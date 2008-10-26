@@ -1,0 +1,212 @@
+.\"
+.\" libexplain - Explain errno values returned by libc functions
+.\" Copyright (C) 2008 Peter Miller
+.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program. If not, see <http://www.gnu.org/licenses/>.
+.\"
+.TH New-System-Call 1
+.SH NAME
+new system call \- How to add a new system call to libexplain
+.XX "" "How to add a new system call to libexplain"
+.SH DESCRIPTION
+Adding a new system call to libexplain is both simple and tedious.
+.PP
+In this example, the system call is called \f[I]example\fP, and takes
+two arguments, \f[I]pathname\fP and \f[I]flags\fP.
+.RS
+example(const char *pathname, int flags);
+.RE
+The libexplain library presents a C interface to the user, and explains
+the C system calls.  It tries to avoid dynamic memory, and has several
+helper functions and structures to make this simpler.
+.SS Naming Conventions
+In general, one function per file.  This gives the static linker more
+opportunity to leave things out, thus producing smaller executables.
+Exceptions to make use of \f[CR]static\fP common functions are
+acceptable.
+No savings for shared libraries, of course.
+.PP
+Functions that write their output into a
+\f[I]libexplain_string_buffer_t\fP via the
+\f[CR]libexplain_string_buffer_*\fP functions, all have a filename of
+\f[CR]libexplain/buffer/\fP\f[I]something\fP.
+.PP
+Functions that write their output to a \f[I]message\fP,
+\f[I]message_size\fP pair have a \f[CR]message\fP path component in
+their file name.
+.PP
+Functions that accept an \f[I]errno\fP value as an argument have an
+\f[CR]errno\fP path component in their file name, called \f[CR]errnum\fP.
+If a function has
+both a buffer and an errno, the buffer comes first, both in the argument
+list, and the file's name.  If a function has both a message+size and
+an errno, the message comes first, both in the argument list, and the
+file's name.
+.SS libexplain/libexplain.h
+The \f[CR]libexplain/libexplain.h\fP include file defines the
+user API.  It, and any files it includes,
+are installed into \f[CR]$(prefix)/include\fP by \f[I]make install\fP.
+.PP
+This file needs another include line.
+This means that the entire API is available to the user as a
+single include directove.
+.RS
+\f[CR]#include <libexplain/\fP\f[I]example\fP\f[CR].h>\fP
+.RE
+This files is also used to decide which files are installed by the \f[I]make
+install\fP command.
+.PP
+Take care that none of those files, directly or indirectly, wind
+up including \f[CR]libexplain/config.h\fP which is generate by the
+\f[I]configure\fP script, and has \f[B]no\fP namespace protection.
+.PP
+This means you can't \f[CR]#include <stddef.h>\fP, or use any of the
+types it defines, becuse on older systems \f[I]configure\fP works quite
+hard to cope with its absence.
+Ditto \f[CR]<unistd.h>\fP and \f[CR]<sys/types.h>\fP.
+.SS libexplain/buffer/errno/example.c
+The central file for adding a new example
+is \f[CR]libexplain/buffer/errno/\fP\f[I]explain\fP\f[CR].c\fP
+Which defines a function
+.RS
+\f[CR]void libexplain_buffer_errno_\fP\f[I]example\fP\f[CR](
+libexplain_string_buffer_t *buffer, int errnum, \fP\fIconst char *pathname,
+int flags\fP\f[CR]);\fP
+.RE
+The \f[CR]errnum\fP argument holds the \f[I]errno\fP value.
+Note that calling \f[I]errno\fP usually has problems because many
+systems has \f[I]errno\fP as a macro, which makes the compiler barf,
+and because there are times you want access to the global \f[I]errno\fP,
+and having it shadowed by the argument is a nuisance.
+.PP
+This function writes its output into the buffer via the
+\f[CR]libexplain_string_buffer_printf\fP, \f[I]etc\fP, functions.
+First the argument list is reprinted.
+.PP
+The \f[CR]libexplain_string_buffer_puts_quoted\fP
+function should be used to print pathnames,
+because it uses full C quoting and escape sequences.
+.PP
+If an argument is a file descriptor, it should be called \f[I]fildes\fP,
+short for file descriptor.
+On systems capable of it, the file descriptor can be mapped to a pathname
+using the \f[CR]libexplain_buffer_fildes_to_pathname\fP function.  This
+make explanations for system calls like \f[I]read\fP and \f[I]write\fP
+much more informative.
+.PP
+Next comes a switch on the errnum value is performed,
+and additional explanation is goven for each errno value documented (or
+sometimes undocumented)
+for that system call.
+Copy-and-paste of the man page is often useful as a basis for the text
+pof the explanation, but be sure it is open source documentation, and
+not Copyright proprietary text.
+.SS libexplain/buffer/errno/example.h
+This file holds the function prototype
+for the above function definition.
+.SS libexplain/example.h
+The file contains the user visable API for the \f[I]example\fP system call.
+There are four function prototypes declared in this file:
+.RS
+\f[CR]void libexplain_\fP\f[I]example\fP\f[CR](
+\fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
+.br
+\f[CR]void libexplain_errno_\fP\f[I]example\fP\f[CR](
+int errnum, \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
+.br
+\f[CR]void libexplain_message_\fP\f[I]example\fP\f[CR](
+const char *message, int message_size,
+\fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
+.br
+\f[CR]void libexplain_message_errno_\fP\f[I]example\fP\f[CR](
+const char *message, int message_size,
+int errnum, \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
+.RE
+The function prototypes for these appear in the
+\f[CR]libexplain/\f[I]example\fP.h include file.
+.PP
+Each shall be accompained by thorough Doxygen style comments.
+These are extracted and placed in the web site.
+.PP
+The buffer functions are \f[B]never\fP part of the user visable API.
+.SS libexplain/example.c
+One function per file,
+\f[CR]libexplain_\fP\f[I]example\fP in this case.
+It simply calls \f[CR]libexplain_errno_\fP\f[I]example\fP to pass in the
+global \f[I]errno\fP value.
+.SS libexplain/errno/example.c
+One function per file,
+\f[CR]libexplain_errno_\fP\f[I]example\fP in this case.
+It calls \f[CR]libexplain_message_errno_\fP\f[I]example\fP,
+using the
+\f[CR]<libexplain/global_message_buffer.h>\fP to hold the string.
+.SS libexplain/message/example.c
+One function per file,
+\f[CR]libexplain_message_\fP\f[I]example\fP in this case.
+It simply calls \f[CR]libexplain_message_errno_\fP\f[I]example\fP to
+pass in the global \f[I]errno\fP value.
+.SS libexplain/message/errno/example.c
+One function per file,
+\f[CR]libexplain_message_errno_\fP\f[I]example\fP in this case.
+It declares and initialises a \f[CR]libexplain_string_buffer_t\fP instance,
+which ensures that the message buffer will not be exceeded,
+and passes that buffer to the
+\f[CR]libexplain_buffer_errno_\fP\f[I]example\fP fucntion.
+.SS man/man3/libexplain_example.3
+This file also documents the functions.
+Use the same text as you did in \f[CR]libexplain/\fP\f[I]example\fP\f[CR].h\fP
+.SS man/man3/libexplain.3
+Add your new man page to the list.
+Keep the list sorted.
+.SS explain/example.c
+Glue to turn the command line into arguments to a call to
+\f[CR]libexplain_\fP\f[I]example\fP
+.SS explain/example.h
+Function prototype for the above.
+.SS explain/main.c
+Include the prototype, and add the function to the table.
+.SS test_example/main.c
+This program should call \f[I]explain\fP and the
+\f[CR]linexplain_\fP\f[I]example\fP when it fails.
+.SS tests
+Write a separate test for each case in the errnum switch.
+.SH Debian Notes
+You can check that the debian stuff builds by using
+.RS
+.nf
+apt-get install pbuilder
+pbuiler create
+pbuilder login
+.fi
+.RE
+now copy the files from \f[I]web-site/debian/\fP into the chroot
+.RS
+.nf
+cd libexplain-*
+dpkg-checkbuilddeps
+apt-get install \f[I]what dpkg-checkbuilddeps said\fP
+apt-get install devscripts
+debuild
+.fi
+.RE
+This should report success.
+.SH COPYRIGHT
+.if n .ds C) (C)
+.if t .ds C) \(co
+libexplain version \*(v)
+.br
+Copyright \*(C) 2008 Peter Miller
+.SH AUTHOR
+Written by Peter Miller <millerp@canb.auug.org.au>

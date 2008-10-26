@@ -1,0 +1,227 @@
+.\"
+.\" libexplain - Explain errno values returned by libc functions
+.\" Copyright (C) 2008 Peter Miller
+.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program. If not, see <http://www.gnu.org/licenses/>.
+.\"
+.ds n) libexplain_link
+.TH libexplain_link 3
+.SH NAME
+libexplain_link \- explain link(2) system call errors
+.XX "libexplain_link(3)" "explain link(2) system call errors"
+.SH SYNOPSIS
+#include <libexplain/link.h>
+.br
+const char *libexplain_link(const char *oldpath, const char *newpath);
+.br
+const char *libexplain_errno_link(int errnum, const char *oldpath,
+const char *newpath);
+.br
+void libexplain_message_link(char *message, int message_size,
+const char *oldpath, const char *newpath);
+.br
+void libexplain_message_errno_link(char *message, int message_size, int errnum,
+const char *oldpath, const char *newpath);
+.SH DESCRIPTION
+The function docuemnted here may be used to
+obtain explanations of link(2) system call errors .
+.\" ------------------------------------------------------------------------
+.SS libexplain_link
+const char *libexplain_link(const char *oldpath, const char *newpath);
+.PP
+The libexplain_link function is used to obtain an explanation of an
+error returned by the \f[I]link\fP(2) system call.  The least the
+message will contain is the value of strerror(errno), but usually it
+will do much better, and indicate the underlying cause in more detail.
+.PP
+The \f[I]errno\fP global variable will be used to obtain the error value
+to be decoded.
+.PP
+This function is intended to be used in a fashion similar to the
+following example:
+.RS
+.ft CR
+.nf
+if (link(oldpath, rewpath) < 0)
+{
+    fprintf(stderr, '%s\n', libexplain_link(oldpath, newpath));
+    exit(1);
+}
+.ft P
+.fi
+.RE
+.TP 8n
+\f[I]oldpath\fP
+The original oldpath, exactly as passed to the \f[I]link\fP(2) system call.
+.TP 8n
+\f[I]newpath\fP
+The original newpath, exactly as passed to the \f[I]link\fP(2) system call.
+.TP 8n
+Returns:
+The message explaining the error.  This message buffer is shared by all
+libexplain functions which do not supply a buffer in their argument
+list.  This will be overwritten by the next call to any libexplain
+function which shares this buffer, including other threads.
+.PP
+\f[B]Note:\fP
+This function is \f[B]not\fP thread safe, because it shares a return
+buffer across all threads, and many other functions in this library.
+.\" ------------------------------------------------------------------------
+.SS libexplain_errno_link
+const char *libexplain_errno_link(int errnum, const char *oldpath,
+const char *newpath);
+.PP
+The libexplain_errno_link function is used to obtain an explanation of
+an error returned by the \f[I]link\fP(2) system call.  The least the
+message will contain is the value of strerror(errnum), but usually it
+will do much better, and indicate the underlying cause in more detail.
+.PP
+This function is intended to be used in a fashion similar to the
+following example:
+.RS
+.ft CR
+.nf
+if (link(oldpath, newpath) < 0)
+{
+    int err = errno;
+    fprintf(stderr, '%s\n', libexplain_errno_link(err, oldpath,
+        newpath));
+    exit(1);
+}
+.fi
+.ft R
+.RE
+.TP 8n
+\f[I]errnum\fP
+The error value to be decoded, usually obtained from the \f[I]errno\fP
+global variable just before this function is called. This is necessary
+if you need to call \f[B]any\fP code between the system call to be
+explained and this function, because many libc functions will alter the
+value of \f[I]errno\fP.
+.TP 8n
+\f[I]oldpath\fP
+The original oldpath, exactly as passed to the \f[I]link\fP(2) system call.
+.tP 8n
+\f[I]newpath\fP
+The original newpath, exactly as passed to the \f[I]link\fP(2) system call.
+.TP 8n
+Returns:
+The message explaining the error.  This message buffer is shared by all
+libexplain functions which do not supply a buffer in their argument
+list.  This will be overwritten by the next call to any libexplain
+function which shares this buffer, including other threads.
+.PP
+\f[B]Note:\fP
+This function is \f[B]not\fP thread safe, because it shares a return
+buffer across all threads, and many other functions in this library.
+.\" ------------------------------------------------------------------------
+.SS libexplain_message_link
+void libexplain_message_link(char *message, int message_size,
+const char *oldpath, const char *newpath);
+.PP
+The libexplain_message_link function is used to obtain an explanation
+of an error returned by the \f[I]link\fP(2) system call.  The least the
+message will contain is the value of strerror(errno), but usually it
+will do much better, and indicate the underlying cause in more detail.
+.PP
+The \f[I]errno\fP global variable will be used to obtain the error value
+to be decoded.
+.PP
+This function is intended to be used in a fashion similar to the
+following example:
+.RS
+.ft CR
+.nf
+if (link(oldpath, newpath) < 0)
+{
+    char message[3000];
+    libexplain_message_link(message, sizeof(message), oldpath,
+        newpath);
+    fprintf(stderr, '%s\n', message);
+    exit(1);
+}
+.ft P
+.fi
+.RE
+.TP 8n
+\f[I]message\fP
+The location in which to store the returned message.  Because a message
+return buffer has been supplied, this function is thread safe.
+.tP 8n
+\f[I]message_size\fP
+The size in bytes of the location in which to store the returned message.
+.TP 8n
+\f[I]oldpath\fP
+The original oldpath, exactly as passed to the \f[I]link\fP(2) system call.
+.TP 8n
+\f[I]newpath\fP
+The original newpath, exactly as passed to the \f[I]link\fP(2) system call.
+.\" ------------------------------------------------------------------------
+.SS libexplain_message_errno_link
+void libexplain_message_errno_link(char *message, int message_size, int errnum,
+const char *oldpath, const char * newpath);
+.PP
+The libexplain_message_errno_link function is used to obtain an
+explanation of an error returned by the \f[I]link\fP(2) system call.
+The least the message will contain is the value of strerror(errnum), but
+usually it will do much better, and indicate the underlying cause in
+more detail.
+.PP
+This function is intended to be used in a fashion similar to the
+following example:
+.RS
+.ft CR
+.nf
+if (link(oldpath, newpath) < 0)
+{
+    int err = errno;
+    char message[3000];
+    libexplain_message_errno_link(message, sizeof(message), err,
+        oldpath, newpath);
+    fprintf(stderr, '%s\n', message);
+    exit(1);
+}
+.ft P
+.fi
+.RE
+.TP 8n
+\f[I]message\fP
+The location in which to store the returned message.  Because a message
+return buffer has been supplied, this function is thread safe.
+.TP 8n
+\f[I]message_size\fP
+The size in bytes of the location in which to store the returned message.
+.TP 8n
+\f[I]errnum\fP
+The error value to be decoded, usually obtained from the \f[I]errno\fP
+global variable just before this function is called.  This is necessary
+if you need to call \f[B]any\fP code between the system call to be
+explained and this function, because many libc functions will alter the
+value of \f[I]errno\fP.
+.TP 8n
+\f[I]oldpath\fP
+The original oldpath, exactly as passed to the \f[I]link\fP(2) system call.
+.TP 8n
+\f[I]newpath\fP
+The original newpath, exactly as passed to the \f[I]link\fP(2) system call.
+.\" ------------------------------------------------------------------------
+.SH COPYRIGHT
+.if n .ds C) (C)
+.if t .ds C) \(co
+libexplain version \*(v)
+.br
+Copyright \*(C) 2008 Peter Miller
+.SH AUTHOR
+Written by Peter Miller <millerp@canb.auug.org.au>

@@ -1,0 +1,137 @@
+.\"
+.\" libexplain - Explain errno values returned by libc functions
+.\" Copyright (C) 2008 Peter Miller
+.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program. If not, see <http://www.gnu.org/licenses/>.
+.\"
+.TH libexplain 3
+.SH NAME
+libexplain \- Explain errno values returned by libc functions
+.XX "libexplain(3)" "Explain errno values returned by libc functions"
+.SH SYNOPSIS
+cc ... -lexplain;
+.sp
+#include <libexplain/libexplain.h>
+.SH DESCRIPTION
+The libexplain library exists to give explanations of error reported by
+system calls.  The error message returned by \f[I]strerror\fP(3) tend to
+be quite cryptic.  By providing a specific error report for each system
+call, a more detailed error message is possible, usually identifying and
+describing the specific cause from amongst the numerous meanings each
+\f[I]errno\fP value maps to.
+.SS Supported System Calls
+Each supported system call has its own \f[I]man\fP page.
+.\" please keep the follwoing list sorted
+.\" ----------  A  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_access\fP(2)
+Explain \f[I]access\fP(2) errors
+.\" ----------  B  ---------------------------------------------------------
+.\" ----------  C  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_chdir\fP(2)
+Explain \f[I]chdir\fP(2) errors
+.TP 8n
+\f[I]libexplain_close\fP(2)
+Explain \f[I]close\fP(2) errors
+.TP 8n
+\f[I]libexplain_creat\fP(2)
+Explain \f[I]creat\fP(2) errors
+.\" ----------  D  ---------------------------------------------------------
+.\" ----------  E  ---------------------------------------------------------
+.\" ----------  F  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_fclose\fP(2)
+Explain \f[I]fclose\fP(2) errors
+.TP 8n
+\f[I]libexplain_fcntl\fP(2)
+Explain \f[I]fcntl\fP(2) errors
+.TP 8n
+\f[I]libexplain_fflush\fP(2)
+Explain \f[I]fflush\fP(2) errors
+.TP 8n
+\f[I]libexplain_fopen\fP(2)
+Explain \f[I]fopen\fP(2) errors
+.TP 8n
+\f[I]libexplain_freopen\fP(2)
+Explain \f[I]freopen\fP(2) errors
+.\" ----------  G  ---------------------------------------------------------
+.\" ----------  H  ---------------------------------------------------------
+.\" ----------  I  ---------------------------------------------------------
+.\" ----------  K  ---------------------------------------------------------
+.\" ----------  L  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_link\fP(2)
+Explain \f[I]link\fP(2) errors
+.TP 8n
+\f[I]libexplain_lseek\fP(2)
+Explain \f[I]lseek\fP(2) errors
+.TP 8n
+\f[I]libexplain_lstat\fP(2)
+Explain \f[I]lstat\fP(2) errors
+.\" ----------  M  ---------------------------------------------------------
+.\" ----------  N  ---------------------------------------------------------
+.\" ----------  O  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_open\fP(2)
+Explain \f[I]open\fP(2) errors
+.\" ----------  P  ---------------------------------------------------------
+.\" ----------  Q  ---------------------------------------------------------
+.\" ----------  R  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_read\fP(2)
+Explain \f[I]read\fP(2) errors
+.TP 8n
+\f[I]libexplain_rename\fP(2)
+Explain \f[I]rename\fP(2) errors
+.\" ----------  S  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_stat\fP(2)
+Explain \f[I]stat\fP(2) errors
+.TP 8n
+\f[I]libexplain_symlink\fP(2)
+Explain \f[I]symlink\fP(2) errors
+.\" ----------  T  ---------------------------------------------------------
+.\" ----------  U  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_unlink\fP(2)
+Explain \f[I]unlink\fP(2) errors
+.\" ----------  V  ---------------------------------------------------------
+.\" ----------  W  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_write\fP(2)
+Explain \f[I]write\fP(2) errors
+.\" ----------  X  ---------------------------------------------------------
+.\" ----------  Y  ---------------------------------------------------------
+.\" ----------  Z  ---------------------------------------------------------
+.\" ------------------------------------------------------------------------
+.PP
+There are plans for additional coverage.
+This list is expected to expand in later releases of this library.
+.SH SEE ALSO
+.TP 8n
+\f[I]errno\fP(3)
+number of last error
+.TP 8n
+\f[I]strerror\fP(3)
+return string describing error number
+.SH COPYRIGHT
+.if n .ds C) (C)
+.if t .ds C) \(co
+libexplain version \*(v)
+.br
+Copyright \*(C) 2008 Peter Miller
+.SH AUTHOR
+Written by Peter Miller <millerp@canb.auug.org.au>

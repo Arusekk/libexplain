@@ -1,0 +1,925 @@
+.hy 0
+.de TH
+..
+.TS H
+l r lw(2.5i) lw(2.5i).
+.TH
+libexplain_access(3)	\*[Page*Of*libexplain_access(3)]	T{
+.ad r
+libexplain access - explain
+T}	T{
+.ad l
+access(2) errors
+T}
+libexplain_access(3)	\*[Page*Of*libexplain_access(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+access - explain access(2) errors
+T}
+explain(1)	\*[Page*Of*explain(1)]	T{
+.ad r
+explain - explain system
+T}	T{
+.ad l
+call error messages
+T}
+libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
+.ad r
+libexplain link - explain link(2) system
+T}	T{
+.ad l
+call errors
+T}
+libexplain_chdir(3)	\*[Page*Of*libexplain_chdir(3)]	T{
+.ad r
+libexplain chdir - explain
+T}	T{
+.ad l
+chdir(2) errors
+T}
+libexplain_chdir(3)	\*[Page*Of*libexplain_chdir(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+chdir - explain chdir(2) errors
+T}
+libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
+.ad r
+libexplain close - explain
+T}	T{
+.ad l
+close(2) errors
+T}
+libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+close - explain close(2) errors
+T}
+libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
+.ad r
+libexplain creat - explain
+T}	T{
+.ad l
+creat(2) errors
+T}
+libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+creat - explain creat(2) errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+libexplain fopen or
+T}	T{
+.ad l
+die - open file and report errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+libexplain open or
+T}	T{
+.ad l
+die - open file and report errors
+T}
+libexplain(3)	\*[Page*Of*libexplain(3)]	T{
+.ad r
+libexplain - Explain
+T}	T{
+.ad l
+errno values returned by libc functions
+T}
+explain(1)	\*[Page*Of*explain(1)]	T{
+.ad r
+explain - explain system call
+T}	T{
+.ad l
+error messages
+T}
+libexplain_access(3)	\*[Page*Of*libexplain_access(3)]	T{
+.ad r
+libexplain access - explain access(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_chdir(3)	\*[Page*Of*libexplain_chdir(3)]	T{
+.ad r
+libexplain chdir - explain chdir(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
+.ad r
+libexplain close - explain close(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
+.ad r
+libexplain creat - explain creat(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fclose(3)	\*[Page*Of*libexplain_fclose(3)]	T{
+.ad r
+libexplain fclose - explain fclose(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fcntl(3)	\*[Page*Of*libexplain_fcntl(3)]	T{
+.ad r
+libexplain fcntl - explain fcntl(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
+.ad r
+libexplain fflush - explain fflush(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
+.ad r
+libexplain fopen - explain fopen(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+libexplain fopen or die - open file and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
+.ad r
+libexplain freopen - explain freopen(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
+.ad r
+libexplain link - explain link(2) system call
+T}	T{
+.ad l
+errors
+T}
+libexplain_lseek(3)	\*[Page*Of*libexplain_lseek(3)]	T{
+.ad r
+libexplain lseek - explain lseek(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_lstat(3)	\*[Page*Of*libexplain_lstat(3)]	T{
+.ad r
+libexplain lstat - explain lstat(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_opendir(3)	\*[Page*Of*libexplain_opendir(3)]	T{
+.ad r
+libexplain opendir - explain opendir(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_open(3)	\*[Page*Of*libexplain_open(3)]	T{
+.ad r
+libexplain open - explain open(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+libexplain open or die - open file and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_read(3)	\*[Page*Of*libexplain_read(3)]	T{
+.ad r
+libexplain read - explain read(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_rename(3)	\*[Page*Of*libexplain_rename(3)]	T{
+.ad r
+libexplain rename - explain rename(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
+.ad r
+libexplain stat - explain stat(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_symlink(3)	\*[Page*Of*libexplain_symlink(3)]	T{
+.ad r
+libexplain symlink - explain symlink(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_unlink(3)	\*[Page*Of*libexplain_unlink(3)]	T{
+.ad r
+libexplain unlink - explain unlink(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
+.ad r
+libexplain write - explain write(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_access(3)	\*[Page*Of*libexplain_access(3)]	T{
+.ad r
+libexplain access -
+T}	T{
+.ad l
+explain access(2) errors
+T}
+libexplain_chdir(3)	\*[Page*Of*libexplain_chdir(3)]	T{
+.ad r
+libexplain chdir -
+T}	T{
+.ad l
+explain chdir(2) errors
+T}
+libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
+.ad r
+libexplain close -
+T}	T{
+.ad l
+explain close(2) errors
+T}
+libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
+.ad r
+libexplain creat -
+T}	T{
+.ad l
+explain creat(2) errors
+T}
+libexplain(3)	\*[Page*Of*libexplain(3)]	T{
+.ad r
+libexplain -
+T}	T{
+.ad l
+Explain errno values returned by libc functions
+T}
+explain(1)	\*[Page*Of*explain(1)]	T{
+.ad r
+
+T}	T{
+.ad l
+explain - explain system call error messages
+T}
+libexplain_fclose(3)	\*[Page*Of*libexplain_fclose(3)]	T{
+.ad r
+libexplain fclose -
+T}	T{
+.ad l
+explain fclose(3) errors
+T}
+libexplain_fcntl(3)	\*[Page*Of*libexplain_fcntl(3)]	T{
+.ad r
+libexplain fcntl -
+T}	T{
+.ad l
+explain fcntl(2) errors
+T}
+libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
+.ad r
+libexplain fflush -
+T}	T{
+.ad l
+explain fflush(3) errors
+T}
+libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
+.ad r
+libexplain fopen -
+T}	T{
+.ad l
+explain fopen(3) errors
+T}
+libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
+.ad r
+libexplain freopen -
+T}	T{
+.ad l
+explain freopen(3) errors
+T}
+libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
+.ad r
+libexplain link -
+T}	T{
+.ad l
+explain link(2) system call errors
+T}
+libexplain_lseek(3)	\*[Page*Of*libexplain_lseek(3)]	T{
+.ad r
+libexplain lseek -
+T}	T{
+.ad l
+explain lseek(2) errors
+T}
+libexplain_lstat(3)	\*[Page*Of*libexplain_lstat(3)]	T{
+.ad r
+libexplain lstat -
+T}	T{
+.ad l
+explain lstat(3) errors
+T}
+libexplain_open(3)	\*[Page*Of*libexplain_open(3)]	T{
+.ad r
+libexplain open -
+T}	T{
+.ad l
+explain open(2) errors
+T}
+libexplain_opendir(3)	\*[Page*Of*libexplain_opendir(3)]	T{
+.ad r
+libexplain opendir -
+T}	T{
+.ad l
+explain opendir(3) errors
+T}
+libexplain_read(3)	\*[Page*Of*libexplain_read(3)]	T{
+.ad r
+libexplain read -
+T}	T{
+.ad l
+explain read(2) errors
+T}
+libexplain_rename(3)	\*[Page*Of*libexplain_rename(3)]	T{
+.ad r
+libexplain rename -
+T}	T{
+.ad l
+explain rename(2) errors
+T}
+libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
+.ad r
+libexplain stat -
+T}	T{
+.ad l
+explain stat(2) errors
+T}
+libexplain_symlink(3)	\*[Page*Of*libexplain_symlink(3)]	T{
+.ad r
+libexplain symlink -
+T}	T{
+.ad l
+explain symlink(2) errors
+T}
+explain(1)	\*[Page*Of*explain(1)]	T{
+.ad r
+explain -
+T}	T{
+.ad l
+explain system call error messages
+T}
+libexplain_unlink(3)	\*[Page*Of*libexplain_unlink(3)]	T{
+.ad r
+libexplain unlink -
+T}	T{
+.ad l
+explain unlink(2) errors
+T}
+libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
+.ad r
+libexplain write -
+T}	T{
+.ad l
+explain write(2) errors
+T}
+libexplain_fclose(3)	\*[Page*Of*libexplain_fclose(3)]	T{
+.ad r
+libexplain fclose - explain
+T}	T{
+.ad l
+fclose(3) errors
+T}
+libexplain_fclose(3)	\*[Page*Of*libexplain_fclose(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fclose - explain fclose(3) errors
+T}
+libexplain_fcntl(3)	\*[Page*Of*libexplain_fcntl(3)]	T{
+.ad r
+libexplain fcntl - explain
+T}	T{
+.ad l
+fcntl(2) errors
+T}
+libexplain_fcntl(3)	\*[Page*Of*libexplain_fcntl(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fcntl - explain fcntl(2) errors
+T}
+libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
+.ad r
+libexplain fflush - explain
+T}	T{
+.ad l
+fflush(3) errors
+T}
+libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fflush - explain fflush(3) errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+libexplain fopen or die - open
+T}	T{
+.ad l
+file and report errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+libexplain open or die - open
+T}	T{
+.ad l
+file and report errors
+T}
+libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
+.ad r
+libexplain fopen - explain
+T}	T{
+.ad l
+fopen(3) errors
+T}
+libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fopen - explain fopen(3) errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fopen or die - open file and report errors
+T}
+libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
+.ad r
+libexplain freopen - explain
+T}	T{
+.ad l
+freopen(3) errors
+T}
+libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+freopen - explain freopen(3) errors
+T}
+libexplain(3)	\*[Page*Of*libexplain(3)]	T{
+.ad r
+libexplain - Explain errno values returned by libc
+T}	T{
+.ad l
+functions
+T}
+libexplain(3)	\*[Page*Of*libexplain(3)]	T{
+.ad r
+libexplain - Explain errno values returned by
+T}	T{
+.ad l
+libc functions
+T}
+libexplain_access(3)	\*[Page*Of*libexplain_access(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain access - explain access(2) errors
+T}
+libexplain_chdir(3)	\*[Page*Of*libexplain_chdir(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain chdir - explain chdir(2) errors
+T}
+libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain close - explain close(2) errors
+T}
+libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain creat - explain creat(2) errors
+T}
+libexplain(3)	\*[Page*Of*libexplain(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain - Explain errno values returned by libc functions
+T}
+libexplain_fclose(3)	\*[Page*Of*libexplain_fclose(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fclose - explain fclose(3) errors
+T}
+libexplain_fcntl(3)	\*[Page*Of*libexplain_fcntl(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fcntl - explain fcntl(2) errors
+T}
+libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fflush - explain fflush(3) errors
+T}
+libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fopen - explain fopen(3) errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fopen or die - open file and report errors
+T}
+libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain freopen - explain freopen(3) errors
+T}
+libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain link - explain link(2) system call errors
+T}
+libexplain_lseek(3)	\*[Page*Of*libexplain_lseek(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain lseek - explain lseek(2) errors
+T}
+libexplain_lstat(3)	\*[Page*Of*libexplain_lstat(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain lstat - explain lstat(3) errors
+T}
+libexplain_opendir(3)	\*[Page*Of*libexplain_opendir(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain opendir - explain opendir(3) errors
+T}
+libexplain_open(3)	\*[Page*Of*libexplain_open(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain open - explain open(2) errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain open or die - open file and report errors
+T}
+libexplain_read(3)	\*[Page*Of*libexplain_read(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain read - explain read(2) errors
+T}
+libexplain_rename(3)	\*[Page*Of*libexplain_rename(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain rename - explain rename(2) errors
+T}
+libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain stat - explain stat(2) errors
+T}
+libexplain_symlink(3)	\*[Page*Of*libexplain_symlink(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain symlink - explain symlink(2) errors
+T}
+libexplain_unlink(3)	\*[Page*Of*libexplain_unlink(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain unlink - explain unlink(2) errors
+T}
+libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain write - explain write(2) errors
+T}
+libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
+.ad r
+libexplain link - explain
+T}	T{
+.ad l
+link(2) system call errors
+T}
+libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+link - explain link(2) system call errors
+T}
+libexplain_lseek(3)	\*[Page*Of*libexplain_lseek(3)]	T{
+.ad r
+libexplain lseek - explain
+T}	T{
+.ad l
+lseek(2) errors
+T}
+libexplain_lseek(3)	\*[Page*Of*libexplain_lseek(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+lseek - explain lseek(2) errors
+T}
+libexplain_lstat(3)	\*[Page*Of*libexplain_lstat(3)]	T{
+.ad r
+libexplain lstat - explain
+T}	T{
+.ad l
+lstat(3) errors
+T}
+libexplain_lstat(3)	\*[Page*Of*libexplain_lstat(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+lstat - explain lstat(3) errors
+T}
+explain(1)	\*[Page*Of*explain(1)]	T{
+.ad r
+explain - explain system call error
+T}	T{
+.ad l
+messages
+T}
+libexplain_open(3)	\*[Page*Of*libexplain_open(3)]	T{
+.ad r
+libexplain open - explain
+T}	T{
+.ad l
+open(2) errors
+T}
+libexplain_opendir(3)	\*[Page*Of*libexplain_opendir(3)]	T{
+.ad r
+libexplain opendir - explain
+T}	T{
+.ad l
+opendir(3) errors
+T}
+libexplain_opendir(3)	\*[Page*Of*libexplain_opendir(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+opendir - explain opendir(3) errors
+T}
+libexplain_open(3)	\*[Page*Of*libexplain_open(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+open - explain open(2) errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+libexplain fopen or die -
+T}	T{
+.ad l
+open file and report errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+libexplain open or die -
+T}	T{
+.ad l
+open file and report errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+open or die - open file and report errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+libexplain fopen
+T}	T{
+.ad l
+or die - open file and report errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+libexplain open
+T}	T{
+.ad l
+or die - open file and report errors
+T}
+libexplain_read(3)	\*[Page*Of*libexplain_read(3)]	T{
+.ad r
+libexplain read - explain
+T}	T{
+.ad l
+read(2) errors
+T}
+libexplain_read(3)	\*[Page*Of*libexplain_read(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+read - explain read(2) errors
+T}
+libexplain_rename(3)	\*[Page*Of*libexplain_rename(3)]	T{
+.ad r
+libexplain rename - explain
+T}	T{
+.ad l
+rename(2) errors
+T}
+libexplain_rename(3)	\*[Page*Of*libexplain_rename(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+rename - explain rename(2) errors
+T}
+libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
+.ad r
+libexplain fopen or die - open file and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_open_or_die(3)	\*[Page*Of*libexplain_open_or_die(3)]	T{
+.ad r
+libexplain open or die - open file and
+T}	T{
+.ad l
+report errors
+T}
+libexplain(3)	\*[Page*Of*libexplain(3)]	T{
+.ad r
+libexplain - Explain errno values
+T}	T{
+.ad l
+returned by libc functions
+T}
+libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
+.ad r
+libexplain stat - explain
+T}	T{
+.ad l
+stat(2) errors
+T}
+libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+stat - explain stat(2) errors
+T}
+libexplain_symlink(3)	\*[Page*Of*libexplain_symlink(3)]	T{
+.ad r
+libexplain symlink - explain
+T}	T{
+.ad l
+symlink(2) errors
+T}
+libexplain_symlink(3)	\*[Page*Of*libexplain_symlink(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+symlink - explain symlink(2) errors
+T}
+explain(1)	\*[Page*Of*explain(1)]	T{
+.ad r
+explain - explain
+T}	T{
+.ad l
+system call error messages
+T}
+libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
+.ad r
+libexplain link - explain link(2)
+T}	T{
+.ad l
+system call errors
+T}
+libexplain_unlink(3)	\*[Page*Of*libexplain_unlink(3)]	T{
+.ad r
+libexplain unlink - explain
+T}	T{
+.ad l
+unlink(2) errors
+T}
+libexplain_unlink(3)	\*[Page*Of*libexplain_unlink(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+unlink - explain unlink(2) errors
+T}
+libexplain(3)	\*[Page*Of*libexplain(3)]	T{
+.ad r
+libexplain - Explain errno
+T}	T{
+.ad l
+values returned by libc functions
+T}
+libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
+.ad r
+libexplain write - explain
+T}	T{
+.ad l
+write(2) errors
+T}
+libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+write - explain write(2) errors
+T}
+.TE
+.ad b

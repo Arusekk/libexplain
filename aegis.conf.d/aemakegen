@@ -1,0 +1,79 @@
+#
+# libexplain - Explain errno values returned by libc functions
+# Copyright (C) 2008 Peter Miller
+# Written by Peter Miller <millerp@canb.auug.org.au>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+project_specific =
+[
+    {
+        name = "aede-policy:version-info:library";
+        value = "libexplain/libexplain.a";
+    },
+    {
+        name = "aemakegen:version-info";
+        value = "0:1:0";
+    },
+    {
+        name = "aemakegen:debian:copyright";
+        value =
+            "The library functions are licensed under the GNU Lesser "
+            "General Public License (LGPL).\n"
+            "/usr/share/common-licenses/LGPL\n"
+            "\n"
+            "The utility programs are licensed under the GNU General "
+            "Public License (GPL).\n"
+            "/usr/share/common-licenses/GPL\n"
+            ;
+    },
+    {
+        name = "aemakegen:debian:homepage";
+        value = "http://libexplain.sourceforge.net/";
+    },
+    {
+        name = "aemakegen:debian:maintainer";
+        value = "Peter Miller <millerp@canb.auug.org.au>";
+    },
+    {
+        name = "aemakegen:debian:priority";
+        value = "optional";
+    },
+    {
+        name = "aemakegen:debian:section";
+        value = "devel";
+    },
+    {
+        name = "aemakegen:debian:description:explain";
+        value = "utility to explain system call errors";
+    },
+    {
+        name = "aemakegen:debian:extended-description:explain";
+        value =
+            "This package provides a command to explain Unix and Linux "
+            "system call errors, after the fact."
+            ;
+    },
+    {
+        name = "aemakegen:debian:extended-description:libexplain";
+        value =
+            "This package provides a library which may be used to "
+            "explain Unix and Linux system call errors.  The library is "
+            "not quite a drop-in replacement for strerror, but it comes "
+            "close, with each system call having a dedicated libexplain "
+            "function."
+            ;
+    },
+];

@@ -1,0 +1,82 @@
+Read Me(libexplain)                                        Read Me(libexplain)
+
+
+
+NAME
+       libexplain - Explain errno values returned by libc functions
+
+DESCRIPTION
+       The libexplain package provides a library which may be used to explain
+       Unix and Linux system call errors.  This will make your application's
+       error messages much more informative to your users.
+
+       The library is not quite a drop-in replacement for strerror(3), but it
+       comes close.  Each system call has a dedicated libexplain function, for
+       example
+              fd = open(path, flags, mode);
+              if (fd < 0)
+              {
+                  fprintf(stderr, "%s\n", libexplain_open(path, flags, mode));
+                  exit(1);
+              }
+       If, for example, you were to try to open no-such-dir/some-file, you
+       would see a message like
+              open("no-such-dir/some-file", O_RDONLY) failed, No such file or
+              directory (2, ENOENT) because directory "no-such-dir" does not
+              exist
+
+       The library also provides thread safe variants of each function.
+
+ARCHIVE SITE
+       The latest version of libexplain is available on the Web from:
+
+           URL:    http://libexplain.sourceforge.net/
+           File:   index.html             # the libexplain page
+           File:   libexplain0.1.README   # Description, from the tar file
+           File:   libexplain0.1.lsm      # Description, LSM format
+           File:   libexplain0.1.tar.gz   # the complete source
+           File:   libexplain0.1.pdf      # Reference Manual
+
+BUILDING LIBEXPLAIN
+       Full instructions for building libexplain may be found in the BUILDING
+       file included in this distribution.
+
+COPYRIGHT
+       libexplain version 0.1
+       Copyright (C) 2008 Peter Miller
+
+       This program is free software; you can redistribute it and/or modify it
+       under the terms of the GNU Lesser General Public License as published
+       by the Free Software Foundation; either version 3 of the License, or
+       (at your option) any later version.
+
+       This program is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+       Lesser General Public License for more details.
+
+       You should have received a copy of the GNU Lesser General Public
+       License along with this program. If not, see
+       <http://www.gnu.org/licenses/>.
+
+       It should be in the LICENSE file included with this distribution.
+
+AUTHOR
+       Peter Miller   E-Mail:   millerp@canb.auug.org.au
+       /\/\*             WWW:   http://www.canb.auug.org.au/~millerp/
+
+
+
+
+RELEASE NOTES
+       This section details the various features and bug fixes of the various
+       releases.  For excruciating and complete detail, and also credits for
+       those of you who have generously sent me suggestions and bug reports,
+       see the etc/CHANGES.* files.
+
+   Version 0.1 (2008-Oct-26)
+       First public release.
+
+
+
+Reference Manual                  libexplain               Read Me(libexplain)

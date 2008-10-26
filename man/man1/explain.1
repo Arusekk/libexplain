@@ -1,0 +1,130 @@
+.\"
+.\" libexplain - Explain errno values returned by libc functions
+.\" Copyright (C) 2008 Peter Miller
+.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program. If not, see <http://www.gnu.org/licenses/>.
+.\"
+.ds n) explain
+.TH explain 1
+.SH NAME
+explain \- explain system call error messages
+.XX "explain(1)" "explain system call error messages"
+.SH SYNOPSIS
+\f[B]\*(n)\fP
+[
+\f[I]option\fP
+\&...
+]
+\f[I]function\fP
+[
+\f[I]argument\fP
+\&...
+]
+.sp
+.B \*(n)
+.B \-\-version
+.SH DESCRIPTION
+The \*(n) command is used to decode an error return read from an
+\f[I]strace\fP(1) listing, or silimar.  Because thisd is being
+deciphered in a different process than the orginal, the results
+will be less accurate than if the program itself were to use
+\f[I]libexplain\fP(3).
+.SS Functions
+The functions understood include:
+.\" ----------  A  ---------------------------------------------------------
+.\" ----------  B  ---------------------------------------------------------
+.\" ----------  C  ---------------------------------------------------------
+.TP 8n
+close \f[I]fildes\fP
+The \f[I]close\fP(2) system call.
+.\" ----------  D  ---------------------------------------------------------
+.\" ----------  E  ---------------------------------------------------------
+.\" ----------  F  ---------------------------------------------------------
+.TP 8n
+fcntl \f[I]fildes\fP \f[I]command\fP [ \f[I]arg\fP ]
+The \f[I]fcntl\fP(2) system call.
+.TP 8n
+fopen \f[I]path\fP \f[I]mode\fP
+The \f[I]fopen\fP(2) system call.
+The \f[I]path\fP argument may need to be quoted to insulate white space and
+punctuation from the shell.
+The \f[I]mode\fP argument (a textual equivalent of the \f[I]open\fP
+system call's \f[I]flags\fP argument).
+See \f[I]fopen\fP(3) for more information.
+.\" ----------  G  ---------------------------------------------------------
+.\" ----------  H  ---------------------------------------------------------
+.\" ----------  I  ---------------------------------------------------------
+.\" ----------  J  ---------------------------------------------------------
+.\" ----------  K  ---------------------------------------------------------
+.\" ----------  L  ---------------------------------------------------------
+.\" ----------  M  ---------------------------------------------------------
+.\" ----------  N  ---------------------------------------------------------
+.\" ----------  O  ---------------------------------------------------------
+.TP 8n
+open \f[I]path\fP \f[I]flags\fP [ \f[I]mode\fP ]
+The \f[I]open\fP(2) system call.
+The \f[I]path\fP argument may need to be quoted to insulate white space and
+punctuation from the shell.
+The \f[I]flags\fP argument may be numeric or symbolic.
+The \f[I]mode\fP argument may be numeric or symbolic.
+.\" ----------  P  ---------------------------------------------------------
+.\" ----------  Q  ---------------------------------------------------------
+.\" ----------  R  ---------------------------------------------------------
+.TP 8n
+read \f[I]fildes\fP \f[I]data\fP \f[I]data-size\fP
+The \f[I]read\fP(2) system call.
+.\" ----------  S  ---------------------------------------------------------
+.TP 8n
+strerror
+The error given will be printed out with all known detail.
+.\" ----------  T  ---------------------------------------------------------
+.\" ----------  U  ---------------------------------------------------------
+.\" ----------  V  ---------------------------------------------------------
+.\" ----------  W  ---------------------------------------------------------
+.TP 8n
+write \f[I]fildes\fP \f[I]data\fP \f[I]data-size\fP
+The \f[I]write\fP(2) system call.
+.\" ----------  X  ---------------------------------------------------------
+.\" ----------  Y  ---------------------------------------------------------
+.\" ----------  Z  ---------------------------------------------------------
+.\" ------------------------------------------------------------------------
+.PP
+Do not include the perentheses used to make the call.
+.SH OPTIONS
+The \*(n) command understands the following options:
+.TP 8n
+\f[I]\-e\fP \f[I]number\fP
+The value of \f[I]errno\fP as a number (\f[I]e.g.\fP 2),
+or as a symbol (\f[I]e.g.\fP ENOENT),
+or as the text of its meaning (\f[I]e.g.\fP No such file or directory\fP).
+You will need quotes to insulate spaces and punctuation from the shell.
+.TP 8n
+\f[B]\-V\fP
+Print the version of the \f[I]\*(n)\fP executing.
+.SH EXIT STATUS
+The \*(n) command exits with status 1 on any error.
+The \*(n) command only exits with status 0 if there are no errors.
+.SH COPYRIGHT
+.if n .ds C) (C)
+.if t .ds C) \(co
+.so etc/version.so
+\*(n) version \*(v)
+.br
+Copyright
+\*(C)
+\*(Y)
+Peter Miller
+.SH AUTHOR
+Written by Peter Miller <millerp@canb.auug.org.au>

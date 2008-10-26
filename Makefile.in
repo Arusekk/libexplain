@@ -1,0 +1,1940 @@
+#
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#
+#    W   W    A    RRRR   N   N   III  N   N  III  N   N   GGG
+#    W   W   A A   R   R  NN  N    I   NN  N   I   NN  N  G   G
+#    W   W  A   A  RRRR   N N N    I   N N N   I   N N N  G
+#    W W W  AAAAA  R R    N  NN    I   N  NN   I   N  NN  G  GG
+#    W W W  A   A  R  R   N   N    I   N   N   I   N   N  G   G
+#     W W   A   A  R   R  N   N   III  N   N  III  N   N   GGG
+#
+# Warning: DO NOT send patches which fix this file.
+# IT IS NOT the original source file.  This file is
+# GENERATED.  If you find a bug in this file, please
+# send me a patch for the the problem source file.
+#
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#
+# @configure_input@
+#
+# The configure script generates 2 files:
+#	1. This Makefile
+#	2. libexplain/config.h
+# If you change this Makefile, you may also need to
+# change these files.  To see what is configured by the
+# configure script, search for @ in the Makefile.in
+# file.
+#
+# If you wish to reconfigure the installation
+# directories it is RECOMMENDED that you re-run the
+# configure script.
+#
+# Use ``./configure --help'' for a list of options.
+#
+
+#
+# directory containing the source
+#
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+#
+# the name of the install program to use
+#
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
+#
+# the name of the compiler to use
+#
+CC = @CC@
+
+#
+# The compiler flags to use
+#
+CFLAGS = @CFLAGS@
+
+#
+# The preprocessor flags to use
+#
+CPPFLAGS = @CPPFLAGS@
+
+#
+# The linker flags to use
+#
+LDFLAGS = @LDFLAGS@
+
+#
+# prefix for installation path
+#
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+#
+# where to put the executables
+#
+# On a network, this would only be shared between machines
+# of identical cpu-hw-os flavour.  It can be read-only.
+#
+# The $(DESTDIR) is for packaging.
+#
+bindir = $(DESTDIR)@bindir@
+
+#
+# where to put the manuals
+#
+# On a network, this would be shared between all machines
+# on the network.  It can be read-only.
+#
+# The $(DESTDIR) is for packaging.
+#
+mandir = $(DESTDIR)@mandir@
+
+# define this to silence ./configure warning
+DATAROOTDIR = $(DESTDIR)@datarootdir@
+
+#
+# where to put the supplementary package executables
+#
+# On a network, this would be shared between all
+# machines of identical architecture.  It can be
+# read-only.
+#
+# The $(DESTDIR) is for packaging.
+#
+LIBDIR = $(DESTDIR)@libdir@
+
+#
+# where to put the include files for the library
+#
+# On a network, this would be shared between all
+# machines of identical architecture.  It can be
+# read-only.
+#
+# The $(DESTDIR) is for packaging.
+#
+includedir = $(DESTDIR)@includedir@
+
+#
+# Which yacc to use
+#
+YACC = @YACC@
+
+#
+# The name of the GNU Libtool command.
+#
+LIBTOOL = @LIBTOOL@
+
+#
+# extra libraries required for your system
+#
+LIBS = @LIBS@
+
+#
+# shell to use to run tests and commands
+#
+SH = @SH@
+
+#
+# command file name extension (typically "" or ".exe")
+#
+EXEEXT = @EXEEXT@
+
+#
+# Set GROFF to the name of the roff command on your
+# system, usually "groff" or "troff" or "nroff"
+#
+GROFF = @GROFF@
+
+#
+# Set SOELIM to the name of the roff proprocessor command
+# on your system, usually "soelim" or "gsoelim"
+#
+SOELIM = @SOELIM@
+
+# -------------------------------------------------------------
+# You should not need to change anything below this line.
+
+#
+# The default target
+#
+the-default-target: all
+
+etc/BUILDING.ps: etc/BUILDING.man 
+	$(GROFF) -s -I. -t -man etc/BUILDING.man > $@
+
+etc/README.ps: etc/README.man 
+	$(GROFF) -s -I. -t -man etc/README.man > $@
+
+etc/new_system_call.ps: etc/new_system_call.man 
+	$(GROFF) -s -I. -t -man etc/new_system_call.man > $@
+
+etc/reference.ps: etc/reference.man 
+	$(GROFF) -s -I. -t -man etc/reference.man > $@
+
+explain/access.lo: explain/access.c explain/access.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/unistd.h libexplain/access.h libexplain/buffer/access_mode.h libexplain/config.h libexplain/config.messy.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/access.c -o explain/access.lo
+
+explain/chdir.lo: explain/chdir.c explain/chdir.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/chdir.h libexplain/config.h libexplain/config.messy.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/chdir.c -o explain/chdir.lo
+
+explain/close.lo: explain/close.c explain/close.h explain/strtol_or_die.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/close.h libexplain/config.h libexplain/config.messy.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/close.c -o explain/close.lo
+
+explain/creat.lo: explain/creat.c explain/creat.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/creat.h libexplain/permission_mode.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/creat.c -o explain/creat.lo
+
+explain/fcntl.lo: explain/fcntl.c explain/fcntl.h explain/strtol_or_die.h libexplain/ac/fcntl.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/buffer/errno/fcntl.h libexplain/config.h libexplain/config.messy.h libexplain/fcntl.h libexplain/open_flags.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/fcntl.c -o explain/fcntl.lo
+
+explain/fopen.lo: explain/fopen.c explain/fopen.h libexplain/ac/fcntl.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/fopen.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/fopen.c -o explain/fopen.lo
+
+explain/link.lo: explain/link.c explain/link.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/link.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/link.c -o explain/link.lo
+
+explain/lseek.lo: explain/lseek.c explain/lseek.h explain/strtol_or_die.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/unistd.h libexplain/buffer/lseek_whence.h libexplain/config.h libexplain/config.messy.h libexplain/lseek.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/lseek.c -o explain/lseek.lo
+
+explain/lstat.lo: explain/lstat.c explain/lstat.h explain/strtol_or_die.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/config.h libexplain/config.messy.h libexplain/lstat.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/lstat.c -o explain/lstat.lo
+
+explain/main.lo: explain/main.c explain/access.h explain/chdir.h explain/close.h explain/creat.h explain/fcntl.h explain/fopen.h explain/link.h explain/lseek.h explain/lstat.h explain/open.h explain/opendir.h explain/read.h explain/rename.h explain/stat.h explain/strerror.h explain/symlink.h explain/unlink.h explain/write.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/string.h libexplain/config.h libexplain/config.messy.h libexplain/errno_info.h libexplain/freopen.h libexplain/fstrcmp.h libexplain/gcc_attributes.h libexplain/sizeof.h libexplain/string_buffer.h libexplain/version_print.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/main.c -o explain/main.lo
+
+explain/open.lo: explain/open.c explain/open.h libexplain/ac/fcntl.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/open.h libexplain/open_flags.h libexplain/permission_mode.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/open.c -o explain/open.lo
+
+explain/opendir.lo: explain/opendir.c explain/opendir.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/opendir.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/opendir.c -o explain/opendir.lo
+
+explain/read.lo: explain/read.c explain/read.h explain/strtol_or_die.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/read.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/read.c -o explain/read.lo
+
+explain/rename.lo: explain/rename.c explain/rename.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/rename.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/rename.c -o explain/rename.lo
+
+explain/stat.lo: explain/stat.c explain/stat.h explain/strtol_or_die.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/config.h libexplain/config.messy.h libexplain/stat.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/stat.c -o explain/stat.lo
+
+explain/strerror.lo: explain/strerror.c explain/strerror.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/buffer/strerror.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/strerror.c -o explain/strerror.lo
+
+explain/strtol_or_die.lo: explain/strtol_or_die.c explain/strtol_or_die.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/strtol_or_die.c -o explain/strtol_or_die.lo
+
+explain/symlink.lo: explain/symlink.c explain/symlink.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/symlink.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/symlink.c -o explain/symlink.lo
+
+explain/unlink.lo: explain/unlink.c explain/unlink.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/unlink.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/unlink.c -o explain/unlink.lo
+
+explain/write.lo: explain/write.c explain/strtol_or_die.h explain/write.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/wrap_and_print.h libexplain/write.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/write.c -o explain/write.lo
+
+libdir/pkg-config/libexplain.pc: libdir/pkg-config/libexplain.pc.in ./config.status
+	CONFIG_FILES=$@:libdir/pkg-config/libexplain.pc.in CONFIG_HEADERS= $(SH) ./config.status
+
+libdir/pkg-config/.libdir: libdir/.libdir
+	-$(INSTALL) -m 0755 -d $(LIBDIR)/pkg-config
+	@-test -d $(LIBDIR)/pkg-config && touch $@
+	@sleep 1
+
+libdir/.libdir:
+	-$(INSTALL) -m 0755 -d $(LIBDIR)
+	@-test -d $(LIBDIR) && touch $@
+	@sleep 1
+
+$(LIBDIR)/pkg-config/libexplain.pc: libdir/pkg-config/libexplain.pc libdir/pkg-config/.libdir
+	$(INSTALL_DATA) libdir/pkg-config/libexplain.pc $@
+
+libexplain/ac/string.lo: libexplain/ac/string.c libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/string.h libexplain/config.h libexplain/config.messy.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/ac/string.c -o libexplain/ac/string.lo
+
+libexplain/access.lo: libexplain/access.c libexplain/ac/errno.h libexplain/access.h libexplain/config.h libexplain/config.messy.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/access.c -o libexplain/access.lo
+
+libexplain/buffer/access_mode.lo: libexplain/buffer/access_mode.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/access_mode.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/parse_bits.h libexplain/sizeof.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/access_mode.c -o libexplain/buffer/access_mode.lo
+
+libexplain/buffer/because.lo: libexplain/buffer/because.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/because.h libexplain/buffer/gettext.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/because.c -o libexplain/buffer/because.lo
+
+libexplain/buffer/efault.lo: libexplain/buffer/efault.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/gettext.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/efault.c -o libexplain/buffer/efault.lo
+
+libexplain/buffer/eio.lo: libexplain/buffer/eio.c libexplain/ac/dirent.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/string.h libexplain/buffer/because.h libexplain/buffer/eio.h libexplain/config.h libexplain/config.messy.h libexplain/dirname.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/eio.c -o libexplain/buffer/eio.lo
+
+libexplain/buffer/emfile.lo: libexplain/buffer/emfile.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/emfile.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/emfile.c -o libexplain/buffer/emfile.lo
+
+libexplain/buffer/emlink.lo: libexplain/buffer/emlink.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/emlink.h libexplain/buffer/file_type.h libexplain/config.h libexplain/config.messy.h libexplain/dirname.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/emlink.c -o libexplain/buffer/emlink.lo
+
+libexplain/buffer/enfile.lo: libexplain/buffer/enfile.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/string.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/enfile.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enfile.c -o libexplain/buffer/enfile.lo
+
+libexplain/buffer/enomem.lo: libexplain/buffer/enomem.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/resource.h libexplain/ac/time.h libexplain/buffer/because.h libexplain/buffer/enomem.h libexplain/buffer/rlimit.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enomem.c -o libexplain/buffer/enomem.lo
+
+libexplain/buffer/errno/access.lo: libexplain/buffer/errno/access.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/access_mode.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/enomem.h libexplain/buffer/errno/access.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/mount_point.h libexplain/buffer/path_to_pid.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/dirname.h libexplain/gcc_attributes.h libexplain/have_permission.h libexplain/path_is_efault.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/access.c -o libexplain/buffer/errno/access.lo
+
+libexplain/buffer/errno/chdir.lo: libexplain/buffer/errno/chdir.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/enomem.h libexplain/buffer/errno/chdir.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/chdir.c -o libexplain/buffer/errno/chdir.lo
+
+libexplain/buffer/errno/close.lo: libexplain/buffer/errno/close.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/because.h libexplain/buffer/eio.h libexplain/buffer/errno/close.h libexplain/buffer/fildes_to_pathname.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/close.c -o libexplain/buffer/errno/close.lo
+
+libexplain/buffer/errno/creat.lo: libexplain/buffer/errno/creat.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/errno/creat.h libexplain/buffer/errno/open.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/permission_mode.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/creat.c -o libexplain/buffer/errno/creat.lo
+
+libexplain/buffer/errno/fclose.lo: libexplain/buffer/errno/fclose.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/buffer/because.h libexplain/buffer/errno/close.h libexplain/buffer/errno/fclose.h libexplain/buffer/errno/write.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/fclose.c -o libexplain/buffer/errno/fclose.lo
+
+libexplain/buffer/errno/fcntl.lo: libexplain/buffer/errno/fcntl.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/emfile.h libexplain/buffer/errno/fcntl.h libexplain/buffer/fildes_to_pathname.h libexplain/buffer/flock.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/fcntl.h libexplain/gcc_attributes.h libexplain/open_flags.h libexplain/parse_bits.h libexplain/sizeof.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/fcntl.c -o libexplain/buffer/errno/fcntl.lo
+
+libexplain/buffer/errno/fflush.lo: libexplain/buffer/errno/fflush.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/signal.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/errno/fflush.h libexplain/buffer/fildes_to_pathname.h libexplain/buffer/mount_point.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/open_flags.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/fflush.c -o libexplain/buffer/errno/fflush.lo
+
+libexplain/buffer/errno/fopen.lo: libexplain/buffer/errno/fopen.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/enomem.h libexplain/buffer/errno/fopen.h libexplain/buffer/errno/open.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/fopen.c -o libexplain/buffer/errno/fopen.lo
+
+libexplain/buffer/errno/freopen.lo: libexplain/buffer/errno/freopen.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/buffer/errno/fclose.h libexplain/buffer/errno/fflush.h libexplain/buffer/errno/fopen.h libexplain/buffer/errno/freopen.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/freopen.c -o libexplain/buffer/errno/freopen.lo
+
+libexplain/buffer/errno/link.lo: libexplain/buffer/errno/link.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/emlink.h libexplain/buffer/enomem.h libexplain/buffer/errno/link.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/exdev.h libexplain/buffer/mount_point.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/dirname.h libexplain/gcc_attributes.h libexplain/path_is_efault.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/link.c -o libexplain/buffer/errno/link.lo
+
+libexplain/buffer/errno/lseek.lo: libexplain/buffer/errno/lseek.c libexplain/ac/errno.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/errno/lseek.h libexplain/buffer/fildes_to_pathname.h libexplain/buffer/file_type.h libexplain/buffer/lseek_whence.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/lseek.c -o libexplain/buffer/errno/lseek.lo
+
+libexplain/buffer/errno/lstat.lo: libexplain/buffer/errno/lstat.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/enomem.h libexplain/buffer/errno/lstat.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/path_is_efault.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/lstat.c -o libexplain/buffer/errno/lstat.lo
+
+libexplain/buffer/errno/open.lo: libexplain/buffer/errno/open.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/emfile.h libexplain/buffer/enfile.h libexplain/buffer/enomem.h libexplain/buffer/errno/open.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/file_type.h libexplain/buffer/mount_point.h libexplain/buffer/path_to_pid.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/buffer/uid.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/open_flags.h libexplain/permission_mode.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/open.c -o libexplain/buffer/errno/open.lo
+
+libexplain/buffer/errno/opendir.lo: libexplain/buffer/errno/opendir.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/enomem.h libexplain/buffer/errno/open.h libexplain/buffer/errno/opendir.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/opendir.c -o libexplain/buffer/errno/opendir.lo
+
+libexplain/buffer/errno/path_resolution.lo: libexplain/buffer/errno/path_resolution.c libexplain/ac/assert.h libexplain/ac/dirent.h libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdlib.h libexplain/ac/string.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/file_type.h libexplain/buffer/gettext.h libexplain/buffer/strerror.h libexplain/config.h libexplain/config.messy.h libexplain/fstrcmp.h libexplain/gcc_attributes.h libexplain/have_permission.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/path_resolution.c -o libexplain/buffer/errno/path_resolution.lo
+
+libexplain/buffer/errno/read.lo: libexplain/buffer/errno/read.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/errno/read.h libexplain/buffer/fildes_to_pathname.h libexplain/buffer/mount_point.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/is_same_inode.h libexplain/open_flags.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/read.c -o libexplain/buffer/errno/read.lo
+
+libexplain/buffer/errno/rename.lo: libexplain/buffer/errno/rename.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/emlink.h libexplain/buffer/enomem.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/errno/rename.h libexplain/buffer/exdev.h libexplain/buffer/file_type.h libexplain/buffer/mount_point.h libexplain/buffer/path_to_pid.h libexplain/buffer/sticky_permissions.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/count_directory_entries.h libexplain/dirname.h libexplain/gcc_attributes.h libexplain/have_permission.h libexplain/path_is_efault.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/rename.c -o libexplain/buffer/errno/rename.lo
+
+libexplain/buffer/errno/stat.lo: libexplain/buffer/errno/stat.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/enomem.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/errno/stat.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/path_is_efault.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/stat.c -o libexplain/buffer/errno/stat.lo
+
+libexplain/buffer/errno/symlink.lo: libexplain/buffer/errno/symlink.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/string.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/enomem.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/errno/symlink.h libexplain/buffer/file_type.h libexplain/buffer/mount_point.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/path_is_efault.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/symlink.c -o libexplain/buffer/errno/symlink.lo
+
+libexplain/buffer/errno/unlink.lo: libexplain/buffer/errno/unlink.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/enomem.h libexplain/buffer/errno/path_resolution.h libexplain/buffer/errno/unlink.h libexplain/buffer/mount_point.h libexplain/buffer/path_to_pid.h libexplain/buffer/sticky_permissions.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/unlink.c -o libexplain/buffer/errno/unlink.lo
+
+libexplain/buffer/errno/write.lo: libexplain/buffer/errno/write.c libexplain/ac/errno.h libexplain/ac/fcntl.h libexplain/ac/signal.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/resource.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/time.h libexplain/ac/unistd.h libexplain/buffer/because.h libexplain/buffer/efault.h libexplain/buffer/eio.h libexplain/buffer/errno/write.h libexplain/buffer/fildes_to_pathname.h libexplain/buffer/mount_point.h libexplain/buffer/rlimit.h libexplain/buffer/strerror.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/open_flags.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/write.c -o libexplain/buffer/errno/write.lo
+
+libexplain/buffer/exdev.lo: libexplain/buffer/exdev.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/because.h libexplain/buffer/exdev.h libexplain/buffer/mount_point.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/same_dev.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/exdev.c -o libexplain/buffer/exdev.lo
+
+libexplain/buffer/fildes_to_pathname.lo: libexplain/buffer/fildes_to_pathname.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/unistd.h libexplain/buffer/fildes_to_pathname.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/fildes_to_pathname.c -o libexplain/buffer/fildes_to_pathname.lo
+
+libexplain/buffer/file_type.lo: libexplain/buffer/file_type.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/buffer/file_type.h libexplain/buffer/gettext.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/file_type.c -o libexplain/buffer/file_type.lo
+
+libexplain/buffer/flock.lo: libexplain/buffer/flock.c libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/flock.h libexplain/buffer/lseek_whence.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/flock.c -o libexplain/buffer/flock.lo
+
+libexplain/buffer/gettext.lo: libexplain/buffer/gettext.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/gettext.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/gettext.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/gettext.c -o libexplain/buffer/gettext.lo
+
+libexplain/buffer/lseek_whence.lo: libexplain/buffer/lseek_whence.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/lseek_whence.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/parse_bits.h libexplain/sizeof.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/lseek_whence.c -o libexplain/buffer/lseek_whence.lo
+
+libexplain/buffer/mount_point.lo: libexplain/buffer/mount_point.c libexplain/ac/mntent.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/vfs.h libexplain/buffer/mount_point.h libexplain/config.h libexplain/config.messy.h libexplain/dirname.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/mount_point.c -o libexplain/buffer/mount_point.lo
+
+libexplain/buffer/open_flags.lo: libexplain/buffer/open_flags.c libexplain/ac/fcntl.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/open_flags.h libexplain/parse_bits.h libexplain/sizeof.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/open_flags.c -o libexplain/buffer/open_flags.lo
+
+libexplain/buffer/path_to_pid.lo: libexplain/buffer/path_to_pid.c libexplain/ac/dirent.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/path_to_pid.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/is_same_inode.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/path_to_pid.c -o libexplain/buffer/path_to_pid.lo
+
+libexplain/buffer/permission_mode.lo: libexplain/buffer/permission_mode.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/parse_bits.h libexplain/permission_mode.h libexplain/sizeof.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/permission_mode.c -o libexplain/buffer/permission_mode.lo
+
+libexplain/buffer/rlimit.lo: libexplain/buffer/rlimit.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/resource.h libexplain/ac/time.h libexplain/buffer/rlimit.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/rlimit.c -o libexplain/buffer/rlimit.lo
+
+libexplain/buffer/sticky_permissions.lo: libexplain/buffer/sticky_permissions.c libexplain/ac/assert.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/string.h libexplain/ac/sys/param.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/ac/unistd.h libexplain/buffer/gettext.h libexplain/buffer/sticky_permissions.h libexplain/buffer/uid.h libexplain/config.h libexplain/config.messy.h libexplain/dirname.h libexplain/gcc_attributes.h libexplain/have_permission.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/sticky_permissions.c -o libexplain/buffer/sticky_permissions.lo
+
+libexplain/buffer/strerror.lo: libexplain/buffer/strerror.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/string.h libexplain/buffer/strerror.h libexplain/config.h libexplain/config.messy.h libexplain/errno_info.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/strerror.c -o libexplain/buffer/strerror.lo
+
+libexplain/buffer/success.lo: libexplain/buffer/success.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/gettext.h libexplain/buffer/success.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/success.c -o libexplain/buffer/success.lo
+
+libexplain/buffer/uid.lo: libexplain/buffer/uid.c libexplain/ac/pwd.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/types.h libexplain/buffer/uid.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/uid.c -o libexplain/buffer/uid.lo
+
+libexplain/chdir.lo: libexplain/chdir.c libexplain/ac/errno.h libexplain/chdir.h libexplain/config.h libexplain/config.messy.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/chdir.c -o libexplain/chdir.lo
+
+libexplain/.incl:
+	-$(INSTALL) -m 0755 -d $(includedir)/libexplain
+	@-test -d $(includedir)/libexplain && touch $@
+	@sleep 1
+
+$(includedir)/libexplain/chdir.h: libexplain/chdir.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/chdir.h $@
+
+libexplain/close.lo: libexplain/close.c libexplain/ac/errno.h libexplain/close.h libexplain/config.h libexplain/config.messy.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/close.c -o libexplain/close.lo
+
+$(includedir)/libexplain/close.h: libexplain/close.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/close.h $@
+
+libexplain/common_message_buffer.lo: libexplain/common_message_buffer.c libexplain/ac/sys/param.h libexplain/common_message_buffer.h libexplain/config.h libexplain/config.messy.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/common_message_buffer.c -o libexplain/common_message_buffer.lo
+
+libexplain/count_directory_entries.lo: libexplain/count_directory_entries.c libexplain/ac/dirent.h libexplain/ac/string.h libexplain/config.h libexplain/config.messy.h libexplain/count_directory_entries.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/count_directory_entries.c -o libexplain/count_directory_entries.lo
+
+libexplain/creat.lo: libexplain/creat.c libexplain/ac/errno.h libexplain/config.h libexplain/config.messy.h libexplain/creat.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/creat.c -o libexplain/creat.lo
+
+libexplain/dirname.lo: libexplain/dirname.c libexplain/ac/stddef.h libexplain/ac/string.h libexplain/ac/sys/param.h libexplain/ac/unistd.h libexplain/config.h libexplain/config.messy.h libexplain/dirname.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/dirname.c -o libexplain/dirname.lo
+
+libexplain/errno/access.lo: libexplain/errno/access.c libexplain/access.h libexplain/common_message_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/access.c -o libexplain/errno/access.lo
+
+libexplain/errno/chdir.lo: libexplain/errno/chdir.c libexplain/chdir.h libexplain/common_message_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/chdir.c -o libexplain/errno/chdir.lo
+
+libexplain/errno/close.lo: libexplain/errno/close.c libexplain/close.h libexplain/common_message_buffer.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/close.c -o libexplain/errno/close.lo
+
+libexplain/errno/creat.lo: libexplain/errno/creat.c libexplain/common_message_buffer.h libexplain/creat.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/creat.c -o libexplain/errno/creat.lo
+
+libexplain/errno/fclose.lo: libexplain/errno/fclose.c libexplain/ac/stdio.h libexplain/common_message_buffer.h libexplain/config.h libexplain/config.messy.h libexplain/fclose.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/fclose.c -o libexplain/errno/fclose.lo
+
+libexplain/errno/fcntl.lo: libexplain/errno/fcntl.c libexplain/common_message_buffer.h libexplain/fcntl.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/fcntl.c -o libexplain/errno/fcntl.lo
+
+libexplain/errno/fflush.lo: libexplain/errno/fflush.c libexplain/ac/stdio.h libexplain/common_message_buffer.h libexplain/config.h libexplain/config.messy.h libexplain/fflush.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/fflush.c -o libexplain/errno/fflush.lo
+
+libexplain/errno/fopen.lo: libexplain/errno/fopen.c libexplain/common_message_buffer.h libexplain/fopen.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/fopen.c -o libexplain/errno/fopen.lo
+
+libexplain/errno/freopen.lo: libexplain/errno/freopen.c libexplain/ac/stdio.h libexplain/common_message_buffer.h libexplain/config.h libexplain/config.messy.h libexplain/freopen.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/freopen.c -o libexplain/errno/freopen.lo
+
+libexplain/errno/link.lo: libexplain/errno/link.c libexplain/common_message_buffer.h libexplain/link.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/link.c -o libexplain/errno/link.lo
+
+libexplain/errno/lseek.lo: libexplain/errno/lseek.c libexplain/common_message_buffer.h libexplain/lseek.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/lseek.c -o libexplain/errno/lseek.lo
+
+libexplain/errno/lstat.lo: libexplain/errno/lstat.c libexplain/common_message_buffer.h libexplain/lstat.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/lstat.c -o libexplain/errno/lstat.lo
+
+libexplain/errno/open.lo: libexplain/errno/open.c libexplain/common_message_buffer.h libexplain/open.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/open.c -o libexplain/errno/open.lo
+
+libexplain/errno/opendir.lo: libexplain/errno/opendir.c libexplain/common_message_buffer.h libexplain/opendir.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/opendir.c -o libexplain/errno/opendir.lo
+
+libexplain/errno/read.lo: libexplain/errno/read.c libexplain/common_message_buffer.h libexplain/read.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/read.c -o libexplain/errno/read.lo
+
+libexplain/errno/rename.lo: libexplain/errno/rename.c libexplain/common_message_buffer.h libexplain/rename.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/rename.c -o libexplain/errno/rename.lo
+
+libexplain/errno/stat.lo: libexplain/errno/stat.c libexplain/common_message_buffer.h libexplain/stat.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/stat.c -o libexplain/errno/stat.lo
+
+libexplain/errno/symlink.lo: libexplain/errno/symlink.c libexplain/common_message_buffer.h libexplain/symlink.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/symlink.c -o libexplain/errno/symlink.lo
+
+libexplain/errno/unlink.lo: libexplain/errno/unlink.c libexplain/common_message_buffer.h libexplain/unlink.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/unlink.c -o libexplain/errno/unlink.lo
+
+libexplain/errno/write.lo: libexplain/errno/write.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/write.c -o libexplain/errno/write.lo
+
+libexplain/errno_info.lo: libexplain/errno_info.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno_info.c -o libexplain/errno_info.lo
+
+libexplain/errno_info/by_name.lo: libexplain/errno_info/by_name.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno_info/by_name.c -o libexplain/errno_info/by_name.lo
+
+libexplain/errno_info/by_name_fuzzy.lo: libexplain/errno_info/by_name_fuzzy.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno_info/by_name_fuzzy.c -o libexplain/errno_info/by_name_fuzzy.lo
+
+libexplain/errno_info/by_number.lo: libexplain/errno_info/by_number.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno_info/by_number.c -o libexplain/errno_info/by_number.lo
+
+libexplain/errno_info/by_text.lo: libexplain/errno_info/by_text.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno_info/by_text.c -o libexplain/errno_info/by_text.lo
+
+libexplain/errno_info/by_text_fuzzy.lo: libexplain/errno_info/by_text_fuzzy.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno_info/by_text_fuzzy.c -o libexplain/errno_info/by_text_fuzzy.lo
+
+libexplain/fclose.lo: libexplain/fclose.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/fclose.c -o libexplain/fclose.lo
+
+$(includedir)/libexplain/fclose.h: libexplain/fclose.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/fclose.h $@
+
+libexplain/fcntl.lo: libexplain/fcntl.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/fcntl.c -o libexplain/fcntl.lo
+
+$(includedir)/libexplain/fcntl.h: libexplain/fcntl.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/fcntl.h $@
+
+libexplain/fflush.lo: libexplain/fflush.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/fflush.c -o libexplain/fflush.lo
+
+$(includedir)/libexplain/fflush.h: libexplain/fflush.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/fflush.h $@
+
+libexplain/fopen.lo: libexplain/fopen.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/fopen.c -o libexplain/fopen.lo
+
+$(includedir)/libexplain/fopen.h: libexplain/fopen.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/fopen.h $@
+
+libexplain/fopen_or_die.lo: libexplain/fopen_or_die.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/fopen_or_die.c -o libexplain/fopen_or_die.lo
+
+libexplain/freopen.lo: libexplain/freopen.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/freopen.c -o libexplain/freopen.lo
+
+$(includedir)/libexplain/freopen.h: libexplain/freopen.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/freopen.h $@
+
+libexplain/fstrcmp.lo: libexplain/fstrcmp.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/fstrcmp.c -o libexplain/fstrcmp.lo
+
+libexplain/gettext.lo: libexplain/gettext.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/gettext.c -o libexplain/gettext.lo
+
+libexplain/have_permission.lo: libexplain/have_permission.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/have_permission.c -o libexplain/have_permission.lo
+
+libexplain/is_same_inode.lo: libexplain/is_same_inode.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/is_same_inode.c -o libexplain/is_same_inode.lo
+
+$(includedir)/libexplain/libexplain.h: libexplain/libexplain.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/libexplain.h $@
+
+libexplain/link.lo: libexplain/link.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/link.c -o libexplain/link.lo
+
+$(includedir)/libexplain/link.h: libexplain/link.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/link.h $@
+
+libexplain/lseek.lo: libexplain/lseek.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/lseek.c -o libexplain/lseek.lo
+
+$(includedir)/libexplain/lseek.h: libexplain/lseek.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/lseek.h $@
+
+libexplain/lstat.lo: libexplain/lstat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/lstat.c -o libexplain/lstat.lo
+
+$(includedir)/libexplain/lstat.h: libexplain/lstat.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/lstat.h $@
+
+libexplain/message/access.lo: libexplain/message/access.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/access.c -o libexplain/message/access.lo
+
+libexplain/message/chdir.lo: libexplain/message/chdir.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/chdir.c -o libexplain/message/chdir.lo
+
+libexplain/message/close.lo: libexplain/message/close.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/close.c -o libexplain/message/close.lo
+
+libexplain/message/creat.lo: libexplain/message/creat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/creat.c -o libexplain/message/creat.lo
+
+libexplain/message/errno/access.lo: libexplain/message/errno/access.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/access.c -o libexplain/message/errno/access.lo
+
+libexplain/message/errno/chdir.lo: libexplain/message/errno/chdir.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/chdir.c -o libexplain/message/errno/chdir.lo
+
+libexplain/message/errno/close.lo: libexplain/message/errno/close.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/close.c -o libexplain/message/errno/close.lo
+
+libexplain/message/errno/creat.lo: libexplain/message/errno/creat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/creat.c -o libexplain/message/errno/creat.lo
+
+libexplain/message/errno/fclose.lo: libexplain/message/errno/fclose.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/fclose.c -o libexplain/message/errno/fclose.lo
+
+libexplain/message/errno/fcntl.lo: libexplain/message/errno/fcntl.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/fcntl.c -o libexplain/message/errno/fcntl.lo
+
+libexplain/message/errno/fflush.lo: libexplain/message/errno/fflush.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/fflush.c -o libexplain/message/errno/fflush.lo
+
+libexplain/message/errno/fopen.lo: libexplain/message/errno/fopen.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/fopen.c -o libexplain/message/errno/fopen.lo
+
+libexplain/message/errno/freopen.lo: libexplain/message/errno/freopen.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/freopen.c -o libexplain/message/errno/freopen.lo
+
+libexplain/message/errno/link.lo: libexplain/message/errno/link.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/link.c -o libexplain/message/errno/link.lo
+
+libexplain/message/errno/lseek.lo: libexplain/message/errno/lseek.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/lseek.c -o libexplain/message/errno/lseek.lo
+
+libexplain/message/errno/lstat.lo: libexplain/message/errno/lstat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/lstat.c -o libexplain/message/errno/lstat.lo
+
+libexplain/message/errno/open.lo: libexplain/message/errno/open.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/open.c -o libexplain/message/errno/open.lo
+
+libexplain/message/errno/opendir.lo: libexplain/message/errno/opendir.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/opendir.c -o libexplain/message/errno/opendir.lo
+
+libexplain/message/errno/read.lo: libexplain/message/errno/read.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/read.c -o libexplain/message/errno/read.lo
+
+libexplain/message/errno/rename.lo: libexplain/message/errno/rename.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/rename.c -o libexplain/message/errno/rename.lo
+
+libexplain/message/errno/stat.lo: libexplain/message/errno/stat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/stat.c -o libexplain/message/errno/stat.lo
+
+libexplain/message/errno/symlink.lo: libexplain/message/errno/symlink.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/symlink.c -o libexplain/message/errno/symlink.lo
+
+libexplain/message/errno/unlink.lo: libexplain/message/errno/unlink.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/unlink.c -o libexplain/message/errno/unlink.lo
+
+libexplain/message/errno/write.lo: libexplain/message/errno/write.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/write.c -o libexplain/message/errno/write.lo
+
+libexplain/message/fclose.lo: libexplain/message/fclose.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/fclose.c -o libexplain/message/fclose.lo
+
+libexplain/message/fcntl.lo: libexplain/message/fcntl.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/fcntl.c -o libexplain/message/fcntl.lo
+
+libexplain/message/fflush.lo: libexplain/message/fflush.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/fflush.c -o libexplain/message/fflush.lo
+
+libexplain/message/fopen.lo: libexplain/message/fopen.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/fopen.c -o libexplain/message/fopen.lo
+
+libexplain/message/freopen.lo: libexplain/message/freopen.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/freopen.c -o libexplain/message/freopen.lo
+
+libexplain/message/link.lo: libexplain/message/link.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/link.c -o libexplain/message/link.lo
+
+libexplain/message/lseek.lo: libexplain/message/lseek.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/lseek.c -o libexplain/message/lseek.lo
+
+libexplain/message/lstat.lo: libexplain/message/lstat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/lstat.c -o libexplain/message/lstat.lo
+
+libexplain/message/open.lo: libexplain/message/open.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/open.c -o libexplain/message/open.lo
+
+libexplain/message/open_flags.lo: libexplain/message/open_flags.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/open_flags.c -o libexplain/message/open_flags.lo
+
+libexplain/message/opendir.lo: libexplain/message/opendir.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/opendir.c -o libexplain/message/opendir.lo
+
+libexplain/message/permission_mode.lo: libexplain/message/permission_mode.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/permission_mode.c -o libexplain/message/permission_mode.lo
+
+libexplain/message/read.lo: libexplain/message/read.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/read.c -o libexplain/message/read.lo
+
+libexplain/message/rename.lo: libexplain/message/rename.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/rename.c -o libexplain/message/rename.lo
+
+libexplain/message/stat.lo: libexplain/message/stat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/stat.c -o libexplain/message/stat.lo
+
+libexplain/message/symlink.lo: libexplain/message/symlink.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/symlink.c -o libexplain/message/symlink.lo
+
+libexplain/message/unlink.lo: libexplain/message/unlink.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/unlink.c -o libexplain/message/unlink.lo
+
+libexplain/message/write.lo: libexplain/message/write.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/write.c -o libexplain/message/write.lo
+
+libexplain/open.lo: libexplain/open.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/open.c -o libexplain/open.lo
+
+$(includedir)/libexplain/open.h: libexplain/open.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/open.h $@
+
+libexplain/open_flags.lo: libexplain/open_flags.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/open_flags.c -o libexplain/open_flags.lo
+
+libexplain/open_or_die.lo: libexplain/open_or_die.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/open_or_die.c -o libexplain/open_or_die.lo
+
+libexplain/opendir.lo: libexplain/opendir.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/opendir.c -o libexplain/opendir.lo
+
+libexplain/parse_bits.yacc.c libexplain/parse_bits.yacc.h: libexplain/parse_bits.y
+	$(YACC) -d libexplain/parse_bits.y
+	sed -e 's/[yY][yY]/parse_bits_/g' y.tab.c > libexplain/parse_bits.yacc.c
+	sed -e 's/[yY][yY]/parse_bits_/g' y.tab.h > libexplain/parse_bits.yacc.h
+	rm y.tab.c y.tab.h
+
+libexplain/parse_bits.yacc.lo: libexplain/parse_bits.yacc.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/parse_bits.yacc.c -o libexplain/parse_bits.yacc.lo
+
+libexplain/path_is_efault.lo: libexplain/path_is_efault.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/path_is_efault.c -o libexplain/path_is_efault.lo
+
+libexplain/permission_mode.lo: libexplain/permission_mode.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/permission_mode.c -o libexplain/permission_mode.lo
+
+libexplain/read.lo: libexplain/read.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/read.c -o libexplain/read.lo
+
+$(includedir)/libexplain/read.h: libexplain/read.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/read.h $@
+
+libexplain/rename.lo: libexplain/rename.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/rename.c -o libexplain/rename.lo
+
+$(includedir)/libexplain/rename.h: libexplain/rename.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/rename.h $@
+
+libexplain/reverse_strerror.lo: libexplain/reverse_strerror.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/reverse_strerror.c -o libexplain/reverse_strerror.lo
+
+libexplain/same_dev.lo: libexplain/same_dev.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/same_dev.c -o libexplain/same_dev.lo
+
+libexplain/stat.lo: libexplain/stat.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/stat.c -o libexplain/stat.lo
+
+$(includedir)/libexplain/stat.h: libexplain/stat.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/stat.h $@
+
+libexplain/string_buffer.lo: libexplain/string_buffer.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/string_buffer.c -o libexplain/string_buffer.lo
+
+libexplain/symlink.lo: libexplain/symlink.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/symlink.c -o libexplain/symlink.lo
+
+$(includedir)/libexplain/symlink.h: libexplain/symlink.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/symlink.h $@
+
+libexplain/unlink.lo: libexplain/unlink.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/unlink.c -o libexplain/unlink.lo
+
+$(includedir)/libexplain/unlink.h: libexplain/unlink.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/unlink.h $@
+
+libexplain/version.lo: libexplain/version.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/version.c -o libexplain/version.lo
+
+libexplain/version_print.lo: libexplain/version_print.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/version_print.c -o libexplain/version_print.lo
+
+libexplain/wrap_and_print.lo: libexplain/wrap_and_print.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/wrap_and_print.c -o libexplain/wrap_and_print.lo
+
+libexplain/write.lo: libexplain/write.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/write.c -o libexplain/write.lo
+
+$(includedir)/libexplain/write.h: libexplain/write.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/write.h $@
+
+man/man1/.mandir: man/.mandir
+	-$(INSTALL) -m 0755 -d $(mandir)/man1
+	@-test -d $(mandir)/man1 && touch $@
+	@sleep 1
+
+man/.mandir:
+	-$(INSTALL) -m 0755 -d $(mandir)
+	@-test -d $(mandir) && touch $@
+	@sleep 1
+
+$(mandir)/man1/explain.1: man/man1/explain.1  man/man1/.mandir
+	$(SOELIM) -I. -Iman/man1 man/man1/explain.1 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man1/explain_license.1: man/man1/explain_license.1  man/man1/.mandir
+	$(SOELIM) -I. -Iman/man1 man/man1/explain_license.1 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+man/man3/.mandir: man/.mandir
+	-$(INSTALL) -m 0755 -d $(mandir)/man3
+	@-test -d $(mandir)/man3 && touch $@
+	@sleep 1
+
+$(mandir)/man3/libexplain.3: man/man3/libexplain.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_access.3: man/man3/libexplain_access.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_access.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_chdir.3: man/man3/libexplain_chdir.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_chdir.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_close.3: man/man3/libexplain_close.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_close.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_creat.3: man/man3/libexplain_creat.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_creat.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_fclose.3: man/man3/libexplain_fclose.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_fclose.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_fcntl.3: man/man3/libexplain_fcntl.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_fcntl.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_fflush.3: man/man3/libexplain_fflush.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_fflush.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_fopen.3: man/man3/libexplain_fopen.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_fopen.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_fopen_or_die.3: man/man3/libexplain_fopen_or_die.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_fopen_or_die.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_freopen.3: man/man3/libexplain_freopen.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_freopen.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_license.3: man/man3/libexplain_license.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_license.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_link.3: man/man3/libexplain_link.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_link.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_lseek.3: man/man3/libexplain_lseek.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_lseek.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_lstat.3: man/man3/libexplain_lstat.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_lstat.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_open.3: man/man3/libexplain_open.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_open.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_open_or_die.3: man/man3/libexplain_open_or_die.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_open_or_die.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_opendir.3: man/man3/libexplain_opendir.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_opendir.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_read.3: man/man3/libexplain_read.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_read.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_rename.3: man/man3/libexplain_rename.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_rename.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_stat.3: man/man3/libexplain_stat.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_stat.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_symlink.3: man/man3/libexplain_symlink.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_symlink.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_unlink.3: man/man3/libexplain_unlink.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_unlink.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_write.3: man/man3/libexplain_write.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_write.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+script/test_prelude: script/test_prelude.in ./config.status
+	CONFIG_FILES=$@:script/test_prelude.in CONFIG_HEADERS= $(SH) ./config.status
+
+bin/test_prelude$(EXEEXT): script/test_prelude .bin
+	cp script/test_prelude $@
+	chmod a+rx $@
+
+$(bindir)/$(PROGRAM_PREFIX)test_prelude$(PROGRAM_SUFFIX)$(EXEEXT): bin/test_prelude$(EXEEXT) .bindir
+	$(INSTALL_SCRIPT) bin/test_prelude$(EXEEXT) $@
+
+t0001a: test/00/t0001a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0001a.sh
+
+t0002a: test/00/t0002a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0002a.sh
+
+t0003a: test/00/t0003a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0003a.sh
+
+t0004a: test/00/t0004a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0004a.sh
+
+t0005a: test/00/t0005a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0005a.sh
+
+t0006a: test/00/t0006a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0006a.sh
+
+t0007a: test/00/t0007a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0007a.sh
+
+t0008a: test/00/t0008a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0008a.sh
+
+t0009a: test/00/t0009a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0009a.sh
+
+t0010a: test/00/t0010a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0010a.sh
+
+t0011a: test/00/t0011a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0011a.sh
+
+t0012a: test/00/t0012a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0012a.sh
+
+t0013a: test/00/t0013a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0013a.sh
+
+t0014a: test/00/t0014a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0014a.sh
+
+t0015a: test/00/t0015a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0015a.sh
+
+t0016a: test/00/t0016a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0016a.sh
+
+t0017a: test/00/t0017a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0017a.sh
+
+t0018a: test/00/t0018a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0018a.sh
+
+t0019a: test/00/t0019a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0019a.sh
+
+t0020a: test/00/t0020a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0020a.sh
+
+t0021a: test/00/t0021a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0021a.sh
+
+t0022a: test/00/t0022a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0022a.sh
+
+t0023a: test/00/t0023a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0023a.sh
+
+t0024a: test/00/t0024a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0024a.sh
+
+t0025a: test/00/t0025a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0025a.sh
+
+t0026a: test/00/t0026a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0026a.sh
+
+t0027a: test/00/t0027a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0027a.sh
+
+t0028a: test/00/t0028a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0028a.sh
+
+t0029a: test/00/t0029a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0029a.sh
+
+t0030a: test/00/t0030a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0030a.sh
+
+t0031a: test/00/t0031a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0031a.sh
+
+t0032a: test/00/t0032a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0032a.sh
+
+t0033a: test/00/t0033a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0033a.sh
+
+t0034a: test/00/t0034a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0034a.sh
+
+t0035a: test/00/t0035a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0035a.sh
+
+t0036a: test/00/t0036a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0036a.sh
+
+t0037a: test/00/t0037a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0037a.sh
+
+t0038a: test/00/t0038a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0038a.sh
+
+t0039a: test/00/t0039a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0039a.sh
+
+t0040a: test/00/t0040a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0040a.sh
+
+t0041a: test/00/t0041a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0041a.sh
+
+t0042a: test/00/t0042a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0042a.sh
+
+t0043a: test/00/t0043a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0043a.sh
+
+t0044a: test/00/t0044a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0044a.sh
+
+t0045a: test/00/t0045a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0045a.sh
+
+t0046a: test/00/t0046a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0046a.sh
+
+t0047a: test/00/t0047a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0047a.sh
+
+t0049a: test/00/t0049a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0049a.sh
+
+t0050a: test/00/t0050a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0050a.sh
+
+t0051a: test/00/t0051a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0051a.sh
+
+t0052a: test/00/t0052a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0052a.sh
+
+t0053a: test/00/t0053a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0053a.sh
+
+t0054a: test/00/t0054a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0054a.sh
+
+t0055a: test/00/t0055a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0055a.sh
+
+t0056a: test/00/t0056a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0056a.sh
+
+t0058a: test/00/t0058a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0058a.sh
+
+t0059a: test/00/t0059a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0059a.sh
+
+t0060a: test/00/t0060a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0060a.sh
+
+t0061a: test/00/t0061a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0061a.sh
+
+t0062a: test/00/t0062a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0062a.sh
+
+t0063a: test/00/t0063a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0063a.sh
+
+t0064a: test/00/t0064a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0064a.sh
+
+t0065a: test/00/t0065a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0065a.sh
+
+t0066a: test/00/t0066a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0066a.sh
+
+t0067a: test/00/t0067a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0067a.sh
+
+t0068a: test/00/t0068a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0068a.sh
+
+t0069a: test/00/t0069a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0069a.sh
+
+t0070a: test/00/t0070a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0070a.sh
+
+t0071a: test/00/t0071a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0071a.sh
+
+t0072a: test/00/t0072a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0072a.sh
+
+t0073a: test/00/t0073a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0073a.sh
+
+t0074a: test/00/t0074a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0074a.sh
+
+t0075a: test/00/t0075a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0075a.sh
+
+t0076a: test/00/t0076a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0076a.sh
+
+t0077a: test/00/t0077a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0077a.sh
+
+t0078a: test/00/t0078a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0078a.sh
+
+t0079a: test/00/t0079a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0079a.sh
+
+t0080a: test/00/t0080a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0080a.sh
+
+t0081a: test/00/t0081a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0081a.sh
+
+t0082a: test/00/t0082a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0082a.sh
+
+t0083a: test/00/t0083a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0083a.sh
+
+t0084a: test/00/t0084a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0084a.sh
+
+t0085a: test/00/t0085a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0085a.sh
+
+t0086a: test/00/t0086a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0086a.sh
+
+t0087a: test/00/t0087a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0087a.sh
+
+t0088a: test/00/t0088a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0088a.sh
+
+t0089a: test/00/t0089a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0089a.sh
+
+t0090a: test/00/t0090a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0090a.sh
+
+t0091a: test/00/t0091a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0091a.sh
+
+t0092a: test/00/t0092a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0092a.sh
+
+t0093a: test/00/t0093a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0093a.sh
+
+t0094a: test/00/t0094a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0094a.sh
+
+t0095a: test/00/t0095a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0095a.sh
+
+t0096a: test/00/t0096a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0096a.sh
+
+t0097a: test/00/t0097a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0097a.sh
+
+t0098a: test/00/t0098a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0098a.sh
+
+t0099a: test/00/t0099a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/00/t0099a.sh
+
+t0100a: test/01/t0100a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0100a.sh
+
+t0101a: test/01/t0101a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0101a.sh
+
+t0102a: test/01/t0102a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0102a.sh
+
+t0103a: test/01/t0103a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0103a.sh
+
+t0104a: test/01/t0104a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0104a.sh
+
+t0105a: test/01/t0105a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0105a.sh
+
+t0107a: test/01/t0107a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0107a.sh
+
+t0108a: test/01/t0108a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0108a.sh
+
+t0109a: test/01/t0109a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0109a.sh
+
+t0110a: test/01/t0110a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0110a.sh
+
+t0111a: test/01/t0111a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0111a.sh
+
+t0112a: test/01/t0112a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0112a.sh
+
+t0113a: test/01/t0113a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0113a.sh
+
+t0114a: test/01/t0114a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0114a.sh
+
+t0115a: test/01/t0115a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0115a.sh
+
+t0116a: test/01/t0116a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0116a.sh
+
+t0117a: test/01/t0117a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0117a.sh
+
+t0118a: test/01/t0118a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0118a.sh
+
+t0119a: test/01/t0119a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0119a.sh
+
+t0120a: test/01/t0120a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0120a.sh
+
+t0121a: test/01/t0121a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0121a.sh
+
+t0122a: test/01/t0122a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0122a.sh
+
+t0123a: test/01/t0123a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0123a.sh
+
+t0124a: test/01/t0124a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0124a.sh
+
+t0125a: test/01/t0125a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0125a.sh
+
+t0126a: test/01/t0126a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0126a.sh
+
+t0127a: test/01/t0127a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0127a.sh
+
+t0128a: test/01/t0128a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0128a.sh
+
+t0129a: test/01/t0129a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0129a.sh
+
+t0130a: test/01/t0130a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0130a.sh
+
+t0131a: test/01/t0131a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0131a.sh
+
+t0132a: test/01/t0132a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0132a.sh
+
+t0133a: test/01/t0133a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0133a.sh
+
+t0134a: test/01/t0134a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0134a.sh
+
+t0135a: test/01/t0135a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0135a.sh
+
+t0136a: test/01/t0136a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0136a.sh
+
+t0137a: test/01/t0137a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0137a.sh
+
+t0138a: test/01/t0138a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0138a.sh
+
+t0139a: test/01/t0139a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0139a.sh
+
+t0140a: test/01/t0140a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0140a.sh
+
+t0141a: test/01/t0141a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0141a.sh
+
+t0142a: test/01/t0142a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0142a.sh
+
+t0143a: test/01/t0143a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0143a.sh
+
+t0144a: test/01/t0144a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0144a.sh
+
+t0145a: test/01/t0145a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0145a.sh
+
+t0146a: test/01/t0146a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/01/t0146a.sh
+
+test_access/main.lo: test_access/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_access/main.c -o test_access/main.lo
+
+test_chdir/main.lo: test_chdir/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_chdir/main.c -o test_chdir/main.lo
+
+test_creat/main.lo: test_creat/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_creat/main.c -o test_creat/main.lo
+
+test_fopen/main.lo: test_fopen/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_fopen/main.c -o test_fopen/main.lo
+
+test_link/main.lo: test_link/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_link/main.c -o test_link/main.lo
+
+test_lstat/main.lo: test_lstat/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_lstat/main.c -o test_lstat/main.lo
+
+test_open/main.lo: test_open/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_open/main.c -o test_open/main.lo
+
+test_opendir/main.lo: test_opendir/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_opendir/main.c -o test_opendir/main.lo
+
+test_rename/main.lo: test_rename/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_rename/main.c -o test_rename/main.lo
+
+test_stat/main.lo: test_stat/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_stat/main.c -o test_stat/main.lo
+
+test_symlink/main.lo: test_symlink/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_symlink/main.c -o test_symlink/main.lo
+
+test_unlink/main.lo: test_unlink/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_unlink/main.c -o test_unlink/main.lo
+
+test_user/main.lo: test_user/main.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_user/main.c -o test_user/main.lo
+
+lib_obj = libexplain/ac/string.lo libexplain/access.lo libexplain/buffer/access_mode.lo libexplain/buffer/because.lo libexplain/buffer/efault.lo libexplain/buffer/eio.lo libexplain/buffer/emfile.lo libexplain/buffer/emlink.lo libexplain/buffer/enfile.lo libexplain/buffer/enomem.lo libexplain/buffer/errno/access.lo libexplain/buffer/errno/chdir.lo libexplain/buffer/errno/close.lo libexplain/buffer/errno/creat.lo libexplain/buffer/errno/fclose.lo libexplain/buffer/errno/fcntl.lo libexplain/buffer/errno/fflush.lo libexplain/buffer/errno/fopen.lo libexplain/buffer/errno/freopen.lo libexplain/buffer/errno/link.lo libexplain/buffer/errno/lseek.lo libexplain/buffer/errno/lstat.lo libexplain/buffer/errno/open.lo libexplain/buffer/errno/opendir.lo libexplain/buffer/errno/path_resolution.lo libexplain/buffer/errno/read.lo libexplain/buffer/errno/rename.lo libexplain/buffer/errno/stat.lo libexplain/buffer/errno/symlink.lo libexplain/buffer/errno/unlink.lo libexplain/buffer/errno/write.lo libexplain/buffer/exdev.lo libexplain/buffer/fildes_to_pathname.lo libexplain/buffer/file_type.lo libexplain/buffer/flock.lo libexplain/buffer/gettext.lo libexplain/buffer/lseek_whence.lo libexplain/buffer/mount_point.lo libexplain/buffer/open_flags.lo libexplain/buffer/path_to_pid.lo libexplain/buffer/permission_mode.lo libexplain/buffer/rlimit.lo libexplain/buffer/sticky_permissions.lo libexplain/buffer/strerror.lo libexplain/buffer/success.lo libexplain/buffer/uid.lo libexplain/chdir.lo libexplain/close.lo libexplain/common_message_buffer.lo libexplain/count_directory_entries.lo libexplain/creat.lo libexplain/dirname.lo libexplain/errno/access.lo libexplain/errno/chdir.lo libexplain/errno/close.lo libexplain/errno/creat.lo libexplain/errno/fclose.lo libexplain/errno/fcntl.lo libexplain/errno/fflush.lo libexplain/errno/fopen.lo libexplain/errno/freopen.lo libexplain/errno/link.lo libexplain/errno/lseek.lo libexplain/errno/lstat.lo libexplain/errno/open.lo libexplain/errno/opendir.lo libexplain/errno/read.lo libexplain/errno/rename.lo libexplain/errno/stat.lo libexplain/errno/symlink.lo libexplain/errno/unlink.lo libexplain/errno/write.lo libexplain/errno_info.lo libexplain/errno_info/by_name.lo libexplain/errno_info/by_name_fuzzy.lo libexplain/errno_info/by_number.lo libexplain/errno_info/by_text.lo libexplain/errno_info/by_text_fuzzy.lo libexplain/fclose.lo libexplain/fcntl.lo libexplain/fflush.lo libexplain/fopen.lo libexplain/fopen_or_die.lo libexplain/freopen.lo libexplain/fstrcmp.lo libexplain/gettext.lo libexplain/have_permission.lo libexplain/is_same_inode.lo libexplain/link.lo libexplain/lseek.lo libexplain/lstat.lo libexplain/message/access.lo libexplain/message/chdir.lo libexplain/message/close.lo libexplain/message/creat.lo libexplain/message/errno/access.lo libexplain/message/errno/chdir.lo libexplain/message/errno/close.lo libexplain/message/errno/creat.lo libexplain/message/errno/fclose.lo libexplain/message/errno/fcntl.lo libexplain/message/errno/fflush.lo libexplain/message/errno/fopen.lo libexplain/message/errno/freopen.lo libexplain/message/errno/link.lo libexplain/message/errno/lseek.lo libexplain/message/errno/lstat.lo libexplain/message/errno/open.lo libexplain/message/errno/opendir.lo libexplain/message/errno/read.lo libexplain/message/errno/rename.lo libexplain/message/errno/stat.lo libexplain/message/errno/symlink.lo libexplain/message/errno/unlink.lo libexplain/message/errno/write.lo libexplain/message/fclose.lo libexplain/message/fcntl.lo libexplain/message/fflush.lo libexplain/message/fopen.lo libexplain/message/freopen.lo libexplain/message/link.lo libexplain/message/lseek.lo libexplain/message/lstat.lo libexplain/message/open.lo libexplain/message/open_flags.lo libexplain/message/opendir.lo libexplain/message/permission_mode.lo libexplain/message/read.lo libexplain/message/rename.lo libexplain/message/stat.lo libexplain/message/symlink.lo libexplain/message/unlink.lo libexplain/message/write.lo libexplain/open.lo libexplain/open_flags.lo libexplain/open_or_die.lo libexplain/opendir.lo libexplain/parse_bits.yacc.lo libexplain/path_is_efault.lo libexplain/permission_mode.lo libexplain/read.lo libexplain/rename.lo libexplain/reverse_strerror.lo libexplain/same_dev.lo libexplain/stat.lo libexplain/string_buffer.lo libexplain/symlink.lo libexplain/unlink.lo libexplain/version.lo libexplain/version_print.lo libexplain/wrap_and_print.lo libexplain/write.lo
+
+libexplain/libexplain.la: $(lib_obj)
+	rm -f $@
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@  $(lib_obj) -rpath $(LIBDIR) -version-info 0:1:0
+
+$(LIBDIR)/libexplain.la: libexplain/libexplain.la
+	$(LIBTOOL) --mode=install $(INSTALL_DATA) libexplain/libexplain.la $@
+
+explain_obj = explain/access.lo explain/chdir.lo explain/close.lo explain/creat.lo explain/fcntl.lo explain/fopen.lo explain/link.lo explain/lseek.lo explain/lstat.lo explain/main.lo explain/open.lo explain/opendir.lo explain/read.lo explain/rename.lo explain/stat.lo explain/strerror.lo explain/strtol_or_die.lo explain/symlink.lo explain/unlink.lo explain/write.lo
+
+bin/explain$(EXEEXT): $(explain_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(explain_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/explain$(EXEEXT): bin/explain$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/explain$(EXEEXT) $@
+
+test_access_obj = test_access/main.lo
+
+bin/test_access$(EXEEXT): $(test_access_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_access_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_access$(EXEEXT): bin/test_access$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_access$(EXEEXT) $@
+
+test_chdir_obj = test_chdir/main.lo
+
+bin/test_chdir$(EXEEXT): $(test_chdir_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_chdir_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_chdir$(EXEEXT): bin/test_chdir$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_chdir$(EXEEXT) $@
+
+test_creat_obj = test_creat/main.lo
+
+bin/test_creat$(EXEEXT): $(test_creat_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_creat_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_creat$(EXEEXT): bin/test_creat$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_creat$(EXEEXT) $@
+
+test_fopen_obj = test_fopen/main.lo
+
+bin/test_fopen$(EXEEXT): $(test_fopen_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_fopen_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_fopen$(EXEEXT): bin/test_fopen$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_fopen$(EXEEXT) $@
+
+test_link_obj = test_link/main.lo
+
+bin/test_link$(EXEEXT): $(test_link_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_link_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_link$(EXEEXT): bin/test_link$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_link$(EXEEXT) $@
+
+test_lstat_obj = test_lstat/main.lo
+
+bin/test_lstat$(EXEEXT): $(test_lstat_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_lstat_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_lstat$(EXEEXT): bin/test_lstat$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_lstat$(EXEEXT) $@
+
+test_open_obj = test_open/main.lo
+
+bin/test_open$(EXEEXT): $(test_open_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_open_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_open$(EXEEXT): bin/test_open$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_open$(EXEEXT) $@
+
+test_opendir_obj = test_opendir/main.lo
+
+bin/test_opendir$(EXEEXT): $(test_opendir_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_opendir_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_opendir$(EXEEXT): bin/test_opendir$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_opendir$(EXEEXT) $@
+
+test_rename_obj = test_rename/main.lo
+
+bin/test_rename$(EXEEXT): $(test_rename_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_rename_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_rename$(EXEEXT): bin/test_rename$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_rename$(EXEEXT) $@
+
+test_stat_obj = test_stat/main.lo
+
+bin/test_stat$(EXEEXT): $(test_stat_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_stat_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_stat$(EXEEXT): bin/test_stat$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_stat$(EXEEXT) $@
+
+test_symlink_obj = test_symlink/main.lo
+
+bin/test_symlink$(EXEEXT): $(test_symlink_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_symlink_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_symlink$(EXEEXT): bin/test_symlink$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_symlink$(EXEEXT) $@
+
+test_unlink_obj = test_unlink/main.lo
+
+bin/test_unlink$(EXEEXT): $(test_unlink_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_unlink_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_unlink$(EXEEXT): bin/test_unlink$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_unlink$(EXEEXT) $@
+
+test_user_obj = test_user/main.lo
+
+bin/test_user$(EXEEXT): $(test_user_obj) libexplain/libexplain.la .bin
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(test_user_obj) libexplain/libexplain.la $(LIBS)
+
+$(bindir)/test_user$(EXEEXT): bin/test_user$(EXEEXT) .bindir
+	$(LIBTOOL) --mode=install $(INSTALL_PROGRAM) bin/test_user$(EXEEXT) $@
+
+all: all-bin all-doc
+all-bin: bin/explain$(EXEEXT) bin/test_access$(EXEEXT) bin/test_chdir$(EXEEXT) bin/test_creat$(EXEEXT) bin/test_fopen$(EXEEXT) bin/test_link$(EXEEXT) bin/test_lstat$(EXEEXT) bin/test_open$(EXEEXT) bin/test_opendir$(EXEEXT) bin/test_prelude$(EXEEXT) bin/test_rename$(EXEEXT) bin/test_stat$(EXEEXT) bin/test_symlink$(EXEEXT) bin/test_unlink$(EXEEXT) bin/test_user$(EXEEXT)
+all-doc: etc/BUILDING.ps etc/README.ps etc/new_system_call.ps etc/reference.ps
+
+.bin:
+	-mkdir bin
+	-chmod 0755 bin
+	@-test -d bin && touch $@
+	@sleep 1
+
+.bindir:
+	-$(INSTALL) -m 0755 -d $(bindir)
+	@-test -d $(bindir) && touch $@
+	@sleep 1
+
+check: sure
+
+sure: t0001a \
+	t0002a \
+	t0003a \
+	t0004a \
+	t0005a \
+	t0006a \
+	t0007a \
+	t0008a \
+	t0009a \
+	t0010a \
+	t0011a \
+	t0012a \
+	t0013a \
+	t0014a \
+	t0015a \
+	t0016a \
+	t0017a \
+	t0018a \
+	t0019a \
+	t0020a \
+	t0021a \
+	t0022a \
+	t0023a \
+	t0024a \
+	t0025a \
+	t0026a \
+	t0027a \
+	t0028a \
+	t0029a \
+	t0030a \
+	t0031a \
+	t0032a \
+	t0033a \
+	t0034a \
+	t0035a \
+	t0036a \
+	t0037a \
+	t0038a \
+	t0039a \
+	t0040a \
+	t0041a \
+	t0042a \
+	t0043a \
+	t0044a \
+	t0045a \
+	t0046a \
+	t0047a \
+	t0049a \
+	t0050a \
+	t0051a \
+	t0052a \
+	t0053a \
+	t0054a \
+	t0055a \
+	t0056a \
+	t0058a \
+	t0059a \
+	t0060a \
+	t0061a \
+	t0062a \
+	t0063a \
+	t0064a \
+	t0065a \
+	t0066a \
+	t0067a \
+	t0068a \
+	t0069a \
+	t0070a \
+	t0071a \
+	t0072a \
+	t0073a \
+	t0074a \
+	t0075a \
+	t0076a \
+	t0077a \
+	t0078a \
+	t0079a \
+	t0080a \
+	t0081a \
+	t0082a \
+	t0083a \
+	t0084a \
+	t0085a \
+	t0086a \
+	t0087a \
+	t0088a \
+	t0089a \
+	t0090a \
+	t0091a \
+	t0092a \
+	t0093a \
+	t0094a \
+	t0095a \
+	t0096a \
+	t0097a \
+	t0098a \
+	t0099a \
+	t0100a \
+	t0101a \
+	t0102a \
+	t0103a \
+	t0104a \
+	t0105a \
+	t0107a \
+	t0108a \
+	t0109a \
+	t0110a \
+	t0111a \
+	t0112a \
+	t0113a \
+	t0114a \
+	t0115a \
+	t0116a \
+	t0117a \
+	t0118a \
+	t0119a \
+	t0120a \
+	t0121a \
+	t0122a \
+	t0123a \
+	t0124a \
+	t0125a \
+	t0126a \
+	t0127a \
+	t0128a \
+	t0129a \
+	t0130a \
+	t0131a \
+	t0132a \
+	t0133a \
+	t0134a \
+	t0135a \
+	t0136a \
+	t0137a \
+	t0138a \
+	t0139a \
+	t0140a \
+	t0141a \
+	t0142a \
+	t0143a \
+	t0144a \
+	t0145a \
+	t0146a
+	@echo Passed All Tests
+
+clean-obj:
+	rm -f .bin
+	rm -f .bindir
+	rm -f 'bin/test_prelude$(EXEEXT)'
+	rm -f core
+	rm -f explain/access.lo
+	rm -f explain/chdir.lo
+	rm -f explain/close.lo
+	rm -f explain/creat.lo
+	rm -f explain/fcntl.lo
+	rm -f explain/fopen.lo
+	rm -f explain/link.lo
+	rm -f explain/lseek.lo
+	rm -f explain/lstat.lo
+	rm -f explain/main.lo
+	rm -f explain/open.lo
+	rm -f explain/opendir.lo
+	rm -f explain/read.lo
+	rm -f explain/rename.lo
+	rm -f explain/stat.lo
+	rm -f explain/strerror.lo
+	rm -f explain/strtol_or_die.lo
+	rm -f explain/symlink.lo
+	rm -f explain/unlink.lo
+	rm -f explain/write.lo
+	rm -f libdir/.libdir
+	rm -f libdir/pkg-config/.libdir
+	rm -f libexplain/.incl
+	rm -f libexplain/ac/string.lo
+	rm -f libexplain/access.lo
+	rm -f libexplain/buffer/access_mode.lo
+	rm -f libexplain/buffer/because.lo
+	rm -f libexplain/buffer/efault.lo
+	rm -f libexplain/buffer/eio.lo
+	rm -f libexplain/buffer/emfile.lo
+	rm -f libexplain/buffer/emlink.lo
+	rm -f libexplain/buffer/enfile.lo
+	rm -f libexplain/buffer/enomem.lo
+	rm -f libexplain/buffer/errno/access.lo
+	rm -f libexplain/buffer/errno/chdir.lo
+	rm -f libexplain/buffer/errno/close.lo
+	rm -f libexplain/buffer/errno/creat.lo
+	rm -f libexplain/buffer/errno/fclose.lo
+	rm -f libexplain/buffer/errno/fcntl.lo
+	rm -f libexplain/buffer/errno/fflush.lo
+	rm -f libexplain/buffer/errno/fopen.lo
+	rm -f libexplain/buffer/errno/freopen.lo
+	rm -f libexplain/buffer/errno/link.lo
+	rm -f libexplain/buffer/errno/lseek.lo
+	rm -f libexplain/buffer/errno/lstat.lo
+	rm -f libexplain/buffer/errno/open.lo
+	rm -f libexplain/buffer/errno/opendir.lo
+	rm -f libexplain/buffer/errno/path_resolution.lo
+	rm -f libexplain/buffer/errno/read.lo
+	rm -f libexplain/buffer/errno/rename.lo
+	rm -f libexplain/buffer/errno/stat.lo
+	rm -f libexplain/buffer/errno/symlink.lo
+	rm -f libexplain/buffer/errno/unlink.lo
+	rm -f libexplain/buffer/errno/write.lo
+	rm -f libexplain/buffer/exdev.lo
+	rm -f libexplain/buffer/fildes_to_pathname.lo
+	rm -f libexplain/buffer/file_type.lo
+	rm -f libexplain/buffer/flock.lo
+	rm -f libexplain/buffer/gettext.lo
+	rm -f libexplain/buffer/lseek_whence.lo
+	rm -f libexplain/buffer/mount_point.lo
+	rm -f libexplain/buffer/open_flags.lo
+	rm -f libexplain/buffer/path_to_pid.lo
+	rm -f libexplain/buffer/permission_mode.lo
+	rm -f libexplain/buffer/rlimit.lo
+	rm -f libexplain/buffer/sticky_permissions.lo
+	rm -f libexplain/buffer/strerror.lo
+	rm -f libexplain/buffer/success.lo
+	rm -f libexplain/buffer/uid.lo
+	rm -f libexplain/chdir.lo
+	rm -f libexplain/close.lo
+	rm -f libexplain/common_message_buffer.lo
+	rm -f libexplain/count_directory_entries.lo
+	rm -f libexplain/creat.lo
+	rm -f libexplain/dirname.lo
+	rm -f libexplain/errno/access.lo
+	rm -f libexplain/errno/chdir.lo
+	rm -f libexplain/errno/close.lo
+	rm -f libexplain/errno/creat.lo
+	rm -f libexplain/errno/fclose.lo
+	rm -f libexplain/errno/fcntl.lo
+	rm -f libexplain/errno/fflush.lo
+	rm -f libexplain/errno/fopen.lo
+	rm -f libexplain/errno/freopen.lo
+	rm -f libexplain/errno/link.lo
+	rm -f libexplain/errno/lseek.lo
+	rm -f libexplain/errno/lstat.lo
+	rm -f libexplain/errno/open.lo
+	rm -f libexplain/errno/opendir.lo
+	rm -f libexplain/errno/read.lo
+	rm -f libexplain/errno/rename.lo
+	rm -f libexplain/errno/stat.lo
+	rm -f libexplain/errno/symlink.lo
+	rm -f libexplain/errno/unlink.lo
+	rm -f libexplain/errno/write.lo
+	rm -f libexplain/errno_info.lo
+	rm -f libexplain/errno_info/by_name.lo
+	rm -f libexplain/errno_info/by_name_fuzzy.lo
+	rm -f libexplain/errno_info/by_number.lo
+	rm -f libexplain/errno_info/by_text.lo
+	rm -f libexplain/errno_info/by_text_fuzzy.lo
+	rm -f libexplain/fclose.lo
+	rm -f libexplain/fcntl.lo
+	rm -f libexplain/fflush.lo
+	rm -f libexplain/fopen.lo
+	rm -f libexplain/fopen_or_die.lo
+	rm -f libexplain/freopen.lo
+	rm -f libexplain/fstrcmp.lo
+	rm -f libexplain/gettext.lo
+	rm -f libexplain/have_permission.lo
+	rm -f libexplain/is_same_inode.lo
+	rm -f libexplain/libexplain.la
+	rm -f libexplain/link.lo
+	rm -f libexplain/lseek.lo
+	rm -f libexplain/lstat.lo
+	rm -f libexplain/message/access.lo
+	rm -f libexplain/message/chdir.lo
+	rm -f libexplain/message/close.lo
+	rm -f libexplain/message/creat.lo
+	rm -f libexplain/message/errno/access.lo
+	rm -f libexplain/message/errno/chdir.lo
+	rm -f libexplain/message/errno/close.lo
+	rm -f libexplain/message/errno/creat.lo
+	rm -f libexplain/message/errno/fclose.lo
+	rm -f libexplain/message/errno/fcntl.lo
+	rm -f libexplain/message/errno/fflush.lo
+	rm -f libexplain/message/errno/fopen.lo
+	rm -f libexplain/message/errno/freopen.lo
+	rm -f libexplain/message/errno/link.lo
+	rm -f libexplain/message/errno/lseek.lo
+	rm -f libexplain/message/errno/lstat.lo
+	rm -f libexplain/message/errno/open.lo
+	rm -f libexplain/message/errno/opendir.lo
+	rm -f libexplain/message/errno/read.lo
+	rm -f libexplain/message/errno/rename.lo
+	rm -f libexplain/message/errno/stat.lo
+	rm -f libexplain/message/errno/symlink.lo
+	rm -f libexplain/message/errno/unlink.lo
+	rm -f libexplain/message/errno/write.lo
+	rm -f libexplain/message/fclose.lo
+	rm -f libexplain/message/fcntl.lo
+	rm -f libexplain/message/fflush.lo
+	rm -f libexplain/message/fopen.lo
+	rm -f libexplain/message/freopen.lo
+	rm -f libexplain/message/link.lo
+	rm -f libexplain/message/lseek.lo
+	rm -f libexplain/message/lstat.lo
+	rm -f libexplain/message/open.lo
+	rm -f libexplain/message/open_flags.lo
+	rm -f libexplain/message/opendir.lo
+	rm -f libexplain/message/permission_mode.lo
+	rm -f libexplain/message/read.lo
+	rm -f libexplain/message/rename.lo
+	rm -f libexplain/message/stat.lo
+	rm -f libexplain/message/symlink.lo
+	rm -f libexplain/message/unlink.lo
+	rm -f libexplain/message/write.lo
+	rm -f libexplain/open.lo
+	rm -f libexplain/open_flags.lo
+	rm -f libexplain/open_or_die.lo
+	rm -f libexplain/opendir.lo
+	rm -f libexplain/parse_bits.yacc.c
+	rm -f libexplain/parse_bits.yacc.cc
+	rm -f libexplain/parse_bits.yacc.h
+	rm -f libexplain/parse_bits.yacc.lo
+	rm -f libexplain/path_is_efault.lo
+	rm -f libexplain/permission_mode.lo
+	rm -f libexplain/read.lo
+	rm -f libexplain/rename.lo
+	rm -f libexplain/reverse_strerror.lo
+	rm -f libexplain/same_dev.lo
+	rm -f libexplain/stat.lo
+	rm -f libexplain/string_buffer.lo
+	rm -f libexplain/symlink.lo
+	rm -f libexplain/unlink.lo
+	rm -f libexplain/version.lo
+	rm -f libexplain/version_print.lo
+	rm -f libexplain/wrap_and_print.lo
+	rm -f libexplain/write.lo
+	rm -f man/.mandir
+	rm -f man/man1/.mandir
+	rm -f man/man3/.mandir
+	rm -f test_access/main.lo
+	rm -f test_chdir/main.lo
+	rm -f test_creat/main.lo
+	rm -f test_fopen/main.lo
+	rm -f test_link/main.lo
+	rm -f test_lstat/main.lo
+	rm -f test_open/main.lo
+	rm -f test_opendir/main.lo
+	rm -f test_rename/main.lo
+	rm -f test_stat/main.lo
+	rm -f test_symlink/main.lo
+	rm -f test_unlink/main.lo
+	rm -f test_user/main.lo
+	rm -f y.output
+	rm -f y.tab.c
+	rm -f y.tab.h
+
+clean: clean-obj
+	rm -f 'bin/explain$(EXEEXT)'
+	rm -f 'bin/test_access$(EXEEXT)'
+	rm -f 'bin/test_chdir$(EXEEXT)'
+	rm -f 'bin/test_creat$(EXEEXT)'
+	rm -f 'bin/test_fopen$(EXEEXT)'
+	rm -f 'bin/test_link$(EXEEXT)'
+	rm -f 'bin/test_lstat$(EXEEXT)'
+	rm -f 'bin/test_open$(EXEEXT)'
+	rm -f 'bin/test_opendir$(EXEEXT)'
+	rm -f 'bin/test_prelude$(EXEEXT)'
+	rm -f 'bin/test_rename$(EXEEXT)'
+	rm -f 'bin/test_stat$(EXEEXT)'
+	rm -f 'bin/test_symlink$(EXEEXT)'
+	rm -f 'bin/test_unlink$(EXEEXT)'
+	rm -f 'bin/test_user$(EXEEXT)'
+	rm -f etc/BUILDING.ps
+	rm -f etc/README.ps
+	rm -f etc/new_system_call.ps
+	rm -f etc/reference.ps
+
+distclean: clean
+	rm -f Makefile
+	rm -f config.cache
+	rm -f config.log
+	rm -f config.status
+	rm -f libdir/pkg-config/libexplain.pc
+	rm -f libexplain/config.h
+	rm -f script/test_prelude
+
+install-bin: $(bindir)/explain
+
+install-man: $(mandir)/man1/explain.1 $(mandir)/man1/explain_license.1 $(mandir)/man3/libexplain.3 $(mandir)/man3/libexplain_access.3 $(mandir)/man3/libexplain_chdir.3 $(mandir)/man3/libexplain_close.3 $(mandir)/man3/libexplain_creat.3 $(mandir)/man3/libexplain_fclose.3 $(mandir)/man3/libexplain_fcntl.3 $(mandir)/man3/libexplain_fflush.3 $(mandir)/man3/libexplain_fopen.3 $(mandir)/man3/libexplain_fopen_or_die.3 $(mandir)/man3/libexplain_freopen.3 $(mandir)/man3/libexplain_license.3 $(mandir)/man3/libexplain_link.3 $(mandir)/man3/libexplain_lseek.3 $(mandir)/man3/libexplain_lstat.3 $(mandir)/man3/libexplain_open.3 $(mandir)/man3/libexplain_open_or_die.3 $(mandir)/man3/libexplain_opendir.3 $(mandir)/man3/libexplain_read.3 $(mandir)/man3/libexplain_rename.3 $(mandir)/man3/libexplain_stat.3 $(mandir)/man3/libexplain_symlink.3 $(mandir)/man3/libexplain_unlink.3 $(mandir)/man3/libexplain_write.3
+
+install-libdir: $(LIBDIR)/libexplain.la $(LIBDIR)/pkg-config/libexplain.pc
+
+install-include: \
+	$(includedir)/libexplain/chdir.h \
+	$(includedir)/libexplain/close.h \
+	$(includedir)/libexplain/fclose.h \
+	$(includedir)/libexplain/fcntl.h \
+	$(includedir)/libexplain/fflush.h \
+	$(includedir)/libexplain/fopen.h \
+	$(includedir)/libexplain/freopen.h \
+	$(includedir)/libexplain/libexplain.h \
+	$(includedir)/libexplain/link.h \
+	$(includedir)/libexplain/lseek.h \
+	$(includedir)/libexplain/lstat.h \
+	$(includedir)/libexplain/open.h \
+	$(includedir)/libexplain/read.h \
+	$(includedir)/libexplain/rename.h \
+	$(includedir)/libexplain/stat.h \
+	$(includedir)/libexplain/symlink.h \
+	$(includedir)/libexplain/unlink.h \
+	$(includedir)/libexplain/write.h
+
+install: install-bin install-man install-libdir install-include

@@ -1,0 +1,255 @@
+.\"
+.\" libexplain - Explain errno values returned by libc functions
+.\" Copyright (C) 2008 Peter Miller
+.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 3 of the License, or (at
+.\" your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program. If not, see <http://www.gnu.org/licenses/>.
+.\"
+.ad l
+.hy 0
+.so etc/version.so
+<!DOCTYPE HTML PUBLIC
+    "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd"
+    >
+.br
+<html>
+<head>
+<title>
+libexplain \*(v)
+</title>
+</head>
+.br
+<body>
+<img src="libexplain.128.png" align="left" alt="" />
+<img src="libexplain.128.png" align="right" alt="" />
+<h1 align="center">
+libexplain \*(v)
+</h1>
+The libexplain project provides a library which may be used to explain
+Unix and Linux system call errors.
+This will make your application's error messages much more
+informative to your users.
+<p>
+The library is not quite a drop-in replacement for strerror, but it
+comes close.
+Each system call has a dedicated libexplain function, for example
+<blockquote><pre>
+.nf
+fd = open(path, flags, mode);
+if (fd < 0)
+{
+    fprintf(stderr, "%s\en", libexplain_open(path, flags, mode));
+    exit(1);
+}
+.fi
+</pre></blockquote>
+If, for example, you were to try to open
+.br
+<tt>no-such-dir/some-file</tt>, you would see a message like
+<blockquote>
+<tt>open("no-such-dir/some-file", O_RDONLY) failed,
+No such file or directory (2, ENOENT)
+because directory
+.br
+"no-such-dir" does not exist</tt>
+</blockquote>
+<p>
+The library also provides thread safe variants of each function.
+
+<h2> Some Common Explanations </h2>
+<dl>
+
+<dt>file descriptors<dd>
+    Where only a file descriptor is passed, the message will include the
+    pathname of the file.
+
+<dt>EACCES<dd>
+    When this is caused by a pathname component, rather than the last
+    component, the name of the problematic component will be included in
+    the message, along with some additional permissions information.
+
+<dt>ENOENT<dd>
+    If this error is caused by a missing path component, rather than the
+    last path component,
+    <ul>
+    <li> the name of the missing component is included
+    in the explanation;
+    <li> if the system call takes more than one path, the
+    message will distinguish which of the paths is at fault;
+    <li> if there is a similarly named file in the directory,
+    the name of the similar file will be included in the message.
+    </ul>
+
+<dt>ENOTDIR<dd>
+    The name of the component which is not a directory will be included
+    in the message, along with its file type.
+
+<dt>ELOOP<dd>
+    The path of the first symbolic link in
+    the loop will be included in the message.
+    Or, if there was too many indirections but no loop,
+    this will be included in the message, along with the actual limit.
+
+<dt>EFAULT<dd>
+    If a system call takes more than one pointer argument, the message
+    will indicate which pointer is at fault.
+
+<dt>EEXIST<dd>
+    If a file should not exists, but does, the message will include the
+    existing file's file type.
+
+<dt><i>etc</i><dd>
+    There are many more.
+    The philosophy is to include as much information as is available.
+</dl>
+
+<h2> Documentation </h2>
+<ul>
+<li>
+There is <a href="doc-external/index.html"
+>full documentation</a> of all API functions.
+This is the interface users of the library may use.
+<li>
+There is <a href="doc-internal/index.html"
+>full documentation</a> of all internal functions.
+This includes all of the functions internal to the library,
+for libexplain developers to use.
+<li>
+The above documentation is generated from the source files,
+via <a href="http://www.doxygen.org/index.html" >Doxygen</a>.
+<li> Want to help?  <a href="fixme.html" >Here is a list of places</a>
+in the source code marked &ldquo;FIXME&rdquo;.
+</ul>
+
+.br
+<h2> Download </h2>
+The following files are available for download:
+<p>
+<table align="center">
+<tr> <th> File </th><th> Description </th> </tr>
+.br
+<tr>
+    <td> <a href="libexplain-\*(v).README" >libexplain-\*(v).README</a> </td>
+    <td> The README file form the tarball. </td> </tr>
+.br
+<tr>
+    <td> <a href="libexplain-\*(v).tar.gz" >libexplain-\*(v).tar.gz</a> </td>
+    <td> The complete source. </td> </tr>
+.br
+<tr>
+    <td> <a href="libexplain-\*(v).ae" >libexplain-\*(v).ae</a> </td>
+    <td> The complete source, in <a href="http://aegis.sourceforge.net/"
+    >aedist</a> format. </td> </tr>
+.br
+<tr>
+    <td> <a href="libexplain-\*(v).pdf" >libexplain-\*(v).pdf</a> </td>
+    <td> The reference manual, in PDF format.
+    </td> </tr>
+.br
+<tr>
+    <td> <a href="debian/" >debian</a> </td>
+    <td> Pre-built debian packages for Ubuntu 8.10 Intrepid i386
+    </td> </tr>
+</table>
+
+.\" ------------------------------------------------------------------------
+.br
+<hr>
+<table border=0><tr><td valign="top">
+<a href="http://www.fsf.org/">
+<img
+.br
+src="http://www.fsf.org/graphics/gnu-head-sm.jpg"
+border=0 width=129 height=122 alt="" /></a>
+.br
+</td><td valign="top" width="15%">
+.br
+Libexplain is written and owned by
+<a href="mailto:millerp@canb.auug.org.au"
+>Peter Miller &lt;millerp@canb.auug.org.au&gt;</a>
+and is freely distributable under the terms and conditions of the
+<a href="http://www.gnu.org/licenses/gpl.txt">GNU GPL</a>.
+.br
+</td><td valign="top">
+.br
+<a href="http://www.opensource.org/docs/definition.php">
+<img
+.nf
+src="http://www.opensource.org/trademarks/opensource/web/opensource-110x95.png"
+border="0" width="110" height="95" alt="" /></a>
+.fi
+</td><td valign="top" align="right">
+Libexplain is developed using <a
+href="http://aegis.sourceforge.net/">Aegis</a>, a transaction based
+software configuration management system.
+The Aegis <a
+.nf
+href="http://aegis.sourceforge.net/cgi-bin/aeget/libexplain.\*(v)?menu"
+.fi
+>repository</a> for this project is available.
+.br
+</td><td valign="top">
+.br
+<a href="http://aegis.sourceforge.net/" ><img
+src="http://aegis.sourceforge.net/aegis.png"
+border=0 alt="" /></a>
+.br
+</td><td valign="top" align="right">
+.br
+There is more <a
+href="http://miller.emu.id.au/pmiller/software/"
+>Software by Peter Miller</a>
+at his home page.
+</td><td valign="top">
+.br
+<a href="http://miller.emu.id.au/pmiller/" ><img
+.nf
+src="http://miller.emu.id.au/pmiller/pmiller_2003_colour.64.png"
+.fi
+border=0 alt="" /></a>
+</td></tr></table>
+.\" ------------------------------------------------------------------------
+.br
+<hr>
+<a href="http://sourceforge.net/"><img
+.nf
+src="http://sourceforge.net/sflogo.php?group_id=237324&amp;type=5"
+.fi
+width="210" height="62" border="0" alt="SourceForge.net Logo"
+align="right"></a>
+This page is hosted by <a href="http://sourceforge.net/">SourceForge</a>.
+<br>
+This page has been accessed approximately
+<img
+.nf
+src="http://miller.emu.id.au/cgi-bin/web_hit_counter?pmiller_libexplain_\*(v)"
+.fi
+alt="number" /> times since
+.ds MO1 Jan
+.ds MO2 Feb
+.ds MO3 Mar
+.ds MO4 Apr
+.ds MO5 May
+.ds MO6 Jun
+.ds MO7 Jul
+.ds MO8 Aug
+.ds MO9 Sep
+.ds MO10 Oct
+.ds MO11 Nov
+.ds MO12 Dec
+.nr y4 \n[yr]+1900
+\n[dy]-\*[MO\n[mo]]-\n[y4].
+</body>
+</html>
