@@ -32,20 +32,32 @@
 
 #include <explain/access.h>
 #include <explain/chdir.h>
+#include <explain/chmod.h>
+#include <explain/chown.h>
 #include <explain/close.h>
 #include <explain/creat.h>
+#include <explain/dup.h>
+#include <explain/fchdir.h>
+#include <explain/fchmod.h>
 #include <explain/fcntl.h>
 #include <explain/fopen.h>
+#include <explain/fstat.h>
+#include <explain/ftruncate.h>
 #include <explain/link.h>
 #include <explain/lseek.h>
 #include <explain/lstat.h>
+#include <explain/mkdir.h>
 #include <explain/opendir.h>
 #include <explain/open.h>
 #include <explain/read.h>
+#include <explain/readlink.h>
+#include <explain/remove.h>
 #include <explain/rename.h>
+#include <explain/rmdir.h>
 #include <explain/stat.h>
 #include <explain/strerror.h>
 #include <explain/symlink.h>
+#include <explain/truncate.h>
 #include <explain/unlink.h>
 #include <explain/write.h>
 
@@ -79,8 +91,8 @@ static const table_t table[] =
     /* FIXME: add support for capget */
     /* FIXME: add support for capset */
     { "chdir", explain_chdir },
-    /* FIXME: add support for chmod */
-    /* FIXME: add support for chown */
+    { "chmod", explain_chmod },
+    { "chown", explain_chown },
     /* FIXME: add support for chroot */
     /* FIXME: add support for clearerr */
     /* FIXME: add support for clock_getres */
@@ -95,7 +107,7 @@ static const table_t table[] =
     /* FIXME: add support for create_module */
     /* FIXME: add support for delete_module */
     /* FIXME: add support for dirfd */
-    /* FIXME: add support for dup */
+    { "dup", explain_dup },
     /* FIXME: add support for dup2 */
     /* FIXME: add support for epoll_create */
     /* FIXME: add support for epoll_ctl */
@@ -108,10 +120,9 @@ static const table_t table[] =
     /* FIXME: add support for faccess */
     /* FIXME: add support for fadvise64 */
     /* FIXME: add support for fallocate */
-    /* FIXME: add support for fchdir */
-    /* FIXME: add support for fchmod */
+    { "fchdir", explain_fchdir },
+    { "fchmod", explain_fchmod },
     /* FIXME: add support for fchown */
-    /* FIXME: add support for fclose */
     { "fcntl", explain_fcntl },
     /* FIXME: add support for fdatasync */
     /* FIXME: add support for fdopen */
@@ -140,12 +151,12 @@ static const table_t table[] =
     /* FIXME: add support for fseek */
     /* FIXME: add support for fsetpos */
     /* FIXME: add support for fsetxattr */
-    /* FIXME: add support for fstat */
+    { "fstat", explain_fstat },
     /* FIXME: add support for fstatfs */
     /* FIXME: add support for fsync */
     /* FIXME: add support for ftell */
     /* FIXME: add support for ftime */
-    /* FIXME: add support for ftruncate */
+    { "ftruncate", explain_ftruncate },
     /* FIXME: add support for futex */
     /* FIXME: add support for futimes */
     /* FIXME: add support for fwrite */
@@ -221,7 +232,7 @@ static const table_t table[] =
     /* FIXME: add support for mbind */
     /* FIXME: add support for migrate_pages */
     /* FIXME: add support for mincore */
-    /* FIXME: add support for mkdir */
+    { "mkdir", explain_mkdir },
     /* FIXME: add support for mknod */
     /* FIXME: add support for mktemp */
     /* FIXME: add support for mlock */
@@ -283,21 +294,21 @@ static const table_t table[] =
     /* FIXME: add support for read */
     /* FIXME: add support for readahead */
     /* FIXME: add support for readdir */
-    /* FIXME: add support for readlink */
+    { "readlink", explain_readlink },
     /* FIXME: add support for readv */
     /* FIXME: add support for reboot */
     /* FIXME: add support for recv */
     /* FIXME: add support for recvfrom */
     /* FIXME: add support for recvmsg */
     /* FIXME: add support for remap_file_pages */
-    /* FIXME: add support for remove */
+    { "remove", explain_remove },
     /* FIXME: add support for removexattr */
     { "rename", explain_rename },
     /* FIXME: add support for request_key */
     /* FIXME: add support for restart_syscall */
     /* FIXME: add support for rewind */
     /* FIXME: add support for rewinddir */
-    /* FIXME: add support for rmdir */
+    { "rmdir", explain_rmdir },
     /* FIXME: add support for rt_sigaction */
     /* FIXME: add support for rt_sigpending */
     /* FIXME: add support for rt_sigprocmask */
@@ -409,7 +420,7 @@ static const table_t table[] =
     /* FIXME: add support for tkill */
     /* FIXME: add support for tmpfile */
     /* FIXME: add support for tmpnam */
-    /* FIXME: add support for truncate */
+    { "truncate", explain_truncate },
     /* FIXME: add support for tuxcall */
     /* FIXME: add support for ugetrlimit */
     /* FIXME: add support for ulimit */
@@ -603,15 +614,7 @@ main(int argc, char **argv)
             break;
 
         case 'o':
-            if (!freopen(optarg, "w", stdout))
-            {
-                libexplain_wrap_and_print
-                (
-                    stderr,
-                    libexplain_freopen(optarg, "w", stdout)
-                );
-                exit(1);
-            }
+            libexplain_freopen_or_die(optarg, "w", stdout);
             break;
 
         case 'V':

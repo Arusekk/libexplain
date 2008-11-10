@@ -64,6 +64,9 @@ libexplain_buffer_flock(libexplain_string_buffer_t *sb, const struct flock *flp)
 }
 
 
+#ifdef F_GETLK64
+#if F_GETLK64 != F_GETLK
+
 void
 libexplain_buffer_flock64(libexplain_string_buffer_t *sb,
     const struct flock64 *flp)
@@ -103,3 +106,6 @@ libexplain_buffer_flock64(libexplain_string_buffer_t *sb,
     );
     libexplain_string_buffer_printf(sb, "l_pid = %d }", (int)flp->l_pid);
 }
+
+#endif
+#endif

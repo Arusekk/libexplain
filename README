@@ -27,22 +27,22 @@ DESCRIPTION
 
        The library also provides thread safe variants of each function.
 
-ARCHIVE SITE
+HOME PAGE
        The latest version of libexplain is available on the Web from:
 
-           URL:    http://libexplain.sourceforge.net/
-           File:   index.html             # the libexplain page
-           File:   libexplain0.1.README   # Description, from the tar file
-           File:   libexplain0.1.lsm      # Description, LSM format
-           File:   libexplain0.1.tar.gz   # the complete source
-           File:   libexplain0.1.pdf      # Reference Manual
+          URL:    http://libexplain.sourceforge.net/
+          File:   index.html              # the libexplain page
+          File:   libexplain.0.2.README   # Description, from the tar file
+          File:   libexplain.0.2.lsm      # Description, LSM format
+          File:   libexplain.0.2.tar.gz   # the complete source
+          File:   libexplain.0.2.pdf      # Reference Manual
 
 BUILDING LIBEXPLAIN
        Full instructions for building libexplain may be found in the BUILDING
        file included in this distribution.
 
 COPYRIGHT
-       libexplain version 0.1
+       libexplain version 0.2
        Copyright (C) 2008 Peter Miller
 
        This program is free software; you can redistribute it and/or modify it
@@ -73,6 +73,15 @@ RELEASE NOTES
        releases.  For excruciating and complete detail, and also credits for
        those of you who have generously sent me suggestions and bug reports,
        see the etc/CHANGES.* files.
+
+   Version 0.2 (2008-Nov-11)
+       * Coverage now includes chmod(2), chown(2), dup(2), fchdir(2),
+       fchmod(2), fstat(2), ftruncate(2), fwrite(3), mkdir(2), readdir(3),
+       readlink(2), remove(3), rmdir(2), truncate(2), * The lsof(1) command is
+       used to obtain supplementary file information on those systems with
+       limited /proc implementations.
+
+       * The explanations now understand Linux capabilities.
 
    Version 0.1 (2008-Oct-26)
        First public release.

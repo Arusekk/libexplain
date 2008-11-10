@@ -22,13 +22,12 @@ TEST_SUBJECT="stat EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-stat(pathname = "fred", buf = 0x123) failed, Bad address (14, EFAULT)
-because buf refers to memory that is outside the process's accessible
-address space
+stat(pathname = "fred", buf = 0x123) failed, Bad address (EFAULT) because
+buf refers to memory that is outside the process's accessible address space
 fubar
 test $? -eq 0 || no_result
 
-explain stat fred 0x123 -e EFAULT -o test.out
+explain -e EFAULT -o test.out stat fred 0x123
 test $? -eq 0 || fail
 
 diff test.ok test.out

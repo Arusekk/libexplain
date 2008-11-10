@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 dnl!
 AC_INIT(install-sh)
 AC_CONFIG_HEADER(libexplain/config.h)
-AC_PROG_CXX
+AC_PROG_CC
 AC_PROG_CPP
 AC_CANONICAL_HOST
 AC_GNU_SOURCE
@@ -56,6 +56,74 @@ AC_CHECK_LIB(intl, gettext, ,
 )
 
 AC_CHECK_PROGS(LIBTOOL, libtool)
+
+if test -z "$LIBTOOL"
+then
+  AC_MSG_RESULT([
+        You must have GNU Libtool installed to build libexplain.
+        Homepage: http://www.gnu.org/software/libtool/])
+  OK=no
+  if apt-get --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo apt-get install libtool
+    ])
+    OK=yes
+  fi
+  if yum --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo yum install libtool
+    ])
+    OK=yes
+  fi
+  if test "$OK" != "yes"; then
+    AC_MSG_RESULT([
+        If you are using a package based install, you will need the
+        libtool package.
+    ])
+  fi
+  exit 1
+fi
+
+AC_CHECK_PROGS(LSOF, lsof)
+
+if test -z "$LSOF"
+then
+  AC_MSG_RESULT([
+        You must have lsof(1) installed to use libexplain.
+        Homepage: http://people.freebsd.org/~abe/])
+  OK=no
+  if apt-get --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo apt-get install lsof
+    ])
+    OK=yes
+  fi
+  if yum --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo yum install lsof
+    ])
+    OK=yes
+  fi
+  if test "$OK" != "yes"; then
+    AC_MSG_RESULT([
+        If you are using a package based install, you will need the
+        lsof package.
+    ])
+  fi
+  exit 1
+fi
+
+if test -L /proc/self/fd/0 2> /dev/null
+then
+    AC_DEFINE(PROC_FS_USEFUL, 1,
+    [Define this symbol if your system has symbolic links containing the
+     absolute path of open files in /proc/self/fd/nnn])
+fi
+
 AC_CHECK_PROGS(MSGFMT, gmsgfmt msgfmt)
 AC_CHECK_PROGS(MSGCAT, gmsgcat msgcat)
 AC_CHECK_PROGS(GROFF, groff roff)
@@ -137,19 +205,41 @@ AC_MSG_RESULT([-m$GROFF_MM_MACROS])
 AC_CHECK_HEADERS(        \
     fcntl.h              \
     libintl.h            \
+    limits.h             \
     mntent.h             \
     pwd.h                \
     stddef.h             \
     stdlib.h             \
     string.h             \
+    sys/capability.h     \
     sys/file.h           \
+    sys/mount.h          \
     sys/param.h          \
     sys/time.h           \
     sys/types.h          \
     sys/stat.h           \
+    sys/vfs.h            \
+    termios.h            \
     time.h               \
     unistd.h             \
     )
+
+if test "$HAVE_MNTENT_H" != "1"
+then
+    _PATH_MNTTAB=/dev/null
+    test -f /etc/fstab && _PATH_MNTTAB=/etc/fstab
+    test -f /etc/vfstab && _PATH_MNTTAB=/etc/vfstab # Solaris
+    AC_DEFINE_UNQUOTED(_PATH_MNTTAB, ["${_PATH_MNTTAB}"],
+    [File listing canonical interesting mount points.])
+
+    _PATH_MOUNTED=${_PATH_MNTTAB}
+    # OpenBSD doesn't have /etc/mtab
+    test -f /etc/mtab && _PATH_MOUNTED=/etc/mtab
+    AC_DEFINE_UNQUOTED(_PATH_MOUNTED, ["${_PATH_MOUNTED}"],
+    [File listing currently active mount points.])
+fi
+
+AC_SEARCH_LIBS(cap_get_proc, cap)
 
 AC_HEADER_DIRENT
 AC_TYPE_SIGNAL
@@ -157,17 +247,39 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 AC_C_CONST
 AC_SYS_LONG_FILE_NAMES
-AC_CHECK_FUNCS( \
-    gettext     \
-    setlocale   \
-    snprintf    \
-    strcasecmp  \
-    strendcpy   \
-    strerror    \
-    strncasecmp \
-    strsignal   \
-    vsnprintf   \
+AC_CHECK_FUNCS(  \
+    cap_get_proc \
+    gettext      \
+    setlocale    \
+    remove       \
+    snprintf     \
+    strcasecmp   \
+    strendcpy    \
+    strerror     \
+    strncasecmp  \
+    strsignal    \
+    vsnprintf    \
     )
+
+dnl
+dnl     Test to see where TIOCGWINSZ is defined.
+dnl
+AC_MSG_CHECKING([for TIOCGWINSZ])
+AC_TRY_RUN([
+#include <sys/ioctl.h>
+int main(argc, argv)int argc; char **argv;{
+#ifdef TIOCGWINSZ
+struct winsize ws; ws.ws_col = 0; exit(ws.ws_col);
+#else
+exit(1);
+#endif
+}]
+, AC_DEFINE(HAVE_winsize_SYS_IOCTL_H,1,
+[Define this symbol if your system as <sys/ioctl.h> AND it
+defines TIOCGWINSZ and struct winsize.])
+AC_MSG_RESULT([sys/ioctl.h]),
+AC_MSG_RESULT([not found]),
+AC_MSG_RESULT(cross))
 
 dnl the strsignal function is usually defined in <string.h>
 dnl but is sometimes defined in <unistd.h>
@@ -182,7 +294,7 @@ AC_CHECK_DECLS([strsignal],,, [
 #include <unistd.h>
 #endif
 ])
-AC_CHECK_DECLS([memmem strverscmp])
+AC_CHECK_DECLS([strverscmp])
 
 dnl
 dnl   Test to find a Bourne shell which understands functions

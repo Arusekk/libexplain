@@ -22,9 +22,9 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/enomem.h>
-#include <libexplain/buffer/errno/open.h>
 #include <libexplain/buffer/errno/opendir.h>
-#include <libexplain/buffer/strerror.h>
+#include <libexplain/buffer/errno/open.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/success.h>
 
 
@@ -43,8 +43,7 @@ libexplain_buffer_errno_opendir_inner(libexplain_string_buffer_t *sb,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
     switch (errnum)
     {

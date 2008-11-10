@@ -23,12 +23,12 @@ TEST_SUBJECT="write vs EFBIG"
 
 cat > test.ok << 'fubar'
 write(fildes = 42, data = 0x1000, data_size = 10) failed, File too large
-(27, EFBIG) because an attempt was made to write at a position past the
-process's file size limit (infinity)
+(EFBIG) because an attempt was made to write a file that exceeds the
+process's file size limit
 fubar
 test $? -eq 0 || no_result
 
-explain write 42 0x1000 10 -e EFBIG > test.out
+explain -e EFBIG write 42 0x1000 10 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

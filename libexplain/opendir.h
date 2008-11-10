@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_OPENDIR_H
 #define LIBEXPLAIN_OPENDIR_H
 
+#include <dirent.h>
+
 /**
   * @file
   * @brief explain opendir(3) errors
@@ -28,6 +30,27 @@
 #ifdef c_plus_plus
 extern "C" {
 #endif
+
+/**
+  * The libexplain_opendir_or_die function is used to call the
+  * opendir(3) system call.  On failure an explanation will be printed
+  * to stderr, obtained from libexplain_opendir(3), and then the process
+  * terminates by calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * DIR *dir = libexplain_opendir_or_die(pathname);
+  * @endcode
+  *
+  * @param pathname
+  *     The pathname, exactly as to be passed to the opendir(3) system call.
+  * @returns
+  *     This function only returns on success.
+  *     On failure, prints an explanation and exits,
+  *     it does not return.
+  */
+DIR *libexplain_opendir_or_die(const char *pathname);
 
 /**
   * The libexplain_opendir function is used to obtain an explanation of

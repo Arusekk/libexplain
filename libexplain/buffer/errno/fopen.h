@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_FOPEN_H
 #define LIBEXPLAIN_BUFFER_ERRNO_FOPEN_H
 
-struct libexplain_string_buffer_t; /* forward */
+#include <libexplain/string_buffer.h>
 
 /**
   * The libexplain_buffer_errno_fopen function is used to obtain an
@@ -43,7 +43,24 @@ struct libexplain_string_buffer_t; /* forward */
   * @param mode
   *     The original mode, exactly has passed to the fopen(3) system call.
   */
-void libexplain_buffer_errno_fopen(struct libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
+    const char *path, const char *mode);
+
+/**
+  * The libexplain_buffer_errno_fopen_because function is used by the
+  * libexplain_buffer_errno_fopen function (and others) to print the
+  * extended "because..." part of the explanation.
+  *
+  * @param sb
+  *     The string buffer in which the message is being constructed.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param path
+  *     The original path, exactly has passed to the fopen(3) system call.
+  * @param mode
+  *     The original mode, exactly has passed to the fopen(3) system call.
+  */
+void libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
     int errnum, const char *path, const char *mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FOPEN_H */

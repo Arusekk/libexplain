@@ -30,6 +30,29 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_symlink_or_die function is used to call the
+  * symlink(2) system call.  On failure an explanation will be printed
+  * to stderr, obtained from libexplain_symlink(3), and then the process
+  * terminates by calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * libexplain_symlink_or_die(oldpath, newpath);
+  * @endcode
+  *
+  * @param oldpath
+  *     The oldpath, exactly as to be passed to the symlink(2) system call.
+  * @param newpath
+  *     The newpath, exactly as to be passed to the symlink(2) system call.
+  * @returns
+  *     This function only returns on success.
+  *     On failure, prints an explanation and exits,
+  *     it does not return.
+  */
+void libexplain_symlink_or_die(const char *oldpath, const char *newpath);
+
+/**
   * The libexplain_symlink function is used to obtain an explanation
   * of an error returned by the symlink(2) system call.  The least the
   * message will contain is the value of strerror(errno), but usually

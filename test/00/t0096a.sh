@@ -22,8 +22,8 @@ TEST_SUBJECT="rename ENOTEMPTY"
 . test_prelude
 
 cat > test.ok << 'fubar'
-rename(oldpath = "foo", newpath = "bar") failed, Directory not empty (39,
-ENOTEMPTY) because newpath is not an empty directory; that is, it contains
+rename(oldpath = "foo", newpath = "bar") failed, Directory not empty
+(ENOTEMPTY) because newpath is not an empty directory; that is, it contains
 entries other than "." and ".." (1); note that oldpath still exists; note
 that newpath exists
 fubar

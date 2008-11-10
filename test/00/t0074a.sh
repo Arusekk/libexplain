@@ -22,12 +22,12 @@ TEST_SUBJECT="opendir ENOMEM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-opendir(pathname = "fred") failed, Cannot allocate memory (12, ENOMEM)
-because insufficient user-space or kernel memory was available
+opendir(pathname = "fred") failed, Cannot allocate memory (ENOMEM) because
+insufficient user-space or kernel memory was available
 fubar
 test $? -eq 0 || no_result
 
-explain opendir fred -e ENOMEM -o test.out
+explain -e ENOMEM -o test.out opendir fred
 test $? -eq 0 || fail
 
 diff test.ok test.out

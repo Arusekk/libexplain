@@ -23,7 +23,7 @@ TEST_SUBJECT="symlink ENOENT"
 
 cat > test.ok << 'fubar'
 symlink(oldpath = "", newpath = "foobar") failed, No such file or directory
-(2, ENOENT) because oldpath is the empty string; if you meant the current
+(ENOENT) because oldpath is the empty string; if you meant the current
 directory, use "." instead
 fubar
 test $? -eq 0 || no_result

@@ -22,8 +22,8 @@ TEST_SUBJECT="link EPERM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-link(oldpath = "foo", newpath = "bar") failed, Operation not permitted (1,
-EPERM) because oldpath is a directory and it is not possible to make hard
+link(oldpath = "foo", newpath = "bar") failed, Operation not permitted
+(EPERM) because oldpath is a directory and it is not possible to make hard
 links to directories; have you considered using a symbolic link?
 fubar
 test $? -eq 0 || no_result

@@ -30,6 +30,31 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_lseek_or_die function is used to call the lseek(2)
+  * system call.  On failure an explanation will be printed to stderr,
+  * obtained from libexplain_lseek(3), and then the process terminates
+  * by calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * long long result = libexplain_lseek_or_die(fd, offset, whence);
+  * @endcode
+  *
+  * @param fildes
+  *     The fildes, exactly as to be passed to the lseek(2) system call.
+  * @param offset
+  *     The offset, exactly as to be passed to the lseek(2) system call.
+  * @param whence
+  *     The whence, exactly as to be passed to the lseek(2) system call.
+  * @returns
+  *     On success, returns the resulting offset location as measured
+  *     in bytes from the beginning of the file.  On failure, prints an
+  *     explanation and exits, it does not return.
+  */
+long long libexplain_lseek_or_die(int fildes, long long offset, int whence);
+
+/**
   * The libexplain_lseek function may be used to obtain a human readable
   * explanation of what went wrong in an lseek(2) system call.  The
   * least the message will contain is the value of strerror(errno), but

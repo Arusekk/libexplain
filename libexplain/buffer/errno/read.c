@@ -19,15 +19,19 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/because.h>
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/eintr.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/read.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/is_same_inode.h>
 #include <libexplain/open_flags.h>
@@ -52,9 +56,7 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
     switch (errnum)
     {
@@ -87,11 +89,7 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
             }
             else
             {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the file descriptor is not valid"
-                );
+                libexplain_buffer_ebadf(sb, "fildes");
             }
         }
         break;
@@ -101,13 +99,7 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EINTR:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the call was interrupted by a signal before any "
-            "data was read"
-        );
+        libexplain_buffer_eintr(sb, "read");
         break;
 
     case EINVAL:
@@ -129,6 +121,7 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
                     libexplain_buffer_open_flags(sb, flags);
                     libexplain_string_buffer_putc(sb, ')');
                 }
+#ifdef O_DIRECT
                 else if (flags & O_DIRECT)
                 {
                     libexplain_string_buffer_puts
@@ -141,6 +134,7 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
                         "current file offset is not suitably aligned"
                     );
                 }
+#endif
                 else
                 {
                     libexplain_string_buffer_puts
@@ -186,8 +180,9 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
                 process_group != tty_process_group
             )
             {
-                struct stat st1;
-                struct stat st2;
+                struct stat     st1;
+                struct stat     st2;
+
                 if
                 (
                     fstat(fildes, &st1) == 0
@@ -249,13 +244,13 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
         libexplain_string_buffer_puts
         (
             sb,
-            " which does not support Unix open file semantics, and the "
+            " that does not support Unix open file semantics, and the "
             "file has been deleted from underneath you"
         );
         break;
 
     default:
-        /* no explanation for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

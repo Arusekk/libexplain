@@ -23,7 +23,7 @@ TEST_SUBJECT="rename ENOTDIR"
 
 cat > test.ok << 'fubar'
 rename(oldpath = "a/b/foo", newpath = "c/d/bar") failed, Not a directory
-(20, ENOTDIR) because the "b" regular file in the oldpath "a" directory is
+(ENOTDIR) because the "b" regular file in the oldpath "a" directory is
 being used as a directory when it is not
 fubar
 test $? -eq 0 || no_result

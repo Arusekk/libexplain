@@ -50,7 +50,7 @@ binary-arch: build install
 	dh_installdocs -A
 	dh_install --fail-missing --sourcedir=debian/tmp
 	dh_installman -A
-	dh_strip --dbg-package=libexplain0-dbg
+	dh_strip --dbg-package=libexplain1-dbg
 	dh_compress -A
 	dh_fixperms
 	dh_makeshlibs

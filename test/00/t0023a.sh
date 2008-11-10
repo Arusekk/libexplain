@@ -22,13 +22,12 @@ TEST_SUBJECT="fopen vs EINVAL"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fopen(pathname = "snot", flags = "wsnot") failed, Invalid argument (22,
-EINVAL) because the flags argument is not valid, flag characters "sno"
-unknown
+fopen(pathname = "snot", flags = "wsnot") failed, Invalid argument (EINVAL)
+because the flags argument is not valid, flag characters "sno" unknown
 fubar
 test $? -eq 0 || no_result
 
-explain fopen snot wsnot -e EINVAL -o test.out
+explain -e EINVAL fopen snot wsnot > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

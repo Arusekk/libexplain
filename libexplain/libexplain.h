@@ -31,21 +31,36 @@
   * @endcode
   */
 
+#include <libexplain/access.h>
 #include <libexplain/chdir.h>
+#include <libexplain/chmod.h>
+#include <libexplain/chown.h>
 #include <libexplain/close.h>
+#include <libexplain/dup.h>
+#include <libexplain/fchdir.h>
+#include <libexplain/fchmod.h>
 #include <libexplain/fclose.h>
 #include <libexplain/fcntl.h>
 #include <libexplain/fflush.h>
 #include <libexplain/fopen.h>
 #include <libexplain/freopen.h>
+#include <libexplain/fstat.h>
+#include <libexplain/ftruncate.h>
+#include <libexplain/fwrite.h>
 #include <libexplain/link.h>
 #include <libexplain/lseek.h>
 #include <libexplain/lstat.h>
 #include <libexplain/open.h>
+#include <libexplain/opendir.h>
 #include <libexplain/read.h>
+#include <libexplain/readdir.h>
+#include <libexplain/readlink.h>
+#include <libexplain/remove.h>
 #include <libexplain/rename.h>
+#include <libexplain/rmdir.h>
 #include <libexplain/stat.h>
 #include <libexplain/symlink.h>
+#include <libexplain/truncate.h>
 #include <libexplain/unlink.h>
 #include <libexplain/write.h>
 

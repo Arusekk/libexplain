@@ -17,15 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/fclose.h>
+#include <libexplain/fcntl.h>
 #include <libexplain/fflush.h>
 #include <libexplain/fopen.h>
+#include <libexplain/fwrite.h>
 #include <libexplain/version_print.h>
-#include <libexplain/wrap_and_print.h>
 
 
 static void
@@ -43,6 +46,7 @@ main(int argc, char **argv)
     FILE            *fp;
     const char      *pathname;
     const char      *flags;
+    int             fd_flags;
 
     flags = "r";
     for (;;)
@@ -69,15 +73,15 @@ main(int argc, char **argv)
     pathname = argv[optind];
 
     fp = libexplain_fopen_or_die(pathname, flags);
-    if (fflush(fp))
+    libexplain_fflush_or_die(fp);
+    fd_flags = libexplain_fcntl_or_die(fileno(fp), F_GETFL, 0);
+    if ((fd_flags & O_ACCMODE) != O_RDONLY)
     {
-        libexplain_wrap_and_print(stderr, libexplain_fflush(fp));
-        exit(1);
+        const char      *data;
+
+        data = "This is a test.\n";
+        libexplain_fwrite_or_die(data, 1, strlen(data), fp);
     }
-    if (fclose(fp))
-    {
-        libexplain_wrap_and_print(stderr, libexplain_fclose(fp));
-        exit(1);
-    }
+    libexplain_fclose_or_die(fp);
     return 0;
 }

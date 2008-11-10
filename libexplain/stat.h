@@ -32,6 +32,29 @@ extern "C" {
 struct stat; /* forward */
 
 /**
+  * The libexplain_stat_or_die function is used to call the stat(2)
+  * system call.  On failure an explanation will be printed to stderr,
+  * obtained from libexplain_stat(3), and then the process terminates by
+  * calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * libexplain_stat_or_die(pathname, buf);
+  * @endcode
+  *
+  * @param pathname
+  *     The pathname, exactly as to be passed to the stat(2) system call.
+  * @param buf
+  *     The buf, exactly as to be passed to the stat(2) system call.
+  * @returns
+  *     This function only returns on success.
+  *     On failure, prints an explanation and exits,
+  *     it does not return.
+  */
+void libexplain_stat_or_die(const char *pathname, struct stat *buf);
+
+/**
   * The libexplain_stat function is used to obtain an explanation of
   * an error returned by the stat(2) function.  The least the message
   * will contain is the value of strerror(errno), but usually it will do

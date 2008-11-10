@@ -22,13 +22,13 @@ TEST_SUBJECT="fcntl vs EINTR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_GETFL) failed, Interrupted system call (4,
-EINTR) because the command was interrupted by a signal before it could
-finish
+fcntl(fildes = 42, command = F_GETFL) failed, Interrupted system call
+(EINTR) because the process was interrupted by a signal before the command
+was complete
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_GETFL -e EINTR -o test.out
+explain -e EINTR fcntl 42 F_GETFL > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

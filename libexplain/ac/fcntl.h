@@ -36,4 +36,11 @@
 #define O_TEXT 0
 #endif
 
+/*
+ * Needed for libexplain_buffer_errno_path_resolution
+ */
+#ifndef O_DIRECTORY
+#define O_DIRECTORY 0x40000000
+#endif
+
 #endif /* LIBEXPLAIN_AC_FCNTL_H */

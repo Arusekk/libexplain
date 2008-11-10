@@ -22,9 +22,9 @@ TEST_SUBJECT="access ETXTBSY"
 . test_prelude
 
 cat > test.ok << 'fubar'
-access(pathname = "foobar", mode = W_OK) failed, Text file busy (26,
-ETXTBSY) because write access was requested to an executable which is being
-executed
+access(pathname = "foobar", mode = W_OK) failed, Text file busy (ETXTBSY)
+because write access was requested to an executable image that is currently
+being executed
 fubar
 test $? -eq 0 || no_result
 

@@ -130,15 +130,6 @@ char *strendcpy(char *dst, const char *src, const char *end);
 #undef strcpy
 #define strcpy strcpy_is_unsafe__use_strendcpy_instead@
 
-#if !HAVE_DECL_MEMMEM
-void *memmem(const void *, size_t, const void *, size_t);
-#endif
-void *memmem_replacement(const void *, size_t, const void *, size_t);
-
-// It is possible memmem is present, but severely broken.  See the GNU
-// libc memmem(3) man page for just how broken it can get.
-#define memmem memmem_replacement
-
 #ifdef c_plus_plus
 }
 #endif

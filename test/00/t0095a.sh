@@ -24,9 +24,9 @@ TEST_SUBJECT="open EACCES"
 cat > test.ok << 'fubar'
 open(pathname = "a/b/foobar", flags = O_WRONLY | O_CREAT, mode = S_IRUSR |
 S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH) failed, Permission denied
-(13, EACCES) because the process does not have write permission to the
-pathname "a/b" directory, this is needed to create the "foobar" directory
-entry
+(EACCES) because the process does not have write permission to the pathname
+"a/b" directory, this is needed to create the directory entry for the
+"foobar" regular file
 fubar
 test $? -eq 0 || no_result
 
@@ -36,7 +36,7 @@ test $? -eq 0 || no_result
 chmod a-w a/b
 test $? -eq 0 || no_result
 
-test_open a/b/foobar -f O_WRONLY+O_CREAT > test.out 2>&1
+test_open -f O_WRONLY+O_CREAT a/b/foobar > test.out 2>&1
 if test $? -ne 1
 then
     chmod -R u+w .

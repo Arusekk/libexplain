@@ -23,7 +23,7 @@ TEST_SUBJECT="rename vs ELOOP"
 
 cat > test.ok << 'fubar'
 rename(oldpath = "foo", newpath = "a/bar") failed, Too many levels of
-symbolic links (40, ELOOP) because a symbolic link loop was encountered in
+symbolic links (ELOOP) because a symbolic link loop was encountered in
 newpath, starting at "a"; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result

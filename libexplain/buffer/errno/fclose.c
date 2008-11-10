@@ -21,15 +21,16 @@
 #include <libexplain/ac/fcntl.h>
 
 #include <libexplain/buffer/because.h>
-#include <libexplain/buffer/errno/fclose.h>
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/errno/close.h>
+#include <libexplain/buffer/errno/fclose.h>
 #include <libexplain/buffer/errno/write.h>
-#include <libexplain/buffer/strerror.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/success.h>
 
 
-static void
-libexplain_buffer_errno_fclose_inner(libexplain_string_buffer_t *sb, int errnum,
+void
+libexplain_buffer_errno_fclose(libexplain_string_buffer_t *sb, int errnum,
     FILE *fp)
 {
     libexplain_string_buffer_printf(sb, "fclose(fp = %p)", fp);
@@ -38,31 +39,16 @@ libexplain_buffer_errno_fclose_inner(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
-    switch (errnum)
-    {
-    case EBADF:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts(sb, " the file descriptor was not open");
-        break;
-
-    default:
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "; note that while the FILE stream is no longer valid, the "
-            "underlying file descriptor may still be open"
-        );
-        break;
-    }
+    libexplain_buffer_errno_fclose_because(sb, errnum, fp);
 }
 
 
+
 void
-libexplain_buffer_errno_fclose(libexplain_string_buffer_t *sb, int errnum,
-    FILE *fp)
+libexplain_buffer_errno_fclose_because(libexplain_string_buffer_t *sb,
+    int errnum, FILE *fp)
 {
     /*
      * The Linux fclose(3) man page says
@@ -90,27 +76,33 @@ libexplain_buffer_errno_fclose(libexplain_string_buffer_t *sb, int errnum,
     if (fildes >= 0 && fcntl(fildes, F_GETFL) < 0)
         fildes = -1;
 
-    if (fildes >= 0)
+    switch (errnum)
     {
-        switch (errnum)
-        {
-        case EFAULT:
-        case EFBIG:
-        case EINVAL:
-        case ENOSPC:
-        case EPIPE:
-            libexplain_buffer_errno_write(sb, errnum, fildes, 0, 0);
-            return;
+    case EFAULT:
+    case EFBIG:
+    case EINVAL:
+    case ENOSPC:
+    case EPIPE:
+        libexplain_buffer_errno_write_because(sb, errnum, fildes, NULL, 0);
+        break;
 
-        case EINTR:
-        case EIO:
-            libexplain_buffer_errno_close(sb, errnum, fildes);
-            return;
+    case EBADF:
+        libexplain_buffer_ebadf(sb, "fildes");
+        break;
 
-        default:
-            break;
-        }
+    case EINTR:
+    case EIO:
+    default:
+        libexplain_buffer_errno_close_because(sb, errnum, fildes);
+        break;
     }
-
-    libexplain_buffer_errno_fclose_inner(sb, errnum, fp);
+    if (errnum != EBADF)
+    {
+        libexplain_string_buffer_puts
+        (
+            sb,
+            "; note that while the FILE stream is no longer valid, the "
+            "underlying file descriptor may still be open"
+        );
+    }
 }

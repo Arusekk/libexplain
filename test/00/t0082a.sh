@@ -22,16 +22,16 @@ TEST_SUBJECT="rename EMLINK"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-rename(oldpath = "foo", newpath = "bar") failed, Too many links (31,
-EMLINK) because oldpath is a regular file and already has the maximum
-number of links (NNN); note that oldpath still exists
+rename(oldpath = "foo", newpath = "bar") failed, Too many links (EMLINK)
+because oldpath is a regular file and already has the maximum number of
+links; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result
 
 touch foo
 test $? -eq 0 || no_result
 
-explain rename foo bar -e EMLINK -o test.out4
+explain -e EMLINK -o test.out4 rename foo bar
 test $? -eq 0 || fail
 
 fmt -w500 test.out4 > test.out3

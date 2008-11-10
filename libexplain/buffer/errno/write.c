@@ -25,15 +25,21 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/because.h>
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/efbig.h>
+#include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/write.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/pretty_size.h>
 #include <libexplain/buffer/rlimit.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/open_flags.h>
+#include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -55,10 +61,16 @@ libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
+    libexplain_buffer_failed(sb, errnum);
 
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_errno_write_because(sb, errnum, fildes, data, data_size);
+}
 
+
+void
+libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, const void *data, size_t data_size)
+{
     switch (errnum)
     {
     case EAGAIN:
@@ -82,18 +94,14 @@ libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
                 libexplain_string_buffer_puts
                 (
                     sb,
-                    "the file descriptor not open for writing ("
+                    "the file descriptor is not open for writing ("
                 );
                 libexplain_buffer_open_flags(sb, flags);
                 libexplain_string_buffer_putc(sb, ')');
             }
             else
             {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the file descriptor is not valid"
-                );
+                libexplain_buffer_ebadf(sb, "fildes");
             }
         }
         break;
@@ -104,70 +112,43 @@ libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
 
     case EFBIG:
         {
-            struct rlimit lim;
+            off_t         max_file_size;
             off_t         pos;
 
-            pos = lseek(fildes, 0, SEEK_CUR);
             libexplain_buffer_because(sb);
-            if (getrlimit(RLIMIT_FSIZE, &lim) >= 0)
+            pos = lseek(fildes, 0, SEEK_CUR);
+            if (pos == (off_t)-1)
+                pos = 0;
+            max_file_size = libexplain_get_max_file_size_by_fildes(fildes);
+            if (pos >= 0 && pos + data_size > max_file_size)
             {
-                if
-                (
-                    pos >= 0
-                &&
-                    pos + (long long)data_size > (long long)lim.rlim_cur
-                )
-                {
-                    libexplain_string_buffer_puts
-                    (
-                        sb,
-                        "an attempt was made to write a file that "
-                        "exceeds the process's file size limit"
-                    );
-                    libexplain_buffer_rlimit(sb, &lim);
-                    break;
-                }
                 libexplain_string_buffer_puts
                 (
                     sb,
-                    "an attempt was made to write at a position"
+                    "an attempt was made to write a file that "
+                    "exceeds the process's file size limit"
                 );
-                if (pos >= 0)
-                {
-                    libexplain_string_buffer_printf
-                    (
-                        sb,
-                        " (%lld)",
-                        (long long)pos
-                    );
-                }
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    " past the process's file size limit"
-                );
-                libexplain_buffer_rlimit(sb, &lim);
-                break;
             }
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "an attempt was made to write a file that exceeds "
-                "the implementation-defined maximum file size or "
-                "the process's file size limit, or to write at a "
-                "position past the maximum allowed offset"
-            );
+            else
+            {
+                libexplain_string_buffer_puts
+                (
+                    sb,
+                    "an attempt was made to write at a position past the "
+                    "process's file size limit"
+                );
+            }
+            if (libexplain_option_dialect_specific())
+            {
+                libexplain_string_buffer_puts(sb, " (");
+                libexplain_buffer_pretty_size(sb, max_file_size);
+                libexplain_string_buffer_putc(sb, ')');
+            }
         }
         break;
 
     case EINTR:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the call was interrupted by a signal before any "
-            "data was written"
-        );
+        libexplain_buffer_eintr(sb, "write");
         break;
 
     case EINVAL:
@@ -365,7 +346,7 @@ libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        /* no explanation for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

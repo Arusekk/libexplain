@@ -30,6 +30,26 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_close_or_die function is used to call the close(2)
+  * system call.  On failure an explanation will be printed to stderr,
+  * obtained from libexplain_close(3), and then the process terminates
+  * by calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * libexplain_close_or_die(fildes);
+  * @endcode
+  *
+  * @param fildes
+  *     The fildes, exactly as to be passed to the close(2) system call.
+  * @returns
+  *     This function only returns on success.
+  *     On failure, prints an explanation and exits.
+  */
+void libexplain_close_or_die(int fildes);
+
+/**
   * The libexplain_close function is used to obtain an explanation of an
   * error returned by the close(2) system call.  The least the message will
   * contain is the value of strerror(errno), but usually it will do much

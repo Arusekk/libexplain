@@ -23,8 +23,9 @@ TEST_SUBJECT="link EACCES"
 
 cat > test.ok << 'fubar'
 link(oldpath = "a/b/foo", newpath = "c/d/bar") failed, Permission denied
-(13, EACCES) because the process does not have write permission to the
-newpath "c/d" directory, this is needed to create the "bar" directory entry
+(EACCES) because the process does not have write permission to the newpath
+"c/d" directory, this is needed to create the directory entry for the "bar"
+regular file
 fubar
 test $? -eq 0 || no_result
 

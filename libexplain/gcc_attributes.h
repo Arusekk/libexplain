@@ -22,9 +22,12 @@
 
 #ifdef __GNUC__
 #define LIBEXPLAIN_FORMAT_PRINTF(x, y) __attribute__((format(printf, x, y)))
+#define NORETURN __attribute__((noreturn))
+#define LINKAGE_HIDDEN __attribute__((visibility("hidden")))
 #else
 #define LIBEXPLAIN_FORMAT_PRINTF(x, y)
 #define NORETURN
+#define LINKAGE_HIDDEN
 #endif
 
 #endif /* LIBEXPLAIN_GCC_ATTRIBUTES_H */

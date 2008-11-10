@@ -22,7 +22,7 @@ TEST_SUBJECT="access EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-access(pathname = "foobar", mode = F_OK) failed, Bad address (14, EFAULT)
+access(pathname = "foobar", mode = F_OK) failed, Bad address (EFAULT)
 because pathname refers to memory that is outside the process's accessible
 address space
 fubar

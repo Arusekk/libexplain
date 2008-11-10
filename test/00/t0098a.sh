@@ -23,8 +23,8 @@ TEST_SUBJECT="symlink EACCES"
 
 cat > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath = "a/b/bar") failed, Permission denied
-(13, EACCES) because the process does not have search permission to the
-newpath "a" directory
+(EACCES) because the process does not have search permission to the newpath
+"a" directory
 fubar
 test $? -eq 0 || no_result
 

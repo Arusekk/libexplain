@@ -23,11 +23,11 @@ TEST_SUBJECT="write vs EBADF"
 
 cat > test.ok << 'fubar'
 write(fildes = 42, data = 0x1000, data_size = 10) failed, Bad file
-descriptor (9, EBADF) because the file descriptor is not valid
+descriptor (EBADF) because because fildes does not refer to an open file
 fubar
 test $? -eq 0 || no_result
 
-explain write 42 0x1000 10 -e EBADF > test.out
+explain -e EBADF write 42 0x1000 10 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

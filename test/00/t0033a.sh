@@ -23,18 +23,18 @@ TEST_SUBJECT="write vs ENOSPC"
 
 fmt > test.ok << 'fubar'
 write(fildes = 1, data = 0x123, data_size = 1110) failed, No space
-left on device (28, ENOSPC) because the file system containing the file
+left on device (ENOSPC) because the file system containing the file
 ("/example", 99% full) has no room for the data
 fubar
 test $? -eq 0 || no_result
 
-explain write 1 0x123 0x456 -e ENOSPC -o test.out.narrow
+explain -e ENOSPC write 1 0x123 0x456 > test.out.narrow
 test $? -eq 0 || fail
 
 fmt -w300 test.out.narrow > test.out.wide
 test $? -eq 0 || no_result
 
-sed -e 's|= 1 \/\* ".*" \*\/,|= 1,|' \
+sed -e 's|= 1 "[^",)]*",|= 1,|' \
     -e 's|(".*", .*% full)|("/example", 99% full)|' \
         test.out.wide > test.out.cooked
 test $? -eq 0 || no_result

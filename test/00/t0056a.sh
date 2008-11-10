@@ -23,7 +23,7 @@ TEST_SUBJECT="write vs EINVAL"
 
 fmt > test.ok << 'fubar'
 write(fildes = 0, data = 0x10, data_size = 20) failed, Invalid argument
-(22, EINVAL) because the file descriptor is attached to an object which
+(EINVAL) because the file descriptor is attached to an object which
 is unsuitable for writing (O_RDONLY | O_LARGEFILE)
 fubar
 test $? -eq 0 || no_result
@@ -31,13 +31,13 @@ test $? -eq 0 || no_result
 touch bogus
 test $? -eq 0 || no_result
 
-explain write 0 0x10 0x14 -e EINVAL -o test.out1 < bogus
+explain -e EINVAL -o test.out1 write 0 0x10 0x14 < bogus
 test $? -eq 0 || fail
 
 fmt -w500 test.out1 > test.out2
 test $? -eq 0 || no_result
 
-sed 's| /\* "[^"]*" \*/,|,|' test.out2 > test.out3
+sed 's| "[^"]*",|,|' test.out2 > test.out3
 test $? -eq 0 || no_result
 
 fmt test.out3 > test.out

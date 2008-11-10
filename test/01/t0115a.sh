@@ -22,9 +22,9 @@ TEST_SUBJECT="symlink ENOTDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-symlink(oldpath = "foo", newpath = "a/b/bar") failed, Not a directory (20,
-ENOTDIR) because the "b" regular file in the newpath "a" directory is being
-used as a directory when it is not
+symlink(oldpath = "foo", newpath = "a/b/bar") failed, Not a directory
+(ENOTDIR) because the "b" regular file in the newpath "a" directory is
+being used as a directory when it is not
 fubar
 test $? -eq 0 || no_result
 

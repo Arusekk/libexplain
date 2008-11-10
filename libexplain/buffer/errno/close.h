@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_CLOSE_H
 #define LIBEXPLAIN_BUFFER_ERRNO_CLOSE_H
 
-struct libexplain_string_buffer_t; /* forward */
+#include <libexplain/string_buffer.h>
 
 /**
   * The libexplain_buffer_errno_close function is used to obtain an
@@ -42,7 +42,23 @@ struct libexplain_string_buffer_t; /* forward */
   *    The original file descriptor, exactly as passed to the close(2)
   *    system call.
   */
-void libexplain_buffer_errno_close(struct libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
+    int fildes);
+
+/**
+  * The libexplain_buffer_errno_close_because function is used by the
+  * libexplain_buffer_errno_close function (and others) to print the
+  * extended "because..." part of the explanation.
+  *
+  * @param sb
+  *     The string buffer in which the message is being constructed.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param fildes
+  *    The original file descriptor, exactly as passed to the close(2)
+  *    system call.
+  */
+void libexplain_buffer_errno_close_because(libexplain_string_buffer_t *sb,
     int errnum, int fildes);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CLOSE_H */

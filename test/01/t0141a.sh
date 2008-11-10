@@ -21,10 +21,10 @@
 TEST_SUBJECT="access EROFS"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 access(pathname = "foobar", mode = F_OK) failed, Read-only file system
-(30, EROFS) because write access was requested for pathname that is on
-a read-only filesystem ("/example", 42% full)
+(EROFS) because write access was requested and pathname refers to a file
+on a read-only file system ("/example", 42% full)
 fubar
 test $? -eq 0 || no_result
 

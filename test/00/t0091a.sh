@@ -22,8 +22,8 @@ TEST_SUBJECT="rename ENOTDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-rename(oldpath = "foo", newpath = "bar") failed, Not a directory (20,
-ENOTDIR) because oldpath is a directory, but regular file newpath is not a
+rename(oldpath = "foo", newpath = "bar") failed, Not a directory (ENOTDIR)
+because oldpath is a directory, but regular file newpath is not a
 directory; note that oldpath still exists; note that newpath exists
 fubar
 test $? -eq 0 || no_result

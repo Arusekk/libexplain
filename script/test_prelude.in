@@ -25,6 +25,9 @@ then
     exit 2
 fi
 
+LIBEXPLAIN_OPTIONS="debug, no-numeric-errno, no-dialect-specific"
+export LIBEXPLAIN_OPTIONS
+
 #
 # Remember where we came from, so that we can refer back to it as necessary.
 #

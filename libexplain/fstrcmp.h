@@ -37,7 +37,29 @@
   * @note
   *     This function uses dynamic memory.
   *     May return -1 if malloc fails.
+  *     This function is not thread-safe.
   */
 double libexplain_fstrcmp(const char *s1, const char *s2);
+
+/**
+  * The libexplain_fstrcasecmp function may be used to compare two strings.  The
+  * comparison is case <b>in</b>sensitive.  The order of the strings has no
+  * effect on the result.
+  *
+  * @param s1
+  *     The first string to be compared.
+  * @param s2
+  *     The second string to be compared.
+  * @returns
+  *     Rather than a simple yes/no result, the similarity of the
+  *     strings is returned.  A return of 0.0 means the strings are
+  *     completely differemt, and a return value of 1.0 means they are
+  *     identical.  However, values can be returned between these two
+  *     values, indicating the degree of similarity.
+  * @note
+  *     This function uses dynamic memory.
+  *     May return -1 if malloc fails.
+  */
+double libexplain_fstrcasecmp(const char *s1, const char *s2);
 
 #endif /* LIBEXPLAIN_FSTRCMP_H */

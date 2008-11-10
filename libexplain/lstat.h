@@ -32,6 +32,29 @@ extern "C" {
 struct stat; /* forward */
 
 /**
+  * The libexplain_lstat_or_die function is used to call the lstat(2)
+  * system call.  On failure an explanation will be printed to stderr,
+  * obtained from libexplain_lstat(3), and then the process terminates
+  * by calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * libexplain_lstat_or_die(pathname, buf);
+  * @endcode
+  *
+  * @param pathname
+  *     The pathname, exactly as to be passed to the lstat(2) system call.
+  * @param buf
+  *     The buf, exactly as to be passed to the lstat(2) system call.
+  * @returns
+  *     This function only returns on success.
+  *     On failure, prints an explanation and exits,
+  *     it does not return.
+  */
+void libexplain_lstat_or_die(const char *pathname, struct stat *buf);
+
+/**
   * The libexplain_lstat function is used to obtain an explanation of
   * an error returned by the lstat(2) function.  The least the message
   * will contain is the value of strerror(errno), but usually it will do

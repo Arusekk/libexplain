@@ -23,8 +23,8 @@ TEST_SUBJECT="path_resolution+fstrcmp"
 
 cat > test.ok << 'fubar'
 open(pathname = "somwhere/here", flags = O_RDONLY) failed, No such file or
-directory (2, ENOENT) because there is no "somwhere" directory in the
-pathname "." directory, did you mean directory "somewhere" instead?
+directory (ENOENT) because there is no "somwhere" directory in the pathname
+"." directory, did you mean the "somewhere" directory instead?
 fubar
 test $? -eq 0 || no_result
 
@@ -34,7 +34,7 @@ test $? -eq 0 || no_result
 touch somewhere/here
 test $? -eq 0 || no_result
 
-test_open somwhere/here -f O_RDONLY > test.out 2>&1
+test_open -f O_RDONLY somwhere/here > test.out 2>&1
 if test $? -ne 1
 then
     echo supposed to fail

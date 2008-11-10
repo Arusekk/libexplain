@@ -16,7 +16,7 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH New-System-Call 1
+.TH New-System-Call libexplain
 .SH NAME
 new system call \- How to add a new system call to libexplain
 .XX "" "How to add a new system call to libexplain"
@@ -113,13 +113,19 @@ for that system call.
 Copy-and-paste of the man page is often useful as a basis for the text
 pof the explanation, but be sure it is open source documentation, and
 not Copyright proprietary text.
+.PP
+Don't forget to check the existing \f[CW]libexplain/buffer/e*.h\fP
+files for pre-canned explanations for common errors.
 .SS libexplain/buffer/errno/example.h
 This file holds the function prototype
 for the above function definition.
 .SS libexplain/example.h
 The file contains the user visable API for the \f[I]example\fP system call.
-There are four function prototypes declared in this file:
+There are five function prototypes declared in this file:
 .RS
+\f[CR]void libexplain_\fP\f[I]example\fP\f[CR]_or_die(
+\fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
+.br
 \f[CR]void libexplain_\fP\f[I]example\fP\f[CR](
 \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
@@ -141,6 +147,11 @@ Each shall be accompained by thorough Doxygen style comments.
 These are extracted and placed in the web site.
 .PP
 The buffer functions are \f[B]never\fP part of the user visable API.
+.SS libexplain/example_or_die.c
+One function per file,
+\f[CR]libexplain_\fP\f[I]example\fP\f[CR]_or_die\fP in this case.
+It simply calls \f[I]example\fP and then, if fails,
+\f[CR]libexplain_\fP\f[I]example\fP to print why, and then exit(1).
 .SS libexplain/example.c
 One function per file,
 \f[CR]libexplain_\fP\f[I]example\fP in this case.
@@ -165,10 +176,17 @@ which ensures that the message buffer will not be exceeded,
 and passes that buffer to the
 \f[CR]libexplain_buffer_errno_\fP\f[I]example\fP fucntion.
 .SS man/man3/libexplain_example.3
-This file also documents the functions.
+This file also documents the error explanations functions,
+except \f[CR]libexplain_\fP\f[I]example\fP\f[CW]_or_dir\fP.
+Use the same text as you did in \f[CR]libexplain/\fP\f[I]example\fP\f[CR].h\fP
+.SS man/man3/libexplain_example_or_die.3
+This file also documents the helper function.
 Use the same text as you did in \f[CR]libexplain/\fP\f[I]example\fP\f[CR].h\fP
 .SS man/man3/libexplain.3
-Add your new man page to the list.
+Add your new man pages,
+man/man3/libexplain_\f[I]example\fP.3 and
+man/man3/libexplain_\f[I]example\fP_or_die.3,
+to the list.
 Keep the list sorted.
 .SS explain/example.c
 Glue to turn the command line into arguments to a call to
@@ -178,10 +196,11 @@ Function prototype for the above.
 .SS explain/main.c
 Include the prototype, and add the function to the table.
 .SS test_example/main.c
-This program should call \f[I]explain\fP and the
-\f[CR]linexplain_\fP\f[I]example\fP when it fails.
+This program should call \f[CR]libexplain_\fP\f[I]explain\fP\f[CW]_or_die\fP.
+.SS man/man1/explain.1
+Add a description of the new system call.
 .SS tests
-Write a separate test for each case in the errnum switch.
+Write at least one separate test for each case in the errnum switch.
 .SH Debian Notes
 You can check that the debian stuff builds by using
 .RS

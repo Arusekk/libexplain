@@ -22,9 +22,9 @@ TEST_SUBJECT="unlink ENOTDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-unlink(pathname = "a/b/bar") failed, Not a directory (20, ENOTDIR) because
-the "b" regular file in the pathname "a" directory is being used as a
-directory when it is not
+unlink(pathname = "a/b/bar") failed, Not a directory (ENOTDIR) because the
+"b" regular file in the pathname "a" directory is being used as a directory
+when it is not
 fubar
 test $? -eq 0 || no_result
 

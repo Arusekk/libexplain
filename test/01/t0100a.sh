@@ -23,7 +23,7 @@ TEST_SUBJECT="link ENOENT"
 
 cat > test.ok << 'fubar'
 link(oldpath = "a/b/foo", newpath = "c/d/bar") failed, No such file or
-directory (2, ENOENT) because there is no "foo" file in the oldpath "a/b"
+directory (ENOENT) because there is no "foo" file in the oldpath "a/b"
 directory
 fubar
 test $? -eq 0 || no_result

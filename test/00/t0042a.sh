@@ -22,13 +22,13 @@ TEST_SUBJECT="symlink vs EROFS"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-symlink(oldpath = "fred", newpath = "nurk") failed, Read-only file
-system (30, EROFS) because newpath is on a read-only file system
-("/example", 99% full)
+symlink(oldpath = "fred", newpath = "nurk") failed, Read-only file system
+(EROFS) because write access was requested and newpath refers to a file
+on a read-only file system ("/example", 99% full)
 fubar
 test $? -eq 0 || no_result
 
-explain symlink fred nurk -e EROFS -o test.out1
+explain -e EROFS -o test.out1 symlink fred nurk
 test $? -eq 0 || fail
 
 fmt -w500 test.out1 > test.out2

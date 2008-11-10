@@ -23,7 +23,7 @@ TEST_SUBJECT="access ENOENT"
 
 cat > test.ok << 'fubar'
 access(pathname = "a/b/foobar", mode = F_OK) failed, No such file or
-directory (2, ENOENT) because there is no "b" directory in the pathname "a"
+directory (ENOENT) because there is no "b" directory in the pathname "a"
 directory
 fubar
 test $? -eq 0 || no_result

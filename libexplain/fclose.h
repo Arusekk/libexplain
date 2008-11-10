@@ -32,6 +32,23 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_fclose_or_die function is used to fflush(3) and
+  * fclose(3) the given stream.  If there is an error, it will be
+  * reported using libexplain_fclose, and then terminates by calling
+  * exit(1).
+  *
+  * @code
+  * libexplain_fclose_or_die(fp);
+  * @endcode
+  *
+  * @param fp
+  *     The fp, exactly as to be passed to the fclose(3) system call.
+  * @returns
+  *     Only returns on success.  Reports error and process exits on failure.
+  */
+void libexplain_fclose_or_die(FILE *fp);
+
+/**
   * The libexplain_fclose function is used to obtain an
   * explanation of an error returned by the fclose(3) function.  The
   * least the message will contain is the value of strerror(errno), but
@@ -82,6 +99,8 @@ extern "C" {
   *     exit(1);
   * }
   * @endcode
+  * Alternatively, the libexplain_fclose_or_die function can do all that
+  * for you.
   */
 const char *libexplain_fclose(FILE *fp);
 

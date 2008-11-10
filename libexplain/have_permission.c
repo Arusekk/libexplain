@@ -21,22 +21,9 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/capability.h>
+#include <libexplain/group_in_groups.h>
 #include <libexplain/have_permission.h>
-
-
-static int
-in_groups(gid_t gid)
-{
-    gid_t           groups[NGROUPS_MAX];
-    int             n;
-    int             j;
-
-    n = getgroups(NGROUPS, groups);
-    for (j = 0; j < n; ++j)
-        if (groups[j] == gid)
-            return 1;
-    return 0;
-}
 
 
 static int
@@ -57,7 +44,7 @@ libexplain_have_permission(const struct stat *st, int wanted)
      * is one of the supplementary group IDs of the calling process (as
      * set by setgroups(2)).
      */
-    if (st->st_gid == getegid() || in_groups(st->st_gid))
+    if (libexplain_group_in_groups(st->st_gid))
     {
         return (0 != (st->st_mode & wanted & S_IRWXG));
     }
@@ -72,6 +59,8 @@ libexplain_have_permission(const struct stat *st, int wanted)
 int
 libexplain_have_read_permission(const struct stat *st)
 {
+    if (libexplain_capability_dac_read_search())
+        return 1;
     return libexplain_have_permission(st, 0444);
 }
 
@@ -79,6 +68,8 @@ libexplain_have_read_permission(const struct stat *st)
 int
 libexplain_have_write_permission(const struct stat *st)
 {
+    if (libexplain_capability_dac_override())
+        return 1;
     return libexplain_have_permission(st, 0222);
 }
 
@@ -86,12 +77,36 @@ libexplain_have_write_permission(const struct stat *st)
 int
 libexplain_have_execute_permission(const struct stat *st)
 {
-    return S_ISREG(st->st_mode) && libexplain_have_permission(st, 0111);
+    if (!S_ISREG(st->st_mode))
+        return 0;
+    if
+    (
+        libexplain_capability_dac_override()
+#ifdef __linux__
+    &&
+        (st->st_mode & 0111)
+#endif
+    )
+        return 1;
+    return libexplain_have_permission(st, 0111);
 }
 
 
 int
 libexplain_have_search_permission(const struct stat *st)
 {
-    return S_ISDIR(st->st_mode) && libexplain_have_permission(st, 0111);
+    if (!S_ISDIR(st->st_mode))
+        return 0;
+    if (libexplain_capability_dac_read_search())
+        return 1;
+    return libexplain_have_permission(st, 0111);
+}
+
+
+int
+libexplain_have_inode_permission(const struct stat *st)
+{
+    if (libexplain_capability_fowner())
+        return 1;
+    return (geteuid() == st->st_uid);
 }

@@ -23,9 +23,10 @@ TEST_SUBJECT="access EACCES"
 
 cat > test.ok << 'fubar'
 access(pathname = "foobar", mode = W_OK | R_OK) failed, Permission denied
-(13, EACCES) because read access to pathname would be denied; note that it
-is an error if any of the access types in mode are denied, even if some of
-the other access types in mode are permitted
+(EACCES) because the process does not have read permission to the "foobar"
+regular file in the pathname "." directory; note that it is an error if any
+of the access types in mode are denied, even if some of the other access
+types in mode are permitted
 fubar
 test $? -eq 0 || no_result
 
@@ -35,7 +36,7 @@ test $? -eq 0 || no_result
 chmod a-r foobar
 test $? -eq 0 || no_result
 
-test_access foobar -m R_OK+W_OK > test.out 2>&1
+test_access -m R_OK+W_OK foobar > test.out 2>&1
 if test $? -ne 1
 then
     echo expected to fail

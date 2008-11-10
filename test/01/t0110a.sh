@@ -23,18 +23,16 @@ TEST_SUBJECT="rename EXDEV"
 
 fmt > test.ok << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, Invalid cross-device
-link (18, EXDEV) because oldpath ("/example", 42% full) and newpath
-("/example", 42% full) are not on the same mounted file system; linux
-permits a file system to be mounted at multiple points, but the rename
-system call does not work across different mount points, even if the
-same file system is mounted on both; note that oldpath still exists
+link (EXDEV) because oldpath ("/example", 42% full) and newpath
+("/example", 42% full) are not on the same mounted file system; note that
+oldpath still exists
 fubar
 test $? -eq 0 || no_result
 
 touch foo
 test $? -eq 0 || no_result
 
-explain rename foo bar -e EXDEV -o test.out4
+explain -e EXDEV -o test.out4 rename foo bar
 test $? -eq 0 || fail
 
 fmt -w500 test.out4 > test.out3

@@ -37,6 +37,20 @@ int libexplain_buffer_path_to_pid(struct libexplain_string_buffer_t *sb,
     const char *path);
 
 /**
+  * The libexplain_buffer_fildes_to_pid function may be used to inject the
+  * PIDs of processes that have the given file open.
+  *
+  * @param sb
+  *    The string buffer to write the PIDs into
+  * @param fildes
+  *    open file descrptor of file of interest
+  * @returns
+  *    number of uses
+  */
+int libexplain_buffer_fildes_to_pid(struct libexplain_string_buffer_t *sb,
+    int fildes);
+
+/**
   * The libexplain_buffer_path_users function may be used to inject the
   * PIDs of processes that have the given file open.  The caption is
   * inserted, too.

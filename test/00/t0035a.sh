@@ -23,12 +23,12 @@ TEST_SUBJECT="libexplain_symlink"
 
 cat > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath = "bar") failed, No such file or directory
-(2, ENOENT) because a directory component in newpath does not exist or is a
+(ENOENT) because a directory component of newpath does not exist or is a
 dangling symbolic link
 fubar
 test $? -eq 0 || no_result
 
-explain symlink foo bar -e ENOENT -o test.out
+explain -e ENOENT symlink foo bar > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

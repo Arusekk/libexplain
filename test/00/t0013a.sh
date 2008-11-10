@@ -22,13 +22,12 @@ TEST_SUBJECT="fcntl vs EACCES"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_GETFL) failed, Permission denied (13,
-EACCES) because the operation is prohibited by locks held by other
-processes
+fcntl(fildes = 42, command = F_GETFL) failed, Permission denied (EACCES)
+because the operation is prohibited by locks held by other processes
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_GETFL -e EACCES -o test.out
+explain -e EACCES fcntl 42 F_GETFL -o test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -21,24 +21,15 @@
 TEST_SUBJECT="open ENFILE"
 . test_prelude
 
-fmt > test.ok << 'fubar'
+cat > test.ok << 'fubar'
 open(pathname = "fred", flags = O_RDONLY) failed, Too many open files in
-system (23, ENFILE) because the system limit on the total number of open
-files has been reached (NNNNN)
+system (ENFILE) because the system limit on the total number of open files
+has been reached
 fubar
 test $? -eq 0 || no_result
 
-explain open fred -e ENFILE -o test.out4
+explain -e ENFILE -o test.out open fred
 test $? -eq 0 || fail
-
-fmt -w500 test.out4 > test.out3
-test $? -eq 0 || no_result
-
-sed 's|([0-9]*)|(NNNNN)|' test.out3 > test.out2
-test $? -eq 0 || no_result
-
-fmt test.out2 > test.out
-test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

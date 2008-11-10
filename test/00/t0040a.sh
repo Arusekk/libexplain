@@ -23,12 +23,12 @@ TEST_SUBJECT="rename vs EROFS"
 
 fmt > test.ok << 'fubar'
 rename(oldpath = "fred", newpath = "nurk") failed, Read-only file system
-(30, EROFS) because the file is on a read-only file system ("/example",
-99% full)
+(EROFS) because write access was requested and newpath refers to a file
+on a read-only file system ("/example", 99% full)
 fubar
 test $? -eq 0 || no_result
 
-explain rename fred nurk -e EROFS -o test.out1
+explain -e EROFS -o test.out1 rename fred nurk
 test $? -eq 0 || fail
 
 fmt -w500 test.out1 > test.out2

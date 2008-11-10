@@ -17,30 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBEXPLAIN_BUFFER_STICKY_PERMISSIONS_H
-#define LIBEXPLAIN_BUFFER_STICKY_PERMISSIONS_H
+#ifndef LIBEXPLAIN_BUFFER_FAILED_H
+#define LIBEXPLAIN_BUFFER_FAILED_H
 
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_sticky_permissions function may be used to
-  * check for sticky bit permissions screw-ups, and then prints the
-  * problem onto the given string buffer.
+  * The libexplain_buffer_failed function may be used to insert the "
+  * failed, " text (suitably translated) into the string buffer,
+  * followed by the strerror(errnum) text.
   *
   * @param sb
-  *    The string buffer to print into.
-  * @param pathname
-  *    The path of the file being removed.
-  * @param caption
-  *    The name of the augment passed as pathname
-  * @returns
-  *    int; -1 if it printed nothing, 0 if it printed something.
-  *
-  * @note
-  *    FIXME: this function has the wrong name,
-  *    it should be libexplain_buffer_unlink_permissions
+  *    The string buffer to print into
+  * @param errnum
+  *    the error to describe
   */
-int libexplain_buffer_sticky_permissions(libexplain_string_buffer_t *sb,
-    const char *pathname, const char *caption);
+void libexplain_buffer_failed(libexplain_string_buffer_t *sb, int errnum);
 
-#endif /* LIBEXPLAIN_BUFFER_STICKY_PERMISSIONS_H */
+#endif /* LIBEXPLAIN_BUFFER_FAILED_H */

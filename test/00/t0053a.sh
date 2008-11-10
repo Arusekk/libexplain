@@ -23,7 +23,7 @@ TEST_SUBJECT="symlink vs ELOOP"
 
 cat > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath = "a/bar") failed, Too many levels of
-symbolic links (40, ELOOP) because a symbolic link loop was encountered in
+symbolic links (ELOOP) because a symbolic link loop was encountered in
 newpath, starting at "a"
 fubar
 test $? -eq 0 || no_result

@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_FFLUSH_H
 #define LIBEXPLAIN_FFLUSH_H
 
+#include <stdio.h>
+
 /**
   * @file
   * @brief explain fflush(3) errors
@@ -28,6 +30,22 @@
 #ifdef c_plus_plus
 extern "C" {
 #endif
+
+/**
+  * The libexplain_fflush_or_die function may be used to fflush a file.
+  * On failure it will issue an error message via libexplain_fflush and
+  * then exit.
+  *
+  * @code
+  * libexplain_fflush_or_die(fp);
+  * @endcode
+  *
+  * @param fp
+  *    The fp, exactly as to be passed to the fflush(3) system call.
+  * @returns
+  *     Only return soin success, will not return on failure.
+  */
+void libexplain_fflush_or_die(FILE *fp);
 
 /**
   * The libexplain_fflush function may be used to obtain a human readable

@@ -22,8 +22,8 @@ TEST_SUBJECT="unlink ENOENT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-unlink(pathname = "a/b/foobar") failed, No such file or directory (2,
-ENOENT) because there is no "b" directory in the pathname "a" directory
+unlink(pathname = "a/b/foobar") failed, No such file or directory (ENOENT)
+because there is no "b" directory in the pathname "a" directory
 fubar
 test $? -eq 0 || no_result
 

@@ -37,6 +37,7 @@
  */
 
 #include <libexplain/ac/assert.h>
+#include <libexplain/ac/ctype.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 
@@ -398,5 +399,54 @@ libexplain_fstrcmp(const char *s1, const char *s2)
                 (fc.fileA.f_linecount + fc.fileB.f_linecount)
             )
         );
+    return result;
+}
+
+
+static void
+downcase(char *out, const char *in)
+{
+    for (;;)
+    {
+        unsigned char   c;
+
+        c = *in++;
+        if (isupper(c))
+            c = tolower(c);
+        *out++ = c;
+        if (!c)
+            return;
+    }
+}
+
+
+double
+libexplain_fstrcasecmp(const char *s1, const char *s2)
+{
+    size_t          len1;
+    char            *lc1;
+    size_t          len2;
+    char            *lc2;
+    double          result;
+
+    len1 = strlen(s1) + 1;
+    lc1 = malloc(len1);
+    if (!lc1)
+        return libexplain_fstrcmp(s1, s2);
+    downcase(lc1, s1);
+
+    len2 = strlen(s2) + 1;
+    lc2 = malloc(len2);
+    if (!lc2)
+    {
+        result = libexplain_fstrcmp(lc1, s2);
+        free(lc1);
+        return result;
+    }
+    downcase(lc2, s2);
+
+    result = libexplain_fstrcmp(lc1, lc2);
+    free(lc1);
+    free(lc2);
     return result;
 }

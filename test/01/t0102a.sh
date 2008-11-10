@@ -22,10 +22,10 @@ TEST_SUBJECT="unlink EACCES"
 . test_prelude
 
 cat > test.ok << 'fubar'
-unlink(pathname = "a/b/foobar") failed, Permission denied (13, EACCES)
-because the process does not have write permission to the pathname "a/b"
-directory, this is needed to remove the "foobar" directory entry; note that
-pathname still exists
+unlink(pathname = "a/b/foobar") failed, Permission denied (EACCES) because
+the process does not have write permission to the pathname "a/b" directory,
+this is needed to remove the directory entry for the "foobar" regular file;
+note that pathname still exists
 fubar
 test $? -eq 0 || no_result
 

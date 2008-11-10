@@ -23,18 +23,15 @@ TEST_SUBJECT="link EXDEV"
 
 fmt > test.ok << 'fubar'
 link(oldpath = "foo", newpath = "bar") failed, Invalid cross-device
-link (18, EXDEV) because oldpath ("/example", 42% full) and newpath
-("/example", 42% full) are not on the same mounted file system; linux
-permits a file system to be mounted at multiple points, but the link
-system call does not work across different mount points, even if the
-same file system is mounted on both
+link (EXDEV) because oldpath ("/example", 42% full) and newpath
+("/example", 42% full) are not on the same mounted file system
 fubar
 test $? -eq 0 || no_result
 
 touch foo
 test $? -eq 0 || no_result
 
-explain link foo bar -e EXDEV -o test.out4
+explain -e EXDEV -o test.out4 link foo bar
 test $? -eq 0 || fail
 
 fmt -w500 test.out4 > test.out3

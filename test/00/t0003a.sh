@@ -22,11 +22,11 @@ TEST_SUBJECT="explain strerror"
 . test_prelude
 
 cat > test.ok << 'fubar'
-No such file or directory (2, ENOENT)
+No such file or directory (ENOENT)
 fubar
 test $? -eq 0 || no_result
 
-explain strerror -e 2 > test.out
+explain -e 2 strerror > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out
@@ -34,7 +34,7 @@ test $? -eq 0 || fail
 
 # -----------
 
-explain strerror -e ENOENT > test.out
+explain -e ENOENT strerror > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out
@@ -42,7 +42,7 @@ test $? -eq 0 || fail
 
 # -----------
 
-explain strerror -e 'No such file or directory' > test.out
+explain -e 'No such file or directory' strerror > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -22,8 +22,8 @@ TEST_SUBJECT="access EIO"
 . test_prelude
 
 cat > test.ok << 'fubar'
-access(pathname = "foobar", mode = F_OK) failed, Input/output error (5,
-EIO) because a low-level I/O error occurred in the block special device,
+access(pathname = "foobar", mode = F_OK) failed, Input/output error
+(EIO) because a low-level I/O error occurred in the block special device,
 possibly as a result of a preceeding read or write
 fubar
 test $? -eq 0 || no_result
@@ -31,8 +31,17 @@ test $? -eq 0 || no_result
 touch foobar
 test $? -eq 0 || no_result
 
-explain access foobar -e EIO -o test.out
+explain access foobar -e EIO -o test.out4
 test $? -eq 0 || fail
+
+fmt -w700 test.out4 > test.out3
+test $? -eq 0 || no_result
+
+sed 's| "/dev/[^"]*" | |' test.out3 > test.out2
+test $? -eq 0 || no_result
+
+fmt test.out2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

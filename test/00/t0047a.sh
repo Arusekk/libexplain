@@ -23,7 +23,7 @@ TEST_SUBJECT="read EINVAL"
 
 cat > test.ok << 'fubar'
 read(fildes = 42, data = 0x100, data_size = 100) failed, Invalid argument
-(22, EINVAL) because the file desriptor is attached to an object which is
+(EINVAL) because the file desriptor is attached to an object which is
 unsuitable for reading; or, the file was opened with the O_DIRECT flag, and
 either the address specified in data, the value specified in data_size, or
 the current file offset is notsuitably aligned; or, the file descriptor was
@@ -31,7 +31,7 @@ created via a call to timerfd_create(2) and the wrong size buffer was given
 fubar
 test $? -eq 0 || no_result
 
-explain read 42 0x100 100 -e EINVAL -o test.out
+explain -e EINVAL -o test.out read 42 0x100 100
 test $? -eq 0 || fail
 
 diff test.ok test.out

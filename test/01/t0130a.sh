@@ -23,12 +23,12 @@ TEST_SUBJECT="creat ENOMEM"
 
 cat > test.ok << 'fubar'
 creat(pathname = "fred", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP |
-S_IROTH | S_IWOTH) failed, Cannot allocate memory (12, ENOMEM) because
+S_IROTH | S_IWOTH) failed, Cannot allocate memory (ENOMEM) because
 insufficient kernel memory was available
 fubar
 test $? -eq 0 || no_result
 
-explain creat fred -e ENOMEM -o test.out
+explain -e ENOMEM -o test.out creat fred
 test $? -eq 0 || fail
 
 diff test.ok test.out

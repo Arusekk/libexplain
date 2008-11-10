@@ -22,6 +22,8 @@
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/stdio.h>
 
+#include <libexplain/gcc_attributes.h>
+
 
 /*
  *  NAME
@@ -47,6 +49,7 @@
 
 #ifndef HAVE_STRERROR
 
+LINKAGE_HIDDEN
 char *
 strerror(int n)
 {
@@ -67,6 +70,7 @@ strerror(int n)
 
 #ifndef HAVE_STRCASECMP
 
+LINKAGE_HIDDEN
 int
 strcasecmp(const char *s1, const char *s2)
 {
@@ -104,6 +108,7 @@ strcasecmp(const char *s1, const char *s2)
 
 #ifndef HAVE_STRSIGNAL
 
+LINKAGE_HIDDEN
 char *
 strsignal(int n)
 {
@@ -210,6 +215,7 @@ strsignal(int n)
 #endif /* !HAVE_STRSIGNAL */
 
 
+LINKAGE_HIDDEN
 const char *
 libexplain_strsignal(int n)
 {
@@ -224,6 +230,7 @@ libexplain_strsignal(int n)
 
 #ifndef HAVE_STRENDCPY
 
+LINKAGE_HIDDEN
 char *
 strendcpy(char *dst, const char *src, const char *end)
 {

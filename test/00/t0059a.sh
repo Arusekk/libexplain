@@ -23,11 +23,11 @@ TEST_SUBJECT="lseek"
 
 cat > test.ok << 'fubar'
 lseek(fildes = 42, offset = 0, whence = SEEK_END) failed, Bad file
-descriptor (9, EBADF) because the file desciptor is not open
+descriptor (EBADF) because fildes does not refer to an open file
 fubar
 test $? -eq 0 || no_result
 
-explain lseek 42 0 SEEK_END -e EBADF -o test.out
+explain -e EBADF -o test.out lseek 42 0 SEEK_END
 test $? -eq 0 || fail
 
 diff test.ok test.out

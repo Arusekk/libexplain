@@ -21,6 +21,7 @@
 
 #include <libexplain/buffer/strerror.h>
 #include <libexplain/errno_info.h>
+#include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -28,14 +29,25 @@ void
 libexplain_buffer_strerror(libexplain_string_buffer_t *sb, int errnum)
 {
     const libexplain_errno_info_t *eip;
+    int             first;
 
     libexplain_string_buffer_puts(sb, strerror(errnum));
-    libexplain_string_buffer_printf(sb, " (%d", errnum);
+    first = 1;
+    if (libexplain_option_numeric_errno())
+    {
+        libexplain_string_buffer_printf(sb, " (%d", errnum);
+        first = 0;
+    }
     eip = libexplain_errno_info_by_number(errnum);
     if (eip)
     {
-        libexplain_string_buffer_puts(sb, ", ");
+        if (first)
+            libexplain_string_buffer_puts(sb, " (");
+        else
+            libexplain_string_buffer_puts(sb, ", ");
         libexplain_string_buffer_puts(sb, eip->name);
+        first = 0;
     }
-    libexplain_string_buffer_putc(sb, ')');
+    if (!first)
+        libexplain_string_buffer_putc(sb, ')');
 }

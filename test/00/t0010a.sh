@@ -23,12 +23,12 @@ TEST_SUBJECT="write vs EIO"
 
 cat > test.ok << 'fubar'
 write(fildes = 42, data = 0x1000, data_size = 10) failed, Input/output
-error (5, EIO) because a low-level I/O error occurred, probably in
-hardware, possibly as a result of a preceeding read or write
+error (EIO) because a low-level I/O error occurred, probably in hardware,
+possibly as a result of a preceeding read or write
 fubar
 test $? -eq 0 || no_result
 
-explain write 42 0x1000 10 -e EIO > test.out
+explain -e EIO write 42 0x1000 10 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

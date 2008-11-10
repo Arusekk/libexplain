@@ -3,7 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: Peter Miller <millerp@canb.auug.org.au>
 Homepage: http://libexplain.sourceforge.net/
-Build-Depends: bison, debhelper (>= 5), groff, libtool
+Build-Depends: bison, debhelper (>= 5), groff, libcap-dev, libtool, lsof
 Standards-Version: 3.8.0
 
 Package: explain
@@ -13,9 +13,9 @@ Architecture: any
 Description: utility to explain system call errors
  This package provides a command to explain Unix and Linux system call errors,
  after the fact.
-Depends: ${shlibs:Depends}, ${misc:Depends}, libexplain0
+Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain1, lsof
 
-Package: libexplain0
+Package: libexplain1
 Section: devel
 Priority: optional
 Architecture: any
@@ -24,9 +24,9 @@ Description: Explain errno values returned by libc functions
  system call errors.  The library is not quite a drop-in replacement for
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, lsof
 
-Package: libexplain0-dbg
+Package: libexplain1-dbg
 Section: libdevel
 Priority: extra
 Architecture: any
@@ -35,7 +35,8 @@ Description: Explain errno values returned by libc functions - debugging symbols
  system call errors.  The library is not quite a drop-in replacement for
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
-Depends: ${shlibs:Depends}, ${misc:Depends}, libexplain0 (= ${binary:Version})
+Depends: ${misc:Depends}, ${shlibs:Depends}, lsof,
+ libexplain1 (= ${binary:Version})
 
 Package: libexplain-dev
 Section: libdevel
@@ -46,5 +47,5 @@ Description: Explain errno values returned by libc functions - development files
  system call errors.  The library is not quite a drop-in replacement for
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
-Depends: ${shlibs:Depends}, ${misc:Depends}, libexplain0 (= ${binary:Version}),
- libexplain0-dbg (= ${binary:Version})
+Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain1 (= ${binary:Version}),
+ libexplain1-dbg (= ${binary:Version}), lsof

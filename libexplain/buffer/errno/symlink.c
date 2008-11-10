@@ -18,7 +18,6 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/sys/stat.h>
@@ -27,12 +26,16 @@
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/eloop.h>
+#include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/symlink.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/string_buffer.h>
@@ -44,6 +47,7 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
 {
     int             oldpath_bad;
     int             newpath_bad;
+    libexplain_final_t final_component;
 
     oldpath_bad = errnum == EFAULT && libexplain_path_is_efault(oldpath);
     newpath_bad = errnum == EFAULT && libexplain_path_is_efault(newpath);
@@ -63,8 +67,13 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
+
+    libexplain_final_init(&final_component);
+    final_component.must_exist = 0;
+    final_component.must_not_exist = 1;
+    final_component.want_to_create = 1;
+    final_component.st_mode = S_IFLNK;
 
     switch (errnum)
     {
@@ -77,8 +86,8 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 newpath,
-                O_WRONLY + O_CREAT,
-                "newpath"
+                "newpath",
+                &final_component
             )
         )
         {
@@ -122,30 +131,11 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ELOOP:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_RDWR + O_CREAT,
-                "newpath"
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "too many symbolic links were encountered in resolving "
-                "newpath"
-            );
-        }
+    case EMLINK: /* BSD */
+        libexplain_buffer_eloop(sb, newpath, "newpath", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_because(sb);
         {
             size_t          oldpath_len;
             long            path_max;
@@ -156,6 +146,7 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
                 path_max = PATH_MAX;
             if (oldpath_len > (size_t)path_max)
             {
+                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts(sb, "oldpath is too long");
                 libexplain_string_buffer_printf
                 (
@@ -165,62 +156,32 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
                     path_max
                 );
             }
-            else if
-            (
-                libexplain_buffer_errno_path_resolution
-                (
-                    sb,
-                    errnum,
-                    newpath,
-                    O_WRONLY | O_CREAT,
-                    "newpath"
-                )
-            )
+            else
             {
-                libexplain_string_buffer_puts
+                libexplain_buffer_enametoolong
                 (
                     sb,
-                    "newpath, or a directory component of newpath, was "
-                    "too long"
+                    newpath,
+                    "newpath",
+                    &final_component
                 );
             }
         }
         break;
 
     case ENOENT:
-        libexplain_buffer_because(sb);
         if (!*oldpath)
         {
+            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
                 "oldpath is the empty string; if you meant the current "
                 "directory, use \".\" instead"
             );
+            break;
         }
-        else if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_WRONLY | O_CREAT,
-                "newpath"
-            )
-        )
-        {
-            /*
-             * No specific cause was found,
-             * use the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a directory component in newpath does not exist "
-                "or is a dangling symbolic link"
-            );
-        }
+        libexplain_buffer_enoent(sb, newpath, "newpath", &final_component);
         break;
 
     case ENOMEM:
@@ -251,8 +212,8 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 newpath,
-                O_WRONLY | O_CREAT,
-                "newpath"
+                "newpath",
+                &final_component
             )
         )
         {
@@ -284,14 +245,7 @@ libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EROFS:
-        libexplain_buffer_because(sb);
-        /* FIXME: which one? */
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "newpath is on a read-only file system"
-        );
-        libexplain_buffer_mount_point_dirname(sb, newpath);
+        libexplain_buffer_erofs(sb, newpath, "newpath");
         break;
 
     default:

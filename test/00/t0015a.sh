@@ -22,12 +22,12 @@ TEST_SUBJECT="fcntl vs EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_GETFL) failed, Bad file descriptor (9,
-EBADF) because the file descriptor is not an open file
+fcntl(fildes = 42, command = F_GETFL) failed, Bad file descriptor (EBADF)
+because fildes does not refer to an open file
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_GETFL -e EBADF -o test.out
+explain -e EBADF fcntl 42 F_GETFL -e EBADF > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

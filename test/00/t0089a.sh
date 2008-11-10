@@ -23,7 +23,7 @@ TEST_SUBJECT="rename ENOENT"
 
 cat > test.ok << 'fubar'
 rename(oldpath = "a/b/foo", newpath = "c/d/bar") failed, No such file or
-directory (2, ENOENT) because there is no "d" directory in the newpath "c"
+directory (ENOENT) because there is no "d" directory in the newpath "c"
 directory; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result

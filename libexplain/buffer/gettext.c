@@ -26,3 +26,15 @@ libexplain_buffer_gettext(libexplain_string_buffer_t *sb, const char *text)
 {
     libexplain_string_buffer_puts(sb, libexplain_gettext(text));
 }
+
+
+void
+libexplain_buffer_gettext_printf(libexplain_string_buffer_t *sb,
+    const char *fmt, ...)
+{
+    va_list         ap;
+
+    va_start(ap, fmt);
+    libexplain_string_buffer_vprintf(sb, libexplain_gettext(fmt), ap);
+    va_end(ap);
+}

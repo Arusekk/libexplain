@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_FREOPEN_H
 #define LIBEXPLAIN_FREOPEN_H
 
+#include <stdio.h>
+
 /**
   * @file
   * @brief explain freopen(3) errors
@@ -28,6 +30,30 @@
 #ifdef c_plus_plus
 extern "C" {
 #endif
+
+/**
+  * The libexplain_freopen_or_die function is used to reopen a file
+  * via the freopen(3) system call.  On failure it will print an
+  * explanation, obtained from the linexplain_freopen(3) function, on
+  * the standard error stream and then exit.
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * libexplain_freopen_or_die(pathname, flags, fp);
+  * @endcode
+  *
+  * @param pathname
+  *     The pathname, exactly as to be passed to the freopen(3) system call.
+  * @param flags
+  *     The flags, exactly as to be passed to the freopen(3) system call.
+  * @param fp
+  *     The fp, exactly as to be passed to the freopen(3) system call.
+  * @returns
+  *     Only ever return on success.  Never returns on failure.
+  */
+void libexplain_freopen_or_die(const char *pathname, const char *flags,
+    FILE *fp);
 
 /**
   * The libexplain_freopen function is used to obtain an explanation

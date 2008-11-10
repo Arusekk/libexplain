@@ -116,7 +116,7 @@ CFLAGS = -Werror -Wall -Wextra
     -Wnested-externs
     ;
 LDFLAGS = ;
-LIBS = -lm;
+LIBS = -lcap;
 
 /* -------------------------------------------------------------------------
  * Section: Compile Flags
@@ -359,7 +359,7 @@ stdio_exceptions =
     libexplain/fputc.h
     libexplain/fputs.h
     libexplain/fread.h
-    libexplain/fread.h
+    libexplain/freopen.h
     libexplain/fscanf.h
     libexplain/fseek.h
     libexplain/fsetpos.h
@@ -381,6 +381,15 @@ stdio_exceptions =
     libexplain/vprintf.h
     libexplain/vscanf.h
     ;
+dirent_exceptions =
+    libexplain/closedir.h
+    libexplain/opendir.h
+    libexplain/readdir.h
+    libexplain/rewinddir.h
+    libexplain/scandir.h
+    libexplain/seekdir.h
+    libexplain/telldir.h
+    ;
 
 %0%.c.d: %0%.c
     set no-cascade
@@ -396,6 +405,8 @@ stdio_exceptions =
             ex = [c_incl_excludes];
         if [in %0%.c [stdio_exceptions]] then
             ex = [stringset [ex] - "-ex=stdio.h"];
+        if [in %0%.c [dirent_exceptions]] then
+            ex = [stringset [ex] - "-ex=dirent.h"];
     }
 
     c_incl -nc -ns -eia -nrec
@@ -425,6 +436,8 @@ stdio_exceptions =
             ex = [c_incl_excludes];
         if [in %0%.h [stdio_exceptions]] then
             ex = [stringset [ex] - "-ex=stdio.h"];
+        if [in %0%.h [dirent_exceptions]] then
+            ex = [stringset [ex] - "-ex=dirent.h"];
     }
 
     c_incl -nc -ns -eia -nrec
@@ -484,33 +497,6 @@ yacc_d_files =
     [patsubst %0%.y %0%.yacc.h.d [filter %0%.y [source_files]]]
     ;;
 #include-cooked-nowarn [yacc_d_files]
-
-/* --------------------------------------------------------------------------
- * Section: Using Lex Source Files
- *
- * How to have lex read .l files and generate a .lex.c file.
- * This section allows you to have more than one lex file in a program
- * (or library) by editing the generated ``yy'' identifiers into something
- * more unique.
- */
-
-/* lex = lex; */
-lex = flex;
-lex_flags = ;
-
-/* LIBS += -ll; */
-LIBS += -lfl;
-
-%0%.lex.c: %0%.l
-    single-thread lex.yy.c
-{
-    [lex] [lex_flags] [resolve %0%.l];
-    sed -e "'s|[yY][yY]|%_|g'" lex.yy.c > %0%.lex.c;
-    rm lex.yy.c;
-}
-
-lex_d_files = [patsubst %0%.l %0%.lex.c.d [filter %0%.l [source_files]]];;
-#include-cooked-nowarn [lex_d_files]
 
 /* --------------------------------------------------------------------------
  * Section: Change Set

@@ -24,13 +24,13 @@ TEST_SUBJECT="libexplain_open vs ENOSPC"
 fmt > test.ok << 'fubar'
 open(pathname = "fred", flags = O_WRONLY | O_CREAT | O_TRUNC, mode =
 S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH) failed, No
-space left on device (28, ENOSPC) because the file system containing
+space left on device (ENOSPC) because the file system containing
 the pathname ("/exmaple", 99% full)
 has no room for the new file
 fubar
 test $? -eq 0 || no_result
 
-explain open fred O_WRONLY+O_CREAT+O_TRUNC -e ENOSPC > test.out.raw
+explain -e ENOSPC open fred O_WRONLY+O_CREAT+O_TRUNC > test.out.raw
 test $? -eq 0 || fail
 
 sed 's|(".*", .*% full)|("/exmaple", 99% full)|' test.out.raw > test.out.cooked

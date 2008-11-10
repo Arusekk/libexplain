@@ -23,16 +23,11 @@ TEST_SUBJECT="access ENAMETOOLONG"
 
 cat > test.ok << 'fubar'
 access(pathname =
-"a/b/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr
-stuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmno
-pqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl
-mnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz/foobar", mode = F_OK) failed, File
-name too long (36, ENAMETOOLONG) because pathname component
-"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuv
-wxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrs
-tuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnop
-qrstuvwxyzabcdefghijklmnopqrstuvwxyz" is longer than the system limit (260
-> 255)
+"a/b/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz/foobar",
+mode = F_OK) failed, File name too long (ENAMETOOLONG) because pathname
+component
+"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+is longer than the system limit (260 > 255)
 fubar
 test $? -eq 0 || no_result
 
@@ -42,7 +37,7 @@ test $? -eq 0 || no_result
 a=abcdefghijklmnopqrstuvwxyz
 long=$a$a$a$a$a$a$a$a$a$a
 
-explain access a/b/$long/foobar -e ENAMETOOLONG -o test.out
+explain -e ENAMETOOLONG -o test.out access a/b/$long/foobar
 test $? -eq 0 || fail
 
 diff test.ok test.out

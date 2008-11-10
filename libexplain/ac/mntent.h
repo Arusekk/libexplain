@@ -27,17 +27,31 @@
 #include <mntent.h>
 
 #ifndef MOUNTED
-# define MOUNTED "/etc/mtab"
+# ifdef _PATH_MOUNTED
+#  define MOUNTED _PATH_MOUNTED
+# else
+#  define MOUNTED "/etc/mtab"
+# endif
 #endif
 
 #else // !HAVE_MNTENT_H
 
-#include <common/main.h>
-#define MOUNTED "/dev/null"
+#ifndef MOUNTED
+# ifdef _PATH_MOUNTED
+#  define MOUNTED _PATH_MOUNTED
+# else
+#  define MOUNTED "/etc/mtab"
+# endif
+#endif
 
 struct mntent
 {
-        char *mnt_dir;
+    char            *mnt_fsname;
+    char            *mnt_dir;
+    char            *mnt_type;
+    char            *mnt_opts;
+    int             mnt_freq;
+    int             mnt_passno;
 };
 
 

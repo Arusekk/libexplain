@@ -22,7 +22,7 @@
 
 #include <libexplain/string_buffer.h>
 
-#ifndef _
+#ifndef i18n
 #define i18n(x) x
 #endif
 
@@ -36,5 +36,20 @@
   *    The string to be localized and printed.
   */
 void libexplain_buffer_gettext(libexplain_string_buffer_t *sb, const char *str);
+
+/**
+  * The libexplain_buffer_gettext_printf function may be used to
+  * translate a string via gettext, and then use it as the format string
+  * for a printf into the given string buffer.
+  *
+  * @param sb
+  *     The string buffer to print on.
+  * @param fmt
+  *    The format string describing the rest of the arguments, to be
+  *    localized and printed.
+  */
+void libexplain_buffer_gettext_printf(libexplain_string_buffer_t *sb,
+    const char *fmt, ...)
+                                                 LIBEXPLAIN_FORMAT_PRINTF(2, 3);
 
 #endif /* LIBEXPLAIN_BUFFER_GETTEXT_H */

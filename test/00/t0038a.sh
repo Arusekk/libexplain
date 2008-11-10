@@ -23,7 +23,7 @@ TEST_SUBJECT="open vs ENOTDIR"
 
 cat > test.ok << 'fubar'
 open(pathname = "fred/nurk", flags = O_RDONLY | O_DIRECTORY) failed, Not a
-directory (20, ENOTDIR) because the "fred" regular file in the pathname "."
+directory (ENOTDIR) because the "fred" regular file in the pathname "."
 directory is being used as a directory when it is not
 fubar
 test $? -eq 0 || no_result
@@ -31,7 +31,7 @@ test $? -eq 0 || no_result
 touch fred
 test $? -eq 0 || no_result
 
-test_open fred/nurk -f O_RDONLY+O_DIRECTORY > test.out 2>&1
+test_open -f O_RDONLY+O_DIRECTORY fred/nurk > test.out 2>&1
 if test $? -ne 1
 then
     echo "should have failed"

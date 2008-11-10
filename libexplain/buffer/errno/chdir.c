@@ -18,15 +18,17 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/fcntl.h>
 
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/eloop.h>
+#include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/errno/chdir.h>
 #include <libexplain/buffer/errno/path_resolution.h>
-#include <libexplain/buffer/strerror.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/string_buffer.h>
 
@@ -35,6 +37,8 @@ void
 libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname)
 {
+    libexplain_final_t final_component;
+
     libexplain_string_buffer_printf(sb, "chdir(pathname = ");
     if (errnum == EFAULT)
         libexplain_string_buffer_printf(sb, "%p", pathname);
@@ -46,8 +50,11 @@ libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
+
+    libexplain_final_init(&final_component);
+    final_component.want_to_search = 1;
+    final_component.must_be_a_directory = 1;
 
     switch (errnum)
     {
@@ -60,8 +67,8 @@ libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 pathname,
-                O_RDONLY + O_DIRECTORY,
-                "pathname"
+                "pathname",
+                &final_component
             )
         )
         {
@@ -83,66 +90,22 @@ libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ELOOP:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                O_RDONLY + O_DIRECTORY,
-                "pathname"
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "too many symbolic links were encountered in resolving "
-                "pathname"
-            );
-        }
+    case EMLINK: /* BSD */
+        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_enametoolong
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                O_RDONLY + O_DIRECTORY,
-                "pathname"
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "pathname, or a component of pathname, is too long"
-            );
-        }
+            sb,
+            pathname,
+            "pathname",
+            &final_component
+        );
         break;
 
     case ENOENT:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                O_RDONLY + O_DIRECTORY,
-                "pathname"
-            )
-        )
-        {
-            libexplain_string_buffer_puts(sb, "the file does not exist");
-        }
+        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
@@ -158,8 +121,8 @@ libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 pathname,
-                O_RDONLY + O_DIRECTORY,
-                "pathname"
+                "pathname",
+                &final_component
             )
         )
         {

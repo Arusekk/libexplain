@@ -24,7 +24,7 @@ TEST_SUBJECT="open vs ENOENT"
 cat > test.ok << 'fubar'
 open(pathname = "foo/bar/baz", flags = O_WRONLY | O_CREAT | O_TRUNC, mode =
 S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH) failed, No such
-file or directory (2, ENOENT) because there is no "bar" directory in the
+file or directory (ENOENT) because there is no "bar" directory in the
 pathname "foo" directory
 fubar
 test $? -eq 0 || no_result
@@ -32,7 +32,7 @@ test $? -eq 0 || no_result
 mkdir foo
 test $? -eq 0 || no_result
 
-test_open foo/bar/baz -f O_WRONLY+O_CREAT+O_TRUNC > test.out 2>&1
+test_open -f O_WRONLY+O_CREAT+O_TRUNC foo/bar/baz > test.out 2>&1
 if test $? -ne 1
 then
     echo it must fail

@@ -23,7 +23,7 @@ TEST_SUBJECT="creat ELOOP"
 
 cat > test.ok << 'fubar'
 creat(pathname = "a/foobar", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP |
-S_IROTH | S_IWOTH) failed, Too many levels of symbolic links (40, ELOOP)
+S_IROTH | S_IWOTH) failed, Too many levels of symbolic links (ELOOP)
 because a symbolic link loop was encountered in pathname, starting at "a"
 fubar
 test $? -eq 0 || no_result

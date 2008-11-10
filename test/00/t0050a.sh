@@ -23,7 +23,7 @@ TEST_SUBJECT="open vs ELOOP"
 
 cat > test.ok << 'fubar'
 open(pathname = "a", flags = O_RDONLY) failed, Too many levels of symbolic
-links (40, ELOOP) because a symbolic link loop was encountered in pathname,
+links (ELOOP) because a symbolic link loop was encountered in pathname,
 starting at "a"
 fubar
 test $? -eq 0 || no_result
@@ -37,7 +37,7 @@ test $? -eq 0 || no_result
 ln -s c a
 test $? -eq 0 || no_result
 
-test_open a -f O_RDONLY > test.out 2>&1
+test_open -f O_RDONLY a > test.out 2>&1
 if test $? -ne 1
 then
     echo "meant to fail"

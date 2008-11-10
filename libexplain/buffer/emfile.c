@@ -21,34 +21,29 @@
 
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/emfile.h>
+#include <libexplain/buffer/gettext.h>
+#include <libexplain/option.h>
 
 
 void
 libexplain_buffer_emfile(libexplain_string_buffer_t *sb)
 {
-    long            open_max;
-
     libexplain_buffer_because(sb);
-    open_max = sysconf(_SC_OPEN_MAX);
-    if (open_max > 0)
+    libexplain_buffer_gettext
+    (
+        sb,
+        i18n("the process already has the maximum number of file "
+            "descriptors open")
+    );
+
+    if (libexplain_option_dialect_specific())
     {
-        libexplain_string_buffer_printf
-        (
-            sb,
-            "the process (%d) already has the maximum number (%ld) of "
-                "file descriptors open",
-            (int)getpid(),
-            open_max
-        );
-    }
-    else
-    {
-        libexplain_string_buffer_printf
-        (
-            sb,
-            "the process (%d) already has the maximum number of file "
-                "descriptors open",
-            (int)getpid()
-        );
+        long            open_max;
+
+        open_max = sysconf(_SC_OPEN_MAX);
+        if (open_max > 0)
+        {
+            libexplain_string_buffer_printf(sb, " (%ld)", open_max);
+        }
     }
 }

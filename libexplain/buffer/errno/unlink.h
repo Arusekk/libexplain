@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_UNLINK_H
 #define LIBEXPLAIN_BUFFER_ERRNO_UNLINK_H
 
-struct libexplain_string_buffer_t; /* forward */
+#include <libexplain/string_buffer.h>
 
 /**
   * The libexplain_buffer_errno_unlink function is used to obtain an
@@ -42,7 +42,22 @@ struct libexplain_string_buffer_t; /* forward */
   * @param path
   *     The original path, exactly has passed to the unlink(2) system call.
   */
-void libexplain_buffer_errno_unlink(struct libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_unlink(libexplain_string_buffer_t *sb,
+    int errnum, const char *path);
+
+/**
+  * The libexplain_buffer_errno_unlink_because function is used
+  * by the libexplain_buffer_errno_unlink function (and others)
+  * to print the extended "because..." part of the explanation.
+  *
+  * @param sb
+  *     The string buffer in which the message is being constructed.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param path
+  *     The original path, exactly has passed to the unlink(2) system call.
+  */
+void libexplain_buffer_errno_unlink_because(libexplain_string_buffer_t *sb,
     int errnum, const char *path);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_UNLINK_H */

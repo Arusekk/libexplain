@@ -69,4 +69,16 @@ int libexplain_have_execute_permission(const struct stat *st);
   */
 int libexplain_have_search_permission(const struct stat *st);
 
+/**
+  * The libexplain_have_inode_permission function may be used to test
+  * whether or not the current process has inode changing permissions
+  * (utimes, chmod, etc) to an inode.
+  *
+  * @param st
+  *    stat structure containing information about the file.
+  * @returns
+  *    int; nonzero(true) if have permission, zero (false) if not.
+  */
+int libexplain_have_inode_permission(const struct stat *st);
+
 #endif /* LIBEXPLAIN_HAVE_PERMISSION_H */

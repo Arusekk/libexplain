@@ -30,6 +30,31 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_write_or_die function is used to call the write(2)
+  * system call.  On failure an explanation will be printed to stderr,
+  * obtained from libexplain_write(3), and then the process terminates
+  * by calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * libexplain_write_or_die(fildes, data, data_size);
+  * @endcode
+  *
+  * @param fildes
+  *     The fildes, exactly as to be passed to the write(2) system call.
+  * @param data
+  *     The data, exactly as to be passed to the write(2) system call.
+  * @param data_size
+  *     The data_size, exactly as to be passed to the write(2) system call.
+  * @returns
+  *     This function only returns on success.
+  *     On failure, prints an explanation and exits,
+  *     it does not return.
+  */
+long libexplain_write_or_die(int fildes, const void *data, long data_size);
+
+/**
   * The libexplain_write function may be used to obtain a human readable
   * explanation of what went wrong in a write(2) system call.  The
   * least the message will contain is the value of strerror(errno), but

@@ -23,12 +23,12 @@ TEST_SUBJECT="write vs ENOSPC"
 
 fmt > test.ok << 'fubar'
 link(oldpath = "foo", newpath = "bar") failed, No space left on device
-(28, ENOSPC) because the file system containing newpath ("/example",
+(ENOSPC) because the file system containing newpath ("/example",
 99% full) has no room for the new directory entry
 fubar
 test $? -eq 0 || no_result
 
-explain link foo bar -e ENOSPC -o test.out.narrow
+explain -e ENOSPC link foo bar > test.out.narrow
 test $? -eq 0 || fail
 
 fmt -w300 test.out.narrow > test.out.wide

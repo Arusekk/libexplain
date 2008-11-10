@@ -23,12 +23,12 @@ TEST_SUBJECT="fcntl vs EINVAL"
 
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_DUPFD, arg = 12345) failed, Invalid argument
-(22, EINVAL) because the argument is greater than the maximum allowable
-value (1024)
+(EINVAL) because the argument is greater than the maximum allowable value
+(1024)
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_DUPFD 12345 -e EINVAL -o test.out
+explain -e EINVAL fcntl 42 F_DUPFD 12345 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

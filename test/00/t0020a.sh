@@ -21,25 +21,15 @@
 TEST_SUBJECT="fcntl vs EMFILE"
 . test_prelude
 
-fmt > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_DUPFD, arg = 2) failed, Too many open
-files (24, EMFILE) because the process (NNN) already has the maximum
-number (1024) of file
+cat > test.ok << 'fubar'
+fcntl(fildes = 42, command = F_DUPFD, arg = 2) failed, Too many open files
+(EMFILE) because the process already has the maximum number of file
 descriptors open
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_DUPFD 2 -e EMFILE -o test.out4
+explain -e EMFILE fcntl 42 F_DUPFD 2 > test.out
 test $? -eq 0 || fail
-
-fmt -w500 test.out4 > test.out3
-test $? -eq 0 || no_result
-
-sed 's|process ([0-9]*)|process (NNN)|' test.out3 > test.out2
-test $? -eq 0 || no_result
-
-fmt test.out2 > test.out
-test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

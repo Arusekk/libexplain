@@ -23,9 +23,9 @@ TEST_SUBJECT="creat EACCES"
 
 cat > test.ok << 'fubar'
 creat(pathname = "a/b/foobar", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP
-| S_IROTH | S_IWOTH) failed, Permission denied (13, EACCES) because the
-process does not have write permission to the pathname "a/b" directory,
-this is needed to create the "foobar" directory entry
+| S_IROTH | S_IWOTH) failed, Permission denied (EACCES) because the process
+does not have write permission to the pathname "a/b" directory, this is
+needed to create the directory entry for the "foobar" regular file
 fubar
 test $? -eq 0 || no_result
 

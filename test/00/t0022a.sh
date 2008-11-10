@@ -23,12 +23,12 @@ TEST_SUBJECT="fcntl vs EPERM"
 
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_SETFL, arg = O_RDWR) failed, Operation not
-permitted (1, EPERM) because it was attempted to clear the O_APPEND flag on
-a file that has the append-only attribute set
+permitted (EPERM) because it was attempted to clear the O_APPEND flag on a
+file that has the append-only attribute set
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_SETFL O_RDWR -e EPERM -o test.out
+explain -e EPERM fcntl 42 F_SETFL O_RDWR > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

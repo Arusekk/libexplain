@@ -75,4 +75,14 @@ void libexplain_string_buffer_copy(libexplain_string_buffer_t *dst,
 void libexplain_string_buffer_path_join(libexplain_string_buffer_t *sb,
     const char *s);
 
+/**
+  * The libexplain_string_buffer_full functionmay be used to determine
+  * whether or not a string buffer is full (has no more room for
+  * additional characters).
+  *
+  * @param sb
+  *     The string buffer to test.
+  */
+int libexplain_string_buffer_full(const libexplain_string_buffer_t *sb);
+
 #endif /* LIBEXPLAIN_STRING_BUFFER_H */

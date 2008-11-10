@@ -20,7 +20,6 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/dirent.h>
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h>
@@ -28,11 +27,15 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/errno/path_resolution.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
-#include <libexplain/buffer/strerror.h>
+#include <libexplain/buffer/uid.h>
+#include <libexplain/capability.h>
 #include <libexplain/fstrcmp.h>
 #include <libexplain/have_permission.h>
+#include <libexplain/option.h>
+#include <libexplain/symloopmax.h>
 
 
 static int
@@ -70,7 +73,7 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
             continue;
         if (0 == strcmp(dep->d_name, ".."))
             continue;
-        weight = libexplain_fstrcmp(component, dep->d_name);
+        weight = libexplain_fstrcasecmp(component, dep->d_name);
         if (best_weight < weight)
         {
             best_weight = weight;
@@ -82,7 +85,10 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
     if (best_name[0] == '\0')
         return;
 
-    libexplain_string_buffer_puts(sb, ", did you mean ");
+    libexplain_string_buffer_puts(sb, ", did you mean the ");
+    /* the rule is: [caption] path file-type */
+    libexplain_string_buffer_puts_quoted(sb, best_name);
+    libexplain_string_buffer_putc(sb, ' ');
 
     {
         /* see if we can say what kind of file it is */
@@ -94,26 +100,20 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
         ip = strendcpy(ip, "/", ipath_end);
         ip = strendcpy(ip, best_name, ipath_end);
         if (lstat(ipath, &st) == 0)
-        {
             libexplain_buffer_file_type(sb, st.st_mode);
-            libexplain_string_buffer_putc(sb, ' ');
-        }
+        else
+            libexplain_string_buffer_puts(sb, "file");
     }
 
-    libexplain_string_buffer_puts_quoted(sb, best_name);
     libexplain_string_buffer_puts(sb, " instead?");
 }
 
 
 int
 libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
-    int expected_errno, const char *initial_pathname, int flags,
-    const char *caption)
+    int expected_errno, const char *initial_pathname, const char *caption,
+    const libexplain_final_t *final_component)
 {
-    int             final_component_must_not_exist;
-    int             final_component_must_exist;
-    int             final_component_must_be_a_directory;
-    int             follow_final_symlink;
     char            pathname[PATH_MAX + 1];
     libexplain_string_buffer_t pathname_buf;
     int             number_of_symlinks_followed;
@@ -166,11 +166,6 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
     else if (all_slash(initial_pathname))
         initial_pathname = "/.";
 
-    final_component_must_not_exist = !!(flags & O_EXCL);
-    final_component_must_exist = !(flags & O_CREAT);
-    final_component_must_be_a_directory = !!(flags & O_DIRECTORY);
-    follow_final_symlink = !(flags & O_NOFOLLOW);
-
     path_max = pathconf(initial_pathname, _PC_PATH_MAX);
     if (path_max <= 0)
         path_max = PATH_MAX;
@@ -216,14 +211,16 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
 
     /*
      * Try to get the system's idea of the loop maximum.
-     * This isn't always available.
      */
-    symloop_max = sysconf(_SC_SYMLOOP_MAX);
-    if (symloop_max < 0)
-        symloop_max = _POSIX_SYMLOOP_MAX;
+    symloop_max = libexplain_symloopmax();
 
     symlinks_so_far = malloc(2 * symloop_max * sizeof(char *));
-    if (!symlinks_so_far && expected_errno == ELOOP)
+    if
+    (
+        !symlinks_so_far
+    &&
+        (expected_errno == ELOOP || expected_errno == EMLINK)
+    )
         return -1;
 
     pp = pathname;
@@ -270,7 +267,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 /* the rule is: [caption] path file-type */
                 libexplain_string_buffer_puts_quoted(sb, lookup_directory);
                 libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_gettext(sb, i18n("directory"));
+                libexplain_buffer_file_type(sb, S_IFDIR);
                 libexplain_string_buffer_putc(sb, ' ');
                 libexplain_buffer_gettext(sb, i18n("does not exist"));
             }
@@ -278,8 +275,8 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             {
                 libexplain_string_buffer_puts(sb, "lstat(");
                 libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_puts(sb, ") failed, ");
-                libexplain_buffer_strerror(sb, lookup_directory_st_errnum);
+                libexplain_string_buffer_putc(sb, ')');
+                libexplain_buffer_failed(sb, lookup_directory_st_errnum);
             }
             return_0:
             if (symlinks_so_far)
@@ -306,10 +303,12 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
              * an ENOTDIR error is returned ("Not a directory").
              */
             libexplain_string_buffer_puts(sb, "path ");
+            /* the rule is: [caption] path file-type */
             libexplain_string_buffer_puts_quoted(sb, lookup_directory);
             libexplain_string_buffer_puts(sb, " is a ");
             libexplain_buffer_file_type(sb, lookup_directory_st.st_mode);
-            libexplain_string_buffer_puts(sb, " and not a directory");
+            libexplain_string_buffer_puts(sb, " and not a ");
+            libexplain_buffer_file_type(sb, S_IFDIR);
             goto return_0;
         }
 
@@ -325,13 +324,13 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 sb,
                 i18n("the process does not have search permission to the")
             );
-            /* the rule is: [caption] path file-type */
             libexplain_string_buffer_putc(sb, ' ');
+            /* the rule is: [caption] path file-type */
             libexplain_string_buffer_puts(sb, caption);
             libexplain_string_buffer_putc(sb, ' ');
             libexplain_string_buffer_puts_quoted(sb, lookup_directory);
             libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_gettext(sb, i18n("directory"));
+            libexplain_buffer_file_type(sb, S_IFDIR);
 
             /*
              * FIXME: may need to explain that the permissions are
@@ -340,10 +339,6 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             goto return_0;
         }
 
-        /*
-         * FIXME: need to deal with 't' permission bit on
-         * directories like /tmp drwxrwxrwt
-         */
         lookup_directory_writable =
             libexplain_have_write_permission(&lookup_directory_st);
 
@@ -465,31 +460,33 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     /* the rule is: [caption] path file-type */
                     libexplain_string_buffer_puts_quoted(sb, component);
                     libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_buffer_gettext(sb, i18n("directory"));
+                    libexplain_buffer_file_type(sb, S_IFDIR);
                     libexplain_string_buffer_puts(sb, " in the ");
                     /* the rule is: [caption] path file-type */
                     libexplain_string_buffer_puts(sb, caption);
                     libexplain_string_buffer_putc(sb, ' ');
                     libexplain_string_buffer_puts_quoted(sb, lookup_directory);
                     libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_buffer_gettext(sb, i18n("directory"));
+                    libexplain_buffer_file_type(sb, S_IFDIR);
 
                     /*
                      * If it was a typo, see if we can find something similar.
                      */
                     look_for_similar(sb, lookup_directory, component);
+                    goto return_0;
                 }
-                else
-                {
-                    libexplain_string_buffer_puts(sb, "lstat(");
-                    libexplain_string_buffer_puts_quoted(sb, intermediate_path);
-                    libexplain_string_buffer_puts(sb, ") failed, ");
-                    libexplain_buffer_strerror(sb, intermediate_path_st_errnum);
-                }
-                goto return_0;
+
+                /*
+                 * intermediate path of non-final component returned
+                 * unexpected error to lstat (i.e. not ENOENT), bail out
+                 */
+                goto return_minus_1;
             }
 
-            if (final_component_must_not_exist)
+            /*
+             * At this point, we know it is a final component.
+             */
+            if (final_component->must_not_exist)
             {
                 if (intermediate_path_st_errnum == ENOENT)
                 {
@@ -508,10 +505,10 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                         libexplain_string_buffer_puts_quoted
                         (
                             sb,
-                            intermediate_path
+                            lookup_directory
                         );
                         libexplain_string_buffer_putc(sb, ' ');
-                        libexplain_buffer_gettext(sb, i18n("directory"));
+                        libexplain_buffer_file_type(sb, S_IFDIR);
 
                         libexplain_string_buffer_puts
                         (
@@ -538,23 +535,23 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     goto return_minus_1;
                 }
 
-                /* something interesting happened */
-                libexplain_string_buffer_puts(sb, "lstat(");
-                libexplain_string_buffer_puts_quoted(sb, intermediate_path);
-                libexplain_string_buffer_puts(sb, ") failed, ");
-                libexplain_buffer_strerror(sb, intermediate_path_st_errnum);
-                goto return_0;
+                /*
+                 * The final component is not meant to exist, but the
+                 * final component gave an unexpected error to lstat
+                 * (i.e. not ENOENT), bail out
+                 */
+                goto return_minus_1;
             }
-            if (final_component_must_exist)
+            if (final_component->must_exist)
             {
                 if (intermediate_path_st_errnum != ENOENT)
                 {
-                    /* but it *may* exist */
-                    libexplain_string_buffer_puts(sb, "lstat(");
-                    libexplain_string_buffer_puts_quoted(sb, intermediate_path);
-                    libexplain_string_buffer_puts(sb, ") failed, ");
-                    libexplain_buffer_strerror(sb, intermediate_path_st_errnum);
-                    goto return_0;
+                    /*
+                     * The final component is meant to exist, but the
+                     * final component gave an unexpected error to
+                     * lstat (i.e. not success and not ENOENT), bail out
+                     */
+                    goto return_minus_1;
                 }
 
                 /* ENOENT */
@@ -562,8 +559,8 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 /* the rule is: [caption] path file-type */
                 libexplain_string_buffer_puts_quoted(sb, component);
                 libexplain_string_buffer_putc(sb, ' ');
-                if (final_component_must_be_a_directory)
-                    libexplain_buffer_gettext(sb, i18n("directory"));
+                if (final_component->must_be_a_directory)
+                    libexplain_buffer_file_type(sb, S_IFDIR);
                 else
                     libexplain_buffer_gettext(sb, i18n("file"));
                 libexplain_string_buffer_puts(sb, " in the ");
@@ -572,7 +569,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 libexplain_string_buffer_putc(sb, ' ');
                 libexplain_string_buffer_puts_quoted(sb, lookup_directory);
                 libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_gettext(sb, i18n("directory"));
+                libexplain_buffer_file_type(sb, S_IFDIR);
 
                 /*
                  * If it was a typo, see if we can find something similar.
@@ -583,16 +580,16 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             }
 
             /*
-             * Creating new file requires write permission in the
+             * Creating a new file requires write permission in the
              * containing directory.
              */
             if
             (
-                expected_errno == EACCES
+                (expected_errno == EACCES || expected_errno == EPERM)
             &&
                 intermediate_path_st_errnum == ENOENT
             &&
-                (flags & O_CREAT)
+                final_component->want_to_create
             &&
                 !lookup_directory_writable
             )
@@ -611,15 +608,16 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 libexplain_string_buffer_putc(sb, ' ');
                 libexplain_string_buffer_puts_quoted(sb, lookup_directory);
                 libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_gettext(sb, i18n("directory"));
+                libexplain_buffer_file_type(sb, S_IFDIR);
 
                 libexplain_string_buffer_puts
                 (
                     sb,
-                    ", this is needed to create the "
+                    ", this is needed to create the directory entry for the "
                 );
                 libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_puts(sb, " directory entry");
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, final_component->st_mode);
 
                 /*
                  * What if they meant to overwrite an existing file?
@@ -631,18 +629,20 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             }
 
             /*
-             * It's OK if it doen't exist,
-             * but we were looking for an error
-             * and didn't find it
+             * It's OK if the final component path doesn't exist,
+             * but we were looking for an error and didn't find one.
              */
             goto return_minus_1;
         }
 
+        /*
+         * At this point, we know that the intermediate path exists.
+         */
         if
         (
             S_ISLNK(intermediate_path_st.st_mode)
         &&
-            (!final || follow_final_symlink)
+            (!final || final_component->follow_symlink)
         )
         {
             int             n;
@@ -701,7 +701,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                             free(symlinks_so_far[j]);
                         free(symlinks_so_far);
                         symlinks_so_far = 0;
-                        if (expected_errno == ELOOP)
+                        if (expected_errno == ELOOP || expected_errno == EMLINK)
                             goto return_minus_1;
                     }
                     else
@@ -770,7 +770,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     libexplain_string_buffer_putc(sb, ' ');
                     libexplain_string_buffer_puts_quoted(sb, lookup_directory);
                     libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_buffer_gettext(sb, i18n("directory"));
+                    libexplain_buffer_file_type(sb, S_IFDIR);
                     libexplain_string_buffer_puts(sb, " refers to ");
                     libexplain_string_buffer_puts_quoted(sb, rlb);
                     libexplain_string_buffer_puts(sb, " that does not exist");
@@ -785,12 +785,21 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 ++number_of_symlinks_followed;
                 if (number_of_symlinks_followed >= symloop_max)
                 {
-                    libexplain_string_buffer_printf
+                    libexplain_string_buffer_puts
                     (
                         sb,
-                        "too many symbolic links (%d) were encountered in ",
-                        number_of_symlinks_followed
+                        "too many symbolic links "
                     );
+                    if (libexplain_option_dialect_specific())
+                    {
+                        libexplain_string_buffer_printf
+                        (
+                            sb,
+                            " (%d)",
+                            number_of_symlinks_followed
+                        );
+                    }
+                    libexplain_string_buffer_puts(sb, " were encountered in ");
                     libexplain_string_buffer_puts(sb, caption);
                     goto return_0;
                 }
@@ -810,15 +819,17 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             {
                 /* ENOTDIR */
                 libexplain_string_buffer_puts(sb, " the ");
+                /* the rule is: [caption] path file-type */
                 libexplain_string_buffer_puts_quoted(sb, component);
                 libexplain_string_buffer_putc(sb, ' ');
                 libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
                 libexplain_string_buffer_puts(sb, " in the ");
+                /* the rule is: [caption] path file-type */
                 libexplain_string_buffer_puts(sb, caption);
                 libexplain_string_buffer_putc(sb, ' ');
                 libexplain_string_buffer_puts_quoted(sb, lookup_directory);
                 libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_gettext(sb, i18n("directory"));
+                libexplain_buffer_file_type(sb, S_IFDIR);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -835,17 +846,24 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             continue;
         }
 
-        /* at this point, final component *does* exist */
-        if (final_component_must_not_exist)
+        /*
+         * At this point, we know that intermediate_path is the final
+         * path, and we know it *does* exist.
+         */
+        if (final_component->must_not_exist)
         {
             libexplain_string_buffer_puts(sb, "in the ");
-            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-            libexplain_string_buffer_puts(sb, " directory of ");
+            /* the rule is: [caption] path file-type */
             libexplain_string_buffer_puts(sb, caption);
-            libexplain_string_buffer_puts(sb, " there is a ");
-            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
             libexplain_string_buffer_putc(sb, ' ');
+            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_buffer_file_type(sb, S_IFDIR);
+            libexplain_string_buffer_puts(sb, " there is a ");
+            /* the rule is: [caption] path file-type */
             libexplain_string_buffer_puts_quoted(sb, component);
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
 
             libexplain_string_buffer_puts(sb, ", but it should not exist yet");
             goto return_0;
@@ -853,29 +871,328 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
 
         if
         (
-            final_component_must_be_a_directory
+            final_component->must_be_a_directory
         &&
             !S_ISDIR(intermediate_path_st.st_mode)
         )
         {
             libexplain_string_buffer_puts(sb, "in the ");
-            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-            libexplain_string_buffer_puts(sb, " directory of ");
+            /* the rule is: [caption] path file-type */
             libexplain_string_buffer_puts(sb, caption);
-            libexplain_string_buffer_puts(sb, " there is a ");
-            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
             libexplain_string_buffer_putc(sb, ' ');
+            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_buffer_file_type(sb, S_IFDIR);
+            libexplain_string_buffer_puts(sb, " there is a ");
+            /* the rule is: [caption] path file-type */
             libexplain_string_buffer_puts_quoted(sb, component);
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
 
             libexplain_string_buffer_puts(sb, ", but it should be a ");
-            libexplain_buffer_gettext(sb, i18n("directory"));
+            libexplain_buffer_file_type(sb, S_IFDIR);
             goto return_0;
         }
 
+        if
+        (
+            (expected_errno == EACCES || expected_errno == EPERM)
+        &&
+            final_component->want_to_modify_inode
+        &&
+            !libexplain_have_inode_permission(&intermediate_path_st)
+        )
+        {
+            libexplain_buffer_gettext
+            (
+                sb,
+                i18n("the process does not have inode modification "
+                    "permission to the")
+            );
+
+            /* the rule is: [caption] path file-type */
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_string_buffer_puts_quoted(sb, component);
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
+
+            libexplain_string_buffer_puts(sb, " in the");
+
+            /* the rule is: [caption] path file-type */
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_string_buffer_puts(sb, caption);
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_buffer_file_type(sb, S_IFDIR);
+            goto return_0;
+        }
+
+        if
+        (
+            (expected_errno == EACCES || expected_errno == EPERM)
+        &&
+            final_component->want_to_unlink
+        &&
+            !lookup_directory_writable
+        )
+        {
+            if ((lookup_directory_st.st_mode & S_ISVTX) == 0)
+            {
+                /*
+                 * No sticky bit set, therefore only need write permissions on
+                 * the lookup directory.
+                 */
+                libexplain_string_buffer_puts
+                (
+                    sb,
+                    "the process does not have write permission to the"
+                );
+                libexplain_string_buffer_putc(sb, ' ');
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_puts(sb, caption);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, S_IFDIR);
+
+                libexplain_string_buffer_puts
+                (
+                    sb,
+                    ", this is needed to remove the directory entry for the "
+                );
+                libexplain_string_buffer_puts_quoted(sb, component);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type
+                (
+                    sb,
+                    intermediate_path_st.st_mode
+                );
+                goto return_0;
+            }
+            else
+            {
+                int             uid;
+
+                uid = geteuid();
+                if
+                (
+                    uid != (int)intermediate_path_st.st_uid
+                &&
+                    uid != (int)lookup_directory_st.st_uid
+                &&
+                    !libexplain_capability_fowner()
+                )
+                {
+                    libexplain_string_buffer_puts
+                    (
+                        sb,
+                        "the process does not have write permission to the"
+                    );
+                    libexplain_string_buffer_putc(sb, ' ');
+                    /* the rule is: [caption] path file-type */
+                    libexplain_string_buffer_puts(sb, caption);
+                    libexplain_string_buffer_putc(sb, ' ');
+                    libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+                    libexplain_string_buffer_putc(sb, ' ');
+                    libexplain_buffer_file_type(sb, S_IFDIR);
+
+                    libexplain_string_buffer_puts
+                    (
+                        sb,
+                        ", this is needed to remove the directory "
+                        "entry for the"
+                    );
+                    /* the rule is: [caption] path file-type */
+                    libexplain_string_buffer_puts_quoted(sb, component);
+                    libexplain_string_buffer_putc(sb, ' ');
+                    libexplain_buffer_file_type
+                    (
+                        sb,
+                        intermediate_path_st.st_mode
+                    );
+                    libexplain_string_buffer_puts
+                    (
+                        sb,
+                        "; the directory has the sticky bit (S_ISVTX) "
+                        "set and the process's effective user ID ("
+                    );
+                    libexplain_buffer_uid(sb, uid);
+                    libexplain_string_buffer_puts
+                    (
+                        sb,
+                        ") is neither the user ID of the "
+                    );
+                    /* the rule is: [caption] path file-type */
+                    libexplain_string_buffer_puts_quoted(sb, component);
+                    libexplain_string_buffer_putc(sb, ' ');
+                    libexplain_buffer_file_type
+                    (
+                        sb,
+                        intermediate_path_st.st_mode
+                    );
+                    libexplain_string_buffer_puts
+                    (
+                        sb,
+                        " to be removed ("
+                    );
+                    libexplain_buffer_uid(sb, intermediate_path_st.st_uid);
+                    libexplain_string_buffer_puts
+                    (
+                        sb,
+                        ") nor that of the directory containing it ("
+                    );
+                    libexplain_buffer_uid(sb, lookup_directory_st.st_uid);
+                    libexplain_string_buffer_puts
+                    (
+                        sb,
+                        "), and the process is not privileged"
+                    );
+#ifndef HAVE_SYS_CAPABILITY_H
+                    if (libexplain_option_dialect_specific())
+                    {
+                        libexplain_string_buffer_puts
+                        (
+                            sb,
+                            " (does not have the CAP_FOWNER capability)"
+                        );
+                    }
+#endif
+                    goto return_0;
+                }
+            }
+        }
+
+        if (expected_errno == EACCES)
+        {
+            if
+            (
+                final_component->want_to_read
+            &&
+                !libexplain_have_read_permission(&intermediate_path_st)
+            )
+            {
+                libexplain_buffer_gettext
+                (
+                    sb,
+                    i18n("the process does not have read permission to the")
+                );
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, component);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
+
+                libexplain_string_buffer_puts(sb, " in the");
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts(sb, caption);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, S_IFDIR);
+                goto return_0;
+            }
+
+            if
+            (
+                final_component->want_to_write
+            &&
+                !libexplain_have_write_permission(&intermediate_path_st)
+            )
+            {
+                libexplain_buffer_gettext
+                (
+                    sb,
+                    i18n("the process does not have write permission to the")
+                );
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, component);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
+
+                libexplain_string_buffer_puts(sb, " in the");
+                libexplain_string_buffer_putc(sb, ' ');
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_puts(sb, caption);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, S_IFDIR);
+                goto return_0;
+            }
+
+            if
+            (
+                final_component->want_to_execute
+            &&
+                !libexplain_have_execute_permission(&intermediate_path_st)
+            )
+            {
+                libexplain_buffer_gettext
+                (
+                    sb,
+                    i18n("the process does not have execute permission to the")
+                );
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, component);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
+
+                libexplain_string_buffer_puts(sb, " in the");
+                libexplain_string_buffer_putc(sb, ' ');
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_puts(sb, caption);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, S_IFDIR);
+                goto return_0;
+            }
+
+            if
+            (
+                final_component->want_to_search
+            &&
+                !libexplain_have_search_permission(&intermediate_path_st)
+            )
+            {
+                libexplain_buffer_gettext
+                (
+                    sb,
+                    i18n("the process does not have search permission to the")
+                );
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, component);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
+
+                libexplain_string_buffer_puts(sb, " in the");
+                libexplain_string_buffer_putc(sb, ' ');
+
+                /* the rule is: [caption] path file-type */
+                libexplain_string_buffer_puts(sb, caption);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
+                libexplain_string_buffer_putc(sb, ' ');
+                libexplain_buffer_file_type(sb, S_IFDIR);
+                goto return_0;
+            }
+        }
+
         /*
-         * no error, yay!
-         * but we were looking for an error,
-         * and did not find one
+         * No error, yay!  Except that we were looking for an error, and
+         * did not find one.
          */
         return_minus_1:
         if (symlinks_so_far)
@@ -888,4 +1205,22 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         }
         return -1;
     }
+}
+
+
+void
+libexplain_final_init(libexplain_final_t *p)
+{
+    p->want_to_read = 0;
+    p->want_to_write = 0;
+    p->want_to_search = 0;
+    p->want_to_execute = 0;
+    p->want_to_create = 0;
+    p->want_to_modify_inode = 0;
+    p->want_to_unlink = 0;
+    p->must_exist = 1;
+    p->must_not_exist = 0;
+    p->must_be_a_directory = 0;
+    p->follow_symlink = 1;
+    p->st_mode = S_IFREG;
 }

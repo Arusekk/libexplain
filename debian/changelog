@@ -1,14 +1,395 @@
-libexplain (0.1.D001) unstable; urgency=low
+libexplain (0.2.D001) unstable; urgency=low
 
-  * This change prepares libexplain for its first public release.
+  * This change set prepares libexplain for the next public release.
 
- -- Peter Miller <millerp@canb.auug.org.au>  Sun, 26 Oct 2008 23:05:46 +1100
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 11 Nov 2008 08:34:49 +1100
+
+libexplain (0.D002) unstable; urgency=low
+
+  * Explain errno values returned by libc functions, branch 0.1.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 10 Nov 2008 23:24:25 +1100
 
 libexplain (0.D001) unstable; urgency=low
 
   * Explain errno values returned by libc functions, branch 0.0.
 
  -- Peter Miller <millerp@canb.auug.org.au>  Sun, 26 Oct 2008 20:44:39 +1100
+
+libexplain (0.1.D057) unstable; urgency=low
+
+  * There are now explanations availabe for the erors returned by the dup(2)
+    system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 10 Nov 2008 23:15:40 +1100
+
+libexplain (0.1.D056) unstable; urgency=low
+
+  * There is now a common function for handling EFBIG errors for consistent
+    explanations.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 10 Nov 2008 22:36:46 +1100
+
+libexplain (0.1.D055) unstable; urgency=low
+
+  * The ENOENT message has been refactored into a single function, for
+    consistent error explanations.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 10 Nov 2008 19:17:22 +1100
+
+libexplain (0.1.D054) unstable; urgency=low
+
+  * The lsof(1) command is used to obtain supplementary file information on
+    those systems with limited /proc implementations, or no /proc at all.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 10 Nov 2008 15:40:57 +1100
+
+libexplain (0.1.D053) unstable; urgency=low
+
+  * There are now explanations available for chown(2) errors.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 09 Nov 2008 10:05:45 +1100
+
+libexplain (0.1.D052) unstable; urgency=low
+
+  * The EROFS handling has been moved into a common function, for consistent
+    explanations.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 08 Nov 2008 22:59:33 +1100
+
+libexplain (0.1.D051) unstable; urgency=low
+
+  * The code now understands Linux capabilities.  iT defaults to using
+    geteuid()==0 if they are not available.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 08 Nov 2008 21:49:50 +1100
+
+libexplain (0.1.D050) unstable; urgency=low
+
+  * The path resolution code now takes a final_compoient struct argument, to
+    describe the desired properties of the final component, rather than using
+    (or, increasingly, abusing) an open(2) flags value.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 07 Nov 2008 17:03:48 +1100
+
+libexplain (0.1.D049) unstable; urgency=low
+
+  * There is now a LIBEXPLAIN_OPTIONS environment variable, which allows the
+    automated tests to avoid system specific text and limits from giving false
+    negatives.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 05 Nov 2008 21:36:00 +1100
+
+libexplain (0.1.D048) unstable; urgency=low
+
+  * A number of OpenBSD build problems have been fixed.	 Some tests have been
+    made less linux specific (more work to do in this area, though).
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 05 Nov 2008 16:30:09 +1100
+
+libexplain (0.1.D047) unstable; urgency=low
+
+  * Explanations are now available for readline system call errors.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 03 Nov 2008 21:43:51 +1100
+
+libexplain (0.1.D046) unstable; urgency=low
+
+  * There are now explanations available fot the mkdir(2) system call errors.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 03 Nov 2008 17:31:05 +1100
+
+libexplain (0.1.D045) unstable; urgency=low
+
+  * The phrasing of one of the messages has been improved.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 03 Nov 2008 16:51:11 +1100
+
+libexplain (0.1.D044) unstable; urgency=low
+
+  * The path resolution code was printing the wring directory name when a file
+    needed to be creaed but there were no permissions to do so.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 03 Nov 2008 16:20:54 +1100
+
+libexplain (0.1.D043) unstable; urgency=low
+
+  * There are now explanations available for errors reported by the ftruncate
+    system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 03 Nov 2008 10:40:06 +1100
+
+libexplain (0.1.D042) unstable; urgency=low
+
+  * There are now explainations available for the fstat(2) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 23:19:09 +1100
+
+libexplain (0.1.D041) unstable; urgency=low
+
+  * The explanation for the unlink EPERM error has been improved.  This makes no
+    difference on Linux, but will probably be visable on other POSIXX systems.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 22:23:56 +1100
+
+libexplain (0.1.D040) unstable; urgency=low
+
+  * Theer is a new libexplain_write_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 22:10:50 +1100
+
+libexplain (0.1.D039) unstable; urgency=low
+
+  * There is a new libexplain_unlink_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 21:52:25 +1100
+
+libexplain (0.1.D038) unstable; urgency=low
+
+  * There are now explanations available for truncate system call errors.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 21:09:00 +1100
+
+libexplain (0.1.D037) unstable; urgency=low
+
+  * The explanation for EIO now includes the path of the special file, if it can
+    be determined.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 21:02:24 +1100
+
+libexplain (0.1.D036) unstable; urgency=low
+
+  * The explanation for ETXTBSY has been refactored into a common function for
+    consistency.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 12:29:54 +1100
+
+libexplain (0.1.D035) unstable; urgency=low
+
+  * The explanations for ELOOP have been moved to a common function, to ensure
+    consistency.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 11:50:28 +1100
+
+libexplain (0.1.D034) unstable; urgency=low
+
+  * The explanations for EINTR have been moved to a common function for
+    consistent reporting.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 11:15:04 +1100
+
+libexplain (0.1.D033) unstable; urgency=low
+
+  * The explanations for ENAMETOOLONG have been refactored into common
+    functions, for consistent error messages.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 02 Nov 2008 10:27:43 +1100
+
+libexplain (0.1.D032) unstable; urgency=low
+
+  * There is now a libexplain_symlink_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 01 Nov 2008 18:26:03 +1100
+
+libexplain (0.1.D031) unstable; urgency=low
+
+  * There is a new libexplain_stat_or_die function for API symmetry
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 01 Nov 2008 18:02:09 +1100
+
+libexplain (0.1.D030) unstable; urgency=low
+
+  * There is a new libexplain_rename_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 01 Nov 2008 13:00:29 +1100
+
+libexplain (0.1.D029) unstable; urgency=low
+
+  * There is a new libexplain_opendir_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 01 Nov 2008 12:51:06 +1100
+
+libexplain (0.1.D028) unstable; urgency=low
+
+  * There is now a libexplain_lstat_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 01 Nov 2008 12:39:56 +1100
+
+libexplain (0.1.D027) unstable; urgency=low
+
+  * There is a new libexplain_lseek_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 01 Nov 2008 09:01:23 +1100
+
+libexplain (0.1.D026) unstable; urgency=low
+
+  * Explanations are now available for error reported by the readdir system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 23:41:45 +1100
+
+libexplain (0.1.D025) unstable; urgency=low
+
+  * There is a new libexplain_read_or_die function for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 21:51:29 +1100
+
+libexplain (0.1.D024) unstable; urgency=low
+
+  * There are now explanations available for error returned by the fwrite(3)
+    system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 21:34:58 +1100
+
+libexplain (0.1.D023) unstable; urgency=low
+
+  * When doing fuzzy file name comparisons, the comparison is now performed in a
+    case-INsensitive manner.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 21:32:08 +1100
+
+libexplain (0.1.D022) unstable; urgency=low
+
+  * There is now a libexplain_creat_or_die functon, for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 21:27:13 +1100
+
+libexplain (0.1.D021) unstable; urgency=low
+
+  * There is a new libexplain_link_or_die function, for API symmetry.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 10:41:00 +1100
+
+libexplain (0.1.D020) unstable; urgency=low
+
+  * There is a new libexplain_fcntl_or_die function, for API symmetry
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 10:22:12 +1100
+
+libexplain (0.1.D019) unstable; urgency=low
+
+  * There is now a libexplain_close_or_die for symmetry with the rest of the
+    API.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 31 Oct 2008 09:37:42 +1100
+
+libexplain (0.1.D018) unstable; urgency=low
+
+  * There are now explanations available for the remove(3) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 30 Oct 2008 22:55:30 +1100
+
+libexplain (0.1.D017) unstable; urgency=low
+
+  * There are now explanations available for the rmdir system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 30 Oct 2008 16:51:54 +1100
+
+libexplain (0.1.D016) unstable; urgency=low
+
+  * The code generator now produces the test programs as well.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 30 Oct 2008 12:17:40 +1100
+
+libexplain (0.1.D015) unstable; urgency=low
+
+  * The code generator now adds see also sections to man pages.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 30 Oct 2008 09:59:38 +1100
+
+libexplain (0.1.D014) unstable; urgency=low
+
+  * There is a new libexplain_chdir_or_die function, for symmetry with the rest
+    of the API.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 29 Oct 2008 23:52:50 +1100
+
+libexplain (0.1.D013) unstable; urgency=low
+
+  * There is a new libexplain_access_or_die function, which may be used to check
+    file permissions and report errors.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 29 Oct 2008 18:17:30 +1100
+
+libexplain (0.1.D012) unstable; urgency=low
+
+  * The text of " failed, " has been refactored into a singl;e function, for use
+    everywhere.	 This provides consistent behaviour, and reduces the size of the
+    code.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 29 Oct 2008 09:15:16 +1100
+
+libexplain (0.1.D011) unstable; urgency=low
+
+  * All of the EBADF explanations now use the same function, so as to present a
+    consistent message.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 28 Oct 2008 22:53:37 +1100
+
+libexplain (0.1.D010) unstable; urgency=low
+
+  * There are now explanations available for the fchmod(2) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 28 Oct 2008 22:31:42 +1100
+
+libexplain (0.1.D009) unstable; urgency=low
+
+  * There are now explanations available for the chmod(2) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 28 Oct 2008 17:03:55 +1100
+
+libexplain (0.1.D008) unstable; urgency=low
+
+  * There is a new libexplain_fclose_or_die which calls fflush and fclose and
+    then calls libexplain_fclose to report the error, then exits.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 27 Oct 2008 21:13:50 +1100
+
+libexplain (0.1.D007) unstable; urgency=low
+
+  * There is a new libexplain_fflush_or_die function, which will call fflush and
+    report the error if there is one.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 27 Oct 2008 20:40:14 +1100
+
+libexplain (0.1.D006) unstable; urgency=low
+
+  * There is a new libexplain_freopen_or_die function which may be used to call
+    freopen and if it fails print the explanation and exit(1).
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 27 Oct 2008 19:45:57 +1100
+
+libexplain (0.1.D005) unstable; urgency=low
+
+  * When a pathname is inserted after a file descriptor, it no longer appears
+    intide C comments, the C quoting is sufficient.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 27 Oct 2008 17:21:04 +1100
+
+libexplain (0.1.D004) unstable; urgency=low
+
+  * There are now explanations available for the fchdir(2) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 27 Oct 2008 17:14:21 +1100
+
+libexplain (0.1.D003) unstable; urgency=low
+
+  * The final component is now checked for EACCES, and spelled out in far more
+    detail.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 27 Oct 2008 16:56:52 +1100
+
+libexplain (0.1.D002) unstable; urgency=low
+
+  * The web site now includes a kfish endorsement.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 27 Oct 2008 14:28:45 +1100
+
+libexplain (0.1.D001) unstable; urgency=low
+
+  * This change prepares libexplain for its first public release.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 26 Oct 2008 23:08:16 +1100
 
 libexplain (0.0.D142) unstable; urgency=low
 

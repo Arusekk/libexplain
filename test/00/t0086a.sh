@@ -22,16 +22,16 @@ TEST_SUBJECT="rename ENAMETOOLONG"
 . test_prelude
 
 cat > test.ok << 'fubar'
-rename(oldpath = "foo", newpath = "bar") failed, File name too long (36,
-ENAMETOOLONG) because oldpath or newpath, or a path component of oldpath or
-newpath, was too long; note that oldpath still exists
+rename(oldpath = "foo", newpath = "bar") failed, File name too long
+(ENAMETOOLONG) because oldpath or newpath, or a directory component of
+oldpath or newpath, is too long; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result
 
 touch foo
 test $? -eq 0 || no_result
 
-explain rename foo bar -e ENAMETOOLONG -o test.out
+explain -e ENAMETOOLONG -o test.out rename foo bar
 test $? -eq 0 || fail
 
 diff test.ok test.out

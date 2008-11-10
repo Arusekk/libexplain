@@ -18,7 +18,6 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
@@ -27,12 +26,16 @@
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/eloop.h>
+#include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/access.h>
 #include <libexplain/buffer/errno/path_resolution.h>
-#include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/etxtbsy.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/path_to_pid.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/dirname.h>
 #include <libexplain/have_permission.h>
@@ -40,11 +43,21 @@
 #include <libexplain/string_buffer.h>
 
 
+static int
+is_dir(const char *pathname)
+{
+    struct stat     st;
+
+    return (stat(pathname, &st) && S_ISDIR(st.st_mode));
+}
+
+
 void
 libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode)
 {
     int             bad_pathname;
+    libexplain_final_t final_component;
 
     bad_pathname = errnum == EFAULT && libexplain_path_is_efault(pathname);
     libexplain_string_buffer_puts(sb, "access(pathname = ");
@@ -61,8 +74,7 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
     /*
      * The Linux access(2) man page says
@@ -98,193 +110,79 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         return;
     }
 
+    /*
+     * Translate the mode into final component flags.
+     */
+    libexplain_final_init(&final_component);
+    if (mode & R_OK)
+        final_component.want_to_read = 1;
+    if (mode & W_OK)
+        final_component.want_to_write = 1;
+    if (mode & X_OK)
+    {
+        if (!bad_pathname && is_dir(pathname))
+            final_component.want_to_search = 1;
+        else
+            final_component.want_to_execute = 1;
+    }
+
     switch (errnum)
     {
     case EACCES:
-        {
-            struct stat     st;
-            char            dir[PATH_MAX + 1];
-
-            libexplain_buffer_because(sb);
-            libexplain_dirname(dir, pathname, sizeof(dir));
-            if
+        libexplain_buffer_because(sb);
+        if
+        (
+            libexplain_buffer_errno_path_resolution
             (
-                libexplain_buffer_errno_path_resolution
-                (
-                    sb,
-                    errnum,
-                    dir,
-                    O_RDONLY + O_DIRECTORY,
-                    "pathname"
-                )
-            >=
-                0
+                sb,
+                errnum,
+                pathname,
+                "pathname",
+                &final_component
             )
-                break;
+        )
+        {
+            libexplain_string_buffer_puts
+            (
+                sb,
+                "the requested access to pathname would be denied"
+            );
+        }
 
-            if (lstat(pathname, &st) >= 0)
-            {
-                int             available;
-                int             first;
-
-                available = 0;
-                if (libexplain_have_read_permission(&st))
-                    available |= R_OK;
-                if (libexplain_have_write_permission(&st))
-                    available |= W_OK;
-                if (S_ISDIR(st.st_mode))
-                {
-                    if (libexplain_have_search_permission(&st))
-                        available |= X_OK;
-                }
-                else
-                {
-                    if (libexplain_have_execute_permission(&st))
-                        available |= X_OK;
-                }
-                first = 1;
-                if ((mode & R_OK) && !(available & R_OK))
-                {
-                    libexplain_string_buffer_puts
-                    (
-                        sb,
-                        "read access to pathname would be denied"
-                    );
-                    first = 0;
-                }
-                if ((mode & W_OK) && !(available & W_OK))
-                {
-                    if (!first)
-                        libexplain_string_buffer_puts(sb, ", ");
-                    libexplain_string_buffer_puts
-                    (
-                        sb,
-                        "write access to pathname would be denied"
-                    );
-                    first = 0;
-                }
-                if ((mode & X_OK) && !(available & X_OK))
-                {
-                    if (!first)
-                        libexplain_string_buffer_puts(sb, ", ");
-                    if (S_ISDIR(st.st_mode))
-                    {
-                        libexplain_string_buffer_puts
-                        (
-                            sb,
-                            "search access to pathname would be denied"
-                        );
-                    }
-                    else
-                    {
-                        libexplain_string_buffer_puts
-                        (
-                            sb,
-                            "execute access to pathname would be denied"
-                        );
-                    }
-                    first = 0;
-                }
-                if (mode != (mode & -mode))
-                {
-                    libexplain_string_buffer_puts
-                    (
-                        sb,
-                        "; note that it is an error if any of the access "
-                        "types in mode are denied, even if some of the other "
-                        "access types in mode are permitted"
-                    );
-                }
-            }
-            else
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the requested access to pathname would be denied"
-                );
-            }
+        /*
+         * If they asked for more than one permission, explain that they
+         * must all succeed.  (Obviously, to get this error, at least
+         * one failed.)
+         */
+        if (mode != (mode & -mode))
+        {
+            libexplain_string_buffer_puts
+            (
+                sb,
+                "; note that it is an error if any of the access "
+                "types in mode are denied, even if some of the other "
+                "access types in mode are permitted"
+            );
         }
         break;
 
     case ELOOP:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                O_RDONLY,
-                "pathname"
-            )
-        )
-        {
-            /*
-             * Unable to find a specific cause,
-             * emit the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "too many symbolic links were encountered in resolving "
-                "pathname"
-            );
-        }
+    case EMLINK: /* BSD */
+        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_enametoolong
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                O_RDONLY,
-                "pathname"
-            )
-        )
-        {
-            /*
-             * Unable to find a specific cause,
-             * emit the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "pathname, or a component of pathname, is too long"
-            );
-        }
+            sb,
+            pathname,
+            "pathname",
+            &final_component
+        );
         break;
 
     case ENOENT:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                O_RDONLY,
-                "pathname"
-            )
-        )
-        {
-            /*
-             * Unable to find a specific cause,
-             * emit the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a component of pathname does not exist or is a "
-                "dangling symbolic link"
-            );
-        }
+        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOTDIR:
@@ -296,8 +194,8 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 pathname,
-                O_RDONLY,
-                "pathname"
+                "pathname",
+                &final_component
             )
         )
         {
@@ -315,14 +213,7 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EROFS:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "write access was requested for pathname that is on a "
-            "read-only filesystem"
-        );
-        libexplain_buffer_mount_point(sb, pathname);
+        libexplain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     case EFAULT:
@@ -347,14 +238,7 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ETXTBSY:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "write access was requested to an executable which is being "
-            "executed"
-        );
-        libexplain_buffer_path_to_pid(sb, pathname);
+        libexplain_buffer_etxtbsy(sb, pathname);
         break;
 
     default:

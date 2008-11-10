@@ -23,7 +23,7 @@ TEST_SUBJECT="opendir ENOENT"
 
 cat > test.ok << 'fubar'
 open(pathname = "fred", flags = O_RDONLY | O_DIRECTORY) failed, No such
-file or directory (2, ENOENT) because there is no "fred" directory in the
+file or directory (ENOENT) because there is no "fred" directory in the
 pathname "." directory
 fubar
 test $? -eq 0 || no_result

@@ -23,11 +23,11 @@ TEST_SUBJECT="explain link"
 
 cat > test.ok << 'fubar'
 link(oldpath = "foo", newpath = "bar") failed, No such file or directory
-(2, ENOENT) because there is no "foo" file in the oldpath "." directory
+(ENOENT) because there is no "foo" file in the oldpath "." directory
 fubar
 test $? -eq 0 || no_result
 
-explain link foo bar -e ENOENT -o test.out
+explain -e ENOENT link foo bar > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -24,6 +24,24 @@
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 
+#ifndef O_DIRECT
+#define O_DIRECT 0
+#endif
+#ifndef O_DIRECTORY
+#define O_DIRECTORY 0
+#endif
+#ifndef O_NOFOLLOW
+#define O_NOFOLLOW 0
+#endif
+#ifndef O_NOATIME
+#define O_NOATIME 0
+#endif
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#endif
+#ifndef O_LARGEFILE
+#define O_LARGEFILE 0
+#endif
 
 static const libexplain_parse_bits_table_t table[] =
 {

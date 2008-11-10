@@ -22,7 +22,7 @@ TEST_SUBJECT="unlink ENOENT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-unlink(pathname = "") failed, No such file or directory (2, ENOENT) because
+unlink(pathname = "") failed, No such file or directory (ENOENT) because
 POSIX decrees that an empty pathname must not be resolved successfully
 fubar
 test $? -eq 0 || no_result

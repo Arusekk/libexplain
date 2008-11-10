@@ -22,11 +22,12 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/because.h>
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/errno/lseek.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/lseek_whence.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 
 
@@ -45,18 +46,12 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the file desciptor is not open"
-        );
+        libexplain_buffer_ebadf(sb, "fildes");
         break;
 
     case EINVAL:

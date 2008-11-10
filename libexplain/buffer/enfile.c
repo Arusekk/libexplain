@@ -22,6 +22,7 @@
 
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/enfile.h>
+#include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
 
 #ifdef __linux__
@@ -33,6 +34,8 @@
 static long
 get_maxfile(void)
 {
+    if (libexplain_option_dialect_specific())
+    {
 #ifdef __linux__
     struct __sysctl_args args;
     long maxfile;
@@ -65,8 +68,10 @@ get_maxfile(void)
     if (syscall(SYS__sysctl, &args) >= 0)
         return maxfile;
 #endif
+    }
     return -1;
 }
+
 
 void
 libexplain_buffer_enfile(libexplain_string_buffer_t *sb)

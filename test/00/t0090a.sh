@@ -23,7 +23,7 @@ TEST_SUBJECT="rename ENOENT"
 
 cat > test.ok << 'fubar'
 rename(oldpath = "a/b/foo", newpath = "c/d/bar") failed, No such file or
-directory (2, ENOENT) because "b" symbolic link in oldpath "a" directory
+directory (ENOENT) because "b" symbolic link in oldpath "a" directory
 refers to "rubbish" that does not exist
 fubar
 test $? -eq 0 || no_result

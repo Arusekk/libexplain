@@ -8,7 +8,7 @@ includedir=@includedir@
 
 Name: libexplain
 Description: Explain errno values returned by libc functions
-Version: 0.1.D001
+Version: 0.2.D001
 URL: http://libexplain.sourceforge.net/
 Libs: -L${libdir} -lexplain
 Libs.private: @LIBS@

@@ -26,13 +26,16 @@
    functions. */
 #undef CONF_SHELL
 
-/* Define to 1 if you have the declaration of `memmem strverscmp', and to 0 if
-   you don't. */
-#undef HAVE_DECL_MEMMEM_STRVERSCMP
+/* Define to 1 if you have the `cap_get_proc' function. */
+#undef HAVE_CAP_GET_PROC
 
 /* Define to 1 if you have the declaration of `strsignal', and to 0 if you
    don't. */
 #undef HAVE_DECL_STRSIGNAL
+
+/* Define to 1 if you have the declaration of `strverscmp', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRVERSCMP
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
@@ -62,6 +65,9 @@
 /* Define to 1 if you have the <libintl.h> header file. */
 #undef HAVE_LIBINTL_H
 
+/* Define to 1 if you have the <limits.h> header file. */
+#undef HAVE_LIMITS_H
+
 /* Define this symbol if your system has the locale-gen(8) program. */
 #undef HAVE_LOCALE_GEN_PROG
 
@@ -82,6 +88,9 @@
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #undef HAVE_PWD_H
+
+/* Define to 1 if you have the `remove' function. */
+#undef HAVE_REMOVE
 
 /* Define to 1 if you have the `setlocale' function. */
 #undef HAVE_SETLOCALE
@@ -119,12 +128,18 @@
 /* Define to 1 if you have the `strsignal' function. */
 #undef HAVE_STRSIGNAL
 
+/* Define to 1 if you have the <sys/capability.h> header file. */
+#undef HAVE_SYS_CAPABILITY_H
+
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
 #undef HAVE_SYS_DIR_H
 
 /* Define to 1 if you have the <sys/file.h> header file. */
 #undef HAVE_SYS_FILE_H
+
+/* Define to 1 if you have the <sys/mount.h> header file. */
+#undef HAVE_SYS_MOUNT_H
 
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
    */
@@ -142,6 +157,12 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
+/* Define to 1 if you have the <sys/vfs.h> header file. */
+#undef HAVE_SYS_VFS_H
+
+/* Define to 1 if you have the <termios.h> header file. */
+#undef HAVE_TERMIOS_H
+
 /* Define to 1 if you have the <time.h> header file. */
 #undef HAVE_TIME_H
 
@@ -150,6 +171,10 @@
 
 /* Define to 1 if you have the `vsnprintf' function. */
 #undef HAVE_VSNPRINTF
+
+/* Define this symbol if your system as <sys/ioctl.h> AND it defines
+   TIOCGWINSZ and struct winsize. */
+#undef HAVE_winsize_SYS_IOCTL_H
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
@@ -165,6 +190,10 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* Define this symbol if your system has symbolic links containing the
+   absolute path of open files in /proc/self/fd/nnn */
+#undef PROC_FS_USEFUL
 
 /* Define as the return type of signal handlers (`int' or `void'). */
 #undef RETSIGTYPE
@@ -191,6 +220,12 @@
 
 /* Define to 1 if on MINIX. */
 #undef _MINIX
+
+/* File listing canonical interesting mount points. */
+#undef _PATH_MNTTAB
+
+/* File listing currently active mount points. */
+#undef _PATH_MOUNTED
 
 /* Define to 2 if the system does not provide POSIX.1 features except with
    this defined. */

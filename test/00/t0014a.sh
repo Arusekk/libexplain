@@ -23,13 +23,13 @@ TEST_SUBJECT="fcntl vs EAGAIN"
 
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_GETFL) failed, Resource temporarily
-unavailable (11, EAGAIN) because the operation is prohibited by locks held
-by other processes; or, the operation is prohibited because the file has
-been memory-mapped by another process
+unavailable (EAGAIN) because the operation is prohibited by locks held by
+other processes; or, the operation is prohibited because the file has been
+memory-mapped by another process
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_GETFL -e EAGAIN -o test.out
+explain -e EAGAIN fcntl 42 F_GETFL > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

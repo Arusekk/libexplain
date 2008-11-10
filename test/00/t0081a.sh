@@ -22,9 +22,9 @@ TEST_SUBJECT="rename EISDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-rename(oldpath = "foo", newpath = "bar") failed, Is a directory (21,
-EISDIR) because newpath is an existing directory, but oldpath is a regular
-file; note that oldpath still exists; note that newpath exists
+rename(oldpath = "foo", newpath = "bar") failed, Is a directory (EISDIR)
+because newpath is an existing directory, but oldpath is a regular file;
+note that oldpath still exists; note that newpath exists
 fubar
 test $? -eq 0 || no_result
 

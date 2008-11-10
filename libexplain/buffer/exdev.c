@@ -20,6 +20,7 @@
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/exdev.h>
+#include <libexplain/option.h>
 #include <libexplain/same_dev.h>
 
 
@@ -46,21 +47,24 @@ libexplain_buffer_exdev(libexplain_string_buffer_t *sb, const char *oldpath,
         " are not on the same mounted file system"
     );
 #ifdef __linux__
-    if (libexplain_same_dev(oldpath, newpath))
+    if (libexplain_option_dialect_specific())
     {
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "; linux permits a file system to be mounted at "
-            "multiple points, but the "
-        );
-        libexplain_string_buffer_puts(sb, sys_call_name);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            " system call does not work across different mount points, "
-            "even if the same file system is mounted on both"
-        );
+        if (libexplain_same_dev(oldpath, newpath))
+        {
+            libexplain_string_buffer_puts
+            (
+                sb,
+                "; Linux permits a file system to be mounted at "
+                "multiple points, but the "
+            );
+            libexplain_string_buffer_puts(sb, sys_call_name);
+            libexplain_string_buffer_puts
+            (
+                sb,
+                " system call does not work across different mount points, "
+                "even if the same file system is mounted on both"
+            );
+        }
     }
 #endif
 }

@@ -25,9 +25,9 @@ TEST_SUBJECT="lstat EACCES"
 test `id -u` -eq 0 && pass
 
 fmt > test.ok << 'fubar'
-lstat(pathname = "a/b", buf = xxxxxxxx) failed, Permission denied (13,
-EACCES) because the process does not have search permission to the
-pathname "a" directory
+lstat(pathname = "a/b", buf = xxxxxxxx) failed, Permission denied (EACCES)
+because the process does not have search permission to the pathname "a"
+directory
 fubar
 test $? -eq 0 || no_result
 

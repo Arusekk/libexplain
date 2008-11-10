@@ -22,9 +22,9 @@ TEST_SUBJECT="chdir vs ENOENT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-chdir(pathname = "a/not-a-dir") failed, Not a directory (20, ENOTDIR)
-because in the "a" directory of pathname there is a regular file
-"not-a-dir", but it should be a directory
+chdir(pathname = "a/not-a-dir") failed, Not a directory (ENOTDIR) because
+in the pathname "a" directory there is a "not-a-dir" regular file, but it
+should be a directory
 fubar
 test $? -eq 0 || no_result
 

@@ -22,13 +22,13 @@ TEST_SUBJECT="close vs EWOULDBLOCK"
 . test_prelude
 
 cat > test.ok << 'fubar'
-close(fildes = 42) failed, Resource temporarily unavailable (11, EAGAIN)
+close(fildes = 42) failed, Resource temporarily unavailable (EAGAIN)
 because the O_NONBLOCK flag was specified, and an operation has yet to
 complete
 fubar
 test $? -eq 0 || no_result
 
-explain close 42 -e EWOULDBLOCK -o test.out
+explain -e EWOULDBLOCK -o test.out close 42
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -44,53 +44,107 @@ will be less accurate than if the program itself were to use
 .SS Functions
 The functions understood include:
 .\" ----------  A  ---------------------------------------------------------
+.TP 8n
+access \f[I]pathname\fP
+The \f[I]access\fP(2) system call.
 .\" ----------  B  ---------------------------------------------------------
 .\" ----------  C  ---------------------------------------------------------
 .TP 8n
+chdir \f[I]pathname\fP
+The \f[I]chdir\fP(2) system call.
+.TP 8n
+chmod \f[I]pathname\fP \f[I]permission-mode\fP
+The \f[I]chmod\fP(2) system call.
+.TP 8n
+chown \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP
+The \f[I]chown\fP(2) system call.
+.TP 8n
 close \f[I]fildes\fP
 The \f[I]close\fP(2) system call.
+.TP 8n
+creat \f[I]pathname\fP [ \f[I]permission-mode\fP
+The \f[I]creat\fP(2) system call.
 .\" ----------  D  ---------------------------------------------------------
+.TP 8n
+dup \f[I]fildes\fP
+The \f[I]dup\fP(2) system call.
 .\" ----------  E  ---------------------------------------------------------
 .\" ----------  F  ---------------------------------------------------------
+.TP 8n
+fchdir \f[I]pathname\fP
+The \f[I]fchdir\fP(2) system call.
 .TP 8n
 fcntl \f[I]fildes\fP \f[I]command\fP [ \f[I]arg\fP ]
 The \f[I]fcntl\fP(2) system call.
 .TP 8n
-fopen \f[I]path\fP \f[I]mode\fP
+fopen \f[I]pathname\fP \f[I]mode\fP
 The \f[I]fopen\fP(2) system call.
-The \f[I]path\fP argument may need to be quoted to insulate white space and
+The \f[I]pathname\fP argument may need to be quoted to insulate white space and
 punctuation from the shell.
 The \f[I]mode\fP argument (a textual equivalent of the \f[I]open\fP
 system call's \f[I]flags\fP argument).
 See \f[I]fopen\fP(3) for more information.
+.TP 8n
+fstat \f[I]pathname\fP
+The \f[I]fstat\fP(2) system call.
+.TP 8n
+ftruncate \f[I]fildes\fP \f[I]length\fP
+The \f[I]ftruncate\fP(2) system call.
 .\" ----------  G  ---------------------------------------------------------
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
 .\" ----------  J  ---------------------------------------------------------
 .\" ----------  K  ---------------------------------------------------------
 .\" ----------  L  ---------------------------------------------------------
+.TP 8n
+link \f[I]oldpath\fP \f[I]newpath\fP
+The \f[I]link\fP(2) system call.
+.TP 8n
+lseek \f[I]fildes\fP \f[I]offset\fP \f[I]whence\fP
+The \f[I]lseek\fP(2) system call.
+.TP 8n
+lstat \f[I]pathname\fP
+The \f[I]lstat\fP(2) system call.
 .\" ----------  M  ---------------------------------------------------------
+.TP 8n
+mkdir \f[I]pathname\fP [ \f[I]mode\fP ]
+The \f[I]mkdir\dP(2) system call.
 .\" ----------  N  ---------------------------------------------------------
 .\" ----------  O  ---------------------------------------------------------
 .TP 8n
-open \f[I]path\fP \f[I]flags\fP [ \f[I]mode\fP ]
+open \f[I]pathname\fP \f[I]flags\fP [ \f[I]mode\fP ]
 The \f[I]open\fP(2) system call.
-The \f[I]path\fP argument may need to be quoted to insulate white space and
+The \f[I]pathname\fP argument may need to be quoted to insulate white space and
 punctuation from the shell.
 The \f[I]flags\fP argument may be numeric or symbolic.
 The \f[I]mode\fP argument may be numeric or symbolic.
+.TP 8n
+opendir \f[I]pathname\fP
+The \f[I]opendir\fP(3) system call.
 .\" ----------  P  ---------------------------------------------------------
 .\" ----------  Q  ---------------------------------------------------------
 .\" ----------  R  ---------------------------------------------------------
 .TP 8n
 read \f[I]fildes\fP \f[I]data\fP \f[I]data-size\fP
 The \f[I]read\fP(2) system call.
+.TP 8n
+rename \f[I]oldpath\fP \f[I]newpath\fP
+The \f[I]rename\fP(2) system call.
 .\" ----------  S  ---------------------------------------------------------
+.TP 8n
+stat \f[I]pathname\fP
+The \f[I]stat\fP(2) system call.
 .TP 8n
 strerror
 The error given will be printed out with all known detail.
+.TP 8n
+rename ymlinkf[I]oldpath\fP \f[I]newpath\fP
+The \f[I]ymlinkename\fP(2) system call.
 .\" ----------  T  ---------------------------------------------------------
 .\" ----------  U  ---------------------------------------------------------
+.TP 8n
+unlink \f[I]pathname\fP
+The \f[I]unlink\fP(2) system call.
 .\" ----------  V  ---------------------------------------------------------
 .\" ----------  W  ---------------------------------------------------------
 .TP 8n

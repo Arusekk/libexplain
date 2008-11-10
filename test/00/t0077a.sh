@@ -22,9 +22,10 @@ TEST_SUBJECT="rename EACCES"
 . test_prelude
 
 cat > test.ok << 'fubar'
-rename(oldpath = "a/foo", newpath = "b/bar") failed, Permission denied (13,
-EACCES) because write permission is denied for the "a" directory; note that
-oldpath still exists
+rename(oldpath = "a/foo", newpath = "b/bar") failed, Permission denied
+(EACCES) because the process does not have write permission to the oldpath
+"a" directory, this is needed to remove the directory entry for the "foo"
+directory; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result
 

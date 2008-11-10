@@ -23,12 +23,12 @@ TEST_SUBJECT="write vs EINTR"
 
 cat > test.ok << 'fubar'
 write(fildes = 42, data = 0x1000, data_size = 10) failed, Interrupted
-system call (4, EINTR) because the call was interrupted by a signal before
-any data was written
+system call (EINTR) because the process was interrupted by a signal before
+the write was complete
 fubar
 test $? -eq 0 || no_result
 
-explain write 42 0x1000 10 -e EINTR > test.out
+explain -e EINTR write 42 0x1000 10 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

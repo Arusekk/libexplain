@@ -23,8 +23,8 @@ TEST_SUBJECT="unlink ELOOP"
 
 cat > test.ok << 'fubar'
 unlink(pathname = "a/b/foobar") failed, Too many levels of symbolic links
-(40, ELOOP) because a symbolic link loop was encountered in pathname,
-starting at "a/b"
+(ELOOP) because a symbolic link loop was encountered in pathname, starting
+at "a/b"
 fubar
 test $? -eq 0 || no_result
 

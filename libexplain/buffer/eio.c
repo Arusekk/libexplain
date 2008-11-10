@@ -17,18 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/assert.h>
 #include <libexplain/ac/dirent.h>
 #include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/string.h>
+#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/stat.h>
+#include <libexplain/ac/unistd.h>
 
 #include <sys/mtio.h>
 #ifdef __linux__
 #include <linux/hdreg.h>
 #endif
-#include <termios.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/file_type.h>
 #include <libexplain/dirname.h>
 
 
@@ -76,11 +81,14 @@ libexplain_buffer_eio(libexplain_string_buffer_t *sb)
 
 
 static int
-dev_stat_recursive(libexplain_string_buffer_t *path, dev_t dev, struct stat *st)
+dev_stat_recursive(libexplain_string_buffer_t *path, dev_t dev, struct stat *st,
+    libexplain_string_buffer_t *dev_buf)
 {
     DIR             *dp;
     int             pos;
+    int             result;
 
+    result = -1;
     dp = opendir(path->message);
     if (!dp)
         return -1;
@@ -105,20 +113,26 @@ dev_stat_recursive(libexplain_string_buffer_t *path, dev_t dev, struct stat *st)
             switch (st2.st_mode & S_IFMT)
             {
             case S_IFDIR:
-                if (dev_stat_recursive(path, dev, st) >= 0)
-                {
-                    closedir(dp);
-                    return 0;
-                }
+                if (dev_stat_recursive(path, dev, st, dev_buf) >= 0)
+                    result = 0;
                 break;
 
             case S_IFBLK:
             case S_IFCHR:
                 if (dev == st2.st_rdev)
                 {
-                    *st = st2;
-                    closedir(dp);
-                    return 0;
+                    if
+                    (
+                        !dev_buf->position
+                    ||
+                        path->position < dev_buf->position
+                    )
+                    {
+                        dev_buf->position = 0;
+                        *st = st2;
+                        libexplain_string_buffer_puts(dev_buf, path->message);
+                    }
+                    result = 0;
                 }
                 break;
 
@@ -129,19 +143,19 @@ dev_stat_recursive(libexplain_string_buffer_t *path, dev_t dev, struct stat *st)
         }
     }
     closedir(dp);
-    return -1;
+    return result;
 }
 
 
 static int
-dev_stat(dev_t dev, struct stat *st)
+dev_stat(dev_t dev, struct stat *st, libexplain_string_buffer_t *dev_buf)
 {
     libexplain_string_buffer_t sb;
     char            path[PATH_MAX + 1];
 
     libexplain_string_buffer_init(&sb, path, sizeof(path));
     libexplain_string_buffer_puts(&sb, "/dev");
-    return dev_stat_recursive(&sb, dev, st);
+    return dev_stat_recursive(&sb, dev, st, dev_buf);
 }
 
 
@@ -149,13 +163,26 @@ static void
 libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
     struct stat *st)
 {
-    if (S_ISREG(st->st_mode))
+    char            dev_path[150];
+    libexplain_string_buffer_t dev_buf;
+
+    libexplain_string_buffer_init(&dev_buf, dev_path, sizeof(dev_path));
+    assert(dev_path[0] == '\0');
+    switch (st->st_mode & S_IFMT)
     {
-        if (dev_stat(st->st_dev, st) < 0)
+    case S_IFDIR:
+    case S_IFREG:
+        if (dev_stat(st->st_dev, st, &dev_buf) < 0)
         {
             libexplain_buffer_eio(sb);
             return;
         }
+        break;
+
+    default:
+        dev_stat(st->st_rdev, st, &dev_buf);
+        /* no problem if it failed, use the st we were given */
+        break;
     }
 
     libexplain_buffer_because(sb);
@@ -174,8 +201,15 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
                 libexplain_string_buffer_puts
                 (
                     sb,
-                    "a low-level I/O error occurred in the disk device"
+                    "a low-level I/O error occurred in the "
                 );
+                if (dev_buf.position)
+                if (dev_path[0])
+                {
+                    libexplain_string_buffer_puts_quoted(sb, dev_path);
+                    libexplain_string_buffer_putc(sb, ' ');
+                }
+                libexplain_string_buffer_puts(sb, "disk");
                 possibly_as_a_result_of_a_preceeding(sb, fildes);
                 return;
             }
@@ -185,8 +219,14 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
         libexplain_string_buffer_puts
         (
             sb,
-            "a low-level I/O error occurred in the block special device"
+            "a low-level I/O error occurred in the "
         );
+        if (dev_path[0])
+        {
+            libexplain_string_buffer_puts_quoted(sb, dev_path);
+            libexplain_string_buffer_putc(sb, ' ');
+        }
+        libexplain_buffer_file_type(sb, st->st_mode);
         possibly_as_a_result_of_a_preceeding(sb, fildes);
         return;
     }
@@ -200,8 +240,17 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
                 libexplain_string_buffer_puts
                 (
                     sb,
-                    "a low-level I/O error occurred in the tape "
-                    "device"
+                    "a low-level I/O error occurred in the "
+                );
+                if (dev_path[0])
+                {
+                    libexplain_string_buffer_puts_quoted(sb, dev_path);
+                    libexplain_string_buffer_putc(sb, ' ');
+                }
+                libexplain_string_buffer_puts
+                (
+                    sb,
+                    "tape device"
                 );
                 possibly_as_a_result_of_a_preceeding(sb, fildes);
                 return;
@@ -209,26 +258,38 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
         }
 
         /* see if it is a serial line */
+        if (isatty(fildes))
         {
-            struct termios t;
-            if (ioctl(fildes, TCGETS, &t) >= 0)
+            libexplain_string_buffer_puts
+            (
+                sb,
+                "a low-level I/O error occurred in the "
+            );
+            if (dev_path[0])
             {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "a low-level I/O error occurred in the serial "
-                    "device"
-                );
-                possibly_as_a_result_of_a_preceeding(sb, fildes);
-                return;
+                libexplain_string_buffer_puts_quoted(sb, dev_path);
+                libexplain_string_buffer_putc(sb, ' ');
             }
+            libexplain_string_buffer_puts
+            (
+                sb,
+                "serial device"
+            );
+            possibly_as_a_result_of_a_preceeding(sb, fildes);
+            return;
         }
 
         libexplain_string_buffer_puts
         (
             sb,
-            "a low-level I/O error occurred in the character special device"
+            "a low-level I/O error occurred in the "
         );
+        if (dev_path[0])
+        {
+            libexplain_string_buffer_puts_quoted(sb, dev_path);
+            libexplain_string_buffer_putc(sb, ' ');
+        }
+        libexplain_buffer_file_type(sb, st->st_mode);
         possibly_as_a_result_of_a_preceeding(sb, fildes);
         return;
     }
@@ -261,7 +322,7 @@ libexplain_buffer_eio_path(libexplain_string_buffer_t *sb, const char *path)
 {
     struct stat     st;
 
-    if (lstat(path, &st) < 0)
+    if (stat(path, &st) < 0 && lstat(path, &st) < 0)
     {
         libexplain_buffer_eio(sb);
         return;

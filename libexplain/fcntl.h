@@ -30,6 +30,32 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_fcntl_or_die function is
+  * used to call the fcntl(2) system call.  On
+  * failure an explanation will be printed to stderr,
+  * obtained from libexplain_fcntl(3), and
+  * then the process terminates by calling exit(1).
+  *
+  * This function is intended to be used in a fashion
+  * similar to the following example:
+  * @code
+  * int result = libexplain_fcntl_or_die(fildes, command, arg);
+  * @endcode
+  *
+  * @param fildes
+  *     The fildes, exactly as to be passed to the fcntl(2) system call.
+  * @param command
+  *     The command, exactly as to be passed to the fcntl(2) system call.
+  * @param arg
+  *     The arg, exactly as to be passed to the fcntl(2) system call.
+  * @returns
+  *     This function only returns on success, and it returns whatever was
+  *     returned by the fcntl(2) call; depending on the command, this
+  *     may have no use.  On failure, prints an explanation and exits.
+  */
+int libexplain_fcntl_or_die(int fildes, int command, long arg);
+
+/**
   * The libexplain_fcntl function is used to obtain an explanation of an
   * error returned by the fcntl(2) system call.  The least the message
   * will contain is the value of strerror(errno), but usually it will do

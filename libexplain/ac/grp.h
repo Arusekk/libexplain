@@ -20,8 +20,8 @@
 #ifndef LIBEXPLAIN_AC_GRP_H
 #define LIBEXPLAIN_AC_GRP_H
 
-#include <common/ac/stddef.h>
-#include <common/ac/sys/types.h>
+#include <libexplain/ac/stddef.h>
+#include <libexplain/ac/sys/types.h>
 #include <grp.h>
 
 #endif /* LIBEXPLAIN_AC_GRP_H */

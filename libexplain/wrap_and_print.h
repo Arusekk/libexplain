@@ -34,4 +34,18 @@
   */
 void libexplain_wrap_and_print(FILE *fp, const char *text);
 
+/**
+  * The libexplain_wrap_and_print_width function may be used to take a
+  * piece of text and wrap it to the specified number of columns and
+  * print it to the given output stream.
+  *
+  * @param fp
+  *    The file descriptor to write the output on.
+  * @param text
+  *    The text to be wrapped and printed.
+  * @param width
+  *    The width of the page, counted in fixed-width character columns.
+  */
+void libexplain_wrap_and_print_width(FILE *fp, const char *text, int width);
+
 #endif /* LIBEXPLAIN_WRAP_AND_PRINT_H */

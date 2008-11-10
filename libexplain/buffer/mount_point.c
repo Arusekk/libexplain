@@ -20,7 +20,7 @@
 #include <libexplain/ac/mntent.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/sys/stat.h>
-#include <libexplain/ac/vfs.h>
+#include <libexplain/ac/sys/vfs.h>
 
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/dirname.h>
@@ -48,7 +48,7 @@ libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
         {
             if (st1->st_dev == st2.st_dev)
             {
-                struct statfs f;
+                struct statfs   f;
 
                 /*
                  * Insert the name of the mount point.

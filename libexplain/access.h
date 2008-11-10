@@ -30,6 +30,26 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_access_or_die function is used to call the access(2)
+  * system call and check the result.  On failure it prints an
+  * explanation for the error, obtained from libexplain_access(3), and
+  * then terminates by calling exit(1).
+  *
+  * @code
+  * libexplain_access_or_die(pathname, mode);
+  * @endcode
+  *
+  * @param pathname
+  *     The pathname, exactly as to be passed to the access(2) system call.
+  * @param mode
+  *     The mode, exactly as to be passed to the access(2) system call.
+  * @returns
+  *     Only ever return on success.
+  *     On failure process will exit.
+  */
+void libexplain_access_or_die(const char *pathname, int mode);
+
+/**
   * The libexplain_access function is used to obtain an explanation
   * of an error returned by the access(2) system call.  The least the
   * message will contain is the value of strerror(errno), but usually

@@ -181,3 +181,10 @@ libexplain_string_buffer_path_join(libexplain_string_buffer_t *dst,
         libexplain_string_buffer_putc(dst, '/');
     libexplain_string_buffer_puts(dst, s);
 }
+
+
+int
+libexplain_string_buffer_full(const libexplain_string_buffer_t *sb)
+{
+    return (sb->position >= sb->maximum - 1);
+}

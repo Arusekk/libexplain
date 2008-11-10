@@ -24,12 +24,12 @@ TEST_SUBJECT="open vs EROFS"
 fmt > test.ok << 'fubar'
 open(pathname = "fred", flags = O_WRONLY | O_CREAT, mode = S_IRUSR |
 S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH) failed, Read-only file
-system (30, EROFS) because write access was requested and pathname refers
+system (EROFS) because write access was requested and pathname refers
 to a file on a read-only file system ("/example", 99% full)
 fubar
 test $? -eq 0 || no_result
 
-explain open fred O_WRONLY+O_CREAT -e EROFS -o test.out1
+explain -e EROFS -o test.out1 open fred O_WRONLY+O_CREAT
 test $? -eq 0 || fail
 
 fmt -w500 test.out1 > test.out2

@@ -23,14 +23,14 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/opendir.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/readdir.h>
 #include <libexplain/version_print.h>
 
 
 static void
 usage(void)
 {
-    fprintf(stderr, "Usage: test_opendir [ <option>... ] <path>\n");
+    fprintf(stderr, "Usage: test_opendir <pathname>\n");
     fprintf(stderr, "       test_opendir -V\n");
     exit(1);
 }
@@ -42,7 +42,6 @@ main(int argc, char **argv)
     const char      *pathname;
     DIR             *dp;
 
-    pathname = 0;
     for (;;)
     {
         int c = getopt(argc, argv, "V");
@@ -62,17 +61,12 @@ main(int argc, char **argv)
         usage();
     pathname = argv[optind];
 
-    dp = opendir(pathname);
-    if (!dp)
-    {
-        libexplain_wrap_and_print(stderr, libexplain_opendir(pathname));
-        exit(1);
-    }
+    dp = libexplain_opendir_or_die(pathname);
     for (;;)
     {
         struct dirent   *dep;
 
-        dep = readdir(dp);
+        dep = libexplain_readdir_or_die(dp);
         if (!dep)
             break;
         printf("%s\n", dep->d_name);

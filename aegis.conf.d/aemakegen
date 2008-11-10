@@ -25,7 +25,7 @@ project_specific =
     },
     {
         name = "aemakegen:version-info";
-        value = "0:1:0";
+        value = "1:1:0";
     },
     {
         name = "aemakegen:debian:copyright";
@@ -75,5 +75,13 @@ project_specific =
             "close, with each system call having a dedicated libexplain "
             "function."
             ;
+    },
+    {
+        name = "aemakegen:debian:build-depends";
+        value = "libcap-dev, bison, groff, lsof";
+    },
+    {
+        name = "aemakegen:debian:depends";
+        value = "lsof";
     },
 ];

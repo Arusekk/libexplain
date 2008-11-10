@@ -31,88 +31,246 @@ be quite cryptic.  By providing a specific error report for each system
 call, a more detailed error message is possible, usually identifying and
 describing the specific cause from amongst the numerous meanings each
 \f[I]errno\fP value maps to.
-.SS Supported System Calls
+.SS Race Condition
+The explanation of the cause of an error is dependent on the environment
+of the error to remain unchanged, so that when libexplain gets around to
+looking for the cause, the cause is still there.  On a running system,
+and particularly a multi-user system, this is not always possible.
+.PP
+If an incorrect explanation is provided,
+it is possible because the cause is no longer present.
+.SS Environment Variable
+The \f[CW]LIBEXPLAIN_OPTIONS\fP environment variable may be used
+to control some of the content in the messages.
+.TP 8n
+no-numeric-errno
+This option suppresses the numeric \f[I]errno\fP value from being
+included in the message, \f[I]e.g.\fP \[lq](ENOENT)\[rq] rather than
+\[lq](2, ENOENT)\[rq].
+.TP 8n
+no-dialect-specific
+The option suppresses explanatory text specific to a prticular UNIX dialect.
+It also suppresses printing system specific maximums.
+.PP
+These options are more generally of use in automated testing, to prevent
+UNIX dialect difference from producing false negatives.
+.SH Supported System Calls
 Each supported system call has its own \f[I]man\fP page.
 .\" please keep the follwoing list sorted
 .\" ----------  A  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_access\fP(2)
+\f[I]libexplain_access\fP(3)
 Explain \f[I]access\fP(2) errors
+.TP 8n
+\f[I]libexplain_access_or_die\fP(3)
+check permissions for a file and report errors
 .\" ----------  B  ---------------------------------------------------------
 .\" ----------  C  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_chdir\fP(2)
+\f[I]libexplain_chdir\fP(3)
 Explain \f[I]chdir\fP(2) errors
 .TP 8n
-\f[I]libexplain_close\fP(2)
+\f[I]libexplain_chdir_or_die\fP(3)
+change working directory and report errors
+.TP 8n
+\f[I]libexplain_chmod\fP(3)
+Explain \f[I]chmod\fP(2) errors
+.TP 8n
+\f[I]libexplain_chmod_or_die\fP(3)
+change permissions of a file and report errors
+.TP 8n
+\f[I]libexplain_chown\fP(3)
+Explain \f[I]chown\fP errors
+.TP 8n
+\f[I]libexplain_chown_or_die\fP(3)
+change ownership of a file and report errors
+.TP 8n
+\f[I]libexplain_close\fP(3)
 Explain \f[I]close\fP(2) errors
 .TP 8n
-\f[I]libexplain_creat\fP(2)
+\f[I]libexplain_close_or_die\fP(3)
+close a file descriptor and report errors
+.TP 8n
+\f[I]libexplain_creat\fP(3)
 Explain \f[I]creat\fP(2) errors
+.TP 8n
+\f[I]libexplain_creat_or_die\fP(3)
+create and open a file and report errors
 .\" ----------  D  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_dup\fP(3)
+Explain \f[I]dup\fP(2) errors
+.TP 8n
+\f[I]libexplain_dup_or_die\fP(3)
+duplicate a file descriptor and report errors
 .\" ----------  E  ---------------------------------------------------------
 .\" ----------  F  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_fclose\fP(2)
+\f[I]libexplain_fchdir\fP(3)
+Explain \f[I]fchdir\fP(2) errors
+.TP 8n
+\f[I]libexplain_fchmod\fP(3)
+Explain \f[I]fchmod\fP(2) errors
+.TP 8n
+\f[I]libexplain_fchmod_or_die\fP(3)
+change permissions of a file and report errors
+.TP 8n
+\f[I]libexplain_fclose\fP(3)
 Explain \f[I]fclose\fP(2) errors
 .TP 8n
-\f[I]libexplain_fcntl\fP(2)
+\f[I]libexplain_fclose_or_die\fP(3)
+close a stream and report errors
+.TP 8n
+\f[I]libexplain_fcntl\fP(3)
 Explain \f[I]fcntl\fP(2) errors
 .TP 8n
-\f[I]libexplain_fflush\fP(2)
+\f[I]libexplain_fcntl_or_die\fP(3)
+Manipulate a file descriptor and report errors
+.TP 8n
+\f[I]libexplain_fflush\fP(3)
 Explain \f[I]fflush\fP(2) errors
 .TP 8n
-\f[I]libexplain_fopen\fP(2)
-Explain \f[I]fopen\fP(2) errors
+\f[I]libexplain_fflush_or_die\fP(3)
+flush a stream and report errors
 .TP 8n
-\f[I]libexplain_freopen\fP(2)
-Explain \f[I]freopen\fP(2) errors
+\f[I]libexplain_fopen\fP(3)
+Explain \f[I]fopen\fP(3) errors
+.TP 8n
+\f[I]libexplain_fopen_or_die\fP(2)
+open files and report errors
+.TP 8n
+\f[I]libexplain_freopen\fP(3)
+Explain \f[I]freopen\fP(3) errors
+.TP 8n
+\f[I]libexplain_freopen_or_die\fP(3)
+open files and report errors
+.TP 8n
+\f[I]libexplain_fstat\fP(3)
+Explain \f[I]fstat\fP(3) errors
+.TP 8n
+\f[I]libexplain_fstat_or_die\fP(3)
+get file status and report errors
+.TP 8n
+\f[I]libexplain_ftruncate\fP(3)
+Explain \f[I]ftruncate\fP(2) errors
+.TP 8n
+\f[I]libexplain_ftruncate_or_die\fP(3)
+truncate a file to a specified length and report errors
+.TP 8n
+\f[I]libexplain_fwrite\fP(3)
+Explain \f[I]fwrite\fP(3) errors
+.TP 8n
+\f[I]libexplain_fwrite_or_die\fP(3)
+binary stream output and report errors
 .\" ----------  G  ---------------------------------------------------------
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
 .\" ----------  K  ---------------------------------------------------------
 .\" ----------  L  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_link\fP(2)
+\f[I]libexplain_link\fP(3)
 Explain \f[I]link\fP(2) errors
 .TP 8n
-\f[I]libexplain_lseek\fP(2)
+\f[I]libexplain_link_or_die\fP(3)
+make a new name for a file and report errors
+.TP 8n
+\f[I]libexplain_lseek\fP(3)
 Explain \f[I]lseek\fP(2) errors
 .TP 8n
-\f[I]libexplain_lstat\fP(2)
+\f[I]libexplain_lseek_or_die\fP(3)
+reposition file offset and report errors
+.TP 8n
+\f[I]libexplain_lstat\fP(3)
 Explain \f[I]lstat\fP(2) errors
+.TP 8n
+\f[I]libexplain_lstat_or_die\fP(3)
+get file status and report errors
 .\" ----------  M  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_mkdir\fP(3)
+Explain \f[I]mkdir\fP(2) errors
+.TP 8n
+\f[I]libexplain_mkdir_or_die\fP(3)
+create directory and report errors
 .\" ----------  N  ---------------------------------------------------------
 .\" ----------  O  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_open\fP(2)
+\f[I]libexplain_open\fP(3)
 Explain \f[I]open\fP(2) errors
+.TP 8n
+\f[I]libexplain_open_or_die\fP(3)
+open files and report errors
+.TP 8n
+\f[I]libexplain_opendir\fP(3)
+Explain \f[I]opendir\fP(3) errors
+.TP 8n
+\f[I]libexplain_opendir_or_die\fP(3)
+open a directory and report errors
 .\" ----------  P  ---------------------------------------------------------
 .\" ----------  Q  ---------------------------------------------------------
 .\" ----------  R  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_read\fP(2)
+\f[I]libexplain_read\fP(3)
 Explain \f[I]read\fP(2) errors
 .TP 8n
-\f[I]libexplain_rename\fP(2)
+\f[I]libexplain_read_or_die\fP(3)
+read from a file descriptor and report errors
+.TP 8n
+\f[I]libexplain_readdir\fP(3)
+Explain \f[I]readdir\fP(3) errors
+.TP 8n
+\f[I]libexplain_readdir_or_die\fP(3)
+read a directory and report errors
+.TP 8n
+\f[I]libexplain_readlink\fP(3)
+Explain \f[I]readlink\fP(2) errors
+.TP 8n
+\f[I]libexplain_readlink_or_die\fP(3)
+read value of a symbolic link and report errors
+.TP 8n
+\f[I]libexplain_rename\fP(3)
 Explain \f[I]rename\fP(2) errors
+.TP 8n
+\f[I]libexplain_rename_or_die\fP(3)
+change the name or location of a file and report errors
+.TP 8n
+\f[I]libexplain_rmdir\fP(3)
+Explain \f[I]rmdir\fP(2) errors
+.TP 8n
+\f[I]libexplain_rmdir_or_die\fP(3)
+delete a directory and report errors
 .\" ----------  S  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_stat\fP(2)
+\f[I]libexplain_stat\fP(3)
 Explain \f[I]stat\fP(2) errors
 .TP 8n
-\f[I]libexplain_symlink\fP(2)
+\f[I]libexplain_symlink\fP(3)
 Explain \f[I]symlink\fP(2) errors
+.TP 8n
+\f[I]libexplain_symlink_or_die\fP(3)
+make a new name for a file and report errors
 .\" ----------  T  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_truncate\fP(3)
+Explain \f[I]truncate\fP(2) errors
+.TP 8n
+\f[I]libexplain_truncate_or_die\fP(3)
+truncate a file to a specified length and report errors
 .\" ----------  U  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_unlink\fP(2)
+\f[I]libexplain_unlink\fP(3)
 Explain \f[I]unlink\fP(2) errors
+.TP 8n
+\f[I]libexplain_unlink_or_die\fP(3)
+delete a file and report errors
 .\" ----------  V  ---------------------------------------------------------
 .\" ----------  W  ---------------------------------------------------------
 .TP 8n
-\f[I]libexplain_write\fP(2)
+\f[I]libexplain_write\fP(3)
 Explain \f[I]write\fP(2) errors
+.TP 8n
+\f[I]libexplain_write_or_die\fP(3)
+write to a file descriptor and report errors
 .\" ----------  X  ---------------------------------------------------------
 .\" ----------  Y  ---------------------------------------------------------
 .\" ----------  Z  ---------------------------------------------------------

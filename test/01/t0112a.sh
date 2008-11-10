@@ -23,7 +23,7 @@ TEST_SUBJECT="symlink ENOENT"
 
 cat > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath = "a/b/bar") failed, No such file or
-directory (2, ENOENT) because there is no "b" directory in the newpath "a"
+directory (ENOENT) because there is no "b" directory in the newpath "a"
 directory
 fubar
 test $? -eq 0 || no_result

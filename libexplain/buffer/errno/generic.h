@@ -1,0 +1,38 @@
+/*
+ * libexplain - Explain errno values returned by libc functions
+ * Copyright (C) 2008 Peter Miller
+ * Written by Peter Miller <millerp@canb.auug.org.au>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef LIBEXPLAIN_BUFFER_ERRNO_GENERIC_H
+#define LIBEXPLAIN_BUFFER_ERRNO_GENERIC_H
+
+#include <libexplain/string_buffer.h>
+
+/**
+  * The libexplain_buffer_errno_generic function is used to explain
+  * errors for which a completely generic explanation is possible, and
+  * which is more informative than strerror alone.
+  *
+  * @param sb
+  *    The string bufferto print into.
+  * @param errnum
+  *    The errno value to explain
+  */
+void libexplain_buffer_errno_generic(libexplain_string_buffer_t *sb,
+    int errnum);
+
+#endif /* LIBEXPLAIN_BUFFER_ERRNO_GENERIC_H */

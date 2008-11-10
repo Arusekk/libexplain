@@ -23,14 +23,14 @@ TEST_SUBJECT="access EINVAL"
 
 cat > test.ok << 'fubar'
 access(pathname = "foobar", mode = X_OK | W_OK | 020 | 0100) failed,
-Invalid argument (22, EINVAL) because mode was incorrectly specified
+Invalid argument (EINVAL) because mode was incorrectly specified
 fubar
 test $? -eq 0 || no_result
 
 touch foobar
 test $? -eq 0 || no_result
 
-test_access foobar -m 0123 > test.out 2>&1
+test_access -m 0123 foobar > test.out 2>&1
 if test $? -ne 1
 then
     echo expected to fail

@@ -25,6 +25,7 @@
 #include <libexplain/buffer/emlink.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/dirname.h>
+#include <libexplain/option.h>
 
 
 void
@@ -36,15 +37,6 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
     libexplain_buffer_because(sb);
     if (stat(oldpath, &oldpath_st) >= 0)
     {
-        long            link_max;
-
-        /*
-         * By definition, oldpath and newpath are on the same file
-         * system to get this error, so we don't need to call
-         * pathconf twice.
-         */
-        link_max = pathconf(oldpath, _PC_LINK_MAX);
-
         if (S_ISDIR(oldpath_st.st_mode))
         {
             char            npdir[PATH_MAX + 1];
@@ -76,8 +68,6 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
                 " and already has the maximum number of links"
             );
         }
-        if (link_max > 0)
-            libexplain_string_buffer_printf(sb, " (%ld)", link_max);
     }
     else
     {
@@ -94,5 +84,19 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
             "or oldpath is a directory and the directory containing "
             "newpath has the maximum number of links"
         );
+    }
+    if (libexplain_option_dialect_specific())
+    {
+        long            link_max;
+
+        /*
+         * By definition, oldpath and newpath are on the same file
+         * system to get this error, so we don't need to call
+         * pathconf twice.
+         */
+        link_max = pathconf(oldpath, _PC_LINK_MAX);
+
+        if (link_max > 0)
+            libexplain_string_buffer_printf(sb, " (%ld)", link_max);
     }
 }

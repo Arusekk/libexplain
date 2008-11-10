@@ -42,6 +42,12 @@ libexplain_buffer_lseek_whence(libexplain_string_buffer_t *sb, int whence)
         libexplain_string_buffer_puts(sb, "SEEK_END");
         break;
 
+#if defined(SEEK_MAX) && SEEK_MAX != SEEK_END
+    case SEEK_MAX:
+        libexplain_string_buffer_puts(sb, "SEEK_MAX");
+        break;
+#endif
+
     default:
         libexplain_string_buffer_printf(sb, "%d", whence);
         break;
@@ -57,6 +63,9 @@ libexplain_lseek_whence_parse(const char *text)
         { "SEEK_SET", SEEK_SET },
         { "SEEK_CUR", SEEK_CUR },
         { "SEEK_END", SEEK_END },
+#ifdef SEEK_MAX
+        { "SEEK_MAX", SEEK_MAX },
+#endif
         { "L_SET",    SEEK_SET },
         { "L_INCR",   SEEK_CUR },
         { "L_XTND",   SEEK_END },

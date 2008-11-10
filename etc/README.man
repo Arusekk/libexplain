@@ -59,7 +59,7 @@ because directory
 The library also provides thread safe variants of each function.
 .br
 .ne 1i
-.SH ARCHIVE SITE
+.SH HOME PAGE
 The latest version of
 .I libexplain
 is available on the Web from:
@@ -69,10 +69,10 @@ l l s
 l l l.
 URL:;http://libexplain.sourceforge.net/
 File:;index.html;# the libexplain page
-File:;libexplain\*(v).README;# Description, from the tar file
-File:;libexplain\*(v).lsm;# Description, LSM format
-File:;libexplain\*(v).tar.gz;# the complete source
-File:;libexplain\*(v).pdf;# Reference Manual
+File:;libexplain.\*(v).README;# Description, from the tar file
+File:;libexplain.\*(v).lsm;# Description, LSM format
+File:;libexplain.\*(v).tar.gz;# the complete source
+File:;libexplain.\*(v).pdf;# Reference Manual
 .TE
 .br
 .ne 1i

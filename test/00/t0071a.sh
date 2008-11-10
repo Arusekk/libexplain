@@ -23,7 +23,7 @@ TEST_SUBJECT="stat ELOOP"
 
 fmt > test.ok << 'fubar'
 stat(pathname = "a/b", buf = xxxxxxxx) failed, Too many levels of
-symbolic links (40, ELOOP) because a symbolic link loop was encountered
+symbolic links (ELOOP) because a symbolic link loop was encountered
 in pathname, starting at "a"
 fubar
 test $? -eq 0 || no_result

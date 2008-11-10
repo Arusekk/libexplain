@@ -23,7 +23,7 @@ TEST_SUBJECT="creat ENOENT"
 
 cat > test.ok << 'fubar'
 creat(pathname = "foo/bar/baz", mode = S_IRUSR | S_IWUSR | S_IRGRP |
-S_IWGRP | S_IROTH | S_IWOTH) failed, No such file or directory (2, ENOENT)
+S_IWGRP | S_IROTH | S_IWOTH) failed, No such file or directory (ENOENT)
 because there is no "bar" directory in the pathname "foo" directory
 fubar
 test $? -eq 0 || no_result

@@ -24,12 +24,12 @@ TEST_SUBJECT="fcntl vs ENOLCK"
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_SETLK, arg = { l_type = F_RDLCK; l_whence =
 SEEK_SET; l_start = 0; l_len = 0; l_pid = 0 }) failed, No locks available
-(37, ENOLCK) because too many segment locks are open, or the lock table is
+(ENOLCK) because too many segment locks are open, or the lock table is
 full, or a remote locking protocol failed (e.g. locking over NFS)
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_SETLK -e ENOLCK -o test.out
+explain -e ENOLCK fcntl 42 F_SETLK > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

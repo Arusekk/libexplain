@@ -17,11 +17,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/chdir.h>
-#include <libexplain/wrap_and_print.h>
 #include <libexplain/version_print.h>
 
 
@@ -59,10 +59,6 @@ main(int argc, char **argv)
         usage();
     path = argv[optind];
 
-    if (chdir(path) < 0)
-    {
-        libexplain_wrap_and_print(stderr, libexplain_chdir(path));
-        exit(1);
-    }
+    libexplain_chdir_or_die(path);
     return 0;
 }

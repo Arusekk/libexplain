@@ -23,12 +23,12 @@ TEST_SUBJECT="symlink ENOSPC"
 
 fmt > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath = "bar") failed, No space left on device
-(28, ENOSPC) because the file system containing newpath ("/example",
+(ENOSPC) because the file system containing newpath ("/example",
 100% full) has no room for the new directory entry
 fubar
 test $? -eq 0 || no_result
 
-explain symlink foo bar -e ENOSPC -o test.out4
+explain -e ENOSPC -o test.out4 symlink foo bar
 test $? -eq 0 || fail
 
 fmt -w500 test.out4 > test.out3

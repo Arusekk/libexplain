@@ -68,11 +68,19 @@ explain_fcntl(int errnum, int argc, char **argv)
         );
         break;
 
+#ifdef F_SETSIG
     case F_SETSIG: /* FIXME: parse signal */
+#endif
+#ifdef F_NOTIFY
     case F_NOTIFY: /* FIXME: parse notify bits */
+#endif
+#ifdef F_SETLEASE
     case F_SETLEASE: /* FIXME: parse lease bits */
+#endif
     case F_DUPFD:
+#ifdef F_DUPFD_CLOEXEC
     case F_DUPFD_CLOEXEC:
+#endif
     case F_SETFD:
     case F_SETOWN:
         {

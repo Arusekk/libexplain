@@ -22,16 +22,16 @@ TEST_SUBJECT="link EMLINK"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-link(oldpath = "foo", newpath = "bar") failed, Too many links (31,
-EMLINK) because oldpath is a directory and the "." directory already
-has the maximum number of links (NNN)
+link(oldpath = "foo", newpath = "bar") failed, Too many links (EMLINK)
+because oldpath is a directory and the "." directory already has the
+maximum number of links
 fubar
 test $? -eq 0 || no_result
 
 mkdir foo
 test $? -eq 0 || no_result
 
-explain link foo bar -e EMLINK -o test.out4
+explain -e EMLINK -o test.out4 link foo bar
 test $? -eq 0 || fail
 
 fmt -w500 test.out4 > test.out3

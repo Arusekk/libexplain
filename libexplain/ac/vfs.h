@@ -20,7 +20,6 @@
 #ifndef LIBEXPLAIN_AC_VFS_H
 #define LIBEXPLAIN_AC_VFS_H
 
-#include <libexplain/config.h>
-#include <sys/vfs.h>
+#error "use libexplain/ac/sys/cfs.h instead"
 
 #endif /* LIBEXPLAIN_AC_VFS_H */

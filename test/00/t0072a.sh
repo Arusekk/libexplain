@@ -22,12 +22,12 @@ TEST_SUBJECT="stat ENOENT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-stat(pathname = "a/b", buf = 0x1000) failed, No such file or directory (2,
-ENOENT) because there is no "a" directory in the pathname "." directory
+stat(pathname = "a/b", buf = 0x1000) failed, No such file or directory
+(ENOENT) because there is no "a" directory in the pathname "." directory
 fubar
 test $? -eq 0 || no_result
 
-explain stat a/b 0x1000 -e ENOENT -o test.out
+explain -e ENOENT -o test.out stat a/b 0x1000
 test $? -eq 0 || fail
 
 diff test.ok test.out

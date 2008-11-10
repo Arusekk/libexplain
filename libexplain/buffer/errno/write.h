@@ -22,7 +22,7 @@
 
 #include <libexplain/ac/stddef.h>
 
-struct libexplain_string_buffer_t; /* forward */
+#include <libexplain/string_buffer.h>
 
 /**
   * The libexplain_buffer_errno_write function may be used to obtain
@@ -40,18 +40,34 @@ struct libexplain_string_buffer_t; /* forward */
   *    system call to be explained and this function, because many libc
   *    functions will alter the value of errno.
   * @param fildes
-  *    The file descriptor to be written to,
-  *    exactly as passed to the write(2) system call.
+  *    The original fildes, exactly as passed to the write(2) system call.
   * @param data
-  *    The address of the base address in memory to obtain the data
-  *    exactly as passed to the write(2) system call.
+  *    The original data, exactly as passed to the write(2) system call.
   * @param data_size
-  *    The maximum number of bytes of data to be used,
-  *    exactly as passed to the write(2) system call.
+  *    The original data_size, exactly as passed to the write(2) system call.
   * @note
   *    Given a suitably thread safe buffer, this function is thread safe.
   */
-void libexplain_buffer_errno_write(struct libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
+    int fildes, const void *data, size_t data_size);
+
+/**
+  * The libexplain_buffer_errno_write_because function is called by the
+  * libexplain_buffer_errno_write function (and others) to write the
+  * "because" part of the message.
+  *
+  * @param sb
+  *    The string buffer into which the message is to be written.
+  * @param errnum
+  *    The error value to be decoded.
+  * @param fildes
+  *    The original fildes, exactly as passed to the write(2) system call.
+  * @param data
+  *    The original data, exactly as passed to the write(2) system call.
+  * @param data_size
+  *    The original data_size, exactly as passed to the write(2) system call.
+  */
+void libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WRITE_H */

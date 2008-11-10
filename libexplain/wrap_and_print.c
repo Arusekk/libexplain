@@ -17,23 +17,39 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/assert.h>
 #include <libexplain/ac/ctype.h>
+#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/unistd.h>
+
+#ifdef HAVE_winsize_SYS_IOCTL_H
+#include <sys/ioctl.h>
+#endif
 
 #include <libexplain/wrap_and_print.h>
 #include <libexplain/string_buffer.h>
 
-#define LINE_LENGTH 75
+#define DEFAULT_LINE_WIDTH 75
+
+#define MAX_LINE_LENGTH (PATH_MAX + 10)
 
 
 void
-libexplain_wrap_and_print(FILE *fp, const char *text)
+libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
 {
     const char      *cp;
-    char            line_string[LINE_LENGTH + 1];
+    char            line_string[MAX_LINE_LENGTH + 1];
     libexplain_string_buffer_t line_buf;
-    char            word_string[LINE_LENGTH + 1];
+    char            word_string[MAX_LINE_LENGTH + 1];
     libexplain_string_buffer_t word_buf;
 
+    assert(width > 0);
+    if (width <= 0)
+        width = DEFAULT_LINE_WIDTH ;
+    if (width > MAX_LINE_LENGTH)
+        width = MAX_LINE_LENGTH;
+    assert(sizeof(word_string) <= sizeof(line_string));
     cp = text;
     libexplain_string_buffer_init(&line_buf, line_string, sizeof(line_string));
     libexplain_string_buffer_init(&word_buf, word_string, sizeof(word_string));
@@ -60,7 +76,7 @@ libexplain_wrap_and_print(FILE *fp, const char *text)
         for (;;)
         {
             libexplain_string_buffer_putc(&word_buf, c);
-            if (word_buf.position >= LINE_LENGTH)
+            if (libexplain_string_buffer_full(&word_buf))
                 break;
             c = *cp;
             if (c == '\0')
@@ -74,7 +90,7 @@ libexplain_wrap_and_print(FILE *fp, const char *text)
         {
             /* do nothing */
         }
-        else if (line_buf.position + 1 + word_buf.position <= LINE_LENGTH)
+        else if (line_buf.position + 1 + word_buf.position <= (size_t)width)
         {
             libexplain_string_buffer_putc(&line_buf, ' ');
         }
@@ -85,5 +101,56 @@ libexplain_wrap_and_print(FILE *fp, const char *text)
             line_buf.position = 0;
         }
         libexplain_string_buffer_puts(&line_buf, word_string);
+        /*
+         * Note: it is possible for a line to be longer than (width)
+         * when it contains a single word that is itself longer than
+         * (width).
+         */
     }
+}
+
+
+void
+libexplain_wrap_and_print(FILE *fp, const char *text)
+{
+    int             width;
+    int             fildes;
+
+    width = DEFAULT_LINE_WIDTH;
+
+    /*
+     * If output is going to a terminal, use the terminal's with when
+     * formatting error messages.
+     */
+    fildes = fileno(fp);
+    if (isatty(fildes))
+    {
+        const char      *cp;
+
+        cp = getenv("COLS");
+        if (cp && *cp)
+        {
+            char            *ep;
+
+            width = strtol(cp, &ep, 0);
+            if (ep == cp || *ep)
+                width = 0;
+        }
+#ifdef TIOCGWINSZ
+        if (width <= 0 )
+        {
+            struct winsize  ws;
+
+            if (ioctl(fildes, TIOCGWINSZ, &ws) >= 0)
+                width = ws.ws_col;
+        }
+#endif
+        if (width <= 0)
+            width = DEFAULT_LINE_WIDTH;
+    }
+
+    /*
+     * Print the text using the window width.
+     */
+    libexplain_wrap_and_print_width(fp, text, width);
 }

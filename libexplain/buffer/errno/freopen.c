@@ -20,16 +20,17 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
 
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/errno/fclose.h>
 #include <libexplain/buffer/errno/fflush.h>
 #include <libexplain/buffer/errno/fopen.h>
 #include <libexplain/buffer/errno/freopen.h>
-#include <libexplain/buffer/strerror.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/success.h>
 
 
-static void
-libexplain_buffer_errno_freopen_inner(struct libexplain_string_buffer_t *sb,
+void
+libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags, FILE *fp)
 {
     libexplain_string_buffer_puts(sb, "freopen(pathname = ");
@@ -42,8 +43,30 @@ libexplain_buffer_errno_freopen_inner(struct libexplain_string_buffer_t *sb,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
+
+    switch (errnum)
+    {
+    case EFAULT:
+    case EFBIG:
+    case ENOSPC:
+    case EPIPE:
+        libexplain_buffer_errno_fflush_because(sb, errnum, fp);
+        return;
+
+    case EBADF:
+        libexplain_buffer_ebadf(sb, "fp");
+        break;
+
+    case EINTR:
+    case EIO:
+        libexplain_buffer_errno_fclose_because(sb, errnum, fp);
+        return;
+
+    default:
+        libexplain_buffer_errno_fopen_because(sb, errnum, pathname, flags);
+        break;
+    }
 
     libexplain_string_buffer_puts
     (
@@ -51,73 +74,4 @@ libexplain_buffer_errno_freopen_inner(struct libexplain_string_buffer_t *sb,
         "; note that while the FILE stream is no longer valid, the "
         "underlying file descriptor may still be open"
     );
-}
-
-
-void
-libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
-    int errnum, const char *pathname, const char *flags, FILE *fp)
-{
-    /*
-     * The freopen function can be thought of as an fclose followed by
-     * an fopen, done with some libc-internal sleight of hand.
-     *
-     * The Linux fclose(3) man page says
-     *
-     *     "RETURN VALUE:  Upon successful completion 0 is returned.
-     *     Otherwise, EOF is returned and the global variable errno is
-     *     set to indicate the error.  In either case any further access
-     *     (including another call to fclose()) to the stream results in
-     *     undefined behavior."
-     *
-     * which is interesting because if close(2) fails, the file
-     * descriptor is usually still open.  Thus, we make an attempt
-     * to recover the file descriptor, to see if we can produce some
-     * additional information.
-     *
-     * If you are using glibc you are plain out of luck, because
-     * it very carefully assigns -1 to the file descriptor member.
-     * Other implementations may not be so careful, indeed other
-     * implementations may keep the FILE pointer valid if the underlying
-     * file descriptor is still valid.
-     */
-    int fildes = -1;
-    if (fp)
-        fildes = fileno(fp);
-    if (fildes >= 0 && fcntl(fildes, F_GETFL) < 0)
-        fildes = -1;
-
-    /*
-     * If possible, try to figure out what went wrong based on the error
-     * number.  It could be any of the errors from fflush, fclose or
-     * fopen.
-     */
-    if (fildes >= 0)
-    {
-        switch (errnum)
-        {
-        case EFAULT:
-        case EFBIG:
-        case ENOSPC:
-        case EPIPE:
-            libexplain_buffer_errno_fflush(sb, errnum, fp);
-            return;
-
-        case EINTR:
-        case EIO:
-        case EBADF:
-            libexplain_buffer_errno_fclose(sb, errnum, fp);
-            return;
-
-        case EINVAL:
-        case ENOMEM:
-            libexplain_buffer_errno_fopen(sb, errnum, pathname, flags);
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    libexplain_buffer_errno_freopen_inner(sb, errnum, pathname, flags, fp);
 }

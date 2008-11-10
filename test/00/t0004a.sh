@@ -23,12 +23,12 @@ TEST_SUBJECT="write vs EAGAIN"
 
 cat > test.ok << 'fubar'
 write(fildes = 42, data = 0x1000, data_size = 10) failed, Resource
-temporarily unavailable (11, EAGAIN) because the file descriptor has been
+temporarily unavailable (EAGAIN) because the file descriptor has been
 marked non-blocking (O_NONBLOCK) and the write would block
 fubar
 test $? -eq 0 || no_result
 
-explain write 42 0x1000 10 -e EAGAIN > test.out
+explain -e EAGAIN write 42 0x1000 10 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

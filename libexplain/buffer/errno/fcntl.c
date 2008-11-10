@@ -22,12 +22,15 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/because.h>
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/errno/fcntl.h>
+#include <libexplain/buffer/errno/generic.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/flock.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/fcntl.h>
 #include <libexplain/open_flags.h>
@@ -39,7 +42,9 @@
 static const libexplain_parse_bits_table_t table[] =
 {
     { "F_DUPFD",         F_DUPFD,         },
+#ifdef F_DUPFD_CLOEXEC
     { "F_DUPFD_CLOEXEC", F_DUPFD_CLOEXEC, },
+#endif
     { "F_GETFD",         F_GETFD,         },
     { "F_SETFD",         F_SETFD,         },
     { "F_GETFL",         F_GETFL,         },
@@ -49,17 +54,31 @@ static const libexplain_parse_bits_table_t table[] =
     { "F_SETLKW",        F_SETLKW,        },
     { "F_SETOWN",        F_SETOWN,        },
     { "F_GETOWN",        F_GETOWN,        },
+#ifdef F_SETSIG
     { "F_SETSIG",        F_SETSIG,        },
+#endif
+#ifdef F_GETSIG
     { "F_GETSIG",        F_GETSIG,        },
+#endif
 #ifdef F_INPROGRESS
     { "F_INPROGRESS",    F_INPROGRESS,    },
 #endif
+#ifdef F_GETLEASE
     { "F_GETLEASE",      F_GETLEASE,      },
+#endif
+#ifdef F_SETLEASE
     { "F_SETLEASE",      F_SETLEASE,      },
+#endif
+#ifdef F_GETLK64
+#if F_GETLK64 != F_GETLK
     { "F_GETLK64",       F_GETLK64,       },
     { "F_SETLK64",       F_SETLK64,       },
     { "F_SETLKW64",      F_SETLKW64,      },
+#endif
+#endif
+#ifdef F_NOTIFY
     { "F_NOTIFY",        F_NOTIFY,        },
+#endif
 };
 
 
@@ -104,26 +123,34 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case F_DUPFD:
+#ifdef F_DUPFD_CLOEXEC
     case F_DUPFD_CLOEXEC:
+#endif
     case F_SETFD:
     case F_SETOWN:
         libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
         break;
 
+#ifdef F_SETSIG
     case F_SETSIG:
         /* FIXME: decode signal */
         libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
         break;
+#endif
 
+#ifdef F_SETLEASE
     case F_SETLEASE:
         /* FIXME: decode lease flag */
         libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
         break;
+#endif
 
+#ifdef F_NOTIFY
     case F_NOTIFY:
         /* FIXME: decode notify bits */
         libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
         break;
+#endif
 
     case F_SETFL:
         libexplain_string_buffer_puts(sb, ", arg = ");
@@ -145,7 +172,8 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         }
         break;
 
-#if defined(F_GETLK64) && F_GETLK64 != F_GETLK
+#ifdef F_GETLK64
+#if F_GETLK64 != F_GETLK
     case F_GETLK64:
     case F_SETLK64:
     case F_SETLKW64:
@@ -161,6 +189,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         }
         break;
 #endif
+#endif
     }
     libexplain_string_buffer_putc(sb, ')');
 
@@ -169,8 +198,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
     switch (errnum)
     {
@@ -197,18 +225,10 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EBADF:
+        if (fcntl(fildes, F_GETFL) < 0)
         {
-            struct stat st;
-            if (fstat(fildes, &st) != 0)
-            {
-                libexplain_buffer_because(sb);
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the file descriptor is not an open file"
-                );
-                break;
-            }
+            libexplain_buffer_ebadf(sb, "fildes");
+            break;
         }
         switch (command)
         {
@@ -263,13 +283,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         switch (command)
         {
         default:
-            libexplain_buffer_because(sb);
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "the command was interrupted by a signal "
-                "before it could finish"
-            );
+            libexplain_buffer_eintr(sb, "command");
             break;
 
         case F_SETLK:
@@ -291,7 +305,9 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         switch (command)
         {
         case F_DUPFD:
+#ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
+#endif
             if (arg < 0)
             {
                 libexplain_buffer_because(sb);
@@ -313,6 +329,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
             }
             break;
 
+#ifdef F_SETSIG
         case F_SETSIG:
             libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
@@ -321,6 +338,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
                 "the arg is not an allowable signal number"
             );
             break;
+#endif
 
         default:
             break;
@@ -331,7 +349,9 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         switch (command)
         {
         case F_DUPFD:
+#ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
+#endif
             libexplain_buffer_emfile(sb);
             break;
 
@@ -362,7 +382,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        /* no additional information for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

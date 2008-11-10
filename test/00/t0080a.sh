@@ -23,8 +23,8 @@ TEST_SUBJECT="rename EACCES"
 
 cat > test.ok << 'fubar'
 rename(oldpath = "a/b/c/foo", newpath = "d/e/f/bar") failed, Permission
-denied (13, EACCES) because the process does not have search permission to
-the newpath "d/e" directory; note that oldpath still exists
+denied (EACCES) because the process does not have search permission to the
+newpath "d/e" directory; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result
 

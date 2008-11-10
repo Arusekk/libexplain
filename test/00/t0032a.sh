@@ -23,7 +23,7 @@ TEST_SUBJECT="libexplain_open vs ENOSPC"
 
 fmt > test.ok << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, No space left on device
-(28, ENOSPC) because the file system containing the file ("/exmaple",
+(ENOSPC) because the file system containing the file ("/exmaple",
 99% full) has no room for the new directory entry; note that oldpath
 still exists
 fubar
@@ -32,7 +32,7 @@ test $? -eq 0 || no_result
 touch foo
 test $? -eq 0 || no_result
 
-explain rename foo bar -e ENOSPC > test.out.raw
+explain -e ENOSPC rename foo bar > test.out.raw
 test $? -eq 0 || fail
 
 sed 's|(".*", .*% full)|("/exmaple", 99% full)|' test.out.raw > test.out.cooked

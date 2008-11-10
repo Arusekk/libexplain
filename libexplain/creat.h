@@ -30,6 +30,29 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_creat_or_die function is
+  * used to call the creat(2) system call.  On
+  * failure an explanation will be printed to stderr,
+  * obtained from libexplain_creat(3), and
+  * then the process terminates by calling exit(1).
+  *
+  * This function is intended to be used in a fashion
+  * similar to the following example:
+  * @code
+  * int fildes = libexplain_creat_or_die(pathname, mode);
+  * @endcode
+  *
+  * @param pathname
+  *     The pathname, exactly as to be passed to the creat(2) system call.
+  * @param mode
+  *     The mode, exactly as to be passed to the creat(2) system call.
+  * @returns
+  *     On success, returns the new file descriptor.
+  *     On failure, prints an explanation and exits, does not return.
+  */
+int libexplain_creat_or_die(const char *pathname, int mode);
+
+/**
   * The libexplain_creat function is used to obtain an
   * explanation of an error returned by the creat(2) system call.  The
   * least the message will contain is the value of strerror(errno), but

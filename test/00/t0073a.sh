@@ -22,9 +22,9 @@ TEST_SUBJECT="stat ENOTDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-stat(pathname = "a/b/c", buf = 0x1234567) failed, Not a directory (20,
-ENOTDIR) because the "b" regular file in the pathname "a" directory is
-being used as a directory when it is not
+stat(pathname = "a/b/c", buf = 0x1234567) failed, Not a directory (ENOTDIR)
+because the "b" regular file in the pathname "a" directory is being used as
+a directory when it is not
 fubar
 test $? -eq 0 || no_result
 
@@ -34,7 +34,7 @@ test $? -eq 0 || no_result
 touch a/b
 test $? -eq 0 || no_result
 
-explain stat a/b/c 0x1234567 -e ENOTDIR -o test.out
+explain -e ENOTDIR -o test.out stat a/b/c 0x1234567
 test $? -eq 0 || fail
 
 diff test.ok test.out

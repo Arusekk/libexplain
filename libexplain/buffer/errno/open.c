@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/assert.h>
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/sys/stat.h>
@@ -24,18 +25,26 @@
 
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/enfile.h>
+#include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/open.h>
 #include <libexplain/buffer/errno/path_resolution.h>
+#include <libexplain/buffer/etxtbsy.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/path_to_pid.h>
-#include <libexplain/buffer/strerror.h>
-#include <libexplain/buffer/uid.h>
+#include <libexplain/buffer/pretty_size.h>
 #include <libexplain/buffer/success.h>
+#include <libexplain/buffer/uid.h>
+#include <libexplain/capability.h>
 #include <libexplain/open_flags.h>
+#include <libexplain/option.h>
 #include <libexplain/permission_mode.h>
 #include <libexplain/string_buffer.h>
 
@@ -62,8 +71,7 @@ libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
     libexplain_buffer_errno_open_because(sb, errnum, pathname, flags, mode);
 }
@@ -73,7 +81,40 @@ void
 libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname, int flags, int mode)
 {
+    libexplain_final_t final_component;
+
     (void)mode;
+    libexplain_final_init(&final_component);
+    switch (flags & O_ACCMODE)
+    {
+    case O_RDONLY:
+        final_component.want_to_read = 1;
+        break;
+
+    case O_RDWR:
+        final_component.want_to_read = 1;
+        final_component.want_to_write = 1;
+        break;
+
+    case O_WRONLY:
+        final_component.want_to_write = 1;
+        break;
+
+    default:
+        assert(!"unknown open access mode");
+        break;
+    }
+    if (flags & O_CREAT)
+    {
+        final_component.want_to_create = 1;
+        final_component.must_exist = 0;
+        if (flags & O_EXCL)
+            final_component.must_not_exist = 1;
+    }
+    if (flags & O_DIRECTORY)
+        final_component.must_be_a_directory = 1;
+    if (flags & O_NOFOLLOW)
+        final_component.follow_symlink = 0;
 
     switch (errnum)
     {
@@ -86,8 +127,8 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 pathname,
-                flags,
-                "pathname"
+                "pathname",
+                &final_component
             )
         )
         {
@@ -112,8 +153,8 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 pathname,
-                flags,
-                "pathname"
+                "pathname",
+                &final_component
             )
         )
         {
@@ -133,29 +174,25 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
     case EFBIG:
     case EOVERFLOW:
         {
-            struct stat st;
+            struct stat     st;
+
+            libexplain_buffer_because(sb);
+            libexplain_string_buffer_puts
+            (
+                sb,
+                "it is a regular file which is too large to be opened"
+            );
             if (stat(pathname, &st) == 0 && S_ISREG(st.st_mode))
             {
-                libexplain_buffer_because(sb);
-                libexplain_string_buffer_printf
-                (
-                    sb,
-                    "it is a regular file which is too large to be "
-                    "opened (%lld bytes), the O_LARGEFILE flag is "
-                    "necessary",
-                    (long long)st.st_size
-                );
+                libexplain_string_buffer_puts(sb, " (");
+                libexplain_buffer_pretty_size(sb, st.st_size);
+                libexplain_string_buffer_putc(sb, ')');
             }
-            else
-            {
-                libexplain_buffer_because(sb);
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "it is a regular file which is too large to be "
-                    "opened, the O_LARGEFILE flag is necessary "
-                );
-            }
+            libexplain_string_buffer_puts
+            (
+                sb,
+                ", the O_LARGEFILE flag is necessary"
+            );
         }
         break;
 
@@ -170,12 +207,13 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ELOOP:
-        libexplain_buffer_because(sb);
+    case EMLINK: /* BSD */
         if (flags & O_NOFOLLOW)
         {
             struct stat st;
             if (lstat(pathname, &st) == 0 && S_ISLNK(st.st_mode))
             {
+                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -185,30 +223,7 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
                 break;
             }
         }
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                flags,
-                "pathname"
-            )
-        )
-        {
-            long            symloop_max;
-
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "too many symbolic links were encountered in resolving "
-                "pathname"
-            );
-            symloop_max = sysconf(_SC_SYMLOOP_MAX);
-            if (symloop_max > 0)
-                libexplain_string_buffer_printf(sb, " (%ld)", symloop_max);
-        }
+        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case EMFILE:
@@ -216,28 +231,13 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENAMETOOLONG:
-        {
-            if
-            (
-                libexplain_buffer_errno_path_resolution
-                (
-                    sb,
-                    errnum,
-                    pathname,
-                    flags,
-                    "pathname"
-                )
-            )
-            {
-                libexplain_buffer_because(sb);
-                libexplain_string_buffer_printf
-                (
-                    sb,
-                    "the pathname, or one of the pathname components, is "
-                    "longer than the system maximum"
-                );
-            }
-        }
+        libexplain_buffer_enametoolong
+        (
+            sb,
+            pathname,
+            "pathname",
+            &final_component
+        );
         break;
 
     case ENFILE:
@@ -256,27 +256,7 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOENT:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                flags,
-                "pathname"
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "O_CREAT is not set and the named file does not exist; "
-                "or, a directory component of pathname does not exist; "
-                "or, a component of pathname is a dangling symbolic link"
-            );
-        }
+        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
@@ -327,8 +307,8 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 pathname,
-                flags,
-                "pathname"
+                "pathname",
+                &final_component
             )
         )
         {
@@ -399,15 +379,12 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EPERM:
-        /*
-         * The O_NOATIME flag was specified, but the effective user ID of
-         * the caller did not match the owner of the file and the caller
-         * was not privileged (CAP_FOWNER).
-         */
         {
-            struct stat st;
-            if (stat(pathname, &st) != 0)
-                break;
+            struct stat     st;
+
+            /*
+             * The O_NOATIME flag needs privileges.
+             */
             libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
@@ -418,41 +395,39 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
             libexplain_string_buffer_puts
             (
                 sb,
-                ") did not match the owner of the file ("
+                ") did not match the owner of the file"
             );
+            if (stat(pathname, &st) >= 0)
+            {
+                libexplain_string_buffer_puts(sb, " (");
+                libexplain_buffer_uid(sb, st.st_uid);
+                libexplain_string_buffer_putc(sb, ')');
+            }
             libexplain_buffer_uid(sb, st.st_uid);
             libexplain_string_buffer_puts
             (
                 sb,
-                ") and the caller was not privileged"
-#ifdef __linux__
-                " (does not have the CAP_FOWNER capability)"
-#endif
+                ", and the caller was not privileged"
             );
+#ifdef HAVE_SYS_CAPABILITY_H
+            if (libexplain_option_dialect_specific())
+            {
+                libexplain_string_buffer_puts
+                (
+                    sb,
+                    " (does not have the CAP_FOWNER capability)"
+                );
+            }
+#endif
         }
         break;
 
     case EROFS:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "write access was requested and pathname refers to a file "
-            "on a read-only file system"
-        );
-        if (libexplain_buffer_mount_point(sb, pathname) < 0)
-            libexplain_buffer_mount_point_dirname(sb, pathname);
+        libexplain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     case ETXTBSY:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "write access was requested and pathname refers to an "
-            "executable image which is currently being executed"
-        );
-        libexplain_buffer_path_to_pid(sb, pathname);
+        libexplain_buffer_etxtbsy(sb, pathname);
         break;
 
     case EWOULDBLOCK:

@@ -23,7 +23,7 @@ TEST_SUBJECT="access ENOMEM"
 
 cat > test.ok << 'fubar'
 access(pathname = "foobar", mode = F_OK) failed, Cannot allocate memory
-(12, ENOMEM) because insufficient kernel memory was available
+(ENOMEM) because insufficient kernel memory was available
 fubar
 test $? -eq 0 || no_result
 

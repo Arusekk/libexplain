@@ -22,8 +22,8 @@ TEST_SUBJECT="access ENOTDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-access(pathname = "a/b/foobar", mode = F_OK) failed, Not a directory (20,
-ENOTDIR) because the "b" regular file in the pathname "a" directory is
+access(pathname = "a/b/foobar", mode = F_OK) failed, Not a directory
+(ENOTDIR) because the "b" regular file in the pathname "a" directory is
 being used as a directory when it is not
 fubar
 test $? -eq 0 || no_result

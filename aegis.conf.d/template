@@ -50,6 +50,10 @@ file_template =
         body = "${read_file ${source etc/template/sh abs}}";
     },
     {
+        pattern = [ "*.3" ];
+        body = "${read_file ${source etc/template/man3 abs}}";
+    },
+    {
         pattern = [ "*.man", "*.[12345678]" ];
         body = "${read_file ${source etc/template/man abs}}";
     },

@@ -24,12 +24,12 @@ TEST_SUBJECT="fcntl vs EDEADLK"
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_SETLKW, arg = { l_type = F_RDLCK; l_whence =
 SEEK_SET; l_start = 0; l_len = 0; l_pid = 0 }) failed, Resource deadlock
-avoided (35, EDEADLK) because it was detected that the specified F_SETLKW
+avoided (EDEADLK) because it was detected that the specified F_SETLKW
 command would cause a deadlock
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_SETLKW -e EDEADLK -o test.out
+explain -e EDEADLK fcntl 42 F_SETLKW > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

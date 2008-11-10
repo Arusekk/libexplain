@@ -23,8 +23,8 @@ TEST_SUBJECT="symlink EACCES"
 
 cat > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath = "a/b/bar") failed, Permission denied
-(13, EACCES) because the process does not have write permission to the
-newpath "a/b" directory, this is needed to create the "bar" directory entry
+(EACCES) because the process does not have write permission to the newpath
+"a/b" directory, this is needed to create the "bar" directory entry
 fubar
 test $? -eq 0 || no_result
 

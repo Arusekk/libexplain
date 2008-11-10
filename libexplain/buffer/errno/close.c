@@ -21,10 +21,13 @@
 #include <libexplain/ac/fcntl.h>
 
 #include <libexplain/buffer/because.h>
+#include <libexplain/buffer/ebadf.h>
+#include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/errno/close.h>
+#include <libexplain/buffer/errno/generic.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/string_buffer.h>
 
@@ -42,27 +45,28 @@ libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
         return;
     }
 
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
+    libexplain_buffer_errno_close_because(sb, errnum, fildes);
+}
+
+
+void
+libexplain_buffer_errno_close_because(libexplain_string_buffer_t *sb,
+    int errnum, int fildes)
+{
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the file descriptor does not refer to an open file"
-        );
+        libexplain_buffer_ebadf(sb, "fildes");
         break;
 
     case EINTR:
-        libexplain_buffer_because(sb);
+        libexplain_buffer_eintr(sb, "close");
         libexplain_string_buffer_puts
         (
             sb,
-            "the process was interrupted before the file could "
-            "be closed; note that the file descriptor is still open"
+            "; note that the file descriptor is still open"
         );
         break;
 
@@ -81,7 +85,7 @@ libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        /* no additional information for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 

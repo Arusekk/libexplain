@@ -24,7 +24,6 @@
 #include <libexplain/access.h>
 #include <libexplain/buffer/access_mode.h>
 #include <libexplain/version_print.h>
-#include <libexplain/wrap_and_print.h>
 
 
 static void
@@ -79,10 +78,6 @@ main(int argc, char **argv)
         usage();
     pathname = argv[optind];
 
-    if (access(pathname, mode) < 0)
-    {
-        libexplain_wrap_and_print(stderr, libexplain_access(pathname, mode));
-        exit(1);
-    }
+    libexplain_access_or_die(pathname, mode);
     return 0;
 }

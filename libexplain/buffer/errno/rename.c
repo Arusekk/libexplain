@@ -18,29 +18,44 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/emlink.h>
+#include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/rename.h>
 #include <libexplain/buffer/exdev.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/path_to_pid.h>
-#include <libexplain/buffer/sticky_permissions.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
+#include <libexplain/capability.h>
 #include <libexplain/count_directory_entries.h>
 #include <libexplain/dirname.h>
 #include <libexplain/have_permission.h>
+#include <libexplain/option.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/string_buffer.h>
+
+
+static int
+get_mode(const char *pathname)
+{
+    struct stat     st;
+
+    if (stat(pathname, &st) < 0)
+        return S_IFREG;
+    return st.st_mode;
+}
 
 
 void
@@ -49,6 +64,8 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
 {
     int             oldpath_bad;
     int             newpath_bad;
+    libexplain_final_t oldpath_final_component;
+    libexplain_final_t newpath_final_component;
 
     oldpath_bad = errnum == EFAULT && libexplain_path_is_efault(oldpath);
     newpath_bad = errnum == EFAULT && libexplain_path_is_efault(newpath);
@@ -68,8 +85,15 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
+
+    libexplain_final_init(&oldpath_final_component);
+    oldpath_final_component.want_to_unlink = 1;
+    oldpath_final_component.st_mode = get_mode(oldpath);
+    libexplain_final_init(&newpath_final_component);
+    newpath_final_component.must_exist = 0;
+    newpath_final_component.want_to_create = 1;
+    newpath_final_component.st_mode = oldpath_final_component.st_mode;
 
     switch (errnum)
     {
@@ -80,75 +104,24 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
          * Check specific requirements for renaming directories.
          */
         {
-            struct stat old_st;
+            struct stat     oldpath_st;
 
             if
             (
-                lstat(oldpath, &old_st) == 0
+                lstat(oldpath, &oldpath_st) == 0
             &&
-                S_ISDIR(old_st.st_mode)
+                S_ISDIR(oldpath_st.st_mode)
             &&
-                !libexplain_have_write_permission(&old_st)
+                !libexplain_have_write_permission(&oldpath_st)
             )
             {
                 libexplain_string_buffer_puts
                 (
                     sb,
                     "oldpath is a directory and does not allow write "
-                    "permission (needed to update the .. entry)"
+                    "permission, this is needed to update the \"..\" "
+                    "directory entry"
                 );
-                break;
-            }
-        }
-
-        /*
-         * Check that we have write permission in the directory above oldpath.
-         */
-        {
-            char old_dotdot[PATH_MAX + 1];
-            struct stat old_dotdot_st;
-
-            libexplain_dirname(old_dotdot, oldpath, sizeof(old_dotdot));
-            if
-            (
-                lstat(old_dotdot, &old_dotdot_st) == 0
-            &&
-                !libexplain_have_write_permission(&old_dotdot_st)
-            )
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "write permission is denied for the "
-                );
-                libexplain_string_buffer_puts_quoted(sb, old_dotdot);
-                libexplain_string_buffer_puts(sb, " directory");
-                break;
-            }
-        }
-
-        /*
-         * Check that we have write permission in the directory above newpath.
-         */
-        {
-            char new_dotdot[PATH_MAX + 1];
-            struct stat new_dotdot_st;
-
-            libexplain_dirname(new_dotdot, newpath, sizeof(new_dotdot));
-            if
-            (
-                lstat(new_dotdot, &new_dotdot_st) == 0
-            &&
-                !libexplain_have_write_permission(&new_dotdot_st)
-            )
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "write permission is denied for the "
-                );
-                libexplain_string_buffer_puts_quoted(sb, new_dotdot);
-                libexplain_string_buffer_puts(sb, " directory");
                 break;
             }
         }
@@ -163,8 +136,8 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 oldpath,
-                O_RDONLY,
-                "oldpath"
+                "oldpath",
+                &oldpath_final_component
             )
         &&
             libexplain_buffer_errno_path_resolution
@@ -172,8 +145,8 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 newpath,
-                O_RDWR | O_CREAT,
-                "newpath"
+                "newpath",
+                &newpath_final_component
             )
         )
         {
@@ -185,9 +158,9 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
             (
                 sb,
                 "write permission is denied for the directory "
-                "containing oldpath or newpath; or, search "
-                "permission is denied for one of the directories in "
-                "the path prefix of oldpath or newpath"
+                "containing oldpath or newpath; or, search permission "
+                "is denied for one of the directory components of "
+                "oldpath or newpath"
             );
         }
         break;
@@ -209,7 +182,7 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
             ", and "
             "the system considers this an error; note that there is "
             "no requirement to return EBUSY in such cases - there is "
-            "nothing wrong with doing the rename anyway - but it is "
+            "nothing wrong with doing the rename anyway, but it is "
             "allowed to return EBUSY if the system cannot otherwise "
             "handle such situations"
 #endif
@@ -230,9 +203,9 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
         libexplain_string_buffer_puts
         (
             sb,
-            "the new pathname contained a path prefix of the "
-            "old; or, more generally, an attempt was made to make a "
-            "directory a subdirectory of itself"
+            "the new pathname contained a path prefix of oldpath; or, "
+            "more generally, an attempt was made to make a directory a "
+            "subdirectory of itself"
         );
         break;
 
@@ -259,35 +232,16 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ELOOP:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_eloop2
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                oldpath,
-                O_RDONLY,
-                "oldpath"
-            )
-        &&
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_RDWR + O_CREAT,
-                "newpath"
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                " too many symbolic links were encountered in resolving "
-                "oldpath or newpath"
-            );
-        }
+            sb,
+            oldpath,
+            "oldpath",
+            &oldpath_final_component,
+            newpath,
+            "newpath",
+            &newpath_final_component
+        );
         break;
 
     case EMLINK:
@@ -295,70 +249,29 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_enametoolong2
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                oldpath,
-                O_RDONLY,
-                "oldpath"
-            )
-        &&
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_RDWR | O_CREAT,
-                "newpath"
-            )
-        )
-        {
-            /*
-             * Unable to find the problem, issue the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "oldpath or newpath, or a path component of oldpath "
-                "or newpath, was too long"
-            );
-        }
+            sb,
+            oldpath,
+            "oldpath",
+            &oldpath_final_component,
+            newpath,
+            "newpath",
+            &newpath_final_component
+        );
         break;
 
     case ENOENT:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_enoent2
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                oldpath,
-                O_RDONLY,
-                "oldpath"
-            )
-        &&
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_RDWR | O_CREAT,
-                "newpath"
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a directory component in oldpath or newpath does "
-                "not exist or is a dangling symbolic link"
-            );
-        }
+            sb,
+            oldpath,
+            "oldpath",
+            &oldpath_final_component,
+            newpath,
+            "newpath",
+            &newpath_final_component
+        );
         break;
 
     case ENOMEM:
@@ -419,8 +332,8 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 oldpath,
-                O_RDONLY,
-                "oldpath"
+                "oldpath",
+                &oldpath_final_component
             )
         &&
             libexplain_buffer_errno_path_resolution
@@ -428,8 +341,8 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 newpath,
-                O_RDONLY | O_CREAT,
-                "newpath"
+                "newpath",
+                &newpath_final_component
             )
         )
         {
@@ -470,9 +383,23 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_because(sb);
         if
         (
-            libexplain_buffer_sticky_permissions(sb, oldpath, "oldpath")
+            libexplain_buffer_errno_path_resolution
+            (
+                sb,
+                errno,
+                oldpath,
+                "oldpath",
+                &oldpath_final_component
+            )
         &&
-            libexplain_buffer_sticky_permissions(sb, newpath, "newpath")
+            libexplain_buffer_errno_path_resolution
+            (
+                sb,
+                errno,
+                newpath,
+                "newpath",
+                &newpath_final_component
+            )
         )
         {
             libexplain_string_buffer_puts
@@ -481,19 +408,41 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
                 "the directory containing oldpath has the sticky bit "
                 "(S_ISVTX) set and the process's effective user ID is "
                 "neither the user ID of the file to be deleted nor that "
-                "of the directory containing it, and the process is "
-                "not privileged"
-#ifdef __linux__
-                " (does not have the CAP_FOWNER capability)"
+                "of the directory containing it, and the process is not "
+                "privileged"
+            );
+#ifdef HAVE_SYS_CAPABILITY_H
+            if (libexplain_option_dialect_specific())
+            {
+                libexplain_string_buffer_puts
+                (
+                    sb,
+                    " (does not have the CAP_FOWNER capability)"
+                );
+            }
 #endif
+            libexplain_string_buffer_puts
+            (
+                sb,
                 "; or newpath is an existing file and the directory "
                 "containing it has the sticky bit set and the "
                 "process's effective user ID is neither the user ID "
                 "of the file to be replaced nor that of the directory "
                 "containing it, and the process is not privileged"
-#ifdef __linux__
-                " (does not have the CAP_FOWNER capability)"
+            );
+#ifdef HAVE_SYS_CAPABILITY_H
+            if (libexplain_option_dialect_specific())
+            {
+                libexplain_string_buffer_puts
+                (
+                    sb,
+                    " (does not have the CAP_FOWNER capability)"
+                );
+            }
 #endif
+            libexplain_string_buffer_puts
+            (
+                sb,
                 "; or the file system containing pathname does not "
                 "support renaming of the type requested"
             );
@@ -501,14 +450,7 @@ libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EROFS:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the file is on a read-only file system"
-        );
-        if (libexplain_buffer_mount_point(sb, newpath) < 0)
-            libexplain_buffer_mount_point_dirname(sb, newpath);
+        libexplain_buffer_erofs(sb, newpath, "newpath");
         break;
 
     case EXDEV:

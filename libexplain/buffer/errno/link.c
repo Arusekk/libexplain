@@ -18,24 +18,38 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/sys/stat.h>
 
 #include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/emlink.h>
+#include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/link.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/exdev.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/strerror.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/dirname.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/string_buffer.h>
+
+
+static int
+get_mode(const char *pathname)
+{
+    struct stat     st;
+
+    if (stat(pathname, &st) < 0)
+        return S_IFREG;
+    return st.st_mode;
+}
 
 
 void
@@ -43,7 +57,9 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
     const char *oldpath, const char *newpath)
 {
     int             oldpath_bad;
+    libexplain_final_t oldpath_final_component;
     int             newpath_bad;
+    libexplain_final_t newpath_final_component;
 
     oldpath_bad = errnum == EFAULT && libexplain_path_is_efault(oldpath);
     newpath_bad = errnum == EFAULT && libexplain_path_is_efault(newpath);
@@ -63,8 +79,13 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
+
+    libexplain_final_init(&oldpath_final_component);
+    libexplain_final_init(&newpath_final_component);
+    newpath_final_component.must_exist = 0;
+    newpath_final_component.want_to_create = 1;
+    newpath_final_component.st_mode = get_mode(oldpath);
 
     switch (errnum)
     {
@@ -77,8 +98,8 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 oldpath,
-                O_RDONLY,
-                "oldpath"
+                "oldpath",
+                &oldpath_final_component
             )
         &&
             libexplain_buffer_errno_path_resolution
@@ -86,8 +107,8 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 newpath,
-                O_RDWR | O_CREAT,
-                "newpath"
+                "newpath",
+                &newpath_final_component
             )
         )
         {
@@ -128,35 +149,16 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ELOOP:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_eloop2
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                oldpath,
-                O_RDONLY,
-                "oldpath"
-            )
-        &&
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_WRONLY + O_CREAT + O_EXCL,
-                "newpath"
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "too many symbolic links were encountered in "
-                "resolving oldpath or newpath"
-            );
-        }
+            sb,
+            oldpath,
+            "oldpath",
+            &oldpath_final_component,
+            newpath,
+            "newpath",
+            &newpath_final_component
+        );
         break;
 
     case EMLINK:
@@ -164,75 +166,29 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_enametoolong2
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                oldpath,
-                O_RDONLY,
-                "oldpath"
-            )
-        &&
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_RDONLY + O_CREAT,
-                "newpath"
-            )
-        )
-        {
-            /*
-             * Unable to pin point a specific cause,
-             * use the generic explanatiuon.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "oldpath or newpath, or a path component of oldpath or "
-                "newpath, was too long"
-            );
-        }
+            sb,
+            oldpath,
+            "oldpath",
+            &oldpath_final_component,
+            newpath,
+            "newpath",
+            &newpath_final_component
+        );
         break;
 
     case ENOENT:
-        libexplain_buffer_because(sb);
-        if
+        libexplain_buffer_enoent2
         (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                oldpath,
-                O_RDONLY,
-                "oldpath"
-            )
-        &&
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                O_WRONLY | O_CREAT,
-                "newpath"
-            )
-        )
-        {
-            /*
-             * Unable to pin point a specific cause,
-             * issue the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a directory component in oldpath or newpath does not "
-                "exist or is a dangling symbolic link"
-            );
-        }
+            sb,
+            oldpath,
+            "oldpath",
+            &oldpath_final_component,
+            newpath,
+            "newpath",
+            &newpath_final_component
+        );
         break;
 
     case ENOMEM:
@@ -246,12 +202,7 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
             sb,
             "the file system containing newpath"
         );
-        {
-            char            dir[PATH_MAX + 1];
-
-            libexplain_dirname(dir, newpath, sizeof(dir));
-            libexplain_buffer_mount_point(sb, dir);
-        }
+        libexplain_buffer_mount_point_dirname(sb, newpath);
         libexplain_string_buffer_puts
         (
             sb,
@@ -268,8 +219,8 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 oldpath,
-                O_RDONLY,
-                "oldpath"
+                "oldpath",
+                &oldpath_final_component
             )
         &&
             libexplain_buffer_errno_path_resolution
@@ -277,8 +228,8 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
                 sb,
                 errnum,
                 newpath,
-                O_WRONLY | O_CREAT,
-                "newpath"
+                "newpath",
+                &newpath_final_component
             )
         )
         {
@@ -340,13 +291,7 @@ libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EROFS:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the file is on a read-only file system"
-        );
-        libexplain_buffer_mount_point(sb, oldpath);
+        libexplain_buffer_erofs(sb, oldpath, "oldpath");
         break;
 
     case EXDEV:

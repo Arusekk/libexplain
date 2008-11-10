@@ -26,7 +26,6 @@
 #include <libexplain/creat.h>
 #include <libexplain/permission_mode.h>
 #include <libexplain/version_print.h>
-#include <libexplain/wrap_and_print.h>
 
 
 static void
@@ -83,16 +82,7 @@ main(int argc, char **argv)
         usage();
     path = argv[optind];
 
-    fd = creat(path, mode);
-    if (fd < 0)
-    {
-        libexplain_wrap_and_print(stderr, libexplain_creat(path, mode));
-        exit(1);
-    }
-    if (close(fd))
-    {
-        libexplain_wrap_and_print(stderr, libexplain_close(fd));
-        exit(1);
-    }
+    fd = libexplain_creat_or_die(path, mode);
+    libexplain_close_or_die(fd);
     return 0;
 }

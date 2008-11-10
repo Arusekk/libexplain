@@ -23,12 +23,12 @@ TEST_SUBJECT="symlink EPERM"
 
 fmt > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath = "bar") failed, Operation not permitted
-(1, EPERM) because the file system containing newpath ("/example", 42%
+(EPERM) because the file system containing newpath ("/example", 42%
 full) does not support the creation of symbolic links
 fubar
 test $? -eq 0 || no_result
 
-explain symlink foo bar -e EPERM -o test.out4
+explain -e EPERM -o test.out4 symlink foo bar
 test $? -eq 0 || fail
 
 fmt -w500 test.out4 > test.out3

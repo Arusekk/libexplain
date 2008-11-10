@@ -18,26 +18,61 @@
  */
 
 #include <libexplain/ac/stdio.h>
+#include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/lsof.h>
 #include <libexplain/string_buffer.h>
+
+
+#ifndef PROC_FS_USEFUL
+
+
+typedef struct adapter adapter;
+struct adapter
+{
+    libexplain_lsof_t inherited;
+    libexplain_string_buffer_t *sb;
+};
+
+
+static void
+n_callback(libexplain_lsof_t *context, const char *name)
+{
+    adapter         *a;
+
+    a = (adapter *)context;
+    libexplain_string_buffer_putc(a->sb, ' ');
+    libexplain_string_buffer_puts_quoted(a->sb, name);
+}
+
+#endif
 
 
 void
 libexplain_buffer_fildes_to_pathname(libexplain_string_buffer_t *sb, int fildes)
 {
-    char procpath[100];
-    char symlink_data[2000];
-    int n;
+#ifdef PROC_FS_USEFUL
+    int             n;
+    char            procpath[100];
+    char            symlink_data[PATH_MAX + 1];
 
     snprintf(procpath, sizeof(procpath), "/proc/self/fd/%d", fildes);
     n = readlink(procpath, symlink_data, sizeof(symlink_data) - 1);
     if (n > 0)
     {
         symlink_data[n] = 0;
-        libexplain_string_buffer_puts(sb, " /* ");
+        libexplain_string_buffer_putc(sb, ' ');
         libexplain_string_buffer_puts_quoted(sb, symlink_data);
-        libexplain_string_buffer_puts(sb, " */");
     }
+#else
+    adapter         obj;
+    char            options[40];
+
+    obj.inherited.n_callback = n_callback;
+    obj.sb = sb;
+    snprintf(options, sizeof(options), "-p %d -d %d", getpid(), fildes);
+    libexplain_lsof(options, &obj.inherited);
+#endif
 }

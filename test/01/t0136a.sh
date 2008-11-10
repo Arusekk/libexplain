@@ -23,7 +23,7 @@ TEST_SUBJECT="access ELOOP"
 
 cat > test.ok << 'fubar'
 access(pathname = "a/b/foobar", mode = F_OK) failed, Too many levels of
-symbolic links (40, ELOOP) because a symbolic link loop was encountered in
+symbolic links (ELOOP) because a symbolic link loop was encountered in
 pathname, starting at "a/b"
 fubar
 test $? -eq 0 || no_result
@@ -37,7 +37,7 @@ test $? -eq 0 || no_result
 ln -s b a/c
 test $? -eq 0 || no_result
 
-explain access a/b/foobar -e ELOOP -o test.out
+explain -e ELOOP -o test.out access a/b/foobar
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -25,7 +25,7 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/errno/fopen.h>
 #include <libexplain/buffer/errno/open.h>
-#include <libexplain/buffer/strerror.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/string_buffer.h>
 
@@ -34,17 +34,6 @@ void
 libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname, const char *flags_string)
 {
-    int             flags_mode_part;
-    int             flags_flags_part;
-    int             flags_string_valid;
-    int             flags;
-    int             permission_mode;
-    int             rwa_seen;
-    const char      *cp;
-    unsigned char   c;
-    char            yuck_msg[50];
-    libexplain_string_buffer_t yuck_buf;
-
     /*
      * Note: EFAULT has to be the pathname, because if flags was broken,
      * it would have raised a SEGFAULT signal from user space.
@@ -63,8 +52,26 @@ libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
+
+    libexplain_buffer_errno_fopen_because(sb, errnum, pathname, flags_string);
+}
+
+
+void
+libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, const char *flags_string)
+{
+    int             flags_mode_part;
+    int             flags_flags_part;
+    int             flags_string_valid;
+    int             flags;
+    int             permission_mode;
+    int             rwa_seen;
+    const char      *cp;
+    unsigned char   c;
+    char            yuck_msg[50];
+    libexplain_string_buffer_t yuck_buf;
 
     /*
      * Parse the flags string.
@@ -140,7 +147,9 @@ libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
             continue;
 
         case 'e':
+#ifdef O_CLOEXEC
             flags_flags_part |= O_CLOEXEC;
+#endif
             continue;
 
         case 'm':
@@ -168,7 +177,6 @@ libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
     }
     flags = flags_mode_part | flags_flags_part;
     permission_mode = 0666;
-
     switch (errnum)
     {
     case EINVAL:
@@ -207,8 +215,8 @@ libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
             libexplain_string_buffer_puts_quoted(sb, pathname);
             libexplain_string_buffer_puts(sb, ", flags = ");
             libexplain_string_buffer_puts_quoted(sb, flags_string);
-            libexplain_string_buffer_puts(sb, ") failed, ");
-            libexplain_buffer_strerror(sb, errnum);
+            libexplain_string_buffer_putc(sb, ')');
+            libexplain_buffer_failed(sb, errnum);
 
             /*
              * Try to figure out if it was a kernel ENOMEM or a user-space

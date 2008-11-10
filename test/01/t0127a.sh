@@ -23,9 +23,9 @@ TEST_SUBJECT="creat ENOTDIR"
 
 cat > test.ok << 'fubar'
 creat(pathname = "fred/nurk", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP
-| S_IROTH | S_IWOTH) failed, Not a directory (20, ENOTDIR) because the
-"fred" regular file in the pathname "." directory is being used as a
-directory when it is not
+| S_IROTH | S_IWOTH) failed, Not a directory (ENOTDIR) because the "fred"
+regular file in the pathname "." directory is being used as a directory
+when it is not
 fubar
 test $? -eq 0 || no_result
 

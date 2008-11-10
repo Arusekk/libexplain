@@ -20,6 +20,10 @@
 #ifndef LIBEXPLAIN_GETTEXT_H
 #define LIBEXPLAIN_GETTEXT_H
 
+#ifndef i18n
+#define i18n(x) x
+#endif
+
 /**
   * The libexplain_gettext function may be used to translate a string,
   * if i18n in in use.

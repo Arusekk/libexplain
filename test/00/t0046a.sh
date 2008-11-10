@@ -24,13 +24,13 @@ TEST_SUBJECT="link EFAULT"
 # This is the case where it can't figure out what is wrong,
 # because, of course, we are only simulating it.
 cat > test.ok << 'fubar'
-link(oldpath = "foo", newpath = "bar") failed, Bad address (14, EFAULT)
-because oldpath or newpath refers to memory that is outside the process's
+link(oldpath = "foo", newpath = "bar") failed, Bad address (EFAULT) because
+oldpath or newpath refers to memory that is outside the process's
 accessible address space
 fubar
 test $? -eq 0 || no_result
 
-explain link foo bar -e EFAULT -o test.out
+explain -e EFAULT -o test.out link foo bar
 test $? -eq 0 || fail
 
 diff test.ok test.out

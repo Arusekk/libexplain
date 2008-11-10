@@ -28,7 +28,7 @@ test $? -eq 0 || no_result
 
 cat > test.ok << 'fubar'
 open(pathname = "slink", flags = O_RDONLY | O_NOFOLLOW) failed, Too many
-levels of symbolic links (40, ELOOP) because O_NOFOLLOW was specified but
+levels of symbolic links (ELOOP) because O_NOFOLLOW was specified but
 pathname was a symbolic link
 fubar
 test $? -eq 0 || no_result

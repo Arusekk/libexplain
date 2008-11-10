@@ -17,17 +17,35 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 1 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
-.\" ------------------------------------------------------------------------
-.\" .PP
-.\" .if n *
-.\" .if t \(bu
-.\" .\" Change N
+.PP
+.if n *
+.if t \(bu
+.\" Change 47, 51, 153, 152, 151, 149, 150, 41, 38, 34, 36, 147, 155, 146
+Coverage now includes
+chmod(2),
+chown(2),
+dup(2),
+fchdir(2),
+fchmod(2),
+fstat(2),
+ftruncate(2),
+fwrite(3),
+mkdir(2),
+readdir(3),
+readlink(2),
+remove(3),
+rmdir(2),
+truncate(2),
+.if n *
+.if t \(bu
+.\" Change 55
+The \f[I]lsof\fP(1) command is used to obtain supplementary file
+information on those systems with limited \f[CW]/proc\fP implementations.
+.PP
+.if n *
+.if t \(bu
+.\" Change 52
+The explanations now understand Linux capabilities.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

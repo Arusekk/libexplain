@@ -27,13 +27,13 @@
 #include <libexplain/open_flags.h>
 #include <libexplain/permission_mode.h>
 #include <libexplain/version_print.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/write.h>
 
 
 static void
 usage(void)
 {
-    fprintf(stderr, "Usage: test_open [ <option>... ] <path>\n");
+    fprintf(stderr, "Usage: test_open [ <option>... ] <pathname>\n");
     fprintf(stderr, "       test_open -V\n");
     exit(1);
 }
@@ -42,13 +42,11 @@ usage(void)
 int
 main(int argc, char **argv)
 {
-    int             fd;
-    const char      *path;
+    int             fildes;
+    const char      *pathname;
     int             flags;
     int             mode;
 
-    fd = -1;
-    path = 0;
     flags = O_RDONLY;
     mode = 0666;
     for (;;)
@@ -96,18 +94,11 @@ main(int argc, char **argv)
     }
     if (optind + 1 != argc)
         usage();
-    path = argv[optind];
+    pathname = argv[optind];
 
-    fd = open(path, flags, mode);
-    if (fd < 0)
-    {
-        libexplain_wrap_and_print(stderr, libexplain_open(path, flags, mode));
-        exit(1);
-    }
-    if (close(fd))
-    {
-        libexplain_wrap_and_print(stderr, libexplain_close(fd));
-        exit(1);
-    }
+    fildes = libexplain_open_or_die(pathname, flags, mode);
+    if ((flags & O_ACCMODE) != O_RDONLY)
+        libexplain_write_or_die(fildes, "This is a test.\n", 16);
+    libexplain_close_or_die(fildes);
     return 0;
 }

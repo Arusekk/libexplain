@@ -30,6 +30,29 @@ extern "C" {
 #endif
 
 /**
+  * The libexplain_rename_or_die function is used to call the rename(2)
+  * system call.  On failure an explanation will be printed to stderr,
+  * obtained from libexplain_rename(3), and then the process terminates
+  * by calling exit(1).
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * libexplain_rename_or_die(oldpath, newpath);
+  * @endcode
+  *
+  * @param oldpath
+  *     The oldpath, exactly as to be passed to the rename(2) system call.
+  * @param newpath
+  *     The newpath, exactly as to be passed to the rename(2) system call.
+  * @returns
+  *     This function only returns on success.
+  *     On failure, prints an explanation and exits,
+  *     it does not return.
+  */
+void libexplain_rename_or_die(const char *oldpath, const char *newpath);
+
+/**
   * The libexplain_rename function is used to obtain an explanation of
   * an error returned by the rename(2) function.  The least the message
   * will contain is the value of strerror(errno), but usually it will do

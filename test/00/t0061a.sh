@@ -23,7 +23,7 @@ TEST_SUBJECT="chdir vs ENOENT"
 
 cat > test.ok << 'fubar'
 chdir(pathname = "no-such-dir/other-non-dir") failed, No such file or
-directory (2, ENOENT) because there is no "no-such-dir" directory in the
+directory (ENOENT) because there is no "no-such-dir" directory in the
 pathname "." directory
 fubar
 test $? -eq 0 || no_result

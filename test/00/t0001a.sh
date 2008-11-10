@@ -23,7 +23,7 @@ TEST_SUBJECT="libexplain_open"
 
 cat > test.ok << 'fubar'
 open(pathname = "snot", flags = O_RDONLY) failed, No such file or directory
-(2, ENOENT) because there is no "snot" file in the pathname "." directory
+(ENOENT) because there is no "snot" file in the pathname "." directory
 fubar
 test $? -eq 0 || no_result
 

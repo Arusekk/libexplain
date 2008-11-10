@@ -23,12 +23,12 @@ TEST_SUBJECT="fcntl vs EFAULT"
 
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_SETLKW, arg = PPPPPPPP) failed, Bad
-address (14, EFAULT) because arg refers to memory that is outside the
-process's accessible address space
+address (EFAULT) because arg refers to memory that is outside the process's
+accessible address space
 fubar
 test $? -eq 0 || no_result
 
-explain fcntl 42 F_SETLKW -e EFAULT -o test.out.raw
+explain -e EFAULT fcntl 42 F_SETLKW > test.out.raw
 test $? -eq 0 || fail
 
 sed 's|, arg = [^,)]*)|, arg = PPPPPPPP)|' < test.out.raw > test.out

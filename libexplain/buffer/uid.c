@@ -25,13 +25,16 @@
 void
 libexplain_buffer_uid(libexplain_string_buffer_t *sb, int uid)
 {
-    struct passwd   *pw;
-
     libexplain_string_buffer_printf(sb, "%d", uid);
-    pw = getpwuid(uid);
-    if (pw)
+    if (uid >= 0)
     {
-        libexplain_string_buffer_puts(sb, ", ");
-        libexplain_string_buffer_puts(sb, pw->pw_name);
+        struct passwd   *pw;
+
+        pw = getpwuid(uid);
+        if (pw)
+        {
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_string_buffer_puts_quoted(sb, pw->pw_name);
+        }
     }
 }

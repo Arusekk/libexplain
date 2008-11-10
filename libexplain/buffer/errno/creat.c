@@ -22,7 +22,7 @@
 
 #include <libexplain/buffer/errno/creat.h>
 #include <libexplain/buffer/errno/open.h>
-#include <libexplain/buffer/strerror.h>
+#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/success.h>
 #include <libexplain/permission_mode.h>
 #include <libexplain/string_buffer.h>
@@ -47,8 +47,7 @@ libexplain_buffer_errno_creat(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_success(sb);
         return;
     }
-    libexplain_string_buffer_puts(sb, " failed, ");
-    libexplain_buffer_strerror(sb, errnum);
+    libexplain_buffer_failed(sb, errnum);
 
     flags = O_WRONLY | O_CREAT | O_TRUNC;
 

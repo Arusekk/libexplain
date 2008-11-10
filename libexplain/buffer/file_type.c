@@ -42,7 +42,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFBLK:
-        libexplain_buffer_gettext(sb, i18n("block special file"));
+        libexplain_buffer_gettext(sb, i18n("block special device"));
         break;
 
     case S_IFDIR:
@@ -50,7 +50,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFCHR:
-        libexplain_buffer_gettext(sb, i18n("character special file"));
+        libexplain_buffer_gettext(sb, i18n("character special device"));
         break;
 
     case S_IFIFO:
@@ -62,7 +62,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         libexplain_buffer_gettext
         (
             sb,
-            i18n("multiplexed character special file")
+            i18n("multiplexed character special device")
         );
         break;
 #endif
@@ -80,7 +80,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFMPB
     case S_IFMPB:
-        libexplain_buffer_gettext(sb, i18n("multiplexed block special"));
+        libexplain_buffer_gettext(sb, i18n("multiplexed block special device"));
         break;
 #endif
 

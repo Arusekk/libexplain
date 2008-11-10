@@ -23,15 +23,15 @@ TEST_SUBJECT="link vs EROFS"
 
 fmt > test.ok << 'fubar'
 link(oldpath = "fred", newpath = "nurk") failed, Read-only file system
-(30, EROFS) because the file is on a read-only file system ("/example",
-99% full)
+(EROFS) because write access was requested and oldpath refers to a file
+on a read-only file system ("/example", 99% full)
 fubar
 test $? -eq 0 || no_result
 
 touch fred
 test $? -eq 0 || no_result
 
-explain link fred nurk -e EROFS -o test.out1
+explain -e EROFS -o test.out1 link fred nurk
 test $? -eq 0 || fail
 
 fmt -w500 test.out1 > test.out2
