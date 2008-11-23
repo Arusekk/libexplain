@@ -37,7 +37,7 @@ libexplain_readlink_or_die(const char *pathname, char *data, int data_size)
             stderr,
             libexplain_readlink(pathname, data, data_size)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

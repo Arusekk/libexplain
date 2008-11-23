@@ -35,7 +35,17 @@ struct libexplain_final_t
     unsigned        must_exist      :1;
     unsigned        must_not_exist  :1;
     unsigned        must_be_a_directory :1;
+    unsigned        must_be_a_symbolic_link :1;
     unsigned        follow_symlink  :1;
+
+    /**
+      * When want_to_execute is set, the executable file should be
+      * checked for #! and if so, the named interpreter's path should
+      * also be checked for executability.  (This is the default).  To
+      * avoid infinite recursion, when checking the interpreter itself,
+      * disable this flag.
+      */
+    unsigned        follow_interpreter :1;
 
     /**
       * When want_to_create, this is an indication of what is about to

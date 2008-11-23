@@ -24,7 +24,7 @@
   * @brief explain read(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the read(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_read(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -72,7 +72,7 @@ long libexplain_read_or_die(int fildes, void *data, long data_size);
   * if (result < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_read(fildes, data, data_size));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -112,7 +112,7 @@ const char *libexplain_read(int fildes, const void *data, long data_size);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_read(err, fildes, data, data_size));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -165,7 +165,7 @@ const char *libexplain_errno_read(int errnum, int fildes, const void *data,
   *     libexplain_message_read(message, sizeof(message), fildes, data,
   *         data_size);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -206,7 +206,7 @@ void libexplain_message_read(char *message, int message_size, int fildes,
   *     libexplain_message_errno_read(message, sizeof(message), err, fildes,
   *         data, data_size);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -234,7 +234,7 @@ void libexplain_message_read(char *message, int message_size, int fildes,
 void libexplain_message_errno_read(char *message, int message_size, int errnum,
     int fildes, const void *data, long data_size);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

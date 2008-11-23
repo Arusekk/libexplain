@@ -23,7 +23,7 @@ TEST_SUBJECT="rmdir ENOTDIR"
 
 cat > test.ok << 'fubar'
 rmdir(pathname = "foobar") failed, No such file or directory (ENOENT)
-because there is no "foobar" directory in the pathname "." directory
+because there is no "foobar" directory in the current directory
 fubar
 test $? -eq 0 || no_result
 

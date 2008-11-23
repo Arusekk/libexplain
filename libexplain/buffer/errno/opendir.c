@@ -24,29 +24,32 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/errno/opendir.h>
 #include <libexplain/buffer/errno/open.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
 
 
 static void
-libexplain_buffer_errno_opendir_inner(libexplain_string_buffer_t *sb,
+libexplain_buffer_errno_opendir_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
     libexplain_string_buffer_printf(sb, "opendir(pathname = ");
     if (errnum == EFAULT)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
 
+
+static void
+libexplain_buffer_errno_opendir_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname)
+{
     switch (errnum)
     {
+    case 0:
+        break;
+
     case ENOMEM:
         {
             int             fd;
@@ -69,25 +72,7 @@ libexplain_buffer_errno_opendir_inner(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no additional info for other errno values */
-        break;
-    }
-}
-
-
-void
-libexplain_buffer_errno_opendir(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname)
-{
-    switch (errnum)
-    {
-    case 0:
-    case ENOMEM:
-        libexplain_buffer_errno_opendir_inner(sb, errnum, pathname);
-        break;
-
-    default:
-        libexplain_buffer_errno_open
+        libexplain_buffer_errno_open_explanation
         (
             sb,
             errnum,
@@ -97,4 +82,27 @@ libexplain_buffer_errno_opendir(libexplain_string_buffer_t *sb, int errnum,
         );
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_opendir(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_opendir_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname
+    );
+    libexplain_buffer_errno_opendir_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

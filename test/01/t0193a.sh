@@ -22,7 +22,7 @@ TEST_SUBJECT="fstat EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fstat(fildes = 42, buf = 0x2468) failed, Bad file descriptor (EBADF)
+fstat(fildes = 42, buf = 0x00002468) failed, Bad file descriptor (EBADF)
 because fildes does not refer to an open file
 fubar
 test $? -eq 0 || no_result

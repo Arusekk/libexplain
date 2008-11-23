@@ -24,7 +24,7 @@ TEST_SUBJECT="readlink ENOENT"
 fmt > test.ok << 'fubar'
 readlink(pathname = "foobar", data = 0xNNNNNNNN, data_size = 4097)
 failed, No such file or directory (ENOENT) because there is no "foobar"
-file in the pathname "." directory
+file in the current directory
 fubar
 test $? -eq 0 || no_result
 

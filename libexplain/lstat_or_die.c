@@ -30,6 +30,6 @@ libexplain_lstat_or_die(const char *pathname, struct stat *buf)
     if (lstat(pathname, buf) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_lstat(pathname, buf));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

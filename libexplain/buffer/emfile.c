@@ -19,7 +19,6 @@
 
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/option.h>
@@ -28,10 +27,14 @@
 void
 libexplain_buffer_emfile(libexplain_string_buffer_t *sb)
 {
-    libexplain_buffer_because(sb);
     libexplain_buffer_gettext
     (
         sb,
+        /*
+         * xgettext: This message is used when a process fails to open a
+         * file because that process already has the maximum number of file
+         * descriptors open.
+         */
         i18n("the process already has the maximum number of file "
             "descriptors open")
     );

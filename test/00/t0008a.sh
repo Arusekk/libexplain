@@ -22,7 +22,7 @@ TEST_SUBJECT="write vs EINTR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, Interrupted
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, Interrupted
 system call (EINTR) because the process was interrupted by a signal before
 the write was complete
 fubar

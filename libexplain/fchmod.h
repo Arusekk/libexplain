@@ -25,7 +25,7 @@
   * @brief explain fchmod(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_fchmod_or_die function is used to call the fchmod(2)
   * system call.  On failure An explanation wiil be printed to stderr,
   * obtained from libexplain_fchmod, and the the process terminates by
-  * call ing exit(1).
+  * call ing exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -47,7 +47,7 @@ extern "C" {
   *     The mode, exactly as to be passed to the fchmod(2) system call.
   * @returns
   *     This function only returns on success.
-  *     On failure, prints an explanation and exit(1)s.
+  *     On failure, prints an explanation and exit(EXIT_FAILURE)s.
   */
 void libexplain_fchmod_or_die(int fildes, int mode);
 
@@ -67,7 +67,7 @@ void libexplain_fchmod_or_die(int fildes, int mode);
   * if (fchmod(fildes, mode) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_fchmod(fildes, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -103,7 +103,7 @@ const char *libexplain_fchmod(int fildes, int mode);
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_fchmod(err, fildes,
   *         mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -148,7 +148,7 @@ const char *libexplain_errno_fchmod(int errnum, int fildes, int mode);
   *     char message[3000];
   *     libexplain_message_fchmod(message, sizeof(message), fildes, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -184,7 +184,7 @@ void libexplain_message_fchmod(char *message, int message_size,
   *     libexplain_message_errno_fchmod(message, sizeof(message), err,
   *         fildes, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -209,7 +209,7 @@ void libexplain_message_fchmod(char *message, int message_size,
 void libexplain_message_errno_fchmod(char *message, int message_size,
     int errnum, int fildes, int mode);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

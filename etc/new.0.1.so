@@ -22,20 +22,21 @@
 .if t \(bu
 .\" Change 47, 51, 153, 152, 151, 149, 150, 41, 38, 34, 36, 147, 155, 146
 Coverage now includes
-chmod(2),
-chown(2),
-dup(2),
-fchdir(2),
-fchmod(2),
-fstat(2),
-ftruncate(2),
-fwrite(3),
-mkdir(2),
-readdir(3),
-readlink(2),
-remove(3),
-rmdir(2),
-truncate(2),
+\f[I]chmod\fP(2),
+\f[I]chown\fP(2),
+\f[I]dup\fP(2),
+\f[I]fchdir\fP(2),
+\f[I]fchmod\fP(2),
+\f[I]fstat\fP(2),
+\f[I]ftruncate\fP(2),
+\f[I]fwrite\fP(3),
+\f[I]mkdir\fP(2),
+\f[I]readdir\fP(3),
+\f[I]readlink\fP(2),
+\f[I]remove\fP(3),
+\f[I]rmdir\fP(2) and
+\f[I]truncate\fP(2).
+.PP
 .if n *
 .if t \(bu
 .\" Change 55

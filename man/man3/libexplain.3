@@ -91,6 +91,12 @@ Explain \f[I]close\fP(2) errors
 \f[I]libexplain_close_or_die\fP(3)
 close a file descriptor and report errors
 .TP 8n
+\f[I]libexplain_closedir\fP(3)
+Explain \f[I]closedir\fP(3) errors
+.TP 8n
+\f[I]libexplain_closedir_or_die\fP(3)
+close a directory and report errors
+.TP 8n
 \f[I]libexplain_creat\fP(3)
 Explain \f[I]creat\fP(2) errors
 .TP 8n
@@ -104,6 +110,12 @@ Explain \f[I]dup\fP(2) errors
 \f[I]libexplain_dup_or_die\fP(3)
 duplicate a file descriptor and report errors
 .\" ----------  E  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_execve\fP(3)
+Explain \f[I]execve\fP(2) errors
+.TP 8n
+\f[I]libexplain_execve_or_die\fP(3)
+execute program and report errors
 .\" ----------  F  ---------------------------------------------------------
 .TP 8n
 \f[I]libexplain_fchdir\fP(3)
@@ -127,17 +139,47 @@ Explain \f[I]fcntl\fP(2) errors
 \f[I]libexplain_fcntl_or_die\fP(3)
 Manipulate a file descriptor and report errors
 .TP 8n
+\f[I]libexplain_ferror\fP(3)
+Explain \f[I]ferror\fP(3) errors
+.TP 8n
+\f[I]libexplain_ferror_or_die\fP(3)
+check stream status and report errors
+.TP 8n
 \f[I]libexplain_fflush\fP(3)
 Explain \f[I]fflush\fP(2) errors
 .TP 8n
 \f[I]libexplain_fflush_or_die\fP(3)
 flush a stream and report errors
 .TP 8n
+\f[I]libexplain_fgetc\fP(3)
+Explain \f[I]fgetc\fP(3) errors
+.TP 8n
+\f[I]libexplain_fgetc_or_die\fP(3)
+input of characters and report errors
+.TP 8n
+\f[I]libexplain_fgets\fP(3)
+Explain \f[I]fgets\fP(3) errors
+.TP 8n
+\f[I]libexplain_fgets_or_die\fP(3)
+input of strings and report errors
+.TP 8n
 \f[I]libexplain_fopen\fP(3)
 Explain \f[I]fopen\fP(3) errors
 .TP 8n
 \f[I]libexplain_fopen_or_die\fP(2)
 open files and report errors
+.TP 8n
+\f[I]libexplain_fork\fP(3)
+Explain \f[I]fork\fP(2) errors
+.TP 8n
+\f[I]libexplain_fork_or_die\fP(3)
+create a child process and report errors
+.TP 8n
+\f[I]libexplain_fread\fP(3)
+Explain \f[I]fread\fP(3) errors
+.TP 8n
+\f[I]libexplain_fread_or_die\fP(3)
+binary stream input and report errors
 .TP 8n
 \f[I]libexplain_freopen\fP(3)
 Explain \f[I]freopen\fP(3) errors
@@ -163,10 +205,34 @@ Explain \f[I]fwrite\fP(3) errors
 \f[I]libexplain_fwrite_or_die\fP(3)
 binary stream output and report errors
 .\" ----------  G  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_getc\fP(3)
+Explain \f[I]getc\fP(3) errors
+.TP 8n
+\f[I]libexplain_getc_or_die\fP(3)
+input of characters and report errors
+.TP 8n
+\f[I]libexplain_getchar\fP(3)
+Explain \f[I]getchar\fP(3) errors
+.TP 8n
+\f[I]libexplain_getchar_or_die\fP(3)
+input of characters and report errors
+.TP 8n
+\f[I]libexplain_gettimeofday\fP(3)
+Explain \f[I]gettimeofday\fP(2) errors
+.TP 8n
+\f[I]libexplain_gettimeofday_or_die\fP(3)
+get time and report errors
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
 .\" ----------  K  ---------------------------------------------------------
 .\" ----------  L  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_lchown\fP(3)
+Explain \f[I]lchown\fP(2) errors
+.TP 8n
+\f[I]libexplain_lchown_or_die\fP(3)
+change ownership of a file and report errors
 .TP 8n
 \f[I]libexplain_link\fP(3)
 Explain \f[I]link\fP(2) errors
@@ -241,6 +307,12 @@ Explain \f[I]rmdir\fP(2) errors
 delete a directory and report errors
 .\" ----------  S  ---------------------------------------------------------
 .TP 8n
+\f[I]libexplain_socket\fP(3)
+Explain \f[I]socket\fP(2) errors
+.TP 8n
+\f[I]libexplain_socket_or_die\fP(3)
+create an endpoint for communication and report errors
+.TP 8n
 \f[I]libexplain_stat\fP(3)
 Explain \f[I]stat\fP(2) errors
 .TP 8n
@@ -249,6 +321,12 @@ Explain \f[I]symlink\fP(2) errors
 .TP 8n
 \f[I]libexplain_symlink_or_die\fP(3)
 make a new name for a file and report errors
+.TP 8n
+\f[I]libexplain_system\fP(3)
+Explain \f[I]system\fP(3) errors
+.TP 8n
+\f[I]libexplain_system_or_die\fP(3)
+execute a shell command and report errors
 .\" ----------  T  ---------------------------------------------------------
 .TP 8n
 \f[I]libexplain_truncate\fP(3)
@@ -263,8 +341,38 @@ Explain \f[I]unlink\fP(2) errors
 .TP 8n
 \f[I]libexplain_unlink_or_die\fP(3)
 delete a file and report errors
+.TP 8n
+\f[I]libexplain_utime\fP(3)
+Explain \f[I]utime\fP(2) errors
+.TP 8n
+\f[I]libexplain_utime_or_die\fP(3)
+change file last access and modification times and report errors
 .\" ----------  V  ---------------------------------------------------------
 .\" ----------  W  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_wait\fP(3)
+Explain \f[I]wait\fP(2) errors
+.TP 8n
+\f[I]libexplain_wait_or_die\fP(3)
+wait for process to change state and report errors
+.TP 8n
+\f[I]libexplain_wait3\fP(3)
+Explain \f[I]wait3\fP(2) errors
+.TP 8n
+\f[I]libexplain_wait3_or_die\fP(3)
+wait for process to change state and report errors
+.TP 8n
+\f[I]libexplain_wait4\fP(3)
+Explain \f[I]wait4\fP(2) errors
+.TP 8n
+\f[I]libexplain_wait4_or_die\fP(3)
+wait for process to change state and report errors
+.TP 8n
+\f[I]libexplain_waitpid\fP(3)
+Explain \f[I]waitpid\fP(2) errors
+.TP 8n
+\f[I]libexplain_waitpid_or_die\fP(3)
+wait for process to change state and report errors
 .TP 8n
 \f[I]libexplain_write\fP(3)
 Explain \f[I]write\fP(2) errors

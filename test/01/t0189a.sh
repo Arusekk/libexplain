@@ -23,8 +23,8 @@ TEST_SUBJECT="truncate ENOTDIR"
 
 cat > test.ok << 'fubar'
 truncate(pathname = "foo/bar", length = 0) failed, Not a directory
-(ENOTDIR) because the "foo" regular file in the pathname "." directory is
-being used as a directory when it is not
+(ENOTDIR) because the "foo" regular file in the current directory is being
+used as a directory when it is not
 fubar
 test $? -eq 0 || no_result
 

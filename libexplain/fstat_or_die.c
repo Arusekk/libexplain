@@ -30,6 +30,6 @@ libexplain_fstat_or_die(int fildes, struct stat *buf)
     if (fstat(fildes, buf) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_fstat(fildes, buf));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

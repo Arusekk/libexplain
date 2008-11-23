@@ -22,8 +22,8 @@ TEST_SUBJECT="write vs EFBIG"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, File too large
-(EFBIG) because an attempt was made to write a file that exceeds the
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, File too
+large (EFBIG) because an attempt was made to write a file that exceeds the
 process's file size limit
 fubar
 test $? -eq 0 || no_result

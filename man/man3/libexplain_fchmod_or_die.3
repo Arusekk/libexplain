@@ -33,7 +33,7 @@ system call.
 On failure an explanation wiil be printed to \f[I]stderr\fP,
 obtained from \f[I]libexplain_fchmod\fP(3),
 and the the process terminates by call
-ing \f[CW]exit(1)\fP.
+ing \f[CW]exit(EXIT_FAILURE)\fP.
 .PP
 This function is intended to be used in a fashion similar to the
 following example:
@@ -53,7 +53,7 @@ The mode, exactly as to be passed to the \f[I]fchmod\fP(2) system call.
 .TP 8n
 Returns:
 This function only returns on success.
-On failure, prints an explanation and exit(1)s.
+On failure, prints an explanation and exit(EXIT_FAILURE)s.
 .SH COPYRIGHT
 .so etc/version.so
 .if n .ds C) (C)

@@ -35,13 +35,8 @@ explain_fopen(int errnum, int argc, char **argv)
 
     if (argc != 2)
     {
-        fprintf
-        (
-            stderr,
-            "requires 2 arguments, not %d",
-            argc
-        );
-        exit(1);
+        fprintf(stderr, "requires 2 arguments, not %d\n", argc);
+        exit(EXIT_FAILURE);
     }
     path = argv[0];
     mode = argv[1];

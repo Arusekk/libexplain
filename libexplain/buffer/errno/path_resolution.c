@@ -17,19 +17,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/ctype.h>
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/dirent.h>
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/caption_name_type.h>
+#include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/errno/path_resolution.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/uid.h>
 #include <libexplain/capability.h>
 #include <libexplain/fstrcmp.h>
@@ -54,6 +58,9 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
     DIR             *dp;
     char            best_name[NAME_MAX + 1];
     double          best_weight;
+    int             st_mode;
+    char            subject[NAME_MAX * 4 + 3];
+    libexplain_string_buffer_t subject_sb;
 
     dp = opendir(lookup_directory);
     if (!dp)
@@ -85,27 +92,891 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
     if (best_name[0] == '\0')
         return;
 
-    libexplain_string_buffer_puts(sb, ", did you mean the ");
-    /* the rule is: [caption] path file-type */
-    libexplain_string_buffer_puts_quoted(sb, best_name);
-    libexplain_string_buffer_putc(sb, ' ');
-
+    st_mode = -1;
     {
-        /* see if we can say what kind of file it is */
-        struct stat st;
-        char ipath[PATH_MAX + 1];
-        char *ipath_end = ipath + sizeof(ipath);
-        char *ip = ipath;
+        /*
+         * see if we can say what kind of file it is
+         */
+        struct stat     st;
+        char            ipath[PATH_MAX + 1];
+        char            *ipath_end;
+        char            *ip;
+
+        ipath_end = ipath + sizeof(ipath);
+        ip = ipath;
         ip = strendcpy(ip, lookup_directory, ipath_end);
         ip = strendcpy(ip, "/", ipath_end);
         ip = strendcpy(ip, best_name, ipath_end);
         if (lstat(ipath, &st) == 0)
-            libexplain_buffer_file_type(sb, st.st_mode);
-        else
-            libexplain_string_buffer_puts(sb, "file");
+            st_mode = st.st_mode;
     }
 
-    libexplain_string_buffer_puts(sb, " instead?");
+    libexplain_string_buffer_init(&subject_sb, subject, sizeof(subject));
+    libexplain_buffer_caption_name_type(&subject_sb, 0, best_name, st_mode);
+
+    libexplain_string_buffer_puts(sb, ", ");
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is issued when a file (or directory
+         * component) could not be found, but a sufficiently similar
+         * name has been found in the same directory.  This often helps
+         * with typographical errors.
+         */
+        i18n("did you mean the %s instead?"),
+        subject
+    );
+}
+
+
+static int
+command_interpreter_broken(libexplain_string_buffer_t *sb, const char *pathname)
+{
+    char            block[512];
+    int             fd;
+    ssize_t         n;
+    char            *end;
+    char            *interpreter_pathname;
+    libexplain_final_t final_component;
+    char            *bp;
+
+    fd = open(pathname, O_RDONLY);
+    if (fd < 0)
+        return -1;
+    n = read(fd, block, sizeof(block) - 1);
+    close(fd);
+    if (n < 4)
+        return -1;
+    end = block + n;
+    if (block[0] != '#')
+        return -1;
+    if (block[1] != '!')
+        return -1;
+    bp = block + 2;
+    while (bp < end && (*bp == ' ' || *bp == '\t'))
+        ++bp;
+    if (bp >= end)
+        return -1;
+    interpreter_pathname = bp;
+    ++bp;
+    while (bp < end && !isspace(*bp))
+        ++bp;
+    *bp = '\0';
+
+    libexplain_final_init(&final_component);
+    final_component.want_to_execute = 1;
+    final_component.follow_interpreter = 0; /* avoid infinite loops */
+    return
+        libexplain_buffer_errno_path_resolution
+        (
+            sb,
+            EACCES,
+            interpreter_pathname,
+            "#!",
+            &final_component
+        );
+}
+
+
+static int
+hash_bang(libexplain_string_buffer_t *sb, const char *pathname)
+{
+    char            block[512];
+    int             fd;
+    ssize_t         n;
+    char            *end;
+    char            *interpreter_pathname;
+    char            *bp;
+
+    fd = open(pathname, O_RDONLY);
+    if (fd < 0)
+        return -1;
+    n = read(fd, block, sizeof(block) - 1);
+    close(fd);
+    if (n < 4)
+        return -1;
+    end = block + n;
+    if (block[0] != '#')
+        return -1;
+    if (block[1] != '!')
+        return -1;
+    bp = block + 2;
+    while (bp < end && (*bp == ' ' || *bp == '\t'))
+        ++bp;
+    if (bp >= end)
+        return -1;
+    interpreter_pathname = bp;
+    ++bp;
+    while (bp < end && !isspace(*bp))
+        ++bp;
+    *bp = '\0';
+
+    libexplain_string_buffer_puts(sb, "too many levels of interpreters (");
+    libexplain_string_buffer_puts_quoted(sb, interpreter_pathname);
+    libexplain_string_buffer_putc(sb, ')');
+    return 0;
+}
+
+
+static void
+directory_does_not_exist(libexplain_string_buffer_t *sb, const char *caption,
+    const char *dirname)
+{
+    char            subject[PATH_MAX + 50];
+    libexplain_string_buffer_t subject_sb;
+
+    libexplain_string_buffer_init(&subject_sb, subject, sizeof(subject));
+    libexplain_buffer_caption_name_type(&subject_sb, caption, dirname, S_IFDIR);
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a path is being used as a
+         * directory, when does not exist.  The %s string contains the
+         * name of the system call argument, the quoted path and the
+         * actual file type.
+         */
+        i18n("%s does not exist"),
+        subject
+    );
+}
+
+
+static void
+not_a_directory(libexplain_string_buffer_t *sb, const char *caption,
+    const char *dir, int st_mode)
+{
+    char            subject[PATH_MAX + 50];
+    libexplain_string_buffer_t subject_sb;
+
+    libexplain_string_buffer_init(&subject_sb, subject, sizeof(subject));
+    libexplain_buffer_caption_name_type(&subject_sb, caption, dir, st_mode);
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a path is being used as
+         * a directory, when it is actually something else (usually a
+         * regular file).  The %s string contains the name of the system
+         * call argument, the quoted path and the actual file type.
+         */
+        i18n("%s is not a directory"),
+        subject
+    );
+}
+
+static void
+there_is_no_such_file_in_this_directory(libexplain_string_buffer_t *sb,
+    const char *comp, int comp_type, const char *caption,
+    const char *dir, int dir_type)
+{
+    char            part1[NAME_MAX * 4 + 3];
+    libexplain_string_buffer_t part1_sb;
+    char            part2[PATH_MAX + 100];
+    libexplain_string_buffer_t part2_sb;
+
+    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_type);
+    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    libexplain_buffer_caption_name_type(&part2_sb, caption, dir, dir_type);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is issued when a particular file does
+         * not exist in a directory.
+         * %1$s => the file that does not exist
+         * %2$s => the directory that the file should be in,
+         *         including the name of the relevant system call argument
+         */
+        i18n("there is no %s in the %s"),
+        part1,
+        part2
+    );
+}
+
+
+static void
+not_possible_to_execute(libexplain_string_buffer_t *sb, const char *caption,
+    const char *name, int st_mode)
+{
+    char            ftype[NAME_MAX * 4 + 50];
+    libexplain_string_buffer_t ftype_sb;
+
+    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    libexplain_buffer_caption_name_type(&ftype_sb, caption, name, st_mode);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is issued when a user attempts to
+         * execute something that is not a file, such as a block special
+         * device.  The %s string contains the name of the system call
+         * argument, the name of the final path component and the type
+         * of the file.
+         */
+        i18n("it is not possible to execute the %s, "
+            "only regular files can be executed"),
+        ftype
+    );
+}
+
+
+static void
+does_not_have_search_permission(libexplain_string_buffer_t *sb,
+    const char *comp, const struct stat *comp_st, const char *caption,
+    const char *dir, const struct stat *dir_st)
+{
+    char part1[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t part1_sb;
+    char part2[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t part2_sb;
+
+    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st->st_mode);
+    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    libexplain_buffer_caption_name_type
+    (
+        &part2_sb,
+        caption,
+        dir,
+        dir_st->st_mode
+    );
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a process does not have
+         * search permission to a directory it attempts to traverse.
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => The name of the component of the path, the subdirectory in
+         *         question (will never have slashes).  It will in clude the
+         *         name of the file, and the file type "directory".
+         * %2$s => The name of the directory that contains the subdirectory in
+         *         question; it may have zero, one or more slashes in it.  Will
+         *         include the name of the function call argument, the name of
+         *         the directory, and the file type "directory".
+         */
+        i18n("the process does not have search permission to the %s in "
+            "the %s"),
+        part1,
+        part2
+    );
+    libexplain_explain_search_permission(sb, comp_st);
+}
+
+
+static void
+does_not_have_search_permission1(libexplain_string_buffer_t *sb,
+    const char *caption, const char *dir, const struct stat *dir_st)
+{
+    char            dir_part[PATH_MAX + 100];
+    libexplain_string_buffer_t dir_part_sb;
+
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_caption_name_type
+    (
+        &dir_part_sb,
+        caption,
+        dir,
+        dir_st->st_mode
+    );
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a process does not have
+         * search permission to a directory it attempts to traverse.
+         * (Only used for problems with "." and "/".)
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %s => The pathname, the directory in question.  It will
+         *       include the name of the function call argument, the
+         *       name of the directory, file type "directory".
+         */
+        i18n("the process does not have search permission to the %s"),
+        dir_part
+    );
+    libexplain_explain_search_permission(sb, dir_st);
+}
+
+
+static void
+does_not_have_execute_permission(libexplain_string_buffer_t *sb,
+    const char *comp, const struct stat *comp_st, const char *caption,
+    const char *dir, const struct stat *dir_st)
+{
+    char            final_part[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t final_part_sb;
+    char            dir_part[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t dir_part_sb;
+
+    libexplain_string_buffer_init
+    (
+        &final_part_sb,
+        final_part,
+        sizeof(final_part)
+    );
+    libexplain_buffer_caption_name_type
+    (
+        &final_part_sb,
+        0,
+        comp,
+        comp_st->st_mode
+    );
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_caption_name_type
+    (
+        &dir_part_sb,
+        caption,
+        dir,
+        dir_st->st_mode
+    );
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a process does not have
+         * execute permission to something it attempts to execute; for
+         * example, one of the execve calls, or similar.
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => the name of the final component of the path, the
+         *         regular file in question (will never have slashes).
+         *         It will in clude the name of the file, and the file
+         *         type "regular file".
+         * %2$s => the name of the directory that contains the regular
+         *         file to be executed; it may have zero, one or more
+         *         slashes in it.  Will include the name of the function
+         *         call argument, the name of the directory, and the
+         *         file type "directory".
+         */
+        i18n("the process does not have execute permission to the %s in "
+            "the %s"),
+        final_part,
+        dir_part
+    );
+    libexplain_explain_execute_permission(sb, comp_st);
+}
+
+
+static void
+does_not_have_inode_modify_permission(libexplain_string_buffer_t *sb,
+    const char *comp, const struct stat *comp_st, const char *caption,
+    const char *dir, const struct stat *dir_st)
+{
+    char            final_part[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t final_part_sb;
+    char            dir_part[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t dir_part_sb;
+
+    libexplain_string_buffer_init
+    (
+        &final_part_sb,
+        final_part,
+        sizeof(final_part)
+    );
+    libexplain_buffer_caption_name_type
+    (
+        &final_part_sb,
+        0,
+        comp,
+        comp_st->st_mode
+    );
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_caption_name_type
+    (
+        &dir_part_sb,
+        caption,
+        dir,
+        dir_st->st_mode
+    );
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a process does not have
+         * inode modification permission to something it attempts to
+         * modify); for example, chmod.
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => the name of the final component of the path, the
+         *         regular file in question (will never have slashes).
+         *         It will in clude the name of the file, and the file
+         *         type "regular file".
+         * %2$s => the name of the directory that contains the regular
+         *         file to be executed; it may have zero, one or more
+         *         slashes in it.  Will include the name of the function
+         *         call argument, the name of the directory, and the
+         *         file type "directory".
+         */
+        i18n("the process does not have inode modification permission "
+            "to the %s in the %s"),
+        final_part,
+        dir_part
+    );
+
+    /*
+     * Give more information: tell them who they are (this can be a
+     * surprise to users of set-uid programs) and who owns the file.
+     */
+    /* FIXME: i18n */
+    libexplain_string_buffer_init
+    (
+        &final_part_sb,
+        final_part,
+        sizeof(final_part)
+    );
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_uid(&final_part_sb, geteuid());
+    libexplain_buffer_uid(&dir_part_sb, comp_st->st_uid);
+    libexplain_string_buffer_puts(sb, ", ");
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message supplements the "no inode modify
+         * permission" message, explaining that the process efective uid
+         * must match the file uid.
+         *
+         * %1$s => the numeric uid of the process, and the corresponding
+         *         login name from the password file, if available.
+         * %2$s => the numeric uid of the file owner, and the
+         *         corresponding login name from the password file, if
+         *         available.
+         */
+        i18n("the process UID %s does not match the file UID %s"),
+        final_part,
+        dir_part
+    );
+    libexplain_buffer_dac_fowner(sb);
+}
+
+
+static void
+does_not_have_read_permission(libexplain_string_buffer_t *sb, const char *comp,
+    const struct stat *comp_st, const char *caption, const char *dir,
+    const struct stat *dir_st)
+{
+    char            final_part[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t final_part_sb;
+    char            dir_part[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t dir_part_sb;
+
+    libexplain_string_buffer_init
+    (
+        &final_part_sb,
+        final_part,
+        sizeof(final_part)
+    );
+    libexplain_buffer_caption_name_type
+    (
+        &final_part_sb,
+        0,
+        comp,
+        comp_st->st_mode
+    );
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_caption_name_type
+    (
+        &dir_part_sb,
+        caption,
+        dir,
+        dir_st->st_mode
+    );
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a process does not have
+         * read permission to something it attempts to
+         * open for reading; for example, open() or fopen().
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => the name of the final component of the path, the
+         *         regular file in question (will never have slashes).
+         *         It will include the name of the file, and the file
+         *         type "regular file".
+         * %2$s => the name of the directory that contains the regular
+         *         file to be executed; it may have zero, one or more
+         *         slashes in it.  Will include the name of the function
+         *         call argument, the name of the directory, and the
+         *         file type "directory".
+         */
+        i18n("the process does not have read permission to the %s in the %s"),
+        final_part,
+        dir_part
+    );
+    libexplain_explain_read_permission(sb, comp_st);
+}
+
+
+static void
+does_not_have_write_permission(libexplain_string_buffer_t *sb, const char *comp,
+    const struct stat *comp_st, const char *caption, const char *dir,
+    const struct stat *dir_st)
+{
+    char            final_part[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t final_part_sb;
+    char            dir_part[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t dir_part_sb;
+
+    libexplain_string_buffer_init
+    (
+        &final_part_sb,
+        final_part,
+        sizeof(final_part)
+    );
+    libexplain_buffer_caption_name_type
+    (
+        &final_part_sb,
+        0,
+        comp,
+        comp_st->st_mode
+    );
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_caption_name_type
+    (
+        &dir_part_sb,
+        caption,
+        dir,
+        dir_st->st_mode
+    );
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a process does not have
+         * write permission to something it attempts to
+         * open for writing; for example, open() or fopen().
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => the name of the final component of the path, the
+         *         regular file in question (will never have slashes).
+         *         It will include the name of the file, and the file
+         *         type "regular file".
+         * %2$s => the name of the directory that contains the regular
+         *         file to be executed; it may have zero, one or more
+         *         slashes in it.  Will include the name of the function
+         *         call argument, the name of the directory, and the
+         *         file type "directory".
+         */
+        i18n("the process does not have write permission to the %s in the %s"),
+        final_part,
+        dir_part
+    );
+    libexplain_explain_write_permission(sb, comp_st);
+}
+
+
+static void
+does_not_have_new_directory_entry_permission(libexplain_string_buffer_t *sb,
+    const char *caption, const char *dir, const struct stat *dir_st,
+    const char *comp, int comp_st_mode)
+{
+    char            dir_part[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t dir_part_sb;
+    char            final_part[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t final_part_sb;
+
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_caption_name_type
+    (
+        &dir_part_sb,
+        caption,
+        dir,
+        dir_st->st_mode
+    );
+    libexplain_string_buffer_init
+    (
+        &final_part_sb,
+        final_part,
+        sizeof(final_part)
+    );
+    libexplain_buffer_caption_name_type(&final_part_sb, 0, comp, comp_st_mode);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a process does not have write
+         * permission to a directoryin order to create a new directory entry;
+         * for example creat(), mkdir(), symlink(), etc.
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => The name of the directory that is to receive the new
+         *         directory entry; it may have zero, one or more slashes in it.
+         *         Will include the name of the function call argument, the name
+         *         of the directory, and the file type "directory".
+         * %2$s => The name of the final component of the path, the
+         *         new directory entry in question (will never have slashes).
+         *         It will include the name of the new file, and the file type.
+         */
+        i18n("the process does not have write permission to the %s, this is "
+            "needed to create the directory entry for the %s"),
+        dir_part,
+        final_part
+    );
+    libexplain_explain_write_permission(sb, dir_st);
+}
+
+
+static void
+dangling_symbolic_link(libexplain_string_buffer_t *sb, const char *comp,
+    int comp_st_mode, const char *caption, const char *dir, int dir_st_mode,
+    const char *garbage)
+{
+    char            final_part[NAME_MAX * 2 + 100];
+    libexplain_string_buffer_t final_part_sb;
+    char            dir_part[PATH_MAX * 2 + 100];
+    libexplain_string_buffer_t dir_part_sb;
+    char            dangling_part[PATH_MAX * 2 + 100];
+    libexplain_string_buffer_t dangling_part_sb;
+
+    libexplain_string_buffer_init
+    (
+        &final_part_sb,
+        final_part,
+        sizeof(final_part)
+    );
+    libexplain_buffer_caption_name_type(&final_part_sb, 0, comp, comp_st_mode);
+    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    libexplain_buffer_caption_name_type
+    (
+        &dir_part_sb,
+        caption,
+        dir,
+        dir_st_mode
+    );
+    libexplain_string_buffer_init
+    (
+        &dangling_part_sb,
+        dangling_part,
+        sizeof(dangling_part)
+    );
+    libexplain_string_buffer_puts_quoted(&dangling_part_sb, garbage);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when there is a dangling
+         * symbolic link.
+         *
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => The name of the final component of the path, the name of
+         *         symbolic link in question, will include the file type
+         *         "symbolic link", but will never have slashes.
+         * %2$s => The name of the directory that contains the symbolic link;
+         *         it may have zero, one or more slashes in it.  Will include
+         *         the name of the function call argument, the name of the
+         *         directory, and the file type "directory".
+         * %3$s => the non-existent thing the symbolic link point to
+         */
+        i18n("the %s in the %s refers to %s that does not exist"),
+        final_part,
+        dir_part,
+        dangling_part
+    );
+}
+
+
+static void
+name_too_long(libexplain_string_buffer_t *sb, const char *caption,
+    const char *component, long comp_length, long name_max)
+{
+    char            part1[PATH_MAX * 2];
+    libexplain_string_buffer_t part1_sb;
+
+    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    libexplain_string_buffer_puts(&part1_sb, caption);
+    libexplain_string_buffer_putc(&part1_sb, ' ');
+    libexplain_string_buffer_puts_quoted(&part1_sb, component);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a path name component is
+         * longer than the system limit (NAME_MAX, not PATH_MAX).
+         *
+         * The %s string contains the name of the function call argument
+         * and the quoted text of the offending path component.
+         */
+        i18n("%s component is longer than the system limit"),
+        part1
+    );
+    libexplain_string_buffer_printf(sb, " (%ld > %ld)", comp_length, name_max);
+}
+
+
+static void
+no_such_directory_entry(libexplain_string_buffer_t *sb, const char *comp,
+    int comp_st_mode, const char *caption, const char *dir, int dir_st_mode)
+{
+    char part1[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t part1_sb;
+    char part2[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t part2_sb;
+
+    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
+    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    libexplain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when directory does not have a
+         * directory entry for the named component.
+         *
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => The name of the offenting path component (will never have
+         *         slashes).  It will be quoted.
+         * %2$s => The name of the directory that contains the problematic
+         *         component; it may have zero, one or more slashes in it.  Will
+         *         include the name of the function call argument, the name of
+         *         the directory, and the file type "directory".
+         */
+        i18n("there is no %s in the %s"),
+        part1,
+        part2
+    );
+}
+
+
+static void
+not_a_subdirectory(libexplain_string_buffer_t *sb, const char *comp,
+    int comp_st_mode, const char *caption, const char *dir, int dir_st_mode)
+{
+    char part1[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t part1_sb;
+    char part2[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t part2_sb;
+
+    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
+    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    libexplain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when directory has a directory
+         * entry for the named component, but a directory was expected
+         * and something else was there instead.
+         *
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => The name of the offenting path component (will never have
+         *         slashes).  It will be quoted.
+         * %2$s => The name of the directory that contains the problematic
+         *         component; it may have zero, one or more slashes in it.  Will
+         *         include the name of the function call argument, the name of
+         *         the directory, and the file type "directory".
+         */
+        i18n("the %s in the %s is being used as a directory when it is not"),
+        part1,
+        part2
+    );
+}
+
+
+static void
+must_not_exist(libexplain_string_buffer_t *sb, const char *comp,
+    int comp_st_mode, const char *caption, const char *dir, int dir_st_mode)
+{
+    char part1[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t part1_sb;
+    char part2[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t part2_sb;
+
+    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
+    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    libexplain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when directory has a directory
+         * entry for the named component, but a directory was expected
+         * and something else was there instead.
+         *
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => The name of the offending path component and file
+         *         type (will never have slashes).  It will be quoted.
+         * %2$s => The name of the directory that contains the problematic
+         *         component; it may have zero, one or more slashes in it.  Will
+         *         include the name of the function call argument, the name of
+         *         the directory, and the file type "directory".
+         */
+        i18n("the %s in the %s should not exist yet"),
+        part1,
+        part2
+    );
+}
+
+
+static void
+wrong_file_type(libexplain_string_buffer_t *sb, const char *caption,
+    const char *dir, int dir_st_mode, const char *comp, int comp_st_mode,
+    int wanted_st_mode)
+{
+    char part1[PATH_MAX * 4 + 100];
+    libexplain_string_buffer_t part1_sb;
+    char part2[NAME_MAX * 4 + 100];
+    libexplain_string_buffer_t part2_sb;
+    char part3[100];
+    libexplain_string_buffer_t part3_sb;
+
+    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    libexplain_buffer_caption_name_type(&part2_sb, 0, comp, comp_st_mode);
+    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    libexplain_buffer_caption_name_type(&part1_sb, caption, dir, dir_st_mode);
+    libexplain_string_buffer_init(&part3_sb, part3, sizeof(part3));
+    libexplain_buffer_file_type(&part3_sb, wanted_st_mode);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when directory has a directory
+         * entry for the named component, but a directory was expected
+         * and something else was there instead.
+         *
+         * Different language grammars may need to rearrange the parts.
+         *
+         * %1$s => The name of the directory that contains the problematic
+         *         component; it may have zero, one or more slashes in
+         *         it.  It will include the name of the function call
+         *         argument, the name of the directory, and the file
+         *         type "directory".
+         * %2$s => The name of the offending path component and file
+         *         type (will never have slashes).  It will be quoted.
+         * %3$s => the desired file type
+         */
+        i18n("in the %s there is a %s, but it should be a %s"),
+        part1,
+        part2,
+        part3
+    );
 }
 
 
@@ -131,7 +1002,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
      *
      * RESIST the temptation to add more, because it actually makes the
      * libexplain API inconsistent (at the expense of avoiding lame
-     * POSIX argument name inconsitencies, hey).
+     * POSIX argument name inconsistencies).
      */
     assert(0 == strcmp(caption, "pathname") || 0 == strcmp(caption, "oldpath")
         || 0 == strcmp(caption, "newpath"));
@@ -150,6 +1021,11 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_printf
         (
             sb,
+            /*
+             * xgettext: this explanation is given for paths that are
+             * the empty string.  The %s string is the name of the
+             * relevant system call argument.
+             */
             i18n("POSIX decrees that an empty %s must not be resolved "
                 "successfully"),
             caption
@@ -177,12 +1053,16 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         len = strlen(initial_pathname);
         if (len > (size_t)path_max)
         {
-            libexplain_string_buffer_puts(sb, caption);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_gettext
+            libexplain_string_buffer_printf_gettext
             (
                 sb,
-                i18n("exceeds the system maximum path length")
+                /*
+                 * xgettext: This message is used when a pathname
+                 * exceeds the maximum (system specific) path name
+                 * length (in bytes, not characters).
+                 */
+                i18n("%s exceeds the system maximum path length"),
+                caption
             );
             libexplain_string_buffer_printf
             (
@@ -262,22 +1142,9 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         if (lstat(lookup_directory, &lookup_directory_st) != 0)
         {
             int lookup_directory_st_errnum = errno;
-            if (lookup_directory_st_errnum == ENOENT)
-            {
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_gettext(sb, i18n("does not exist"));
-            }
-            else
-            {
-                libexplain_string_buffer_puts(sb, "lstat(");
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ')');
-                libexplain_buffer_failed(sb, lookup_directory_st_errnum);
-            }
+            if (lookup_directory_st_errnum != ENOENT)
+                goto return_minus_1;
+            directory_does_not_exist(sb, caption, lookup_directory);
             return_0:
             if (symlinks_so_far)
             {
@@ -302,13 +1169,13 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
              * If the lookup_directory is found, but is not a directory,
              * an ENOTDIR error is returned ("Not a directory").
              */
-            libexplain_string_buffer_puts(sb, "path ");
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-            libexplain_string_buffer_puts(sb, " is a ");
-            libexplain_buffer_file_type(sb, lookup_directory_st.st_mode);
-            libexplain_string_buffer_puts(sb, " and not a ");
-            libexplain_buffer_file_type(sb, S_IFDIR);
+            not_a_directory
+            (
+                sb,
+                caption,
+                lookup_directory,
+                lookup_directory_st.st_mode
+            );
             goto return_0;
         }
 
@@ -319,23 +1186,13 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
          */
         if (!libexplain_have_search_permission(&lookup_directory_st))
         {
-            libexplain_buffer_gettext
+            does_not_have_search_permission1
             (
                 sb,
-                i18n("the process does not have search permission to the")
+                caption,
+                lookup_directory,
+                &lookup_directory_st
             );
-            libexplain_string_buffer_putc(sb, ' ');
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_puts(sb, caption);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_file_type(sb, S_IFDIR);
-
-            /*
-             * FIXME: may need to explain that the permissions are
-             * exclusive, rather than inclusive as naive users expect.
-             */
             goto return_0;
         }
 
@@ -396,18 +1253,11 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 name_max = NAME_MAX;
             if (!silent_truncate && component_buf.position > (size_t)name_max)
             {
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_puts(sb, " component ");
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_puts
+                name_too_long
                 (
                     sb,
-                    " is longer than the system limit"
-                );
-                libexplain_string_buffer_printf
-                (
-                    sb,
-                    " (%ld > %ld)",
+                    caption,
+                    component,
                     (long)component_buf.position,
                     name_max
                 );
@@ -415,8 +1265,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             }
             if (component_buf.position > (size_t)name_max)
             {
-                component_buf.position = name_max;
-                component[name_max] = '\0';
+                libexplain_string_buffer_truncate(&component_buf, name_max);
             }
         }
         else
@@ -429,8 +1278,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 name_max = NAME_MAX;
             if (component_buf.position > (size_t)name_max)
             {
-                component_buf.position = name_max;
-                component[name_max] = '\0';
+                libexplain_string_buffer_truncate(&component_buf, name_max);
             }
         }
 
@@ -456,18 +1304,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             {
                 if (intermediate_path_st_errnum == ENOENT)
                 {
-                    libexplain_string_buffer_puts(sb, " there is no ");
-                    /* the rule is: [caption] path file-type */
-                    libexplain_string_buffer_puts_quoted(sb, component);
-                    libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_buffer_file_type(sb, S_IFDIR);
-                    libexplain_string_buffer_puts(sb, " in the ");
-                    /* the rule is: [caption] path file-type */
-                    libexplain_string_buffer_puts(sb, caption);
-                    libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                    libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_buffer_file_type(sb, S_IFDIR);
+                    no_such_directory_entry
+                    (
+                        sb,
+                        component,
+                        S_IFDIR,
+                        caption,
+                        lookup_directory,
+                        lookup_directory_st.st_mode
+                    );
 
                     /*
                      * If it was a typo, see if we can find something similar.
@@ -493,37 +1338,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     if (!lookup_directory_writable)
                     {
                         /* EACCES */
-                        libexplain_string_buffer_puts
+                        does_not_have_new_directory_entry_permission
                         (
                             sb,
-                            "the process does not have write permission to the"
+                            caption,
+                            lookup_directory,
+                            &lookup_directory_st,
+                            component,
+                            final_component->st_mode
                         );
-                        libexplain_string_buffer_putc(sb, ' ');
-                        /* the rule is: [caption] path file-type */
-                        libexplain_string_buffer_puts(sb, caption);
-                        libexplain_string_buffer_putc(sb, ' ');
-                        libexplain_string_buffer_puts_quoted
-                        (
-                            sb,
-                            lookup_directory
-                        );
-                        libexplain_string_buffer_putc(sb, ' ');
-                        libexplain_buffer_file_type(sb, S_IFDIR);
-
-                        libexplain_string_buffer_puts
-                        (
-                            sb,
-                            ", this is needed to create the "
-                        );
-                        /* the rule is: [caption] path file-type */
-                        libexplain_string_buffer_puts_quoted(sb, component);
-                        libexplain_string_buffer_puts(sb, " directory entry");
-
-                        /*
-                         * FIXME: may need to explain that the
-                         * permissions are exclusive, rather than
-                         * inclusive as naive users expect.
-                         */
                         goto return_0;
                     }
 
@@ -555,21 +1378,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 }
 
                 /* ENOENT */
-                libexplain_string_buffer_puts(sb, " there is no ");
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_putc(sb, ' ');
-                if (final_component->must_be_a_directory)
-                    libexplain_buffer_file_type(sb, S_IFDIR);
-                else
-                    libexplain_buffer_gettext(sb, i18n("file"));
-                libexplain_string_buffer_puts(sb, " in the ");
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
+                there_is_no_such_file_in_this_directory
+                (
+                    sb,
+                    component,
+                    (final_component->must_be_a_directory ? S_IFDIR : -1),
+                    caption,
+                    lookup_directory,
+                    lookup_directory_st.st_mode
+                );
 
                 /*
                  * If it was a typo, see if we can find something similar.
@@ -594,30 +1411,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 !lookup_directory_writable
             )
             {
-                /*
-                 * No write permission to containing directory.
-                 */
-                libexplain_buffer_gettext
+                does_not_have_new_directory_entry_permission
                 (
                     sb,
-                    i18n("the process does not have write permission to the")
+                    caption,
+                    lookup_directory,
+                    &lookup_directory_st,
+                    component,
+                    final_component->st_mode
                 );
-                libexplain_string_buffer_putc(sb, ' ');
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
-
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    ", this is needed to create the directory entry for the "
-                );
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, final_component->st_mode);
 
                 /*
                  * What if they meant to overwrite an existing file?
@@ -659,6 +1461,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 {
                     if (0 == strcmp(symlinks_so_far[j], intermediate_path))
                     {
+                        /* FIXME: i18n */
                         libexplain_string_buffer_puts
                         (
                             sb,
@@ -760,20 +1563,16 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     errno == ENOENT
                 )
                 {
-                    /* the rule is: [caption] path file-type */
-                    libexplain_string_buffer_puts_quoted(sb, component);
-                    libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_buffer_gettext(sb, i18n("symbolic link"));
-                    libexplain_string_buffer_puts(sb, " in ");
-                    /* the rule is: [caption] path file-type */
-                    libexplain_string_buffer_puts(sb, caption);
-                    libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                    libexplain_string_buffer_putc(sb, ' ');
-                    libexplain_buffer_file_type(sb, S_IFDIR);
-                    libexplain_string_buffer_puts(sb, " refers to ");
-                    libexplain_string_buffer_puts_quoted(sb, rlb);
-                    libexplain_string_buffer_puts(sb, " that does not exist");
+                    dangling_symbolic_link
+                    (
+                        sb,
+                        component,
+                        S_IFLNK,
+                        caption,
+                        lookup_directory,
+                        lookup_directory_st.st_mode,
+                        rlb
+                    );
                     goto return_0;
                 }
 
@@ -785,6 +1584,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 ++number_of_symlinks_followed;
                 if (number_of_symlinks_followed >= symloop_max)
                 {
+                    /* FIXME: i18n */
                     libexplain_string_buffer_puts
                     (
                         sb,
@@ -818,22 +1618,14 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             if (!S_ISDIR(intermediate_path_st.st_mode))
             {
                 /* ENOTDIR */
-                libexplain_string_buffer_puts(sb, " the ");
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
-                libexplain_string_buffer_puts(sb, " in the ");
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
-                libexplain_string_buffer_puts
+                not_a_subdirectory
                 (
                     sb,
-                    " is being used as a directory when it is not"
+                    component,
+                    intermediate_path_st.st_mode,
+                    caption,
+                    lookup_directory,
+                    lookup_directory_st.st_mode
                 );
                 return 0;
             }
@@ -852,20 +1644,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
          */
         if (final_component->must_not_exist)
         {
-            libexplain_string_buffer_puts(sb, "in the ");
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_puts(sb, caption);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_file_type(sb, S_IFDIR);
-            libexplain_string_buffer_puts(sb, " there is a ");
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_puts_quoted(sb, component);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
-
-            libexplain_string_buffer_puts(sb, ", but it should not exist yet");
+            must_not_exist
+            (
+                sb,
+                component,
+                intermediate_path_st.st_mode,
+                caption,
+                lookup_directory,
+                lookup_directory_st.st_mode
+            );
             goto return_0;
         }
 
@@ -876,21 +1663,35 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             !S_ISDIR(intermediate_path_st.st_mode)
         )
         {
-            libexplain_string_buffer_puts(sb, "in the ");
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_puts(sb, caption);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_file_type(sb, S_IFDIR);
-            libexplain_string_buffer_puts(sb, " there is a ");
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_puts_quoted(sb, component);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
-
-            libexplain_string_buffer_puts(sb, ", but it should be a ");
-            libexplain_buffer_file_type(sb, S_IFDIR);
+            wrong_file_type
+            (
+                sb,
+                caption,
+                lookup_directory,
+                lookup_directory_st.st_mode,
+                component,
+                intermediate_path_st.st_mode,
+                S_IFDIR
+            );
+            goto return_0;
+        }
+        if
+        (
+            final_component->must_be_a_symbolic_link
+        &&
+            !S_ISLNK(intermediate_path_st.st_mode)
+        )
+        {
+            wrong_file_type
+            (
+                sb,
+                caption,
+                lookup_directory,
+                lookup_directory_st.st_mode,
+                component,
+                intermediate_path_st.st_mode,
+                S_IFLNK
+            );
             goto return_0;
         }
 
@@ -903,28 +1704,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             !libexplain_have_inode_permission(&intermediate_path_st)
         )
         {
-            libexplain_buffer_gettext
+            does_not_have_inode_modify_permission
             (
                 sb,
-                i18n("the process does not have inode modification "
-                    "permission to the")
+                component,
+                &intermediate_path_st,
+                caption,
+                lookup_directory,
+                &lookup_directory_st
             );
-
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, component);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
-
-            libexplain_string_buffer_puts(sb, " in the");
-
-            /* the rule is: [caption] path file-type */
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts(sb, caption);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_file_type(sb, S_IFDIR);
             goto return_0;
         }
 
@@ -943,6 +1731,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                  * No sticky bit set, therefore only need write permissions on
                  * the lookup directory.
                  */
+                /* FIXME: i18n */
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -984,6 +1773,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     !libexplain_capability_fowner()
                 )
                 {
+                    /* FIXME: i18n */
                     libexplain_string_buffer_puts
                     (
                         sb,
@@ -1043,21 +1833,8 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                         ") nor that of the directory containing it ("
                     );
                     libexplain_buffer_uid(sb, lookup_directory_st.st_uid);
-                    libexplain_string_buffer_puts
-                    (
-                        sb,
-                        "), and the process is not privileged"
-                    );
-#ifndef HAVE_SYS_CAPABILITY_H
-                    if (libexplain_option_dialect_specific())
-                    {
-                        libexplain_string_buffer_puts
-                        (
-                            sb,
-                            " (does not have the CAP_FOWNER capability)"
-                        );
-                    }
-#endif
+                    libexplain_string_buffer_putc(sb, ')');
+                    libexplain_buffer_dac_fowner(sb);
                     goto return_0;
                 }
             }
@@ -1072,27 +1849,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 !libexplain_have_read_permission(&intermediate_path_st)
             )
             {
-                libexplain_buffer_gettext
+                does_not_have_read_permission
                 (
                     sb,
-                    i18n("the process does not have read permission to the")
+                    component,
+                    &intermediate_path_st,
+                    caption,
+                    lookup_directory,
+                    &lookup_directory_st
                 );
-
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
-
-                libexplain_string_buffer_puts(sb, " in the");
-
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
                 goto return_0;
             }
 
@@ -1103,59 +1868,113 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 !libexplain_have_write_permission(&intermediate_path_st)
             )
             {
-                libexplain_buffer_gettext
+                does_not_have_write_permission
                 (
                     sb,
-                    i18n("the process does not have write permission to the")
+                    component,
+                    &intermediate_path_st,
+                    caption,
+                    lookup_directory,
+                    &lookup_directory_st
                 );
-
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
-
-                libexplain_string_buffer_puts(sb, " in the");
-                libexplain_string_buffer_putc(sb, ' ');
-
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
                 goto return_0;
             }
 
-            if
-            (
-                final_component->want_to_execute
-            &&
-                !libexplain_have_execute_permission(&intermediate_path_st)
-            )
+            if (final_component->want_to_execute)
             {
-                libexplain_buffer_gettext
-                (
-                    sb,
-                    i18n("the process does not have execute permission to the")
-                );
+                if (libexplain_have_execute_permission(&intermediate_path_st))
+                {
+                    if
+                    (
+                        libexplain_mount_point_noexec(intermediate_path)
+                    &&
+                        !libexplain_capability_dac_override()
+                    )
+                    {
+                        libexplain_buffer_gettext
+                        (
+                            sb,
+                            /*
+                             * xgettext: This message is used when the process
+                             * attempts to execute a regular file which would
+                             * otherwise be executable, except that it resides
+                             * on a file system that is mounted with the
+                             * "noexec" option.
+                             */
+                            i18n("the executable is on a file system that is "
+                            "mounted with the \"noexec\" option")
+                        );
+                        libexplain_buffer_mount_point(sb, intermediate_path);
+                        goto return_0;
+                    }
 
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
+                    if
+                    (
+                        (intermediate_path_st.st_mode & (S_ISUID | S_ISGID))
+                    &&
+                        libexplain_mount_point_nosuid(intermediate_path)
+                    &&
+                        !libexplain_capability_dac_override()
+                    )
+                    {
+                        libexplain_buffer_gettext
+                        (
+                            sb,
+                            /*
+                             * xgettext: This message is used when the process
+                             * attempts to execute a regular file which would
+                             * otherwise be executable, except that it has the
+                             * set-uid (S_ISUID) or set-gid (S_ISGID) bit set,
+                             * and it resides on a file system that is mounted
+                             * with the "nosuid" option.
+                             */
+                            i18n("the executable is on a file system that is "
+                            "mounted with the \"nosuid\" option")
+                        );
+                        libexplain_buffer_mount_point(sb, intermediate_path);
+                        goto return_0;
+                    }
 
-                libexplain_string_buffer_puts(sb, " in the");
-                libexplain_string_buffer_putc(sb, ' ');
+                    /*
+                     * If it is a #! script, check the command interpreter.
+                     * (But avoid command interpreter infinite loops.)
+                     */
+                    if (final_component->follow_interpreter)
+                    {
+                        if (!command_interpreter_broken(sb, intermediate_path))
+                            goto return_0;
+                    }
+                    else
+                    {
+                        if (!hash_bang(sb, intermediate_path))
+                            goto return_0;
+                    }
+                }
+                else
+                {
+                    if (!S_ISREG(intermediate_path_st.st_mode))
+                    {
+                        not_possible_to_execute
+                        (
+                            sb,
+                            caption,
+                            component,
+                            intermediate_path_st.st_mode
+                        );
+                        goto return_0;
+                    }
 
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
-                goto return_0;
+                    does_not_have_execute_permission
+                    (
+                        sb,
+                        component,
+                        &intermediate_path_st,
+                        caption,
+                        lookup_directory,
+                        &lookup_directory_st
+                    );
+                    goto return_0;
+                }
             }
 
             if
@@ -1165,27 +1984,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 !libexplain_have_search_permission(&intermediate_path_st)
             )
             {
-                libexplain_buffer_gettext
+                does_not_have_search_permission
                 (
                     sb,
-                    i18n("the process does not have search permission to the")
+                    component,
+                    &intermediate_path_st,
+                    caption,
+                    lookup_directory,
+                    &lookup_directory_st
                 );
-
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, component);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, intermediate_path_st.st_mode);
-
-                libexplain_string_buffer_puts(sb, " in the");
-                libexplain_string_buffer_putc(sb, ' ');
-
-                /* the rule is: [caption] path file-type */
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts_quoted(sb, lookup_directory);
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, S_IFDIR);
                 goto return_0;
             }
         }
@@ -1221,6 +2028,8 @@ libexplain_final_init(libexplain_final_t *p)
     p->must_exist = 1;
     p->must_not_exist = 0;
     p->must_be_a_directory = 0;
+    p->must_be_a_symbolic_link = 0;
     p->follow_symlink = 1;
+    p->follow_interpreter = 1;
     p->st_mode = S_IFREG;
 }

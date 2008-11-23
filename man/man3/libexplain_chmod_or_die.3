@@ -30,7 +30,7 @@ void libexplain_chmod_or_die(const char *pathname, int mode);
 The libexplain_chmod_or_die function is used to call the
 \f[I]chmod\fP(2) system call.  On failure an explanation wiil be printed
 to stderr, obtained from \f[I]libexplain_chmod\fP(3), and the the
-process terminates by calling \f[CW]exit(1)\fP.
+process terminates by calling \f[CW]exit(EXIT_FAILURE)\fP.
 .PP
 This function is intended to be used in a fashion similar to the
 following example:
@@ -50,7 +50,7 @@ The mode, exactly as to be passed to the \f[I]chmod\fP(2) system call.
 .TP 8n
 Returns:
 This function only returns on success.
-On failure, prints an explanation and exit(1)s.
+On failure, prints an explanation and exit(EXIT_FAILURE)s.
 .SH COPYRIGHT
 .if n .ds C) (C)
 .if t .ds C) \(co

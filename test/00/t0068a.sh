@@ -22,7 +22,7 @@ TEST_SUBJECT="lstat ENOTDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-lstat(pathname = "a/b/c", buf = 0x1234567) failed, Not a directory
+lstat(pathname = "a/b/c", buf = 0x01234567) failed, Not a directory
 (ENOTDIR) because the "b" regular file in the pathname "a" directory is
 being used as a directory when it is not
 fubar

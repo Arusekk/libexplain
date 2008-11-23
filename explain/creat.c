@@ -39,7 +39,7 @@ explain_creat(int errnum, int argc, char **argv)
     {
     case 0:
         fprintf(stderr, "creat: no path given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
 
     case 2:
         mode = libexplain_permission_mode_parse(argv[1]);
@@ -51,7 +51,7 @@ explain_creat(int errnum, int argc, char **argv)
                 "argument \"%s\" does not look like a permission mode\n",
                 argv[1]
             );
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         /* fall through... */
 
@@ -61,7 +61,7 @@ explain_creat(int errnum, int argc, char **argv)
 
     default:
         fprintf(stderr, "creat: too many arguments given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

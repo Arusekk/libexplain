@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_HAVE_PERMISSION_H
 #define LIBEXPLAIN_HAVE_PERMISSION_H
 
+#include <libexplain/string_buffer.h>
+
 struct stat; /* forward */
 
 /**
@@ -34,6 +36,21 @@ struct stat; /* forward */
 int libexplain_have_read_permission(const struct stat *st);
 
 /**
+  * The libexplain_explain_read_permission function may be used to
+  * explain why the current process (does not) have read permissions on
+  * an inode.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param st
+  *     The stat structure containing information about the file.
+  * @returns
+  *     int; nonzero(true) if have permission, zero (false) if not.
+  */
+int libexplain_explain_read_permission(libexplain_string_buffer_t *sb,
+    const struct stat *st);
+
+/**
   * The libexplain_have_write_permission function may be used to test
   * whether or not the current process has write permissions on an
   * inode.
@@ -44,6 +61,21 @@ int libexplain_have_read_permission(const struct stat *st);
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
 int libexplain_have_write_permission(const struct stat *st);
+
+/**
+  * The libexplain_explain_write_permission function may be used to
+  * explain why the current process (does not) have write permissions on
+  * an inode.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param st
+  *     The stat structure containing information about the file.
+  * @returns
+  *     int; nonzero(true) if have permission, zero (false) if not.
+  */
+int libexplain_explain_write_permission(libexplain_string_buffer_t *sb,
+    const struct stat *st);
 
 /**
   * The libexplain_have_execute_permission function may be used to test
@@ -58,6 +90,21 @@ int libexplain_have_write_permission(const struct stat *st);
 int libexplain_have_execute_permission(const struct stat *st);
 
 /**
+  * The libexplain_explain_execute_permission function may be used to
+  * explain why the current process (does not) have execute permissions
+  * on an inode.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param st
+  *     The stat structure containing information about the file.
+  * @returns
+  *     int; nonzero(true) if have permission, zero (false) if not.
+  */
+int libexplain_explain_execute_permission(libexplain_string_buffer_t *sb,
+    const struct stat *st);
+
+/**
   * The libexplain_have_search_permission function may be used to test
   * whether or not the current process has search permissions on an
   * inode.
@@ -68,6 +115,21 @@ int libexplain_have_execute_permission(const struct stat *st);
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
 int libexplain_have_search_permission(const struct stat *st);
+
+/**
+  * The libexplain_explain_search_permission function may be used to
+  * explain why the current process (does not) have search permissions
+  * on an inode.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param st
+  *     The stat structure containing information about the file.
+  * @returns
+  *     int; nonzero(true) if have permission, zero (false) if not.
+  */
+int libexplain_explain_search_permission(libexplain_string_buffer_t *sb,
+    const struct stat *st);
 
 /**
   * The libexplain_have_inode_permission function may be used to test

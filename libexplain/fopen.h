@@ -27,16 +27,16 @@
 
 #include <stdio.h>
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
   * The libexplain_fopen_or_die function is used to open a file using
   * fopen(3).  If an error occurs, this will be reported to stderr, and
-  * then the function will call exit(1) to terminate the process.  This
-  * presents a quick and simple way to have good error reporting from
-  * command line programs.
+  * then the function will call exit(EXIT_FAILURE) to terminate the
+  * process.  This presents a quick and simple way to have good error
+  * reporting from command line programs.
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -54,7 +54,7 @@ extern "C" {
   *     Does not return on failure.
   * @note
   *     If the open fails, the libexplain_fopen(3) will be called,
-  *     and the process will exit via a exit(1) call.
+  *     and the process will exit via a exit(EXIT_FAILURE) call.
   */
 FILE *libexplain_fopen_or_die(const char *pathname, const char *flags);
 
@@ -75,7 +75,7 @@ FILE *libexplain_fopen_or_die(const char *pathname, const char *flags);
   * {
   *     const char *message = libexplain_fopen(pathname, flags);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -115,7 +115,7 @@ const char *libexplain_fopen(const char *pathname, const char *flags);
   *     char message[3000];
   *     libexplain_message_fopen(message, sizeof(message), pathname, flags);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -148,7 +148,7 @@ void libexplain_message_fopen(char *message, int message_size,
   * {
   *     const char *message = libexplain_errno_fopen(err, pathname, flags);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -194,7 +194,7 @@ const char *libexplain_errno_fopen(int errnum, const char *pathname,
   *     libexplain_message_errno_fopen(message, sizeof(message), err, pathname,
   *         flags);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -219,7 +219,7 @@ const char *libexplain_errno_fopen(int errnum, const char *pathname,
 void libexplain_message_errno_fopen(char *message, int message_size,
     int errnum, const char *pathname, const char *flags);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

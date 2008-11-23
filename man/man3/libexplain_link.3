@@ -58,7 +58,7 @@ similar to the following example:
 if (link(oldpath, newpath) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_link(oldpath, newpath));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -102,7 +102,7 @@ if (link(oldpath, newpath) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_link(err, oldpath, newpath));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -159,7 +159,7 @@ if (link(oldpath, newpath) < 0)
     char message[3000];
     libexplain_message_link(message, sizeof(message), oldpath, newpath);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -204,7 +204,7 @@ if (link(oldpath, newpath) < 0)
     libexplain_message_errno_link(message, sizeof(message), err,
         oldpath, newpath);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

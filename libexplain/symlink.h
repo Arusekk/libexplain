@@ -25,7 +25,7 @@
   * @brief explain symlink(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_symlink_or_die function is used to call the
   * symlink(2) system call.  On failure an explanation will be printed
   * to stderr, obtained from libexplain_symlink(3), and then the process
-  * terminates by calling exit(1).
+  * terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -68,7 +68,7 @@ void libexplain_symlink_or_die(const char *oldpath, const char *newpath);
   * if (symlink(oldpath, rewpath) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_symlink(oldpath, newpath));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -108,7 +108,7 @@ const char *libexplain_symlink(const char *oldpath, const char *newpath);
   *     libexplain_message_symlink(message, sizeof(message), oldpath,
   *         newpath);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -142,7 +142,7 @@ void libexplain_message_symlink(char *message, int message_size,
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_symlink(err, oldpath,
   *         newpath));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -187,7 +187,7 @@ const char *libexplain_errno_symlink(int errnum, const char *oldpath,
   *     libexplain_message_errno_symlink(message, sizeof(message), err,
   *         oldpath, newpath);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -212,7 +212,7 @@ const char *libexplain_errno_symlink(int errnum, const char *oldpath,
 void libexplain_message_errno_symlink(char *message, int message_size,
     int errnum, const char *oldpath, const char *newpath);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

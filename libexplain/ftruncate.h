@@ -24,7 +24,7 @@
   * @brief explain ftruncate(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the ftruncate(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_ftruncate(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -69,7 +69,7 @@ void libexplain_ftruncate_or_die(int fildes, long long length);
   * if (ftruncate(fildes, length) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_ftruncate(fildes, length));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -106,7 +106,7 @@ const char *libexplain_ftruncate(int fildes, long long length);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_ftruncate(err, fildes, length));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -155,7 +155,7 @@ const char *libexplain_errno_ftruncate(int errnum, int fildes,
   *     char message[3000];
   *     libexplain_message_ftruncate(message, sizeof(message), fildes, length);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -193,7 +193,7 @@ void libexplain_message_ftruncate(char *message, int message_size, int fildes,
   *     libexplain_message_errno_ftruncate(message, sizeof(message), err,
   *         fildes, length);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -219,7 +219,7 @@ void libexplain_message_ftruncate(char *message, int message_size, int fildes,
 void libexplain_message_errno_ftruncate(char *message, int message_size,
     int errnum, int fildes, long long length);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

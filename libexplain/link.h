@@ -24,7 +24,7 @@
   * @brief explain link(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the link(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_link(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -69,7 +69,7 @@ void libexplain_link_or_die(const char *oldpath, const char *newpath);
   * if (link(oldpath, newpath) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_link(oldpath, newpath));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -106,7 +106,7 @@ const char *libexplain_link(const char *oldpath, const char *newpath);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_link(err, oldpath, newpath));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -155,7 +155,7 @@ const char *libexplain_errno_link(int errnum, const char *oldpath,
   *     char message[3000];
   *     libexplain_message_link(message, sizeof(message), oldpath, newpath);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -193,7 +193,7 @@ void libexplain_message_link(char *message, int message_size,
   *     libexplain_message_errno_link(message, sizeof(message), err, oldpath,
   *         newpath);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -219,7 +219,7 @@ void libexplain_message_link(char *message, int message_size,
 void libexplain_message_errno_link(char *message, int message_size, int errnum,
     const char *oldpath, const char *newpath);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -22,10 +22,10 @@
 #include <libexplain/ac/sys/stat.h>
 
 #include <libexplain/stat.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/stat.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -41,10 +41,10 @@ explain_stat(int errnum, int argc, char **argv)
     {
     case 0:
         fprintf(stderr, "stat: no path given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
 
     case 2:
-        buf = (void *)strtol_or_die(argv[1]);
+        buf = (void *)libexplain_strtol_or_die(argv[1]);
         /* fall through... */
 
     case 1:
@@ -53,7 +53,7 @@ explain_stat(int errnum, int argc, char **argv)
 
     default:
         fprintf(stderr, "stat: too many arguments given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

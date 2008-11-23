@@ -29,7 +29,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_chown <path> <owner> <group>\n");
     fprintf(stderr, "       test_chown -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

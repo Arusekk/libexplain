@@ -20,10 +20,10 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/write.h>
 #include <libexplain/wrap_and_print.h>
 
-#include <explain/strtol_or_die.h>
 #include <explain/write.h>
 
 
@@ -36,24 +36,24 @@ explain_write(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 0:
-        fprintf(stderr, "write: no fildes given");
-        exit(1);
+        fprintf(stderr, "write: no fildes given\n");
+        exit(EXIT_FAILURE);
 
     case 3:
-        data_size = strtol_or_die(argv[2]);
+        data_size = libexplain_strtol_or_die(argv[2]);
         /* fall through... */
 
     case 2:
-        data = (void *)strtol_or_die(argv[1]);
+        data = (void *)libexplain_strtol_or_die(argv[1]);
         /* fall through... */
 
     case 1:
-        fildes = strtol_or_die(argv[0]);
+        fildes = libexplain_strtol_or_die(argv[0]);
         break;
 
     default:
-        fprintf(stderr, "write: too many arguments given");
-        exit(1);
+        fprintf(stderr, "write: too many arguments given\n");
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

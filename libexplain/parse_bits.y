@@ -56,8 +56,47 @@
 
 %{
 
+
+const libexplain_parse_bits_table_t *
+libexplain_parse_bits_find_by_name(const char *name,
+    const libexplain_parse_bits_table_t *table, size_t table_size)
+{
+    const libexplain_parse_bits_table_t *tp;
+    const libexplain_parse_bits_table_t *end;
+
+    end = table + table_size;
+    for (tp = table; tp < end; ++tp)
+    {
+        if (0 == strcasecmp(tp->name, name))
+        {
+            return tp;
+        }
+    }
+    return 0;
+}
+
+
+const libexplain_parse_bits_table_t *
+libexplain_parse_bits_find_by_value(int value,
+    const libexplain_parse_bits_table_t *table, size_t table_size)
+{
+    const libexplain_parse_bits_table_t *tp;
+    const libexplain_parse_bits_table_t *end;
+
+    end = table + table_size;
+    for (tp = table; tp < end; ++tp)
+    {
+        if (tp->value == value)
+        {
+            return tp;
+        }
+    }
+    return 0;
+}
+
+
 static const libexplain_parse_bits_table_t *lex_table;
-static const libexplain_parse_bits_table_t *lex_table_end;
+static size_t   lex_table_size;
 static const char *lex_cp;
 static int      result;
 static char     error_message[1000];
@@ -160,13 +199,17 @@ yylex(void)
                     }
                     break;
                 }
-                for (tp = lex_table; tp < lex_table_end; ++tp)
+                tp =
+                    libexplain_parse_bits_find_by_name
+                    (
+                        name,
+                        lex_table,
+                        lex_table_size
+                    );
+                if (tp)
                 {
-                    if (0 == strcasecmp(tp->name, name))
-                    {
-                        yylval.lv_number = tp->value;
-                        return NUMBER;
-                    }
+                    yylval.lv_number = tp->value;
+                    return NUMBER;
                 }
                 yyerror("name \"%s\" unknown", name);
             }
@@ -229,7 +272,7 @@ libexplain_parse_bits(const char *text,
 
     lex_cp = text;
     lex_table = table;
-    lex_table_end = table + table_size;
+    lex_table_size = table_size;
     yyparse();
     if (error_count > 0)
         return -1;

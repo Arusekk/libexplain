@@ -30,7 +30,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_rmdir [ <option>... ] <path>\n");
     fprintf(stderr, "       test_rmdir -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

@@ -22,7 +22,7 @@
 
 #include <libexplain/string_buffer.h>
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -59,7 +59,36 @@ struct libexplain_string_buffer_t; /* forward */
 void libexplain_buffer_errno_read(libexplain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size);
 
-#ifdef c_plus_plus
+/**
+  * The libexplain_buffer_errno_read_explanation function is called by the
+  * libexplain_buffer_errno_read function (and others) to print the
+  * explanation, the part after "because..."
+  *
+  * @param sb
+  *    The string buffer into which the message is to be written.
+  * @param errnum
+  *    The error value to be decoded, usually obtain from the errno
+  *    global variable just before this function is called.  This
+  *    is necessary if you need to call <b>any</b> code between the
+  *    system call to be explained and this function, because many libc
+  *    functions will alter the value of errno.
+  * @param fildes
+  *    The file descriptor to be read from,
+  *    exactly as passed to the read(2) system call.
+  * @param data
+  *    The address of the base address in memory to write the data
+  *    (the original read call modified the data, this function will not),
+  *    exactly as passed to the read(2) system call.
+  * @param data_size
+  *    The maximum number of bytes of data to be read,
+  *    exactly as passed to the read(2) system call.
+  * @note
+  *    Given a suitably thread safe buffer, this function is thread safe.
+  */
+void libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, const void *data, size_t data_size);
+
+#ifdef __cplusplus
 }
 #endif
 

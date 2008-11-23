@@ -17,16 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
-#include <libexplain/buffer/gettext.h>
+#include <libexplain/gettext.h>
 
 
 void
 libexplain_buffer_ebadf(libexplain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_buffer_because(sb);
-    libexplain_string_buffer_puts(sb, caption);
-    libexplain_string_buffer_putc(sb, ' ');
-    libexplain_buffer_gettext(sb, i18n("does not refer to an open file"));
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a file descriptor is not
+         * valid and does not refer to an open file.  The %s string is
+         * the name of a system call argument.
+         */
+        i18n("%s does not refer to an open file"),
+        caption
+    );
 }

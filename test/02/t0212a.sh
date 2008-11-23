@@ -23,7 +23,7 @@ TEST_SUBJECT="mkdir ENOTDIR"
 
 cat > test.ok << 'fubar'
 mkdir(pathname = "foo/bar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed, Not
-a directory (ENOTDIR) because the "foo" regular file in the pathname "."
+a directory (ENOTDIR) because the "foo" regular file in the current
 directory is being used as a directory when it is not
 fubar
 test $? -eq 0 || no_result

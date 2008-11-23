@@ -35,7 +35,7 @@ explain_opendir(int errnum, int argc, char **argv)
     {
     case 0:
         fprintf(stderr, "opendir: no path given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
 
     case 1:
         pathname = argv[0];
@@ -43,7 +43,7 @@ explain_opendir(int errnum, int argc, char **argv)
 
     default:
         fprintf(stderr, "opendir: too many arguments given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

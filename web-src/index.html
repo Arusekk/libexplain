@@ -51,7 +51,7 @@ fd = open(path, flags, mode);
 if (fd < 0)
 {
     fprintf(stderr, "%s\en", libexplain_open(path, flags, mode));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 </pre></blockquote>

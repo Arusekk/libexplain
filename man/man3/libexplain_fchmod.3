@@ -57,7 +57,7 @@ following example:
 if (fchmod(fildes, mode) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_fchmod(fildes, mode));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -98,7 +98,7 @@ if (fchmod(fildes, mode) < 0)
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_fchmod(err, fildes,
         mode));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -150,7 +150,7 @@ if (fchmod(fildes, mode) < 0)
     char message[3000];
     libexplain_message_fchmod(message, sizeof(message), fildes, mode);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -191,7 +191,7 @@ if (fchmod(fildes, mode) < 0)
     libexplain_message_errno_fchmod(message, sizeof(message), err,
         fildes, mode);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

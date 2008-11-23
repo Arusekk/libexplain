@@ -420,5 +420,4 @@ const libexplain_errno_info_t libexplain_errno_info[] =
 #endif
 };
 
-const size_t libexplain_errno_info_size =
-    LIBEXPLAIN_SIZEOF(libexplain_errno_info);
+const size_t libexplain_errno_info_size = SIZEOF(libexplain_errno_info);

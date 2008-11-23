@@ -20,39 +20,29 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/errno/close.h>
 #include <libexplain/buffer/errno/generic.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/explanation.h>
 #include <libexplain/string_buffer.h>
 
 
-void
-libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
-    int fildes)
+static void
+libexplain_buffer_errno_close_system_call(libexplain_string_buffer_t *sb,
+    int errnum, int fildes)
 {
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "close(fildes = %d", fildes);
     libexplain_buffer_fildes_to_pathname(sb, fildes);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-
-    libexplain_buffer_failed(sb, errnum);
-
-    libexplain_buffer_errno_close_because(sb, errnum, fildes);
 }
 
 
 void
-libexplain_buffer_errno_close_because(libexplain_string_buffer_t *sb,
+libexplain_buffer_errno_close_explanation(libexplain_string_buffer_t *sb,
     int errnum, int fildes)
 {
     switch (errnum)
@@ -75,7 +65,6 @@ libexplain_buffer_errno_close_because(libexplain_string_buffer_t *sb,
         break;
 
     case EWOULDBLOCK:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -100,4 +89,27 @@ libexplain_buffer_errno_close_because(libexplain_string_buffer_t *sb,
             "; note the file descriptor is still open"
         );
     }
+}
+
+
+void
+libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
+    int fildes)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_close_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes
+    );
+    libexplain_buffer_errno_close_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        fildes
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

@@ -22,7 +22,7 @@ TEST_SUBJECT="write vs EAGAIN"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, Resource
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, Resource
 temporarily unavailable (EAGAIN) because the file descriptor has been
 marked non-blocking (O_NONBLOCK) and the write would block
 fubar

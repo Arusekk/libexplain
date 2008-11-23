@@ -149,7 +149,7 @@ reserved(const char *s)
 {
     const res_tab_t *tp;
 
-    for (tp = res_tab; tp < LIBEXPLAIN_ENDOF(res_tab); ++tp)
+    for (tp = res_tab; tp < ENDOF(res_tab); ++tp)
     {
         if (0 == strcmp(s, tp->name))
             return tp->value;
@@ -230,7 +230,7 @@ static void
 yyerror(const char *s)
 {
     fprintf(stderr, "parsing declaration: %s\n", s);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

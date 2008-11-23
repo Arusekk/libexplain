@@ -25,16 +25,16 @@
   * @brief explain open(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
   * The libexplain_open_or_die function is used to open a file using
   * open(3).  If an error occurs, this will be reported to stderr, and
-  * then the function will call exit(1) to terminate the process.  This
-  * presents a quick and simple way to have good error reporting from
-  * command line programs.
+  * then the function will call exit(EXIT_FAILURE) to terminate the
+  * process.  This presents a quick and simple way to have good error
+  * reporting from command line programs.
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -55,7 +55,7 @@ extern "C" {
   *     Does not return on failure.
   * @note
   *     If the open fails, the libexplain_open(3) function will be called,
-  *     and the process will exit via a exit(1) call.
+  *     and the process will exit via a exit(EXIT_FAILURE) call.
   */
 int libexplain_open_or_die(const char *pathname, int flags, int mode);
 
@@ -76,7 +76,7 @@ int libexplain_open_or_die(const char *pathname, int flags, int mode);
   * if (fd < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_open(pathname, flags, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -120,7 +120,7 @@ const char *libexplain_open(const char *pathname, int flags, int mode);
   *     libexplain_message_open(message, sizeof(message), pathname, flags,
   *         mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -157,7 +157,7 @@ void libexplain_message_open(char *message, int message_size,
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_open(err, pathname,
   *         flags, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -206,7 +206,7 @@ const char *libexplain_errno_open(int errnum, const char *pathname, int flags,
   *     libexplain_message_errno_open(message, sizeof(message), err, pathname,
   *         flags, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -234,7 +234,7 @@ const char *libexplain_errno_open(int errnum, const char *pathname, int flags,
 void libexplain_message_errno_open(char *message, int message_size,
     int errnum, const char *pathname, int flags, int mode);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -22,6 +22,7 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/closedir.h>
 #include <libexplain/opendir.h>
 #include <libexplain/readdir.h>
 #include <libexplain/version_print.h>
@@ -32,7 +33,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_opendir <pathname>\n");
     fprintf(stderr, "       test_opendir -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 
@@ -71,6 +72,6 @@ main(int argc, char **argv)
             break;
         printf("%s\n", dep->d_name);
     }
-    closedir(dp);
+    libexplain_closedir_or_die(dp);
     return 0;
 }

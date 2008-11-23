@@ -25,7 +25,7 @@
   * @brief explain close(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_close_or_die function is used to call the close(2)
   * system call.  On failure an explanation will be printed to stderr,
   * obtained from libexplain_close(3), and then the process terminates
-  * by calling exit(1).
+  * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -64,7 +64,7 @@ void libexplain_close_or_die(int fildes);
   * if (close(fd) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_close(fd));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -98,7 +98,7 @@ const char *libexplain_close(int fildes);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_close(err, fd));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -142,7 +142,7 @@ const char *libexplain_errno_close(int errnum, int fildes);
   *     char message[3000];
   *     libexplain_message_errno_close(message, sizeof(message), fd);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -175,7 +175,7 @@ void libexplain_message_close(char *message, int message_size, int fildes);
   *     char message[3000];
   *     libexplain_message_errno_close(message, sizeof(message), err, fd);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -199,7 +199,7 @@ void libexplain_message_close(char *message, int message_size, int fildes);
 void libexplain_message_errno_close(char *message, int message_size,
     int errnum, int fildes);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

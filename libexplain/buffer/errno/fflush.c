@@ -22,55 +22,56 @@
 #include <libexplain/ac/signal.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/errno/fflush.h>
 #include <libexplain/buffer/errno/write.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/explanation.h>
 #include <libexplain/open_flags.h>
+#include <libexplain/stream_to_fildes.h>
 
 
-void
-libexplain_buffer_errno_fflush(libexplain_string_buffer_t *sb, int errnum,
-    FILE *fp)
+static void
+libexplain_buffer_errno_fflush_system_call(libexplain_string_buffer_t *sb,
+    int errnum, FILE *fp)
 {
-    int             fildes;
-
-    fildes = -1;
-    if (fp)
-        fildes = fileno(fp);
-
-    libexplain_string_buffer_printf(sb, "fflush(fp = %p", fp);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
+    (void)errnum;
+    libexplain_string_buffer_puts(sb, "fflush(fp = ");
+    libexplain_buffer_pointer(sb, fp);
+    libexplain_buffer_stream_to_pathname(sb, fp);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
-
-    libexplain_buffer_errno_fflush_because(sb, errnum, fp);
 }
 
 
 void
-libexplain_buffer_errno_fflush_because(libexplain_string_buffer_t *sb,
+libexplain_buffer_errno_fflush_explanation(libexplain_string_buffer_t *sb,
     int errnum, FILE *fp)
 {
     int             fildes;
 
     if (!fp)
     {
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts(sb, "fp is the NULL pointer");
+        libexplain_buffer_gettext(sb, i18n("fp is the NULL pointer"));
         return;
     }
-    fildes = fileno(fp);
+    fildes = libexplain_stream_to_fildes(fp);
 
-    libexplain_buffer_errno_write(sb, errnum, fildes, (void *)0, 0);
+    libexplain_buffer_errno_write_explanation(sb, errnum, fildes, NULL, 0);
+}
+
+
+void
+libexplain_buffer_errno_fflush(libexplain_string_buffer_t *sb, int errnum,
+    FILE *fp)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_fflush_system_call(&exp.system_call_sb, errnum, fp);
+    libexplain_buffer_errno_fflush_explanation(&exp.explanation_sb, errnum, fp);
+    libexplain_explanation_assemble(&exp, sb);
 }

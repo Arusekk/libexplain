@@ -151,7 +151,7 @@ The buffer functions are \f[B]never\fP part of the user visable API.
 One function per file,
 \f[CR]libexplain_\fP\f[I]example\fP\f[CR]_or_die\fP in this case.
 It simply calls \f[I]example\fP and then, if fails,
-\f[CR]libexplain_\fP\f[I]example\fP to print why, and then exit(1).
+\f[CR]libexplain_\fP\f[I]example\fP to print why, and then exit(EXIT_FAILURE).
 .SS libexplain/example.c
 One function per file,
 \f[CR]libexplain_\fP\f[I]example\fP in this case.

@@ -27,6 +27,7 @@
 #include <libexplain/fcntl.h>
 #include <libexplain/fflush.h>
 #include <libexplain/fopen.h>
+#include <libexplain/fread.h>
 #include <libexplain/fwrite.h>
 #include <libexplain/version_print.h>
 
@@ -36,7 +37,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_open [ <option>... ] <pathname>\n");
     fprintf(stderr, "       test_open -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 
@@ -81,6 +82,12 @@ main(int argc, char **argv)
 
         data = "This is a test.\n";
         libexplain_fwrite_or_die(data, 1, strlen(data), fp);
+    }
+    if ((fd_flags & O_ACCMODE) != O_WRONLY)
+    {
+        char            data[100];
+
+        libexplain_fread_or_die(data, 1, sizeof(data), fp);
     }
     libexplain_fclose_or_die(fp);
     return 0;

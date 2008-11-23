@@ -281,7 +281,7 @@ find_function_name(node_t *np)
     {
         not_a_func:
         fprintf(stderr, "not a function declaration\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     assert(node_is_literal(np->child[3], ")"));
 
@@ -615,6 +615,7 @@ generate(node_t *declspec, node_t *decl)
     size_t           j;
     int             section;
     char            filename[1000];
+    const char      *opengroup_url;
 
     assert(node_is(declspec, "declaration_specifiers"));
     assert(node_is(decl, "declarator"));
@@ -642,7 +643,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "  * @brief explain %s(%d) errors\n", function_name, section);
     fprintf(fp, "  */\n");
     fprintf(fp, "\n");
-    fprintf(fp, "#ifdef c_plus_plus\n");
+    fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "extern \"C\" {\n");
     fprintf(fp, "#endif\n");
 
@@ -653,7 +654,8 @@ generate(node_t *declspec, node_t *decl)
         section);
     fprintf(fp, "  * failure an explanation will be printed to stderr,\n");
     fprintf(fp, "  * obtained from libexplain_%s(3), and\n", function_name);
-    fprintf(fp, "  * then the process terminates by calling exit(1).\n");
+    fprintf(fp, "  * then the process terminates by calling\n");
+    fprintf(fp, "  * exit(EXIT_FAILURE).\n");
     fprintf(fp, "  *\n");
     fprintf(fp, "  * This function is intended to be used in a fashion\n");
     fprintf(fp, "  * similar to the following example:\n");
@@ -701,7 +703,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "libexplain_%s(", function_name);
     node_print(call_args, fp);
     fprintf(fp, "));\n");
-    fprintf(fp, "  *     exit(1);\n");
+    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  *\n");
@@ -733,7 +735,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "libexplain_%s(err, ", function_name);
     node_print(call_args, fp);
     fprintf(fp, "));\n");
-    fprintf(fp, "  *     exit(1);\n");
+    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  *\n");
@@ -768,7 +770,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(call_args, fp);
     fprintf(fp, ");\n");
     fprintf(fp, "  *     fprintf(stderr, \"%%s\\n\", message);\n");
-    fprintf(fp, "  *     exit(1);\n");
+    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  *\n");
@@ -804,7 +806,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(call_args, fp);
     fprintf(fp, ");\n");
     fprintf(fp, "  *     fprintf(stderr, \"%%s\\n\", message);\n");
-    fprintf(fp, "  *     exit(1);\n");
+    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  *\n");
@@ -818,7 +820,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, ");\n");
 
     fprintf(fp, "\n");
-    fprintf(fp, "#ifdef c_plus_plus\n");
+    fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
     fprintf(fp, "#endif\n");
 
@@ -893,7 +895,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "libexplain_%s(", function_name);
     node_print(call_args, fp);
     fprintf(fp, "));\n");
-    fprintf(fp, "    exit(1);\n");
+    fprintf(fp, "    exit(EXIT_FAILURE);\n");
     fprintf(fp, "}\n");
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
@@ -927,7 +929,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "libexplain_errno_%s(err, ", function_name);
     node_print(call_args, fp);
     fprintf(fp, "));\n");
-    fprintf(fp, "    exit(1);\n");
+    fprintf(fp, "    exit(EXIT_FAILURE);\n");
     fprintf(fp, "}\n");
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
@@ -966,7 +968,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(call_args, fp);
     fprintf(fp, ");\n");
     fprintf(fp, "    fprintf(stderr, \"%%s\\en\", message);\n");
-    fprintf(fp, "    exit(1);\n");
+    fprintf(fp, "    exit(EXIT_FAILURE);\n");
     fprintf(fp, "}\n");
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
@@ -1004,7 +1006,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(call_args, fp);
     fprintf(fp, ");\n");
     fprintf(fp, "    fprintf(stderr, \"%%s\\en\", message);\n");
-    fprintf(fp, "    exit(1);\n");
+    fprintf(fp, "    exit(EXIT_FAILURE);\n");
     fprintf(fp, "}\n");
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
@@ -1051,7 +1053,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "printed to \\f[I]stderr\\fP,\n");
     fprintf(fp, "obtained from \\f[I]libexplain_%s\\fP(3),\n", function_name);
     fprintf(fp, "and then the process terminates\n");
-    fprintf(fp, "by calling \\f[CW]exit(1)\\fP.\n");
+    fprintf(fp, "by calling \\f[CW]exit(EXIT_FAILURE)\\fP.\n");
     fprintf(fp, ".PP\n");
     fprintf(fp, "This function is intended to be used in a fashion\n");
     fprintf(fp, "similar to the following example:\n");
@@ -1119,7 +1121,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "libexplain_%s(", function_name);
     node_print(call_args, fp);
     fprintf(fp, "));\n");
-    fprintf(fp, "        exit(1);\n");
+    fprintf(fp, "        exit(EXIT_FAILURE);\n");
     fprintf(fp, "    }\n");
     fprintf(fp, "}\n");
     libexplain_fclose_or_die(fp);
@@ -1168,9 +1170,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "    (\n");
     fprintf(fp, "        libexplain_common_message_buffer,\n");
     fprintf(fp, "        libexplain_common_message_buffer_size,\n");
-    fprintf(fp, "        errnum,\n");
-    fprintf(fp, "        ");
-    node_print(call_args, fp);
+    fprintf(fp, "        errnum");
+    for (j = 0; j < call_args->nchild; j += 2)
+        fprintf(fp, ",\n        %s", call_args->child[j]->literal);
     fprintf(fp, "\n");
     fprintf(fp, "    );\n");
     fprintf(fp, "    return libexplain_common_message_buffer;\n");
@@ -1200,9 +1202,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "    (\n");
     fprintf(fp, "        message,\n");
     fprintf(fp, "        message_size,\n");
-    fprintf(fp, "        errno,\n");
-    fprintf(fp, "        ");
-    node_print(call_args, fp);
+    fprintf(fp, "        errno");
+    for (j = 0; j < call_args->nchild; j += 2)
+        fprintf(fp, ",\n        %s", call_args->child[j]->literal);
     fprintf(fp, "\n");
     fprintf(fp, "    );\n");
     fprintf(fp, "}\n");
@@ -1286,12 +1288,11 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "\n");
     fprintf(fp, "#include <libexplain/buffer/errno/generic.h>\n");
     fprintf(fp, "#include <libexplain/buffer/errno/%s.h>\n", function_name);
-    fprintf(fp, "#include <libexplain/buffer/failed.h>\n");
-    fprintf(fp, "#include <libexplain/buffer/success.h>\n");
+    fprintf(fp, "#include <libexplain/explanation.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "\n");
-    fprintf(fp, "void\n");
-    fprintf(fp, "libexplain_buffer_errno_%s(", function_name);
+    fprintf(fp, "static void\n");
+    fprintf(fp, "libexplain_buffer_errno_%s_system_call(", function_name);
     fprintf(fp, "libexplain_string_buffer_t *sb, int errnum, ");
     node_print(args, fp);
     fprintf(fp, ")\n");
@@ -1311,19 +1312,59 @@ generate(node_t *declspec, node_t *decl)
         );
     }
     fprintf(fp, "    libexplain_string_buffer_putc(sb, ')');\n");
-    fprintf(fp, "    if (errnum == 0)\n");
-    fprintf(fp, "    {\n");
-    fprintf(fp, "        libexplain_buffer_success(sb);\n");
-    fprintf(fp, "        return;\n");
-    fprintf(fp, "    }\n");
-    fprintf(fp, "    libexplain_buffer_failed(sb, errnum);\n");
+    fprintf(fp, "}\n");
+
     fprintf(fp, "\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "static void\n");
+    fprintf(fp, "libexplain_buffer_errno_%s_explanation(", function_name);
+    fprintf(fp, "libexplain_string_buffer_t *sb, int errnum, ");
+    node_print(args, fp);
+    fprintf(fp, ")\n");
+    fprintf(fp, "{\n");
     fprintf(fp, "    switch (errnum)\n");
     fprintf(fp, "    {\n");
+    fprintf(fp, "    see\n");
+    opengroup_url = "http://www.opengroup.org/onlinepubs/009695399";
+    fprintf(fp, "    %s/nfindex.html\n", opengroup_url);
+    fprintf(fp, "    for a definitive error list.  If you are lucky\n");
+    fprintf(fp, "    %s/functions/%s.html\n", opengroup_url, function_name);
+    fprintf(fp, "    will take you directly to the function specification.\n");
+    fprintf(fp, "\n");
     fprintf(fp, "    default:\n");
     fprintf(fp, "        libexplain_buffer_errno_generic(sb, errnum);\n");
     fprintf(fp, "        break;\n");
     fprintf(fp, "    }\n");
+    fprintf(fp, "}\n");
+
+    fprintf(fp, "\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "void\n");
+    fprintf(fp, "libexplain_buffer_errno_%s(", function_name);
+    fprintf(fp, "libexplain_string_buffer_t *sb, int errnum, ");
+    node_print(args, fp);
+    fprintf(fp, ")\n");
+    fprintf(fp, "{\n");
+    fprintf(fp, "    libexplain_explanation_t exp;\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "    libexplain_explanation_init(&exp, errnum);\n");
+    fprintf(fp, "    libexplain_buffer_errno_%s_system_call\n", function_name);
+    fprintf(fp, "    (\n");
+    fprintf(fp, "        &exp.system_call_sb,\n");
+    fprintf(fp, "        errnum");
+    for (j = 0; j < call_args->nchild; j += 2)
+        fprintf(fp, ",\n        %s", call_args->child[j]->literal);
+    fprintf(fp, "\n");
+    fprintf(fp, "    );\n");
+    fprintf(fp, "    libexplain_buffer_errno_%s_explanation\n", function_name);
+    fprintf(fp, "    (\n");
+    fprintf(fp, "        &exp.explanation_sb,\n");
+    fprintf(fp, "        errnum");
+    for (j = 0; j < call_args->nchild; j += 2)
+        fprintf(fp, ",\n        %s", call_args->child[j]->literal);
+    fprintf(fp, "\n");
+    fprintf(fp, "    );\n");
+    fprintf(fp, "    libexplain_explanation_assemble(&exp, sb);\n");
     fprintf(fp, "}\n");
     libexplain_fclose_or_die(fp);
 
@@ -1357,7 +1398,7 @@ generate(node_t *declspec, node_t *decl)
         "    fprintf(stderr, \"       test_%s -V\\n\");\n",
         function_name
     );
-    fprintf(fp, "    exit(1);\n");
+    fprintf(fp, "    exit(EXIT_FAILURE);\n");
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
     fprintf(fp, "\n");
@@ -1378,7 +1419,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "        {\n");
     fprintf(fp, "        case 'V':\n");
     fprintf(fp, "            libexplain_version_print();\n");
-    fprintf(fp, "            return 0;\n");
+    fprintf(fp, "            return EXIT_SUCCESS;\n");
     fprintf(fp, "\n");
     fprintf(fp, "        default:\n");
     fprintf(fp, "            usage();\n");
@@ -1397,7 +1438,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "    libexplain_%s_or_die(", function_name);
     node_print(call_args, fp);
     fprintf(fp, ");\n");
-    fprintf(fp, "    return 0;\n");
+    fprintf(fp, "    return EXIT_SUCCESS;\n");
     fprintf(fp, "}\n");
     libexplain_fclose_or_die(fp);
 
@@ -1437,7 +1478,7 @@ generate(node_t *declspec, node_t *decl)
         (int)((call_args->nchild + 1) / 2),
         (call_args->nchild == 1 ? "" : "s")
     );
-    fprintf(fp, "        exit(1);\n");
+    fprintf(fp, "        exit(EXIT_FAILURE);\n");
     fprintf(fp, "    }\n");
     for (j = 0; j < call_args->nchild; j += 2)
     {

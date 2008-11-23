@@ -36,8 +36,8 @@ explain_strerror(int errnum, int argc, char **argv)
     (void)argv;
     if (argc != 0)
     {
-        fprintf(stderr, "strerror: too many arguments given");
-        exit(1);
+        fprintf(stderr, "strerror: too many arguments given\n");
+        exit(EXIT_FAILURE);
     }
     libexplain_string_buffer_init(&sb, message, sizeof(message));
     libexplain_buffer_strerror(&sb, errnum);

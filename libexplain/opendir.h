@@ -27,7 +27,7 @@
   * @brief explain opendir(3) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -35,7 +35,7 @@ extern "C" {
   * The libexplain_opendir_or_die function is used to call the
   * opendir(3) system call.  On failure an explanation will be printed
   * to stderr, obtained from libexplain_opendir(3), and then the process
-  * terminates by calling exit(1).
+  * terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -68,7 +68,7 @@ DIR *libexplain_opendir_or_die(const char *pathname);
   * if (!dp)
   * {
   *     fprintf(stderr, "%s\n", libexplain_opendir(pathname));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -106,7 +106,7 @@ const char *libexplain_opendir(const char *pathname);
   *     char message[3000];
   *     libexplain_message_opendir(message, sizeof(message), pathname);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -139,7 +139,7 @@ void libexplain_message_opendir(char *message, int message_size,
   *     int err = errno;
   *     const char *message = libexplain_errno_opendir(err, pathname);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -182,7 +182,7 @@ const char *libexplain_errno_opendir(int errnum, const char *pathname);
   *     libexplain_message_errno_opendir(message, sizeof(message), err,
   *         pathname);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -205,7 +205,7 @@ const char *libexplain_errno_opendir(int errnum, const char *pathname);
 void libexplain_message_errno_opendir(char *message, int message_size,
     int errnum, const char *pathname);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

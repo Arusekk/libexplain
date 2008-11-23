@@ -31,6 +31,6 @@ libexplain_chmod_or_die(const char *pathname, int mode)
     if (chmod(pathname, mode))
     {
         libexplain_wrap_and_print(stderr, libexplain_chmod(pathname, mode));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

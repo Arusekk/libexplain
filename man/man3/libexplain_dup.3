@@ -56,7 +56,7 @@ similar to the following example:
 if (dup(fildes) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_dup(fildes));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -96,7 +96,7 @@ if (dup(fildes) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_dup(err, fildes));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -149,7 +149,7 @@ if (dup(fildes) < 0)
     char message[3000];
     libexplain_message_dup(message, sizeof(message), fildes);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -190,7 +190,7 @@ if (dup(fildes) < 0)
     char message[3000];
     libexplain_message_errno_dup(message, sizeof(message), err, fildes);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

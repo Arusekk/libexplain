@@ -20,7 +20,6 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdio.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/option.h>
@@ -50,7 +49,6 @@ void
 libexplain_buffer_eloop(libexplain_string_buffer_t *sb, const char *pathname,
     const char *pathname_caption, const libexplain_final_t *final_component)
 {
-    libexplain_buffer_because(sb);
     if
     (
         libexplain_buffer_errno_path_resolution
@@ -79,7 +77,6 @@ libexplain_buffer_eloop2(libexplain_string_buffer_t *sb,
     const char *newpath, const char *newpath_caption,
     const libexplain_final_t *newpath_final_component)
 {
-    libexplain_buffer_because(sb);
     if
     (
         libexplain_buffer_errno_path_resolution

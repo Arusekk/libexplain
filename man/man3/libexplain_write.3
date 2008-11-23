@@ -58,7 +58,7 @@ sszie_t n = write(fd, data, data_size);
 if (n < 0)
 {
     fprintf(stderr, '%s\n', libexplain_read(fd, data, data_size));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .FT R
@@ -104,7 +104,7 @@ if (n < 0)
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_read(errnum, fd, data,
         data_size));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -160,7 +160,7 @@ if (n < 0)
     libexplain_message_read(message, sizeof(message), fd, data,
         data_size));
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -208,7 +208,7 @@ if (n < 0)
     libexplain_message_errno_read(message, sizeof(message), errno,
         fd, data, data_size));
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

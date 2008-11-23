@@ -35,7 +35,7 @@ malloc_or_die(size_t n)
     if (!p)
     {
         fprintf(stderr, "out of memory, aborting\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return p;
 }
@@ -106,6 +106,13 @@ node_push_back(node_t *parent, node_t *child)
 }
 
 
+static int
+comma(const node_t *np)
+{
+    return (0 == strcmp(np->name, "LITERAL") && 0 == strcmp(np->literal, ","));
+}
+
+
 void
 node_print(const node_t *np, FILE *fp)
 {
@@ -121,7 +128,7 @@ node_print(const node_t *np, FILE *fp)
         assert(!np->literal);
         for (j = 0; j < np->nchild; ++j)
         {
-            if (j)
+            if (j && !comma(np->child[j]))
                 putc(' ', fp);
             node_print(np->child[j], fp);
         }

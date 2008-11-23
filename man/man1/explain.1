@@ -62,6 +62,9 @@ The \f[I]chown\fP(2) system call.
 close \f[I]fildes\fP
 The \f[I]close\fP(2) system call.
 .TP 8n
+closedir \f[I]dir\fP
+The \f[I]closedir\fP(3) system call.
+.TP 8n
 creat \f[I]pathname\fP [ \f[I]permission-mode\fP
 The \f[I]creat\fP(2) system call.
 .\" ----------  D  ---------------------------------------------------------
@@ -69,6 +72,9 @@ The \f[I]creat\fP(2) system call.
 dup \f[I]fildes\fP
 The \f[I]dup\fP(2) system call.
 .\" ----------  E  ---------------------------------------------------------
+.TP 8n
+execve \f[I]pathname\fP \f[I]arg\fP...
+The \f[I]execve\fP(2) system call.
 .\" ----------  F  ---------------------------------------------------------
 .TP 8n
 fchdir \f[I]pathname\fP
@@ -76,6 +82,21 @@ The \f[I]fchdir\fP(2) system call.
 .TP 8n
 fcntl \f[I]fildes\fP \f[I]command\fP [ \f[I]arg\fP ]
 The \f[I]fcntl\fP(2) system call.
+.TP 8n
+ferror \f[I]fp\fP
+The \f[I]ferror\fP(3) system call.
+.TP 8n
+fgetc \f[I]fp\fP
+The \f[I]fgetc\fP(3) system call.
+.TP 8n
+fgets \f[I]data\fP \f[I]data_size\fP \f[I]fp\fP
+The \f[I]fgets\fP(3) system call.
+.TP 8n
+fork
+The \f[I]fork\fP(2) system call.
+.TP 8n
+fread \f[I]ptr\fP \f[I]size\fP \f[I]nmemb\fP \f[I]fp\fP
+The \f[I]fread\fP(3) system call.
 .TP 8n
 fopen \f[I]pathname\fP \f[I]mode\fP
 The \f[I]fopen\fP(2) system call.
@@ -91,11 +112,23 @@ The \f[I]fstat\fP(2) system call.
 ftruncate \f[I]fildes\fP \f[I]length\fP
 The \f[I]ftruncate\fP(2) system call.
 .\" ----------  G  ---------------------------------------------------------
+.TP 8n
+getc \f[I]fp\fP
+The \f[I]getc\fP(3) system call.
+.TP 8n
+getchar
+The \f[I]getchar\fP(3) system call.
+.TP 8n
+gettimeofday [ \f[I]tv\fP [ \f[I]tz\fP ] ]
+The \f[I]gettimeofday\fP(2) system call.
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
 .\" ----------  J  ---------------------------------------------------------
 .\" ----------  K  ---------------------------------------------------------
 .\" ----------  L  ---------------------------------------------------------
+.TP 8n
+lchown \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP
+The \f[I]lchown\fP(2) system call.
 .TP 8n
 link \f[I]oldpath\fP \f[I]newpath\fP
 The \f[I]link\fP(2) system call.
@@ -132,6 +165,9 @@ rename \f[I]oldpath\fP \f[I]newpath\fP
 The \f[I]rename\fP(2) system call.
 .\" ----------  S  ---------------------------------------------------------
 .TP 8n
+socket \f[I]domain\fP \f[I]type\fP \f[I]protocol\fP
+The \f[I]socket\fP(2) system call.
+.TP 8n
 stat \f[I]pathname\fP
 The \f[I]stat\fP(2) system call.
 .TP 8n
@@ -140,13 +176,31 @@ The error given will be printed out with all known detail.
 .TP 8n
 rename ymlinkf[I]oldpath\fP \f[I]newpath\fP
 The \f[I]ymlinkename\fP(2) system call.
+.TP 8n
+system \f[I]command\fP
+The \f[I]system\fP(3) system call.
 .\" ----------  T  ---------------------------------------------------------
 .\" ----------  U  ---------------------------------------------------------
 .TP 8n
 unlink \f[I]pathname\fP
 The \f[I]unlink\fP(2) system call.
+.TP 8n
+utime \f[I]pathname\fP [ \f[I]times\fP ]
+The \f[I]utime\fP(2) system call.
 .\" ----------  V  ---------------------------------------------------------
 .\" ----------  W  ---------------------------------------------------------
+.TP 8n
+wait \f[I]status\fP
+The \f[I]wait\fP(2) system call.
+.TP 8n
+wait3 \f[I]status\fP \f[I]options\fP \f[I]rusage\fP
+The \f[I]wait3\fP(2) system call.
+.TP 8n
+wait4 \f[I]pid\fP \f[I]status\fP \f[I]options\fP \f[I]rusage\fP
+The \f[I]wait4\fP(2) system call.
+.TP 8n
+waitpid \f[I]pid\fP \f[I]status\fP \f[I]options\fP
+The \f[I]waitpid\fP(2) system call.
 .TP 8n
 write \f[I]fildes\fP \f[I]data\fP \f[I]data-size\fP
 The \f[I]write\fP(2) system call.

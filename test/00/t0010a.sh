@@ -22,7 +22,7 @@ TEST_SUBJECT="write vs EIO"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, Input/output
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, Input/output
 error (EIO) because a low-level I/O error occurred, probably in hardware,
 possibly as a result of a preceeding read or write
 fubar

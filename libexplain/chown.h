@@ -24,7 +24,7 @@
   * @brief explain chown(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the chown(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_chown(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -71,7 +71,7 @@ void libexplain_chown_or_die(const char *pathname, int owner, int group);
   * if (chown(pathname, owner, group) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_chown(pathname, owner, group));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -111,7 +111,7 @@ const char *libexplain_chown(const char *pathname, int owner, int group);
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_chown(err, pathname, owner,
   *         group));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -163,7 +163,7 @@ const char *libexplain_errno_chown(int errnum, const char *pathname, int owner,
   *     libexplain_message_chown(message, sizeof(message),
   *         pathname, owner, group);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -203,7 +203,7 @@ void libexplain_message_chown(char *message, int message_size,
   *     libexplain_message_errno_chown(message, sizeof(message), err,
   *         pathname, owner, group);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -231,7 +231,7 @@ void libexplain_message_chown(char *message, int message_size,
 void libexplain_message_errno_chown(char *message, int message_size, int errnum,
     const char *pathname, int owner, int group);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

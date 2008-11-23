@@ -51,7 +51,7 @@ Returns:
 Only ever returns on success.
 On failure, this function will report errors using
 \f[I]libexplain_fflush\fP(3) and then terminate by calling
-\f[CW]exit(1)\fP.
+\f[CW]exit(EXIT_FAILURE)\fP.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
 .if n .ds C) (C)

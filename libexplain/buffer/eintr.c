@@ -17,14 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/eintr.h>
 
 
 void
 libexplain_buffer_eintr(libexplain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_printf
     (
         sb,

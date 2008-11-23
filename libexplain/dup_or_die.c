@@ -33,7 +33,7 @@ libexplain_dup_or_die(int fildes)
     if (result < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_dup(fildes));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

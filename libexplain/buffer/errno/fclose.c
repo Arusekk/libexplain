@@ -20,36 +20,41 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/errno/close.h>
 #include <libexplain/buffer/errno/fclose.h>
 #include <libexplain/buffer/errno/write.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/explanation.h>
+#include <libexplain/stream_to_fildes.h>
 
 
-void
-libexplain_buffer_errno_fclose(libexplain_string_buffer_t *sb, int errnum,
-    FILE *fp)
+static void
+libexplain_buffer_errno_fclose_system_call(libexplain_string_buffer_t *sb,
+    int errnum, FILE *fp)
 {
-    libexplain_string_buffer_printf(sb, "fclose(fp = %p)", fp);
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
-
-    libexplain_buffer_errno_fclose_because(sb, errnum, fp);
+    (void)errnum;
+    libexplain_string_buffer_puts(sb, "fclose(fp = ");
+    libexplain_buffer_pointer(sb, fp);
+    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_string_buffer_putc(sb, ')');
 }
 
 
-
 void
-libexplain_buffer_errno_fclose_because(libexplain_string_buffer_t *sb,
+libexplain_buffer_errno_fclose_explanation(libexplain_string_buffer_t *sb,
     int errnum, FILE *fp)
 {
+    int             fildes;
+
+    if (!fp)
+    {
+        libexplain_buffer_gettext(sb, i18n("fp is the NULL pointer"));
+        return;
+    }
+
     /*
      * The Linux fclose(3) man page says
      *
@@ -70,11 +75,7 @@ libexplain_buffer_errno_fclose_because(libexplain_string_buffer_t *sb,
      * implementations may keep the FILE pointer valid if the underlying
      * file descriptor is still valid.
      */
-    int fildes = -1;
-    if (fp)
-        fildes = fileno(fp);
-    if (fildes >= 0 && fcntl(fildes, F_GETFL) < 0)
-        fildes = -1;
+    fildes = libexplain_stream_to_fildes(fp);
 
     switch (errnum)
     {
@@ -83,17 +84,17 @@ libexplain_buffer_errno_fclose_because(libexplain_string_buffer_t *sb,
     case EINVAL:
     case ENOSPC:
     case EPIPE:
-        libexplain_buffer_errno_write_because(sb, errnum, fildes, NULL, 0);
+        libexplain_buffer_errno_write_explanation(sb, errnum, fildes, NULL, 0);
         break;
 
     case EBADF:
-        libexplain_buffer_ebadf(sb, "fildes");
+        libexplain_buffer_ebadf(sb, "fp");
         break;
 
     case EINTR:
     case EIO:
     default:
-        libexplain_buffer_errno_close_because(sb, errnum, fildes);
+        libexplain_buffer_errno_close_explanation(sb, errnum, fildes);
         break;
     }
     if (errnum != EBADF)
@@ -105,4 +106,17 @@ libexplain_buffer_errno_fclose_because(libexplain_string_buffer_t *sb,
             "underlying file descriptor may still be open"
         );
     }
+}
+
+
+void
+libexplain_buffer_errno_fclose(libexplain_string_buffer_t *sb, int errnum,
+    FILE *fp)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_fclose_system_call(&exp.system_call_sb, errnum, fp);
+    libexplain_buffer_errno_fclose_explanation(&exp.explanation_sb, errnum, fp);
+    libexplain_explanation_assemble(&exp, sb);
 }

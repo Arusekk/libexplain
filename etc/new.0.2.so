@@ -17,17 +17,38 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 2 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
-.\" ------------------------------------------------------------------------
-.\" .PP
-.\" .if n *
-.\" .if t \(bu
-.\" .\" Change N
+.PP
+.if n *
+.if t \(bu
+.\" Change 40, 27, 39, 36, 35, 34, 33, 31, 26, 30, 29, 24, 20, 15, 13, 12
+Cover has been extended to include
+\f[I]closedir\fP(3),
+\f[I]execve\fP(2),
+\f[I]ferror\fP(3),
+\f[I]fgetc\fP(3),
+\f[I]fgets\fP(3),
+\f[I]fork\fP(2),
+\f[I]fread\fP(3),
+\f[I]getc\fP(3),
+\f[I]gettimeofday\fP(2),
+\f[I]lchown\fP(2),
+\f[I]socket\fP(2),
+\f[I]system\fP(3),
+\f[I]utime\fP(2),
+\f[I]wait3\fP(2),
+\f[I]wait4\fP(2),
+\f[I]wait\fP(2),
+\f[I]waitpid\fP(2),
+.PP
+.if n *
+.if t \(bu
+.\" Change 25, 21, 18, 19
+More internationalization support has been added.
+.PP
+.if n *
+.if t \(bu
+.\" Change 22
+A bug has been fixed in the C++ insulation.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

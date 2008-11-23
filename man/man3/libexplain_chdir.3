@@ -57,7 +57,7 @@ following example:
 if (chdir(pathname) < 0)
 {
     fprintf(stderr, '%s\n', libexplain_chdir(pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -94,7 +94,7 @@ if (chdir(pathname) < 0)
 {
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_chdir(err, pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -143,7 +143,7 @@ if (chdir(pathname) < 0)
     char message[3000];
     libexplain_message_chdir(message, sizeof(message), pathname);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -181,7 +181,7 @@ if (chdir(pathname) < 0)
     libexplain_message_errno_chdir(message, sizeof(message), err,
         pathname);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

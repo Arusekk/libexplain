@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_OPEN_H
 #define LIBEXPLAIN_BUFFER_ERRNO_OPEN_H
 
-struct libexplain_string_buffer_t; /* forward */
+#include <libexplain/string_buffer.h>
 
 /**
   * The libexplain_buffer_errno_open function is used to obtain an
@@ -39,16 +39,16 @@ struct libexplain_string_buffer_t; /* forward */
   *     is necessary if you need to call <b>any</b> code between the
   *     system call to be explained and this function, because many libc
   *     functions will alter the value of errno.
-  * @param path
-  *     The original path, exactly has passed to the open(2) system call.
+  * @param pathname
+  *     The original pathname, exactly has passed to the open(2) system call.
   * @param flags
   *     The original flags, exactly has passed to the open(2) system call.
   * @param mode
   *     The original mode, exactly has passed to the open(2) system call (or
   *     zero if the original call didn't need a mode argument).
   */
-void libexplain_buffer_errno_open(struct libexplain_string_buffer_t *sb,
-    int errnum, const char *path, int flags, int mode);
+void libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, int flags, int mode);
 
 /**
   * The libexplain_buffer_errno_open_because function is used to
@@ -66,15 +66,15 @@ void libexplain_buffer_errno_open(struct libexplain_string_buffer_t *sb,
   *     is necessary if you need to call <b>any</b> code between the
   *     system call to be explained and this function, because many libc
   *     functions will alter the value of errno.
-  * @param path
-  *     The original path, exactly has passed to the open(2) system call.
+  * @param pathname
+  *     The original pathname, exactly has passed to the open(2) system call.
   * @param flags
   *     The original flags, exactly has passed to the open(2) system call.
   * @param mode
   *     The original mode, exactly has passed to the open(2) system call (or
   *     zero if the original call didn't need a mode argument).
   */
-void libexplain_buffer_errno_open_because(struct libexplain_string_buffer_t *sb,
-    int errnum, const char *path, int flags, int mode);
+void libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, int flags, int mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_OPEN_H */

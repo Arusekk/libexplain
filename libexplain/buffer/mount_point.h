@@ -80,4 +80,30 @@ struct stat; /* forward */
 int libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
     const struct stat *st);
 
+/**
+  * The libexplain_mount_point_noexec function may be used to test
+  * whether or not a file system has been mounted with a particular
+  * option.
+  *
+  * @param pathname
+  *     The pathname of the file of interest
+  * @returns
+  *     int; zon-zero (true) if the "noexec" mount option is used,
+  *     zero (false) if not.
+  */
+int libexplain_mount_point_noexec(const char *pathname);
+
+/**
+  * The libexplain_mount_point_nosuid function may be used to test
+  * whether or not a file system has been mounted with a particular
+  * option.
+  *
+  * @param pathname
+  *     The pathname of the file of interest
+  * @returns
+  *     int; zon-zero (true) if the "nosuid" mount option is used,
+  *     zero (false) if not.
+  */
+int libexplain_mount_point_nosuid(const char *pathname);
+
 #endif /* LIBEXPLAIN_BUFFER_MOUNT_POINT_H */

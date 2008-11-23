@@ -57,7 +57,7 @@ libexplain_buffer_permission_mode(libexplain_string_buffer_t *sb, int mode)
         return;
     }
     first = 1;
-    for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
+    for (tp = table; tp < ENDOF(table); ++tp)
     {
         if (tp->value != 0 && (mode & tp->value) == tp->value)
         {
@@ -80,5 +80,5 @@ libexplain_buffer_permission_mode(libexplain_string_buffer_t *sb, int mode)
 int
 libexplain_permission_mode_parse(const char *text)
 {
-    return libexplain_parse_bits(text, table, LIBEXPLAIN_SIZEOF(table));
+    return libexplain_parse_bits(text, table, SIZEOF(table));
 }

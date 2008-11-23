@@ -17,7 +17,7 @@ DESCRIPTION
               if (fd < 0)
               {
                   fprintf(stderr, "%s\n", libexplain_open(path, flags, mode));
-                  exit(1);
+                  exit(EXIT_FAILURE);
               }
        If, for example, you were to try to open no-such-dir/some-file, you
        would see a message like
@@ -32,17 +32,17 @@ HOME PAGE
 
           URL:    http://libexplain.sourceforge.net/
           File:   index.html              # the libexplain page
-          File:   libexplain.0.2.README   # Description, from the tar file
-          File:   libexplain.0.2.lsm      # Description, LSM format
-          File:   libexplain.0.2.tar.gz   # the complete source
-          File:   libexplain.0.2.pdf      # Reference Manual
+          File:   libexplain.0.3.README   # Description, from the tar file
+          File:   libexplain.0.3.lsm      # Description, LSM format
+          File:   libexplain.0.3.tar.gz   # the complete source
+          File:   libexplain.0.3.pdf      # Reference Manual
 
 BUILDING LIBEXPLAIN
        Full instructions for building libexplain may be found in the BUILDING
        file included in this distribution.
 
 COPYRIGHT
-       libexplain version 0.2
+       libexplain version 0.3
        Copyright (C) 2008 Peter Miller
 
        This program is free software; you can redistribute it and/or modify it
@@ -74,12 +74,23 @@ RELEASE NOTES
        those of you who have generously sent me suggestions and bug reports,
        see the etc/CHANGES.* files.
 
+   Version 0.3 (2008-Nov-23)
+       * Cover has been extended to include closedir(3), execve(2), ferror(3),
+       fgetc(3), fgets(3), fork(2), fread(3), getc(3), gettimeofday(2),
+       lchown(2), socket(2), system(3), utime(2), wait3(2), wait4(2), wait(2),
+       waitpid(2),
+
+       * More internationalization support has been added.
+
+       * A bug has been fixed in the C++ insulation.
+
    Version 0.2 (2008-Nov-11)
        * Coverage now includes chmod(2), chown(2), dup(2), fchdir(2),
        fchmod(2), fstat(2), ftruncate(2), fwrite(3), mkdir(2), readdir(3),
-       readlink(2), remove(3), rmdir(2), truncate(2), * The lsof(1) command is
-       used to obtain supplementary file information on those systems with
-       limited /proc implementations.
+       readlink(2), remove(3), rmdir(2) and truncate(2).
+
+       * The lsof(1) command is used to obtain supplementary file information
+       on those systems with limited /proc implementations.
 
        * The explanations now understand Linux capabilities.
 

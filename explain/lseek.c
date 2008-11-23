@@ -23,10 +23,10 @@
 
 #include <libexplain/buffer/lseek_whence.h>
 #include <libexplain/lseek.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/lseek.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -38,8 +38,8 @@ explain_lseek(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 0:
-        fprintf(stderr, "lseek: requires 3 arguments");
-        exit(1);
+        fprintf(stderr, "lseek: requires 3 arguments\n");
+        exit(EXIT_FAILURE);
 
     case 3:
         whence = libexplain_lseek_whence_parse(argv[2]);
@@ -51,21 +51,21 @@ explain_lseek(int errnum, int argc, char **argv)
                 "argument \"%s\" does not look like an lseek whence value\n",
                 argv[2]
             );
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         /* fall through... */
 
     case 2:
-        offset = strtol_or_die(argv[1]);
+        offset = libexplain_strtol_or_die(argv[1]);
         /* fall through... */
 
     case 1:
-        fildes = strtol_or_die(argv[0]);
+        fildes = libexplain_strtol_or_die(argv[0]);
         break;
 
     default:
-        fprintf(stderr, "lseek: too many arguments given");
-        exit(1);
+        fprintf(stderr, "lseek: too many arguments given\n");
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

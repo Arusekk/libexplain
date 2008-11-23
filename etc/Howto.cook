@@ -198,6 +198,7 @@ lib%/lib%.la lib%/.libs/lib%.a lib%/.libs/lib%.so:
     [CC] [CPPFLAGS] [CFLAGS]
         -o [target]
         [resolve [[target]_obj]]
+        [LIBS]
         -version-info [version-info]
 
         /*
@@ -261,7 +262,7 @@ bin/% bin/.libs/%: [[target]_obj] [defined-or-null [target]_libs]
     [CC] -o [target]
         [LDFLAGS]
         [resolve [[target]_obj] [defined-or-null [target]_libs]]
-        [LIBS];
+        ;
 
     /*
      * libtool creates bin/% as a script, which, when executed, does the
@@ -350,6 +351,7 @@ c_incl_excludes =
  */
 stdio_exceptions =
     libexplain/fclose.h
+    libexplain/ferror.h
     libexplain/fflush.h
     libexplain/fgetc.h
     libexplain/fgetpos.h
@@ -526,4 +528,5 @@ all += [addprefix bin/ [scripts]];
 #include-cooked etc/tags.cook
 #include-cooked etc/metrics.cook
 #include-cooked etc/documentation.cook
+#include-cooked etc/i18n.cook
 #include-cooked web-src/module.cook

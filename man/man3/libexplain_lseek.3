@@ -58,7 +58,7 @@ following example:
 if (lseek(fd, offset, whence) == (off_t)-1)
 {
     fprintf(stderr, '%s\n', libexplain_lseek(fd, offset, whence);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -105,7 +105,7 @@ if (lseek(fd, offset, whence) == (off_t)-1)
     int errnum = errno;
     fprintf(stderr, '%s\n', libexplain_errno_lseek(fd, eernum, offset,
         whence);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -160,7 +160,7 @@ if (lseek(fd, offset, whence) == (off_t)-1)
     char message[3000];
     libexplain_message_lseek(message, sizeof(message), fd, offset, whence);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -206,7 +206,7 @@ if (lseek(fd, offset, whence) == (off_t)-1)
     libexplain_message_errno_lseek(message, sizeof(message), errnum, fd,
         offset, whence);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

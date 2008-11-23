@@ -22,8 +22,9 @@ TEST_SUBJECT="lstat EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-lstat(pathname = "fred", buf = 0x123) failed, Bad address (EFAULT) because
-buf refers to memory that is outside the process's accessible address space
+lstat(pathname = "fred", buf = 0x00000123) failed, Bad address (EFAULT)
+because buf refers to memory that is outside the process's accessible
+address space
 fubar
 test $? -eq 0 || no_result
 

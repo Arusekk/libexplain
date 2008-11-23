@@ -20,9 +20,9 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/truncate.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
-#include <explain/strtol_or_die.h>
 #include <explain/truncate.h>
 
 
@@ -35,10 +35,10 @@ explain_truncate(int errnum, int argc, char **argv)
     if (argc != 2)
     {
         fprintf(stderr, "truncate: requires 2 arguments, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     pathname = argv[0];
-    length = strtol_or_die(argv[1]);
+    length = libexplain_strtol_or_die(argv[1]);
 
     libexplain_wrap_and_print
     (

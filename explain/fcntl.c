@@ -23,11 +23,12 @@
 
 #include <libexplain/fcntl.h>
 #include <libexplain/buffer/errno/fcntl.h>
+#include <libexplain/buffer/strsignal.h>
 #include <libexplain/open_flags.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/fcntl.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -39,9 +40,9 @@ explain_fcntl(int errnum, int argc, char **argv)
     if (argc < 2)
     {
         fprintf(stderr, "fcntl: at least 2 arguments required\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
-    fildes = strtol_or_die(argv[0]);
+    fildes = libexplain_strtol_or_die(argv[0]);
     command = libexplain_fcntl_command_parse(argv[1]);
     if (command < 0)
     {
@@ -51,7 +52,7 @@ explain_fcntl(int errnum, int argc, char **argv)
             "fcntl: unable to interpret \"%s\" as a command\n",
             argv[1]
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     switch (command)
     {
@@ -59,7 +60,7 @@ explain_fcntl(int errnum, int argc, char **argv)
         if (argc > 2)
         {
             fprintf(stderr, "fcntl: need 2 arguments (not %d)\n", argc);
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         libexplain_wrap_and_print
         (
@@ -69,8 +70,35 @@ explain_fcntl(int errnum, int argc, char **argv)
         break;
 
 #ifdef F_SETSIG
-    case F_SETSIG: /* FIXME: parse signal */
+    case F_SETSIG:
+        {
+            long            arg;
+
+            if (argc != 3)
+            {
+                fprintf(stderr, "fcntl: need 3 arguments (not %d)\n", argc);
+                exit(EXIT_FAILURE);
+            }
+            arg = libexplain_signal_parse(argv[2]);
+            if (arg < 0)
+            {
+                fprintf
+                (
+                    stderr,
+                    "argument \"%s\" does not look like a signal name\n",
+                    argv[2]
+                );
+                exit(EXIT_FAILURE);
+            }
+            libexplain_wrap_and_print
+            (
+                stdout,
+                libexplain_errno_fcntl(errnum, fildes, command, arg)
+            );
+        }
+        break;
 #endif
+
 #ifdef F_NOTIFY
     case F_NOTIFY: /* FIXME: parse notify bits */
 #endif
@@ -89,9 +117,9 @@ explain_fcntl(int errnum, int argc, char **argv)
             if (argc != 3)
             {
                 fprintf(stderr, "fcntl: need 3 arguments (not %d)\n", argc);
-                exit(1);
+                exit(EXIT_FAILURE);
             }
-            arg = strtol_or_die(argv[2]);
+            arg = libexplain_strtol_or_die(argv[2]);
             libexplain_wrap_and_print
             (
                 stdout,
@@ -107,7 +135,7 @@ explain_fcntl(int errnum, int argc, char **argv)
             if (argc != 3)
             {
                 fprintf(stderr, "fcntl: need 3 arguments (not %d)\n", argc);
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             arg = libexplain_open_flags_parse(argv[2]);
             if (arg < 0)
@@ -118,7 +146,7 @@ explain_fcntl(int errnum, int argc, char **argv)
                     "argument \"%s\" does not look like open flags\n",
                     argv[2]
                 );
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             libexplain_wrap_and_print
             (
@@ -138,7 +166,7 @@ explain_fcntl(int errnum, int argc, char **argv)
             if (argc > 2)
             {
                 fprintf(stderr, "fcntl: need 2 arguments (not %d)\n", argc);
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             f = f_zero;
             libexplain_wrap_and_print
@@ -160,7 +188,7 @@ explain_fcntl(int errnum, int argc, char **argv)
             if (argc != 2)
             {
                 fprintf(stderr, "fcntl: need 2 arguments (not %d)", argc);
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             f = f_zero;
             libexplain_wrap_and_print

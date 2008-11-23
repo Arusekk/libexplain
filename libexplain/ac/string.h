@@ -33,7 +33,7 @@
 #  include <strings.h>
 #endif
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -130,7 +130,7 @@ char *strendcpy(char *dst, const char *src, const char *end);
 #undef strcpy
 #define strcpy strcpy_is_unsafe__use_strendcpy_instead@
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

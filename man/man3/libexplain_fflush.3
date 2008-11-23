@@ -55,7 +55,7 @@ following example:
 if (fflush(fp))
 {
     fprintf(stderr, '%s\n', libexplain_fflush(fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .ft R
 .fi
@@ -92,7 +92,7 @@ if (fflush(fp))
 {
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_fflush(err, fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -139,7 +139,7 @@ if (fflush(fp))
     char message[3000];
     libexplain_message_fflush(message, sizeof(message), fp);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -179,7 +179,7 @@ if (fflush(fp))
     char message[3000];
     libexplain_message_errno_fflush(message, sizeof(message), err, fp);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

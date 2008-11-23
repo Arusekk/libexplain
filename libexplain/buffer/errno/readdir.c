@@ -18,34 +18,37 @@
 
 #include <libexplain/ac/errno.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/errno/readdir.h>
-#include <libexplain/buffer/fildes_to_pathname.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/dir_to_pathname.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
 
 
-void
-libexplain_buffer_errno_readdir(libexplain_string_buffer_t *sb, int errnum,
-    DIR *dir)
+static void
+libexplain_buffer_errno_readdir_system_call(libexplain_string_buffer_t *sb,
+    int errnum, DIR *dir)
+{
+    (void)errnum;
+    libexplain_string_buffer_puts(sb, "readdir(dir = ");
+    libexplain_buffer_pointer(sb, dir);
+    libexplain_buffer_dir_to_pathname(sb, dir);
+    libexplain_string_buffer_putc(sb, ')');
+}
+
+
+static void
+libexplain_buffer_errno_readdir_explanation(libexplain_string_buffer_t *sb,
+    int errnum, DIR *dir)
 {
     int             fildes;
 
-    libexplain_string_buffer_printf(sb, "readdir(dir = %p", dir);
     fildes = -1;
     if (dir)
         fildes = dirfd(dir);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
 
     /*
      * Most of these errors are from getdents(2).
@@ -61,7 +64,6 @@ libexplain_buffer_errno_readdir(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EINVAL:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -74,16 +76,34 @@ libexplain_buffer_errno_readdir(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "file descriptor does not refer to a directory"
-        );
+        libexplain_buffer_enotdir_fd(sb, fildes, "dir");
         break;
 
     default:
         /* no explanations for other errors */
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_readdir(libexplain_string_buffer_t *sb, int errnum,
+    DIR *dir)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_readdir_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        dir
+    );
+    libexplain_buffer_errno_readdir_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        dir
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

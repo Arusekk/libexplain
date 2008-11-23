@@ -37,7 +37,7 @@ explain_mkdir(int errnum, int argc, char **argv)
     {
     default:
         fprintf(stderr, "mkdir: requires 1 argument, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
 
     case 2:
         mode = libexplain_permission_mode_parse(argv[1]);
@@ -49,7 +49,7 @@ explain_mkdir(int errnum, int argc, char **argv)
                 "argument \"%s\" does not look like a permission mode\n",
                 argv[1]
             );
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         /* fall through... */
 

@@ -45,6 +45,6 @@ libexplain_remove_or_die(const char *pathname)
     if (remove(pathname) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_remove(pathname));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

@@ -30,7 +30,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_stat <pathname>\n");
     fprintf(stderr, "       test_stat -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

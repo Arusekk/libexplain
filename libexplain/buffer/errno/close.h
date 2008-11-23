@@ -46,7 +46,7 @@ void libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
     int fildes);
 
 /**
-  * The libexplain_buffer_errno_close_because function is used by the
+  * The libexplain_buffer_errno_close_explanation function is used by the
   * libexplain_buffer_errno_close function (and others) to print the
   * extended "because..." part of the explanation.
   *
@@ -58,7 +58,7 @@ void libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
   *    The original file descriptor, exactly as passed to the close(2)
   *    system call.
   */
-void libexplain_buffer_errno_close_because(libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_close_explanation(libexplain_string_buffer_t *sb,
     int errnum, int fildes);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CLOSE_H */

@@ -23,7 +23,7 @@ TEST_SUBJECT="fopen vs ENOENT"
 
 cat > test.ok << 'fubar'
 fopen(pathname = "snot", flags = "r") failed, No such file or directory
-(ENOENT) because there is no "snot" file in the pathname "." directory
+(ENOENT) because there is no "snot" file in the current directory
 fubar
 test $? -eq 0 || no_result
 

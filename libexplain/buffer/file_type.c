@@ -30,31 +30,89 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
     switch (mode)
     {
     case S_IFSOCK:
-        libexplain_buffer_gettext(sb, i18n("socket"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a network socket.
+             */
+            i18n("socket")
+        );
         break;
 
     case S_IFLNK:
-        libexplain_buffer_gettext(sb, i18n("symbolic link"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a symbolic link.
+             */
+            i18n("symbolic link")
+        );
         break;
 
     case S_IFREG:
-        libexplain_buffer_gettext(sb, i18n("regular file"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a regular file.
+             */
+            i18n("regular file")
+        );
         break;
 
     case S_IFBLK:
-        libexplain_buffer_gettext(sb, i18n("block special device"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a block special
+             * device.
+             */
+            i18n("block special device")
+        );
         break;
 
     case S_IFDIR:
-        libexplain_buffer_gettext(sb, i18n("directory"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a directory.
+             */
+            i18n("directory")
+        );
         break;
 
     case S_IFCHR:
-        libexplain_buffer_gettext(sb, i18n("character special device"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a character
+             * special device.
+             */
+            i18n("character special device")
+        );
         break;
 
     case S_IFIFO:
-        libexplain_buffer_gettext(sb, i18n("named pipe"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a fifo.
+             */
+            i18n("named pipe")
+        );
         break;
 
 #ifdef S_IFMPC
@@ -62,6 +120,12 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         libexplain_buffer_gettext
         (
             sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a multiplexed
+             * character special device.
+             * Not present on all POSIX implementations.
+             */
             i18n("multiplexed character special device")
         );
         break;
@@ -69,7 +133,16 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFNAM
     case S_IFNAM:
-        libexplain_buffer_gettext(sb, i18n("named special file"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a named special
+             * file.  Not present on all POSIX implementations.
+             */
+            i18n("named special file")
+        );
         /*
          * with two subtypes, distinguished by st_rdev values 1, 2
          * 0001   S_INSEM    s    000001   XENIX semaphore subtype of IFNAM
@@ -80,36 +153,92 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFMPB
     case S_IFMPB:
-        libexplain_buffer_gettext(sb, i18n("multiplexed block special device"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see
+             * stat(2) for more information) when that file is a
+             * multiplexed block special device.  Not present on all
+             * POSIX implementations.
+             */
+            i18n("multiplexed block special device")
+        );
         break;
 #endif
 
 #ifdef S_IFCMP
     case S_IFCMP:
-        libexplain_buffer_gettext(sb, i18n("VxFS compressed file"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a VxFS compressed
+             * file.  Not present on all POSIX implementations.
+             */
+            i18n("VxFS compressed file")
+        );
         break;
 #endif
 
 #ifdef S_IFNWK
     case S_IFNWK:
-        libexplain_buffer_gettext(sb, i18n("network special file"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a network special
+             * file.  Not present on all POSIX implementations.
+             */
+            i18n("network special file")
+        );
         break;
 #endif
 
 #ifdef S_IFDOOR
     case S_IFDOOR:
-        libexplain_buffer_gettext(sb, i18n("Solaris door"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a Solaris door.
+             * Not present on all POSIX implementations.
+             */
+            i18n("Solaris door")
+        );
         break;
 #endif
 
 #ifdef S_IFWHT
     case S_IFWHT:
-        libexplain_buffer_gettext(sb, i18n("BSD whiteout"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is a BSD whiteout
+             * file, used by the union file system.  Not present on all
+             * POSIX implementations.
+             */
+            i18n("BSD whiteout")
+        );
         break;
 #endif
 
     default:
-        libexplain_buffer_gettext(sb, i18n("unknown file type"));
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2)
+             * for more information) when that file is of an unknown
+             * type, often the result of a bad inode block on a hard disk.
+             */
+            i18n("unknown file type")
+        );
         libexplain_string_buffer_printf(sb, " (%#o)", mode);
         break;
     }

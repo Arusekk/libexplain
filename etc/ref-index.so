@@ -193,6 +193,104 @@ T}	T{
 .ad l
 
 T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+
+T}
 libexplain_access(3)	\*[Page*Of*libexplain_access(3)]	T{
 .ad r
 libexplain access - explain
@@ -214,6 +312,13 @@ T}	T{
 .ad l
 access or die - check permissions for a file and report errors
 T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain socket or die - create
+T}	T{
+.ad l
+an endpoint and report errors
+T}
 	\*[Page*Of*]	T{
 .ad r
 
@@ -227,6 +332,13 @@ T}
 T}	T{
 .ad l
 binary stream
+T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain fread or die -
+T}	T{
+.ad l
+binary stream input and report errors
 T}
 	\*[Page*Of*]	T{
 .ad r
@@ -312,12 +424,82 @@ T}	T{
 .ad l
 change
 T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change
+T}
 libexplain_fchdir_or_die(3)	\*[Page*Of*libexplain_fchdir_or_die(3)]	T{
 .ad r
 libexplain fchdir or die -
 T}	T{
 .ad l
 change directory and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change file
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change file last
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change file last access and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change file last access and modification
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change file last access and modification times and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change file last access and modification times and report
+T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain utime or die -
+T}	T{
+.ad l
+change file times and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change ownership of a
 T}
 	\*[Page*Of*]	T{
 .ad r
@@ -338,11 +520,32 @@ T}
 
 T}	T{
 .ad l
+change ownership of a file and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+change ownership of a file and report
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
 change ownership of a file and report
 T}
 libexplain_chown_or_die(3)	\*[Page*Of*libexplain_chown_or_die(3)]	T{
 .ad r
 libexplain chown or die -
+T}	T{
+.ad l
+change ownership of a file and report errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain lchown or die -
 T}	T{
 .ad l
 change ownership of a file and report errors
@@ -402,6 +605,34 @@ libexplain fchmod or die -
 T}	T{
 .ad l
 change permissions of a file and report errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or die - wait for process to
+T}	T{
+.ad l
+change state and report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or die - wait for process to
+T}	T{
+.ad l
+change state and report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or die - wait for process to
+T}	T{
+.ad l
+change state and report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or die - wait for process to
+T}	T{
+.ad l
+change state and report errors
 T}
 	\*[Page*Of*]	T{
 .ad r
@@ -466,6 +697,27 @@ T}	T{
 .ad l
 change working directory and report errors
 T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+libexplain fgetc or die - input of
+T}	T{
+.ad l
+characters and report errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+libexplain getchar or die - input of
+T}	T{
+.ad l
+characters and report errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+libexplain getc or die - input of
+T}	T{
+.ad l
+characters and report errors
+T}
 libexplain_chdir(3)	\*[Page*Of*libexplain_chdir(3)]	T{
 .ad r
 libexplain chdir - explain
@@ -486,6 +738,13 @@ libexplain
 T}	T{
 .ad l
 chdir or die - change working directory and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+check
 T}
 	\*[Page*Of*]	T{
 .ad r
@@ -528,6 +787,41 @@ libexplain access or die -
 T}	T{
 .ad l
 check permissions for a file and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+check stream
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+check stream status and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+check stream status and report
+T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain ferror or die -
+T}	T{
+.ad l
+check stream status and report errors
+T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain fork or die - create a
+T}	T{
+.ad l
+child process and report errors
 T}
 libexplain_chmod(3)	\*[Page*Of*libexplain_chmod(3)]	T{
 .ad r
@@ -590,6 +884,34 @@ T}
 
 T}	T{
 .ad l
+close a
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+close a directory and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+close a directory and report
+T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+libexplain closedir or die -
+T}	T{
+.ad l
+close a directory and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
 close a file
 T}
 	\*[Page*Of*]	T{
@@ -620,6 +942,27 @@ T}	T{
 .ad l
 close a stream and report errors
 T}
+libexplain_closedir(3)	\*[Page*Of*libexplain_closedir(3)]	T{
+.ad r
+libexplain closedir - explain
+T}	T{
+.ad l
+closedir(3) errors
+T}
+libexplain_closedir(3)	\*[Page*Of*libexplain_closedir(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+closedir - explain closedir(3) errors
+T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+closedir or die - close a directory and report errors
+T}
 libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
 .ad r
 libexplain
@@ -633,6 +976,13 @@ libexplain
 T}	T{
 .ad l
 close or die - close a file descriptor and report errors
+T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain system or die - execute a shell
+T}	T{
+.ad l
+command and report errors
 T}
 libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
 .ad r
@@ -653,7 +1003,49 @@ T}
 
 T}	T{
 .ad l
+create
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
 create a
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create a
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create a child
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create a child process and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create a child process and report
+T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain fork or die -
+T}	T{
+.ad l
+create a child process and report errors
 T}
 	\*[Page*Of*]	T{
 .ad r
@@ -675,6 +1067,13 @@ libexplain mkdir or die -
 T}	T{
 .ad l
 create a directory and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create an
 T}
 	\*[Page*Of*]	T{
 .ad r
@@ -710,6 +1109,41 @@ libexplain creat or die -
 T}	T{
 .ad l
 create and open a file creat and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create an endpoint
+T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain socket or die -
+T}	T{
+.ad l
+create an endpoint and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create an endpoint for
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create an endpoint for communication and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+create an endpoint for communication and report
 T}
 libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
 .ad r
@@ -823,6 +1257,13 @@ T}	T{
 .ad l
 descriptor and report errors
 T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain fread or
+T}	T{
+.ad l
+die - binary stream input and report errors
+T}
 libexplain_fwrite_or_die(3)	\*[Page*Of*libexplain_fwrite_or_die(3)]	T{
 .ad r
 libexplain fwrite or
@@ -844,9 +1285,23 @@ T}	T{
 .ad l
 die - change directory and report errors
 T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain utime or
+T}	T{
+.ad l
+die - change file times and report errors
+T}
 libexplain_chown_or_die(3)	\*[Page*Of*libexplain_chown_or_die(3)]	T{
 .ad r
 libexplain chown or
+T}	T{
+.ad l
+die - change ownership of a file and report errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain lchown or
 T}	T{
 .ad l
 die - change ownership of a file and report errors
@@ -886,6 +1341,20 @@ T}	T{
 .ad l
 die - check permissions for a file and report errors
 T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain ferror or
+T}	T{
+.ad l
+die - check stream status and report errors
+T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+libexplain closedir or
+T}	T{
+.ad l
+die - close a directory and report errors
+T}
 libexplain_close_or_die(3)	\*[Page*Of*libexplain_close_or_die(3)]	T{
 .ad r
 libexplain close or
@@ -900,6 +1369,13 @@ T}	T{
 .ad l
 die - close a stream and report errors
 T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain fork or
+T}	T{
+.ad l
+die - create a child process and report errors
+T}
 libexplain_mkdir_or_die(3)	\*[Page*Of*libexplain_mkdir_or_die(3)]	T{
 .ad r
 libexplain mkdir or
@@ -913,6 +1389,13 @@ libexplain creat or
 T}	T{
 .ad l
 die - create and open a file creat and report errors
+T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain socket or
+T}	T{
+.ad l
+die - create an endpoint and report errors
 T}
 libexplain_rmdir_or_die(3)	\*[Page*Of*libexplain_rmdir_or_die(3)]	T{
 .ad r
@@ -942,6 +1425,20 @@ T}	T{
 .ad l
 die - duplicate a file descriptor and report errors
 T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain system or
+T}	T{
+.ad l
+die - execute a shell command and report errors
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+libexplain execve or
+T}	T{
+.ad l
+die - execute program and report errors
+T}
 libexplain_fflush_or_die(3)	\*[Page*Of*libexplain_fflush_or_die(3)]	T{
 .ad r
 libexplain fflush or
@@ -969,6 +1466,41 @@ libexplain stat or
 T}	T{
 .ad l
 die - get file status and report errors
+T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+libexplain gettimeofday or
+T}	T{
+.ad l
+die - get time and report errors
+T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+libexplain fgetc or
+T}	T{
+.ad l
+die - input of characters and report errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+libexplain getchar or
+T}	T{
+.ad l
+die - input of characters and report errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+libexplain getc or
+T}	T{
+.ad l
+die - input of characters and report errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+libexplain fgets or
+T}	T{
+.ad l
+die - input of strings and report errors
 T}
 libexplain_link_or_die(3)	\*[Page*Of*libexplain_link_or_die(3)]	T{
 .ad r
@@ -1054,6 +1586,34 @@ T}	T{
 .ad l
 die - truncate a file and report errors
 T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or
+T}	T{
+.ad l
+die - wait for process to change state and report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or
+T}	T{
+.ad l
+die - wait for process to change state and report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or
+T}	T{
+.ad l
+die - wait for process to change state and report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or
+T}	T{
+.ad l
+die - wait for process to change state and report errors
+T}
 libexplain_write_or_die(3)	\*[Page*Of*libexplain_write_or_die(3)]	T{
 .ad r
 libexplain write or
@@ -1064,6 +1624,13 @@ T}
 libexplain_chdir_or_die(3)	\*[Page*Of*libexplain_chdir_or_die(3)]	T{
 .ad r
 libexplain chdir or die - change working
+T}	T{
+.ad l
+directory and report errors
+T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+libexplain closedir or die - close a
 T}	T{
 .ad l
 directory and report errors
@@ -1159,6 +1726,13 @@ T}	T{
 .ad l
 dup or die - duplicate a file descriptor and report errors
 T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain socket or die - create an
+T}	T{
+.ad l
+endpoint and report errors
+T}
 libexplain_readdir_or_die(3)	\*[Page*Of*libexplain_readdir_or_die(3)]	T{
 .ad r
 libexplain readdir or die - read directory
@@ -1236,6 +1810,20 @@ T}	T{
 .ad l
 errors
 T}
+libexplain_closedir(3)	\*[Page*Of*libexplain_closedir(3)]	T{
+.ad r
+libexplain closedir - explain closedir(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+libexplain closedir or die - close a directory and report
+T}	T{
+.ad l
+errors
+T}
 libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
 .ad r
 libexplain close - explain close(2)
@@ -1274,6 +1862,20 @@ T}
 libexplain_dup_or_die(3)	\*[Page*Of*libexplain_dup_or_die(3)]	T{
 .ad r
 libexplain dup or die - duplicate a file descriptor and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_execve(3)	\*[Page*Of*libexplain_execve(3)]	T{
+.ad r
+libexplain execve - explain execve(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+libexplain execve or die - execute program and report
 T}	T{
 .ad l
 errors
@@ -1334,6 +1936,20 @@ T}	T{
 .ad l
 errors
 T}
+libexplain_ferror(3)	\*[Page*Of*libexplain_ferror(3)]	T{
+.ad r
+libexplain ferror - explain ferror(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain ferror or die - check stream status and report
+T}	T{
+.ad l
+errors
+T}
 libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
 .ad r
 libexplain fflush - explain fflush(3)
@@ -1348,6 +1964,34 @@ T}	T{
 .ad l
 errors
 T}
+libexplain_fgetc(3)	\*[Page*Of*libexplain_fgetc(3)]	T{
+.ad r
+libexplain fgetc - explain fgetc(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+libexplain fgetc or die - input of characters and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_fgets(3)	\*[Page*Of*libexplain_fgets(3)]	T{
+.ad r
+libexplain fgets - explain fgets(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+libexplain fgets or die - input of strings and report
+T}	T{
+.ad l
+errors
+T}
 libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
 .ad r
 libexplain fopen - explain fopen(3)
@@ -1358,6 +2002,34 @@ T}
 libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
 .ad r
 libexplain fopen or die - open file and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_fork(3)	\*[Page*Of*libexplain_fork(3)]	T{
+.ad r
+libexplain fork - explain fork(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain fork or die - create a child process and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_fread(3)	\*[Page*Of*libexplain_fread(3)]	T{
+.ad r
+libexplain fread - explain fread(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain fread or die - binary stream input and report
 T}	T{
 .ad l
 errors
@@ -1414,6 +2086,62 @@ T}
 libexplain_fwrite_or_die(3)	\*[Page*Of*libexplain_fwrite_or_die(3)]	T{
 .ad r
 libexplain fwrite or die - binary stream output and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_getc(3)	\*[Page*Of*libexplain_getc(3)]	T{
+.ad r
+libexplain getc - explain getc(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_getchar(3)	\*[Page*Of*libexplain_getchar(3)]	T{
+.ad r
+libexplain getchar - explain getchar(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+libexplain getchar or die - input of characters and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+libexplain getc or die - input of characters and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_gettimeofday(3)	\*[Page*Of*libexplain_gettimeofday(3)]	T{
+.ad r
+libexplain gettimeofday - explain gettimeofday(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+libexplain gettimeofday or die - get time and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_lchown(3)	\*[Page*Of*libexplain_lchown(3)]	T{
+.ad r
+libexplain lchown - explain lchown(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain lchown or die - change ownership of a file and report
 T}	T{
 .ad l
 errors
@@ -1586,6 +2314,20 @@ T}	T{
 .ad l
 errors
 T}
+libexplain_socket(3)	\*[Page*Of*libexplain_socket(3)]	T{
+.ad r
+libexplain socket - explain socket(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain socket or die - create an endpoint and report
+T}	T{
+.ad l
+errors
+T}
 libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
 .ad r
 libexplain stat - explain stat(2)
@@ -1610,6 +2352,20 @@ T}
 libexplain_symlink_or_die(3)	\*[Page*Of*libexplain_symlink_or_die(3)]	T{
 .ad r
 libexplain symlink or die - make a new name for a file and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_system(3)	\*[Page*Of*libexplain_system(3)]	T{
+.ad r
+libexplain system - explain system(3)
+T}	T{
+.ad l
+errors
+T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain system or die - execute a shell command and report
 T}	T{
 .ad l
 errors
@@ -1642,6 +2398,76 @@ T}	T{
 .ad l
 errors
 T}
+libexplain_utime(3)	\*[Page*Of*libexplain_utime(3)]	T{
+.ad r
+libexplain utime - explain utime(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain utime or die - change file times and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_wait3(3)	\*[Page*Of*libexplain_wait3(3)]	T{
+.ad r
+libexplain wait3 - explain wait3(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or die - wait for process to change state and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_wait4(3)	\*[Page*Of*libexplain_wait4(3)]	T{
+.ad r
+libexplain wait4 - explain wait4(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or die - wait for process to change state and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_wait(3)	\*[Page*Of*libexplain_wait(3)]	T{
+.ad r
+libexplain wait - explain wait(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or die - wait for process to change state and report
+T}	T{
+.ad l
+errors
+T}
+libexplain_waitpid(3)	\*[Page*Of*libexplain_waitpid(3)]	T{
+.ad r
+libexplain waitpid - explain waitpid(2)
+T}	T{
+.ad l
+errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or die - wait for process to change state and report
+T}	T{
+.ad l
+errors
+T}
 libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
 .ad r
 libexplain write - explain write(2)
@@ -1655,6 +2481,62 @@ libexplain write or die - write to a file descriptor and report
 T}	T{
 .ad l
 errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+execute
+T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain system or die -
+T}	T{
+.ad l
+execute a shell command and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+execute program and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+execute program and report
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+libexplain execve or die -
+T}	T{
+.ad l
+execute program and report errors
+T}
+libexplain_execve(3)	\*[Page*Of*libexplain_execve(3)]	T{
+.ad r
+libexplain execve - explain
+T}	T{
+.ad l
+execve(2) errors
+T}
+libexplain_execve(3)	\*[Page*Of*libexplain_execve(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+execve - explain execve(2) errors
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+execve or die - execute program and report errors
 T}
 libexplain_access(3)	\*[Page*Of*libexplain_access(3)]	T{
 .ad r
@@ -1691,6 +2573,13 @@ T}	T{
 .ad l
 explain close(2) errors
 T}
+libexplain_closedir(3)	\*[Page*Of*libexplain_closedir(3)]	T{
+.ad r
+libexplain closedir -
+T}	T{
+.ad l
+explain closedir(3) errors
+T}
 libexplain_creat(3)	\*[Page*Of*libexplain_creat(3)]	T{
 .ad r
 libexplain creat -
@@ -1711,6 +2600,13 @@ libexplain -
 T}	T{
 .ad l
 Explain errno values returned by libc functions
+T}
+libexplain_execve(3)	\*[Page*Of*libexplain_execve(3)]	T{
+.ad r
+libexplain execve -
+T}	T{
+.ad l
+explain execve(2) errors
 T}
 explain(1)	\*[Page*Of*explain(1)]	T{
 .ad r
@@ -1747,6 +2643,13 @@ T}	T{
 .ad l
 explain fcntl(2) errors
 T}
+libexplain_ferror(3)	\*[Page*Of*libexplain_ferror(3)]	T{
+.ad r
+libexplain ferror -
+T}	T{
+.ad l
+explain ferror(3) errors
+T}
 libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
 .ad r
 libexplain fflush -
@@ -1754,12 +2657,40 @@ T}	T{
 .ad l
 explain fflush(3) errors
 T}
+libexplain_fgetc(3)	\*[Page*Of*libexplain_fgetc(3)]	T{
+.ad r
+libexplain fgetc -
+T}	T{
+.ad l
+explain fgetc(3) errors
+T}
+libexplain_fgets(3)	\*[Page*Of*libexplain_fgets(3)]	T{
+.ad r
+libexplain fgets -
+T}	T{
+.ad l
+explain fgets(3) errors
+T}
 libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
 .ad r
 libexplain fopen -
 T}	T{
 .ad l
 explain fopen(3) errors
+T}
+libexplain_fork(3)	\*[Page*Of*libexplain_fork(3)]	T{
+.ad r
+libexplain fork -
+T}	T{
+.ad l
+explain fork(2) errors
+T}
+libexplain_fread(3)	\*[Page*Of*libexplain_fread(3)]	T{
+.ad r
+libexplain fread -
+T}	T{
+.ad l
+explain fread(3) errors
 T}
 libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
 .ad r
@@ -1788,6 +2719,34 @@ libexplain fwrite -
 T}	T{
 .ad l
 explain fwrite(3) errors
+T}
+libexplain_getc(3)	\*[Page*Of*libexplain_getc(3)]	T{
+.ad r
+libexplain getc -
+T}	T{
+.ad l
+explain getc(3) errors
+T}
+libexplain_getchar(3)	\*[Page*Of*libexplain_getchar(3)]	T{
+.ad r
+libexplain getchar -
+T}	T{
+.ad l
+explain getchar(3) errors
+T}
+libexplain_gettimeofday(3)	\*[Page*Of*libexplain_gettimeofday(3)]	T{
+.ad r
+libexplain gettimeofday -
+T}	T{
+.ad l
+explain gettimeofday(2) errors
+T}
+libexplain_lchown(3)	\*[Page*Of*libexplain_lchown(3)]	T{
+.ad r
+libexplain lchown -
+T}	T{
+.ad l
+explain lchown(2) errors
 T}
 libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
 .ad r
@@ -1873,6 +2832,13 @@ T}	T{
 .ad l
 explain rmdir(2) errors
 T}
+libexplain_socket(3)	\*[Page*Of*libexplain_socket(3)]	T{
+.ad r
+libexplain socket -
+T}	T{
+.ad l
+explain socket(2) errors
+T}
 libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
 .ad r
 libexplain stat -
@@ -1886,6 +2852,13 @@ libexplain symlink -
 T}	T{
 .ad l
 explain symlink(2) errors
+T}
+libexplain_system(3)	\*[Page*Of*libexplain_system(3)]	T{
+.ad r
+libexplain system -
+T}	T{
+.ad l
+explain system(3) errors
 T}
 explain(1)	\*[Page*Of*explain(1)]	T{
 .ad r
@@ -1907,6 +2880,41 @@ libexplain unlink -
 T}	T{
 .ad l
 explain unlink(2) errors
+T}
+libexplain_utime(3)	\*[Page*Of*libexplain_utime(3)]	T{
+.ad r
+libexplain utime -
+T}	T{
+.ad l
+explain utime(2) errors
+T}
+libexplain_wait(3)	\*[Page*Of*libexplain_wait(3)]	T{
+.ad r
+libexplain wait -
+T}	T{
+.ad l
+explain wait(2) errors
+T}
+libexplain_wait3(3)	\*[Page*Of*libexplain_wait3(3)]	T{
+.ad r
+libexplain wait3 -
+T}	T{
+.ad l
+explain wait3(2) errors
+T}
+libexplain_wait4(3)	\*[Page*Of*libexplain_wait4(3)]	T{
+.ad r
+libexplain wait4 -
+T}	T{
+.ad l
+explain wait4(2) errors
+T}
+libexplain_waitpid(3)	\*[Page*Of*libexplain_waitpid(3)]	T{
+.ad r
+libexplain waitpid -
+T}	T{
+.ad l
+explain waitpid(2) errors
 T}
 libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
 .ad r
@@ -1999,6 +3007,27 @@ T}	T{
 .ad l
 fcntl or die - manipulate a file descriptor and report errors
 T}
+libexplain_ferror(3)	\*[Page*Of*libexplain_ferror(3)]	T{
+.ad r
+libexplain ferror - explain
+T}	T{
+.ad l
+ferror(3) errors
+T}
+libexplain_ferror(3)	\*[Page*Of*libexplain_ferror(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+ferror - explain ferror(3) errors
+T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+ferror or die - check stream status and report errors
+T}
 libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
 .ad r
 libexplain fflush - explain
@@ -2019,6 +3048,48 @@ libexplain
 T}	T{
 .ad l
 fflush or die - flush a stream and report errors
+T}
+libexplain_fgetc(3)	\*[Page*Of*libexplain_fgetc(3)]	T{
+.ad r
+libexplain fgetc - explain
+T}	T{
+.ad l
+fgetc(3) errors
+T}
+libexplain_fgetc(3)	\*[Page*Of*libexplain_fgetc(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fgetc - explain fgetc(3) errors
+T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fgetc or die - input of characters and report errors
+T}
+libexplain_fgets(3)	\*[Page*Of*libexplain_fgets(3)]	T{
+.ad r
+libexplain fgets - explain
+T}	T{
+.ad l
+fgets(3) errors
+T}
+libexplain_fgets(3)	\*[Page*Of*libexplain_fgets(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fgets - explain fgets(3) errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fgets or die - input of strings and report errors
 T}
 libexplain_access_or_die(3)	\*[Page*Of*libexplain_access_or_die(3)]	T{
 .ad r
@@ -2065,6 +3136,13 @@ T}
 libexplain_ftruncate_or_die(3)	\*[Page*Of*libexplain_ftruncate_or_die(3)]	T{
 .ad r
 libexplain ftruncate or die - truncate a
+T}	T{
+.ad l
+file and report errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain lchown or die - change ownership of a
 T}	T{
 .ad l
 file and report errors
@@ -2188,6 +3266,13 @@ T}	T{
 .ad l
 file status and report errors
 T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain utime or die - change
+T}	T{
+.ad l
+file times and report errors
+T}
 libexplain_fflush_or_die(3)	\*[Page*Of*libexplain_fflush_or_die(3)]	T{
 .ad r
 libexplain fflush or die -
@@ -2236,6 +3321,76 @@ libexplain symlink or die - make a new name
 T}	T{
 .ad l
 for a file and report errors
+T}
+libexplain_fork(3)	\*[Page*Of*libexplain_fork(3)]	T{
+.ad r
+libexplain fork - explain
+T}	T{
+.ad l
+fork(2) errors
+T}
+libexplain_fork(3)	\*[Page*Of*libexplain_fork(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fork - explain fork(2) errors
+T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fork or die - create a child process and report errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or die - wait
+T}	T{
+.ad l
+for process to change state and report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or die - wait
+T}	T{
+.ad l
+for process to change state and report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or die - wait
+T}	T{
+.ad l
+for process to change state and report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or die - wait
+T}	T{
+.ad l
+for process to change state and report errors
+T}
+libexplain_fread(3)	\*[Page*Of*libexplain_fread(3)]	T{
+.ad r
+libexplain fread - explain
+T}	T{
+.ad l
+fread(3) errors
+T}
+libexplain_fread(3)	\*[Page*Of*libexplain_fread(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fread - explain fread(3) errors
+T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+fread or die - binary stream input and report errors
 T}
 libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
 .ad r
@@ -2356,6 +3511,48 @@ T}	T{
 .ad l
 get
 T}
+libexplain_getc(3)	\*[Page*Of*libexplain_getc(3)]	T{
+.ad r
+libexplain getc - explain
+T}	T{
+.ad l
+getc(3) errors
+T}
+libexplain_getc(3)	\*[Page*Of*libexplain_getc(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+getc - explain getc(3) errors
+T}
+libexplain_getchar(3)	\*[Page*Of*libexplain_getchar(3)]	T{
+.ad r
+libexplain getchar - explain
+T}	T{
+.ad l
+getchar(3) errors
+T}
+libexplain_getchar(3)	\*[Page*Of*libexplain_getchar(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+getchar - explain getchar(3) errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+getchar or die - input of characters and report errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+getc or die - input of characters and report errors
+T}
 	\*[Page*Of*]	T{
 .ad r
 
@@ -2440,6 +3637,153 @@ T}	T{
 .ad l
 get file status and report errors
 T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+libexplain gettimeofday or die -
+T}	T{
+.ad l
+get time and report errors
+T}
+libexplain_gettimeofday(3)	\*[Page*Of*libexplain_gettimeofday(3)]	T{
+.ad r
+libexplain gettimeofday - explain
+T}	T{
+.ad l
+gettimeofday(2) errors
+T}
+libexplain_gettimeofday(3)	\*[Page*Of*libexplain_gettimeofday(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+gettimeofday - explain gettimeofday(2) errors
+T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+gettimeofday or die - get time and report errors
+T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain fread or die - binary stream
+T}	T{
+.ad l
+input and report errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of characters and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of characters and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of characters and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of characters and report
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of characters and report
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+input of characters and report
+T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+libexplain fgetc or die -
+T}	T{
+.ad l
+input of characters and report errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+libexplain getchar or die -
+T}	T{
+.ad l
+input of characters and report errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+libexplain getc or die -
+T}	T{
+.ad l
+input of characters and report errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+libexplain fgets or die -
+T}	T{
+.ad l
+input of strings and report errors
+T}
+libexplain_lchown(3)	\*[Page*Of*libexplain_lchown(3)]	T{
+.ad r
+libexplain lchown - explain
+T}	T{
+.ad l
+lchown(2) errors
+T}
+libexplain_lchown(3)	\*[Page*Of*libexplain_lchown(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+lchown - explain lchown(2) errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+lchown or die - change ownership of a file and report errors
+T}
 libexplain(3)	\*[Page*Of*libexplain(3)]	T{
 .ad r
 libexplain - Explain errno values returned by
@@ -2503,6 +3847,20 @@ T}	T{
 .ad l
 libexplain chown or die - change ownership of a file and report errors
 T}
+libexplain_closedir(3)	\*[Page*Of*libexplain_closedir(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain closedir - explain closedir(3) errors
+T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain closedir or die - close a directory and report errors
+T}
 libexplain_close(3)	\*[Page*Of*libexplain_close(3)]	T{
 .ad r
 
@@ -2544,6 +3902,20 @@ libexplain_dup_or_die(3)	\*[Page*Of*libexplain_dup_or_die(3)]	T{
 T}	T{
 .ad l
 libexplain dup or die - duplicate a file descriptor and report errors
+T}
+libexplain_execve(3)	\*[Page*Of*libexplain_execve(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain execve - explain execve(2) errors
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain execve or die - execute program and report errors
 T}
 libexplain(3)	\*[Page*Of*libexplain(3)]	T{
 .ad r
@@ -2608,6 +3980,20 @@ T}	T{
 .ad l
 libexplain fcntl or die - manipulate a file descriptor and report errors
 T}
+libexplain_ferror(3)	\*[Page*Of*libexplain_ferror(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain ferror - explain ferror(3) errors
+T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain ferror or die - check stream status and report errors
+T}
 libexplain_fflush(3)	\*[Page*Of*libexplain_fflush(3)]	T{
 .ad r
 
@@ -2622,6 +4008,34 @@ T}	T{
 .ad l
 libexplain fflush or die - flush a stream and report errors
 T}
+libexplain_fgetc(3)	\*[Page*Of*libexplain_fgetc(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fgetc - explain fgetc(3) errors
+T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fgetc or die - input of characters and report errors
+T}
+libexplain_fgets(3)	\*[Page*Of*libexplain_fgets(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fgets - explain fgets(3) errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fgets or die - input of strings and report errors
+T}
 libexplain_fopen(3)	\*[Page*Of*libexplain_fopen(3)]	T{
 .ad r
 
@@ -2635,6 +4049,34 @@ libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
 T}	T{
 .ad l
 libexplain fopen or die - open file and report errors
+T}
+libexplain_fork(3)	\*[Page*Of*libexplain_fork(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fork - explain fork(2) errors
+T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fork or die - create a child process and report errors
+T}
+libexplain_fread(3)	\*[Page*Of*libexplain_fread(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fread - explain fread(3) errors
+T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain fread or die - binary stream input and report errors
 T}
 libexplain_freopen(3)	\*[Page*Of*libexplain_freopen(3)]	T{
 .ad r
@@ -2691,6 +4133,62 @@ libexplain_fwrite_or_die(3)	\*[Page*Of*libexplain_fwrite_or_die(3)]	T{
 T}	T{
 .ad l
 libexplain fwrite or die - binary stream output and report errors
+T}
+libexplain_getc(3)	\*[Page*Of*libexplain_getc(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain getc - explain getc(3) errors
+T}
+libexplain_getchar(3)	\*[Page*Of*libexplain_getchar(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain getchar - explain getchar(3) errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain getchar or die - input of characters and report errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain getc or die - input of characters and report errors
+T}
+libexplain_gettimeofday(3)	\*[Page*Of*libexplain_gettimeofday(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain gettimeofday - explain gettimeofday(2) errors
+T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain gettimeofday or die - get time and report errors
+T}
+libexplain_lchown(3)	\*[Page*Of*libexplain_lchown(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain lchown - explain lchown(2) errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain lchown or die - change ownership of a file and report errors
 T}
 libexplain_link(3)	\*[Page*Of*libexplain_link(3)]	T{
 .ad r
@@ -2860,6 +4358,20 @@ T}	T{
 .ad l
 libexplain rmdir or die - delete a directory and report errors
 T}
+libexplain_socket(3)	\*[Page*Of*libexplain_socket(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain socket - explain socket(2) errors
+T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain socket or die - create an endpoint and report errors
+T}
 libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
 .ad r
 
@@ -2888,6 +4400,20 @@ T}	T{
 .ad l
 libexplain symlink or die - make a new name for a file and report errors
 T}
+libexplain_system(3)	\*[Page*Of*libexplain_system(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain system - explain system(3) errors
+T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain system or die - execute a shell command and report errors
+T}
 libexplain_truncate(3)	\*[Page*Of*libexplain_truncate(3)]	T{
 .ad r
 
@@ -2915,6 +4441,76 @@ libexplain_unlink_or_die(3)	\*[Page*Of*libexplain_unlink_or_die(3)]	T{
 T}	T{
 .ad l
 libexplain unlink or die - delete a file and report errors
+T}
+libexplain_utime(3)	\*[Page*Of*libexplain_utime(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain utime - explain utime(2) errors
+T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain utime or die - change file times and report errors
+T}
+libexplain_wait3(3)	\*[Page*Of*libexplain_wait3(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain wait3 - explain wait3(2) errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain wait3 or die - wait for process to change state and report errors
+T}
+libexplain_wait4(3)	\*[Page*Of*libexplain_wait4(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain wait4 - explain wait4(2) errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain wait4 or die - wait for process to change state and report errors
+T}
+libexplain_wait(3)	\*[Page*Of*libexplain_wait(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain wait - explain wait(2) errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain wait or die - wait for process to change state and report errors
+T}
+libexplain_waitpid(3)	\*[Page*Of*libexplain_waitpid(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain waitpid - explain waitpid(2) errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+
+T}	T{
+.ad l
+libexplain waitpid or die - wait for process to change state and report errors
 T}
 libexplain_write(3)	\*[Page*Of*libexplain_write(3)]	T{
 .ad r
@@ -3294,6 +4890,13 @@ T}	T{
 .ad l
 open or die - open file and report errors
 T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain fread
+T}	T{
+.ad l
+or die - binary stream input and report errors
+T}
 libexplain_fwrite_or_die(3)	\*[Page*Of*libexplain_fwrite_or_die(3)]	T{
 .ad r
 libexplain fwrite
@@ -3315,9 +4918,23 @@ T}	T{
 .ad l
 or die - change directory and report errors
 T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain utime
+T}	T{
+.ad l
+or die - change file times and report errors
+T}
 libexplain_chown_or_die(3)	\*[Page*Of*libexplain_chown_or_die(3)]	T{
 .ad r
 libexplain chown
+T}	T{
+.ad l
+or die - change ownership of a file and report errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain lchown
 T}	T{
 .ad l
 or die - change ownership of a file and report errors
@@ -3357,6 +4974,20 @@ T}	T{
 .ad l
 or die - check permissions for a file and report errors
 T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain ferror
+T}	T{
+.ad l
+or die - check stream status and report errors
+T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+libexplain closedir
+T}	T{
+.ad l
+or die - close a directory and report errors
+T}
 libexplain_close_or_die(3)	\*[Page*Of*libexplain_close_or_die(3)]	T{
 .ad r
 libexplain close
@@ -3371,6 +5002,13 @@ T}	T{
 .ad l
 or die - close a stream and report errors
 T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain fork
+T}	T{
+.ad l
+or die - create a child process and report errors
+T}
 libexplain_mkdir_or_die(3)	\*[Page*Of*libexplain_mkdir_or_die(3)]	T{
 .ad r
 libexplain mkdir
@@ -3384,6 +5022,13 @@ libexplain creat
 T}	T{
 .ad l
 or die - create and open a file creat and report errors
+T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain socket
+T}	T{
+.ad l
+or die - create an endpoint and report errors
 T}
 libexplain_rmdir_or_die(3)	\*[Page*Of*libexplain_rmdir_or_die(3)]	T{
 .ad r
@@ -3413,6 +5058,20 @@ T}	T{
 .ad l
 or die - duplicate a file descriptor and report errors
 T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain system
+T}	T{
+.ad l
+or die - execute a shell command and report errors
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+libexplain execve
+T}	T{
+.ad l
+or die - execute program and report errors
+T}
 libexplain_fflush_or_die(3)	\*[Page*Of*libexplain_fflush_or_die(3)]	T{
 .ad r
 libexplain fflush
@@ -3440,6 +5099,41 @@ libexplain stat
 T}	T{
 .ad l
 or die - get file status and report errors
+T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+libexplain gettimeofday
+T}	T{
+.ad l
+or die - get time and report errors
+T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+libexplain fgetc
+T}	T{
+.ad l
+or die - input of characters and report errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+libexplain getc
+T}	T{
+.ad l
+or die - input of characters and report errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+libexplain getchar
+T}	T{
+.ad l
+or die - input of characters and report errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+libexplain fgets
+T}	T{
+.ad l
+or die - input of strings and report errors
 T}
 libexplain_link_or_die(3)	\*[Page*Of*libexplain_link_or_die(3)]	T{
 .ad r
@@ -3525,6 +5219,34 @@ T}	T{
 .ad l
 or die - truncate a file and report errors
 T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait
+T}	T{
+.ad l
+or die - wait for process to change state and report errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3
+T}	T{
+.ad l
+or die - wait for process to change state and report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4
+T}	T{
+.ad l
+or die - wait for process to change state and report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid
+T}	T{
+.ad l
+or die - wait for process to change state and report errors
+T}
 libexplain_write_or_die(3)	\*[Page*Of*libexplain_write_or_die(3)]	T{
 .ad r
 libexplain write
@@ -3542,6 +5264,13 @@ T}
 libexplain_chown_or_die(3)	\*[Page*Of*libexplain_chown_or_die(3)]	T{
 .ad r
 libexplain chown or die - change
+T}	T{
+.ad l
+ownership of a file and report errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain lchown or die - change
 T}	T{
 .ad l
 ownership of a file and report errors
@@ -3566,6 +5295,48 @@ libexplain fchmod or die - change
 T}	T{
 .ad l
 permissions of a file and report errors
+T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain fork or die - create a child
+T}	T{
+.ad l
+process and report errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or die - wait for
+T}	T{
+.ad l
+process to change state and report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or die - wait for
+T}	T{
+.ad l
+process to change state and report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or die - wait for
+T}	T{
+.ad l
+process to change state and report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or die - wait for
+T}	T{
+.ad l
+process to change state and report errors
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+libexplain execve or die - execute
+T}	T{
+.ad l
+program and report errors
 T}
 	\*[Page*Of*]	T{
 .ad r
@@ -3784,6 +5555,13 @@ T}	T{
 .ad l
 report errors
 T}
+libexplain_closedir_or_die(3)	\*[Page*Of*libexplain_closedir_or_die(3)]	T{
+.ad r
+libexplain closedir or die - close a directory and
+T}	T{
+.ad l
+report errors
+T}
 libexplain_close_or_die(3)	\*[Page*Of*libexplain_close_or_die(3)]	T{
 .ad r
 libexplain close or die - close a file descriptor and
@@ -3801,6 +5579,13 @@ T}
 libexplain_dup_or_die(3)	\*[Page*Of*libexplain_dup_or_die(3)]	T{
 .ad r
 libexplain dup or die - duplicate a file descriptor and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_execve_or_die(3)	\*[Page*Of*libexplain_execve_or_die(3)]	T{
+.ad r
+libexplain execve or die - execute program and
 T}	T{
 .ad l
 report errors
@@ -3833,6 +5618,13 @@ T}	T{
 .ad l
 report errors
 T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain ferror or die - check stream status and
+T}	T{
+.ad l
+report errors
+T}
 libexplain_fflush_or_die(3)	\*[Page*Of*libexplain_fflush_or_die(3)]	T{
 .ad r
 libexplain fflush or die - flush a stream and
@@ -3840,9 +5632,37 @@ T}	T{
 .ad l
 report errors
 T}
+libexplain_fgetc_or_die(3)	\*[Page*Of*libexplain_fgetc_or_die(3)]	T{
+.ad r
+libexplain fgetc or die - input of characters and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+libexplain fgets or die - input of strings and
+T}	T{
+.ad l
+report errors
+T}
 libexplain_fopen_or_die(3)	\*[Page*Of*libexplain_fopen_or_die(3)]	T{
 .ad r
 libexplain fopen or die - open file and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_fork_or_die(3)	\*[Page*Of*libexplain_fork_or_die(3)]	T{
+.ad r
+libexplain fork or die - create a child process and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain fread or die - binary stream input and
 T}	T{
 .ad l
 report errors
@@ -3871,6 +5691,34 @@ T}
 libexplain_fwrite_or_die(3)	\*[Page*Of*libexplain_fwrite_or_die(3)]	T{
 .ad r
 libexplain fwrite or die - binary stream output and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_getchar_or_die(3)	\*[Page*Of*libexplain_getchar_or_die(3)]	T{
+.ad r
+libexplain getchar or die - input of characters and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_getc_or_die(3)	\*[Page*Of*libexplain_getc_or_die(3)]	T{
+.ad r
+libexplain getc or die - input of characters and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+libexplain gettimeofday or die - get time and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_lchown_or_die(3)	\*[Page*Of*libexplain_lchown_or_die(3)]	T{
+.ad r
+libexplain lchown or die - change ownership of a file and
 T}	T{
 .ad l
 report errors
@@ -3959,6 +5807,13 @@ T}	T{
 .ad l
 report errors
 T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain socket or die - create an endpoint and
+T}	T{
+.ad l
+report errors
+T}
 libexplain_stat_or_die(3)	\*[Page*Of*libexplain_stat_or_die(3)]	T{
 .ad r
 libexplain stat or die - get file status and
@@ -3973,6 +5828,13 @@ T}	T{
 .ad l
 report errors
 T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain system or die - execute a shell command and
+T}	T{
+.ad l
+report errors
+T}
 libexplain_truncate_or_die(3)	\*[Page*Of*libexplain_truncate_or_die(3)]	T{
 .ad r
 libexplain truncate or die - truncate a file and
@@ -3983,6 +5845,41 @@ T}
 libexplain_unlink_or_die(3)	\*[Page*Of*libexplain_unlink_or_die(3)]	T{
 .ad r
 libexplain unlink or die - delete a file and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain utime or die - change file times and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or die - wait for process to change state and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or die - wait for process to change state and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or die - wait for process to change state and
+T}	T{
+.ad l
+report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or die - wait for process to change state and
 T}	T{
 .ad l
 report errors
@@ -4057,12 +5954,68 @@ T}	T{
 .ad l
 rmdir or die - delete a directory and report errors
 T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain system or die - execute a
+T}	T{
+.ad l
+shell command and report errors
+T}
+libexplain_socket(3)	\*[Page*Of*libexplain_socket(3)]	T{
+.ad r
+libexplain socket - explain
+T}	T{
+.ad l
+socket(2) errors
+T}
+libexplain_socket(3)	\*[Page*Of*libexplain_socket(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+socket - explain socket(2) errors
+T}
+libexplain_socket_or_die(3)	\*[Page*Of*libexplain_socket_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+socket or die - create an endpoint and report errors
+T}
 libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
 .ad r
 libexplain stat - explain
 T}	T{
 .ad l
 stat(2) errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or die - wait for process to change
+T}	T{
+.ad l
+state and report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or die - wait for process to change
+T}	T{
+.ad l
+state and report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or die - wait for process to change
+T}	T{
+.ad l
+state and report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or die - wait for process to change
+T}	T{
+.ad l
+state and report errors
 T}
 libexplain_stat(3)	\*[Page*Of*libexplain_stat(3)]	T{
 .ad r
@@ -4077,6 +6030,13 @@ libexplain
 T}	T{
 .ad l
 stat or die - get file status and report errors
+T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain ferror or die - check stream
+T}	T{
+.ad l
+status and report errors
 T}
 libexplain_fstat_or_die(3)	\*[Page*Of*libexplain_fstat_or_die(3)]	T{
 .ad r
@@ -4113,12 +6073,33 @@ T}	T{
 .ad l
 stream and report errors
 T}
+libexplain_fread_or_die(3)	\*[Page*Of*libexplain_fread_or_die(3)]	T{
+.ad r
+libexplain fread or die - binary
+T}	T{
+.ad l
+stream input and report errors
+T}
 libexplain_fwrite_or_die(3)	\*[Page*Of*libexplain_fwrite_or_die(3)]	T{
 .ad r
 libexplain fwrite or die - binary
 T}	T{
 .ad l
 stream output and report errors
+T}
+libexplain_ferror_or_die(3)	\*[Page*Of*libexplain_ferror_or_die(3)]	T{
+.ad r
+libexplain ferror or die - check
+T}	T{
+.ad l
+stream status and report errors
+T}
+libexplain_fgets_or_die(3)	\*[Page*Of*libexplain_fgets_or_die(3)]	T{
+.ad r
+libexplain fgets or die - input of
+T}	T{
+.ad l
+strings and report errors
 T}
 libexplain_symlink(3)	\*[Page*Of*libexplain_symlink(3)]	T{
 .ad r
@@ -4141,12 +6122,47 @@ T}	T{
 .ad l
 symlink or die - make a new name for a file and report errors
 T}
+libexplain_system(3)	\*[Page*Of*libexplain_system(3)]	T{
+.ad r
+libexplain system - explain
+T}	T{
+.ad l
+system(3) errors
+T}
 explain(1)	\*[Page*Of*explain(1)]	T{
 .ad r
 explain - explain
 T}	T{
 .ad l
 system call error messages
+T}
+libexplain_system(3)	\*[Page*Of*libexplain_system(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+system - explain system(3) errors
+T}
+libexplain_system_or_die(3)	\*[Page*Of*libexplain_system_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+system or die - execute a shell command and report errors
+T}
+libexplain_gettimeofday_or_die(3)	\*[Page*Of*libexplain_gettimeofday_or_die(3)]	T{
+.ad r
+libexplain gettimeofday or die - get
+T}	T{
+.ad l
+time and report errors
+T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain utime or die - change file
+T}	T{
+.ad l
+times and report errors
 T}
 libexplain_truncate(3)	\*[Page*Of*libexplain_truncate(3)]	T{
 .ad r
@@ -4246,12 +6262,313 @@ T}	T{
 .ad l
 unlink or die - delete a file and report errors
 T}
+libexplain_utime(3)	\*[Page*Of*libexplain_utime(3)]	T{
+.ad r
+libexplain utime - explain
+T}	T{
+.ad l
+utime(2) errors
+T}
+libexplain_utime(3)	\*[Page*Of*libexplain_utime(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+utime - explain utime(2) errors
+T}
+libexplain_utime_or_die(3)	\*[Page*Of*libexplain_utime_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+utime or die - change file times and report errors
+T}
 libexplain(3)	\*[Page*Of*libexplain(3)]	T{
 .ad r
 libexplain - Explain errno
 T}	T{
 .ad l
 values returned by libc functions
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait
+T}
+libexplain_wait(3)	\*[Page*Of*libexplain_wait(3)]	T{
+.ad r
+libexplain wait - explain
+T}	T{
+.ad l
+wait(2) errors
+T}
+libexplain_wait3(3)	\*[Page*Of*libexplain_wait3(3)]	T{
+.ad r
+libexplain wait3 - explain
+T}	T{
+.ad l
+wait3(2) errors
+T}
+libexplain_wait3(3)	\*[Page*Of*libexplain_wait3(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+wait3 - explain wait3(2) errors
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+wait3 or die - wait for process to change state and report errors
+T}
+libexplain_wait4(3)	\*[Page*Of*libexplain_wait4(3)]	T{
+.ad r
+libexplain wait4 - explain
+T}	T{
+.ad l
+wait4(2) errors
+T}
+libexplain_wait4(3)	\*[Page*Of*libexplain_wait4(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+wait4 - explain wait4(2) errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+wait4 or die - wait for process to change state and report errors
+T}
+libexplain_wait(3)	\*[Page*Of*libexplain_wait(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+wait - explain wait(2) errors
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and report
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and report
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and report
+T}
+	\*[Page*Of*]	T{
+.ad r
+
+T}	T{
+.ad l
+wait for process to change state and report
+T}
+libexplain_wait3_or_die(3)	\*[Page*Of*libexplain_wait3_or_die(3)]	T{
+.ad r
+libexplain wait3 or die -
+T}	T{
+.ad l
+wait for process to change state and report errors
+T}
+libexplain_wait4_or_die(3)	\*[Page*Of*libexplain_wait4_or_die(3)]	T{
+.ad r
+libexplain wait4 or die -
+T}	T{
+.ad l
+wait for process to change state and report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain wait or die -
+T}	T{
+.ad l
+wait for process to change state and report errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain waitpid or die -
+T}	T{
+.ad l
+wait for process to change state and report errors
+T}
+libexplain_wait_or_die(3)	\*[Page*Of*libexplain_wait_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+wait or die - wait for process to change state and report errors
+T}
+libexplain_waitpid(3)	\*[Page*Of*libexplain_waitpid(3)]	T{
+.ad r
+libexplain waitpid - explain
+T}	T{
+.ad l
+waitpid(2) errors
+T}
+libexplain_waitpid(3)	\*[Page*Of*libexplain_waitpid(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+waitpid - explain waitpid(2) errors
+T}
+libexplain_waitpid_or_die(3)	\*[Page*Of*libexplain_waitpid_or_die(3)]	T{
+.ad r
+libexplain
+T}	T{
+.ad l
+waitpid or die - wait for process to change state and report errors
 T}
 libexplain_chdir_or_die(3)	\*[Page*Of*libexplain_chdir_or_die(3)]	T{
 .ad r

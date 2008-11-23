@@ -24,9 +24,9 @@ TEST_SUBJECT="access EACCES"
 cat > test.ok << 'fubar'
 access(pathname = "foobar", mode = X_OK | W_OK | R_OK) failed, Permission
 denied (EACCES) because the process does not have read permission to the
-"foobar" regular file in the pathname "." directory; note that it is an
-error if any of the access types in mode are denied, even if some of the
-other access types in mode are permitted
+"foobar" regular file in the current directory; note that it is an error if
+any of the access types in mode are denied, even if some of the other
+access types in mode are permitted
 fubar
 test $? -eq 0 || no_result
 

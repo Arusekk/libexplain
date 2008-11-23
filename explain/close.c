@@ -21,10 +21,10 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/close.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/close.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -34,16 +34,16 @@ explain_close(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 0:
-        fprintf(stderr, "close: no fildes given");
-        exit(1);
+        fprintf(stderr, "close: no fildes given\n");
+        exit(EXIT_FAILURE);
 
     case 1:
-        fildes = strtol_or_die(argv[0]);
+        fildes = libexplain_strtol_or_die(argv[0]);
         break;
 
     default:
-        fprintf(stderr, "close: too many arguments given");
-        exit(1);
+        fprintf(stderr, "close: too many arguments given\n");
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

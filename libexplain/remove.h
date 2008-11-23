@@ -24,7 +24,7 @@
   * @brief explain remove(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the remove(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_remove(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -66,7 +66,7 @@ void libexplain_remove_or_die(const char *pathname);
   * if (remove(pathname) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_remove(pathname));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -101,7 +101,7 @@ const char *libexplain_remove(const char *pathname);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_remove(err, pathname));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -147,7 +147,7 @@ const char *libexplain_errno_remove(int errnum, const char *pathname);
   *     char message[3000];
   *     libexplain_message_remove(message, sizeof(message), pathname);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -180,7 +180,7 @@ void libexplain_message_remove(char *message, int message_size,
   *     libexplain_message_errno_remove(message, sizeof(message), err,
   *         pathname);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -204,7 +204,7 @@ void libexplain_message_remove(char *message, int message_size,
 void libexplain_message_errno_remove(char *message, int message_size,
     int errnum, const char *pathname);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

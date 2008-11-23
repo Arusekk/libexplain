@@ -58,7 +58,7 @@ ssize_t n = read(fd, data, data_size);
 if (n < 0)
 {
     fprintf(stderr, "%s\en", libexplain_read(fd, data, data_size));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -106,7 +106,7 @@ if (n < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_read(err, fd, data, data_size));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -164,7 +164,7 @@ if (n < 0)
     char message[3000];
     libexplain_message_read(message, sizeof(message), fd, data, data_size));
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -215,7 +215,7 @@ if (n < 0)
     libexplain_message_errno_read(message, sizeof(message), err,
         fd, data, data_size);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

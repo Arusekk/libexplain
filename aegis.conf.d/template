@@ -26,6 +26,10 @@
 file_template =
 [
     {
+        pattern = [ "libexplain/ac/*.h" ];
+        body = "${read_file ${source etc/template/lib_ac_h abs}}";
+    },
+    {
         pattern = [ "lib*/*.c" ];
         body = "${read_file ${source etc/template/lib_c abs}}";
     },

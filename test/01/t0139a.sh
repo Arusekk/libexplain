@@ -23,8 +23,8 @@ TEST_SUBJECT="access ENOENT"
 
 cat > test.ok << 'fubar'
 access(pathname = "a/b/foobar", mode = F_OK) failed, No such file or
-directory (ENOENT) because "b" symbolic link in pathname "a" directory
-refers to "garbage" that does not exist
+directory (ENOENT) because the "b" symbolic link in the pathname "a"
+directory refers to "garbage" that does not exist
 fubar
 test $? -eq 0 || no_result
 

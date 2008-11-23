@@ -29,7 +29,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_link <oldpath> <newpath>\n");
     fprintf(stderr, "       test_link -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

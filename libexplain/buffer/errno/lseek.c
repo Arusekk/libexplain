@@ -21,33 +21,32 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/errno/lseek.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/lseek_whence.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/explanation.h>
 
 
-void
-libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
-    int fildes, off_t offset, int whence)
+static void
+libexplain_buffer_errno_lseek_system_call(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, off_t offset, int whence)
 {
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "lseek(fildes = %d", fildes);
     libexplain_buffer_fildes_to_pathname(sb, fildes);
     libexplain_string_buffer_printf(sb, ", offset = %lld", (long long)offset);
     libexplain_string_buffer_puts(sb, ", whence = ");
     libexplain_buffer_lseek_whence(sb, whence);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
 
+
+static void
+libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, off_t offset, int whence)
+{
     switch (errnum)
     {
     case EBADF:
@@ -63,7 +62,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
             switch (whence)
             {
             default:
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -99,7 +97,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
             {
                 if (destination < 0)
                 {
-                    libexplain_buffer_because(sb);
                     libexplain_string_buffer_puts
                     (
                         sb,
@@ -109,7 +106,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
                 }
                 else
                 {
-                    libexplain_buffer_because(sb);
                     libexplain_string_buffer_puts
                     (
                         sb,
@@ -126,7 +122,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
                 break;
             }
 
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
@@ -137,7 +132,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EOVERFLOW:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -151,7 +145,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
 
             if (fstat(fildes, &st) == 0)
             {
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -161,7 +154,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
             }
             else
             {
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -176,7 +168,6 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
 #if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
     case EOPNOTSUPP:
 #endif
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -188,4 +179,31 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
         /* no explanation for other errno values */
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
+    int fildes, off_t offset, int whence)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_lseek_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        offset,
+        whence
+    );
+    libexplain_buffer_errno_lseek_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        fildes,
+        offset,
+        whence
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

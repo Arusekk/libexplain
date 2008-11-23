@@ -20,7 +20,6 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdio.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/gettext.h>
@@ -32,6 +31,13 @@ report_error(libexplain_string_buffer_t *sb, const char *caption)
     libexplain_buffer_gettext_printf
     (
         sb,
+        /*
+         * xgettext: This explanation is used in response to an ENOENT
+         * error.  Both of the %s strings are always identical.  The
+         * string is the name of one of the function call arguments.
+         * This explanation is only used if a more specific cause
+         * cannot be determined.
+         */
         i18n("%s, or a directory component of %s, does not exist or is a "
             "dangling symbolic link"),
         caption,
@@ -46,6 +52,12 @@ report_error_dirname(libexplain_string_buffer_t *sb, const char *caption)
     libexplain_buffer_gettext_printf
     (
         sb,
+        /*
+         * xgettext: This explanation is used in response to an ENOENT
+         * error.  The string is the name of one of the function call
+         * arguments.  This explanation is only used if a more specific
+         * cause cannot be determined.
+         */
         i18n("a directory component of %s does not exist or is a dangling "
             "symbolic link"),
         caption
@@ -57,7 +69,6 @@ void
 libexplain_buffer_enoent(libexplain_string_buffer_t *sb, const char *pathname,
     const char *pathname_caption, const libexplain_final_t *final_component)
 {
-    libexplain_buffer_because(sb);
     if
     (
         libexplain_buffer_errno_path_resolution
@@ -89,7 +100,6 @@ libexplain_buffer_enoent2(libexplain_string_buffer_t *sb,
     const char *newpath, const char *newpath_caption,
     const libexplain_final_t *newpath_final_component)
 {
-    libexplain_buffer_because(sb);
     if
     (
         libexplain_buffer_errno_path_resolution

@@ -22,16 +22,32 @@
 #include <libexplain/buffer/errno/remove.h>
 #include <libexplain/buffer/errno/rmdir.h>
 #include <libexplain/buffer/errno/unlink.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
+#include <libexplain/pathname_is_a_directory.h>
 
 
-static int
-is_dir(const char *pathname)
+static void
+libexplain_buffer_errno_remove_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname)
 {
-    struct stat     st;
+    libexplain_string_buffer_puts(sb, "remove(pathname = ");
+    if (errnum == EFAULT)
+        libexplain_buffer_pointer(sb, pathname);
+    else
+        libexplain_string_buffer_puts_quoted(sb, pathname);
+    libexplain_string_buffer_putc(sb, ')');
+}
 
-    return (stat(pathname, &st) >= 0 && S_ISDIR(st.st_mode));
+
+static void
+libexplain_buffer_errno_remove_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname)
+{
+    if (libexplain_pathname_is_a_directory(pathname))
+        libexplain_buffer_errno_rmdir_explanation(sb, errnum, pathname);
+    else
+        libexplain_buffer_errno_unlink_explanation(sb, errnum, pathname);
 }
 
 
@@ -39,21 +55,20 @@ void
 libexplain_buffer_errno_remove(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname)
 {
-    libexplain_string_buffer_puts(sb, "remove(pathname = ");
-    if (errnum == EFAULT)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
-    else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+    libexplain_explanation_t exp;
 
-    if (errno != EFAULT && is_dir(pathname))
-        libexplain_buffer_errno_rmdir_because(sb, errnum, pathname);
-    else
-        libexplain_buffer_errno_unlink_because(sb, errnum, pathname);
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_remove_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname
+    );
+    libexplain_buffer_errno_remove_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

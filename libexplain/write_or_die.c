@@ -37,7 +37,7 @@ libexplain_write_or_die(int fildes, const void *data, long data_size)
             stderr,
             libexplain_write(fildes, data, data_size)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

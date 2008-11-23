@@ -25,33 +25,38 @@
 #include <libexplain/buffer/errno/fflush.h>
 #include <libexplain/buffer/errno/fopen.h>
 #include <libexplain/buffer/errno/freopen.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/explanation.h>
 
 
-void
-libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
+static void
+libexplain_buffer_errno_freopen_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags, FILE *fp)
 {
+    (void)errnum;
     libexplain_string_buffer_puts(sb, "freopen(pathname = ");
     libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_puts(sb, ", flags = ");
     libexplain_string_buffer_puts_quoted(sb, flags);
-    libexplain_string_buffer_printf(sb, ", fp = %p)", fp);
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+    libexplain_string_buffer_puts(sb, ", fp = ");
+    libexplain_buffer_pointer(sb, fp);
+    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_string_buffer_putc(sb, ')');
+}
 
+
+static void
+libexplain_buffer_errno_freopen_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, const char *flags, FILE *fp)
+{
     switch (errnum)
     {
     case EFAULT:
     case EFBIG:
     case ENOSPC:
     case EPIPE:
-        libexplain_buffer_errno_fflush_because(sb, errnum, fp);
+        libexplain_buffer_errno_fflush_explanation(sb, errnum, fp);
         return;
 
     case EBADF:
@@ -60,11 +65,11 @@ libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
 
     case EINTR:
     case EIO:
-        libexplain_buffer_errno_fclose_because(sb, errnum, fp);
+        libexplain_buffer_errno_fclose_explanation(sb, errnum, fp);
         return;
 
     default:
-        libexplain_buffer_errno_fopen_because(sb, errnum, pathname, flags);
+        libexplain_buffer_errno_fopen_explanation(sb, errnum, pathname, flags);
         break;
     }
 
@@ -74,4 +79,31 @@ libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
         "; note that while the FILE stream is no longer valid, the "
         "underlying file descriptor may still be open"
     );
+}
+
+
+void
+libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, const char *flags, FILE *fp)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_freopen_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        flags,
+        fp
+    );
+    libexplain_buffer_errno_freopen_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname,
+        flags,
+        fp
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

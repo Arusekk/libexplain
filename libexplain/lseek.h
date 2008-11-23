@@ -25,7 +25,7 @@
   * @brief explain lseek(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_lseek_or_die function is used to call the lseek(2)
   * system call.  On failure an explanation will be printed to stderr,
   * obtained from libexplain_lseek(3), and then the process terminates
-  * by calling exit(1).
+  * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -70,7 +70,7 @@ long long libexplain_lseek_or_die(int fildes, long long offset, int whence);
   * if (lseek(fd, offset, whence) == (off_t)-1)
   * {
   *     fprintf(stderr, "%s\n", libexplain_lseek(fd, offset, whence);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -111,7 +111,7 @@ const char *libexplain_lseek(int fildes, long long offset, int whence);
   *     int errnum = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_lseek(fd, eernum, offset,
   *         whence);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -162,7 +162,7 @@ const char *libexplain_errno_lseek(int errnum, int fildes, long long offset,
   *     char message[3000];
   *     libexplain_message_lseek(message, sizeof(message), fd, offset, whence);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -203,7 +203,7 @@ void libexplain_message_lseek(char *message, int message_size, int fildes,
   *     libexplain_message_errno_lseek(message, sizeof(message), errnum, fd,
   *         offset, whence);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -233,7 +233,7 @@ void libexplain_message_lseek(char *message, int message_size, int fildes,
 void libexplain_message_errno_lseek(char *message, int message_size,
     int errnum, int fildes, long long offset, int whence);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -25,7 +25,7 @@
   * @brief explain creat(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -34,7 +34,7 @@ extern "C" {
   * used to call the creat(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_creat(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -69,7 +69,7 @@ int libexplain_creat_or_die(const char *pathname, int mode);
   * if (fd < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_creat(pathname, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -109,7 +109,7 @@ const char *libexplain_creat(const char *pathname, int mode);
   *     char message[3000];
   *     libexplain_message_creat(message, sizeof(message), pathname, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -143,7 +143,7 @@ void libexplain_message_creat(char *message, int message_size,
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_creat(err, pathname,
   *         mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -188,7 +188,7 @@ const char *libexplain_errno_creat(int errnum, const char *pathname, int mode);
   *     libexplain_message_errno_creat(message, sizeof(message), err,
   *         pathname, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -213,7 +213,7 @@ const char *libexplain_errno_creat(int errnum, const char *pathname, int mode);
 void libexplain_message_errno_creat(char *message, int message_size,
     int errnum, const char *pathname, int mode);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

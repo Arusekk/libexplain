@@ -23,8 +23,8 @@ TEST_SUBJECT="mkdir EEXIST"
 
 cat > test.ok << 'fubar'
 mkdir(pathname = "foobar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed, File
-exists (EEXIST) because in the pathname "." directory there is a "foobar"
-regular file, but it should not exist yet
+exists (EEXIST) because the "foobar" regular file in the current directory
+should not exist yet
 fubar
 test $? -eq 0 || no_result
 

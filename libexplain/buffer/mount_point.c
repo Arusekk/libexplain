@@ -124,3 +124,63 @@ libexplain_buffer_mount_point_dirname(libexplain_string_buffer_t *sb,
     libexplain_dirname(dir, path, sizeof(dir));
     return libexplain_buffer_mount_point(sb, dir);
 }
+
+
+static int
+libexplain_mount_point_option(const char *pathname, const char *option)
+{
+    FILE            *fp;
+    struct stat     st1;
+
+    if (lstat(pathname, &st1) < 0)
+        return 0;
+    fp = setmntent(MOUNTED, "r");
+    if (!fp)
+        return 0;
+    for (;;)
+    {
+        struct mntent   *mnt;
+        struct stat     st2;
+
+        /* FIXME: use getmntent_r if available */
+        mnt = getmntent(fp);
+        if (!mnt)
+            break;
+        if (lstat(mnt->mnt_dir, &st2) == 0)
+        {
+            if (st1.st_dev == st2.st_dev)
+            {
+                int             result;
+
+                /*
+                 * Found the mount point.
+                 *
+                 * (For linux this is "probably found the right mount
+                 * point", because linux allows the same block special
+                 * device to be mounted at more than one place, and they
+                 * could have different options for different mount
+                 * points.)
+                 */
+                result = !!hasmntopt(mnt, option);
+                endmntent(fp);
+                return result;
+            }
+        }
+    }
+    endmntent(fp);
+    return 0;
+}
+
+
+int
+libexplain_mount_point_noexec(const char *pathname)
+{
+    return libexplain_mount_point_option(pathname, "noexec");
+}
+
+
+int
+libexplain_mount_point_nosuid(const char *pathname)
+{
+    return libexplain_mount_point_option(pathname, "nosuid");
+}

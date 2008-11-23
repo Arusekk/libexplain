@@ -34,6 +34,6 @@ libexplain_truncate_or_die(const char *pathname, long long length)
             stderr,
             libexplain_truncate(pathname, length)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

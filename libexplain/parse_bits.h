@@ -56,4 +56,55 @@ int libexplain_parse_bits(const char *text,
   */
 const char *libexplain_parse_bits_get_error(void);
 
+/**
+  * The libexplain_parse_bits_find_by_name function is used to search a
+  * parse-bits table for the given name.
+  *
+  * @param name
+  *      The name to search for in the table
+  * @param table
+  *      The table to be searched.
+  * @param table_size
+  *      The number of members in the table to be searched.
+  * @returns
+  *      pointer to table entry on succes, or NULL on no match
+  */
+const libexplain_parse_bits_table_t *libexplain_parse_bits_find_by_name(
+    const char *name, const libexplain_parse_bits_table_t *table,
+    size_t table_size);
+
+/**
+  * The libexplain_parse_bits_find_by_name_fuzzy function is used to search a
+  * parse-bits table for the given name, using fuzzy matching.
+  *
+  * @param name
+  *      The name to search for in the table
+  * @param table
+  *      The table to be searched.
+  * @param table_size
+  *      The number of members in the table to be searched.
+  * @returns
+  *      pointer to table entry on succes, or NULL on no match
+  */
+const libexplain_parse_bits_table_t *libexplain_parse_bits_find_by_name_fuzzy(
+    const char *name, const libexplain_parse_bits_table_t *table,
+    size_t table_size);
+
+/**
+  * The libexplain_parse_bits_find_by_value function is used to search a
+  * parse-bits table for the given value.
+  *
+  * @param value
+  *      The value to search for in the table
+  * @param table
+  *      The table to be searched.
+  * @param table_size
+  *      The number of members in the table to be searched.
+  * @returns
+  *      pointer to table entry on succes, or NULL on no match
+  */
+const libexplain_parse_bits_table_t *libexplain_parse_bits_find_by_value(
+    int value, const libexplain_parse_bits_table_t *table,
+    size_t table_size);
+
 #endif /* LIBEXPLAIN_PARSE_BITS_H */

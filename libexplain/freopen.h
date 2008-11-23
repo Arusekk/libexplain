@@ -27,7 +27,7 @@
   * @brief explain freopen(3) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -71,7 +71,7 @@ void libexplain_freopen_or_die(const char *pathname, const char *flags,
   * if (!freopen(pathname, flags, fp))
   * {
   *     fprintf(stderr, "%s\n", libexplain_freopen(pathname, flags, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -109,7 +109,7 @@ const char *libexplain_freopen(const char *pathname, const char *flags,
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_freopen(err, pathname,
   *         flags, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -158,7 +158,7 @@ const char *libexplain_errno_freopen(int errnum, const char *pathname,
   *     libexplain_message_freopen(message, sizeof(message), pathname, flags,
   *         fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -196,7 +196,7 @@ void libexplain_message_freopen(char *message, int message_size,
   *     libexplain_message_errno_freopen(message, sizeof(message), err,
   *         pathname, flags, fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -223,7 +223,7 @@ void libexplain_message_freopen(char *message, int message_size,
 void libexplain_message_errno_freopen(char *message, int message_size,
     int errnum, const char *pathname, const char *flags, FILE *fp);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

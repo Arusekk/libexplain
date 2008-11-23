@@ -25,9 +25,9 @@ cat > test.ok << 'fubar'
 mkdir(pathname =
 "a/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz/b",
 mode = S_IRWXU | S_IRWXG | S_IRWXO) failed, File name too long
-(ENAMETOOLONG) because pathname component
+(ENAMETOOLONG) because pathname
 "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
-is longer than the system limit (260 > 255)
+component is longer than the system limit (260 > 255)
 fubar
 test $? -eq 0 || no_result
 

@@ -18,37 +18,36 @@
 
 #include <libexplain/buffer/errno/fwrite.h>
 #include <libexplain/buffer/errno/write.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/explanation.h>
+#include <libexplain/stream_to_fildes.h>
 
 
-void
-libexplain_buffer_errno_fwrite(libexplain_string_buffer_t *sb, int errnum,
-    const void *ptr, size_t size, size_t nmemb, FILE *fp)
+static void
+libexplain_buffer_errno_fwrite_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const void *ptr, size_t size, size_t nmemb, FILE *fp)
+{
+    (void)errnum;
+    libexplain_string_buffer_puts(sb, "fwrite(ptr = ");
+    libexplain_buffer_pointer(sb, ptr);
+    libexplain_string_buffer_printf(sb, ", size = %ld", (long)size);
+    libexplain_string_buffer_printf(sb, ", nmemb = %ld", (long)nmemb);
+    libexplain_string_buffer_puts(sb, ", fp = ");
+    libexplain_buffer_pointer(sb, fp);
+    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_string_buffer_putc(sb, ')');
+}
+
+
+static void
+libexplain_buffer_errno_fwrite_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const void *ptr, size_t size, size_t nmemb, FILE *fp)
 {
     int             fildes;
 
-    libexplain_string_buffer_puts(sb, "fwrite(ptr = ");
-    libexplain_string_buffer_printf(sb, "%p", ptr);
-    libexplain_string_buffer_puts(sb, ", size = ");
-    libexplain_string_buffer_printf(sb, "%ld", (long)size);
-    libexplain_string_buffer_puts(sb, ", nmemb = ");
-    libexplain_string_buffer_printf(sb, "%ld", (long)nmemb);
-    libexplain_string_buffer_puts(sb, ", fp = ");
-    libexplain_string_buffer_printf(sb, "%p", fp);
-    libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
-
-    fildes = -1;
-    if (fp)
-        fildes = fileno(fp);
-
-    libexplain_buffer_errno_write_because
+    fildes = libexplain_stream_to_fildes(fp);
+    libexplain_buffer_errno_write_explanation
     (
         sb,
         errnum,
@@ -56,4 +55,33 @@ libexplain_buffer_errno_fwrite(libexplain_string_buffer_t *sb, int errnum,
         ptr,
         size * nmemb
     );
+}
+
+
+void
+libexplain_buffer_errno_fwrite(libexplain_string_buffer_t *sb, int errnum,
+    const void *ptr, size_t size, size_t nmemb, FILE *fp)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_fwrite_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        ptr,
+        size,
+        nmemb,
+        fp
+    );
+    libexplain_buffer_errno_fwrite_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        ptr,
+        size,
+        nmemb,
+        fp
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

@@ -33,7 +33,7 @@ libexplain_creat_or_die(const char *pathname, int mode)
     if (fildes < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_creat(pathname, mode));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return fildes;
 }

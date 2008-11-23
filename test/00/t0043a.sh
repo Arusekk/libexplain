@@ -22,8 +22,8 @@ TEST_SUBJECT="read vs EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
-read(fildes = 42, data = 0x100, data_size = 256) failed, Bad file
-descriptor (EBADF) because because fildes does not refer to an open file
+read(fildes = 42, data = 0x00000100, data_size = 256) failed, Bad file
+descriptor (EBADF) because fildes does not refer to an open file
 fubar
 test $? -eq 0 || no_result
 

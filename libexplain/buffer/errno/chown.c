@@ -20,36 +20,32 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/chown.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/gid.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/uid.h>
 #include <libexplain/capability.h>
+#include <libexplain/explanation.h>
 #include <libexplain/group_in_groups.h>
 #include <libexplain/option.h>
 
 
-void
-libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname, int owner, int group)
+static void
+libexplain_buffer_errno_chown_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, int owner, int group)
 {
-    int             pathname_bad;
-    libexplain_final_t final_component;
-
-    pathname_bad = errnum == EFAULT;
     libexplain_string_buffer_puts(sb, "chown(pathname = ");
-    if (pathname_bad)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+    if (errnum == EFAULT)
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_puts(sb, ", owner = ");
@@ -57,20 +53,40 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
     libexplain_string_buffer_puts(sb, ", group = ");
     libexplain_buffer_gid(sb, group);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
+
+
+static void
+libexplain_buffer_errno_chown_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, int owner, int group)
+{
+    libexplain_final_t final_component;
 
     libexplain_final_init(&final_component);
     final_component.want_to_modify_inode = 1;
 
+    libexplain_buffer_errno_chown_explanation_fc
+    (
+        sb,
+        errnum,
+        pathname,
+        owner,
+        group,
+        &final_component
+    );
+}
+
+
+void
+libexplain_buffer_errno_chown_explanation_fc(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, int owner, int group,
+    libexplain_final_t *final_component)
+{
+    final_component->want_to_modify_inode = 1;
+
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -79,7 +95,7 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
                 errnum,
                 pathname,
                 "pathname",
-                &final_component
+                final_component
             )
         )
         {
@@ -96,7 +112,7 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ELOOP:
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        libexplain_buffer_eloop(sb, pathname, "pathname", final_component);
         break;
 
     case ENAMETOOLONG:
@@ -105,12 +121,12 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
             sb,
             pathname,
             "pathname",
-            &final_component
+            final_component
         );
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        libexplain_buffer_enoent(sb, pathname, "pathname", final_component);
         break;
 
     case ENOMEM:
@@ -118,29 +134,10 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a directory component of pathname is not, in fact, a directory"
-            );
-        }
+        libexplain_buffer_enotdir(sb, pathname, "pathname", final_component);
         break;
 
     case EPERM:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -149,7 +146,7 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
                 errnum,
                 pathname,
                 "pathname",
-                &final_component
+                final_component
             )
         )
         {
@@ -358,4 +355,31 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, int owner, int group)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_chown_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        owner,
+        group
+    );
+    libexplain_buffer_errno_chown_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname,
+        owner,
+        group
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

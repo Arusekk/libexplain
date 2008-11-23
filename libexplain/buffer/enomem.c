@@ -19,7 +19,6 @@
 
 #include <libexplain/ac/sys/resource.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/rlimit.h>
 
@@ -27,7 +26,6 @@
 void
 libexplain_buffer_enomem_kernel(libexplain_string_buffer_t *sb)
 {
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_puts
     (
         sb,
@@ -41,7 +39,6 @@ libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
 {
     struct rlimit   rlim;
 
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_puts
     (
         sb,
@@ -72,7 +69,6 @@ libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
 void
 libexplain_buffer_enomem_kernel_or_user(libexplain_string_buffer_t *sb)
 {
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_puts
     (
         sb,

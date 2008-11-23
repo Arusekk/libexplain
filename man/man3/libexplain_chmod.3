@@ -57,7 +57,7 @@ following example:
 if (chmod(pathname, mode) < 0)
 {
     fprintf(stderr, '%s\n', libexplain_chmod(pathname, mode));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -97,7 +97,7 @@ if (chmod(pathname) < 0)
 {
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_chmod(err, pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -149,7 +149,7 @@ if (chmod(pathname, mode) < 0)
     char message[3000];
     libexplain_message_chmod(message, sizeof(message), pathname, mode);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -190,7 +190,7 @@ if (chmod(pathname) < 0)
     libexplain_message_errno_chmod(message, sizeof(message), err,
         pathname);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

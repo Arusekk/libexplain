@@ -30,6 +30,6 @@ libexplain_fflush_or_die(FILE *fp)
     if (fflush(fp))
     {
         libexplain_wrap_and_print(stderr, libexplain_fflush(fp));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

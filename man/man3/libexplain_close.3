@@ -57,7 +57,7 @@ similar to the following example:
 if (close(fildes) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_close(fildes));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -96,7 +96,7 @@ if (close(fildes) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_close(err, fildes));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -147,7 +147,7 @@ if (close(fildes) < 0)
     char message[3000];
     libexplain_message_close(message, sizeof(message), fildes);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -186,7 +186,7 @@ if (close(fildes) < 0)
     char message[3000];
     libexplain_message_errno_close(message, sizeof(message), err, fildes);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

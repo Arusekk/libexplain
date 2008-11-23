@@ -23,7 +23,7 @@ TEST_SUBJECT="stat ENOENT"
 
 cat > test.ok << 'fubar'
 stat(pathname = "a/b", buf = 0x1000) failed, No such file or directory
-(ENOENT) because there is no "a" directory in the pathname "." directory
+(ENOENT) because there is no "a" directory in the current directory
 fubar
 test $? -eq 0 || no_result
 

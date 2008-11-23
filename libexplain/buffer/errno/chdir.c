@@ -19,38 +19,38 @@
 
 #include <libexplain/ac/errno.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/errno/chdir.h>
 #include <libexplain/buffer/errno/path_resolution.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
 #include <libexplain/string_buffer.h>
 
 
-void
-libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname)
+static void
+libexplain_buffer_errno_chdir_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname)
 {
-    libexplain_final_t final_component;
-
     libexplain_string_buffer_printf(sb, "chdir(pathname = ");
     if (errnum == EFAULT)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
+
+
+static void
+libexplain_buffer_errno_chdir_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname)
+{
+    libexplain_final_t final_component;
 
     libexplain_final_init(&final_component);
     final_component.want_to_search = 1;
@@ -59,7 +59,6 @@ libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -113,29 +112,34 @@ libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "pathname, or a component of pathname, is not a directory"
-            );
-        }
+        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     default:
         /* no additional info for other errno values */
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_chdir_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname
+    );
+    libexplain_buffer_errno_chdir_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

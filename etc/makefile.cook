@@ -68,6 +68,11 @@ source_file_order =
      * For pkg-config
      */
     libdir/pkg-config/[project_short].pc.in
+
+    /*
+     * for message translators
+     */
+    po/libexplain.pot
     ;
 
 web-site/%.tar.gz: [source_file_order] debian/control
@@ -151,6 +156,7 @@ debian-package: web-site/[project_minus].tar.gz bin/test_user
     rm -rf web-site/debian &&
     mkdir -p web-site/debian &&
     cd web-site/debian &&
+    echo Options Indexes > .htaccess &&
     tar xzf ../[project_minus].tar.gz &&
     cd [project_minus] &&
     dpkg-buildpackage -sgpg [key] &&

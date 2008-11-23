@@ -22,8 +22,8 @@ TEST_SUBJECT="readlink EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-readlink(pathname = "foobar", data = 0x12345, data_size = 1000) failed, Bad
-address (EFAULT) because data refers to memory that is outside the
+readlink(pathname = "foobar", data = 0x00012345, data_size = 1000) failed,
+Bad address (EFAULT) because data refers to memory that is outside the
 process's accessible address space
 fubar
 test $? -eq 0 || no_result

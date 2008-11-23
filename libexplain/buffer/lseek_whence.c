@@ -71,5 +71,5 @@ libexplain_lseek_whence_parse(const char *text)
         { "L_XTND",   SEEK_END },
     };
 
-    return libexplain_parse_bits(text, table, LIBEXPLAIN_SIZEOF(table));
+    return libexplain_parse_bits(text, table, SIZEOF(table));
 }

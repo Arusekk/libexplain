@@ -57,7 +57,7 @@ similar to the following example:
 if (rmdir(pathname) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_rmdir(pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -97,7 +97,7 @@ if (rmdir(pathname) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_rmdir(err, pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -126,7 +126,8 @@ This function is \f[B]not\fP thread safe, because it
 shares a return buffer across all threads, and many other
 functions in this library.
 .\" ----------------------------------------------------
-.SS libexplain_message_rmdirvoid libexplain_message_rmdir(char *message,
+.SS libexplain_message_rmdir
+void libexplain_message_rmdir(char *message,
 int message_size, const char *pathname);
 .PP
 The \f[B]libexplain_message_rmdir\fP
@@ -149,7 +150,7 @@ if (rmdir(pathname) < 0)
     char message[3000];
     libexplain_message_rmdir(message, sizeof(message), pathname);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -189,7 +190,7 @@ if (rmdir(pathname) < 0)
     char message[3000];
     libexplain_message_errno_rmdir(message, sizeof(message), err, pathname);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

@@ -30,6 +30,6 @@ libexplain_chdir_or_die(const char * pathname)
     if (chdir(pathname) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_chdir(pathname));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

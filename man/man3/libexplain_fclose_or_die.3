@@ -30,7 +30,7 @@ void libexplain_fclose_or_die(FILE *fp);
 The libexplain_fclose_or_die function is used to \f[I]fflush\fP(3) and
 \f[I]fclose\fP(3) the given stream.  If there is an error, it will be
 reported using \f[I]libexplain_fclose\fP(3), and then terminates by
-calling \f[CW]exit(1)\fP.
+calling \f[CW]exit(EXIT_FAILURE)\fP.
 .RS
 .ft CW
 .nf

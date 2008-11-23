@@ -35,14 +35,26 @@
 #include <explain/chmod.h>
 #include <explain/chown.h>
 #include <explain/close.h>
+#include <explain/closedir.h>
 #include <explain/creat.h>
 #include <explain/dup.h>
+#include <explain/execve.h>
 #include <explain/fchdir.h>
 #include <explain/fchmod.h>
 #include <explain/fcntl.h>
+#include <explain/ferror.h>
+#include <explain/fgetc.h>
+#include <explain/fgets.h>
 #include <explain/fopen.h>
+#include <explain/fork.h>
+#include <explain/fread.h>
 #include <explain/fstat.h>
 #include <explain/ftruncate.h>
+#include <explain/fwrite.h>
+#include <explain/getc.h>
+#include <explain/getchar.h>
+#include <explain/gettimeofday.h>
+#include <explain/lchown.h>
 #include <explain/link.h>
 #include <explain/lseek.h>
 #include <explain/lstat.h>
@@ -50,15 +62,23 @@
 #include <explain/opendir.h>
 #include <explain/open.h>
 #include <explain/read.h>
+#include <explain/readdir.h>
 #include <explain/readlink.h>
 #include <explain/remove.h>
 #include <explain/rename.h>
 #include <explain/rmdir.h>
+#include <explain/socket.h>
 #include <explain/stat.h>
 #include <explain/strerror.h>
 #include <explain/symlink.h>
+#include <explain/system.h>
 #include <explain/truncate.h>
 #include <explain/unlink.h>
+#include <explain/utime.h>
+#include <explain/wait.h>
+#include <explain/wait3.h>
+#include <explain/wait4.h>
+#include <explain/waitpid.h>
 #include <explain/write.h>
 
 
@@ -75,6 +95,7 @@ struct table_t
 
 static const table_t table[] =
 {
+    /* ----------  A  ------------------------------------------------------- */
     /* FIXME: add support for accept */
     { "access", explain_access },
     /* FIXME: add support for acct */
@@ -83,10 +104,12 @@ static const table_t table[] =
     /* FIXME: add support for afs_syscall */
     /* FIXME: add support for alarm */
     /* FIXME: add support for alloc_hugepages */
+    /* ----------  B  ------------------------------------------------------- */
     /* FIXME: add support for bdflush */
     /* FIXME: add support for bind */
     /* FIXME: add support for break */
     /* FIXME: add support for brk */
+    /* ----------  C  ------------------------------------------------------- */
     /* FIXME: add support for cacheflush */
     /* FIXME: add support for capget */
     /* FIXME: add support for capset */
@@ -94,29 +117,29 @@ static const table_t table[] =
     { "chmod", explain_chmod },
     { "chown", explain_chown },
     /* FIXME: add support for chroot */
-    /* FIXME: add support for clearerr */
     /* FIXME: add support for clock_getres */
     /* FIXME: add support for clock_gettime */
     /* FIXME: add support for clock_nanosleep */
     /* FIXME: add support for clock_settime */
     /* FIXME: add support for clone */
     { "close", explain_close },
-    /* FIXME: add support for closedir */
+    { "closedir", explain_closedir },
     /* FIXME: add support for connect */
     { "creat", explain_creat },
     /* FIXME: add support for create_module */
+    /* ----------  D  ------------------------------------------------------- */
     /* FIXME: add support for delete_module */
     /* FIXME: add support for dirfd */
     { "dup", explain_dup },
     /* FIXME: add support for dup2 */
+    /* ----------  E  ------------------------------------------------------- */
     /* FIXME: add support for epoll_create */
     /* FIXME: add support for epoll_ctl */
     /* FIXME: add support for epoll_pwait */
     /* FIXME: add support for epoll_wait */
     /* FIXME: add support for eventfd */
-    /* FIXME: add support for execve */
-    /* FIXME: add support for exit */
-    /* FIXME: add support for exit_group */
+    { "execve", explain_execve },
+    /* ----------  F  ------------------------------------------------------- */
     /* FIXME: add support for faccess */
     /* FIXME: add support for fadvise64 */
     /* FIXME: add support for fallocate */
@@ -127,24 +150,22 @@ static const table_t table[] =
     /* FIXME: add support for fdatasync */
     /* FIXME: add support for fdopen */
     /* FIXME: add support for fdopendir */
-    /* FIXME: add support for feof */
-    /* FIXME: add support for ferror */
+    { "ferror", explain_ferror },
     /* FIXME: add support for fflush */
-    /* FIXME: add support for fgetc */
+    { "fgetc", explain_fgetc },
     /* FIXME: add support for fgetpos */
-    /* FIXME: add support for fgets */
+    { "fgets", explain_fgets },
     /* FIXME: add support for fgetxattr */
     /* FIXME: add support for fileno */
     /* FIXME: add support for flistxattr */
     /* FIXME: add support for flock */
     { "fopen", explain_fopen },
-    /* FIXME: add support for fopen */
-    /* FIXME: add support for fork */
+    { "fork", explain_fork },
     /* FIXME: add support for fprintf */
     /* FIXME: add support for fpurge */
     /* FIXME: add support for fputc */
     /* FIXME: add support for fputs */
-    /* FIXME: add support for fread */
+    { "fread", explain_fread },
     /* FIXME: add support for free_hugepages */
     /* FIXME: add support for fremovexattr */
     /* FIXME: add support for fscanf */
@@ -159,9 +180,10 @@ static const table_t table[] =
     { "ftruncate", explain_ftruncate },
     /* FIXME: add support for futex */
     /* FIXME: add support for futimes */
-    /* FIXME: add support for fwrite */
-    /* FIXME: add support for getc */
-    /* FIXME: add support for getchar */
+    { "fwrite", explain_fwrite },
+    /* ----------  G  ------------------------------------------------------- */
+    { "getc", explain_getc },
+    { "getchar", explain_getchar },
     /* FIXME: add support for getcpu */
     /* FIXME: add support for getcwd */
     /* FIXME: add support for getdents */
@@ -191,11 +213,13 @@ static const table_t table[] =
     /* FIXME: add support for getsockopt */
     /* FIXME: add support for get_thread_area */
     /* FIXME: add support for gettid */
-    /* FIXME: add support for gettimeofday */
+    { "gettimeofday", explain_gettimeofday },
     /* FIXME: add support for getuid */
     /* FIXME: add support for getw */
     /* FIXME: add support for getxattr */
     /* FIXME: add support for gtty */
+    /* ----------  H  ------------------------------------------------------- */
+    /* ----------  I  ------------------------------------------------------- */
     /* FIXME: add support for idle */
     /* FIXME: add support for init_module */
     /* FIXME: add support for inotify_add_watch */
@@ -212,10 +236,13 @@ static const table_t table[] =
     /* FIXME: add support for io_setup */
     /* FIXME: add support for io_submit */
     /* FIXME: add support for ipc */
+    /* ----------  J  ------------------------------------------------------- */
+    /* ----------  K  ------------------------------------------------------- */
     /* FIXME: add support for kexec_load */
     /* FIXME: add support for keyctl */
     /* FIXME: add support for kill */
-    /* FIXME: add support for lchown */
+    /* ----------  L  ------------------------------------------------------- */
+    { "lchown", explain_lchown },
     /* FIXME: add support for lgetxattr */
     { "link", explain_link },
     /* FIXME: add support for listen */
@@ -227,6 +254,7 @@ static const table_t table[] =
     { "lseek", explain_lseek },
     /* FIXME: add support for lsetxattr */
     { "lstat", explain_lstat },
+    /* ----------  M  ------------------------------------------------------- */
     /* FIXME: add support for madvise */
     /* FIXME: add support for madvise1 */
     /* FIXME: add support for mbind */
@@ -259,11 +287,14 @@ static const table_t table[] =
     /* FIXME: add support for munlock */
     /* FIXME: add support for munlockall */
     /* FIXME: add support for munmap */
+    /* ----------  N  ------------------------------------------------------- */
     /* FIXME: add support for nanosleep */
     /* FIXME: add support for nfsservctl */
     /* FIXME: add support for nice */
+    /* ----------  O  ------------------------------------------------------- */
     { "open", explain_open },
     { "opendir", explain_opendir },
+    /* ----------  P  ------------------------------------------------------- */
     /* FIXME: add support for pause */
     /* FIXME: add support for pciconfig_iobase */
     /* FIXME: add support for pciconfig_read */
@@ -288,12 +319,14 @@ static const table_t table[] =
     /* FIXME: add support for puts */
     /* FIXME: add support for putw */
     /* FIXME: add support for pwrite */
+    /* ----------  Q  ------------------------------------------------------- */
     /* FIXME: add support for query_module */
     /* FIXME: add support for quotactl */
+    /* ----------  R  ------------------------------------------------------- */
     { "read", explain_read },
     /* FIXME: add support for read */
     /* FIXME: add support for readahead */
-    /* FIXME: add support for readdir */
+    { "readdir", explain_readdir },
     { "readlink", explain_readlink },
     /* FIXME: add support for readv */
     /* FIXME: add support for reboot */
@@ -316,6 +349,7 @@ static const table_t table[] =
     /* FIXME: add support for rt_sigreturn */
     /* FIXME: add support for rt_sigsuspend */
     /* FIXME: add support for rt_sigtimedwait */
+    /* ----------  S  ------------------------------------------------------- */
     /* FIXME: add support for scandir */
     /* FIXME: add support for scanf */
     /* FIXME: add support for sched_getaffinity */
@@ -382,7 +416,7 @@ static const table_t table[] =
     /* FIXME: add support for sigprocmask */
     /* FIXME: add support for sigreturn */
     /* FIXME: add support for sigsuspend */
-    /* FIXME: add support for socket */
+    { "socket", explain_socket },
     /* FIXME: add support for socketcall */
     /* FIXME: add support for socketpair */
     /* FIXME: add support for splice */
@@ -406,6 +440,8 @@ static const table_t table[] =
     /* FIXME: add support for sysfs */
     /* FIXME: add support for sysinfo */
     /* FIXME: add support for syslog */
+    { "system", explain_system },
+    /* ----------  T  ------------------------------------------------------- */
     /* FIXME: add support for tee */
     /* FIXME: add support for telldir */
     /* FIXME: add support for tempnam */
@@ -422,6 +458,7 @@ static const table_t table[] =
     /* FIXME: add support for tmpnam */
     { "truncate", explain_truncate },
     /* FIXME: add support for tuxcall */
+    /* ----------  U  ------------------------------------------------------- */
     /* FIXME: add support for ugetrlimit */
     /* FIXME: add support for ulimit */
     /* FIXME: add support for umask */
@@ -432,9 +469,10 @@ static const table_t table[] =
     /* FIXME: add support for unshare */
     /* FIXME: add support for uselib */
     /* FIXME: add support for ustat */
-    /* FIXME: add support for utime */
+    { "utime", explain_utime },
     /* FIXME: add support for utimens */
     /* FIXME: add support for utimes */
+    /* ----------  V  ------------------------------------------------------- */
     /* FIXME: add support for vfork */
     /* FIXME: add support for vfprintf */
     /* FIXME: add support for vfscanf */
@@ -445,11 +483,18 @@ static const table_t table[] =
     /* FIXME: add support for vserver */
     /* FIXME: add support for vsprintf */
     /* FIXME: add support for vsscanf */
+    /* ----------  W  ------------------------------------------------------- */
+    { "wait", explain_wait },
+    { "wait3", explain_wait3 },
+    { "wait4", explain_wait4 },
     /* FIXME: add support for wait4 */
     /* FIXME: add support for waitid */
-    /* FIXME: add support for waitpid */
+    { "waitpid", explain_waitpid },
     { "write", explain_write },
     /* FIXME: add support for writev */
+    /* ----------  X  ------------------------------------------------------- */
+    /* ----------  Y  ------------------------------------------------------- */
+    /* ----------  Z  ------------------------------------------------------- */
 };
 
 
@@ -460,7 +505,7 @@ find_function(const char *name)
     const table_t   *best_tp;
     double          best_weight;
 
-    for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
+    for (tp = table; tp < ENDOF(table); ++tp)
     {
         if (0 == strcasecmp(name, tp->name))
             return tp->func;
@@ -468,7 +513,7 @@ find_function(const char *name)
 
     best_tp = 0;
     best_weight = 0.6;
-    for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
+    for (tp = table; tp < ENDOF(table); ++tp)
     {
         double          weight;
 
@@ -492,7 +537,7 @@ find_function(const char *name)
     }
     else
         fprintf(stderr, "function \"%s\" unknown\n", name);
-    exit(1);
+    exit(EXIT_FAILURE);
     return 0;
 }
 
@@ -503,7 +548,7 @@ usage(void)
     fprintf(stderr, "Usage: explain -e <errno> <function> [ <args> ... ]\n");
     fprintf(stderr, "       explain -m <message> <function> [ <args> ... ]\n");
     fprintf(stderr, "       explain -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 
@@ -559,7 +604,7 @@ figure_out_error(const char *text)
         libexplain_string_buffer_puts_quoted(&sb, eip->name);
         libexplain_string_buffer_puts(&sb, " instead");
         libexplain_wrap_and_print(stderr, message);
-        exit_status = 1;
+        exit_status = EXIT_FAILURE;
         return eip->error_number;
     }
 
@@ -577,7 +622,7 @@ figure_out_error(const char *text)
         libexplain_string_buffer_puts_quoted(&sb, strerror(eip->error_number));
         libexplain_string_buffer_puts(&sb, " instead");
         libexplain_wrap_and_print(stderr, message);
-        exit_status = 1;
+        exit_status = EXIT_FAILURE;
         return eip->error_number;
     }
 
@@ -590,7 +635,8 @@ figure_out_error(const char *text)
         "strerror() string, aborting"
     );
     libexplain_wrap_and_print(stderr, message);
-    exit(1);
+    exit(EXIT_FAILURE);
+    /* NOTREACHED */
     return 0;
 }
 
@@ -601,6 +647,7 @@ main(int argc, char **argv)
     func_t          func;
     int             err;
 
+    exit_status = EXIT_SUCCESS;
     err = -1;
     for (;;)
     {
@@ -629,7 +676,7 @@ main(int argc, char **argv)
     if (err < 0)
     {
         fprintf(stderr, "please specify an error number (-e)\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     if (optind >= argc)
         usage();

@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/exdev.h>
 #include <libexplain/option.h>
@@ -28,7 +27,6 @@ void
 libexplain_buffer_exdev(libexplain_string_buffer_t *sb, const char *oldpath,
     const char *newpath, const char *sys_call_name)
 {
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_puts
     (
         sb,

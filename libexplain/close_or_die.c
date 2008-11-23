@@ -30,6 +30,6 @@ libexplain_close_or_die(int fildes)
     if (close(fildes) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_close(fildes));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

@@ -24,7 +24,7 @@ TEST_SUBJECT="truncate EACCES"
 cat > test.ok << 'fubar'
 truncate(pathname = "foobar", length = 4) failed, Permission denied
 (EACCES) because the process does not have write permission to the "foobar"
-regular file in the pathname "." directory
+regular file in the current directory
 fubar
 test $? -eq 0 || no_result
 

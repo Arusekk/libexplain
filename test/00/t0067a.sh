@@ -22,8 +22,8 @@ TEST_SUBJECT="lstat ENOENT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-lstat(pathname = "a/b", buf = 0x1000) failed, No such file or directory
-(ENOENT) because there is no "a" directory in the pathname "." directory
+lstat(pathname = "a/b", buf = 0x00001000) failed, No such file or directory
+(ENOENT) because there is no "a" directory in the current directory
 fubar
 test $? -eq 0 || no_result
 

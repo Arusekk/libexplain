@@ -20,7 +20,6 @@
 #include <libexplain/ac/unistd.h>
 #include <libexplain/ac/sys/stat.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/efbig.h>
 #include <libexplain/buffer/eintr.h>
@@ -28,36 +27,37 @@
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/truncate.h>
 #include <libexplain/buffer/etxtbsy.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
 #include <libexplain/option.h>
 
 
-void
-libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname, long long length)
+static void
+libexplain_buffer_errno_truncate_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, long long length)
 {
-    libexplain_final_t final_component;
-
     libexplain_string_buffer_puts(sb, "truncate(pathname = ");
     if (errnum == EFAULT)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_printf(sb, ", length = %lld)", length);
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
+
+
+static void
+libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, long long length)
+{
+    libexplain_final_t final_component;
 
     libexplain_final_init(&final_component);
     final_component.want_to_write = 1;
@@ -65,7 +65,6 @@ libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -78,11 +77,10 @@ libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
             )
         )
         {
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
-                "search permission is denied for a dorectory component of "
+                "search permission is denied for a directory component of "
                 "pathname; or, pathname is not writable by the user "
             );
         }
@@ -101,7 +99,6 @@ libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EINVAL:
-        libexplain_buffer_because(sb);
         if (length < 0)
         {
             libexplain_string_buffer_puts(sb, "length is negative");
@@ -129,7 +126,6 @@ libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EISDIR:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -158,29 +154,10 @@ libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a directory component of pathname is not, in fact, a directory"
-            );
-        }
+        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EPERM:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -202,4 +179,29 @@ libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, long long length)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_truncate_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        length
+    );
+    libexplain_buffer_errno_truncate_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname,
+        length
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

@@ -24,7 +24,7 @@
   * @brief explain fstat(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -34,7 +34,7 @@ struct stat; /* forward */
   * The libexplain_fstat_or_die function is used to call the fstat(2)
   * system call.  On failure an explanation will be printed to stderr,
   * obtained from libexplain_fstat(3), and then the process terminates
-  * by calling exit(1).
+  * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -70,7 +70,7 @@ void libexplain_fstat_or_die(int fildes, struct stat *buf);
   * if (fstat(fildes, buf) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_fstat(fildes, buf));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -107,7 +107,7 @@ const char *libexplain_fstat(int fildes, struct stat *buf);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_fstat(err, fildes, buf));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -155,7 +155,7 @@ const char *libexplain_errno_fstat(int errnum, int fildes, struct stat *buf);
   *     char message[3000];
   *     libexplain_message_fstat(message, sizeof(message), fildes, buf);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -193,7 +193,7 @@ void libexplain_message_fstat(char *message, int message_size, int fildes,
   *     libexplain_message_errno_fstat(message, sizeof(message), err,
   *         fildes, buf);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -219,7 +219,7 @@ void libexplain_message_fstat(char *message, int message_size, int fildes,
 void libexplain_message_errno_fstat(char *message, int message_size, int errnum,
     int fildes, struct stat *buf);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

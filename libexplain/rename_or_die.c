@@ -29,6 +29,6 @@ libexplain_rename_or_die(const char *oldpath, const char *newpath)
     if (rename(oldpath, newpath) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_rename(oldpath, newpath));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

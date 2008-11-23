@@ -20,10 +20,10 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/dup.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/dup.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -34,9 +34,9 @@ explain_dup(int errnum, int argc, char **argv)
     if (argc != 1)
     {
         fprintf(stderr, "dup: requires 1 argument, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
-    fildes = strtol_or_die(argv[0]);
+    fildes = libexplain_strtol_or_die(argv[0]);
 
     libexplain_wrap_and_print
     (

@@ -21,37 +21,37 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/fchmod.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
-#include <libexplain/buffer/success.h>
 #include <libexplain/buffer/uid.h>
 #include <libexplain/capability.h>
+#include <libexplain/explanation.h>
 #include <libexplain/option.h>
 #include <libexplain/permission_mode.h>
 
 
-void
-libexplain_buffer_errno_fchmod(libexplain_string_buffer_t *sb, int errnum,
-    int fildes, int mode)
+static void
+libexplain_buffer_errno_fchmod_system_call(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, int mode)
 {
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "fchmod(fildes = %d", fildes);
     libexplain_buffer_fildes_to_pathname(sb, fildes);
     libexplain_string_buffer_puts(sb, ", mode = ");
     libexplain_buffer_permission_mode(sb, mode);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
 
+
+static void
+libexplain_buffer_errno_fchmod_explanation(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, int mode)
+{
+    (void)mode;
     switch (errnum)
     {
     case EBADF:
@@ -64,7 +64,6 @@ libexplain_buffer_errno_fchmod(libexplain_string_buffer_t *sb, int errnum,
 
     case EPERM:
         {
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts(sb, "the effective UID");
             if (libexplain_option_dialect_specific())
             {
@@ -114,4 +113,29 @@ libexplain_buffer_errno_fchmod(libexplain_string_buffer_t *sb, int errnum,
         /* no explanation for other errors */
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_fchmod(libexplain_string_buffer_t *sb, int errnum,
+    int fildes, int mode)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_fchmod_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        mode
+    );
+    libexplain_buffer_errno_fchmod_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        fildes,
+        mode
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

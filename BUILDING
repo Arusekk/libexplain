@@ -13,6 +13,26 @@ BEFORE YOU START
         There are a few pieces of software you may want to fetch and install
         before you proceed with your installation of libexplain
 
+        libcap  Linux needs libcap, for access to capabilities.
+                ftp://ftp.kernel.org/pub/linux/libs/security/linux-
+                privs/kernel-2.2/
+
+        lsof    For systems with inadequate or non-existent /proc facilities,
+                the lsof(1) is needed to obtain supplementary information
+                about open file descriptors.
+                http://people.freebsd.org/~abe/
+
+        GNU libtool
+                The libtool program is used to build shared libraries.  It
+                understands neccesary weird and wonderful compiler and linker
+                tricks on many weird and wonderful systems.
+                http://www.gnu.org/software/libtool/
+
+        bison   The bison program is a general-purpose parser generator that
+                converts a grammar description for an LALR(1) context-free
+                grammar into a C program to parse that grammar.
+                http://www.gnu.org/software/bison/
+
         GNU Groff
                 The documentation for the libexplain package was prepared
                 using the GNU Groff package (version 1.14 or later).  This
@@ -195,7 +215,7 @@ GETTING HELP
         When reporting problems, please include the version number given by
         the
                 % explain -version
-                explain version 0.D002
+                explain version 0.D003
                 ...warranty disclaimer...
                 %
         command.  Please do not send this example; run the program for the

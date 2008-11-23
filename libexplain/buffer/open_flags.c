@@ -76,27 +76,11 @@ static const libexplain_parse_bits_table_t table[] =
 };
 
 
-static void
-flag_bit(libexplain_string_buffer_t *sb, int bit)
-{
-    const libexplain_parse_bits_table_t *tp;
-
-    for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
-    {
-        if (tp->value == bit)
-        {
-            libexplain_string_buffer_puts(sb, tp->name);
-            return;
-        }
-    }
-    libexplain_string_buffer_printf(sb, "%#o", bit);
-}
-
-
 void
 libexplain_buffer_open_flags(libexplain_string_buffer_t *sb, int flags)
 {
     int             low_bits;
+    int             other;
 
     low_bits = flags & O_ACCMODE;
     flags &= ~O_ACCMODE;
@@ -118,20 +102,28 @@ libexplain_buffer_open_flags(libexplain_string_buffer_t *sb, int flags)
         libexplain_string_buffer_printf(sb, "%d", low_bits);
         break;
     }
+    other = 0;
     while (flags)
     {
         int             bit;
+        const libexplain_parse_bits_table_t *tp;
 
         bit = (flags & -flags);
         flags -= bit;
         libexplain_string_buffer_puts(sb, " | ");
-        flag_bit(sb, bit);
+        tp = libexplain_parse_bits_find_by_value(bit, table, SIZEOF(table));
+        if (tp)
+            libexplain_string_buffer_puts(sb, tp->name);
+        else
+            other |= bit;
     }
+    if (other)
+        libexplain_string_buffer_printf(sb, " | %#o", other);
 }
 
 
 int
 libexplain_open_flags_parse(const char *text)
 {
-    return libexplain_parse_bits(text, table, LIBEXPLAIN_SIZEOF(table));
+    return libexplain_parse_bits(text, table, SIZEOF(table));
 }

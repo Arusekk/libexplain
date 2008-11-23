@@ -22,7 +22,7 @@
 #include <libexplain/capability.h>
 
 #ifndef CAP_DAC_READ_SEARCH
-#define CAP_DAC_READ_SEARCH
+#define CAP_DAC_READ_SEARCH 42
 #endif
 
 

@@ -48,7 +48,7 @@ void libexplain_buffer_errno_fflush(libexplain_string_buffer_t *sb, int errnum,
     FILE *fp);
 
 /**
-  * The libexplain_buffer_errno_fflush_because is used by the
+  * The libexplain_buffer_errno_fflush_explanation is used by the
   * libexplain_buffer_errno_fflush function (and others) to decode the
   * errno value.
   *
@@ -59,7 +59,7 @@ void libexplain_buffer_errno_fflush(libexplain_string_buffer_t *sb, int errnum,
   * @param fp
   *    The original fp, exactly as passed to the fflush(3) system call.
   */
-void libexplain_buffer_errno_fflush_because(libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_fflush_explanation(libexplain_string_buffer_t *sb,
     int errnum, FILE *fp);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FFLUSH_H */

@@ -20,10 +20,10 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/readlink.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/readlink.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -36,11 +36,11 @@ explain_readlink(int errnum, int argc, char **argv)
     if (argc != 3)
     {
         fprintf(stderr, "readlink: requires 3 arguments, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     pathname = argv[0];
-    data = (char *)strtol_or_die(argv[1]);
-    data_size = strtol_or_die(argv[2]);
+    data = (char *)libexplain_strtol_or_die(argv[1]);
+    data_size = libexplain_strtol_or_die(argv[2]);
 
     libexplain_wrap_and_print
     (

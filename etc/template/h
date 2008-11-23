@@ -25,7 +25,7 @@
   * @brief explain ${trim_extension ${basename $filename}}(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -39,7 +39,7 @@ extern "C" {
   */
 void ${ident ${trim_ext $filename}}(void);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

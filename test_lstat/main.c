@@ -30,7 +30,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_lstat <pathname> <buf>\n");
     fprintf(stderr, "       test_lstat -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

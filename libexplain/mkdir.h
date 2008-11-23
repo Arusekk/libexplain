@@ -24,7 +24,7 @@
   * @brief explain mkdir(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the mkdir(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_mkdir(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -69,7 +69,7 @@ void libexplain_mkdir_or_die(const char *pathname, int mode);
   * if (mkdir(pathname, mode) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_mkdir(pathname, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -106,7 +106,7 @@ const char *libexplain_mkdir(const char *pathname, int mode);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_mkdir(err, pathname, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -154,7 +154,7 @@ const char *libexplain_errno_mkdir(int errnum, const char *pathname, int mode);
   *     char message[3000];
   *     libexplain_message_mkdir(message, sizeof(message), pathname, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -192,7 +192,7 @@ void libexplain_message_mkdir(char *message, int message_size,
   *     libexplain_message_errno_mkdir(message, sizeof(message), err,
   *         pathname, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -218,7 +218,7 @@ void libexplain_message_mkdir(char *message, int message_size,
 void libexplain_message_errno_mkdir(char *message, int message_size, int errnum,
     const char *pathname, int mode);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

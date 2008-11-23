@@ -26,7 +26,7 @@
   * @brief explain readdir(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -35,7 +35,7 @@ extern "C" {
   * used to call the readdir(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_readdir(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -66,10 +66,12 @@ struct dirent *libexplain_readdir_or_die(DIR *dir);
   * This function is intended to be used in a fashion
   * similar to the following example:
   * @code
-  * if (readdir(dir) < 0)
+  * errno = 0;
+  * struct dirent *dep = readdir(dir);
+  * if (!dep && errno != 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_readdir(dir));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -100,11 +102,13 @@ const char *libexplain_readdir(DIR *dir);
   * This function is intended to be used in a fashion
   * similar to the following example:
   * @code
-  * if (readdir(dir) < 0)
+  * errno = 0;
+  * struct dirent *dep = readdir(dir);
+  * int err = errno;
+  * if (!dep && err != 0)
   * {
-  *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_readdir(err, dir));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -145,12 +149,14 @@ const char *libexplain_errno_readdir(int errnum, DIR *dir);
   * This function is intended to be used in a fashion
   * similar to the following example:
   * @code
-  * if (readdir(dir) < 0)
+  * errno = 0;
+  * struct dirent *dep = readdir(dir);
+  * if (!dep && errno != 0)
   * {
   *     char message[3000];
   *     libexplain_message_readdir(message, sizeof(message), dir);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -178,13 +184,15 @@ void libexplain_message_readdir(char *message, int message_size, DIR *dir);
   * This function is intended to be used in a fashion
   * similar to the following example:
   * @code
+  * errno = 0;
+  * struct dirent *dep = readdir(dir);
+  * int err = errno;
   * if (readdir(dir) < 0)
   * {
-  *     int err = errno;
   *     char message[3000];
   *     libexplain_message_errno_readdir(message, sizeof(message), err, dir);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -208,7 +216,7 @@ void libexplain_message_readdir(char *message, int message_size, DIR *dir);
 void libexplain_message_errno_readdir(char *message, int message_size,
     int errnum, DIR *dir);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

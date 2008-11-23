@@ -31,6 +31,6 @@ libexplain_access_or_die(const char *pathname, int mode)
     if (access(pathname, mode) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_access(pathname, mode));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

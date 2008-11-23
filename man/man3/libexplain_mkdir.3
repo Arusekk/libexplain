@@ -57,7 +57,7 @@ similar to the following example:
 if (mkdir(pathname) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_mkdir(pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -97,7 +97,7 @@ if (mkdir(pathname) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_mkdir(err, pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -151,7 +151,7 @@ if (mkdir(pathname) < 0)
     char message[3000];
     libexplain_message_mkdir(message, sizeof(message), pathname);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -192,7 +192,7 @@ if (mkdir(pathname) < 0)
     char message[3000];
     libexplain_message_errno_mkdir(message, sizeof(message), err, pathname);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

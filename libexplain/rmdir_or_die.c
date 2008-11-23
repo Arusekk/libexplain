@@ -30,6 +30,6 @@ libexplain_rmdir_or_die(const char *pathname)
     if (rmdir(pathname) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_rmdir(pathname));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

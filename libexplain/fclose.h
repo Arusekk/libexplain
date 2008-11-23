@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -35,7 +35,7 @@ extern "C" {
   * The libexplain_fclose_or_die function is used to fflush(3) and
   * fclose(3) the given stream.  If there is an error, it will be
   * reported using libexplain_fclose, and then terminates by calling
-  * exit(1).
+  * exit(EXIT_FAILURE).
   *
   * @code
   * libexplain_fclose_or_die(fp);
@@ -64,7 +64,7 @@ void libexplain_fclose_or_die(FILE *fp);
   * if (fclose(fp))
   * {
   *     fprintf(stderr, "%s\n", libexplain_fclose(fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -91,12 +91,12 @@ void libexplain_fclose_or_die(FILE *fp);
   * if (fflush(fp))
   * {
   *     fprintf(stderr, "%s\n", libexplain_fflush(fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * if (fclose(fp))
   * {
   *     fprintf(stderr, "%s\n", libexplain_fclose(fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   * Alternatively, the libexplain_fclose_or_die function can do all that
@@ -117,7 +117,7 @@ const char *libexplain_fclose(FILE *fp);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_fclose(err, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -151,13 +151,13 @@ const char *libexplain_fclose(FILE *fp);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_fflush(err, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * if (fclose(fp))
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_fclose(err, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   */
@@ -181,7 +181,7 @@ const char *libexplain_errno_fclose(int errnum, FILE *fp);
   *     char message[3000];
   *     libexplain_message_fclose(message, sizeof(message), fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -207,14 +207,14 @@ const char *libexplain_errno_fclose(int errnum, FILE *fp);
   *     char message[3000];
   *     libexplain_message_fflush(message, sizeof(message), fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * if (fclose(fp))
   * {
   *     char message[3000];
   *     libexplain_message_fclose(message, sizeof(message), fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   */
@@ -236,7 +236,7 @@ void libexplain_message_fclose(char *message, int message_size, FILE *fp);
   *     char message[3000];
   *     libexplain_message_errno_fclose(message, sizeof(message), err, fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -269,7 +269,7 @@ void libexplain_message_fclose(char *message, int message_size, FILE *fp);
   *     char message[3000];
   *     libexplain_message_errno_fflush(message, sizeof(message), err, fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * if (fclose(fp))
   * {
@@ -277,14 +277,14 @@ void libexplain_message_fclose(char *message, int message_size, FILE *fp);
   *     char message[3000];
   *     libexplain_message_errno_fclose(message, sizeof(message), err, fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   */
 void libexplain_message_errno_fclose(char *message, int message_size,
     int errnum, FILE *fp);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

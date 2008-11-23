@@ -25,7 +25,7 @@
   * @brief explain unlink(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_unlink_or_die function is used to call the unlink(2)
   * system call.  On failure an explanation will be printed to stderr,
   * obtained from libexplain_unlink(3), and then the process terminates
-  * by calling exit(1).
+  * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -66,7 +66,7 @@ void libexplain_unlink_or_die(const char *pathname);
   * if (unlink(pathname) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_unlink(pathname));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -103,7 +103,7 @@ const char *libexplain_unlink(const char *pathname);
   *     char message[3000];
   *     libexplain_message_unlink(message, sizeof(message), pathname);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -134,7 +134,7 @@ void libexplain_message_unlink(char *message, int message_size,
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_unlink(err, pathname));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -176,7 +176,7 @@ const char *libexplain_errno_unlink(int errnum, const char *pathname);
   *     libexplain_message_errno_unlink(message, sizeof(message), err,
   *         pathname);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -199,7 +199,7 @@ const char *libexplain_errno_unlink(int errnum, const char *pathname);
 void libexplain_message_errno_unlink(char *message, int message_size,
     int errnum, const char *pathname);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

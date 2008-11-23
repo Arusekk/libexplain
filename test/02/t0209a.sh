@@ -24,7 +24,7 @@ TEST_SUBJECT="mkdir ENOENT"
 cat > test.ok << 'fubar'
 mkdir(pathname = "foo/bar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed, No
 such file or directory (ENOENT) because there is no "foo" directory in the
-pathname "." directory
+current directory
 fubar
 test $? -eq 0 || no_result
 

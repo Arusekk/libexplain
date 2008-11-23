@@ -25,7 +25,7 @@
   * @brief explain lstat(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -35,7 +35,7 @@ struct stat; /* forward */
   * The libexplain_lstat_or_die function is used to call the lstat(2)
   * system call.  On failure an explanation will be printed to stderr,
   * obtained from libexplain_lstat(3), and then the process terminates
-  * by calling exit(1).
+  * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -69,7 +69,7 @@ void libexplain_lstat_or_die(const char *pathname, struct stat *buf);
   * if (lstat(pathname, &buf) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_lstat(pathname, &buf));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -108,7 +108,7 @@ const char *libexplain_lstat(const char *pathname, const struct stat *buf);
   *     char message[3000];
   *     libexplain_message_lstat(message, sizeof(message), pathname, &buf);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -141,7 +141,7 @@ void libexplain_message_lstat(char *message, int message_size,
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_lstat(err, pathname, &buf));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -186,7 +186,7 @@ const char *libexplain_errno_lstat(int errnum, const char *pathname,
   *     libexplain_message_errno_lstat(message, sizeof(message), err,
   *         pathname, &buf);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -211,7 +211,7 @@ const char *libexplain_errno_lstat(int errnum, const char *pathname,
 void libexplain_message_errno_lstat(char *message, int message_size,
     int errnum, const char *pathname, const struct stat *buf);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -20,10 +20,10 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/fstat.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/fstat.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -35,10 +35,10 @@ explain_fstat(int errnum, int argc, char **argv)
     if (argc != 2)
     {
         fprintf(stderr, "fstat: requires 2 arguments, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
-    fildes = strtol_or_die(argv[0]);
-    buf = (struct stat *)strtol_or_die(argv[1]);
+    fildes = libexplain_strtol_or_die(argv[0]);
+    buf = (struct stat *)libexplain_strtol_or_die(argv[1]);
 
     libexplain_wrap_and_print
     (

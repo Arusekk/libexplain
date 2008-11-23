@@ -46,7 +46,7 @@ void libexplain_buffer_errno_unlink(libexplain_string_buffer_t *sb,
     int errnum, const char *path);
 
 /**
-  * The libexplain_buffer_errno_unlink_because function is used
+  * The libexplain_buffer_errno_unlink_explanation function is used
   * by the libexplain_buffer_errno_unlink function (and others)
   * to print the extended "because..." part of the explanation.
   *
@@ -57,7 +57,7 @@ void libexplain_buffer_errno_unlink(libexplain_string_buffer_t *sb,
   * @param path
   *     The original path, exactly has passed to the unlink(2) system call.
   */
-void libexplain_buffer_errno_unlink_because(libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
     int errnum, const char *path);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_UNLINK_H */

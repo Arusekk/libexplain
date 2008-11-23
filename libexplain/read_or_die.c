@@ -37,7 +37,7 @@ libexplain_read_or_die(int fildes, void *data, long data_size)
             stderr,
             libexplain_read(fildes, data, data_size)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

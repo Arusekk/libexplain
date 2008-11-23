@@ -22,8 +22,8 @@ TEST_SUBJECT="fstat ENOMEM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fstat(fildes = 42, buf = 0x2468) failed, Cannot allocate memory (ENOMEM)
-because insufficient kernel memory was available
+fstat(fildes = 42, buf = 0x00002468) failed, Cannot allocate memory
+(ENOMEM) because insufficient kernel memory was available
 fubar
 test $? -eq 0 || no_result
 

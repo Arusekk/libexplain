@@ -24,7 +24,7 @@ TEST_SUBJECT="chmod ENOENT"
 cat > test.ok << 'fubar'
 chmod(pathname = "foobar", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 failed, No such file or directory (ENOENT) because there is no "foobar"
-file in the pathname "." directory
+file in the current directory
 fubar
 test $? -eq 0 || no_result
 

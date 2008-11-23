@@ -25,9 +25,9 @@ cat > test.ok << 'fubar'
 chmod(pathname =
 "a/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz/foobar",
 mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) failed, File name too long
-(ENAMETOOLONG) because pathname component
+(ENAMETOOLONG) because pathname
 "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
-is longer than the system limit (260 > 255)
+component is longer than the system limit (260 > 255)
 fubar
 test $? -eq 0 || no_result
 

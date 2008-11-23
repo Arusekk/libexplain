@@ -29,7 +29,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_rename <oldpath> <newpath>\n");
     fprintf(stderr, "       test_rename -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

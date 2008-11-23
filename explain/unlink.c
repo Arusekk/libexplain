@@ -32,7 +32,7 @@ explain_unlink(int errnum, int argc, char **argv)
     if (argc != 1)
     {
         fprintf(stderr, "unlink: requires 1 argument, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

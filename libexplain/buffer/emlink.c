@@ -21,7 +21,6 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/emlink.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/dirname.h>
@@ -34,7 +33,6 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
 {
     struct stat     oldpath_st;
 
-    libexplain_buffer_because(sb);
     if (stat(oldpath, &oldpath_st) >= 0)
     {
         if (S_ISDIR(oldpath_st.st_mode))

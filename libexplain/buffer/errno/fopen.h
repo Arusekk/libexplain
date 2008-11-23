@@ -47,7 +47,7 @@ void libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
     const char *path, const char *mode);
 
 /**
-  * The libexplain_buffer_errno_fopen_because function is used by the
+  * The libexplain_buffer_errno_fopen_explanation function is used by the
   * libexplain_buffer_errno_fopen function (and others) to print the
   * extended "because..." part of the explanation.
   *
@@ -60,7 +60,7 @@ void libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
   * @param mode
   *     The original mode, exactly has passed to the fopen(3) system call.
   */
-void libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
     int errnum, const char *path, const char *mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FOPEN_H */

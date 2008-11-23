@@ -23,7 +23,7 @@ TEST_SUBJECT="truncate ENOENT"
 
 cat > test.ok << 'fubar'
 truncate(pathname = "foobar", length = 0) failed, No such file or directory
-(ENOENT) because there is no "foobar" file in the pathname "." directory
+(ENOENT) because there is no "foobar" file in the current directory
 fubar
 test $? -eq 0 || no_result
 

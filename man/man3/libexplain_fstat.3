@@ -57,7 +57,7 @@ similar to the following example:
 if (fstat(fildes, buf) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_fstat(fildes, buf));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -100,7 +100,7 @@ if (fstat(fildes, buf) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_fstat(err, fildes, buf));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -157,7 +157,7 @@ if (fstat(fildes, buf) < 0)
     char message[3000];
     libexplain_message_fstat(message, sizeof(message), fildes, buf);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -201,7 +201,7 @@ if (fstat(fildes, buf) < 0)
     char message[3000];
     libexplain_message_errno_fstat(message, sizeof(message), err, fildes, buf);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

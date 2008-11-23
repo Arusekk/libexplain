@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_SIZEOF_H
 
 /**
-  * The LIBEXPLAIN_SIZEOF macro is used to calculate the number of
+  * The SIZEOF macro is used to calculate the number of
   * elements in an array.  This is usedful in cases when the C built-in
   * sizeof operator would return the size of the array in bytes, but the
   * array elements are larger in size than a single byte.
@@ -29,16 +29,16 @@
   * @param a
   *     The array of interest
   */
-#define LIBEXPLAIN_SIZEOF(a) (sizeof(a) / sizeof(a[0]))
+#define SIZEOF(a) (sizeof(a) / sizeof(a[0]))
 
 /**
-  * The LIBEXPLAIN_ENDOF macro is used to calculate the address of
+  * The ENDOF macro is used to calculate the address of
   * the array element just of the end of an array.  This is useful in
   * writing for loops to traverse arrays usuing an elelent pointer.
   *
   * @param a
   *     The array of interest
   */
-#define LIBEXPLAIN_ENDOF(a) ((a) + LIBEXPLAIN_SIZEOF(a))
+#define ENDOF(a) ((a) + SIZEOF(a))
 
 #endif /* LIBEXPLAIN_SIZEOF_H */

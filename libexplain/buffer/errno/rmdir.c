@@ -19,41 +19,33 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/rmdir.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/path_to_pid.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
 #include <libexplain/capability.h>
+#include <libexplain/explanation.h>
 #include <libexplain/count_directory_entries.h>
 #include <libexplain/option.h>
 
 
-void
-libexplain_buffer_errno_rmdir(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname)
+static void
+libexplain_buffer_errno_rmdir_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname)
 {
     libexplain_string_buffer_puts(sb, "rmdir(pathname = ");
     if (errnum == EFAULT)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
-
-    libexplain_buffer_errno_rmdir_because(sb, errnum, pathname);
 }
 
 
@@ -110,7 +102,7 @@ last_component_is_dot(const char *pathname)
 
 
 void
-libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
+libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
     libexplain_final_t final_component;
@@ -122,7 +114,6 @@ libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -151,7 +142,6 @@ libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
             /* BSD */
             goto case_einval;
         }
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -178,7 +168,6 @@ libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
 
     case EINVAL:
         case_einval:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -210,31 +199,11 @@ libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "pathname, or a component used as a directory in "
-                "pathname, is not, in fact, a directory"
-            );
-        }
+        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EEXIST:
     case ENOTEMPTY:
-        libexplain_buffer_because(sb);
         if (last_component_is_dotdot(pathname))
         {
             libexplain_string_buffer_puts
@@ -260,7 +229,6 @@ libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
         break;
 
     case EPERM:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -321,4 +289,27 @@ libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
             );
         }
     }
+}
+
+
+void
+libexplain_buffer_errno_rmdir(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_rmdir_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname
+    );
+    libexplain_buffer_errno_rmdir_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

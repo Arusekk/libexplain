@@ -40,7 +40,7 @@ explain_open(int errnum, int argc, char **argv)
     {
     case 0:
         fprintf(stderr, "open: no path given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
 
     case 3:
         mode = libexplain_permission_mode_parse(argv[2]);
@@ -52,7 +52,7 @@ explain_open(int errnum, int argc, char **argv)
                 "argument \"%s\" does not look like a permission mode\n",
                 argv[2]
             );
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         /* fall through... */
 
@@ -66,7 +66,7 @@ explain_open(int errnum, int argc, char **argv)
                 "argument \"%s\" does not look like open flags\n",
                 argv[1]
             );
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         /* fall through... */
 
@@ -76,7 +76,7 @@ explain_open(int errnum, int argc, char **argv)
 
     default:
         fprintf(stderr, "open: too many arguments given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

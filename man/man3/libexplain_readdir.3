@@ -53,10 +53,12 @@ similar to the following example:
 .RS
 .ft CW
 .nf
-if (readdir(dir) < 0)
+errno = 0;
+struct dirent *dep = readdir(dir);
+if (!dep && errno != 0)
 {
     fprintf(stderr, "%s\en", libexplain_readdir(dir));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -92,11 +94,13 @@ similar to the following example:
 .RS
 .ft CW
 .nf
-if (readdir(dir) < 0)
+errno = 0;
+struct dirent *dep = readdir(dir);
+int err = errno;
+if (!dep && errno != 0)
 {
-    int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_readdir(err, dir));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -144,12 +148,14 @@ similar to the following example:
 .RS
 .ft CW
 .nf
-if (readdir(dir) < 0)
+errno = 0;
+struct dirent *dep = readdir(dir);
+if (!dep && errno != 0)
 {
     char message[3000];
     libexplain_message_readdir(message, sizeof(message), dir);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -184,13 +190,15 @@ similar to the following example:
 .RS
 .ft CW
 .nf
-if (readdir(dir) < 0)
+errno = 0;
+struct dirent *dep = readdir(dir);
+int err = errno;
+if (!dep && errno != 0)
 {
-    int err = errno;
     char message[3000];
     libexplain_message_errno_readdir(message, sizeof(message), err, dir);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

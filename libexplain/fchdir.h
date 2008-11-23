@@ -25,7 +25,7 @@
   * @brief explain fchdir(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -61,7 +61,7 @@ void libexplain_fchdir_or_die(int fildes);
   * if (fchdir(fildes) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_fchdir(fildes));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -98,7 +98,7 @@ const char *libexplain_fchdir(int fildes);
   *     char message[3000];
   *     libexplain_message_fchdir(message, sizeof(message), fildes);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -129,7 +129,7 @@ void libexplain_message_fchdir(char *message, int message_size,
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_fchdir(err, fildes));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -171,7 +171,7 @@ const char *libexplain_errno_fchdir(int errnum, int fildes);
   *     libexplain_message_errno_fchdir(message, sizeof(message), err,
   *         fildes);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -194,7 +194,7 @@ const char *libexplain_errno_fchdir(int errnum, int fildes);
 void libexplain_message_errno_fchdir(char *message, int message_size,
     int errnum, int fildes);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

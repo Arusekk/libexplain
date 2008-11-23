@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_LINK_H
 #define LIBEXPLAIN_BUFFER_ERRNO_LINK_H
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -50,7 +50,7 @@ struct libexplain_string_buffer_t; /* forward */
 void libexplain_buffer_errno_link(struct libexplain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -24,7 +24,7 @@
   * @brief explain dup(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the dup(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_dup(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -67,7 +67,7 @@ int libexplain_dup_or_die(int fildes);
   * if (dup(fildes) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_dup(fildes));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -102,7 +102,7 @@ const char *libexplain_dup(int fildes);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_dup(err, fildes));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -148,7 +148,7 @@ const char *libexplain_errno_dup(int errnum, int fildes);
   *     char message[3000];
   *     libexplain_message_dup(message, sizeof(message), fildes);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -182,7 +182,7 @@ void libexplain_message_dup(char *message, int message_size, int fildes);
   *     char message[3000];
   *     libexplain_message_errno_dup(message, sizeof(message), err, fildes);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -206,7 +206,7 @@ void libexplain_message_dup(char *message, int message_size, int fildes);
 void libexplain_message_errno_dup(char *message, int message_size, int errnum,
     int fildes);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

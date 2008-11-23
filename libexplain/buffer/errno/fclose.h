@@ -46,7 +46,7 @@ void libexplain_buffer_errno_fclose(libexplain_string_buffer_t *sb, int errnum,
     FILE *fp);
 
 /**
-  * The libexplain_buffer_errno_fclose_because function is used by the
+  * The libexplain_buffer_errno_fclose_explanation function is used by the
   * libexplain_buffer_errno_fclose function (and others) to print the
   * extended "because..." part of the explanation.
   *
@@ -57,7 +57,7 @@ void libexplain_buffer_errno_fclose(libexplain_string_buffer_t *sb, int errnum,
   * @param fp
   *     The original fp, exactly has passed to the fclose(3) system call.
   */
-void libexplain_buffer_errno_fclose_because(libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_fclose_explanation(libexplain_string_buffer_t *sb,
     int errnum, FILE *fp);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FCLOSE_H */

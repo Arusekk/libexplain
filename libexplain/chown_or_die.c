@@ -30,6 +30,6 @@ libexplain_chown_or_die(const char *path, int owner, int group)
     if (chown(path, owner, group) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_chown(path, owner, group));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

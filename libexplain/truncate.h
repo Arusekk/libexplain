@@ -24,7 +24,7 @@
   * @brief explain truncate(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the truncate(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_truncate(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -69,7 +69,7 @@ void libexplain_truncate_or_die(const char *pathname, long long length);
   * if (truncate(pathname, length) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_truncate(pathname, length));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -106,7 +106,7 @@ const char *libexplain_truncate(const char *pathname, long long length);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_truncate(err, pathname, length));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -155,7 +155,7 @@ const char *libexplain_errno_truncate(int errnum, const char *pathname,
   *     char message[3000];
   *     libexplain_message_truncate(message, sizeof(message), pathname, length);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -193,7 +193,7 @@ void libexplain_message_truncate(char *message, int message_size,
   *     libexplain_message_errno_truncate(message, sizeof(message), err,
   *         pathname, length);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -219,7 +219,7 @@ void libexplain_message_truncate(char *message, int message_size,
 void libexplain_message_errno_truncate(char *message, int message_size,
     int errnum, const char *pathname, long long length);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -29,7 +29,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_unlink <pathname>\n");
     fprintf(stderr, "       test_unlink -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

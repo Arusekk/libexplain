@@ -32,7 +32,7 @@ explain_rmdir(int errnum, int argc, char **argv)
     if (argc != 1)
     {
         fprintf(stderr, "symlink: requires 1 argument, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

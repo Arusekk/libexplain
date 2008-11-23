@@ -25,7 +25,7 @@
   * @brief explain fcntl(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -34,7 +34,7 @@ extern "C" {
   * used to call the fcntl(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_fcntl(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -71,7 +71,7 @@ int libexplain_fcntl_or_die(int fildes, int command, long arg);
   * if (ok < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_fcntl(fd, command, arg));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -116,7 +116,7 @@ const char *libexplain_fcntl(int fildes, int command, long arg);
   *         "%s\n",
   *         libexplain_errno_fcntl(errnum, fd, command, arg)
   *     );
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -167,7 +167,7 @@ const char *libexplain_errno_fcntl(int errnum, int fildes, int command,
   *     char message[3000];
   *     libexplain_message_fcntl(message, sizeof(message), fd, cmd, arg);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -208,7 +208,7 @@ void libexplain_message_fcntl(char *message, int message_size, int fildes,
   *     libexplain_message_fcntl(message, sizeof(message), errnum, fd,
   *         command, arg);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -237,7 +237,7 @@ void libexplain_message_fcntl(char *message, int message_size, int fildes,
 void libexplain_message_errno_fcntl(char *message, int message_size,
     int errnum, int fildes, int command, long arg);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -22,7 +22,7 @@ TEST_SUBJECT="readlink ENOMEM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-readlink(pathname = "foobar", data = 0x12345, data_size = 1000) failed,
+readlink(pathname = "foobar", data = 0x00012345, data_size = 1000) failed,
 Cannot allocate memory (ENOMEM) because insufficient kernel memory was
 available
 fubar

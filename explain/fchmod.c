@@ -22,10 +22,10 @@
 
 #include <libexplain/fchmod.h>
 #include <libexplain/permission_mode.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/fchmod.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -40,7 +40,7 @@ explain_fchmod(int errnum, int argc, char **argv)
     {
     case 0:
         fprintf(stderr, "fchmod: no pathname given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
 
     case 2:
         mode = libexplain_permission_mode_parse(argv[1]);
@@ -52,17 +52,17 @@ explain_fchmod(int errnum, int argc, char **argv)
                 "argument \"%s\" does not look like a permission mode\n",
                 argv[1]
             );
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         /* fall through... */
 
     case 1:
-        fildes = strtol_or_die(argv[0]);
+        fildes = libexplain_strtol_or_die(argv[0]);
         break;
 
     default:
         fprintf(stderr, "fchmod: too many arguments given\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

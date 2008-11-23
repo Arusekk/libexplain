@@ -21,17 +21,17 @@
 #include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/errno/fcntl.h>
 #include <libexplain/buffer/errno/generic.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/flock.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/strsignal.h>
+#include <libexplain/explanation.h>
 #include <libexplain/fcntl.h>
 #include <libexplain/open_flags.h>
 #include <libexplain/parse_bits.h>
@@ -89,30 +89,16 @@ libexplain_fcntl_command_parse(const char *text)
 }
 
 
-static const libexplain_parse_bits_table_t *
-table_find(int command)
+static void
+libexplain_buffer_errno_fcntl_system_call(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, int command, long arg)
 {
     const libexplain_parse_bits_table_t *tp;
 
-    for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
-    {
-        if (command == tp->value)
-            return tp;
-    }
-    return 0;
-}
-
-
-void
-libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
-    int fildes, int command, long arg)
-{
-    const libexplain_parse_bits_table_t *tp;
-
-    tp = table_find(command);
     libexplain_string_buffer_printf(sb, "fcntl(fildes = %d", fildes);
     libexplain_buffer_fildes_to_pathname(sb, fildes);
     libexplain_string_buffer_puts(sb, ", command = ");
+    tp = libexplain_parse_bits_find_by_value(command, table, SIZEOF(table));
     if (tp)
         libexplain_string_buffer_puts(sb, tp->name);
     else
@@ -133,8 +119,8 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
 
 #ifdef F_SETSIG
     case F_SETSIG:
-        /* FIXME: decode signal */
-        libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
+        libexplain_string_buffer_puts(sb, ", arg = ");
+        libexplain_buffer_strsignal(sb, arg);
         break;
 #endif
 
@@ -166,7 +152,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
             p = (const struct flock *)arg;
             libexplain_string_buffer_puts(sb, ", arg = ");
             if (errnum == EFAULT)
-                libexplain_string_buffer_printf(sb, "%p", p);
+                libexplain_buffer_pointer(sb, p);
             else
                 libexplain_buffer_flock(sb, p);
         }
@@ -183,7 +169,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
             p = (const struct flock64 *)arg;
             libexplain_string_buffer_puts(sb, ", arg = ");
             if (errnum == EFAULT)
-                libexplain_string_buffer_printf(sb, "%p", p);
+                libexplain_buffer_pointer(sb, p);
             else
                 libexplain_buffer_flock64(sb, p);
         }
@@ -192,18 +178,16 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
 #endif
     }
     libexplain_string_buffer_putc(sb, ')');
+}
 
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
 
+static void
+libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, int command, long arg)
+{
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         /* FIXME: what other processes? */
         libexplain_string_buffer_puts
         (
@@ -213,7 +197,6 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EAGAIN:
-        libexplain_buffer_because(sb);
         /* FIXME: what other processes? */
         libexplain_string_buffer_puts
         (
@@ -234,7 +217,6 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         {
         case F_SETLK:
         case F_SETLKW:
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
@@ -265,7 +247,6 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EDEADLK:
-        libexplain_buffer_because(sb);
         /* FIXME: which other process? */
         libexplain_string_buffer_puts
         (
@@ -288,7 +269,6 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
 
         case F_SETLK:
         case F_GETLK:
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
@@ -310,14 +290,12 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
 #endif
             if (arg < 0)
             {
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts(sb, "the argument is negative");
             }
             else
             {
                 long            n;
 
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -331,7 +309,6 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
 
 #ifdef F_SETSIG
         case F_SETSIG:
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
@@ -361,7 +338,6 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOLCK:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -372,7 +348,6 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EPERM:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -385,4 +360,31 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
+    int fildes, int command, long arg)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_fcntl_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        command,
+        arg
+    );
+    libexplain_buffer_errno_fcntl_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        fildes,
+        command,
+        arg
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

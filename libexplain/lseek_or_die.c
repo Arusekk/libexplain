@@ -37,7 +37,7 @@ libexplain_lseek_or_die(int fildes, long long offset, int whence)
             stderr,
             libexplain_lseek(fildes, offset, whence)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

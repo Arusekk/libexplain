@@ -38,7 +38,7 @@ Upon successful completion \f[B]libexplain_fopen_or_die\fP returns a
 .PP
 If an error occurs, \f[B]libexplain_fopen\fP will be called to explain
 the error, which will be printed onto \f[I]stderr\fP, and then the
-process will terminate by calling \f[CW]exit(1)\fP.
+process will terminate by calling \f[CW]exit(EXIT_FAILURE)\fP.
 .SH SEE ALSO
 .TP 8n
 \f[I]fopen\fP(3)

@@ -33,7 +33,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_generator <declaration>\n");
     fprintf(stderr, "       test_generator -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 
@@ -83,14 +83,14 @@ main(int argc, char **argv)
     if (np->nchild != 3)
     {
         fprintf(stderr, "no names declared\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     assert(node_is(np->child[0], "declaration_specifiers"));
     assert(node_is(np->child[1], "init_declarator_list"));
     if (np->child[1]->nchild != 1)
     {
         fprintf(stderr, "too many names declared\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     assert(node_is(np->child[1]->child[0], "init_declarator"));
     assert(np->child[1]->child[0]->nchild == 1);

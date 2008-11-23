@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/mount_point.h>
 
@@ -26,7 +25,6 @@ void
 libexplain_buffer_erofs(libexplain_string_buffer_t *sb, const char *pathname,
     const char *caption)
 {
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_printf
     (
         sb,
@@ -43,7 +41,6 @@ void
 libexplain_buffer_erofs_fildes(libexplain_string_buffer_t *sb, int fildes,
     const char *caption)
 {
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_printf
     (
         sb,

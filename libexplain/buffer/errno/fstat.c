@@ -23,24 +23,29 @@
 #include <libexplain/buffer/errno/fstat.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
 
 
-void
-libexplain_buffer_errno_fstat(libexplain_string_buffer_t *sb, int errnum,
-    int fildes, const struct stat *buf)
+static void
+libexplain_buffer_errno_fstat_system_call(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, const struct stat *buf)
 {
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "fstat(fildes = %d", fildes);
     libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_printf(sb, ", buf = %p)", buf);
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+    libexplain_string_buffer_puts(sb, ", buf = ");
+    libexplain_buffer_pointer(sb, buf);
+    libexplain_string_buffer_putc(sb, ')');
+}
 
+
+static void
+libexplain_buffer_errno_fstat_explanation(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, const struct stat *buf)
+{
+    (void)fildes;
+    (void)buf;
     switch (errnum)
     {
     case EBADF:
@@ -55,4 +60,29 @@ libexplain_buffer_errno_fstat(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_fstat(libexplain_string_buffer_t *sb, int errnum,
+    int fildes, const struct stat *buf)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_fstat_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        buf
+    );
+    libexplain_buffer_errno_fstat_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        fildes,
+        buf
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

@@ -24,9 +24,9 @@ TEST_SUBJECT="symlink ENAMETOOLONG"
 cat > test.ok << 'fubar'
 symlink(oldpath = "foo", newpath =
 "a/b/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz")
-failed, File name too long (ENAMETOOLONG) because newpath component
+failed, File name too long (ENAMETOOLONG) because newpath
 "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
-is longer than the system limit (260 > 255)
+component is longer than the system limit (260 > 255)
 fubar
 test $? -eq 0 || no_result
 

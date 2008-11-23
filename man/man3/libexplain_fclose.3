@@ -55,7 +55,7 @@ following example:
 if (fclose(fp))
 {
     fprintf(stderr, "%s\en", libexplain_fclose(fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -86,12 +86,12 @@ for writing, you will obtain more useful information by first calling
 if (fflush(fp))
 {
     fprintf(stderr, "%s\en", libexplain_fflush(fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 if (fclose(fp))
 {
     fprintf(stderr, "%s\en", libexplain_fclose(fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -115,7 +115,7 @@ if (fclose(fp))
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_fclose(err, fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -154,13 +154,13 @@ if (fflush(fp))
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_fflush(err, fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 if (fclose(fp))
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_fclose(err, fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -188,7 +188,7 @@ if (fclose(fp))
     char message[3000];
     libexplain_message_fclose(message, sizeof(message), fp);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -218,14 +218,14 @@ if (fflush(fp))
     char message[3000];
     libexplain_message_fflush(message, sizeof(message), fp);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 if (fclose(fp))
 {
     char message[3000];
     libexplain_message_fclose(message, sizeof(message), fp);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -253,7 +253,7 @@ if (fclose(fp))
     libexplain_message_errno_fclose(message, sizeof(message),
         err, fp);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -292,7 +292,7 @@ if (fflush(fp))
     libexplain_message_errno_fflush(message, sizeof(message),
         err, fp);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 if (fclose(fp))
 {
@@ -301,7 +301,7 @@ if (fclose(fp))
     libexplain_message_errno_fclose(message, sizeof(message),
         err, fp);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

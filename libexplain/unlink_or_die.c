@@ -30,6 +30,6 @@ libexplain_unlink_or_die(const char *pathname)
     if (unlink(pathname) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_unlink(pathname));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

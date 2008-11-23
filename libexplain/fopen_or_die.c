@@ -32,7 +32,7 @@ libexplain_fopen_or_die(const char *pathname, const char *flags)
     if (!fp)
     {
         libexplain_wrap_and_print(stderr, libexplain_fopen(pathname, flags));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return fp;
 }

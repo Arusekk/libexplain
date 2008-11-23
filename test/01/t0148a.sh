@@ -24,7 +24,7 @@ TEST_SUBJECT="open EACCES"
 cat > test.ok << 'fubar'
 open(pathname = "foobar", flags = O_RDONLY) failed, Permission denied
 (EACCES) because the process does not have read permission to the "foobar"
-regular file in the pathname "." directory
+regular file in the current directory
 fubar
 test $? -eq 0 || no_result
 

@@ -23,58 +23,50 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/access_mode.h>
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/access.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/etxtbsy.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/path_to_pid.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
 #include <libexplain/dirname.h>
+#include <libexplain/explanation.h>
 #include <libexplain/have_permission.h>
 #include <libexplain/path_is_efault.h>
-#include <libexplain/string_buffer.h>
+#include <libexplain/pathname_is_a_directory.h>
 
 
-static int
-is_dir(const char *pathname)
-{
-    struct stat     st;
-
-    return (stat(pathname, &st) && S_ISDIR(st.st_mode));
-}
-
-
-void
-libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
+static void
+libexplain_buffer_errno_access_call(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode)
 {
     int             bad_pathname;
-    libexplain_final_t final_component;
 
     bad_pathname = errnum == EFAULT && libexplain_path_is_efault(pathname);
     libexplain_string_buffer_puts(sb, "access(pathname = ");
     if (bad_pathname)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_puts(sb, ", mode = ");
     libexplain_buffer_access_mode(sb, mode);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_string_buffer_puts(sb, ": ");
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
+
+
+void
+libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, int mode)
+{
+    libexplain_final_t final_component;
+    int             bad_pathname;
 
     /*
      * The Linux access(2) man page says
@@ -100,15 +92,17 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         libexplain_string_buffer_puts
         (
             sb,
-            "; warning: using access(2) to check if a user is "
+            "{warning: using access(2) to check if a user is "
             "authorized, for example to open a file before actually "
             "using open(2), creates a security hole, because the user "
             "might exploit the short time interval between checking "
             "and opening the file to manipulate it; for this reason, "
-            "this use of access(2) should be avoided"
+            "this use of access(2) should be avoided}"
         );
         return;
     }
+
+    bad_pathname = errnum == EFAULT && libexplain_path_is_efault(pathname);
 
     /*
      * Translate the mode into final component flags.
@@ -120,7 +114,7 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         final_component.want_to_write = 1;
     if (mode & X_OK)
     {
-        if (!bad_pathname && is_dir(pathname))
+        if (libexplain_pathname_is_a_directory(pathname))
             final_component.want_to_search = 1;
         else
             final_component.want_to_execute = 1;
@@ -129,7 +123,6 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -186,30 +179,7 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            /*
-             * Unable to find a specific cause,
-             * emit the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a component used as a directory in pathname is not, in "
-                "fact, a directory                                     "
-            );
-        }
+        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EROFS:
@@ -221,7 +191,6 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EINVAL:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -245,4 +214,29 @@ libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
         /* no explanation for any other error */
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, int mode)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_access_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        mode
+    );
+    libexplain_buffer_errno_access_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname,
+        mode
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

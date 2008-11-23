@@ -1,0 +1,996 @@
+# libexplain - Explain errno values returned by libc functions.
+# Copyright (C) 2008 Peter Miller <millerp@canb.auug.org.au>
+# This file is distributed under the same license as the libexplain package.
+# Peter Miller <millerp@canb.auug.org.au>, 2008.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: libexplain 0.3.D001\n"
+"Report-Msgid-Bugs-To: Peter Miller <millerp@canb.auug.org.au>\n"
+"POT-Creation-Date: 2008-11-23 19:45+1100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#.
+#. This message is used to explain the specific
+#. DAC_FOWNER privilege that is absent.
+#.
+#: libexplain/buffer/dac/fowner.c:43
+msgid " (does not have the DAC_FOWNER capability)"
+msgstr ""
+
+#.
+#. This message is used to explain the specific
+#. DAC_NET_RAW privilege that is absent.
+#.
+#: libexplain/buffer/dac/net_raw.c:43
+msgid " (does not have the DAC_NET_RAW capability)"
+msgstr ""
+
+#.
+#. This message is used to explain the specific
+#. privilege that is absent.
+#.
+#: libexplain/buffer/dac/override.c:43
+msgid " (does not have the DAC_OVERRIDE capability)"
+msgstr ""
+
+#.
+#. This message is used to explain the specific
+#. privilege that is absent.
+#.
+#: libexplain/buffer/dac/read_search.c:43
+msgid " (does not have the DAC_READ_SEARCH capability)"
+msgstr ""
+
+#.
+#. This message is used when a path name component is
+#. longer than the system limit (NAME_MAX, not PATH_MAX).
+#.
+#. The %s string contains the name of the function call argument
+#. and the quoted text of the offending path component.
+#.
+#: libexplain/buffer/errno/path_resolution.c:817
+#, c-format
+msgid "%s component is longer than the system limit"
+msgstr ""
+
+#.
+#. This message is used when a path is being used as a
+#. directory, when does not exist.  The %s string contains the
+#. name of the system call argument, the quoted path and the
+#. actual file type.
+#.
+#: libexplain/buffer/errno/path_resolution.c:240
+#, c-format
+msgid "%s does not exist"
+msgstr ""
+
+#.
+#. This message is used when a file descriptor is not
+#. valid and does not refer to an open file.  The %s string is
+#. the name of a system call argument.
+#.
+#: libexplain/buffer/ebadf.c:35
+#, c-format
+msgid "%s does not refer to an open file"
+msgstr ""
+
+#.
+#. This message is used when a pathname
+#. exceeds the maximum (system specific) path name
+#. length (in bytes, not characters).
+#.
+#: libexplain/buffer/errno/path_resolution.c:1064
+#, c-format
+msgid "%s exceeds the system maximum path length"
+msgstr ""
+
+#.
+#. this message is printed when there is no
+#. extended explanation available.  In english, the stuff
+#. to the left of "because" is a statement of the problem,
+#. including function name and function argument names and
+#. values.
+#.
+#. Usually a longer message, including a prose explanation, is
+#. used.  This shorter message is used when there is no extended
+#. explanation, or when the user-supplied message buffer is too
+#. small.
+#.
+#. Depending on the grammar of the language being translated
+#. to, you may need to rearrange these two pieces using
+#. positional arguments.
+#.
+#. %1$s => the system call and its arguments
+#.         e.g. "open(pathname = "foo/bar", flags = O_RDONLY)"
+#. %2$s => the strerror text, plus the name and number of
+#.         the errno.h constant
+#.         e.g. "No such file or directory (2, ENOENT)"
+#.
+#. For example:
+#.
+#. msgid "%s failed, %s"
+#. msgstr "%2$s was returned by %1$s"
+#.
+#: libexplain/explanation.c:123
+#, c-format
+msgid "%s failed, %s"
+msgstr ""
+
+#.
+#. This message is used to join the problem to the
+#. explanation.  In english, the stuff to the left of "because"
+#. is a statement of the problem, including function name and
+#. function argument names and values; and the stuff to the
+#. right of "because" is the explanation text.
+#.
+#. Depending on the grammar of the language being translated to,
+#. you may need to rearrange these two pieces using positional
+#. arguments.
+#.     %1$s => the system call and its arguments
+#.             e.g. "open(pathname = 'foo/bar', flags = O_RDONLY)"
+#.     %2$s => the strerror text, plus the name and number of
+#.             the errno.h constant
+#.             e.g. "No such file or directory (2, ENOENT)"
+#.     %3$s => the explanation text
+#.             e.g. "there is no 'bar' file in the pathname
+#.                  'foo'; directory"
+#.
+#. For example:
+#.
+#. msgid "%s failed, %s because %s"
+#. msgstr "%3$s caused %2$s to be returned by %1$s"
+#.
+#. msgid "%s failed, %s because %s"
+#. msgstr "a %2$s error, due to %3$s, was reported by %1$s"
+#.
+#. This has a follow-on effect for how the explanations themselves
+#. are translated, to ensure that sensable sentences result.  In
+#. particular, the explanation portion should only ever be one
+#. sentence, so that a clause (e.g. above) may be appended.
+#.
+#: libexplain/explanation.c:179
+#, c-format
+msgid "%s failed, %s because %s"
+msgstr ""
+
+#.
+#. This message is used when a path given in a path is
+#. larger that the (dialect specific) maximum path length.  The
+#. %s string is the name of the relevant system call argument.
+#.
+#: libexplain/buffer/efbig.c:71
+#, c-format
+msgid "%s is larger than the maximum file size"
+msgstr ""
+
+#.
+#. This message is used when a path is being used as
+#. a directory, when it is actually something else (usually a
+#. regular file).  The %s string contains the name of the system
+#. call argument, the quoted path and the actual file type.
+#.
+#: libexplain/buffer/errno/path_resolution.c:264
+#, c-format
+msgid "%s is not a directory"
+msgstr ""
+
+#.
+#. This message is used when a system call argument
+#. points to non-existent memory.  This is usually either a NULL
+#. pointer or an uninitialized variabe or a memory scribble.
+#. The %s string contains the name of a function call argument.
+#.
+#: libexplain/buffer/efault.c:37
+#, c-format
+msgid ""
+"%s refers to memory that is outside the process's accessible address "
+"space"
+msgstr ""
+
+#.
+#. This explanation is used in response to an ENOENT
+#. error.  Both of the %s strings are always identical.  The
+#. string is the name of one of the function call arguments.
+#. This explanation is only used if a more specific cause
+#. cannot be determined.
+#.
+#: libexplain/buffer/enoent.c:41
+#, c-format
+msgid ""
+"%s, or a directory component of %s, does not exist or is a dangling "
+"symbolic link"
+msgstr ""
+
+#.
+#. this message is issued when a system call
+#. succeeds, when there was, in fact, no error.
+#.
+#: libexplain/explanation.c:67
+#, c-format
+msgid "%s: success"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a BSD whiteout
+#. file, used by the union file system.  Not present on all
+#. POSIX implementations.
+#.
+#: libexplain/buffer/file_type.c:226
+msgid "BSD whiteout"
+msgstr ""
+
+#.
+#. this explanation is given for paths that are
+#. the empty string.  The %s string is the name of the
+#. relevant system call argument.
+#.
+#: libexplain/buffer/errno/path_resolution.c:1029
+#, c-format
+msgid "POSIX decrees that an empty %s must not be resolved successfully"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a Solaris door.
+#. Not present on all POSIX implementations.
+#.
+#: libexplain/buffer/file_type.c:210
+msgid "Solaris door"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a VxFS compressed
+#. file.  Not present on all POSIX implementations.
+#.
+#: libexplain/buffer/file_type.c:180
+msgid "VxFS compressed file"
+msgstr ""
+
+#.
+#. This explanation is used in response to an ENOENT
+#. error.  The string is the name of one of the function call
+#. arguments.  This explanation is only used if a more specific
+#. cause cannot be determined.
+#.
+#: libexplain/buffer/enoent.c:61
+#, c-format
+msgid ""
+"a directory component of %s does not exist or is a dangling symbolic link"
+msgstr ""
+
+#.
+#. This message is used when explaining why file
+#. access is denied, and the process is not root.
+#.
+#: libexplain/buffer/dac/process_is_not_privileged.c:35
+msgid "and the process is not privileged"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a block special
+#. device.
+#.
+#: libexplain/buffer/file_type.c:77
+msgid "block special device"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a character
+#. special device.
+#.
+#: libexplain/buffer/file_type.c:102
+msgid "character special device"
+msgstr ""
+
+#.
+#. the name of the current directory, rather than
+#. "." that not all users understand.
+#.
+#: libexplain/buffer/caption_name_type.c:41
+msgid "current directory"
+msgstr ""
+
+#.
+#. This message is issued when a file (or directory
+#. component) could not be found, but a sufficiently similar
+#. name has been found in the same directory.  This often helps
+#. with typographical errors.
+#.
+#: libexplain/buffer/errno/path_resolution.c:127
+#, c-format
+msgid "did you mean the %s instead?"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a directory.
+#.
+#: libexplain/buffer/file_type.c:89
+msgid "directory"
+msgstr ""
+
+#.
+#. This message is used when a file stream pointer
+#. is invalid because it is the NULL pointer.
+#.
+#: libexplain/buffer/errno/fclose.c:54 libexplain/buffer/errno/fflush.c:58
+#: libexplain/buffer/errno/fgets.c:57 libexplain/buffer/errno/getc.c:48
+msgid "fp is the NULL pointer"
+msgstr ""
+
+#.
+#. This message is used when directory has a directory
+#. entry for the named component, but a directory was expected
+#. and something else was there instead.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in
+#.         it.  It will include the name of the function call
+#.         argument, the name of the directory, and the file
+#.         type "directory".
+#. %2$s => The name of the offending path component and file
+#.         type (will never have slashes).  It will be quoted.
+#. %3$s => the desired file type
+#.
+#: libexplain/buffer/errno/path_resolution.c:975
+#, c-format
+msgid "in the %s there is a %s, but it should be a %s"
+msgstr ""
+
+#.
+#. This message is issued when a user attempts to
+#. execute something that is not a file, such as a block special
+#. device.  The %s string contains the name of the system call
+#. argument, the name of the final path component and the type
+#. of the file.
+#.
+#: libexplain/buffer/errno/path_resolution.c:321
+#, c-format
+msgid ""
+"it is not possible to execute the %s, only regular files can be executed"
+msgstr ""
+
+#.
+#. This string is the type of a file (see
+#. stat(2) for more information) when that file is a
+#. multiplexed block special device.  Not present on all
+#. POSIX implementations.
+#.
+#: libexplain/buffer/file_type.c:165
+msgid "multiplexed block special device"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a multiplexed
+#. character special device.
+#. Not present on all POSIX implementations.
+#.
+#: libexplain/buffer/file_type.c:129
+msgid "multiplexed character special device"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a fifo.
+#.
+#: libexplain/buffer/file_type.c:114
+msgid "named pipe"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a named special
+#. file.  Not present on all POSIX implementations.
+#.
+#: libexplain/buffer/file_type.c:144
+msgid "named special file"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a network special
+#. file.  Not present on all POSIX implementations.
+#.
+#: libexplain/buffer/file_type.c:195
+msgid "network special file"
+msgstr ""
+
+#.
+#. This message is used when a wait*()
+#. function was called to wait for a process group
+#. that does not exist.
+#.
+#. The %d value is the process group number.
+#.
+#: libexplain/buffer/errno/waitpid.c:158
+#, c-format
+msgid "process group %d does not exist"
+msgstr ""
+
+#.
+#. This message is used when a wait*()
+#. function was called to wait for a process group
+#. that does not have any member process that is a
+#. child of the calling proces.
+#.
+#. The %d value is the process group number.
+#.
+#: libexplain/buffer/errno/waitpid.c:141
+#, c-format
+msgid ""
+"process group %d does not have any member process that is a child of the "
+"calling process"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a regular file.
+#.
+#: libexplain/buffer/file_type.c:64
+msgid "regular file"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a network socket.
+#.
+#: libexplain/buffer/file_type.c:40
+msgid "socket"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a symbolic link.
+#.
+#: libexplain/buffer/file_type.c:52
+msgid "symbolic link"
+msgstr ""
+
+#.
+#. This message is used when an argment of a
+#. system call is invalid.
+#.
+#. The %s string is the name of the offending argument.
+#.
+#: libexplain/buffer/errno/waitpid.c:187
+#, c-format
+msgid "the %s argument was invalid"
+msgstr ""
+
+#.
+#. This message is used when directory has a directory
+#. entry for the named component, but a directory was expected
+#. and something else was there instead.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the offenting path component (will never have
+#.         slashes).  It will be quoted.
+#. %2$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:892
+#, c-format
+msgid "the %s in the %s is being used as a directory when it is not"
+msgstr ""
+
+#.
+#. This message is used when there is a dangling
+#. symbolic link.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the final component of the path, the name of
+#.         symbolic link in question, will include the file type
+#.         "symbolic link", but will never have slashes.
+#. %2$s => The name of the directory that contains the symbolic link;
+#.         it may have zero, one or more slashes in it.  Will include
+#.         the name of the function call argument, the name of the
+#.         directory, and the file type "directory".
+#. %3$s => the non-existent thing the symbolic link point to
+#.
+#: libexplain/buffer/errno/path_resolution.c:787
+#, c-format
+msgid "the %s in the %s refers to %s that does not exist"
+msgstr ""
+
+#.
+#. This message is used when directory has a directory
+#. entry for the named component, but a directory was expected
+#. and something else was there instead.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the offending path component and file
+#.         type (will never have slashes).  It will be quoted.
+#. %2$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:930
+#, c-format
+msgid "the %s in the %s should not exist yet"
+msgstr ""
+
+#.
+#. This message is used when wait(2) is called and
+#. the calling process does not have any unwaited-for child
+#. processes.
+#.
+#: libexplain/buffer/errno/wait.c:61 libexplain/buffer/errno/waitpid.c:119
+msgid "the calling process does not have any unwaited-for child processes"
+msgstr ""
+
+#.
+#. This message is used when a child process
+#. terminates normally.  The exist status is reported.
+#.
+#: libexplain/buffer/wait_status.c:50
+#, c-format
+msgid "the child process terminated with exit status %s"
+msgstr ""
+
+#.
+#. This message is used when a child process is
+#. resumed by delivering a signal (SIGCONT).
+#.
+#: libexplain/buffer/wait_status.c:123
+#, c-format
+msgid "the child process was resumed by delivery of the %s signal"
+msgstr ""
+
+#.
+#. This message is used when a child process is
+#. stopped by delivery of a signal.  The process is still
+#. there, is is stopped, not terminated.
+#.
+#: libexplain/buffer/wait_status.c:105
+#, c-format
+msgid "the child process was stopped by delivery of the %s signal"
+msgstr ""
+
+#.
+#. This message is used when a child process
+#. is terminated by the delivery of an uncaught signal.
+#.
+#: libexplain/buffer/wait_status.c:85
+#, c-format
+msgid "the child process was terminated by the %s signal"
+msgstr ""
+
+#.
+#. This message is used when a child process
+#. is terminated by the delivery of an uncaught signal.
+#. This also resulted in a core dump.
+#.
+#: libexplain/buffer/wait_status.c:71
+#, c-format
+msgid "the child process was terminated by the %s signal, core dumped"
+msgstr ""
+
+#.
+#. This message is used when the process
+#. attempts to execute a regular file which would
+#. otherwise be executable, except that it resides
+#. on a file system that is mounted with the
+#. "noexec" option.
+#.
+#: libexplain/buffer/errno/path_resolution.c:1904
+msgid ""
+"the executable is on a file system that is mounted with the \"noexec\" "
+"option"
+msgstr ""
+
+#.
+#. This message is used when the process
+#. attempts to execute a regular file which would
+#. otherwise be executable, except that it has the
+#. set-uid (S_ISUID) or set-gid (S_ISGID) bit set,
+#. and it resides on a file system that is mounted
+#. with the "nosuid" option.
+#.
+#: libexplain/buffer/errno/path_resolution.c:1931
+msgid ""
+"the executable is on a file system that is mounted with the \"nosuid\" "
+"option"
+msgstr ""
+
+#.
+#. This message is used when explaining why
+#. some permission mode bits are ignored.  The %s string
+#. will be the "rwx" bits, including the quotes, as.
+#. The 3-character string will look like ls -l output.
+#.
+#: libexplain/have_permission.c:157
+#, c-format
+msgid "the group permission mode %s is ignored"
+msgstr ""
+
+#.
+#. This message is used when explaining why
+#. some permission mode bits are ignored.  The %s string
+#. will be the "rwx" bits, including the quotes, as.
+#. The 3-character string will look like ls -l output.
+#.
+#: libexplain/have_permission.c:175 libexplain/have_permission.c:263
+#, c-format
+msgid "the others permission mode %s is ignored"
+msgstr ""
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permsiions.
+#.
+#. The %s string will contain "rwx", including the quotes, in a
+#. form resembling the ls -l representation of mode bits.
+#.
+#: libexplain/have_permission.c:341
+#, c-format
+msgid "the others permission mode is %s"
+msgstr ""
+
+#.
+#. This message supplements the "no inode modify
+#. permission" message, explaining that the process efective uid
+#. must match the file uid.
+#.
+#. %1$s => the numeric uid of the process, and the corresponding
+#.         login name from the password file, if available.
+#. %2$s => the numeric uid of the file owner, and the
+#.         corresponding login name from the password file, if
+#.         available.
+#.
+#: libexplain/buffer/errno/path_resolution.c:556
+#, c-format
+msgid "the process UID %s does not match the file UID %s"
+msgstr ""
+
+#.
+#. This message is used when a process fails to open a
+#. file because that process already has the maximum number of file
+#. descriptors open.
+#.
+#: libexplain/buffer/emfile.c:38
+msgid "the process already has the maximum number of file descriptors open"
+msgstr ""
+
+#.
+#. This message is used when a process does not have
+#. execute permission to something it attempts to execute; for
+#. example, one of the execve calls, or similar.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will in clude the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:461
+#, c-format
+msgid "the process does not have execute permission to the %s in the %s"
+msgstr ""
+
+#.
+#. This message is used when a process does not have
+#. inode modification permission to something it attempts to
+#. modify); for example, chmod.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will in clude the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:521
+#, c-format
+msgid ""
+"the process does not have inode modification permission to the %s in the "
+"%s"
+msgstr ""
+
+#.
+#. This message is used when a process does not have
+#. read permission to something it attempts to
+#. open for reading; for example, open() or fopen().
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will include the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:615
+#, c-format
+msgid "the process does not have read permission to the %s in the %s"
+msgstr ""
+
+#.
+#. This message is used when a process does not have
+#. search permission to a directory it attempts to traverse.
+#. (Only used for problems with "." and "/".)
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %s => The pathname, the directory in question.  It will
+#.       include the name of the function call argument, the
+#.       name of the directory, file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:403
+#, c-format
+msgid "the process does not have search permission to the %s"
+msgstr ""
+
+#.
+#. This message is used when a process does not have
+#. search permission to a directory it attempts to traverse.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the component of the path, the subdirectory in
+#.         question (will never have slashes).  It will in clude the
+#.         name of the file, and the file type "directory".
+#. %2$s => The name of the directory that contains the subdirectory in
+#.         question; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:365
+#, c-format
+msgid "the process does not have search permission to the %s in the %s"
+msgstr ""
+
+#.
+#. This message is used when a process does not have
+#. write permission to something it attempts to
+#. open for writing; for example, open() or fopen().
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will include the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:674
+#, c-format
+msgid "the process does not have write permission to the %s in the %s"
+msgstr ""
+
+#.
+#. This message is used when a process does not have write
+#. permission to a directoryin order to create a new directory entry;
+#. for example creat(), mkdir(), symlink(), etc.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the directory that is to receive the new
+#.         directory entry; it may have zero, one or more slashes in it.
+#.         Will include the name of the function call argument, the name
+#.         of the directory, and the file type "directory".
+#. %2$s => The name of the final component of the path, the
+#.         new directory entry in question (will never have slashes).
+#.         It will include the name of the new file, and the file type.
+#.
+#: libexplain/buffer/errno/path_resolution.c:725
+#, c-format
+msgid ""
+"the process does not have write permission to the %s, this is needed to "
+"create the directory entry for the %s"
+msgstr ""
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are ignored when determining file
+#. access permissions.
+#.
+#. %1$s => the effective GID of the process, number and name.
+#. %2$s => the file type, e.g. "directory" or "regular file"
+#. %3$s => the group of the file, number and name.
+#. %4$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#: libexplain/have_permission.c:319
+#, c-format
+msgid ""
+"the process effective GID %s does not match the %s group %s so the group "
+"permission mode %s is ignored"
+msgstr ""
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permissions.
+#.
+#. %1$s => the effective GID of the process, number and name.
+#. %2$s =? the file type, e.g. 'directory' or 'regular file'
+#. %3$s => the group of the file, number and name.
+#. %4$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#: libexplain/have_permission.c:247
+#, c-format
+msgid ""
+"the process effective GID %s matches the %s group %s and the group "
+"permission mode is %s"
+msgstr ""
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are ignored when determining
+#. file access permissions.
+#.
+#. %1$s => the effective UID of the process, number and name.
+#. %2$s => the file type, e.g. "firectory" or "regular file"
+#. %3$s => the owner of the file, number and name.
+#. %4$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#: libexplain/have_permission.c:215 libexplain/have_permission.c:286
+#, c-format
+msgid ""
+"the process effective UID %s does not match the %s owner %s so the owner "
+"permission mode %s is ignored"
+msgstr ""
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permissions.
+#.
+#. %1$s => the effective UID of the process, number and name.
+#. %2$s => the file type, e.g. "directory" or "regular file"
+#. %3$s => the owner of the file, number and name.
+#. %4$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#: libexplain/have_permission.c:130
+#, c-format
+msgid ""
+"the process effective UID %s matches the %s owner %s and the owner "
+"permission mode is %s"
+msgstr ""
+
+#.
+#. This message is used by the wait*()
+#. explanations to describe the relationship between SIGCHLD
+#. and the wait*() functions.
+#.
+#: libexplain/buffer/note/sigchld.c:54
+msgid ""
+"the process is ignoring the SIGCHLD signal, this means that child "
+"processes that terminate will not persist until waited for"
+msgstr ""
+
+#.
+#. This message is use when a wait*()
+#. function is asked to wait for a process that does
+#. not exist.
+#.
+#. The %s string is the name of the offending
+#. argument.
+#.
+#: libexplain/buffer/errno/waitpid.c:104
+#, c-format
+msgid "the process specified by %s does not exist"
+msgstr ""
+
+#.
+#. This message is use when a wait*()
+#. function is asked to wait for a process that is
+#. not a child of the calling process.
+#.
+#. The %s string is the name of the offending
+#. argument.
+#.
+#: libexplain/buffer/errno/waitpid.c:86
+#, c-format
+msgid "the process specified by %s is not a child of the calling process"
+msgstr ""
+
+#.
+#. This message is used to explain fork(2) errors,
+#. when no more specific cause can be determined.
+#.
+#: libexplain/buffer/errno/fork.c:55
+msgid ""
+"the system lacked the necessary resources to create another process; or, "
+"the system-imposed limit on the total number of processes under "
+"execution system-wide would be exceeded; or, the system-imposed limit on "
+"the total number of processes under execution by a single user "
+"{CHILD_MAX} would be exceeded"
+msgstr ""
+
+#.
+#. This message is issued when a particular file does
+#. not exist in a directory.
+#. %1$s => the file that does not exist
+#. %2$s => the directory that the file should be in,
+#.         including the name of the relevant system call argument
+#.
+#.
+#. This message is used when directory does not have a
+#. directory entry for the named component.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the offenting path component (will never have
+#.         slashes).  It will be quoted.
+#. %2$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#: libexplain/buffer/errno/path_resolution.c:294
+#: libexplain/buffer/errno/path_resolution.c:854
+#, c-format
+msgid "there is no %s in the %s"
+msgstr ""
+
+#.
+#. This message is used when * explaining
+#. the capapbilities required to exceed system limits
+#. on the numbe rof processes a user may execute
+#. simultaniously.
+#.
+#: libexplain/buffer/errno/fork.c:89
+msgid ""
+"to exceed the limit on the number of processes, the process must have "
+"either the CAP_SYS_ADMIN or the CAP_SYS_RESOURCE capability"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is of an unknown
+#. type, often the result of a bad inode block on a hard disk.
+#.
+#: libexplain/buffer/file_type.c:240
+msgid "unknown file type"
+msgstr ""
+
+#.
+#. This message is used when a process attempts to
+#. write to an executable file that is currently being executed.
+#.
+#: libexplain/buffer/etxtbsy.c:35
+msgid ""
+"write access was requested to an executable image that is currently "
+"being executed"
+msgstr ""

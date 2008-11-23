@@ -59,7 +59,7 @@ if (!fp)
 {
     const char *message = libexplain_fopen(path, mode);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -101,7 +101,7 @@ if (!fp)
 {
     const char *message = libexplain_errno_fopen(err, path, mode);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -153,7 +153,7 @@ if (!fp)
     char message[3000];
     libexplain_message_fopen(message, sizeof(message), path, mode);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -195,7 +195,7 @@ if (!fp)
     libexplain_message_errno_fopen(message, sizeof(message), err, path,
         mode);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

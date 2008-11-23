@@ -58,7 +58,7 @@ similar to the following example:
 if (chown(pathname, owner, group) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_chown(pathname, owner, group));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -106,7 +106,7 @@ if (chown(pathname, owner, group) < 0)
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_chown(err, pathname, owner,
         group));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -166,7 +166,7 @@ if (chown(pathname, owner, group) < 0)
     char message[3000];
     libexplain_message_chown(message, sizeof(message), pathname, owner, group);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -214,7 +214,7 @@ if (chown(pathname, owner, group) < 0)
     libexplain_message_errno_chown(message, sizeof(message), err,
         pathname, owner, group);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

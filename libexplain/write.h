@@ -25,7 +25,7 @@
   * @brief explain write(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_write_or_die function is used to call the write(2)
   * system call.  On failure an explanation will be printed to stderr,
   * obtained from libexplain_write(3), and then the process terminates
-  * by calling exit(1).
+  * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -70,7 +70,7 @@ long libexplain_write_or_die(int fildes, const void *data, long data_size);
   * if (n < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_read(fd, data, data_size));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -111,7 +111,7 @@ const char *libexplain_write(int fildes, const void *data, long data_size);
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_read(errnum, fd, data,
   *         data_size));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -160,7 +160,7 @@ const char *libexplain_errno_write(int errnum, int fildes, const void *data,
   *     libexplain_message_read(message, sizeof(message), fd, data,
   *         data_size));
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -201,7 +201,7 @@ void libexplain_message_write(char *message, int message_size, int fildes,
   *     libexplain_message_errno_read(message, sizeof(message), errno,
   *         fd, data, data_size));
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -230,7 +230,7 @@ void libexplain_message_write(char *message, int message_size, int fildes,
 void libexplain_message_errno_write(char *message, int message_size,
     int errnum, int fildes, const void *data, long data_size);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

@@ -26,7 +26,7 @@
   * @brief explain fwrite(3) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -35,7 +35,7 @@ extern "C" {
   * used to call the fwrite(3) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_fwrite(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -76,7 +76,7 @@ size_t libexplain_fwrite_or_die(const void *ptr, size_t size, size_t nmemb,
   * if (fwrite(ptr, size, nmemb, fp) < nmemb)
   * {
   *     fprintf(stderr, "%s\n", libexplain_fwrite(ptr, size, nmemb, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -118,7 +118,7 @@ const char *libexplain_fwrite(const void *ptr, size_t size, size_t nmemb,
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_fwrite(err, ptr, size, nmemb, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -172,7 +172,7 @@ const char *libexplain_errno_fwrite(int errnum, const void *ptr, size_t size,
   *     libexplain_message_fwrite(message, sizeof(message),
   *         ptr, size, nmemb, fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -214,7 +214,7 @@ void libexplain_message_fwrite(char *message, int message_size, const void *ptr,
   *     libexplain_message_errno_fwrite(message, sizeof(message), err,
   *         ptr, size, nmemb, fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -244,7 +244,7 @@ void libexplain_message_fwrite(char *message, int message_size, const void *ptr,
 void libexplain_message_errno_fwrite(char *message, int message_size,
     int errnum, const void *ptr, size_t size, size_t nmemb, FILE *fp);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

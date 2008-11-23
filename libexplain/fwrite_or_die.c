@@ -36,7 +36,7 @@ libexplain_fwrite_or_die(const void *ptr, size_t size, size_t nmemb, FILE *fp)
             stderr,
             libexplain_fwrite(ptr, size, nmemb, fp)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

@@ -60,7 +60,7 @@ similar to the following example:
 if (readlink(pathname, data, data_size) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_readlink(pathname, data, data_size));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -109,7 +109,7 @@ if (readlink(pathname, data, data_size) < 0)
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_readlink(err, pathname, data,
         data_size));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -171,7 +171,7 @@ if (readlink(pathname, data, data_size) < 0)
     libexplain_message_readlink(message, sizeof(message), pathname, data,
         data_size);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -220,7 +220,7 @@ if (readlink(pathname, data, data_size) < 0)
     libexplain_message_errno_readlink(message, sizeof(message), err, pathname,
         data, data_size);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

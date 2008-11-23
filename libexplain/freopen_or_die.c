@@ -33,6 +33,6 @@ libexplain_freopen_or_die(const char *pathname, const char *flags, FILE *fp)
             stderr,
             libexplain_freopen(pathname, flags, fp)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

@@ -1,8 +1,14 @@
-libexplain (0.2.D001) unstable; urgency=low
+libexplain (0.3.D001) unstable; urgency=low
 
-  * This change set prepares libexplain for the next public release.
+  * This change prepared libexplain for the next public release.
 
- -- Peter Miller <millerp@canb.auug.org.au>  Tue, 11 Nov 2008 08:34:49 +1100
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 23 Nov 2008 19:45:16 +1100
+
+libexplain (0.D003) unstable; urgency=low
+
+  * Explain errno values returned by libc functions, branch 0.2.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 23 Nov 2008 19:17:51 +1100
 
 libexplain (0.D002) unstable; urgency=low
 
@@ -15,6 +21,223 @@ libexplain (0.D001) unstable; urgency=low
   * Explain errno values returned by libc functions, branch 0.0.
 
  -- Peter Miller <millerp@canb.auug.org.au>  Sun, 26 Oct 2008 20:44:39 +1100
+
+libexplain (0.2.D032) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the socket(2) system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sun, 23 Nov 2008 19:04:05 +1100
+
+libexplain (0.2.D031) unstable; urgency=low
+
+  * The SIZEOF macro doesn't need such a combersome name.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 21 Nov 2008 22:46:40 +1100
+
+libexplain (0.2.D030) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the utime(2) system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 21 Nov 2008 18:25:54 +1100
+
+libexplain (0.2.D029) unstable; urgency=low
+
+  * There are now explanations available for errors reported by the closedir
+    system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 20 Nov 2008 17:03:40 +1100
+
+libexplain (0.2.D028) unstable; urgency=low
+
+  * The strtol_or_die function has been moved into the library, so the test_*
+    programs can access it.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 20 Nov 2008 16:31:10 +1100
+
+libexplain (0.2.D027) unstable; urgency=low
+
+  * There are now explanations available for the case when ferror returns true.
+    Hopefully not too much time has passed since the relevant event.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 20 Nov 2008 10:54:10 +1100
+
+libexplain (0.2.D026) unstable; urgency=low
+
+  * There are now explanations available for errors reported by the
+    gettimeofday(2) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Thu, 20 Nov 2008 09:06:03 +1100
+
+libexplain (0.2.D025) unstable; urgency=low
+
+  * Explanations are now available for error reported by the wait4 system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 19 Nov 2008 23:44:46 +1100
+
+libexplain (0.2.D024) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the wait3 system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 19 Nov 2008 22:02:46 +1100
+
+libexplain (0.2.D023) unstable; urgency=low
+
+  * Pointer can now be printed in a consistent way, which will hopefully cut
+    down on the false negatives from the test suite.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 19 Nov 2008 20:05:28 +1100
+
+libexplain (0.2.D022) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the waitpid(2) system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 19 Nov 2008 17:12:21 +1100
+
+libexplain (0.2.D021) unstable; urgency=low
+
+  * A bug has been fixed in the list of installed files.  The libexplain/mkdir.h
+    file was omitted from the libexplain/libexplain.h file, and thus not
+    installed.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 19 Nov 2008 17:09:23 +1100
+
+libexplain (0.2.D020) unstable; urgency=low
+
+  * The code examples for readdir now handles the errno ambiguity.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 18 Nov 2008 22:39:10 +1100
+
+libexplain (0.2.D019) unstable; urgency=low
+
+  * Explanations are now available for the system(3) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 18 Nov 2008 21:29:46 +1100
+
+libexplain (0.2.D018) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the wait(2) system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 18 Nov 2008 17:20:24 +1100
+
+libexplain (0.2.D017) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the fork(2) system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 18 Nov 2008 10:07:51 +1100
+
+libexplain (0.2.D016) unstable; urgency=low
+
+  * There are now explanations available for the fgets system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 17 Nov 2008 21:11:18 +1100
+
+libexplain (0.2.D015) unstable; urgency=low
+
+  * More internationalization has been added to messages printed by libexplain_
+    buffer_errno_path_resolution
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 17 Nov 2008 15:41:22 +1100
+
+libexplain (0.2.D014) unstable; urgency=low
+
+  * This change fixes the way the shared library is linked, now it includes
+    subordinate libraries.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Mon, 17 Nov 2008 12:34:36 +1100
+
+libexplain (0.2.D013) unstable; urgency=low
+
+  * The donditional was wrong for the C++ insulation.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 15 Nov 2008 23:36:06 +1100
+
+libexplain (0.2.D012) unstable; urgency=low
+
+  * More code has been added to internationalize the error messages.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Sat, 15 Nov 2008 22:46:48 +1100
+
+libexplain (0.2.D011) unstable; urgency=low
+
+  * Explanations are now available for the error reported by the lchown system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 14 Nov 2008 19:36:30 +1100
+
+libexplain (0.2.D010) unstable; urgency=low
+
+  * The structure of the problem statements and cause explanation has been
+    changed to permit i18n to re-arrange the form of the messages, for languages
+    who's syntax is different than English.  Preminiary support for .pot files
+    has been added.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 14 Nov 2008 17:03:18 +1100
+
+libexplain (0.2.D009) unstable; urgency=low
+
+  * The libexplain_wrap_and_print function now understands multi-byte
+    characters, including multi-byte characters that are more than one column
+    wide.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Fri, 14 Nov 2008 16:54:26 +1100
+
+libexplain (0.2.D008) unstable; urgency=low
+
+  * There are now explanations available for error reported by the execve system
+    call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 12 Nov 2008 23:38:21 +1100
+
+libexplain (0.2.D007) unstable; urgency=low
+
+  * The code and code examples have all been corrected to use exit(EXIT_FAILURE)
+    instead of exit(1).
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 12 Nov 2008 19:07:27 +1100
+
+libexplain (0.2.D006) unstable; urgency=low
+
+  * The ENOTDIR explaiantions have been refactored into a single function, for
+    consitent explanations.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Wed, 12 Nov 2008 18:32:04 +1100
+
+libexplain (0.2.D005) unstable; urgency=low
+
+  * This change et fixes Suse build problems.
+  * My thanks to Ralf Fassel for reporting these problems.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 11 Nov 2008 23:06:15 +1100
+
+libexplain (0.2.D004) unstable; urgency=low
+
+  * Explanations are now available for the fread(3) system call.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 11 Nov 2008 18:22:18 +1100
+
+libexplain (0.2.D003) unstable; urgency=low
+
+  * There are now explanations available for errors reported by the getc and
+    fgetc library calls.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 11 Nov 2008 16:53:27 +1100
+
+libexplain (0.2.D002) unstable; urgency=low
+
+  * Directory listing has been enabled for the debian directory on the web site.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 11 Nov 2008 09:50:32 +1100
+
+libexplain (0.2.D001) unstable; urgency=low
+
+  * This change set prepares libexplain for the next public release.
+
+ -- Peter Miller <millerp@canb.auug.org.au>  Tue, 11 Nov 2008 08:38:20 +1100
 
 libexplain (0.1.D057) unstable; urgency=low
 

@@ -30,6 +30,6 @@ libexplain_symlink_or_die(const char *oldpath, const char *newpath)
     if (symlink(oldpath, newpath) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_symlink(oldpath, newpath));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

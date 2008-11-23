@@ -19,9 +19,12 @@
 
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/ctype.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/unistd.h>
+#include <libexplain/ac/wchar.h>
+#include <libexplain/ac/wctype.h>
 
 #ifdef HAVE_winsize_SYS_IOCTL_H
 #include <sys/ioctl.h>
@@ -34,6 +37,135 @@
 
 #define MAX_LINE_LENGTH (PATH_MAX + 10)
 
+
+#if HAVE_MBRTOWC && HAVE_WCWIDTH
+
+void
+libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
+{
+    const char      *cp;
+    const char      *end;
+    char            line_string[MAX_LINE_LENGTH + 1];
+    libexplain_string_buffer_t line_buf;
+    char            word_string[MAX_LINE_LENGTH + 1];
+    libexplain_string_buffer_t word_buf;
+    static mbstate_t mbz;
+    mbstate_t       state;
+    int             width_of_line;
+    int             width_of_word;
+
+    assert(width > 0);
+    if (width <= 0)
+        width = DEFAULT_LINE_WIDTH ;
+    if (width > MAX_LINE_LENGTH)
+        width = MAX_LINE_LENGTH;
+    assert(sizeof(word_string) <= sizeof(line_string));
+    cp = text;
+    end = text + strlen(text);
+    libexplain_string_buffer_init(&line_buf, line_string, sizeof(line_string));
+    libexplain_string_buffer_init(&word_buf, word_string, sizeof(word_string));
+    state = mbz;
+    width_of_line = 0;
+    width_of_word = 0;
+    for (;;)
+    {
+        const char      *starts_here;
+        wchar_t         wc;
+        size_t          n;
+
+        starts_here = cp;
+        n = mbrtowc(&wc, cp, end - cp, &state);
+        if ((ssize_t)n < 0)
+        {
+            wc = *cp;
+            n = 1;
+        }
+        cp += n;
+        if (n == 0 || wc == L'\0')
+        {
+            if (line_buf.position)
+            {
+                fwrite(line_string, line_buf.position, 1, fp);
+                putc('\n', fp);
+            }
+            return;
+        }
+
+        if (iswspace(wc))
+            continue;
+
+        /*
+         * Grab the next word.
+         *
+         * The width_of_word records the number of character positions
+         * consumed.  This can be less than the number of bytes, when
+         * multi-byte character sequences represent single displayed
+         * characters.  This can be more than the number of bytes, for
+         * exmaple kanji, when a character is display 2 columns wide.
+         */
+        word_buf.position = 0;
+        width_of_word = 0;
+        for (;;)
+        {
+            mbstate_t       hold;
+
+            libexplain_string_buffer_write(&word_buf, starts_here, n);
+            width_of_word += wcwidth(wc);
+            if (libexplain_string_buffer_full(&word_buf))
+                break;
+
+            hold = state;
+            starts_here = cp;
+            n = mbrtowc(&wc, cp, end - cp, &state);
+            if ((ssize_t)n < 0)
+            {
+                wc = *cp;
+                n = 1;
+            }
+
+            if (n == 0 || wc == '\0')
+            {
+                state = hold;
+                break;
+            }
+            if (iswspace(wc))
+            {
+                state = hold;
+                break;
+            }
+            cp += n;
+        }
+
+        if (line_buf.position == 0)
+        {
+            /* do nothing */
+        }
+        else if (width_of_line + 1 + width_of_word <= width)
+        {
+            libexplain_string_buffer_putc(&line_buf, ' ');
+            ++width_of_line;
+        }
+        else
+        {
+            fwrite(line_string, line_buf.position, 1, fp);
+            putc('\n', fp);
+            line_buf.position = 0;
+            width_of_line = 0;
+        }
+        libexplain_string_buffer_puts(&line_buf, word_string);
+        width_of_line += width_of_word;
+
+        /*
+         * Note: it is possible for a line to be longer than (width)
+         * when it contains a single word that is itself longer than
+         * (width).  We do this to avoid putting line breaks in the
+         * middle of pathnames, provided the pathanme itself does not
+         * contain white space.  This is useful for copy-and-paste.
+         */
+    }
+}
+
+#else
 
 void
 libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
@@ -108,6 +240,8 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
          */
     }
 }
+
+#endif
 
 
 void

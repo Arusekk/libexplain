@@ -30,6 +30,6 @@ libexplain_ftruncate_or_die(int fildes, long long length)
     if (ftruncate(fildes, length) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_ftruncate(fildes, length));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

@@ -60,7 +60,7 @@ following example:
 if (!freopen(pathname, flags, fp))
 {
     fprintf(stderr, '%s\n', libexplain_freopen(pathname, flags, fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -105,7 +105,7 @@ if (freopen(pathname, flags, fp))
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_freopen(err, pathname,
         flags, fp));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -161,7 +161,7 @@ if (!freopen(pathname, flags, fp))
     libexplain_message_freopen(message, sizeof(message), pathname, flags,
         fp);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -205,7 +205,7 @@ if (!freopen(pathname, flags, fp))
     libexplain_message_errno_freopen(message, sizeof(message), err,
         pathname, flags, fp);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

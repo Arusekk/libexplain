@@ -37,7 +37,7 @@ libexplain_fcntl_or_die(int fildes, int command, long arg)
             stderr,
             libexplain_fcntl(fildes, command, arg)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

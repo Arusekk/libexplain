@@ -20,7 +20,6 @@
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/enfile.h>
 #include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
@@ -77,8 +76,6 @@ void
 libexplain_buffer_enfile(libexplain_string_buffer_t *sb)
 {
     long            maxfile;
-
-    libexplain_buffer_because(sb);
 
     /*
      * FIXME: say the limit -- except that there doesn't seem to be

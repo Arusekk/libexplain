@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_ACCESS_H
 #define LIBEXPLAIN_BUFFER_ERRNO_ACCESS_H
 
-struct libexplain_string_buffer_t; /* forward */
+#include <libexplain/string_buffer.h>
 
 /**
   * The libexplain_buffer_errno_access function is used to obtain an
@@ -44,7 +44,24 @@ struct libexplain_string_buffer_t; /* forward */
   * @param mode
   *     The original mode, exactly has passed to the access(2) system call.
   */
-void libexplain_buffer_errno_access(struct libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, int mode);
+
+/**
+  * The libexplain_buffer_errno_access_explanation function is used by
+  * the libexplain_buffer_errno_access function (and others) to explain
+  * an error.
+  *
+  * @param sb
+  *     The string buffer in which the message is being constructed.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param pathname
+  *     The original pathname, exactly has passed to the access(2) system call.
+  * @param mode
+  *     The original mode, exactly has passed to the access(2) system call.
+  */
+void libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_ACCESS_H */

@@ -79,9 +79,9 @@ const char *libexplain_permission_mode(int mode);
   * @returns
   *     permission mode value
   * @note
-  *     If there is a parse error, a fatal error message is printed, and
-  *     exit(1) is called.  If there is an error, this function will not
-  *     return.
+  *     If there is a parse error, a fatal error message is printed,
+  *     and exit(EXIT_FAILURE) is called.  If there is an error, this
+  *     function will not return.
   */
 int libexplain_permission_mode_parse(const char *text);
 

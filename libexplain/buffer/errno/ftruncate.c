@@ -21,7 +21,6 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efbig.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/eio.h>
@@ -29,32 +28,31 @@
 #include <libexplain/buffer/errno/ftruncate.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/etxtbsy.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/explanation.h>
 #include <libexplain/open_flags.h>
 
 
-void
-libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
-    int fildes, long long length)
+static void
+libexplain_buffer_errno_ftruncate_system_call(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, long long length)
 {
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "ftruncate(fildes = %d", fildes);
     libexplain_buffer_fildes_to_pathname(sb, fildes);
     libexplain_string_buffer_printf(sb, ", length = %lld)", length);
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
 
+
+static void
+libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, long long length)
+{
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -66,7 +64,6 @@ libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
         {
             int             flags;
 
-            libexplain_buffer_because(sb);
             flags = fcntl(fildes, F_GETFL);
             if (flags < 0)
             {
@@ -98,7 +95,6 @@ libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EINVAL:
-        libexplain_buffer_because(sb);
         if (length < 0)
         {
             libexplain_string_buffer_puts(sb, "'length' is negative");
@@ -142,7 +138,6 @@ libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
             {
                 int             flags;
 
-                libexplain_buffer_because(sb);
                 flags = fcntl(fildes, F_GETFL);
                 if (flags >= 0 && (flags & O_ACCMODE) == O_RDONLY)
                 {
@@ -193,7 +188,6 @@ libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EISDIR:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -209,7 +203,6 @@ libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EPERM:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -231,4 +224,29 @@ libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
+    int fildes, long long length)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_ftruncate_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        length
+    );
+    libexplain_buffer_errno_ftruncate_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        fildes,
+        length
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

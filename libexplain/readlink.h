@@ -24,7 +24,7 @@
   * @brief explain readlink(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * used to call the readlink(2) system call.  On
   * failure an explanation will be printed to stderr,
   * obtained from libexplain_readlink(3), and
-  * then the process terminates by calling exit(1).
+  * then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
@@ -71,7 +71,7 @@ int libexplain_readlink_or_die(const char *pathname, char *data, int data_size);
   * if (readlink(pathname, data, data_size) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_readlink(pathname, data, data_size));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -114,7 +114,7 @@ const char *libexplain_readlink(const char *pathname, char *data,
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_readlink(err, pathname, data,
   *         data_size));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -168,7 +168,7 @@ const char *libexplain_errno_readlink(int errnum, const char *pathname,
   *     libexplain_message_readlink(message, sizeof(message), pathname, data,
   *         data_size);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -209,7 +209,7 @@ void libexplain_message_readlink(char *message, int message_size,
   *     libexplain_message_errno_readlink(message, sizeof(message), err,
   *         pathname, data, data_size);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -238,7 +238,7 @@ void libexplain_message_readlink(char *message, int message_size,
 void libexplain_message_errno_readlink(char *message, int message_size,
     int errnum, const char *pathname, char *data, int data_size);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

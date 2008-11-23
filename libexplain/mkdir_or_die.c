@@ -30,6 +30,6 @@ libexplain_mkdir_or_die(const char *pathname, int mode)
     if (mkdir(pathname, mode) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_mkdir(pathname, mode));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

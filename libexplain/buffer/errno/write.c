@@ -24,7 +24,6 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/efbig.h>
@@ -32,49 +31,42 @@
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/write.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/pretty_size.h>
 #include <libexplain/buffer/rlimit.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/explanation.h>
 #include <libexplain/open_flags.h>
 #include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
 
 
-void
-libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
-    int fildes, const void *data, size_t data_size)
+static void
+libexplain_buffer_errno_write_system_call(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, const void *data, size_t data_size)
 {
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "write(fildes = %d", fildes);
     libexplain_buffer_fildes_to_pathname(sb, fildes);
+    libexplain_string_buffer_puts(sb, ", data = ");
+    libexplain_buffer_pointer(sb, data);
     libexplain_string_buffer_printf
     (
         sb,
-        ", data = %p, data_size = %lld)",
-        data,
+        ", data_size = %lld)",
         (long long)data_size
     );
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
-
-    libexplain_buffer_errno_write_because(sb, errnum, fildes, data, data_size);
 }
 
 
 void
-libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
+libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size)
 {
     switch (errnum)
     {
     case EAGAIN:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -87,7 +79,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
         {
             int             flags;
 
-            libexplain_buffer_because(sb);
             flags = fcntl(fildes, F_GETFL);
             if (flags >= 0)
             {
@@ -115,7 +106,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
             off_t         max_file_size;
             off_t         pos;
 
-            libexplain_buffer_because(sb);
             pos = lseek(fildes, 0, SEEK_CUR);
             if (pos == (off_t)-1)
                 pos = 0;
@@ -154,7 +144,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
     case EINVAL:
         {
             int flags = fcntl(fildes, F_GETFL);
-            libexplain_buffer_because(sb);
             if (flags >= 0)
             {
                 if ((flags & O_ACCMODE) == O_RDONLY)
@@ -226,7 +215,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
             {
                 if (S_ISBLK(st.st_mode) || S_ISCHR(st.st_mode))
                 {
-                    libexplain_buffer_because(sb);
                     libexplain_string_buffer_puts
                     (
                         sb,
@@ -235,7 +223,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
                 }
                 else
                 {
-                    libexplain_buffer_because(sb);
                     libexplain_string_buffer_puts
                     (
                         sb,
@@ -251,7 +238,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -269,7 +255,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
             sigset_t mask;
             struct sigaction sa;
 
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
@@ -330,7 +315,6 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -349,4 +333,31 @@ libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
         libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
+    int fildes, const void *data, size_t data_size)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_write_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        data,
+        data_size
+    );
+    libexplain_buffer_errno_write_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        fildes,
+        data,
+        data_size
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

@@ -33,7 +33,7 @@ explain_remove(int errnum, int argc, char **argv)
     if (argc != 1)
     {
         fprintf(stderr, "remove: requires 1 argument, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     pathname = argv[0];
 

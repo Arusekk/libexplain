@@ -58,7 +58,7 @@ following example:
 if (unlink(pathname) < 0)
 {
     fprintf(stderr, '%s\n', libexplain_unlink(pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -95,7 +95,7 @@ if (unlink(pathname) < 0)
 {
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_unlink(err, pathname));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -144,7 +144,7 @@ if (unlink(pathname) < 0)
     char message[3000];
     libexplain_message_unlink(message, sizeof(message), pathname);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -183,7 +183,7 @@ if (unlink(pathname) < 0)
     libexplain_message_errno_unlink(message, sizeof(message), err,
         pathname);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

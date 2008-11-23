@@ -27,7 +27,7 @@
   * @brief explain fflush(3) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -62,7 +62,7 @@ void libexplain_fflush_or_die(FILE *fp);
   * if (fflush(fp))
   * {
   *     fprintf(stderr, "%s\n", libexplain_fflush(fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -95,7 +95,7 @@ const char *libexplain_fflush(FILE *fp);
   * {
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_fflush(err, fp));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -137,7 +137,7 @@ const char *libexplain_errno_fflush(int errnum, FILE *fp);
   *     char message[3000];
   *     libexplain_message_fflush(message, sizeof(message), fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -171,7 +171,7 @@ void libexplain_message_fflush(char *message, int message_size, FILE *fp);
   *     char message[3000];
   *     libexplain_message_errno_fflush(message, sizeof(message), err, fp);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -196,7 +196,7 @@ void libexplain_message_fflush(char *message, int message_size, FILE *fp);
 void libexplain_message_errno_fflush(char *message, int message_size,
     int errnum, FILE *fp);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

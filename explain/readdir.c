@@ -33,7 +33,7 @@ explain_readdir(int errnum, int argc, char **argv)
     if (argc != 1)
     {
         fprintf(stderr, "readdir: requires 1 argument, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     dir = opendir(argv[0]);
 

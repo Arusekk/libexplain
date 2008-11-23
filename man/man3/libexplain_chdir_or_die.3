@@ -32,7 +32,7 @@ call.  On failure an explanation will be
 printed to \f[I]stderr\fP,
 obtained from \f[I]libexplain_chdir\fP(3),
 and then the process terminates
-by calling \f[CW]exit(1)\fP.
+by calling \f[CW]exit(EXIT_FAILURE)\fP.
 .PP
 This function is intended to be used in a fashion
 similar to the following example:

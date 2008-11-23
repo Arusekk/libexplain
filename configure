@@ -5151,11 +5151,20 @@ echo "${ECHO_T}-m$GROFF_MM_MACROS" >&6; }
 
 
 
+
+
+
+
+
+
+
 for ac_header in \
     fcntl.h              \
     libintl.h            \
     limits.h             \
     mntent.h             \
+    netdb.h              \
+    netinet/in.h         \
     pwd.h                \
     stddef.h             \
     stdlib.h             \
@@ -5166,11 +5175,16 @@ for ac_header in \
     sys/param.h          \
     sys/time.h           \
     sys/types.h          \
+    sys/socket.h         \
     sys/stat.h           \
     sys/vfs.h            \
+    sys/wait.h           \
     termios.h            \
     time.h               \
     unistd.h             \
+    utime.h              \
+    wchar.h              \
+    wctype.h             \
 
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -5944,6 +5958,85 @@ _ACEOF
 
 fi
 
+
+{ echo "$as_me:$LINENO: checking for inline" >&5
+echo $ECHO_N "checking for inline... $ECHO_C" >&6; }
+if test "${ac_cv_c_inline+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_c_inline=no
+for ac_kw in inline __inline__ __inline; do
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#ifndef __cplusplus
+typedef int foo_t;
+static $ac_kw foo_t static_foo () {return 0; }
+$ac_kw foo_t foo () {return 0; }
+#endif
+
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_cv_c_inline=$ac_kw
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  test "$ac_cv_c_inline" != no && break
+done
+
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_c_inline" >&5
+echo "${ECHO_T}$ac_cv_c_inline" >&6; }
+
+
+case $ac_cv_c_inline in
+  inline | yes) ;;
+  *)
+    case $ac_cv_c_inline in
+      no) ac_val=;;
+      *) ac_val=$ac_cv_c_inline;;
+    esac
+    cat >>confdefs.h <<_ACEOF
+#ifndef __cplusplus
+#define inline $ac_val
+#endif
+_ACEOF
+    ;;
+esac
+
+if test "$ac_cv_c_inline" != "no"
+then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_INLINE 1
+_ACEOF
+
+fi
+
 { echo "$as_me:$LINENO: checking for long file names" >&5
 echo $ECHO_N "checking for long file names... $ECHO_C" >&6; }
 if test "${ac_cv_sys_long_file_names+set}" = set; then
@@ -5997,11 +6090,18 @@ fi
 
 
 
+
+
+
+
 for ac_func in \
+    capget       \
     cap_get_proc \
     gettext      \
-    setlocale    \
+    lchown       \
+    mbrtowc      \
     remove       \
+    setlocale    \
     snprintf     \
     strcasecmp   \
     strendcpy    \
@@ -6009,6 +6109,7 @@ for ac_func in \
     strncasecmp  \
     strsignal    \
     vsnprintf    \
+    wcwidth      \
 
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
@@ -6102,6 +6203,53 @@ _ACEOF
 fi
 done
 
+
+if test "$ac_cv_func_capget" = "yes"
+then
+  if test "$ac_cv_func_cap_get_proc" != "yes"
+  then
+    { echo "$as_me:$LINENO: result:
+        You must have libcap(1) installed to use libexplain.
+Homepage: ftp://ftp.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.2/" >&5
+echo "${ECHO_T}
+        You must have libcap(1) installed to use libexplain.
+Homepage: ftp://ftp.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.2/" >&6; }
+    OK=no
+    if apt-get --version > /dev/null 2> /dev/null; then
+      { echo "$as_me:$LINENO: result:
+          The following command may be used to install it:
+          sudo apt-get install libcap-dev
+      " >&5
+echo "${ECHO_T}
+          The following command may be used to install it:
+          sudo apt-get install libcap-dev
+      " >&6; }
+      OK=yes
+    fi
+    if yum --version > /dev/null 2> /dev/null; then
+      { echo "$as_me:$LINENO: result:
+          The following command may be used to install it:
+          sudo yum install libcap-devel
+      " >&5
+echo "${ECHO_T}
+          The following command may be used to install it:
+          sudo yum install libcap-devel
+      " >&6; }
+      OK=yes
+    fi
+    if test "$OK" != "yes"; then
+      { echo "$as_me:$LINENO: result:
+          If you are using a package based install, you will need the
+          libcap-dev or libcap-devel package, or similar.
+      " >&5
+echo "${ECHO_T}
+          If you are using a package based install, you will need the
+          libcap-dev or libcap-devel package, or similar.
+      " >&6; }
+    fi
+    exit 1
+  fi
+fi
 
 { echo "$as_me:$LINENO: checking for TIOCGWINSZ" >&5
 echo $ECHO_N "checking for TIOCGWINSZ... $ECHO_C" >&6; }

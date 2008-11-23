@@ -22,12 +22,12 @@ TEST_SUBJECT="write vs EINVAL"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, Invalid argument
-(EINVAL) because the file descriptor is attached to an object which is
-unsuitable for writing; or, the file was opened with the O_DIRECT flag, and
-either the address specified in buf is not suitably aligned, the value
-specified in count is not suitably aligned, or the current file offset is
-not suitably aligned
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, Invalid
+argument (EINVAL) because the file descriptor is attached to an object
+which is unsuitable for writing; or, the file was opened with the O_DIRECT
+flag, and either the address specified in buf is not suitably aligned, the
+value specified in count is not suitably aligned, or the current file
+offset is not suitably aligned
 fubar
 test $? -eq 0 || no_result
 

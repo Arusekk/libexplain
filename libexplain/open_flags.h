@@ -80,9 +80,9 @@ void libexplain_buffer_open_flags(struct libexplain_string_buffer_t *sb,
   * @returns
   *     open flags value
   * @note
-  *     If there is a parse error, a fatal error message is printed, and
-  *     exit(1) is called.  If there is an error, this function will not
-  *     return.
+  *     If there is a parse error, a fatal error message is printed,
+  *     and exit(EXIT_FAILURE) is called.  If there is an error, this
+  *     function will not return.
   */
 int libexplain_open_flags_parse(const char *text);
 

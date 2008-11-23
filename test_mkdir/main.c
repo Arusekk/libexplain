@@ -30,7 +30,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_mkdir <pathname>\n");
     fprintf(stderr, "       test_mkdir -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 
@@ -58,7 +58,7 @@ main(int argc, char **argv)
                     "-m \"%s\" does not look like a permission mode\n",
                     optarg
                 );
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             break;
 

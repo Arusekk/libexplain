@@ -35,7 +35,7 @@ libexplain_readdir_or_die(DIR *dir)
     if (!result && errno)
     {
         libexplain_wrap_and_print(stderr, libexplain_readdir(dir));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

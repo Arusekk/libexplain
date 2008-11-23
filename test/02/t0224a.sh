@@ -24,7 +24,7 @@ TEST_SUBJECT="readlink ENOTDIR"
 fmt > test.ok << 'fubar'
 readlink(pathname = "foo/bar", data = 0xNNNNNNNN, data_size = 4097)
 failed, Not a directory (ENOTDIR) because the "foo" regular file in
-the pathname "." directory is being used as a directory when it is not
+the current directory is being used as a directory when it is not
 fubar
 test $? -eq 0 || no_result
 

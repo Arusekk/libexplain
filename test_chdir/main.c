@@ -30,7 +30,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_chdir [ <option>... ] <path>\n");
     fprintf(stderr, "       test_chdir -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

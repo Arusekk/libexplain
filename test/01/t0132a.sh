@@ -24,7 +24,7 @@ TEST_SUBJECT="access EACCES"
 cat > test.ok << 'fubar'
 access(pathname = "foobar", mode = X_OK) failed, Permission denied (EACCES)
 because the process does not have execute permission to the "foobar"
-regular file in the pathname "." directory
+regular file in the current directory
 fubar
 test $? -eq 0 || no_result
 

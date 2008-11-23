@@ -47,7 +47,7 @@ void libexplain_buffer_errno_rmdir(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname);
 
 /**
-  * The libexplain_buffer_errno_rmdir_ebcause function is used by the
+  * The libexplain_buffer_errno_rmdir_explanation function is used by the
   * libexplain_buffer_errno_rmdir function (and others) to print the
   * explanation "because..." part.
   *
@@ -58,7 +58,7 @@ void libexplain_buffer_errno_rmdir(libexplain_string_buffer_t *sb, int errnum,
   * @param pathname
   *     The original pathname, exactly as passed to the rmdir(2) system call.
   */
-void libexplain_buffer_errno_rmdir_because(libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_RMDIR_H */

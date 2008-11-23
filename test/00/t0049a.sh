@@ -22,8 +22,8 @@ TEST_SUBJECT="read EIO"
 . test_prelude
 
 cat > test.ok << 'fubar'
-read(fildes = 42, data = 0x100, data_size = 100) failed, Input/output error
-(EIO) because a low-level I/O error occurred, probably in hardware,
+read(fildes = 42, data = 0x00000100, data_size = 100) failed, Input/output
+error (EIO) because a low-level I/O error occurred, probably in hardware,
 possibly as a result of a preceeding read or write
 fubar
 test $? -eq 0 || no_result

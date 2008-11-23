@@ -207,6 +207,8 @@ AC_CHECK_HEADERS(        \
     libintl.h            \
     limits.h             \
     mntent.h             \
+    netdb.h              \
+    netinet/in.h         \
     pwd.h                \
     stddef.h             \
     stdlib.h             \
@@ -217,11 +219,16 @@ AC_CHECK_HEADERS(        \
     sys/param.h          \
     sys/time.h           \
     sys/types.h          \
+    sys/socket.h         \
     sys/stat.h           \
     sys/vfs.h            \
+    sys/wait.h           \
     termios.h            \
     time.h               \
     unistd.h             \
+    utime.h              \
+    wchar.h              \
+    wctype.h             \
     )
 
 if test "$HAVE_MNTENT_H" != "1"
@@ -246,12 +253,23 @@ AC_TYPE_SIGNAL
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
 AC_C_CONST
+
+AC_C_INLINE
+if test "$ac_cv_c_inline" != "no"
+then
+    AC_DEFINE(HAVE_INLINE,1,
+    [Define this symbol if your C compiler as the inline keyword])
+fi
+
 AC_SYS_LONG_FILE_NAMES
 AC_CHECK_FUNCS(  \
+    capget       \
     cap_get_proc \
     gettext      \
-    setlocale    \
+    lchown       \
+    mbrtowc      \
     remove       \
+    setlocale    \
     snprintf     \
     strcasecmp   \
     strendcpy    \
@@ -259,7 +277,40 @@ AC_CHECK_FUNCS(  \
     strncasecmp  \
     strsignal    \
     vsnprintf    \
+    wcwidth      \
     )
+
+if test "$ac_cv_func_capget" = "yes"
+then
+  if test "$ac_cv_func_cap_get_proc" != "yes"
+  then
+    AC_MSG_RESULT([
+        You must have libcap(1) installed to use libexplain.
+Homepage: ftp://ftp.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.2/])
+    OK=no
+    if apt-get --version > /dev/null 2> /dev/null; then
+      AC_MSG_RESULT([
+          The following command may be used to install it:
+          sudo apt-get install libcap-dev
+      ])
+      OK=yes
+    fi
+    if yum --version > /dev/null 2> /dev/null; then
+      AC_MSG_RESULT([
+          The following command may be used to install it:
+          sudo yum install libcap-devel
+      ])
+      OK=yes
+    fi
+    if test "$OK" != "yes"; then
+      AC_MSG_RESULT([
+          If you are using a package based install, you will need the
+          libcap-dev or libcap-devel package, or similar.
+      ])
+    fi
+    exit 1
+  fi
+fi
 
 dnl
 dnl     Test to see where TIOCGWINSZ is defined.

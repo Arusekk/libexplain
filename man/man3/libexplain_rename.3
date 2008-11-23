@@ -56,7 +56,7 @@ following example:
 if (rename(oldpath, rewpath) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_rename(oldpath, newpath));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .ft R
 .fi
@@ -97,7 +97,7 @@ if (rename(oldpath, newpath) < 0)
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_rename(err, oldpath,
         newpath));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -149,7 +149,7 @@ if (rename(oldpath, newpath) < 0)
     libexplain_message_rename(message, sizeof(message), oldpath,
         newpath);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -191,7 +191,7 @@ if (rename(oldpath, newpath) < 0)
     libexplain_message_errno_rename(message, sizeof(message), err,
         oldpath, newpath);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .ft R
 .fi

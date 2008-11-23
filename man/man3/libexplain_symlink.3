@@ -58,7 +58,7 @@ following example:
 if (symlink(oldpath, rewpath) < 0)
 {
     fprintf(stderr, '%s\n', libexplain_symlink(oldpath, newpath));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -102,7 +102,7 @@ if (symlink(oldpath, newpath) < 0)
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_symlink(err, oldpath,
         newpath));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -157,7 +157,7 @@ if (symlink(oldpath, newpath) < 0)
     libexplain_message_symlink(message, sizeof(message), oldpath,
         newpath);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -199,7 +199,7 @@ if (symlink(oldpath, newpath) < 0)
     libexplain_message_errno_symlink(message, sizeof(message), err,
         oldpath, newpath);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

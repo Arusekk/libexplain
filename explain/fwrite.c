@@ -20,10 +20,10 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/fwrite.h>
+#include <libexplain/strtol_or_die.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/fwrite.h>
-#include <explain/strtol_or_die.h>
 
 
 void
@@ -37,12 +37,12 @@ explain_fwrite(int errnum, int argc, char **argv)
     if (argc != 4)
     {
         fprintf(stderr, "fwrite: requires 4 arguments, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
-    ptr = (void *)strtol_or_die(argv[0]);
-    size = strtol_or_die(argv[1]);
-    nmemb = strtol_or_die(argv[2]);
-    fp = (FILE *)strtol_or_die(argv[3]);
+    ptr = (void *)libexplain_strtol_or_die(argv[0]);
+    size = libexplain_strtol_or_die(argv[1]);
+    nmemb = libexplain_strtol_or_die(argv[2]);
+    fp = (FILE *)libexplain_strtol_or_die(argv[3]);
 
     libexplain_wrap_and_print
     (

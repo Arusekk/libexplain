@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/etxtbsy.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/path_to_pid.h>
@@ -26,10 +25,13 @@
 static void
 report_error(libexplain_string_buffer_t *sb)
 {
-    libexplain_buffer_because(sb);
     libexplain_buffer_gettext
     (
         sb,
+        /*
+         * xgettext: This message is used when a process attempts to
+         * write to an executable file that is currently being executed.
+         */
         i18n("write access was requested to an executable image that is "
         "currently being executed")
     );

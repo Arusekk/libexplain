@@ -57,7 +57,7 @@ similar to the following example:
 if (creat(pathname, mode) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_creat(pathname, mode));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -100,7 +100,7 @@ if (creat(pathname, mode) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_creat(err, pathname, mode));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -157,7 +157,7 @@ if (creat(pathname, mode) < 0)
     char message[3000];
     libexplain_message_creat(message, sizeof(message), pathname, mode);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -202,7 +202,7 @@ if (creat(pathname, mode) < 0)
     libexplain_message_errno_creat(message, sizeof(message), err, pathname,
         mode);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

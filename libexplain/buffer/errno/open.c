@@ -23,7 +23,6 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/emfile.h>
@@ -31,31 +30,32 @@
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/open.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/etxtbsy.h>
-#include <libexplain/buffer/failed.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/path_to_pid.h>
+#include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/pretty_size.h>
-#include <libexplain/buffer/success.h>
 #include <libexplain/buffer/uid.h>
 #include <libexplain/capability.h>
+#include <libexplain/explanation.h>
 #include <libexplain/open_flags.h>
 #include <libexplain/option.h>
 #include <libexplain/permission_mode.h>
 #include <libexplain/string_buffer.h>
 
 
-void
-libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname, int flags, int mode)
+static void
+libexplain_buffer_errno_open_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, int flags, int mode)
 {
     libexplain_string_buffer_printf(sb, "open(pathname = ");
     if (errnum == EFAULT)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_puts(sb, ", flags = ");
@@ -66,20 +66,12 @@ libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
         libexplain_buffer_permission_mode(sb, mode);
     }
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
-
-    libexplain_buffer_errno_open_because(sb, errnum, pathname, flags, mode);
 }
 
 
 void
-libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname, int flags, int mode)
+libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, int flags, int mode)
 {
     libexplain_final_t final_component;
 
@@ -119,7 +111,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -145,7 +136,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EEXIST:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -176,7 +166,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         {
             struct stat     st;
 
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
@@ -197,7 +186,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EISDIR:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -213,7 +201,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
             struct stat st;
             if (lstat(pathname, &st) == 0 && S_ISLNK(st.st_mode))
             {
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -245,7 +232,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENODEV:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -264,7 +250,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOSPC:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -280,54 +265,7 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        if (flags & O_DIRECTORY)
-        {
-            struct stat st;
-            if (lstat(pathname, &st) == 0 && !S_ISDIR(st.st_mode))
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "O_DIRECTORY was specified and pathname is a "
-                );
-                libexplain_buffer_file_type(sb, st.st_mode);
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    ", not a directory"
-                );
-                break;
-            }
-        }
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a component used as a directory in pathname is not, in "
-                "fact, a directory"
-            );
-            if (flags & O_DIRECTORY)
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "; or, O_DIRECTORY was specified and pathname was "
-                    "not a directory"
-                );
-            }
-        }
+        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case ENXIO:
@@ -336,7 +274,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
             if (stat(pathname, &st) != 0)
             {
                 enxio_generic:
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -350,7 +287,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
             switch (st.st_mode & S_IFMT)
             {
             case S_IFIFO:
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_puts
                 (
                     sb,
@@ -361,7 +297,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
 
             case S_IFCHR:
             case S_IFBLK:
-                libexplain_buffer_because(sb);
                 libexplain_string_buffer_printf
                 (
                     sb,
@@ -385,7 +320,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
             /*
              * The O_NOATIME flag needs privileges.
              */
-            libexplain_buffer_because(sb);
             libexplain_string_buffer_puts
             (
                 sb,
@@ -431,7 +365,6 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EWOULDBLOCK:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -454,4 +387,31 @@ libexplain_buffer_errno_open_because(libexplain_string_buffer_t *sb, int errnum,
             "is not specified"
         );
     }
+}
+
+
+void
+libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, int flags, int mode)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_open_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        flags,
+        mode
+    );
+    libexplain_buffer_errno_open_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname,
+        flags,
+        mode
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

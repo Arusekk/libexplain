@@ -73,7 +73,7 @@ process(char *name)
             --eq;
         *eq = '\0';
     }
-    for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
+    for (tp = table; tp < ENDOF(table); ++tp)
     {
         if (0 == strcmp(tp->name, name))
         {
@@ -90,7 +90,7 @@ process(char *name)
 
         best_tp = 0;
         best_weight = 0.6;
-        for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
+        for (tp = table; tp < ENDOF(table); ++tp)
         {
             double          weight;
 
@@ -142,7 +142,7 @@ initialise(void)
         np = name;
         for (;;)
         {
-            if (np < LIBEXPLAIN_ENDOF(name) -1)
+            if (np < ENDOF(name) -1)
             {
                 if (isupper(c))
                     c = tolower(c);

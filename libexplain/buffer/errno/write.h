@@ -52,7 +52,7 @@ void libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
     int fildes, const void *data, size_t data_size);
 
 /**
-  * The libexplain_buffer_errno_write_because function is called by the
+  * The libexplain_buffer_errno_write_explanation function is called by the
   * libexplain_buffer_errno_write function (and others) to write the
   * "because" part of the message.
   *
@@ -67,7 +67,7 @@ void libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
   * @param data_size
   *    The original data_size, exactly as passed to the write(2) system call.
   */
-void libexplain_buffer_errno_write_because(libexplain_string_buffer_t *sb,
+void libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WRITE_H */

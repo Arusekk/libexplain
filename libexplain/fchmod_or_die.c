@@ -31,6 +31,6 @@ libexplain_fchmod_or_die(int fildes, int mode)
     if (fchmod(fildes, mode) < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_fchmod(fildes, mode));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }

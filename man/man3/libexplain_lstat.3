@@ -57,7 +57,7 @@ following example:
 if (lstat(pathname, &buf) < 0)
 {
     fprintf(stderr, '%s\n', libexplain_lstat(pathname, &buf));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -98,7 +98,7 @@ if (lstat(pathname, &buf) < 0)
 {
     int err = errno;
     fprintf(stderr, '%s\n', libexplain_errno_lstat(err, pathname, &buf));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -150,7 +150,7 @@ if (lstat(pathname, &buf) < 0)
     char message[3000];
     libexplain_message_lstat(message, sizeof(message), pathname, &buf);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -191,7 +191,7 @@ if (lstat(pathname, &buf) < 0)
     libexplain_message_errno_lstat(message, sizeof(message), err,
         pathname, &buf);
     fprintf(stderr, '%s\n', message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

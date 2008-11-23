@@ -22,10 +22,10 @@ TEST_SUBJECT="write vs ENOSPC"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, No space left on
-device (ENOSPC) because the device containing the file referred to by the
-file descriptor has no room for the data; or, the file system containing
-the file has no room for the data
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, No space left
+on device (ENOSPC) because the device containing the file referred to by
+the file descriptor has no room for the data; or, the file system
+containing the file has no room for the data
 fubar
 test $? -eq 0 || no_result
 

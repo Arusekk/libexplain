@@ -30,7 +30,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_readlink <pathname>\n");
     fprintf(stderr, "       test_readlink -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

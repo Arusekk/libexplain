@@ -33,7 +33,7 @@ libexplain_opendir_or_die(const char *pathname)
     if (!result)
     {
         libexplain_wrap_and_print(stderr, libexplain_opendir(pathname));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return result;
 }

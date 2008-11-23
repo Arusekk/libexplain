@@ -25,7 +25,7 @@
   * @brief explain access(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_access_or_die function is used to call the access(2)
   * system call and check the result.  On failure it prints an
   * explanation for the error, obtained from libexplain_access(3), and
-  * then terminates by calling exit(1).
+  * then terminates by calling exit(EXIT_FAILURE).
   *
   * @code
   * libexplain_access_or_die(pathname, mode);
@@ -66,7 +66,7 @@ void libexplain_access_or_die(const char *pathname, int mode);
   * if (fd < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_access(pathname, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -107,7 +107,7 @@ const char *libexplain_access(const char *pathname, int mode);
   *     libexplain_message_access(message, sizeof(message), pathname,
   *         mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -141,7 +141,7 @@ void libexplain_message_access(char *message, int message_size,
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_access(err, pathname,
   *         mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -186,7 +186,7 @@ const char *libexplain_errno_access(int errnum, const char *pathname, int mode);
   *     libexplain_message_errno_access(message, sizeof(message), err,
   *         pathname, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -211,7 +211,7 @@ const char *libexplain_errno_access(int errnum, const char *pathname, int mode);
 void libexplain_message_errno_access(char *message, int message_size,
     int errnum, const char *pathname, int mode);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

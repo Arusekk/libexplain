@@ -38,7 +38,7 @@ libexplain_open_or_die(const char *pathname, int flags, int mode)
             stderr,
             libexplain_open(pathname, flags, mode)
         );
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return fd;
 }

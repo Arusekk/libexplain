@@ -29,7 +29,7 @@ usage(void)
 {
     fprintf(stderr, "Usage: test_truncate <pathname> <length>\n");
     fprintf(stderr, "       test_truncate -V\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

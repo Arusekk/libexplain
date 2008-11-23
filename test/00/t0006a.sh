@@ -22,7 +22,7 @@ TEST_SUBJECT="write vs EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, Bad address
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, Bad address
 (EFAULT) because data refers to memory that is outside the process's
 accessible address space
 fubar

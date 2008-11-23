@@ -47,7 +47,7 @@ explain_access(int errnum, int argc, char **argv)
                 "argument \"%s\" does not look like an access mode\n",
                 argv[1]
             );
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         /* fall through... */
 
@@ -57,7 +57,7 @@ explain_access(int errnum, int argc, char **argv)
 
     default:
         fprintf(stderr, "access: requires 2 arguments, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

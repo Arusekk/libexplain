@@ -22,7 +22,7 @@ TEST_SUBJECT="write vs ENOSPC"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-write(fildes = 1, data = 0x123, data_size = 1110) failed, No space
+write(fildes = 1, data = 0x00000123, data_size = 1110) failed, No space
 left on device (ENOSPC) because the file system containing the file
 ("/example", 99% full) has no room for the data
 fubar

@@ -25,7 +25,7 @@ cat > test.ok << 'fubar'
 mkdir(pathname = "a/foo/bar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed,
 Permission denied (EACCES) because the process does not have write
 permission to the pathname "a/foo" directory, this is needed to create the
-"bar" directory entry
+directory entry for the "bar" directory
 fubar
 test $? -eq 0 || no_result
 

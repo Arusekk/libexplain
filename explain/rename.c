@@ -32,7 +32,7 @@ explain_rename(int errnum, int argc, char **argv)
     if (argc  != 2)
     {
         fprintf(stderr, "rename: requires 2 arguments, not %d\n", argc);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

@@ -21,7 +21,6 @@
 #include <libexplain/ac/sys/resource.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efbig.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/pretty_size.h>
@@ -57,27 +56,41 @@ libexplain_get_max_file_size_by_pathname(const char *pathname)
 }
 
 
-void
-libexplain_buffer_efbig(libexplain_string_buffer_t *sb, const char *pathname,
-    unsigned long long length, const char *length_caption)
+static void
+report_error(libexplain_string_buffer_t *sb, const char *caption,
+    unsigned long long actual, unsigned long long maximum)
 {
-    libexplain_buffer_because(sb);
-    libexplain_string_buffer_puts(sb, length_caption);
-    libexplain_string_buffer_putc(sb, ' ');
-    libexplain_buffer_gettext(sb, i18n("is larger than the maximum file size"));
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when a path given in a path is
+         * larger that the (dialect specific) maximum path length.  The
+         * %s string is the name of the relevant system call argument.
+         */
+        i18n("%s is larger than the maximum file size"),
+        caption
+    );
 
     if (libexplain_option_dialect_specific())
     {
         libexplain_string_buffer_puts(sb, " (");
-        libexplain_buffer_pretty_size(sb, length);
+        libexplain_buffer_pretty_size(sb, actual);
         libexplain_string_buffer_puts(sb, " > ");
-        libexplain_buffer_pretty_size
-        (
-            sb,
-            libexplain_get_max_file_size_by_pathname(pathname)
-        );
+        libexplain_buffer_pretty_size(sb, maximum);
         libexplain_string_buffer_putc(sb, ')');
     }
+}
+
+
+void
+libexplain_buffer_efbig(libexplain_string_buffer_t *sb, const char *pathname,
+    unsigned long long length, const char *length_caption)
+{
+    unsigned long long maximum;
+
+    maximum = libexplain_get_max_file_size_by_pathname(pathname);
+    report_error(sb, length_caption, length, maximum);
 }
 
 
@@ -92,21 +105,8 @@ void
 libexplain_buffer_efbig_fildes(libexplain_string_buffer_t *sb, int fildes,
     unsigned long long length, const char *length_caption)
 {
-    libexplain_buffer_because(sb);
-    libexplain_string_buffer_puts(sb, length_caption);
-    libexplain_string_buffer_putc(sb, ' ');
-    libexplain_buffer_gettext(sb, i18n("is larger than the maximum file size"));
+    unsigned long long maximum;
 
-    if (libexplain_option_dialect_specific())
-    {
-        libexplain_string_buffer_puts(sb, " (");
-        libexplain_buffer_pretty_size(sb, length);
-        libexplain_string_buffer_puts(sb, " > ");
-        libexplain_buffer_pretty_size
-        (
-            sb,
-            libexplain_get_max_file_size_by_fildes(fildes)
-        );
-        libexplain_string_buffer_putc(sb, ')');
-    }
+    maximum = libexplain_get_max_file_size_by_fildes(fildes);
+    report_error(sb, length_caption, length, maximum);
 }

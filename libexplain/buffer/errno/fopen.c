@@ -21,18 +21,17 @@
 #include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/errno/fopen.h>
 #include <libexplain/buffer/errno/open.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
 #include <libexplain/string_buffer.h>
 
 
-void
-libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname, const char *flags_string)
+static void
+libexplain_buffer_errno_fopen_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, const char *flags_string)
 {
     /*
      * Note: EFAULT has to be the pathname, because if flags was broken,
@@ -41,25 +40,17 @@ libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
 
     libexplain_string_buffer_printf(sb, "fopen(pathname = ");
     if (errnum == EFAULT)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_puts(sb, ", flags = ");
     libexplain_string_buffer_puts_quoted(sb, flags_string);
     libexplain_string_buffer_putc(sb, ')');
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
-
-    libexplain_buffer_errno_fopen_because(sb, errnum, pathname, flags_string);
 }
 
 
 void
-libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
+libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags_string)
 {
     int             flags_mode_part;
@@ -180,7 +171,6 @@ libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
-        libexplain_buffer_because(sb);
         libexplain_string_buffer_puts
         (
             sb,
@@ -211,13 +201,6 @@ libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
         {
             int             fd;
 
-            libexplain_string_buffer_printf(sb, "fopen(pathname = ");
-            libexplain_string_buffer_puts_quoted(sb, pathname);
-            libexplain_string_buffer_puts(sb, ", flags = ");
-            libexplain_string_buffer_puts_quoted(sb, flags_string);
-            libexplain_string_buffer_putc(sb, ')');
-            libexplain_buffer_failed(sb, errnum);
-
             /*
              * Try to figure out if it was a kernel ENOMEM or a user-space
              * (sbrk) ENOMEM.  This is doomed to be inaccurate.
@@ -229,21 +212,21 @@ libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
                 if (errno == ENOMEM)
                 {
                     libexplain_buffer_enomem_kernel(sb);
-                    return;
+                    break;
                 }
                 libexplain_buffer_enomem_kernel_or_user(sb);
-                return;
+                break;
             }
             close(fd);
             libexplain_buffer_enomem_user(sb);
         }
-        return;
+        break;
 
     default:
         /*
          * Punt everything else to open()
          */
-        libexplain_buffer_errno_open_because
+        libexplain_buffer_errno_open_explanation
         (
             sb,
             errnum,
@@ -253,4 +236,29 @@ libexplain_buffer_errno_fopen_because(libexplain_string_buffer_t *sb,
         );
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, const char *flags_string)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_fopen_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        flags_string
+    );
+    libexplain_buffer_errno_fopen_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname,
+        flags_string
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

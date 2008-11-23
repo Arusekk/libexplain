@@ -34,27 +34,11 @@ static const libexplain_parse_bits_table_t table[] =
 };
 
 
-static void
-mode_bit(libexplain_string_buffer_t *sb, int bit)
-{
-    const libexplain_parse_bits_table_t *tp;
-
-    for (tp = table; tp < LIBEXPLAIN_ENDOF(table); ++tp)
-    {
-        if (tp->value == bit)
-        {
-            libexplain_string_buffer_puts(sb, tp->name);
-            return;
-        }
-    }
-    libexplain_string_buffer_printf(sb, "%#o", bit);
-}
-
-
 void
 libexplain_buffer_access_mode(libexplain_string_buffer_t *sb, int mode)
 {
     int             first;
+    int             other;
 
     if (mode == 0)
     {
@@ -62,16 +46,30 @@ libexplain_buffer_access_mode(libexplain_string_buffer_t *sb, int mode)
         return;
     }
     first = 1;
+    other = 0;
     while (mode)
     {
         int             bit;
+        const libexplain_parse_bits_table_t *tp;
 
         bit = (mode & -mode);
         mode -= bit;
+        tp = libexplain_parse_bits_find_by_value(bit, table, SIZEOF(table));
+        if (tp)
+        {
+            if (!first)
+                libexplain_string_buffer_puts(sb, " | ");
+            libexplain_string_buffer_puts(sb, tp->name);
+            first = 0;
+        }
+        else
+            other |= bit;
+    }
+    if (other)
+    {
         if (!first)
             libexplain_string_buffer_puts(sb, " | ");
-        mode_bit(sb, bit);
-        first = 0;
+        libexplain_string_buffer_printf(sb, "%#o", other);
     }
 }
 
@@ -79,5 +77,5 @@ libexplain_buffer_access_mode(libexplain_string_buffer_t *sb, int mode)
 int
 libexplain_access_mode_parse(const char *text)
 {
-    return libexplain_parse_bits(text, table, LIBEXPLAIN_SIZEOF(table));
+    return libexplain_parse_bits(text, table, SIZEOF(table));
 }

@@ -58,7 +58,7 @@ similar to the following example:
 if (fcntl(fildes, command, arg) < 0)
 {
     fprintf(stderr, "%s\en", libexplain_fcntl(fildes, command, arg));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -105,7 +105,7 @@ if (fcntl(fildes, command, arg) < 0)
 {
     int err = errno;
     fprintf(stderr, "%s\en", libexplain_errno_fcntl(err, fildes, command, arg));
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -165,7 +165,7 @@ if (fcntl(fildes, command, arg) < 0)
     char message[3000];
     libexplain_message_fcntl(message, sizeof(message), fildes, command, arg);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R
@@ -213,7 +213,7 @@ if (fcntl(fildes, command, arg) < 0)
     libexplain_message_errno_fcntl(message, sizeof(message), err, fildes,
         command, arg);
     fprintf(stderr, "%s\en", message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 .fi
 .ft R

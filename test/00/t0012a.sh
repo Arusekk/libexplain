@@ -22,7 +22,7 @@ TEST_SUBJECT="write vs EPIPE"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, Broken pipe
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, Broken pipe
 (EPIPE) because the file descriptor is connected to a pipe or socket whose
 reading end is closed, when this happens the writing process will also
 receive a SIGPIPE signal; this process catches, blocks or ignores the

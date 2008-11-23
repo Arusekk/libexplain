@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/string_buffer.h>
@@ -26,13 +25,17 @@
 void
 libexplain_buffer_efault(libexplain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_buffer_because(sb);
-    libexplain_string_buffer_puts(sb, caption);
-    libexplain_string_buffer_putc(sb, ' ');
-    libexplain_buffer_gettext
+    libexplain_string_buffer_printf_gettext
     (
         sb,
-        i18n("refers to memory that is outside the process's accessible "
-        "address space")
+        /*
+         * xgettext: This message is used when a system call argument
+         * points to non-existent memory.  This is usually either a NULL
+         * pointer or an uninitialized variabe or a memory scribble.
+         * The %s string contains the name of a function call argument.
+         */
+        i18n("%s refers to memory that is outside the process's accessible "
+            "address space"),
+        caption
     );
 }

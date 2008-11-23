@@ -25,7 +25,7 @@
   * @brief explain rename(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_rename_or_die function is used to call the rename(2)
   * system call.  On failure an explanation will be printed to stderr,
   * obtained from libexplain_rename(3), and then the process terminates
-  * by calling exit(1).
+  * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -67,7 +67,7 @@ void libexplain_rename_or_die(const char *oldpath, const char *newpath);
   * if (rename(oldpath, rewpath) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_rename(oldpath, newpath));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -107,7 +107,7 @@ const char *libexplain_rename(const char *oldpath, const char *newpath);
   *     libexplain_message_rename(message, sizeof(message), oldpath,
   *         newpath);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -141,7 +141,7 @@ void libexplain_message_rename(char *message, int message_size,
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_rename(err, oldpath,
   *         newpath));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -186,7 +186,7 @@ const char *libexplain_errno_rename(int errnum, const char *oldpath,
   *     libexplain_message_errno_rename(message, sizeof(message), err,
   *         oldpath, newpath);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -211,7 +211,7 @@ const char *libexplain_errno_rename(int errnum, const char *oldpath,
 void libexplain_message_errno_rename(char *message, int message_size,
     int errnum, const char *oldpath, const char *newpath);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

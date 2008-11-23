@@ -25,7 +25,7 @@
   * @brief explain chmod(2) errors
   */
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
   * The libexplain_chmod_or_die function is used to call the chmod(2)
   * system call.  On failure An explanation wiil be printed to stderr,
   * obtained from libexplain_chmod, and the the process terminates by
-  * call ing exit(1).
+  * call ing exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
@@ -47,7 +47,7 @@ extern "C" {
   *     The mode, exactly as to be passed to the chmod(2) system call.
   * @returns
   *     This function only returns on success.
-  *     On failure, prints an explanation and exit(1)s.
+  *     On failure, prints an explanation and exit(EXIT_FAILURE)s.
   */
 void libexplain_chmod_or_die(const char *pathname, int mode);
 
@@ -67,7 +67,7 @@ void libexplain_chmod_or_die(const char *pathname, int mode);
   * if (chmod(pathname, mode) < 0)
   * {
   *     fprintf(stderr, "%s\n", libexplain_chmod(pathname, mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -103,7 +103,7 @@ const char *libexplain_chmod(const char *pathname, int mode);
   *     int err = errno;
   *     fprintf(stderr, "%s\n", libexplain_errno_chmod(err, pathname,
   *         mode));
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -148,7 +148,7 @@ const char *libexplain_errno_chmod(int errnum, const char *pathname, int mode);
   *     char message[3000];
   *     libexplain_message_chmod(message, sizeof(message), pathname, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -184,7 +184,7 @@ void libexplain_message_chmod(char *message, int message_size,
   *     libexplain_message_errno_chmod(message, sizeof(message), err,
   *         pathname, mode);
   *     fprintf(stderr, "%s\n", message);
-  *     exit(1);
+  *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
@@ -209,7 +209,7 @@ void libexplain_message_chmod(char *message, int message_size,
 void libexplain_message_errno_chmod(char *message, int message_size,
     int errnum, const char *pathname, int mode);
 
-#ifdef c_plus_plus
+#ifdef __cplusplus
 }
 #endif
 

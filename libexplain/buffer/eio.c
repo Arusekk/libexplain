@@ -31,7 +31,6 @@
 #endif
 #include <libexplain/ac/termios.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/dirname.h>
@@ -70,7 +69,6 @@ possibly_as_a_result_of_a_preceeding(libexplain_string_buffer_t *sb, int fildes)
 void
 libexplain_buffer_eio(libexplain_string_buffer_t *sb)
 {
-    libexplain_buffer_because(sb);
     libexplain_string_buffer_puts
     (
         sb,
@@ -185,7 +183,6 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
         break;
     }
 
-    libexplain_buffer_because(sb);
     if (S_ISBLK(st->st_mode))
     {
 #if 0

@@ -22,8 +22,8 @@ TEST_SUBJECT="write vs EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
-write(fildes = 42, data = 0x1000, data_size = 10) failed, Bad file
-descriptor (EBADF) because because fildes does not refer to an open file
+write(fildes = 42, data = 0x00001000, data_size = 10) failed, Bad file
+descriptor (EBADF) because fildes does not refer to an open file
 fubar
 test $? -eq 0 || no_result
 

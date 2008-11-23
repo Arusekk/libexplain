@@ -20,47 +20,46 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
 
-#include <libexplain/buffer/because.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/stat.h>
-#include <libexplain/buffer/failed.h>
-#include <libexplain/buffer/success.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/string_buffer.h>
 
 
-void
-libexplain_buffer_errno_stat(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname, const struct stat *buf)
+static void
+libexplain_buffer_errno_stat_system_call(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, const struct stat *buf)
 {
-    int             path_broken;
-    libexplain_final_t final_component;
-
-    path_broken = errnum == EFAULT && libexplain_path_is_efault(pathname);
     libexplain_string_buffer_printf(sb, "stat(pathname = ");
-    if (path_broken)
-        libexplain_string_buffer_printf(sb, "%p", pathname);
+    if (errnum == EFAULT && libexplain_path_is_efault(pathname))
+        libexplain_buffer_pointer(sb, pathname);
     else
         libexplain_string_buffer_puts_quoted(sb, pathname);
     libexplain_string_buffer_printf(sb, ", buf = %p)", buf);
-    if (errnum == 0)
-    {
-        libexplain_buffer_success(sb);
-        return;
-    }
-    libexplain_buffer_failed(sb, errnum);
+}
 
+
+static void
+libexplain_buffer_errno_stat_explanation(libexplain_string_buffer_t *sb,
+    int errnum, const char *pathname, const struct stat *buf)
+{
+    libexplain_final_t final_component;
+
+    (void)errnum;
+    (void)buf;
     libexplain_final_init(&final_component);
 
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_because(sb);
         if
         (
             libexplain_buffer_errno_path_resolution
@@ -83,7 +82,7 @@ libexplain_buffer_errno_stat(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case EFAULT:
-        if (path_broken)
+        if (libexplain_path_is_efault(pathname))
             libexplain_buffer_efault(sb, "pathname");
         else
             libexplain_buffer_efault(sb, "buf");
@@ -113,29 +112,36 @@ libexplain_buffer_errno_stat(libexplain_string_buffer_t *sb, int errnum,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_because(sb);
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a component of pathname is not a directory"
-            );
-        }
+        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     default:
         /* no additional info for other errno values */
         break;
     }
+}
+
+
+void
+libexplain_buffer_errno_stat(libexplain_string_buffer_t *sb, int errnum,
+    const char *pathname, const struct stat *buf)
+{
+    libexplain_explanation_t exp;
+
+    libexplain_explanation_init(&exp, errnum);
+    libexplain_buffer_errno_stat_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        buf
+    );
+    libexplain_buffer_errno_stat_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        pathname,
+        buf
+    );
+    libexplain_explanation_assemble(&exp, sb);
 }

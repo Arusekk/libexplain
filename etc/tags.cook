@@ -93,14 +93,7 @@ tags: [change_files]
     xargs ctags [ctags-opts] [target]
             set meter;
 data
-[unsplit "\n"
-    [resolve
-        [stringset [source_files] - [match_mask %0%.h [source_files]]]
-        [match_mask %0%.h [source_files]]
-        [fromto %0%.def %0%.cc [match_mask %0%.def [source_files]]]
-        [fromto %0%.def %0%.h [match_mask %0%.def [source_files]]]
-    ]
-]
+[unsplit "\n" [resolve [source_files]]]
 dataend
 }
 
@@ -110,12 +103,6 @@ TAGS: [change_files]
     xargs [etags] [etags-opts] [target]
         set meter;
 data
-[unsplit "\n"
-    [resolve
-        [source_files]
-        [fromto %0%.def %0%.cc [match_mask %0%.def [source_files]]]
-        [fromto %0%.def %0%.h [match_mask %0%.def [source_files]]]
-    ]
-]
+[unsplit "\n" [resolve [source_files]]]
 dataend
 }
