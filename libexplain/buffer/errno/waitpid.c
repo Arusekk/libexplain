@@ -27,6 +27,7 @@
 #include <libexplain/buffer/errno/waitpid.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/waitpid_options.h>
+#include <libexplain/buffer/no_outstanding_children.h>
 #include <libexplain/buffer/note/sigchld.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
@@ -78,13 +79,12 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
                     /*
                      * xgettext:  This message is use when a wait*()
                      * function is asked to wait for a process that is
-                     * not a child of the calling process.
+                     * not a child of the process.
                      *
-                     * The %s string is the name of the offending
-                     * argument.
+                     * %1$s => the name of the offending system call argument
                      */
                     i18n("the process specified by %s is not a child of "
-                        "the calling process"),
+                        "this process"),
                     "pid"
                 );
             }
@@ -98,8 +98,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
                      * function is asked to wait for a process that does
                      * not exist.
                      *
-                     * The %s string is the name of the offending
-                     * argument.
+                     * %1$s => the name of the offending system call argument
                      */
                     i18n("the process specified by %s does not exist"),
                     "pid"
@@ -108,17 +107,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
         }
         else if (pid == -1)
         {
-            libexplain_buffer_gettext
-            (
-                sb,
-                /*
-                 * xgettext: This message is used when wait(2) is called and
-                 * the calling process does not have any unwaited-for child
-                 * processes.
-                 */
-                i18n("the calling process does not have any unwaited-for "
-                    "child processes")
-            );
+            libexplain_buffer_no_outstanding_children(sb);
         }
         else
         {
@@ -134,12 +123,12 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
                      * xgettext: This message is used when a wait*()
                      * function was called to wait for a process group
                      * that does not have any member process that is a
-                     * child of the calling proces.
+                     * child of this process.
                      *
-                     * The %d value is the process group number.
+                     * %1$d => is the process group number.
                      */
                     i18n("process group %d does not have any member process "
-                        "that is a child of the calling process"),
+                        "that is a child of this process"),
                     pgid
                 );
             }
@@ -153,7 +142,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
                      * function was called to wait for a process group
                      * that does not exist.
                      *
-                     * The %d value is the process group number.
+                     * %1$d => the process group number.
                      */
                     i18n("process group %d does not exist"),
                     pgid
@@ -179,10 +168,10 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
         (
             sb,
             /*
-             * xgettext: This message is used when an argment of a
+             * xgettext: This message is used when an argument of a
              * system call is invalid.
              *
-             * The %s string is the name of the offending argument.
+             * %1$s => the name of the offending system call argument.
              */
             i18n("the %s argument was invalid"),
             "options"

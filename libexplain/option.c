@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,6 +23,7 @@
 
 #include <libexplain/fstrcmp.h>
 #include <libexplain/option.h>
+#include <libexplain/program_name.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/wrap_and_print.h>
@@ -34,6 +35,7 @@ static int initialised;
 static value_t debug;
 static value_t numeric_errno = 1;
 static value_t dialect_specific = 1;
+static value_t assemble_program_name = 1;
 
 typedef struct table_t table_t;
 struct table_t
@@ -44,9 +46,11 @@ struct table_t
 
 static const table_t table[] =
 {
+    { "assemble-program-name", &assemble_program_name },
     { "debug", &debug },
-    { "numeric-errno", &numeric_errno },
     { "dialect-specific", &dialect_specific },
+    { "numeric-errno", &numeric_errno },
+    { "program-name", &assemble_program_name },
 };
 
 
@@ -190,4 +194,22 @@ libexplain_option_dialect_specific(void)
     if (!initialised)
         initialise();
     return dialect_specific;
+}
+
+
+int
+libexplain_option_assemble_program_name(void)
+{
+    if (!initialised)
+        initialise();
+    return assemble_program_name;
+}
+
+
+void
+libexplain_program_name_assemble(int yesno)
+{
+    if (!initialised)
+        initialise();
+    assemble_program_name = !!yesno;
 }

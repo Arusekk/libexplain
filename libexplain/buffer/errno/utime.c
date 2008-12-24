@@ -19,13 +19,16 @@
 #include <libexplain/ac/errno.h>
 
 #include <libexplain/buffer/dac.h>
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/utime.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/utimbuf.h>
 #include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
 
@@ -34,13 +37,11 @@ static void
 libexplain_buffer_errno_utime_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, const struct utimbuf *times)
 {
+    (void)errnum;
     libexplain_string_buffer_puts(sb, "utime(pathname = ");
-    if (errnum == EFAULT && libexplain_path_is_efault(pathname))
-        libexplain_buffer_pointer(sb, pathname);
-    else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
+    libexplain_buffer_pathname(sb, pathname);
     libexplain_string_buffer_puts(sb, ", times = ");
-    libexplain_buffer_pointer(sb, times);
+    libexplain_buffer_utimbuf(sb, times);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -62,50 +63,32 @@ libexplain_buffer_errno_utime_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
+        /*
+         * if time is NULL, change to "now",
+         * but need write permission
+         */
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        break;
+
     case EPERM:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            if (times)
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "search permission is denied for one of the "
-                    "directories in the path prefix of path; or, "
-                    "the caller's effective user ID does not "
-                    "match the owner of the file"
-                );
-                libexplain_buffer_dac_fowner(sb);
-            }
-            else
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "search permission is denied for one of the "
-                    "directories in the path prefix of path; or, the "
-                    "caller does not have write access to the file"
-                );
-                libexplain_buffer_dac_override(sb);
-            }
-        }
+        /*
+         * if times is not NULL, change as given,
+         * but need inode modify permission
+         * */
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
         if (libexplain_path_is_efault(pathname))
+        {
             libexplain_buffer_efault(sb, "pathname");
-        else
+            break;
+        }
+        if (libexplain_pointer_is_efault(times))
+        {
             libexplain_buffer_efault(sb, "times");
+            break;
+        }
         break;
 
     case ENOENT:

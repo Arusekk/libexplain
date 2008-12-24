@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_GETCHAR_H
 #define LIBEXPLAIN_GETCHAR_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <stdio.h>
 
 /**
@@ -124,7 +127,8 @@ libexplain_getchar_or_die(void)
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_getchar(void);
+const char *libexplain_getchar(void)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_getchar function is
@@ -165,7 +169,8 @@ const char *libexplain_getchar(void);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_getchar(int errnum);
+const char *libexplain_errno_getchar(int errnum)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_getchar function is

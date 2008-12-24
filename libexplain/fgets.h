@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_FGETS_H
 #define LIBEXPLAIN_FGETS_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <stdio.h>
 
 /**
@@ -96,7 +99,8 @@ char *libexplain_fgets_or_die(char *data, int data_size, FILE *fp);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_fgets(char *data, int data_size, FILE *fp);
+const char *libexplain_fgets(char *data, int data_size, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fgets function is
@@ -143,7 +147,8 @@ const char *libexplain_fgets(char *data, int data_size, FILE *fp);
   *     many other functions in this library.
   */
 const char *libexplain_errno_fgets(int errnum, char *data, int data_size,
-    FILE *fp);
+    FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fgets function is

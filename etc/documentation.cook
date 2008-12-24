@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,18 +109,7 @@ etc/%.man.d: etc/%.man
         -o [target];
 }
 
-cascade etc/reference.man = etc/ref-index.so etc/ref-parts.so;
-
-etc/ref-index.so: [match_mask man/man%1/%2.%1 [source_files]]
-    etc/ref-ptx1.awk etc/ref-ptx.ignore etc/ref-ptx2.awk
-{
-    awk -f [resolve etc/ref-ptx1.awk]
-        [resolve [match_mask man/man%1/%2.%1 [source_files]]]
-    | ptx -O -r -w1000 -i[resolve etc/ref-ptx.ignore]
-    | sort -t'\'"\'' -f -d +5 -6 +3 -4
-    | awk -F'\'"\'' -f [resolve etc/ref-ptx2.awk]
-    > [target];
-}
+cascade etc/reference.man = etc/ref-parts.so;
 
 etc/ref-parts.so: [match_mask man/man%1/%2.%1 [source_files]]
     etc/ref-ptx.sh

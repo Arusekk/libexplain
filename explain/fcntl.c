@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,17 +43,7 @@ explain_fcntl(int errnum, int argc, char **argv)
         exit(EXIT_FAILURE);
     }
     fildes = libexplain_strtol_or_die(argv[0]);
-    command = libexplain_fcntl_command_parse(argv[1]);
-    if (command < 0)
-    {
-        fprintf
-        (
-            stderr,
-            "fcntl: unable to interpret \"%s\" as a command\n",
-            argv[1]
-        );
-        exit(EXIT_FAILURE);
-    }
+    command = libexplain_fcntl_command_parse_or_die(argv[1], "fcntl arg 2");
     switch (command)
     {
     default:
@@ -79,17 +69,7 @@ explain_fcntl(int errnum, int argc, char **argv)
                 fprintf(stderr, "fcntl: need 3 arguments (not %d)\n", argc);
                 exit(EXIT_FAILURE);
             }
-            arg = libexplain_signal_parse(argv[2]);
-            if (arg < 0)
-            {
-                fprintf
-                (
-                    stderr,
-                    "argument \"%s\" does not look like a signal name\n",
-                    argv[2]
-                );
-                exit(EXIT_FAILURE);
-            }
+            arg = libexplain_signal_parse_or_die(argv[2], "fcntl arg 3");
             libexplain_wrap_and_print
             (
                 stdout,
@@ -137,17 +117,7 @@ explain_fcntl(int errnum, int argc, char **argv)
                 fprintf(stderr, "fcntl: need 3 arguments (not %d)\n", argc);
                 exit(EXIT_FAILURE);
             }
-            arg = libexplain_open_flags_parse(argv[2]);
-            if (arg < 0)
-            {
-                fprintf
-                (
-                    stderr,
-                    "argument \"%s\" does not look like open flags\n",
-                    argv[2]
-                );
-                exit(EXIT_FAILURE);
-            }
+            arg = libexplain_open_flags_parse_or_die(argv[2], "fcntl arg 3");
             libexplain_wrap_and_print
             (
                 stdout,

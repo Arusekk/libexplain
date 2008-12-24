@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,8 @@
   * @file
   * @brief explain fcntl(2) errors
   */
+
+#include <libexplain/warn_unused_result.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -94,7 +96,8 @@ int libexplain_fcntl_or_die(int fildes, int command, long arg);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_fcntl(int fildes, int command, long arg);
+const char *libexplain_fcntl(int fildes, int command, long arg)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fcntl function is used to obtain an explanation
@@ -146,7 +149,8 @@ const char *libexplain_fcntl(int fildes, int command, long arg);
   *     this library.
   */
 const char *libexplain_errno_fcntl(int errnum, int fildes, int command,
-    long arg);
+    long arg)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fcntl function is used to obtain an

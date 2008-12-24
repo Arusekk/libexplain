@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,9 +23,8 @@ TEST_SUBJECT="utime EACCES"
 
 cat > test.ok << 'fubar'
 utime(pathname = "foobar", times = 0x00001000) failed, Permission denied
-(EACCES) because search permission is denied for one of the directories in
-the path prefix of path; or, the caller's effective user ID does not match
-the owner of the file, and the process is not privileged
+(EACCES) because write access to pathname was not allowed, or one of the
+directory components of pathname did not allow search permission
 fubar
 test $? -eq 0 || no_result
 

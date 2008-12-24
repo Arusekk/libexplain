@@ -50,4 +50,21 @@ struct stat; /* forward */
 void libexplain_buffer_errno_fstat(libexplain_string_buffer_t *sb, int errnum,
     int fildes, const struct stat *buf);
 
+/**
+  * The libexplain_buffer_errno_fstat_explanation function is used by
+  * the libexplain_buffer_errno_fstat function (and others) to print an
+  * explanation of the error.
+  *
+  * @param sb
+  *     The string buffer to print the message into.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param fildes
+  *     The original fildes, exactly as passed to the fstat(2) system call.
+  * @param buf
+  *     The original buf, exactly as passed to the fstat(2) system call.
+  */
+void libexplain_buffer_errno_fstat_explanation(libexplain_string_buffer_t *sb,
+    int errnum, int fildes, const struct stat *buf);
+
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FSTAT_H */

@@ -16,10 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/errno.h>
+
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/errno/fgetc.h>
 #include <libexplain/buffer/errno/read.h>
-#include <libexplain/buffer/pointer.h>
-#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
+#include <libexplain/buffer/stream.h>
 #include <libexplain/explanation.h>
 #include <libexplain/stream_to_fildes.h>
 
@@ -30,8 +33,7 @@ libexplain_buffer_errno_fgetc_system_call(libexplain_string_buffer_t *sb,
 {
     (void)errnum;
     libexplain_string_buffer_puts(sb, "fgetc(fp = ");
-    libexplain_buffer_pointer(sb, fp);
-    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_buffer_stream(sb, fp);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -42,7 +44,19 @@ libexplain_buffer_errno_fgetc_explanation(libexplain_string_buffer_t *sb,
 {
     int             fildes;
 
+    if (fp == NULL)
+    {
+        libexplain_buffer_is_the_null_pointer(sb, "fp");
+        return;
+    }
+
     fildes = libexplain_stream_to_fildes(fp);
+    if (errnum == EBADF)
+    {
+        libexplain_buffer_ebadf(sb, fildes, "fp");
+        return;
+    }
+
     libexplain_buffer_errno_read_explanation(sb, errnum, fildes, NULL, 0);
 }
 

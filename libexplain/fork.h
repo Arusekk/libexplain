@@ -24,6 +24,8 @@
   * @brief explain fork(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -82,7 +84,8 @@ int libexplain_fork_or_die(void);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_fork(void);
+const char *libexplain_fork(void)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fork function is
@@ -122,7 +125,8 @@ const char *libexplain_fork(void);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_fork(int errnum);
+const char *libexplain_errno_fork(int errnum)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fork function is

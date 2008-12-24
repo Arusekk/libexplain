@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,22 +38,8 @@ explain_fchmod(int errnum, int argc, char **argv)
     mode = 0644;
     switch (argc)
     {
-    case 0:
-        fprintf(stderr, "fchmod: no pathname given\n");
-        exit(EXIT_FAILURE);
-
     case 2:
-        mode = libexplain_permission_mode_parse(argv[1]);
-        if (mode < 0)
-        {
-            fprintf
-            (
-                stderr,
-                "argument \"%s\" does not look like a permission mode\n",
-                argv[1]
-            );
-            exit(EXIT_FAILURE);
-        }
+        mode = libexplain_permission_mode_parse_or_die(argv[1], "fcmnod arg 2");
         /* fall through... */
 
     case 1:
@@ -61,7 +47,7 @@ explain_fchmod(int errnum, int argc, char **argv)
         break;
 
     default:
-        fprintf(stderr, "fchmod: too many arguments given\n");
+        fprintf(stderr, "fchmod: needs 2 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
 

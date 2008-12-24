@@ -23,6 +23,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/close.h>
 #include <libexplain/buffer/errno/closedir.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/dir_to_fildes.h>
 #include <libexplain/explanation.h>
@@ -52,7 +53,7 @@ libexplain_buffer_errno_closedir_explanation(libexplain_string_buffer_t *sb,
      */
     if (dir == NULL)
     {
-        libexplain_string_buffer_puts(sb, "dir is the NULL pointer");
+        libexplain_buffer_is_the_null_pointer(sb, "dir");
         return;
     }
     if (errnum == EFAULT)

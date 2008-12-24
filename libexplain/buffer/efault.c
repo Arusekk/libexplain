@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,7 @@
 
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/software_error.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -30,12 +31,15 @@ libexplain_buffer_efault(libexplain_string_buffer_t *sb, const char *caption)
         sb,
         /*
          * xgettext: This message is used when a system call argument
-         * points to non-existent memory.  This is usually either a NULL
-         * pointer or an uninitialized variabe or a memory scribble.
-         * The %s string contains the name of a function call argument.
+         * points to non-existent memory.  This is usually caused by
+         * either a NULL pointer, or an uninitialized variable, or a
+         * memory scribble.
+         *
+         * %1$s => the name of the offending system call argument.
          */
         i18n("%s refers to memory that is outside the process's accessible "
             "address space"),
         caption
     );
+    libexplain_buffer_software_error(sb);
 }

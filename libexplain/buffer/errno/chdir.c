@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,9 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
@@ -27,6 +29,7 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/errno/chdir.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
@@ -54,30 +57,13 @@ libexplain_buffer_errno_chdir_explanation(libexplain_string_buffer_t *sb,
 
     libexplain_final_init(&final_component);
     final_component.want_to_search = 1;
-    final_component.must_be_a_directory = 1;
+    final_component.must_be_a_st_mode = 1;
+    final_component.st_mode = S_IFDIR;
 
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "search permission is denied for one of the components "
-                "of pathname"
-            );
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
@@ -116,7 +102,7 @@ libexplain_buffer_errno_chdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no additional info for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

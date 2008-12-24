@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -30,13 +30,16 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/rename.h>
 #include <libexplain/buffer/exdev.h>
 #include <libexplain/buffer/file_type.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/note/still_exists.h>
 #include <libexplain/buffer/path_to_pid.h>
-#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/capability.h>
 #include <libexplain/count_directory_entries.h>
 #include <libexplain/dirname.h>
@@ -63,22 +66,67 @@ static void
 libexplain_buffer_errno_rename_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
-    int             oldpath_bad;
-    int             newpath_bad;
-
-    oldpath_bad = errnum == EFAULT && libexplain_path_is_efault(oldpath);
-    newpath_bad = errnum == EFAULT && libexplain_path_is_efault(newpath);
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "rename(oldpath = ");
-    if (oldpath_bad)
-        libexplain_buffer_pointer(sb, oldpath);
-    else
-        libexplain_string_buffer_puts_quoted(sb, oldpath);
+    libexplain_buffer_pathname(sb, oldpath);
     libexplain_string_buffer_puts(sb, ", newpath = ");
-    if (newpath_bad)
-        libexplain_buffer_pointer(sb, newpath);
-    else
-        libexplain_string_buffer_puts_quoted(sb, newpath);
+    libexplain_buffer_pathname(sb, newpath);
     libexplain_string_buffer_putc(sb, ')');
+}
+
+
+static void
+dir_vs_not_dir(libexplain_string_buffer_t *sb, const char *dir_caption,
+    const char *not_dir_caption, const struct stat *not_dir_st)
+{
+    libexplain_string_buffer_t ftype_sb;
+    char            ftype[40];
+
+    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    libexplain_buffer_file_type(&ftype_sb, not_dir_st->st_mode);
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used to explain an
+         * EISDIR error reported by a rename(2) system call,
+         * in the case where there is a file type mismatch.
+         *
+         * %1$s => the name of the source system call argument
+         * %2$s => the name of the destination system call argument
+         * %3$s => The file type of the destination,
+         *         e.g. "regular file"
+         */
+        i18n("%s is a directory, but %s is a %s, not a directory"),
+        dir_caption,
+        not_dir_caption,
+        ftype
+    );
+}
+
+
+static void
+dir_vs_not_dir2(libexplain_string_buffer_t *sb, const char *dir_caption,
+    const char *not_dir_caption)
+{
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used to explain an
+         * EISDIR error reported by a rename(2) system call,
+         * in the case where there is a file type mismatch,
+         * but the precise file type of oldpath cannot be
+         * determined.
+         *
+         * %1$s => the name of the source system call argument
+         * %2$s => the name of the destination system call argument
+         */
+        i18n("%s is an existing directory, but %s is "
+            "not a directory"),
+        dir_caption,
+        not_dir_caption
+    );
 }
 
 
@@ -112,15 +160,29 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
             &&
                 S_ISDIR(oldpath_st.st_mode)
             &&
-                !libexplain_have_write_permission(&oldpath_st)
+                !libexplain_have_write_permission
+                (
+                    &oldpath_st,
+                    &oldpath_final_component.id
+                )
             )
             {
-                libexplain_string_buffer_puts
+                libexplain_string_buffer_printf_gettext
                 (
                     sb,
-                    "oldpath is a directory and does not allow write "
-                    "permission, this is needed to update the \"..\" "
-                    "directory entry"
+                    /*
+                     * xgettext: This message is used to explan an
+                     * EACCES error reported by a rename(2) system
+                     * call.  This is the generic explanation given when
+                     * renaming directories when path_resolution(7) is
+                     * unable to provide a more specific explanation.
+                     *
+                     * %1$s => The name of the offending system call argument.
+                     */
+                    i18n("%s is a directory and does not allow write "
+                        "permission, this is needed to update the \"..\" "
+                        "directory entry"),
+                    "oldpath"
                 );
                 break;
             }
@@ -154,13 +216,20 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
              * Unable to find anything specific, give the generic
              * explanation.
              */
-            libexplain_string_buffer_puts
+            libexplain_buffer_gettext
             (
                 sb,
-                "write permission is denied for the directory "
+                /*
+                 * xgettext: This message is used to explan an EACCES
+                 * error reported by a rename(2) system call.  This is
+                 * the generic explanation given when renaming things
+                 * other than directories when path_resolution(7) is
+                 * unable to provide a more specific explanation.
+                 */
+                i18n("write permission is denied for the directory "
                 "containing oldpath or newpath; or, search permission "
                 "is denied for one of the directory components of "
-                "oldpath or newpath"
+                "oldpath or newpath")
             );
         }
         break;
@@ -170,60 +239,68 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
             break;
         if (libexplain_buffer_path_users(sb, newpath, "newpath") > 0)
             break;
-        libexplain_string_buffer_puts
+        libexplain_buffer_gettext
         (
             sb,
-            "oldpath or newpath is a directory that is in use "
+            /*
+             * xgettext: This message is used to explain an EBUSY error
+             * reported by a rename(2) system call.  This is the generic
+             * message given when a more specific explanation can not be
+             * determined.
+             */
+            i18n("oldpath or newpath is a directory that is in use "
             "by some process (perhaps as current working directory, "
             "or as root directory, or it was open for reading) or is "
-            "in use by the system (for example as mount point)"
-#if  0
-            ", and "
-            "the system considers this an error; note that there is "
-            "no requirement to return EBUSY in such cases - there is "
-            "nothing wrong with doing the rename anyway, but it is "
-            "allowed to return EBUSY if the system cannot otherwise "
-            "handle such situations"
-#endif
+            "in use by the system (for example as mount point)")
         );
         break;
 
     case EFAULT:
         if (libexplain_path_is_efault(oldpath))
+        {
             libexplain_buffer_efault(sb, "oldpath");
-        else if (libexplain_path_is_efault(newpath))
+            break;
+        }
+        if (libexplain_path_is_efault(newpath))
+        {
             libexplain_buffer_efault(sb, "newpath");
-        else
-            libexplain_buffer_efault(sb, "oldpath or newpath");
+            break;
+        }
+        libexplain_buffer_efault(sb, "oldpath or newpath");
         break;
 
     case EINVAL:
-        libexplain_string_buffer_puts
+        libexplain_string_buffer_printf_gettext
         (
             sb,
-            "the new pathname contained a path prefix of oldpath; or, "
-            "more generally, an attempt was made to make a directory a "
-            "subdirectory of itself"
+            /*
+             * xgettext: This message is used to explain an EINVAL error
+             * reported by a rename(2) system call, in the case where an
+             * attempt was made to make a directory a subdirectory of
+             * itself
+             *
+             * %1$s => the name of the source system call argument
+             * %2$s => the name of the destination system call argument
+             */
+            i18n("%s contained a path prefix of %s; or, "
+                "more generally, an attempt was made to make a directory a "
+                "subdirectory of itself"),
+            "newpath",
+            "oldpath"
         );
         break;
 
     case EISDIR:
         {
-            struct stat     st;
+            struct stat     oldpath_st;
 
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "newpath is an existing directory, but oldpath is "
-            );
-            if (lstat(oldpath, &st) == 0)
+            if (lstat(oldpath, &oldpath_st) >= 0)
             {
-                libexplain_string_buffer_puts(sb, "a ");
-                libexplain_buffer_file_type(sb, st.st_mode);
+                dir_vs_not_dir(sb, "newpath", "oldpath", &oldpath_st);
             }
             else
             {
-                libexplain_string_buffer_puts(sb, "not a directory");
+                dir_vs_not_dir2(sb, "newpath", "oldpath");
             }
         }
         break;
@@ -276,17 +353,21 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOSPC:
-        libexplain_string_buffer_puts
+        libexplain_buffer_gettext
         (
             sb,
-            "the file system containing the file"
+            /*
+             * xgettext: This message is used to explain an ENOSPC error
+             * reported by a rename(2) system call.
+             *
+             * It may optionally be followed by the actual mount point,
+             * so it helps if the sentance structure works for that
+             * case.
+             */
+            i18n("the file system containing the file has no room for "
+            "the new directory entry")
         );
         libexplain_buffer_mount_point(sb, oldpath);
-        libexplain_string_buffer_puts
-        (
-            sb,
-            " has no room for the new directory entry"
-        );
         break;
 
     case ENOTDIR:
@@ -301,17 +382,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 !S_ISDIR(newpath_st.st_mode)
             )
             {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "oldpath is a directory, but newpath "
-                );
-                libexplain_buffer_file_type(sb, newpath_st.st_mode);
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    " is not a directory"
-                );
+                dir_vs_not_dir(sb, "oldpath", "newpath", &newpath_st);
                 break;
             }
         }
@@ -333,11 +404,20 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         {
             int             count;
 
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_printf_gettext
             (
                 sb,
-                "newpath is not an empty directory; that is, it "
-                "contains entries other than \".\" and \"..\""
+                /*
+                 * xgettext: This message is used to explain and
+                 * ENOTEMPTY or EEXIST error reported by a rename(2)
+                 * system call, in the case where both oldpath and
+                 * newpath are directpries, but newpath is not empty.
+                 *
+                 * %1$s => the name of the offending system call argument
+                 */
+                i18n("%s is not an empty directory; that is, it "
+                    "contains entries other than \".\" and \"..\""),
+                "newpath"
             );
 
             count = libexplain_count_directory_entries(newpath);
@@ -368,14 +448,25 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_printf_gettext
             (
                 sb,
-                "the directory containing oldpath has the sticky bit "
-                "(S_ISVTX) set and the process's effective user ID is "
-                "neither the user ID of the file to be deleted nor that "
-                "of the directory containing it, and the process is not "
-                "privileged"
+                /*
+                 * xgettext: This message is used to EPERM error reported by
+                 * a rename(2) system call, in the case where the directory
+                 * containing oldpath has the sticky bit (S_ISVTX) set and the
+                 * process's effective user ID is neither the user ID of the
+                 * file to be deleted nor that of the directory containing it,
+                 * and the process is not privileged.
+                 *
+                 * %1$s => the name of the offending system call argument
+                 */
+                i18n("the directory containing %s has the sticky bit "
+                    "(S_ISVTX) set and the process's effective user ID is "
+                    "neither the user ID of the file to be deleted nor that "
+                    "of the directory containing it, and the process is not "
+                    "privileged"),
+                "oldpath"
             );
 #ifdef HAVE_SYS_CAPABILITY_H
             if (libexplain_option_dialect_specific())
@@ -387,14 +478,27 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 );
             }
 #endif
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_puts(sb, "; ");
+            libexplain_string_buffer_printf_gettext
             (
                 sb,
-                "; or newpath is an existing file and the directory "
-                "containing it has the sticky bit set and the "
-                "process's effective user ID is neither the user ID "
-                "of the file to be replaced nor that of the directory "
-                "containing it, and the process is not privileged"
+                /*
+                 * xgettext: This message is used to EPERM error
+                 * reported by a rename(2) system call, in the case
+                 * where newpath is an existing file and the directory
+                 * containing it has the sticky bit set and the
+                 * process's effective user ID is neither the user ID
+                 * of the file to be replaced nor that of the directory
+                 * containing it, and the process is not privileged.
+                 *
+                 * %1$s => the name of the offending system call argument
+                 */
+                i18n("or %s is an existing file and the directory "
+                    "containing it has the sticky bit set and the "
+                    "process's effective user ID is neither the user ID "
+                    "of the file to be replaced nor that of the directory "
+                    "containing it, and the process is not privileged"),
+                "newpath"
             );
 #ifdef HAVE_SYS_CAPABILITY_H
             if (libexplain_option_dialect_specific())
@@ -406,11 +510,21 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 );
             }
 #endif
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_puts(sb, "; ");
+            libexplain_string_buffer_printf_gettext
             (
                 sb,
-                "; or the file system containing pathname does not "
-                "support renaming of the type requested"
+                /*
+                 * xgettext: This message is used to EPERM error reported by a
+                 * rename(2) system call, in the case where the the file system
+                 * containing pathname does not support renaming of the type
+                 * requested.
+                 *
+                 * %1$s => the name of the offending system call argument
+                 */
+                i18n("or the file system containing %s does not "
+                    "support renaming of the type requested"),
+                "newpath"
             );
         }
         break;
@@ -424,32 +538,15 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanation for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 
     /*
      * Let the user know where things stand after the failure.
      */
-    {
-        struct stat st;
-        if (lstat(oldpath, &st) == 0)
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "; note that oldpath still exists"
-            );
-        }
-        if (lstat(newpath, &st) == 0)
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "; note that newpath exists"
-            );
-        }
-    }
+    libexplain_buffer_note_if_still_exists(sb, oldpath, "oldpath");
+    libexplain_buffer_note_if_exists(sb, newpath, "newpath");
 }
 
 

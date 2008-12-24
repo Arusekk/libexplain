@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -41,8 +41,22 @@ void libexplain_buffer_access_mode(struct libexplain_string_buffer_t *sb,
   * @param text
   *     The text to be parsed.
   * @returns
-  *     int; open mode on success, -1 on failure
+  *     int; access mode on success, -1 on failure
   */
 int libexplain_access_mode_parse(const char *text);
+
+/**
+  * The libexplain_access_mode_parse_or_die function may be used to
+  * parse a C-like expression string, into an access(2) mode argument.
+  * If string is not valie, issues a diagnostic and exits EXIT_FAILURE.
+  *
+  * @param text
+  *     The text to be parsed.
+  * @param caption
+  *     Caption for error message, or NULL for none.
+  * @returns
+  *     the access mode
+  */
+int libexplain_access_mode_parse_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_ACCESS_MODE_H */

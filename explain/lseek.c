@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,17 +42,7 @@ explain_lseek(int errnum, int argc, char **argv)
         exit(EXIT_FAILURE);
 
     case 3:
-        whence = libexplain_lseek_whence_parse(argv[2]);
-        if (whence < 0)
-        {
-            fprintf
-            (
-                stderr,
-                "argument \"%s\" does not look like an lseek whence value\n",
-                argv[2]
-            );
-            exit(EXIT_FAILURE);
-        }
+        whence = libexplain_lseek_whence_parse_or_die(argv[2], "lseek arg 2");
         /* fall through... */
 
     case 2:

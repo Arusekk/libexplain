@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,8 @@ TEST_SUBJECT="fcntl vs EFAULT"
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_SETLKW, arg = PPPPPPPP) failed, Bad
 address (EFAULT) because arg refers to memory that is outside the process's
-accessible address space
+accessible address space; this is more likely to be a software error (a
+bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 

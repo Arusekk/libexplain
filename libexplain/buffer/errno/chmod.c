@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/errno.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
@@ -28,6 +29,7 @@
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/chmod.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/capability.h>
@@ -64,25 +66,7 @@ libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "search permission is denied on a component of the path "
-                "prefix"
-            );
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
@@ -136,6 +120,7 @@ libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the effective UID does not match the owner of the "
                 "file, and the process is not privileged"
             );
@@ -157,7 +142,7 @@ libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanation for other errors */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

@@ -24,6 +24,8 @@
   * @brief explain readlink(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -96,7 +98,8 @@ int libexplain_readlink_or_die(const char *pathname, char *data, int data_size);
   *     this library.
   */
 const char *libexplain_readlink(const char *pathname, char *data,
-    int data_size);
+    int data_size)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_readlink function is
@@ -146,7 +149,8 @@ const char *libexplain_readlink(const char *pathname, char *data,
   *     many other functions in this library.
   */
 const char *libexplain_errno_readlink(int errnum, const char *pathname,
-    char *data, int data_size);
+    char *data, int data_size)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_readlink function is

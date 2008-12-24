@@ -36,6 +36,7 @@
 #include <libexplain/buffer/errno/execve.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/path_to_pid.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
@@ -61,14 +62,8 @@ static void
 libexplain_buffer_errno_execve_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, char *const *argv, char *const *envp)
 {
-    int             pathname_bad;
-
-    pathname_bad = errnum == EFAULT && libexplain_path_is_efault(pathname);
     libexplain_string_buffer_puts(sb, "execve(pathname = ");
-    if (pathname_bad)
-        libexplain_buffer_pointer(sb, pathname);
-    else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
+    libexplain_buffer_pathname(sb, pathname);
     if (errnum == EFAULT)
     {
         libexplain_string_buffer_puts(sb, ", argv = ");
@@ -125,14 +120,14 @@ wonky_pointer(libexplain_string_buffer_t *sb, char *const *array,
 {
     int             n;
 
-    if (libexplain_path_is_efault((char *)array))
+    if (libexplain_pointer_is_efault(array))
     {
         libexplain_buffer_efault(sb, array_caption);
         return 0;
     }
     for (n = 0; array[n]; ++n)
     {
-        if (!array[n] || libexplain_path_is_efault(array[n]))
+        if (libexplain_path_is_efault(array[n]))
         {
             char            temp[20];
 
@@ -289,6 +284,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "search permission is denied on a component of the path prefix "
                 "of pathname or the name of a script interpreter; or, the "
                 "file or a script interpreter is not a regular file; or, "
@@ -375,6 +371,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
         }
         break;
 
+#ifdef ELIBBAD
     case ELIBBAD:
         libexplain_string_buffer_puts
         (
@@ -382,6 +379,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             "an ELF interpreter was not in a recognized format"
         );
         break;
+#endif
 
     case ELOOP:
         libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);

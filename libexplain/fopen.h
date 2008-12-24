@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,9 @@
 
 #ifndef LIBEXPLAIN_FOPEN_H
 #define LIBEXPLAIN_FOPEN_H
+
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
 
 /**
   * @file
@@ -94,7 +97,8 @@ FILE *libexplain_fopen_or_die(const char *pathname, const char *flags);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_fopen(const char *pathname, const char *flags);
+const char *libexplain_fopen(const char *pathname, const char *flags)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fopen function is used to obtain an
@@ -174,7 +178,8 @@ void libexplain_message_fopen(char *message, int message_size,
   *     this library.
   */
 const char *libexplain_errno_fopen(int errnum, const char *pathname,
-    const char *flags);
+    const char *flags)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_errno_fopen function is used to obtain an

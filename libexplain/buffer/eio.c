@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -33,6 +33,7 @@
 
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/file_type.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/dirname.h>
 
 
@@ -44,37 +45,71 @@ possibly_as_a_result_of_a_preceeding(libexplain_string_buffer_t *sb, int fildes)
     flags = fcntl(fildes, F_GETFL);
     if (flags < 0)
         flags = O_RDWR;
-    libexplain_string_buffer_puts
-    (
-        sb,
-        ", possibly as a result of a preceeding "
-    );
+    libexplain_string_buffer_puts(sb, ", ");
     switch (flags & O_ACCMODE)
     {
     case O_RDONLY:
-        libexplain_string_buffer_puts(sb, "read");
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext: This message is used when explaining an EIO
+             * error, for a file open only for reading.
+             */
+            i18n("possibly as a result of a preceeding read(2) system call")
+        );
         break;
 
     case O_WRONLY:
-        libexplain_string_buffer_puts(sb, "write");
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext: This message is used when explaining an EIO
+             * error, for a file open only for writing.
+             */
+            i18n("possibly as a result of a preceeding write(2) system call")
+        );
         break;
 
     default:
-        libexplain_string_buffer_puts(sb, "read or write");
+        libexplain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext: This message is used when explaining an EIO
+             * error, for a file open for both reading and writing.
+             */
+            i18n("possibly as a result of a preceeding read(2) or "
+            "write(2) system call")
+        );
         break;
     }
+}
+
+
+static void
+libexplain_buffer_eio_generic(libexplain_string_buffer_t *sb, int fildes)
+{
+    libexplain_buffer_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when explaining an EIO error.
+         * Such errors are usually related to the underlying hardware of
+         * the device being used, or the special device that contains
+         * the file system the file is stored in.
+         */
+        i18n("a low-level I/O error occurred, probably in hardware")
+    );
+    possibly_as_a_result_of_a_preceeding(sb, fildes);
 }
 
 
 void
 libexplain_buffer_eio(libexplain_string_buffer_t *sb)
 {
-    libexplain_string_buffer_puts
-    (
-        sb,
-        "a low-level I/O error occurred, probably in hardware"
-    );
-    possibly_as_a_result_of_a_preceeding(sb, -1);
+    libexplain_buffer_eio_generic(sb, -1);
 }
 
 
@@ -158,6 +193,38 @@ dev_stat(dev_t dev, struct stat *st, libexplain_string_buffer_t *dev_buf)
 
 
 static void
+a_low_level_io_error_occurred(libexplain_string_buffer_t *sb,
+    const char *device_path, const struct stat *st)
+{
+    char            ftype[300];
+    libexplain_string_buffer_t ftype_sb;
+
+    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    if (device_path[0])
+    {
+        libexplain_string_buffer_puts_quoted(&ftype_sb, device_path);
+        libexplain_string_buffer_putc(&ftype_sb, ' ');
+    }
+    libexplain_buffer_file_type(&ftype_sb, st->st_mode);
+
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when explaining an EIO error.
+         * Such errors are usually related to the underlying hardware of
+         * the device being used, or the special device that contains
+         * the file system the file is stored in.
+         *
+         * %1$s => The device named and device's file type
+         */
+        i18n("a low-level I/O error occurred in the %s"),
+        ftype
+    );
+}
+
+
+static void
 libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
     struct stat *st)
 {
@@ -183,120 +250,14 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
         break;
     }
 
-    if (S_ISBLK(st->st_mode))
+    if (S_ISBLK(st->st_mode) || S_ISCHR(st->st_mode))
     {
-#if 0
-        /*
-         * See if it is a disk drive, or something that looks like a
-         * disk drive.
-         */
-        {
-            struct hd_geometry x;
-
-            if (ioctl(fildes, HDIO_GETGEO, &x) >= 0)
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "a low-level I/O error occurred in the "
-                );
-                if (dev_buf.position)
-                if (dev_path[0])
-                {
-                    libexplain_string_buffer_puts_quoted(sb, dev_path);
-                    libexplain_string_buffer_putc(sb, ' ');
-                }
-                libexplain_string_buffer_puts(sb, "disk");
-                possibly_as_a_result_of_a_preceeding(sb, fildes);
-                return;
-            }
-        }
-#endif
-
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "a low-level I/O error occurred in the "
-        );
-        if (dev_path[0])
-        {
-            libexplain_string_buffer_puts_quoted(sb, dev_path);
-            libexplain_string_buffer_putc(sb, ' ');
-        }
-        libexplain_buffer_file_type(sb, st->st_mode);
-        possibly_as_a_result_of_a_preceeding(sb, fildes);
-        return;
-    }
-    if (S_ISCHR(st->st_mode))
-    {
-        /* see if it is a tape */
-        {
-            struct mtget m;
-            if (ioctl(fildes, MTIOCGET, &m) >= 0)
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "a low-level I/O error occurred in the "
-                );
-                if (dev_path[0])
-                {
-                    libexplain_string_buffer_puts_quoted(sb, dev_path);
-                    libexplain_string_buffer_putc(sb, ' ');
-                }
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "tape device"
-                );
-                possibly_as_a_result_of_a_preceeding(sb, fildes);
-                return;
-            }
-        }
-
-        /* see if it is a serial line */
-        if (isatty(fildes))
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "a low-level I/O error occurred in the "
-            );
-            if (dev_path[0])
-            {
-                libexplain_string_buffer_puts_quoted(sb, dev_path);
-                libexplain_string_buffer_putc(sb, ' ');
-            }
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "serial device"
-            );
-            possibly_as_a_result_of_a_preceeding(sb, fildes);
-            return;
-        }
-
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "a low-level I/O error occurred in the "
-        );
-        if (dev_path[0])
-        {
-            libexplain_string_buffer_puts_quoted(sb, dev_path);
-            libexplain_string_buffer_putc(sb, ' ');
-        }
-        libexplain_buffer_file_type(sb, st->st_mode);
+        a_low_level_io_error_occurred(sb, dev_path, st);
         possibly_as_a_result_of_a_preceeding(sb, fildes);
         return;
     }
 
-    libexplain_string_buffer_puts
-    (
-        sb,
-        "a low-level I/O error occurred, probably in hardware"
-    );
-    possibly_as_a_result_of_a_preceeding(sb, fildes);
+    libexplain_buffer_eio_generic(sb, fildes);
 }
 
 

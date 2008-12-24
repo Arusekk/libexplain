@@ -20,7 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/socket_domain.h>
+#include <libexplain/buffer/address_family.h>
 #include <libexplain/buffer/socket_protocol.h>
 #include <libexplain/buffer/socket_type.h>
 #include <libexplain/socket.h>
@@ -61,41 +61,10 @@ main(int argc, char **argv)
     if (optind + 3 != argc)
         usage();
 
-    domain = libexplain_parse_socket_domain(argv[optind]);
-    if (domain < 0)
-    {
-        fprintf
-        (
-            stderr,
-            "option \"%s\" does not look like a socket domain\n",
-            argv[optind]
-        );
-        exit(EXIT_FAILURE);
-    }
-
-    type = libexplain_parse_socket_type(argv[optind + 1]);
-    if (type < 0)
-    {
-        fprintf
-        (
-            stderr,
-            "option \"%s\" does not look like a socket type\n",
-            argv[optind + 1]
-        );
-        exit(EXIT_FAILURE);
-    }
-
-    protocol = libexplain_parse_socket_protocol(argv[optind + 2]);
-    if (protocol < 0)
-    {
-        fprintf
-        (
-            stderr,
-            "option \"%s\" does not look like a socket protocol\n",
-            argv[optind + 2]
-        );
-        exit(EXIT_FAILURE);
-    }
+    domain = libexplain_parse_address_family_or_die(argv[optind], "arg 1");
+    type = libexplain_parse_socket_type_or_die(argv[optind + 1], "arg 2");
+    protocol =
+        libexplain_parse_socket_protocol_or_die(argv[optind + 2], "arg 3");
 
     libexplain_socket_or_die(domain, type, protocol);
     return EXIT_SUCCESS;

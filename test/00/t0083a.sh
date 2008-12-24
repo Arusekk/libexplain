@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@
 TEST_SUBJECT="rename EMLINK"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, Too many links (EMLINK)
-because oldpath is a directory and the "." directory already has the
-maximum number of links; note that oldpath still exists
+because oldpath is a directory and the current directory already has
+the maximum number of links; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result
 

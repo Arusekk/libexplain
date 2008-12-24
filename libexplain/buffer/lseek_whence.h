@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -37,13 +37,15 @@ void libexplain_buffer_lseek_whence(struct libexplain_string_buffer_t *sb,
 /**
   * The libexplain_lseek_whence_parse function may be used to parse
   * a text string into an lseek whence value.  It may be symbolic or
-  * numeric.
+  * numeric.  If an error occurs, will print a diagnostic and exit.
   *
   * @param text
   *     The text string to be parsed.
+  * @param caption
+  *     an additional caption to add to the error message.
   * @returns
-  *     int, an lseek whence value, or -1 on error
+  *     an lseek whence value
   */
-int libexplain_lseek_whence_parse(const char *text);
+int libexplain_lseek_whence_parse_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_LSEEK_WHENCE_H */

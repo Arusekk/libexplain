@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ TEST_SUBJECT="ftruncate EIO"
 cat > test.ok << 'fubar'
 ftruncate(fildes = 42, length = 42) failed, Input/output error (EIO)
 because a low-level I/O error occurred, probably in hardware, possibly as a
-result of a preceeding read or write
+result of a preceeding read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result
 

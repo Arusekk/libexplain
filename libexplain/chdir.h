@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,8 @@
   * @file
   * @brief explain chdir(2) errors
   */
+
+#include <libexplain/warn_unused_result.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,7 +84,8 @@ void libexplain_chdir_or_die(const char *pathname);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_chdir(const char *pathname);
+const char *libexplain_chdir(const char *pathname)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_chdir function is used to obtain an
@@ -156,7 +159,8 @@ void libexplain_message_chdir(char *message, int message_size,
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_errno_chdir(int errnum, const char *pathname);
+const char *libexplain_errno_chdir(int errnum, const char *pathname)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_errno_chdir function is used to obtain an

@@ -21,6 +21,7 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efbig.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/eio.h>
@@ -29,6 +30,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/etxtbsy.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/fildes_not_open_for_writing.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/explanation.h>
@@ -61,29 +63,8 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EBADF:
-        {
-            int             flags;
-
-            flags = fcntl(fildes, F_GETFL);
-            if (flags < 0)
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the file descriptor does not refer to an open file"
-                );
-            }
-            else
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the file descriptor is not open for writing ("
-                );
-                libexplain_buffer_open_flags(sb, flags);
-                libexplain_string_buffer_putc(sb, ')');
-            }
-        }
+        if (libexplain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
+            libexplain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFBIG:

@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ TEST_SUBJECT="socket ENFILE"
 . test_prelude
 
 cat > test.ok << 'fubar'
-socket(domain = PF_INET, type = SOCK_RAW, protocol = IPPROTO_TCP) failed,
+socket(family = PF_INET, type = SOCK_RAW, protocol = IPPROTO_TCP) failed,
 Too many open files in system (ENFILE) because the system limit on the
 total number of open files has been reached
 fubar

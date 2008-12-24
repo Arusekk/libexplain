@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -36,13 +36,16 @@ void libexplain_buffer_socket_protocol(struct libexplain_string_buffer_t *sb,
 
 /**
   * The libexplain_parse_socket_protocol function is used to parse a
-  * string into a socket protocol value.
+  * string into a socket protocol value.  On error, prints a diagnostic
+  * and exits EXIT_FAILURE.
   *
   * @param text
   *     The string to be parsed.
+  * @param cptn
+  *     additional text to add to start of error message
   * @returns
   *     the socket value, or -1 on error
   */
-int libexplain_parse_socket_protocol(const char *text);
+int libexplain_parse_socket_protocol_or_die(const char *text, const char *cptn);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKET_PROTOCOL_H */

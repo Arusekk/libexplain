@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,12 @@
 
 #ifndef LIBEXPLAIN_LSOF_H
 #define LIBEXPLAIN_LSOF_H
+
+#define LIBEXPLAIN_LSOF_FD_mem (-'m')
+#define LIBEXPLAIN_LSOF_FD_txt (-'t')
+#define LIBEXPLAIN_LSOF_FD_cwd (-'c')
+#define LIBEXPLAIN_LSOF_FD_rtd (-'r')
+#define LIBEXPLAIN_LSOF_FD_NOFD (-'N')
 
 typedef struct libexplain_lsof_t libexplain_lsof_t;
 struct libexplain_lsof_t

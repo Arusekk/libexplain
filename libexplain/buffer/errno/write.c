@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,9 @@
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/write.h>
+#include <libexplain/buffer/fildes_not_open_for_writing.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/pretty_size.h>
@@ -76,25 +78,8 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EBADF:
-        {
-            int             flags;
-
-            flags = fcntl(fildes, F_GETFL);
-            if (flags >= 0)
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the file descriptor is not open for writing ("
-                );
-                libexplain_buffer_open_flags(sb, flags);
-                libexplain_string_buffer_putc(sb, ')');
-            }
-            else
-            {
-                libexplain_buffer_ebadf(sb, "fildes");
-            }
-        }
+        if (libexplain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
+            libexplain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFAULT:

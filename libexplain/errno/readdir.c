@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/stdio.h>
+
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/readdir.h>
 

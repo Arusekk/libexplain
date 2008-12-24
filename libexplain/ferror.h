@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_FERROR_H
 #define LIBEXPLAIN_FERROR_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <stdio.h>
 
 /**
@@ -96,7 +99,8 @@ void libexplain_ferror_or_die(FILE *fp);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_ferror(FILE *fp);
+const char *libexplain_ferror(FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_ferror function is
@@ -142,7 +146,8 @@ const char *libexplain_ferror(FILE *fp);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_ferror(int errnum, FILE *fp);
+const char *libexplain_errno_ferror(int errnum, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_ferror function is

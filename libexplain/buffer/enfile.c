@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,11 +17,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/errno.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/enfile.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/option.h>
+#include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 
 #ifdef __linux__
@@ -36,36 +39,40 @@ get_maxfile(void)
     if (libexplain_option_dialect_specific())
     {
 #ifdef __linux__
-    struct __sysctl_args args;
-    long maxfile;
-    size_t maxfile_size = sizeof(maxfile);
-    int name[] = { CTL_FS, FS_MAXFILE };
+        /*
+         * In the linux kernel, if get_empty_filp() returns NULL, the open
+         * system call (and others) will return ENFILE.
+         */
+        struct __sysctl_args args;
+        long maxfile;
+        size_t maxfile_size = sizeof(maxfile);
+        int name[] = { CTL_FS, FS_MAXFILE };
 
-    /*
-     * The Linux sysctl(2) man page has this to say:
-     *
-     *     Glibc does not provide a wrapper for this system call; call it
-     *     using syscall(2).
-     *
-     *     Or rather... don't call it: use of this system call has long
-     *     been discouraged, and it is so unloved that it is likely
-     *     to disappear in a future kernel version.  Remove it from your
-     *     programs now; use the /proc/sys interface instead.
-     *
-     *     The object names vary between kernel versions, making this system
-     *     call worthless for applications.
-     *
-     * Catch 22: you have to open a file to discover the limit of
-     * open files AFTER you have hit the limit of open files.  Sigh.
-     */
-    memset(&args, 0, sizeof(struct __sysctl_args));
-    args.name = name;
-    args.nlen = sizeof(name)/sizeof(name[0]);
-    args.oldval = &maxfile;
-    args.oldlenp = &maxfile_size;
+        /*
+         * The Linux sysctl(2) man page has this to say:
+         *
+         *     Glibc does not provide a wrapper for this system call; call it
+         *     using syscall(2).
+         *
+         *     Or rather... don't call it: use of this system call has long
+         *     been discouraged, and it is so unloved that it is likely
+         *     to disappear in a future kernel version.  Remove it from your
+         *     programs now; use the /proc/sys interface instead.
+         *
+         *     The object names vary between kernel versions, making this system
+         *     call worthless for applications.
+         *
+         * Catch 22: you have to open a file to discover the limit of
+         * open files AFTER you have hit the limit of open files.  Sigh.
+         */
+        memset(&args, 0, sizeof(struct __sysctl_args));
+        args.name = name;
+        args.nlen = SIZEOF(name);
+        args.oldval = &maxfile;
+        args.oldlenp = &maxfile_size;
 
-    if (syscall(SYS__sysctl, &args) >= 0)
-        return maxfile;
+        if (syscall(SYS__sysctl, &args) >= 0)
+            return maxfile;
 #endif
     }
     return -1;
@@ -82,11 +89,18 @@ libexplain_buffer_enfile(libexplain_string_buffer_t *sb)
      * a sysconf() name for this.  The _SC_OPEN_MAX name is for the
      * EMFILE error, which is different.
      */
-    libexplain_string_buffer_puts
+    libexplain_buffer_gettext
     (
         sb,
-        "the system limit on the total number of open files "
-        "has been reached"
+        /*
+         * xgettext: This message is used when explaining an ENFILE error.
+         *
+         * Note that it could be followed by the actual limit in
+         * preentheses (if it can be determined) so it helps of the last
+         * phrase in the message can sensably be followed by it.
+         */
+        i18n("the system limit on the total number of open files "
+        "has been reached")
     );
 
     /*

@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,9 @@
 
 #ifndef LIBEXPLAIN_OPENDIR_H
 #define LIBEXPLAIN_OPENDIR_H
+
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
 
 #include <dirent.h>
 
@@ -85,7 +88,8 @@ DIR *libexplain_opendir_or_die(const char *pathname);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_opendir(const char *pathname);
+const char *libexplain_opendir(const char *pathname)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_opendir function is used to obtain an
@@ -162,7 +166,8 @@ void libexplain_message_opendir(char *message, int message_size,
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_errno_opendir(int errnum, const char *pathname);
+const char *libexplain_errno_opendir(int errnum, const char *pathname)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_errno_opendir function is used to obtain an

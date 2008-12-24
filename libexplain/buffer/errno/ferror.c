@@ -22,8 +22,8 @@
 #include <libexplain/buffer/errno/ferror.h>
 #include <libexplain/buffer/errno/read.h>
 #include <libexplain/buffer/errno/write.h>
-#include <libexplain/buffer/pointer.h>
-#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
+#include <libexplain/buffer/stream.h>
 #include <libexplain/explanation.h>
 #include <libexplain/stream_to_fildes.h>
 
@@ -34,8 +34,7 @@ libexplain_buffer_errno_ferror_system_call(libexplain_string_buffer_t *sb,
 {
     (void)errnum;
     libexplain_string_buffer_puts(sb, "ferror(fp = ");
-    libexplain_buffer_pointer(sb, fp);
-    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_buffer_stream(sb, fp);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -52,7 +51,7 @@ libexplain_buffer_errno_ferror_explanation(libexplain_string_buffer_t *sb,
      */
     if (fp == NULL)
     {
-        libexplain_string_buffer_puts(sb, "fp is the NULL pointer");
+        libexplain_buffer_is_the_null_pointer(sb, "fp");
         return;
     }
 

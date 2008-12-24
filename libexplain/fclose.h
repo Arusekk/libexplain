@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,9 @@
 
 #ifndef LIBEXPLAIN_FCLOSE_H
 #define LIBEXPLAIN_FCLOSE_H
+
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
 
 /**
   * @file
@@ -102,7 +105,8 @@ void libexplain_fclose_or_die(FILE *fp);
   * Alternatively, the libexplain_fclose_or_die function can do all that
   * for you.
   */
-const char *libexplain_fclose(FILE *fp);
+const char *libexplain_fclose(FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fclose function is used to obtain an explanation
@@ -161,7 +165,8 @@ const char *libexplain_fclose(FILE *fp);
   * }
   * @endcode
   */
-const char *libexplain_errno_fclose(int errnum, FILE *fp);
+const char *libexplain_errno_fclose(int errnum, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fclose function is used to obtain an

@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,12 +27,24 @@
 
 static const libexplain_parse_bits_table_t table[] =
 {
+#ifdef SOCK_STREAM
     { "SOCK_STREAM", SOCK_STREAM },
+#endif
+#ifdef SOCK_DGRAM
     { "SOCK_DGRAM", SOCK_DGRAM },
+#endif
+#ifdef SOCK_RAW
     { "SOCK_RAW", SOCK_RAW },
+#endif
+#ifdef SOCK_RDM
     { "SOCK_RDM", SOCK_RDM },
+#endif
+#ifdef SOCK_SEQPACKET
     { "SOCK_SEQPACKET", SOCK_SEQPACKET },
+#endif
+#ifdef SOCK_PACKET
     { "SOCK_PACKET", SOCK_PACKET },
+#endif
 };
 
 
@@ -50,7 +62,24 @@ libexplain_buffer_socket_type(libexplain_string_buffer_t *sb, int type)
 
 
 int
-libexplain_parse_socket_type(const char *text)
+libexplain_parse_socket_type_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits(text, table, SIZEOF(table));
+    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+}
+
+
+void
+libexplain_buffer_socket_type_from_fildes(libexplain_string_buffer_t *sb,
+    int fildes)
+{
+    int             val;
+    socklen_t       valsiz;
+
+    valsiz = sizeof(val);
+    if (getsockopt(fildes, SOL_SOCKET, SO_TYPE, &val, &valsiz) >= 0)
+    {
+        libexplain_string_buffer_puts(sb, " (");
+        libexplain_buffer_socket_type(sb, val);
+        libexplain_string_buffer_putc(sb, ')');
+    }
 }

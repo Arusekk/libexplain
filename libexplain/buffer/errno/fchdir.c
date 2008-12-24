@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,6 +23,7 @@
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/errno/fchdir.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/explanation.h>
@@ -47,7 +48,7 @@ libexplain_buffer_errno_fchdir_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, "fildes");
+        libexplain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case ENOTDIR:
@@ -63,7 +64,7 @@ libexplain_buffer_errno_fchdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no additional info for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,13 +25,15 @@
   * @brief explain open(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
   * The libexplain_open_or_die function is used to open a file using
-  * open(3).  If an error occurs, this will be reported to stderr, and
+  * open(2).  If an error occurs, this will be reported to stderr, and
   * then the function will call exit(EXIT_FAILURE) to terminate the
   * process.  This presents a quick and simple way to have good error
   * reporting from command line programs.
@@ -46,15 +48,15 @@ extern "C" {
   *     The pathname to open, exactly as will be passed to the open(2)
   *     system call.
   * @param flags
-  *     The open flags, exactly as will be passed to the open(3) system call.
+  *     The open flags, exactly as will be passed to the open(2) system call.
   * @param mode
-  *     The new file modes, exactly as will be passed to the open(3)
+  *     The new file modes, exactly as will be passed to the open(2)
   *     system call.
   * @returns
   *     The open file descriptor.
   *     Does not return on failure.
   * @note
-  *     If the open fails, the libexplain_open(3) function will be called,
+  *     If the open fails, the libexplain_open(2) function will be called,
   *     and the process will exit via a exit(EXIT_FAILURE) call.
   */
 int libexplain_open_or_die(const char *pathname, int flags, int mode);
@@ -98,7 +100,8 @@ int libexplain_open_or_die(const char *pathname, int flags, int mode);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_open(const char *pathname, int flags, int mode);
+const char *libexplain_open(const char *pathname, int flags, int mode)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_open function is used to obtain an
@@ -186,7 +189,8 @@ void libexplain_message_open(char *message, int message_size,
   *     this library.
   */
 const char *libexplain_errno_open(int errnum, const char *pathname, int flags,
-    int mode);
+    int mode)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_errno_open function is used to obtain an

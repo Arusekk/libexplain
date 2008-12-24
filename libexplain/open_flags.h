@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -71,12 +71,14 @@ void libexplain_buffer_open_flags(struct libexplain_string_buffer_t *sb,
     int flags);
 
 /**
-  * The libexplain_open_flags_parse function may be used to parse a
-  * strings containing a symbolic representation of open() flags,
+  * The libexplain_open_flags_parse_or_die function may be used to parse
+  * a strings containing a symbolic representation of open() flags,
   * turning it into a open flags value.
   *
   * @param text
   *     The text to be parsed to extract an open flags value.
+  * @param caption
+  *     additional text to add to start of error message
   * @returns
   *     open flags value
   * @note
@@ -84,6 +86,6 @@ void libexplain_buffer_open_flags(struct libexplain_string_buffer_t *sb,
   *     and exit(EXIT_FAILURE) is called.  If there is an error, this
   *     function will not return.
   */
-int libexplain_open_flags_parse(const char *text);
+int libexplain_open_flags_parse_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_OPEN_FLAGS_H */

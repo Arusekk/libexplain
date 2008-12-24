@@ -25,24 +25,28 @@ DESCRIPTION
               directory (2, ENOENT) because directory "no-such-dir" does not
               exist
 
-       The library also provides thread safe variants of each function.
+       The good new is that for each of these functions there is a wrapper
+       function, in this case libexplain_open_or_die(3), that includes the
+       above code fragment.  Adding good error reporting is as simple as using
+       a different, but similarly named, function.  The library also provides
+       thread safe variants of each explanation function.
 
 HOME PAGE
        The latest version of libexplain is available on the Web from:
 
           URL:    http://libexplain.sourceforge.net/
           File:   index.html              # the libexplain page
-          File:   libexplain.0.3.README   # Description, from the tar file
-          File:   libexplain.0.3.lsm      # Description, LSM format
-          File:   libexplain.0.3.tar.gz   # the complete source
-          File:   libexplain.0.3.pdf      # Reference Manual
+          File:   libexplain.0.4.README   # Description, from the tar file
+          File:   libexplain.0.4.lsm      # Description, LSM format
+          File:   libexplain.0.4.tar.gz   # the complete source
+          File:   libexplain.0.4.pdf      # Reference Manual
 
 BUILDING LIBEXPLAIN
        Full instructions for building libexplain may be found in the BUILDING
        file included in this distribution.
 
 COPYRIGHT
-       libexplain version 0.3
+       libexplain version 0.4
        Copyright (C) 2008 Peter Miller
 
        This program is free software; you can redistribute it and/or modify it
@@ -62,8 +66,67 @@ COPYRIGHT
        It should be in the LICENSE file included with this distribution.
 
 AUTHOR
-       Peter Miller   E-Mail:   millerp@canb.auug.org.au
+       Peter Miller   E-Mail:   pmiller@opensource.org.au
        /\/\*             WWW:   http://www.canb.auug.org.au/~millerp/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -73,6 +136,19 @@ RELEASE NOTES
        releases.  For excruciating and complete detail, and also credits for
        those of you who have generously sent me suggestions and bug reports,
        see the etc/CHANGES.* files.
+
+   Version 0.4 (2008-Dec-24)
+       * Coverage now includes accept(2), bind(2), connect(2), dup2(2),
+       fchown(2), fdopen(3), fpathconf(2), fputc(2), futimes(2),
+       getaddrinfo(2), getcwd(2), getrlimit(2), listen(2), pathconf(2),
+       putc(2), putchar(2), select(2).
+
+       * Internationalization has been improved.
+
+       * The thread safety of the code has been improved.
+
+       * The code is now able to be compiled on OpenBSD.  The test suite still
+       gives many false negatives, due to differences in strerror() results.
 
    Version 0.3 (2008-Nov-23)
        * Cover has been extended to include closedir(3), execve(2), ferror(3),

@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_FWRITE_H
 #define LIBEXPLAIN_FWRITE_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <stdio.h>
 
 /**
@@ -101,7 +104,8 @@ size_t libexplain_fwrite_or_die(const void *ptr, size_t size, size_t nmemb,
   *     many other functions in this library.
   */
 const char *libexplain_fwrite(const void *ptr, size_t size, size_t nmemb,
-    FILE *fp);
+    FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fwrite function is
@@ -150,7 +154,8 @@ const char *libexplain_fwrite(const void *ptr, size_t size, size_t nmemb,
   *     many other functions in this library.
   */
 const char *libexplain_errno_fwrite(int errnum, const void *ptr, size_t size,
-    size_t nmemb, FILE *fp);
+    size_t nmemb, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fwrite function is

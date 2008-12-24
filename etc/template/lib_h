@@ -21,15 +21,6 @@
 #define ${ident ${upcase $filename}}
 
 /**
-  * @file
-  * @brief explain ${trim_extension ${basename $filename}}(2) errors
-  */
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/**
   * The ${ident ${trim_ext $filename}} function may be used to
   *
   * @param arg
@@ -38,9 +29,5 @@ extern "C" {
   *    blah blah
   */
 void ${ident ${trim_ext $filename}}(void);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* ${ident ${upcase $filename}} */

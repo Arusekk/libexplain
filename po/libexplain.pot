@@ -6,77 +6,123 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libexplain 0.3.D001\n"
+"Project-Id-Version: libexplain 0.4.D001\n"
 "Report-Msgid-Bugs-To: Peter Miller <millerp@canb.auug.org.au>\n"
-"POT-Creation-Date: 2008-11-23 19:45+1100\n"
+"POT-Creation-Date: 2008-12-24 17:23+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=us-ascii\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#.
-#. This message is used to explain the specific
-#. DAC_FOWNER privilege that is absent.
-#.
-#: libexplain/buffer/dac/fowner.c:43
-msgid " (does not have the DAC_FOWNER capability)"
-msgstr ""
-
-#.
-#. This message is used to explain the specific
-#. DAC_NET_RAW privilege that is absent.
-#.
-#: libexplain/buffer/dac/net_raw.c:43
-msgid " (does not have the DAC_NET_RAW capability)"
-msgstr ""
-
-#.
-#. This message is used to explain the specific
-#. privilege that is absent.
-#.
-#: libexplain/buffer/dac/override.c:43
-msgid " (does not have the DAC_OVERRIDE capability)"
-msgstr ""
-
-#.
-#. This message is used to explain the specific
-#. privilege that is absent.
-#.
-#: libexplain/buffer/dac/read_search.c:43
-msgid " (does not have the DAC_READ_SEARCH capability)"
-msgstr ""
 
 #.
 #. This message is used when a path name component is
 #. longer than the system limit (NAME_MAX, not PATH_MAX).
 #.
-#. The %s string contains the name of the function call argument
-#. and the quoted text of the offending path component.
+#. %1$s => the name of the function call argument and the quoted
+#.         text of the offending path component.
 #.
-#: libexplain/buffer/errno/path_resolution.c:817
+#: libexplain/buffer/errno/path_resolution.c:750
 #, c-format
 msgid "%s component is longer than the system limit"
 msgstr ""
 
 #.
-#. This message is used when a path is being used as a
-#. directory, when does not exist.  The %s string contains the
-#. name of the system call argument, the quoted path and the
-#. actual file type.
+#. This message is used to explain an EINVAL error
+#. reported by a rename(2) system call, in the case where an
+#. attempt was made to make a directory a subdirectory of
+#. itself
 #.
-#: libexplain/buffer/errno/path_resolution.c:240
+#. %1$s => the name of the source system call argument
+#. %2$s => the name of the destination system call argument
+#.
+#: libexplain/buffer/errno/rename.c:285
+#, c-format
+msgid ""
+"%s contained a path prefix of %s; or, more generally, an attempt was "
+"made to make a directory a subdirectory of itself"
+msgstr ""
+
+#.
+#. This message is used when a path is being used as a
+#. directory, when does not exist.
+#.
+#. %1$s => the name of the system call argument, the quoted path
+#.         and the expected file type ("directory", already translated).
+#.
+#: libexplain/buffer/errno/path_resolution.c:262
 #, c-format
 msgid "%s does not exist"
 msgstr ""
 
 #.
-#. This message is used when a file descriptor is not
-#. valid and does not refer to an open file.  The %s string is
-#. the name of a system call argument.
+#. This message is used when socket(2) and
+#. {bind(2) or connect(2)} disagree about the file
+#. descriptor's address family.
 #.
-#: libexplain/buffer/ebadf.c:35
+#. %1$s => The name of the system call argument containing
+#.         the sockaddr with the erroneous address family.
+#. %2$s => The name of the system call argument
+#.         containing the socket file descriptor.
+#. %3$s => The value of the socket file descriptor's
+#.         address family, as obtained from the file
+#.         descriptor itself.
+#.
+#: libexplain/buffer/eafnosupport.c:58
+#, c-format
+msgid ""
+"%s does not have the correct address family, %s address family is %s"
+msgstr ""
+
+#.
+#. This message is used when socket() and
+#. connect() disagree about the file descriptor's
+#. address family.  It is used when the file
+#. descriptor's actual address family cannot be
+#. determined.
+#.
+#. %1$s => The name of the system call argument containing
+#.         the sockaddr with the erroneous address family.
+#. %2$s => The name of the system call argument containing
+#.         the file descriptor with the other address family.
+#.
+#: libexplain/buffer/eafnosupport.c:82
+#, c-format
+msgid "%s does not have the same address family as %s"
+msgstr ""
+
+#.
+#. This message is used when a file descriptor is
+#. passed to a system call, and it has the wrong file type,
+#. but the actual file type is unavailable.
+#.
+#. %1$s => The name of the offending system call argument
+#. %2$s => the required file type, already translated.
+#.
+#: libexplain/buffer/wrong_file_type.c:78
+#, c-format
+msgid "%s does not refer to a %s"
+msgstr ""
+
+#.
+#. This message is used to explain an EINVAL error
+#. reported by the pathconf system call.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#: libexplain/buffer/errno/pathconf.c:62
+#, c-format
+msgid "%s does not refer to a known file configuration value"
+msgstr ""
+
+#.
+#. This message is used when a file descriptor is not
+#. valid and does not refer to an open file.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#: libexplain/buffer/ebadf.c:41
 #, c-format
 msgid "%s does not refer to an open file"
 msgstr ""
@@ -85,6 +131,8 @@ msgstr ""
 #. This message is used when a pathname
 #. exceeds the maximum (system specific) path name
 #. length (in bytes, not characters).
+#.
+#. %1$s => the name of the offending system call argument
 #.
 #: libexplain/buffer/errno/path_resolution.c:1064
 #, c-format
@@ -103,22 +151,17 @@ msgstr ""
 #. explanation, or when the user-supplied message buffer is too
 #. small.
 #.
-#. Depending on the grammar of the language being translated
-#. to, you may need to rearrange these two pieces using
-#. positional arguments.
+#. Depending on the grammar of the natural language being
+#. translated to, you may need to rearrange these two pieces
+#. using positional arguments.
 #.
-#. %1$s => the system call and its arguments
+#. %1$s => the C text of the system call and its arguments
 #.         e.g. "open(pathname = "foo/bar", flags = O_RDONLY)"
 #. %2$s => the strerror text, plus the name and number of
 #.         the errno.h constant
 #.         e.g. "No such file or directory (2, ENOENT)"
 #.
-#. For example:
-#.
-#. msgid "%s failed, %s"
-#. msgstr "%2$s was returned by %1$s"
-#.
-#: libexplain/explanation.c:123
+#: libexplain/explanation.c:121
 #, c-format
 msgid "%s failed, %s"
 msgstr ""
@@ -133,14 +176,15 @@ msgstr ""
 #. Depending on the grammar of the language being translated to,
 #. you may need to rearrange these two pieces using positional
 #. arguments.
-#.     %1$s => the system call and its arguments
-#.             e.g. "open(pathname = 'foo/bar', flags = O_RDONLY)"
-#.     %2$s => the strerror text, plus the name and number of
-#.             the errno.h constant
-#.             e.g. "No such file or directory (2, ENOENT)"
-#.     %3$s => the explanation text
-#.             e.g. "there is no 'bar' file in the pathname
-#.                  'foo'; directory"
+#.
+#. %1$s => the C text of the system call and its arguments
+#.         e.g. "open(pathname = 'foo/bar', flags = O_RDONLY)"
+#. %2$s => the strerror text, plus the name and number of
+#.         the errno.h constant
+#.         e.g. "No such file or directory (2, ENOENT)"
+#. %3$s => the explanation text
+#.         e.g. "there is no 'bar' file in the pathname
+#.         'foo'; directory"
 #.
 #. For example:
 #.
@@ -151,43 +195,159 @@ msgstr ""
 #. msgstr "a %2$s error, due to %3$s, was reported by %1$s"
 #.
 #. This has a follow-on effect for how the explanations themselves
-#. are translated, to ensure that sensable sentences result.  In
+#. are translated, to ensure that sensible sentences result.  In
 #. particular, the explanation portion should only ever be one
 #. sentence, so that a clause (e.g. above) may be appended.
 #.
-#: libexplain/explanation.c:179
+#: libexplain/explanation.c:176
 #, c-format
 msgid "%s failed, %s because %s"
 msgstr ""
 
 #.
-#. This message is used when a path given in a path is
-#. larger that the (dialect specific) maximum path length.  The
-#. %s string is the name of the relevant system call argument.
+#. This message is used to explan an
+#. EACCES error reported by a rename(2) system
+#. call.  This is the generic explanation given when
+#. renaming directories when path_resolution(7) is
+#. unable to provide a more specific explanation.
 #.
-#: libexplain/buffer/efbig.c:71
+#. %1$s => The name of the offending system call argument.
+#.
+#: libexplain/buffer/errno/rename.c:182
+#, c-format
+msgid ""
+"%s is a directory and does not allow write permission, this is needed to "
+"update the \"..\" directory entry"
+msgstr ""
+
+#.
+#. This message is used to explain an
+#. EISDIR error reported by a rename(2) system call,
+#. in the case where there is a file type mismatch.
+#.
+#. %1$s => the name of the source system call argument
+#. %2$s => the name of the destination system call argument
+#. %3$s => The file type of the destination,
+#.         e.g. "regular file"
+#.
+#: libexplain/buffer/errno/rename.c:100
+#, c-format
+msgid "%s is a directory, but %s is a %s, not a directory"
+msgstr ""
+
+#.
+#. This message is used to explain an
+#. EISDIR error reported by a rename(2) system call,
+#. in the case where there is a file type mismatch,
+#. but the precise file type of oldpath cannot be
+#. determined.
+#.
+#. %1$s => the name of the source system call argument
+#. %2$s => the name of the destination system call argument
+#.
+#: libexplain/buffer/errno/rename.c:125
+#, c-format
+msgid "%s is an existing directory, but %s is not a directory"
+msgstr ""
+
+#.
+#. This message is used to explain an
+#. EINVAL error reported by a bind(2) system call,
+#. in the case where a Unix domain socket address
+#. was accompanied by the wrong size; probably too
+#. short.
+#.
+#. %1$s => The name of the offending system call argument.
+#.
+#: libexplain/buffer/errno/bind.c:232
+#, c-format
+msgid "%s is incorrect"
+msgstr ""
+
+#.
+#. This message is used when a path given in a path is
+#. larger that the (dialect specific) maximum path length.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#: libexplain/buffer/efbig.c:80
 #, c-format
 msgid "%s is larger than the maximum file size"
 msgstr ""
 
 #.
-#. This message is used when a path is being used as
-#. a directory, when it is actually something else (usually a
-#. regular file).  The %s string contains the name of the system
-#. call argument, the quoted path and the actual file type.
+#. This message is used to explain and
+#. ENOTEMPTY or EEXIST error reported by a rename(2)
+#. system call, in the case where both oldpath and
+#. newpath are directpries, but newpath is not empty.
 #.
-#: libexplain/buffer/errno/path_resolution.c:264
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/errno/rename.c:418
 #, c-format
-msgid "%s is not a directory"
+msgid ""
+"%s is not an empty directory; that is, it contains entries other than \"."
+"\" and \"..\""
+msgstr ""
+
+#.
+#. This message is used when an attempt is made to write to
+#. a file descriptor that was not opened for writing.  The actual open
+#. mode will be printed separately.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#: libexplain/buffer/fildes_not_open_for_writing.c:54
+#, c-format
+msgid "%s is not open for writing"
+msgstr ""
+
+#.
+#. This message is used when a file descriptor
+#. is detected that is negative, or larger than
+#. sysconf(_SC_OPEN_MAX).
+#.
+#. The range will be printed separately, if available, so do not
+#. mention sysconf(_SC_OPEN_MAX) in the translation.
+#.
+#: libexplain/buffer/check_fildes_range.c:39
+#, c-format
+msgid "%s is outside the allowed range for file descriptors"
+msgstr ""
+
+#.
+#. This message is used when a system call argument is
+#. passed a NULL pointer, and it should not be.
+#.
+#. %1$s => The name of the system call's offending argument.
+#.
+#: libexplain/buffer/is_the_null_pointer.c:35
+#, c-format
+msgid "%s is the NULL pointer"
+msgstr ""
+
+#.
+#. This message is used when a file descriptor is
+#. passed to a system call, and it has the wrong file type.
+#.
+#. %1$s => The name of the offending system call argument
+#. %2$s => the actual (wrong) file type, already translated.
+#. %3$s => the required file type, already translated.
+#.
+#: libexplain/buffer/wrong_file_type.c:53
+#, c-format
+msgid "%s refers to a %s, not a %s"
 msgstr ""
 
 #.
 #. This message is used when a system call argument
-#. points to non-existent memory.  This is usually either a NULL
-#. pointer or an uninitialized variabe or a memory scribble.
-#. The %s string contains the name of a function call argument.
+#. points to non-existent memory.  This is usually caused by
+#. either a NULL pointer, or an uninitialized variable, or a
+#. memory scribble.
 #.
-#: libexplain/buffer/efault.c:37
+#. %1$s => the name of the offending system call argument.
+#.
+#: libexplain/buffer/efault.c:40
 #, c-format
 msgid ""
 "%s refers to memory that is outside the process's accessible address "
@@ -195,13 +355,26 @@ msgid ""
 msgstr ""
 
 #.
-#. This explanation is used in response to an ENOENT
-#. error.  Both of the %s strings are always identical.  The
-#. string is the name of one of the function call arguments.
-#. This explanation is only used if a more specific cause
-#. cannot be determined.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about
+#. undefined bits in a bitfield argument, e.g. access(2).
 #.
-#: libexplain/buffer/enoent.c:41
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/einval.c:36
+#, c-format
+msgid "%s was incorrectly specified, it contains undefined bits"
+msgstr ""
+
+#.
+#. This explanation is used in response to an ENOENT
+#. error.  This explanation is only used if a more specific
+#. cause cannot be determined.
+#.
+#. %1$s => the name of the offending system call argument.
+#. %2$s => always identical to the above.
+#.
+#: libexplain/buffer/enoent.c:42
 #, c-format
 msgid ""
 "%s, or a directory component of %s, does not exist or is a dangling "
@@ -212,7 +385,9 @@ msgstr ""
 #. this message is issued when a system call
 #. succeeds, when there was, in fact, no error.
 #.
-#: libexplain/explanation.c:67
+#. %1$s => the C text of the system call and its arguments
+#.
+#: libexplain/explanation.c:75
 #, c-format
 msgid "%s: success"
 msgstr ""
@@ -228,11 +403,48 @@ msgid "BSD whiteout"
 msgstr ""
 
 #.
-#. this explanation is given for paths that are
-#. the empty string.  The %s string is the name of the
-#. relevant system call argument.
+#. This message is used to explain an
+#. ELOOP or EMLINK error reported by an open(2)
+#. system call, in the case where the O_NOFOLLOW
+#. flags was specified but the final path component
+#. was a symbolic link.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1029
+#: libexplain/buffer/errno/open.c:326
+msgid "O_NOFOLLOW was specified but pathname refers to a symbolic link"
+msgstr ""
+
+#.
+#. This message is used to explain an
+#. ENXIO error returned by an open(2) system call,
+#. in the case where a named pipe has no readers,
+#. and a non-blocking writer tried to open it.
+#.
+#: libexplain/buffer/errno/open.c:430
+msgid ""
+"O_NONBLOCK | O_WRONLY is set, and the named file is a FIFO, and no "
+"process has the file open for reading"
+msgstr ""
+
+#.
+#. This message is used to explain an
+#. ENXIO error returned by an open(2) system call.
+#. This is the generic explanation, used when no
+#. more specific cause can be determined.
+#.
+#: libexplain/buffer/errno/open.c:411
+msgid ""
+"O_NONBLOCK | O_WRONLY is set, the named file is a FIFO and no process "
+"has the file open for reading; or, the file is a device special file and "
+"no corresponding device exists"
+msgstr ""
+
+#.
+#. this explanation is given for paths that are
+#. the empty string.
+#.
+#. %1$s => the name of the relevant system call argument.
+#.
+#: libexplain/buffer/errno/path_resolution.c:1025
 #, c-format
 msgid "POSIX decrees that an empty %s must not be resolved successfully"
 msgstr ""
@@ -257,14 +469,74 @@ msgstr ""
 
 #.
 #. This explanation is used in response to an ENOENT
-#. error.  The string is the name of one of the function call
-#. arguments.  This explanation is only used if a more specific
+#. error.  This explanation is only used if a more specific
 #. cause cannot be determined.
 #.
-#: libexplain/buffer/enoent.c:61
+#. %1$s => the name of the offending system call argument.
+#.
+#: libexplain/buffer/enoent.c:63
 #, c-format
 msgid ""
 "a directory component of %s does not exist or is a dangling symbolic link"
+msgstr ""
+
+#.
+#. This message is used when explaining an EIO error.
+#. Such errors are usually related to the underlying hardware of
+#. the device being used, or the special device that contains
+#. the file system the file is stored in.
+#.
+#. %1$s => The device named and device's file type
+#.
+#: libexplain/buffer/eio.c:221
+#, c-format
+msgid "a low-level I/O error occurred in the %s"
+msgstr ""
+
+#.
+#. This message is used when explaining an EIO error.
+#. Such errors are usually related to the underlying hardware of
+#. the device being used, or the special device that contains
+#. the file system the file is stored in.
+#.
+#: libexplain/buffer/eio.c:103
+msgid "a low-level I/O error occurred, probably in hardware"
+msgstr ""
+
+#.
+#. This message is used to explain and EPROTO
+#. error reported by an accept(2) system call, in the case
+#. where a protocol error has occurred.
+#.
+#: libexplain/buffer/errno/accept.c:198
+msgid ""
+"a protocol error has occurred; for example, the STREAMS protocol stack "
+"has not been initialized"
+msgstr ""
+
+#.
+#. This message is used when a
+#. symbolic link loop has been detected,
+#. usually as a result of an ELOOP error.
+#.
+#. %1$s => The name of the offending system
+#.         call argument
+#. %2$s => The path of the first symlink in
+#.         the loop, already quoted.
+#.
+#: libexplain/buffer/errno/path_resolution.c:1499
+#, c-format
+msgid "a symbolic link loop was encountered in %s, starting at %s"
+msgstr ""
+
+#.
+#. This message is used to explan an ECONNABORTED
+#. error reported by the accept(2) system call, in the case
+#. where an incoming connection has been aborted by the
+#. remote host.
+#.
+#: libexplain/buffer/errno/accept.c:95
+msgid "an incoming connection has been aborted by the remote host"
 msgstr ""
 
 #.
@@ -273,6 +545,13 @@ msgstr ""
 #.
 #: libexplain/buffer/dac/process_is_not_privileged.c:35
 msgid "and the process is not privileged"
+msgstr ""
+
+#.
+#. This message is used to explain an EADDRINUSE error.
+#.
+#: libexplain/buffer/errno/listen.c:114
+msgid "another socket is already listening on the same port"
 msgstr ""
 
 #.
@@ -294,6 +573,17 @@ msgid "character special device"
 msgstr ""
 
 #.
+#. This message is used to explain an
+#. EPERM error reported by a chown (or similar)
+#. system call, in the case where chown is
+#. restricted, i.e. when it is not sufficent to be
+#. the owner of the file to change its ownership.
+#.
+#: libexplain/buffer/errno/chown.c:97
+msgid "chown is restricted"
+msgstr ""
+
+#.
 #. the name of the current directory, rather than
 #. "." that not all users understand.
 #.
@@ -307,7 +597,10 @@ msgstr ""
 #. name has been found in the same directory.  This often helps
 #. with typographical errors.
 #.
-#: libexplain/buffer/errno/path_resolution.c:127
+#. %1$s => the name (already quoted) and file type (already
+#.         translated) of the alternate file found.
+#.
+#: libexplain/buffer/errno/path_resolution.c:132
 #, c-format
 msgid "did you mean the %s instead?"
 msgstr ""
@@ -321,12 +614,43 @@ msgid "directory"
 msgstr ""
 
 #.
-#. This message is used when a file stream pointer
-#. is invalid because it is the NULL pointer.
+#. This message is used when further explaining a
+#. "process is not privileged" message, to include the specific
+#. absent capability.
 #.
-#: libexplain/buffer/errno/fclose.c:54 libexplain/buffer/errno/fflush.c:58
-#: libexplain/buffer/errno/fgets.c:57 libexplain/buffer/errno/getc.c:48
-msgid "fp is the NULL pointer"
+#. %1$s => the name of the capability,
+#.         e.g. "CAP_FOWNER"
+#.
+#: libexplain/buffer/dac/does_not_have_capability.c:38
+#, c-format
+msgid "does not have the %s capability"
+msgstr ""
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's GIDs are in use during the permissions
+#. check.  In this case, the effective gid.
+#.
+#: libexplain/have_permission.c:579
+msgid "effective GID"
+msgstr ""
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's UIDs are in use during the permissions
+#. check.  In this case, the effective UID.
+#.
+#: libexplain/have_permission.c:547
+msgid "effective UID"
+msgstr ""
+
+#.
+#. This message is used to explain an EPERM error
+#. reported by an accept(2) system call, in the case where
+#. firewall rules forbid connection.
+#.
+#: libexplain/buffer/errno/accept.c:185
+msgid "firewall rules forbid connection"
 msgstr ""
 
 #.
@@ -345,22 +669,87 @@ msgstr ""
 #.         type (will never have slashes).  It will be quoted.
 #. %3$s => the desired file type
 #.
-#: libexplain/buffer/errno/path_resolution.c:975
+#: libexplain/buffer/errno/path_resolution.c:871
 #, c-format
 msgid "in the %s there is a %s, but it should be a %s"
 msgstr ""
 
 #.
+#. This message is used when explaining an ENOMEM
+#. error, when it is specific to kernel memory.
+#.
+#: libexplain/buffer/enomem.c:37
+msgid "insufficient kernel memory was available"
+msgstr ""
+
+#.
+#. This message is used as a generic explanation
+#. of an ENOBUFS error returned by any system call that does
+#. not provide a more specific explanation.
+#.
+#: libexplain/buffer/errno/generic.c:75
+msgid ""
+"insufficient kernel resources are available in the system to complete "
+"the system call"
+msgstr ""
+
+#.
+#. This message is used when explaining an ENOMEM
+#. error, when it is specific to user space memory.
+#.
+#. Note that this may be followed by the actual limit, if
+#. available.
+#.
+#: libexplain/buffer/enomem.c:57
+msgid "insufficient user-space memory was available"
+msgstr ""
+
+#.
+#. This message is used when explaining an ENOMEM
+#. error, when it is not possible to distinguish whether it was
+#. kernel memory of user space memory that was exhausted.
+#.
+#: libexplain/buffer/enomem.c:102
+msgid "insufficient user-space or kernel memory was available"
+msgstr ""
+
+#.
 #. This message is issued when a user attempts to
 #. execute something that is not a file, such as a block special
-#. device.  The %s string contains the name of the system call
-#. argument, the name of the final path component and the type
-#. of the file.
+#. device.
 #.
-#: libexplain/buffer/errno/path_resolution.c:321
+#. %1$s => the name of the system call argument, the name of the
+#.         final path component and the type of the file.
+#.
+#: libexplain/buffer/errno/path_resolution.c:345
 #, c-format
 msgid ""
 "it is not possible to execute the %s, only regular files can be executed"
+msgstr ""
+
+#.
+#. This message is used to inform users of the
+#. listen(2) system call when they specify a backlog
+#. valie in excess of SOMAXCONN.
+#.
+#. %1$d => The maximum queue length for completely
+#.         established sockets waiting to be accepted.
+#.
+#: libexplain/buffer/errno/listen.c:194
+#, c-format
+msgid ""
+"large backlog values are silently truncated to the system maximum "
+"(SOMAXCONN, %d)"
+msgstr ""
+
+#.
+#. This message is used as an explanation for an
+#. EADDRINUSE error.  See connect(2) and bind(2) for more
+#. information.
+#.
+#: libexplain/buffer/eaddrinuse.c:39
+msgid ""
+"local address is already in use; or, the address was in use very recently"
 msgstr ""
 
 #.
@@ -401,6 +790,19 @@ msgid "named special file"
 msgstr ""
 
 #.
+#. This message is used to explain an ENETUNREACH
+#. error reported by the connect(2) system call, in the case
+#. where network or host is unreachable.
+#.
+#: libexplain/buffer/errno/connect.c:287
+msgid ""
+"network or host is unreachable; sometimes this is a routing issue, "
+"sometimes the network is physically disconnected, sometimes a router is "
+"turned off, sometimes the host is physically disconnected, sometimes the "
+"host is turned off"
+msgstr ""
+
+#.
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a network special
 #. file.  Not present on all POSIX implementations.
@@ -410,13 +812,259 @@ msgid "network special file"
 msgstr ""
 
 #.
+#. This message is used to explain an EAGAIN error
+#. reported by the connect(2) system call, in the case where
+#. no more free local ports or insufficient entries in the
+#. routing cache.
+#.
+#: libexplain/buffer/errno/connect.c:142
+msgid ""
+"no more free local ports or insufficient entries in the routing cache"
+msgstr ""
+
+#.
+#. This message is used to supplement a
+#. rename(2) error explanation, and oldpath still
+#. exists.
+#.
+#. %1$s => the name of the relevant system call argument
+#.
+#: libexplain/buffer/note/still_exists.c:71
+#, c-format
+msgid "note that %s exists"
+msgstr ""
+
+#.
+#. This message is used to supplement a
+#. rename(2) error explanation, and oldpath still
+#. exists.
+#.
+#. %1$s => the name of the relevant system call argument
+#.
+#: libexplain/buffer/note/still_exists.c:39
+#, c-format
+msgid "note that %s still exists"
+msgstr ""
+
+#.
+#. This message is used when supplementing an
+#. EACCES error returned by the access(2) system call,
+#. to remind users that it is an error if ANY of the
+#. access types in mode are denied, even if some of the
+#. other access types in mode would be permitted.
+#.
+#: libexplain/buffer/errno/access.c:121
+msgid ""
+"note that it is an error if any of the access types in mode are denied, "
+"even if some of the other access types in mode would be permitted"
+msgstr ""
+
+#.
+#. This message is used to supplement an explanation for
+#. an error reported by open(2) system call, and the caller used a
+#. flags combination with explicitly undefined behavior.
+#.
+#: libexplain/buffer/errno/open.c:596
+msgid ""
+"note that the behavior of O_EXCL is undefined if O_CREAT is not specified"
+msgstr ""
+
+#.
+#. This message is used when explaining an EMLINK
+#. error, in the case where a specific cause could not be
+#. determined.
+#.
+#: libexplain/buffer/emlink.c:115
+msgid ""
+"oldpath already has the maximum number of links to it, or oldpath is a "
+"directory and the directory containing newpath has the maximum number of "
+"links"
+msgstr ""
+
+#.
+#. This message is used when explaining an
+#. EMLINK error, in the non-directory case where a file
+#. already has the maximum number of links.
+#.
+#. Note that this message may be followed by the actual
+#. limit in parentheses, so it helps of the last phrase
+#. can be sensably followed by it.
+#.
+#. %1$s => the file type of the problem file
+#.         (already translated)
+#.
+#: libexplain/buffer/emlink.c:99
+#, c-format
+msgid "oldpath is a %s and already has the maximum number of links"
+msgstr ""
+
+#.
+#. This message is used when explaining an
+#. EMLINK error, in the case where a directory needs to
+#. re-write its ".." directory entry, and the new ".."
+#. would thereby exceed the link limit.
+#.
+#. Note that this message may be followed by the actual
+#. limit in parentheses, so it helps of the last phrase
+#. can be sensably followed by it.
+#.
+#. %1$s => The name (already quoted) and file type
+#.         (already translated) of the directory of
+#.         newpath that has the problem.
+#.
+#: libexplain/buffer/emlink.c:72
+#, c-format
+msgid ""
+"oldpath is a directory and the %s already has the maximum number of links"
+msgstr ""
+
+#.
+#. This message is used to explain an EBUSY error
+#. reported by a rename(2) system call.  This is the generic
+#. message given when a more specific explanation can not be
+#. determined.
+#.
+#: libexplain/buffer/errno/rename.c:251
+msgid ""
+"oldpath or newpath is a directory that is in use by some process "
+"(perhaps as current working directory, or as root directory, or it was "
+"open for reading) or is in use by the system (for example as mount point)"
+msgstr ""
+
+#.
+#. This message is used to EPERM error
+#. reported by a rename(2) system call, in the case
+#. where newpath is an existing file and the directory
+#. containing it has the sticky bit set and the
+#. process's effective user ID is neither the user ID
+#. of the file to be replaced nor that of the directory
+#. containing it, and the process is not privileged.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/errno/rename.c:496
+#, c-format
+msgid ""
+"or %s is an existing file and the directory containing it has the sticky "
+"bit set and the process's effective user ID is neither the user ID of "
+"the file to be replaced nor that of the directory containing it, and the "
+"process is not privileged"
+msgstr ""
+
+#.
+#. This message is used when getcwd() is
+#. trying to reconstruct the problem, and discovers that
+#. the process is probably running inside a chroot jail,
+#. and that the current directory is actually ouside
+#. that chroot jail.
+#.
+#: libexplain/buffer/get_current_directory.c:201
+msgid "or is outside your chroot jail"
+msgstr ""
+
+#.
+#. This message is used to EPERM error reported by a
+#. rename(2) system call, in the case where the the file system
+#. containing pathname does not support renaming of the type
+#. requested.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/errno/rename.c:525
+#, c-format
+msgid ""
+"or the file system containing %s does not support renaming of the type "
+"requested"
+msgstr ""
+
+#.
+#. This message is used to explain an EFBIG
+#. or EOVERFLOW error reported by and open(2) system
+#. call.  The file is, in fact, too large to be opened
+#. without the O_LARGEFILE flag.
+#.
+#. %1$s => The size of the file, in parentheses
+#.
+#: libexplain/buffer/errno/open.c:278
+#, c-format
+msgid ""
+"pathname referes to a regular file that is too large to be opened %s, "
+"the O_LARGEFILE flag is necessary"
+msgstr ""
+
+#.
+#. This message is used to explain
+#. an ENODEV error reported by an open(2)
+#. system call, and the device does not
+#. actually exist.
+#.
+#. %1$s => the file type of the special file,
+#.         already translated.
+#. %2$s => the major and minor device numbers
+#.
+#. Example: "pathname refers to a block special file (42, 13) and no
+#.           corresponding device exists"
+#.
+#: libexplain/buffer/errno/open.c:130
+#, c-format
+msgid "pathname refers to a %s %s and no corresponding device exists"
+msgstr ""
+
+#.
+#. This message is used to explain an EISDIR
+#. reported by an open(2) system call.  You may not open
+#. a directory for writing.
+#.
+#: libexplain/buffer/errno/open.c:301
+msgid ""
+"pathname refers to a directory and the access requested involved writing"
+msgstr ""
+
+#.
+#. This message is used when explaining an EIO
+#. error, for a file open for both reading and writing.
+#.
+#: libexplain/buffer/eio.c:83
+msgid ""
+"possibly as a result of a preceeding read(2) or write(2) system call"
+msgstr ""
+
+#.
+#. This message is used when explaining an EIO
+#. error, for a file open only for reading.
+#.
+#: libexplain/buffer/eio.c:59
+msgid "possibly as a result of a preceeding read(2) system call"
+msgstr ""
+
+#.
+#. This message is used when explaining an EIO
+#. error, for a file open only for writing.
+#.
+#: libexplain/buffer/eio.c:71
+msgid "possibly as a result of a preceeding write(2) system call"
+msgstr ""
+
+#.
+#. This message is used when supplementing
+#. an explation an ENOMEM error, when it is specific to
+#. user space memory, and the process has an infinite
+#. memory limit, meaning that a system limit on the
+#. total amout of user space memory available to all
+#. processes has been exhausted.
+#.
+#: libexplain/buffer/enomem.c:79
+msgid "probably by exhausting swap space"
+msgstr ""
+
+#.
 #. This message is used when a wait*()
 #. function was called to wait for a process group
 #. that does not exist.
 #.
-#. The %d value is the process group number.
+#. %1$d => the process group number.
 #.
-#: libexplain/buffer/errno/waitpid.c:158
+#: libexplain/buffer/errno/waitpid.c:147
 #, c-format
 msgid "process group %d does not exist"
 msgstr ""
@@ -425,15 +1073,48 @@ msgstr ""
 #. This message is used when a wait*()
 #. function was called to wait for a process group
 #. that does not have any member process that is a
-#. child of the calling proces.
+#. child of this process.
 #.
-#. The %d value is the process group number.
+#. %1$d => is the process group number.
 #.
-#: libexplain/buffer/errno/waitpid.c:141
+#: libexplain/buffer/errno/waitpid.c:130
 #, c-format
 msgid ""
-"process group %d does not have any member process that is a child of the "
-"calling process"
+"process group %d does not have any member process that is a child of "
+"this process"
+msgstr ""
+
+#.
+#. This message is used to explain an EACCES error,
+#. when attempting to read a file, when path_resolution(7) can
+#. not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#. %2$s => identical to the above
+#.
+#: libexplain/buffer/eacces.c:74
+#, c-format
+msgid ""
+"read access to %s was not allowed, or one of the directory components of "
+"%s did not allow search permission"
+msgstr ""
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's GIDs are in use during the permissions
+#. check.  In this case, the real gid.
+#.
+#: libexplain/have_permission.c:566
+msgid "real GID"
+msgstr ""
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's UIDs are in use during the permissions
+#. check.  In this case, the real UID.
+#.
+#: libexplain/have_permission.c:534
+msgid "real UID"
 msgstr ""
 
 #.
@@ -442,6 +1123,58 @@ msgstr ""
 #.
 #: libexplain/buffer/file_type.c:64
 msgid "regular file"
+msgstr ""
+
+#.
+#. This message is used to explain an EACCES error,
+#. when path_resolution(7) can not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#.
+#: libexplain/buffer/eacces.c:117
+#, c-format
+msgid "search permission is denied for a directory component of %s"
+msgstr ""
+
+#.
+#. This message is used to explain an EACCES error,
+#. when attempting to create or remove a file, when
+#. path_resolution(7) can not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#. %2$s => identical to the above
+#.
+#: libexplain/buffer/eacces.c:54
+#, c-format
+msgid ""
+"search permission is denied for a directory component of %s; or, the "
+"directory containing %s is not writable by the user"
+msgstr ""
+
+#.
+#. This message is used to supplement an
+#. EAGAIN explanation for the connect(2) system call, on
+#. Linux the numebr of local ports can be increased.
+#.
+#: libexplain/buffer/errno/connect.c:162
+msgid ""
+"see the net.ipv4.ip_local_port_range sysctl in ip(7) for how to increase "
+"the number of local ports"
+msgstr ""
+
+#.
+#. This message is used to explain an EINVAL
+#. error reported by the accept(2) system call, in the
+#. case where the maximum socket adress size given is
+#. invalid, e.g. negative.
+#.
+#. %1$d => The actual size passed (because the
+#.         recapitualtion fo the system call is going to
+#.         have a pointer in it, not the actual value).
+#.
+#: libexplain/buffer/errno/accept.c:119
+#, c-format
+msgid "sock_addr_size is invalid (%d)"
 msgstr ""
 
 #.
@@ -461,12 +1194,12 @@ msgid "symbolic link"
 msgstr ""
 
 #.
-#. This message is used when an argment of a
+#. This message is used when an argument of a
 #. system call is invalid.
 #.
-#. The %s string is the name of the offending argument.
+#. %1$s => the name of the offending system call argument.
 #.
-#: libexplain/buffer/errno/waitpid.c:187
+#: libexplain/buffer/errno/waitpid.c:176
 #, c-format
 msgid "the %s argument was invalid"
 msgstr ""
@@ -478,14 +1211,14 @@ msgstr ""
 #.
 #. Different language grammars may need to rearrange the parts.
 #.
-#. %1$s => The name of the offenting path component (will never have
-#.         slashes).  It will be quoted.
+#. %1$s => The name of the offending path component (will never have
+#.         slashes).  It is already quoted.
 #. %2$s => The name of the directory that contains the problematic
 #.         component; it may have zero, one or more slashes in it.  Will
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:892
+#: libexplain/buffer/errno/path_resolution.c:788
 #, c-format
 msgid "the %s in the %s is being used as a directory when it is not"
 msgstr ""
@@ -505,7 +1238,7 @@ msgstr ""
 #.         directory, and the file type "directory".
 #. %3$s => the non-existent thing the symbolic link point to
 #.
-#: libexplain/buffer/errno/path_resolution.c:787
+#: libexplain/buffer/errno/path_resolution.c:720
 #, c-format
 msgid "the %s in the %s refers to %s that does not exist"
 msgstr ""
@@ -524,25 +1257,57 @@ msgstr ""
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:930
+#: libexplain/buffer/errno/path_resolution.c:826
 #, c-format
 msgid "the %s in the %s should not exist yet"
 msgstr ""
 
 #.
-#. This message is used when wait(2) is called and
-#. the calling process does not have any unwaited-for child
-#. processes.
+#. This message is used when an EPERM erro is
+#. returned by an open(2) system call, and the O_NOATIME
+#. open flag was specific, but the process lacked the
+#. permissions required.
 #.
-#: libexplain/buffer/errno/wait.c:61 libexplain/buffer/errno/waitpid.c:119
-msgid "the calling process does not have any unwaited-for child processes"
+#. %1$s => the number and name of the process effective UID,
+#.         already quoted if needed
+#. %2$s => the file type of the file in question,
+#.         almost always "regular file" (already translated)
+#. %3$s => the number and name of the file owner UID,
+#.         already quoted if needed
+#.
+#: libexplain/buffer/errno/open.c:490
+#, c-format
+msgid ""
+"the O_NOATIME flags was specified, but the process effective UID %s does "
+"not match the %s owner UID %s"
+msgstr ""
+
+#.
+#. This message is used to explain an
+#. EWOULDBLOCK error returned by an open(2) system call,
+#. when the use of thr O_NONBLOCK flags would otherwise
+#. cause the open(2) system call to block.
+#.
+#: libexplain/buffer/errno/open.c:524
+msgid ""
+"the O_NONBLOCK flag was specified, and an incompatible lease was held on "
+"the file"
+msgstr ""
+
+#.
+#. This message is used when and EADDRINUSE error
+#. is seen, and the socket does not have the SO_REUSEADDR
+#. socket option enabled.  See socket(7) for more information.
+#.
+#: libexplain/buffer/eaddrinuse.c:68
+msgid "the SO_REUSEADDR socket option can be used to shorten the wait"
 msgstr ""
 
 #.
 #. This message is used when a child process
 #. terminates normally.  The exist status is reported.
 #.
-#: libexplain/buffer/wait_status.c:50
+#: libexplain/buffer/wait_status.c:51
 #, c-format
 msgid "the child process terminated with exit status %s"
 msgstr ""
@@ -551,7 +1316,7 @@ msgstr ""
 #. This message is used when a child process is
 #. resumed by delivering a signal (SIGCONT).
 #.
-#: libexplain/buffer/wait_status.c:123
+#: libexplain/buffer/wait_status.c:124
 #, c-format
 msgid "the child process was resumed by delivery of the %s signal"
 msgstr ""
@@ -561,7 +1326,7 @@ msgstr ""
 #. stopped by delivery of a signal.  The process is still
 #. there, is is stopped, not terminated.
 #.
-#: libexplain/buffer/wait_status.c:105
+#: libexplain/buffer/wait_status.c:106
 #, c-format
 msgid "the child process was stopped by delivery of the %s signal"
 msgstr ""
@@ -570,7 +1335,7 @@ msgstr ""
 #. This message is used when a child process
 #. is terminated by the delivery of an uncaught signal.
 #.
-#: libexplain/buffer/wait_status.c:85
+#: libexplain/buffer/wait_status.c:86
 #, c-format
 msgid "the child process was terminated by the %s signal"
 msgstr ""
@@ -580,9 +1345,60 @@ msgstr ""
 #. is terminated by the delivery of an uncaught signal.
 #. This also resulted in a core dump.
 #.
-#: libexplain/buffer/wait_status.c:71
+#: libexplain/buffer/wait_status.c:72
 #, c-format
 msgid "the child process was terminated by the %s signal, core dumped"
+msgstr ""
+
+#.
+#. This message is used to explain an ETIMEDOUT
+#. error reported by the connect(2) system call, in the case
+#. where the connection attempt took to long.
+#.
+#: libexplain/buffer/errno/connect.c:308
+msgid ""
+"the connection attempt took to long; the server may be too busy to "
+"accept new connections, or an intervening firewall may be discarding "
+"your packets"
+msgstr ""
+
+#.
+#. This message is used to EPERM error reported by
+#. a rename(2) system call, in the case where the directory
+#. containing oldpath has the sticky bit (S_ISVTX) set and the
+#. process's effective user ID is neither the user ID of the
+#. file to be deleted nor that of the directory containing it,
+#. and the process is not privileged.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/errno/rename.c:464
+#, c-format
+msgid ""
+"the directory containing %s has the sticky bit (S_ISVTX) set and the "
+"process's effective user ID is neither the user ID of the file to be "
+"deleted nor that of the directory containing it, and the process is not "
+"privileged"
+msgstr ""
+
+#.
+#. %1$s => the kind of UID, either "effective UID" or "real
+#.         UID", already translated
+#. %2$s => the process's UID and the corresponding login name,
+#.         already quoted
+#. %3$s => the file's UID and the corresponding login name,
+#.         already quoted
+#. %4$s => the type of file to be removed (e.g. "regular file"),
+#.         already translated
+#. %5$s => the directory's UID and the corresponding login name,
+#.         already quoted
+#.
+#: libexplain/buffer/errno/path_resolution.c:962
+#, c-format
+msgid ""
+"the directory has the sticky bit (S_ISVTX) set and the process's %s %s "
+"is neither the owner UID %s of the %s to be removed, nor the owner UID %"
+"s of the directory containing it"
 msgstr ""
 
 #.
@@ -592,7 +1408,7 @@ msgstr ""
 #. on a file system that is mounted with the
 #. "noexec" option.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1904
+#: libexplain/buffer/errno/path_resolution.c:1881
 msgid ""
 "the executable is on a file system that is mounted with the \"noexec\" "
 "option"
@@ -602,34 +1418,112 @@ msgstr ""
 #. This message is used when the process
 #. attempts to execute a regular file which would
 #. otherwise be executable, except that it has the
-#. set-uid (S_ISUID) or set-gid (S_ISGID) bit set,
+#. set-UID (S_ISUID) or set-GID (S_ISGID) bit set,
 #. and it resides on a file system that is mounted
 #. with the "nosuid" option.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1931
+#: libexplain/buffer/errno/path_resolution.c:1908
 msgid ""
 "the executable is on a file system that is mounted with the \"nosuid\" "
 "option"
 msgstr ""
 
 #.
-#. This message is used when explaining why
-#. some permission mode bits are ignored.  The %s string
-#. will be the "rwx" bits, including the quotes, as.
-#. The 3-character string will look like ls -l output.
+#. This message is used when explaining an
+#. EEXIST error returned by an open(2) system call.
+#. Usually path_resolution(7) will have a better
+#. explanation, this explanation is only used when a
+#. more specific explanation is not available.
 #.
-#: libexplain/have_permission.c:157
+#: libexplain/buffer/errno/open.c:240
+msgid ""
+"the file already exists when it should not (flags O_CREAT and O_EXCL "
+"were used)"
+msgstr ""
+
+#.
+#. This message is used when an attempt is
+#. made to read from a file descriptor that was not
+#. opened for reading.  The actual open mode will be
+#. printed separately.
+#.
+#: libexplain/buffer/errno/read.c:93
+msgid "the file descriptor is not open for reading"
+msgstr ""
+
+#.
+#. This message is used to provide an
+#. explanation for and ENOSPC error returned by an
+#. open(2) system call, in the case where there is no
+#. more room for a new file.
+#.
+#. %1$s => The name of the problematic system call argument
+#. %2$s => The file system mount point and usage,
+#.         in parentheses
+#.
+#: libexplain/buffer/errno/open.c:382
+#, c-format
+msgid "the file system containing %s %s has no room for the new file"
+msgstr ""
+
+#.
+#. This message is used to explain an ENOSPC error
+#. reported by a rename(2) system call.
+#.
+#. It may optionally be followed by the actual mount point,
+#. so it helps if the sentance structure works for that
+#. case.
+#.
+#: libexplain/buffer/errno/rename.c:367
+msgid ""
+"the file system containing the file has no room for the new directory "
+"entry"
+msgstr ""
+
+#.
+#. This message is used when explaining why some
+#. permission mode bits are ignored.
+#.
+#. %1$s => text representation of the "rwx" bits, including the
+#.         quotes.  The 3-character string will look like ls -l
+#.         output.
+#.
+#: libexplain/have_permission.c:253
 #, c-format
 msgid "the group permission mode %s is ignored"
 msgstr ""
 
 #.
-#. This message is used when explaining why
-#. some permission mode bits are ignored.  The %s string
-#. will be the "rwx" bits, including the quotes, as.
-#. The 3-character string will look like ls -l output.
+#. This message is used to explain an EINVAL error
+#. reported by the pathconf system call.
 #.
-#: libexplain/have_permission.c:175 libexplain/have_permission.c:263
+#. %1$s => the name of the system call argument containing
+#.         the 'name' selector, e.g. _PC_NAME_MAX
+#. %2$s => the name of the first argument, "pathname" or "fildes"
+#.
+#: libexplain/buffer/errno/pathconf.c:79
+#, c-format
+msgid "the implementation does not support an association of %s with %s"
+msgstr ""
+
+#.
+#. This message is used to explain an EACCES
+#. error reported by a bind(2) system call, in the case
+#. where a privileged port is specific, and the process
+#. does not have permission.
+#.
+#: libexplain/buffer/errno/bind.c:171
+msgid "the network port address is protected"
+msgstr ""
+
+#.
+#. This message is used when explaining why
+#. the "other" permission mode bits are ignored.
+#.
+#. %1$s => the "rwx" bits, including the quotes, like the
+#.         3-character string used in 'ls -l' output.
+#.
+#: libexplain/have_permission.c:308
 #, c-format
 msgid "the others permission mode %s is ignored"
 msgstr ""
@@ -639,28 +1533,95 @@ msgstr ""
 #. permission mode bits are used when determining file access
 #. permsiions.
 #.
-#. The %s string will contain "rwx", including the quotes, in a
-#. form resembling the ls -l representation of mode bits.
+#. %1$s => the "rwx" mode representation, including the quotes, in a
+#.         form resembling the ls -l representation of mode bits.
 #.
-#: libexplain/have_permission.c:341
+#: libexplain/have_permission.c:281
 #, c-format
 msgid "the others permission mode is %s"
 msgstr ""
 
 #.
-#. This message supplements the "no inode modify
-#. permission" message, explaining that the process efective uid
-#. must match the file uid.
+#. This message is used when explaining which
+#. permission mode bits are ignored when determining
+#. file access permissions.
 #.
-#. %1$s => the numeric uid of the process, and the corresponding
+#. %1$s => the kind of GID, "real GID" or "effective GID",
+#.         already translated
+#. %2$s => the GID of the process, number and name.
+#. %3$s => the file type, e.g. "directory" or "regular file"
+#. %4$s => the owner of the file, number and name.
+#. %5$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#: libexplain/have_permission.c:169
+#, c-format
+msgid ""
+"the process %s %s does not match the %s owner %s so the owner permission "
+"mode %s is ignored"
+msgstr ""
+
+#.
+#. This message supplements the "no inode modify
+#. permission" message, explaining that the process effective UID
+#. must match the file owner UID.
+#.
+#. %1$s => thekind of UID, eother "real UID" or "effective UID"
+#.         already translated
+#. %2$s => the numeric UID of the process, and the corresponding
 #.         login name from the password file, if available.
-#. %2$s => the numeric uid of the file owner, and the
+#. %3$s => the name of the offending system call argument,
+#.         possibly with some additional file type info
+#. %4$s => the numeric UID of the file owner, and the
 #.         corresponding login name from the password file, if
 #.         available.
 #.
-#: libexplain/buffer/errno/path_resolution.c:556
+#: libexplain/buffer/does_not_have_inode_modify_permission.c:93
 #, c-format
-msgid "the process UID %s does not match the file UID %s"
+msgid "the process %s %s does not match the %s owner UID %s"
+msgstr ""
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permissions.
+#.
+#. %1$s => the kind of GID, "real GID" or "effective GID",
+#.         already translated
+#. %2$s => the GID of the process, number and name.
+#. %3$s => the file type, e.g. 'directory' or 'regular file'
+#. %4$s => the group of the file, number and name.
+#. %5$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#: libexplain/have_permission.c:220
+#, c-format
+msgid ""
+"the process %s %s matches the %s group GID %s and the group permission "
+"mode is %s"
+msgstr ""
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permissions.
+#.
+#. %1$s => the kind of UID, "real UID" or "effective UID",
+#.         already translated.
+#. %2$s => the UID of the process, number and name.
+#. %3$s => the file type, e.g. "directory" or "regular file"
+#. %4$s => the owner of the file, number and name.
+#. %5$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#: libexplain/have_permission.c:118
+#, c-format
+msgid ""
+"the process %s %s matches the %s owner UID %s and the owner permission "
+"mode is %s"
 msgstr ""
 
 #.
@@ -670,6 +1631,60 @@ msgstr ""
 #.
 #: libexplain/buffer/emfile.c:38
 msgid "the process already has the maximum number of file descriptors open"
+msgstr ""
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available,
+#. but the call attempted to only the GID.
+#.
+#: libexplain/buffer/errno/chown.c:268
+msgid ""
+"the process did not have the required permissions to change the group GID"
+msgstr ""
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available,
+#. but the call attempted to change only the UID.
+#.
+#: libexplain/buffer/errno/chown.c:250
+msgid ""
+"the process did not have the required permissions to change the owner UID"
+msgstr ""
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available,
+#. but the call attempted to change both the UID and the GID.
+#.
+#: libexplain/buffer/errno/chown.c:235
+msgid ""
+"the process did not have the required permissions to change the owner "
+"UID and group GID"
+msgstr ""
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available.
+#.
+#: libexplain/buffer/errno/chown.c:282
+msgid ""
+"the process did not have the required permissions to change the owner "
+"UID or group GID"
+msgstr ""
+
+#.
+#. This message is used when wait(2) is called and
+#. the process does not have any unwaited-for child
+#. processes.
+#.
+#: libexplain/buffer/no_outstanding_children.c:34
+msgid "the process does not have any unwaited-for child processes"
 msgstr ""
 
 #.
@@ -688,9 +1703,18 @@ msgstr ""
 #.         call argument, the name of the directory, and the
 #.         file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:461
+#: libexplain/buffer/errno/path_resolution.c:488
 #, c-format
 msgid "the process does not have execute permission to the %s in the %s"
+msgstr ""
+
+#.
+#. This message is used when a process does not have
+#. inode modification permission to something it attempts to
+#. modify); for example, fchmod.
+#.
+#: libexplain/buffer/does_not_have_inode_modify_permission.c:144
+msgid "the process does not have inode modification permission"
 msgstr ""
 
 #.
@@ -709,7 +1733,7 @@ msgstr ""
 #.         call argument, the name of the directory, and the
 #.         file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:521
+#: libexplain/buffer/does_not_have_inode_modify_permission.c:237
 #, c-format
 msgid ""
 "the process does not have inode modification permission to the %s in the "
@@ -732,7 +1756,7 @@ msgstr ""
 #.         call argument, the name of the directory, and the
 #.         file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:615
+#: libexplain/buffer/errno/path_resolution.c:548
 #, c-format
 msgid "the process does not have read permission to the %s in the %s"
 msgstr ""
@@ -743,11 +1767,11 @@ msgstr ""
 #. (Only used for problems with "." and "/".)
 #. Different language grammars may need to rearrange the parts.
 #.
-#. %s => The pathname, the directory in question.  It will
-#.       include the name of the function call argument, the
-#.       name of the directory, file type "directory".
+#. %1$s => The pathname, the directory in question.  It will
+#.         include the name of the function call argument, the
+#.         name of the directory, file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:403
+#: libexplain/buffer/errno/path_resolution.c:429
 #, c-format
 msgid "the process does not have search permission to the %s"
 msgstr ""
@@ -765,9 +1789,20 @@ msgstr ""
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:365
+#: libexplain/buffer/errno/path_resolution.c:390
 #, c-format
 msgid "the process does not have search permission to the %s in the %s"
+msgstr ""
+
+#.
+#. This message is used as a generic explanation
+#. of an EPERM error returned by any system call that does
+#. not provide a more specific explanation.
+#.
+#: libexplain/buffer/errno/generic.c:53
+msgid ""
+"the process does not have the appropriate privileges to use this system "
+"call"
 msgstr ""
 
 #.
@@ -786,7 +1821,7 @@ msgstr ""
 #.         call argument, the name of the directory, and the
 #.         file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:674
+#: libexplain/buffer/errno/path_resolution.c:607
 #, c-format
 msgid "the process does not have write permission to the %s in the %s"
 msgstr ""
@@ -805,7 +1840,7 @@ msgstr ""
 #.         new directory entry in question (will never have slashes).
 #.         It will include the name of the new file, and the file type.
 #.
-#: libexplain/buffer/errno/path_resolution.c:725
+#: libexplain/buffer/errno/path_resolution.c:658
 #, c-format
 msgid ""
 "the process does not have write permission to the %s, this is needed to "
@@ -813,79 +1848,21 @@ msgid ""
 msgstr ""
 
 #.
-#. This message is used when explaining which
-#. permission mode bits are ignored when determining file
-#. access permissions.
+#. This message is used when the process has
+#. insufficient permissions to a directory to remove a directory
+#. entry from it.
 #.
-#. %1$s => the effective GID of the process, number and name.
-#. %2$s => the file type, e.g. "directory" or "regular file"
-#. %3$s => the group of the file, number and name.
-#. %4$s => The mode bits like "rwx", including the quotes, in
-#.         a form resembling the ls -l representation of mode
-#.         bits.
+#. %1$s => The name of the offending system call argument, the
+#.         quoted name of the corresponding directory, and its
+#.         file type already translated.
+#. %2$s => The quoted name of the directory component, and its
+#.         file type already translated.
 #.
-#: libexplain/have_permission.c:319
+#: libexplain/buffer/errno/path_resolution.c:914
 #, c-format
 msgid ""
-"the process effective GID %s does not match the %s group %s so the group "
-"permission mode %s is ignored"
-msgstr ""
-
-#.
-#. This message is used when explaining which
-#. permission mode bits are used when determining file access
-#. permissions.
-#.
-#. %1$s => the effective GID of the process, number and name.
-#. %2$s =? the file type, e.g. 'directory' or 'regular file'
-#. %3$s => the group of the file, number and name.
-#. %4$s => The mode bits like "rwx", including the quotes, in
-#.         a form resembling the ls -l representation of mode
-#.         bits.
-#.
-#: libexplain/have_permission.c:247
-#, c-format
-msgid ""
-"the process effective GID %s matches the %s group %s and the group "
-"permission mode is %s"
-msgstr ""
-
-#.
-#. This message is used when explaining which
-#. permission mode bits are ignored when determining
-#. file access permissions.
-#.
-#. %1$s => the effective UID of the process, number and name.
-#. %2$s => the file type, e.g. "firectory" or "regular file"
-#. %3$s => the owner of the file, number and name.
-#. %4$s => The mode bits like "rwx", including the quotes, in
-#.         a form resembling the ls -l representation of mode
-#.         bits.
-#.
-#: libexplain/have_permission.c:215 libexplain/have_permission.c:286
-#, c-format
-msgid ""
-"the process effective UID %s does not match the %s owner %s so the owner "
-"permission mode %s is ignored"
-msgstr ""
-
-#.
-#. This message is used when explaining which
-#. permission mode bits are used when determining file access
-#. permissions.
-#.
-#. %1$s => the effective UID of the process, number and name.
-#. %2$s => the file type, e.g. "directory" or "regular file"
-#. %3$s => the owner of the file, number and name.
-#. %4$s => The mode bits like "rwx", including the quotes, in
-#.         a form resembling the ls -l representation of mode
-#.         bits.
-#.
-#: libexplain/have_permission.c:130
-#, c-format
-msgid ""
-"the process effective UID %s matches the %s owner %s and the owner "
-"permission mode is %s"
+"the process does not have write permission to the %s, this is needed to "
+"remove the directory entry for the %s"
 msgstr ""
 
 #.
@@ -904,10 +1881,9 @@ msgstr ""
 #. function is asked to wait for a process that does
 #. not exist.
 #.
-#. The %s string is the name of the offending
-#. argument.
+#. %1$s => the name of the offending system call argument
 #.
-#: libexplain/buffer/errno/waitpid.c:104
+#: libexplain/buffer/errno/waitpid.c:103
 #, c-format
 msgid "the process specified by %s does not exist"
 msgstr ""
@@ -915,14 +1891,207 @@ msgstr ""
 #.
 #. This message is use when a wait*()
 #. function is asked to wait for a process that is
-#. not a child of the calling process.
+#. not a child of the process.
 #.
-#. The %s string is the name of the offending
-#. argument.
+#. %1$s => the name of the offending system call argument
 #.
 #: libexplain/buffer/errno/waitpid.c:86
 #, c-format
-msgid "the process specified by %s is not a child of the calling process"
+msgid "the process specified by %s is not a child of this process"
+msgstr ""
+
+#.
+#. This message is used to explain an EPERM error
+#. reported by the connect(2) system call, in the case where
+#. the process tried to connect to a broadcast address
+#. without having the socket broadcast flag enabled; or, the
+#. connection request failed because of a local firewall
+#. rule
+#.
+#: libexplain/buffer/errno/connect.c:110
+msgid ""
+"the process tried to connect to a broadcast address without having the "
+"socket broadcast flag enabled; or, the connection request failed because "
+"of a local firewall rule"
+msgstr ""
+
+#.
+#. This message is used to explain an ECONNREFUSED
+#. error reported by the connect(2) system call, in the
+#. case where the remote server is accessible but is not
+#. listening for connections to the given port; or, an
+#. intervening firewall refused the connection.
+#.
+#: libexplain/buffer/errno/connect.c:200
+msgid ""
+"the remote server is accessible but is not listening for connections to "
+"the given port; or, an intervening firewall refused the connection"
+msgstr ""
+
+#.
+#. This message is used when explaining an
+#. EACCES error returned by an open(2) system call.
+#. Usually path_resolution(7) will have a better
+#. explanation, this explanation is only used when a
+#. more specific explanation is not available.
+#.
+#: libexplain/buffer/errno/open.c:204
+msgid ""
+"the requested access to the file is not allowed, or search permission is "
+"denied for one of the directories in the path prefix of pathname, or the "
+"file did not exist yet and write access to the parent directory is not "
+"allowed"
+msgstr ""
+
+#.
+#. This message is used to explain an EADDRNOTAVAIL
+#. error reported by a bind(2) system call, in the case where
+#. the requested network address was not local or a nonexistent
+#. interface was requested.
+#.
+#: libexplain/buffer/errno/bind.c:273
+msgid ""
+"the requested network address was not local or a nonexistent interface "
+"was requested"
+msgstr ""
+
+#.
+#. This message is used when an AF_UNIX socket
+#. file already exists when it should not.  While the
+#. bind(2) call will create the entry in the file
+#. system, the correponding close(2) will not remove it
+#. again, the programmer must explicitly unlink(2) it.
+#.
+#: libexplain/buffer/errno/bind.c:190
+msgid ""
+"the socket file already exists, and it should not; when you are done "
+"with AF_UNIX sockets you must deliberately unlink(2) the socket file, it "
+"does not happen automatically"
+msgstr ""
+
+#.
+#. This message is used to explain an EINVAL error
+#. returned by the bind(2) system call, in the case where
+#. the socket is already bound to an address.
+#.
+#. %1$s => a representation of the struct sockaddr that the
+#.         socket is already bound to.
+#.
+#: libexplain/buffer/errno/bind.c:107
+#, c-format
+msgid "the socket is already bound to %s"
+msgstr ""
+
+#.
+#. This message is used to explain an EINVAL
+#. error returned by the bind(2) system call, in the case
+#. where the socket is already bound to an address, but the
+#. address cannot be determined.
+#.
+#: libexplain/buffer/errno/bind.c:122
+msgid "the socket is already bound to an address"
+msgstr ""
+
+#.
+#. This message is used to explain an EISCONN
+#. error reported by the connect(2) system call, in the case
+#. where the socket is already connected.
+#.
+#. %1$s => The network address to which it is connected
+#.
+#: libexplain/buffer/errno/connect.c:255
+#, c-format
+msgid "the socket is already connected to %s"
+msgstr ""
+
+#.
+#. This message is used to explain an EISCONN
+#. error reported by the connect(2) system call, in the case
+#. where the socket is already connected, but the exact
+#. address cannot be determined.
+#.
+#: libexplain/buffer/errno/connect.c:270
+msgid "the socket is already connected to a network address"
+msgstr ""
+
+#.
+#. This message is used to explain an EINVAL
+#. error returned by a listen(2) system call.
+#.
+#: libexplain/buffer/errno/listen.c:165
+msgid "the socket is already connected, or the socket has been shut down"
+msgstr ""
+
+#.
+#. This message is used to explain an EAGAIN
+#. error reprted by an accept(2) system call, in the case
+#. where the socket is marked non-blocking (O_NONBLOCK) and
+#. no connections are waiting to be accepted.
+#.
+#: libexplain/buffer/errno/accept.c:76
+msgid ""
+"the socket is marked non-blocking and no connections are present to be "
+"accepted"
+msgstr ""
+
+#.
+#. This message is used to explain an EALREADY
+#. error reported by the connect(2) system call, in the
+#. case where the socket is non-blocking and a previous
+#. connection attempt has not yet been completed.
+#.
+#: libexplain/buffer/errno/connect.c:179
+msgid ""
+"the socket is non-blocking and a previous connection attempt has not yet "
+"been completed"
+msgstr ""
+
+#.
+#. This message is used to explain an EINPROGRESS
+#. error reported by the connect(2) system call, in the
+#. case where the socket is non-blocking and the connection
+#. cannot be completed immediately.
+#.
+#: libexplain/buffer/errno/connect.c:220
+msgid ""
+"the socket is non-blocking and the connection cannot be completed "
+"immediately"
+msgstr ""
+
+#.
+#. This message is used to explain an EDESTADDRREQ
+#. error returned by a listen(2) system call.
+#.
+#: libexplain/buffer/errno/listen.c:149
+msgid ""
+"the socket is not bound to a local address, and the protocol does not "
+"support listening on an unbound socket"
+msgstr ""
+
+#.
+#. This message is used to explain an EINVAL error
+#. reported by the accept(2) system call, in the case where
+#. the file descriptor is actually a socket, but is not in a
+#. state that permits the use of the accept(2) system call.
+#.
+#: libexplain/buffer/errno/accept.c:133
+msgid "the socket is not listening for connections"
+msgstr ""
+
+#.
+#. This message is used to explain an EOPNOTSUPP
+#. error returned by a listen(2) system call.
+#.
+#: libexplain/buffer/errno/accept.c:157
+msgid "the socket is not of a type that supports the accept(2) system call"
+msgstr ""
+
+#.
+#. This message is used to explain an EOPNOTSUPP
+#. error returned by a listen(2) system call.
+#.
+#: libexplain/buffer/errno/listen.c:135
+msgid "the socket is not of a type that supports the listen(2) system call"
 msgstr ""
 
 #.
@@ -939,41 +2108,112 @@ msgid ""
 msgstr ""
 
 #.
-#. This message is issued when a particular file does
-#. not exist in a directory.
-#. %1$s => the file that does not exist
-#. %2$s => the directory that the file should be in,
-#.         including the name of the relevant system call argument
+#. This message is used when explaining an ENFILE error.
 #.
+#. Note that it could be followed by the actual limit in
+#. preentheses (if it can be determined) so it helps of the last
+#. phrase in the message can sensably be followed by it.
+#.
+#: libexplain/buffer/enfile.c:102
+msgid "the system limit on the total number of open files has been reached"
+msgstr ""
+
 #.
 #. This message is used when directory does not have a
 #. directory entry for the named component.
 #.
 #. Different language grammars may need to rearrange the parts.
 #.
-#. %1$s => The name of the offenting path component (will never have
+#. %1$s => The name of the offending path component (will never have
 #.         slashes).  It will be quoted.
 #. %2$s => The name of the directory that contains the problematic
 #.         component; it may have zero, one or more slashes in it.  Will
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:294
-#: libexplain/buffer/errno/path_resolution.c:854
+#: libexplain/buffer/errno/path_resolution.c:317
 #, c-format
 msgid "there is no %s in the %s"
 msgstr ""
 
 #.
-#. This message is used when * explaining
-#. the capapbilities required to exceed system limits
-#. on the numbe rof processes a user may execute
+#. This message is used when getcwd() is trying
+#. to reconstruct the problem, and discovers that the
+#. backwards ".." chain is broken.
+#.
+#: libexplain/buffer/get_current_directory.c:182
+#, c-format
+msgid ""
+"there is no directory entry in %s that has the same inode number as %s; "
+"this means that the directory has been unlinked"
+msgstr ""
+
+#.
+#. This message is used to explain an
+#. ENODEV error reported by an open(2) system
+#. call, which shoudl actually have been a ENXIO
+#. error instead.  They are easy to confuse,
+#. they have exactly the same English text
+#. returned from strerror(3).
+#.
+#: libexplain/buffer/errno/open.c:566
+msgid ""
+"this is a Linux kernel bug, in this situation POSIX says ENXIO should "
+"have been returned"
+msgstr ""
+
+#.
+#. This message is used to explain that an error the
+#. user is reading is more likely to be a software bug than it
+#. is to be use user's fault.  E.g. things like EBADF and EFAULT
+#. that are clearly beyond the user's control.
+#.
+#: libexplain/buffer/software_error.c:36
+msgid ""
+"this is more likely to be a software error (a bug) than it is to be a "
+"user error"
+msgstr ""
+
+#.
+#. This message is used when explaining
+#. the capabilities required to exceed system limits
+#. on the number of processes a user may execute
 #. simultaniously.
 #.
 #: libexplain/buffer/errno/fork.c:89
 msgid ""
 "to exceed the limit on the number of processes, the process must have "
 "either the CAP_SYS_ADMIN or the CAP_SYS_RESOURCE capability"
+msgstr ""
+
+#.
+#. This message is used to explain an EACCES error,
+#. where nested #! interpreter files are attempted.
+#.
+#. %1$s => The quoted pathname of the first file that contains an
+#.         interpreter (#!) line, that points at yet another
+#.         interpreted file.
+#.
+#: libexplain/buffer/errno/path_resolution.c:236
+#, c-format
+msgid "too many levels of interpreters (%s)"
+msgstr ""
+
+#.
+#. This message is used when too
+#. may links (ELOOP or EMLINK) are seen when
+#. resolving a path.
+#.
+#. It may ioptionally be followed by the limit,
+#. in parentheses, so sentence structure that
+#. works that way would be a plus.
+#.
+#. %1$s => The name of the offending system call
+#.         argument.
+#.
+#: libexplain/buffer/errno/path_resolution.c:1629
+#, c-format
+msgid "too many symbolic links were encountered in %s"
 msgstr ""
 
 #.
@@ -986,6 +2226,48 @@ msgid "unknown file type"
 msgstr ""
 
 #.
+#. This message is used when streror (or strerror_r)
+#. is unable to translate an errno value, in which ase this
+#. fall-back message is used.  This does not occur with glibc,
+#. but other libc implemntations are more flakey.
+#.
+#: libexplain/buffer/strerror.c:62
+msgid "unknown system error"
+msgstr ""
+
+#.
+#. This message is used when supplementing
+#. and explanation for an EACCES error reported by
+#. an access(2) system call, in the case where the
+#. effective ID does not match the actual ID.
+#.
+#. This text taken from the Linux access(2) man page.
+#.
+#: libexplain/buffer/errno/access.c:141
+msgid ""
+"warning: using access(2) to check if a user is authorized, for example "
+"to verify a file before actually using open(2), creates a security hole, "
+"because an attacker might exploit the short time interval between "
+"checking the file and opening the file to manipulate it; for this "
+"reason, this use of access(2) should be avoided"
+msgstr ""
+
+#.
+#. This message is used to explain an EACCES error,
+#. when attempting to write a file, when path_resolution(7) can
+#. not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#. %2$s => identical to the above
+#.
+#: libexplain/buffer/eacces.c:99
+#, c-format
+msgid ""
+"write access to %s was not allowed, or one of the directory components "
+"of %s did not allow search permission"
+msgstr ""
+
+#.
 #. This message is used when a process attempts to
 #. write to an executable file that is currently being executed.
 #.
@@ -993,4 +2275,31 @@ msgstr ""
 msgid ""
 "write access was requested to an executable image that is currently "
 "being executed"
+msgstr ""
+
+#.
+#. This message is used to explan an EACCES
+#. error reported by a rename(2) system call.  This is
+#. the generic explanation given when renaming things
+#. other than directories when path_resolution(7) is
+#. unable to provide a more specific explanation.
+#.
+#: libexplain/buffer/errno/rename.c:229
+msgid ""
+"write permission is denied for the directory containing oldpath or "
+"newpath; or, search permission is denied for one of the directory "
+"components of oldpath or newpath"
+msgstr ""
+
+#.
+#. This message is used when open(2) received an
+#. ENODEV error, and the pathname it attempted to open was a
+#. socket (first character "s" is ls(1) long output).  They
+#. probably meant to use a named pipe (first character "p" in
+#. ls(1) long outout).
+#.
+#: libexplain/buffer/errno/open.c:89
+msgid ""
+"you cannot use open(2) to open socket files, you must use connect(2) "
+"instead; a named pipe may be what was intended"
 msgstr ""

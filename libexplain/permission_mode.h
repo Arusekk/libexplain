@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -70,12 +70,14 @@ void libexplain_message_permission_mode(char *message, size_t message_size,
 const char *libexplain_permission_mode(int mode);
 
 /**
-  * The libexplain_permission_mode_parse function may be used to parse a
-  * strings containing a symbolic representation of a permission mode,
-  * turning it into a permission mode value.
+  * The libexplain_permission_mode_parse_or_die function may be used to
+  * parse a strings containing a symbolic representation of a permission
+  * mode, turning it into a permission mode value.
   *
   * @param text
   *     The text to be parsed to extract a permission mode value.
+  * @param cptn
+  *     additional text to add to the start of the error message
   * @returns
   *     permission mode value
   * @note
@@ -83,6 +85,6 @@ const char *libexplain_permission_mode(int mode);
   *     and exit(EXIT_FAILURE) is called.  If there is an error, this
   *     function will not return.
   */
-int libexplain_permission_mode_parse(const char *text);
+int libexplain_permission_mode_parse_or_die(const char *text, const char *cptn);
 
 #endif /* LIBEXPLAIN_PERMISSION_MODE_H */

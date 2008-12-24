@@ -1,7 +1,7 @@
 Source: libexplain
 Section: devel
 Priority: optional
-Maintainer: Peter Miller <millerp@canb.auug.org.au>
+Maintainer: Peter Miller <pmiller@opensource.org.au>
 Homepage: http://libexplain.sourceforge.net/
 Build-Depends: bison, debhelper (>= 5), groff, libcap-dev, libtool, lsof
 Standards-Version: 3.8.0

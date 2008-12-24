@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,7 @@ TEST_SUBJECT="fcntl vs EINVAL"
 
 cat > test.ok << 'fubar'
 fcntl(fildes = 42, command = F_DUPFD, arg = 12345) failed, Invalid argument
-(EINVAL) because the argument is greater than the maximum allowable value
-(1024)
+(EINVAL) because arg is outside the allowed range for file descriptors
 fubar
 test $? -eq 0 || no_result
 

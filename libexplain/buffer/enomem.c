@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,16 +20,21 @@
 #include <libexplain/ac/sys/resource.h>
 
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/rlimit.h>
 
 
 void
 libexplain_buffer_enomem_kernel(libexplain_string_buffer_t *sb)
 {
-    libexplain_string_buffer_puts
+    libexplain_buffer_gettext
     (
         sb,
-        "insufficient kernel memory was available"
+        /*
+         * xgettext:  This message is used when explaining an ENOMEM
+         * error, when it is specific to kernel memory.
+         */
+        i18n("insufficient kernel memory was available")
     );
 }
 
@@ -39,10 +44,17 @@ libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
 {
     struct rlimit   rlim;
 
-    libexplain_string_buffer_puts
+    libexplain_buffer_gettext
     (
         sb,
-        "insufficient user-space memory was available"
+        /*
+         * xgettext:  This message is used when explaining an ENOMEM
+         * error, when it is specific to user space memory.
+         *
+         * Note that this may be followed by the actual limit, if
+         * available.
+         */
+        i18n("insufficient user-space memory was available")
     );
 
     /*
@@ -52,14 +64,24 @@ libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
     {
         if (rlim.rlim_cur == RLIM_INFINITY)
         {
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_puts(sb, ", ");
+            libexplain_buffer_gettext
             (
                 sb,
-                ", probably by exhausting swap space"
+                /*
+                 * xgettext:  This message is used when supplementing
+                 * an explation an ENOMEM error, when it is specific to
+                 * user space memory, and the process has an infinite
+                 * memory limit, meaning that a system limit on the
+                 * total amout of user space memory available to all
+                 * processes has been exhausted.
+                 */
+                i18n("probably by exhausting swap space")
             );
         }
         else
         {
+            libexplain_string_buffer_putc(sb, ' ');
             libexplain_buffer_rlimit(sb, &rlim);
         }
     }
@@ -69,9 +91,14 @@ libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
 void
 libexplain_buffer_enomem_kernel_or_user(libexplain_string_buffer_t *sb)
 {
-    libexplain_string_buffer_puts
+    libexplain_buffer_gettext
     (
         sb,
-        "insufficient user-space or kernel memory was available"
+        /*
+         * xgettext:  This message is used when explaining an ENOMEM
+         * error, when it is not possible to distinguish whether it was
+         * kernel memory of user space memory that was exhausted.
+         */
+        i18n("insufficient user-space or kernel memory was available")
     );
 }

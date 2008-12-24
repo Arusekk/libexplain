@@ -19,13 +19,13 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/netdb.h>
 
+#include <libexplain/buffer/address_family.h>
 #include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/enfile.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/socket.h>
-#include <libexplain/buffer/socket_domain.h>
 #include <libexplain/buffer/socket_protocol.h>
 #include <libexplain/buffer/socket_type.h>
 #include <libexplain/explanation.h>
@@ -33,28 +33,49 @@
 
 static void
 libexplain_buffer_errno_socket_system_call(libexplain_string_buffer_t *sb,
-    int errnum, int domain, int type, int protocol)
+    int errnum, int family, int type, int protocol)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "socket(domain = ");
-    libexplain_buffer_socket_domain(sb, domain);
+    libexplain_string_buffer_puts(sb, "socket(family = ");
+    libexplain_buffer_address_family(sb, family);
     libexplain_string_buffer_puts(sb, ", type = ");
     libexplain_buffer_socket_type(sb, type);
     libexplain_string_buffer_puts(sb, ", protocol = ");
     libexplain_buffer_socket_protocol(sb, protocol);
     libexplain_string_buffer_putc(sb, ')');
+
+    /*
+     * Afterwards,
+     *     getsockname(2);sa.sa_family
+     *         can be used to retrieve the 'family'
+     *     getsockopt(fildes, SOL_SOCKET, SO_TYPE, ...)
+     *         can be used to retrieve the 'type'
+     *     lsof(1) ... or the techniques it uses, on Linux
+     *         can be used to retrieve the 'protocol'
+     */
 }
 
 
 static void
 libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
-    int errnum, int domain, int type, int protocol)
+    int errnum, int family, int type, int protocol)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/socket.html
+     *
+     * Domain     Types...                                  See Also
+     * AF_UNIX    SOCK_STREAM, SOCK_DGRAM, SOCK_SEQPACKET   unix(7)
+     * AF_INET                                              ip(7)
+     * AF_NETLINK                                           netlink(7)
+     * AF_X25     SOCK_SEQPACKET                            x25(7)
+     * AF_AX25                                              ax25(4)
+     * AF_APPLETALK                                         ddp(7), atalk(4)
+     * AF_PACKET                                            packet(7)
+     * AF_NETROM                                            netrom(4)
+     * AF_ROSE                                              rose(4)
+     * AF_RAW                                               raw(7)
      */
-    (void)domain;
-    (void)type;
+    (void)family;
     (void)protocol;
     switch (errnum)
     {
@@ -66,8 +87,22 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
             "the process does not have permission to create a socket of "
             "the specified type and/or protocol"
         );
-        if (type == SOCK_RAW || type == SOCK_PACKET)
+#if defined(SOCK_RAW) || defined(SOCK_PACKET)
+        switch (type)
+        {
+#ifdef SOCK_RAW
+        case SOCK_RAW:
+#endif
+#ifdef SOCK_PACKET
+        case SOCK_PACKET:
+#endif
             libexplain_buffer_dac_net_raw(sb);
+            break;
+
+        default:
+            break;
+        }
+#endif
         break;
 
     case EAFNOSUPPORT:
@@ -113,7 +148,7 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
         (
             sb,
             "the protocol type or the specified protocol is not "
-            "supported within this domain"
+            "supported within this address family"
         );
         break;
 
@@ -126,7 +161,7 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
 
 void
 libexplain_buffer_errno_socket(libexplain_string_buffer_t *sb, int errnum,
-    int domain, int type, int protocol)
+    int family, int type, int protocol)
 {
     libexplain_explanation_t exp;
 
@@ -135,7 +170,7 @@ libexplain_buffer_errno_socket(libexplain_string_buffer_t *sb, int errnum,
     (
         &exp.system_call_sb,
         errnum,
-        domain,
+        family,
         type,
         protocol
     );
@@ -143,7 +178,7 @@ libexplain_buffer_errno_socket(libexplain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
-        domain,
+        family,
         type,
         protocol
     );

@@ -40,16 +40,15 @@ libexplain_buffer_errno_fstat_system_call(libexplain_string_buffer_t *sb,
 }
 
 
-static void
+void
 libexplain_buffer_errno_fstat_explanation(libexplain_string_buffer_t *sb,
     int errnum, int fildes, const struct stat *buf)
 {
-    (void)fildes;
     (void)buf;
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, "fildes");
+        libexplain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case ENOMEM:

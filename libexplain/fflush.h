@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,9 @@
 
 #ifndef LIBEXPLAIN_FFLUSH_H
 #define LIBEXPLAIN_FFLUSH_H
+
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
 
 #include <stdio.h>
 
@@ -79,7 +82,8 @@ void libexplain_fflush_or_die(FILE *fp);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_fflush(FILE *fp);
+const char *libexplain_fflush(FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fflush function may be used to obtain a human
@@ -118,7 +122,8 @@ const char *libexplain_fflush(FILE *fp);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_errno_fflush(int errnum, FILE *fp);
+const char *libexplain_errno_fflush(int errnum, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fflush function may be used to obtain a human

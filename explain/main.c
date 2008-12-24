@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,43 +30,59 @@
 #include <libexplain/version_print.h>
 #include <libexplain/wrap_and_print.h>
 
+#include <explain/accept.h>
 #include <explain/access.h>
+#include <explain/bind.h>
 #include <explain/chdir.h>
 #include <explain/chmod.h>
 #include <explain/chown.h>
 #include <explain/close.h>
 #include <explain/closedir.h>
+#include <explain/connect.h>
 #include <explain/creat.h>
 #include <explain/dup.h>
+#include <explain/dup2.h>
 #include <explain/execve.h>
 #include <explain/fchdir.h>
 #include <explain/fchmod.h>
+#include <explain/fchown.h>
 #include <explain/fcntl.h>
+#include <explain/fdopen.h>
 #include <explain/ferror.h>
 #include <explain/fgetc.h>
 #include <explain/fgets.h>
 #include <explain/fopen.h>
 #include <explain/fork.h>
+#include <explain/fpathconf.h>
+#include <explain/fputc.h>
 #include <explain/fread.h>
 #include <explain/fstat.h>
 #include <explain/ftruncate.h>
+#include <explain/futimes.h>
 #include <explain/fwrite.h>
 #include <explain/getc.h>
 #include <explain/getchar.h>
+#include <explain/getcwd.h>
+#include <explain/getrlimit.h>
 #include <explain/gettimeofday.h>
 #include <explain/lchown.h>
 #include <explain/link.h>
+#include <explain/listen.h>
 #include <explain/lseek.h>
 #include <explain/lstat.h>
 #include <explain/mkdir.h>
 #include <explain/opendir.h>
 #include <explain/open.h>
+#include <explain/pathconf.h>
+#include <explain/putc.h>
+#include <explain/putchar.h>
 #include <explain/read.h>
 #include <explain/readdir.h>
 #include <explain/readlink.h>
 #include <explain/remove.h>
 #include <explain/rename.h>
 #include <explain/rmdir.h>
+#include <explain/select.h>
 #include <explain/socket.h>
 #include <explain/stat.h>
 #include <explain/strerror.h>
@@ -96,7 +112,7 @@ struct table_t
 static const table_t table[] =
 {
     /* ----------  A  ------------------------------------------------------- */
-    /* FIXME: add support for accept */
+    { "accept", explain_accept },
     { "access", explain_access },
     /* FIXME: add support for acct */
     /* FIXME: add support for add_key */
@@ -106,7 +122,7 @@ static const table_t table[] =
     /* FIXME: add support for alloc_hugepages */
     /* ----------  B  ------------------------------------------------------- */
     /* FIXME: add support for bdflush */
-    /* FIXME: add support for bind */
+    { "bind", explain_bind },
     /* FIXME: add support for break */
     /* FIXME: add support for brk */
     /* ----------  C  ------------------------------------------------------- */
@@ -124,14 +140,14 @@ static const table_t table[] =
     /* FIXME: add support for clone */
     { "close", explain_close },
     { "closedir", explain_closedir },
-    /* FIXME: add support for connect */
+    { "connect", explain_connect },
     { "creat", explain_creat },
     /* FIXME: add support for create_module */
     /* ----------  D  ------------------------------------------------------- */
     /* FIXME: add support for delete_module */
     /* FIXME: add support for dirfd */
     { "dup", explain_dup },
-    /* FIXME: add support for dup2 */
+    { "dup2", explain_dup2 },
     /* ----------  E  ------------------------------------------------------- */
     /* FIXME: add support for epoll_create */
     /* FIXME: add support for epoll_ctl */
@@ -145,10 +161,10 @@ static const table_t table[] =
     /* FIXME: add support for fallocate */
     { "fchdir", explain_fchdir },
     { "fchmod", explain_fchmod },
-    /* FIXME: add support for fchown */
+    { "fchown", explain_fchown },
     { "fcntl", explain_fcntl },
     /* FIXME: add support for fdatasync */
-    /* FIXME: add support for fdopen */
+    { "fdopen", explain_fdopen },
     /* FIXME: add support for fdopendir */
     { "ferror", explain_ferror },
     /* FIXME: add support for fflush */
@@ -161,9 +177,10 @@ static const table_t table[] =
     /* FIXME: add support for flock */
     { "fopen", explain_fopen },
     { "fork", explain_fork },
+    { "fpathconf", explain_fpathconf },
     /* FIXME: add support for fprintf */
     /* FIXME: add support for fpurge */
-    /* FIXME: add support for fputc */
+    { "fputc", explain_fputc },
     /* FIXME: add support for fputs */
     { "fread", explain_fread },
     /* FIXME: add support for free_hugepages */
@@ -179,13 +196,13 @@ static const table_t table[] =
     /* FIXME: add support for ftime */
     { "ftruncate", explain_ftruncate },
     /* FIXME: add support for futex */
-    /* FIXME: add support for futimes */
+    { "futimes", explain_futimes },
     { "fwrite", explain_fwrite },
     /* ----------  G  ------------------------------------------------------- */
     { "getc", explain_getc },
     { "getchar", explain_getchar },
     /* FIXME: add support for getcpu */
-    /* FIXME: add support for getcwd */
+    { "getcwd", explain_getcwd },
     /* FIXME: add support for getdents */
     /* FIXME: add support for getegid */
     /* FIXME: add support for geteuid */
@@ -204,7 +221,7 @@ static const table_t table[] =
     /* FIXME: add support for getpriority */
     /* FIXME: add support for getresgid */
     /* FIXME: add support for getresuid */
-    /* FIXME: add support for getrlimit */
+    { "getrlimit", explain_getrlimit },
     /* FIXME: add support for get_robust_list */
     /* FIXME: add support for getrusage */
     /* FIXME: add support for gets */
@@ -245,7 +262,7 @@ static const table_t table[] =
     { "lchown", explain_lchown },
     /* FIXME: add support for lgetxattr */
     { "link", explain_link },
-    /* FIXME: add support for listen */
+    { "listen", explain_listen },
     /* FIXME: add support for listxattr */
     /* FIXME: add support for llistxattr */
     /* FIXME: add support for lock */
@@ -295,6 +312,7 @@ static const table_t table[] =
     { "open", explain_open },
     { "opendir", explain_opendir },
     /* ----------  P  ------------------------------------------------------- */
+    { "pathconf", explain_pathconf },
     /* FIXME: add support for pause */
     /* FIXME: add support for pciconfig_iobase */
     /* FIXME: add support for pciconfig_read */
@@ -313,8 +331,8 @@ static const table_t table[] =
     /* FIXME: add support for profil */
     /* FIXME: add support for pselect6 */
     /* FIXME: add support for ptrace */
-    /* FIXME: add support for putc */
-    /* FIXME: add support for putchar */
+    { "putc", explain_putc },
+    { "putchar", explain_putchar },
     /* FIXME: add support for putpmsg */
     /* FIXME: add support for puts */
     /* FIXME: add support for putw */
@@ -324,7 +342,6 @@ static const table_t table[] =
     /* FIXME: add support for quotactl */
     /* ----------  R  ------------------------------------------------------- */
     { "read", explain_read },
-    /* FIXME: add support for read */
     /* FIXME: add support for readahead */
     { "readdir", explain_readdir },
     { "readlink", explain_readlink },
@@ -364,7 +381,7 @@ static const table_t table[] =
     /* FIXME: add support for sched_yield */
     /* FIXME: add support for security */
     /* FIXME: add support for seekdir */
-    /* FIXME: add support for select */
+    { "select", explain_select },
     /* FIXME: add support for semctl */
     /* FIXME: add support for semget */
     /* FIXME: add support for semop */
@@ -429,14 +446,12 @@ static const table_t table[] =
     /* FIXME: add support for statfs */
     /* FIXME: add support for stime */
     { "strerror", explain_strerror },
-    /* FIXME: add support for strerror */
     /* FIXME: add support for stty */
     /* FIXME: add support for swapoff */
     /* FIXME: add support for swapon */
     { "symlink", explain_symlink },
     /* FIXME: add support for sync */
     /* FIXME: add support for sync_file_range */
-    /* FIXME: add support for sys_errlist */
     /* FIXME: add support for sysfs */
     /* FIXME: add support for sysinfo */
     /* FIXME: add support for syslog */

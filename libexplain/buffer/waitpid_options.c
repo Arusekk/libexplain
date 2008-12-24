@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -36,47 +36,12 @@ static const libexplain_parse_bits_table_t table[] =
 void
 libexplain_buffer_waitpid_options(libexplain_string_buffer_t *sb, int options)
 {
-    int             first;
-    int             other;
-    const libexplain_parse_bits_table_t *tp;
-
-    first = 1;
-    other = 0;
-    while (options)
-    {
-        int             bit;
-
-        bit = options & -options;
-        options -= bit;
-        tp = libexplain_parse_bits_find_by_value(bit, table, SIZEOF(table));
-        if (tp)
-        {
-            if (!first)
-                libexplain_string_buffer_puts(sb, " | ");
-            libexplain_string_buffer_puts(sb, tp->name);
-            first = 0;
-        }
-        else
-        {
-            other |= bit;
-        }
-    }
-    if (other)
-    {
-        if (!first)
-            libexplain_string_buffer_puts(sb, " | ");
-        libexplain_string_buffer_printf(sb, "%#x", other);
-    }
-    else
-    {
-        if (first)
-            libexplain_string_buffer_putc(sb, '0');
-    }
+    libexplain_parse_bits_print(sb, options, table, SIZEOF(table));
 }
 
 
 int
-libexplain_parse_waitpid_options(const char *text)
+libexplain_parse_waitpid_options_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits(text, table, SIZEOF(table));
+    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

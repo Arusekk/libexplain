@@ -19,7 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
-#include <libexplain/buffer/socket_domain.h>
+#include <libexplain/buffer/address_family.h>
 #include <libexplain/buffer/socket_protocol.h>
 #include <libexplain/buffer/socket_type.h>
 #include <libexplain/socket.h>
@@ -41,41 +41,9 @@ explain_socket(int errnum, int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    domain = libexplain_parse_socket_domain(argv[0]);
-    if (domain < 0)
-    {
-        fprintf
-        (
-            stderr,
-            "option \"%s\" does not look like a socket domain\n",
-            argv[0]
-        );
-        exit(EXIT_FAILURE);
-    }
-
-    type = libexplain_parse_socket_type(argv[1]);
-    if (type < 0)
-    {
-        fprintf
-        (
-            stderr,
-            "option \"%s\" does not look like a socket type\n",
-            argv[1]
-        );
-        exit(EXIT_FAILURE);
-    }
-
-    protocol = libexplain_parse_socket_protocol(argv[2]);
-    if (protocol < 0)
-    {
-        fprintf
-        (
-            stderr,
-            "option \"%s\" does not look like a socket protocol\n",
-            argv[1]
-        );
-        exit(EXIT_FAILURE);
-    }
+    domain = libexplain_parse_address_family_or_die(argv[0], "socket arg 1");
+    type = libexplain_parse_socket_type_or_die(argv[1], "socket arg 2");
+    protocol = libexplain_parse_socket_protocol_or_die(argv[2], "socket arg 3");
 
     libexplain_wrap_and_print
     (

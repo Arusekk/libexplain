@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,9 +27,9 @@
 #include <libexplain/buffer/errno/fflush.h>
 #include <libexplain/buffer/errno/write.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/pointer.h>
-#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/buffer/stream.h>
 #include <libexplain/explanation.h>
 #include <libexplain/open_flags.h>
 #include <libexplain/stream_to_fildes.h>
@@ -41,8 +41,7 @@ libexplain_buffer_errno_fflush_system_call(libexplain_string_buffer_t *sb,
 {
     (void)errnum;
     libexplain_string_buffer_puts(sb, "fflush(fp = ");
-    libexplain_buffer_pointer(sb, fp);
-    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_buffer_stream(sb, fp);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -55,7 +54,7 @@ libexplain_buffer_errno_fflush_explanation(libexplain_string_buffer_t *sb,
 
     if (!fp)
     {
-        libexplain_buffer_gettext(sb, i18n("fp is the NULL pointer"));
+        libexplain_buffer_is_the_null_pointer(sb, "fp");
         return;
     }
     fildes = libexplain_stream_to_fildes(fp);

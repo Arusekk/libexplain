@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -40,9 +40,11 @@ void libexplain_buffer_strsignal(libexplain_string_buffer_t *sb, int signum);
   *
   * @param text
   *     The text to be parsed.
+  * @param caption
+  *     addition text to add to start of error message
   * @returns
-  *     the signal number, or -1 on error.
+  *     the signal number
   */
-int libexplain_signal_parse(const char *text);
+int libexplain_signal_parse_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_STRSIGNAL_H */

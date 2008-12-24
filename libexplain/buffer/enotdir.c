@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,6 +24,7 @@
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/file_type.h>
+#include <libexplain/buffer/wrong_file_type.h>
 
 
 void
@@ -42,7 +43,7 @@ libexplain_buffer_enotdir(libexplain_string_buffer_t *sb, const char *pathname,
         )
     )
     {
-        if (final_component->must_be_a_directory)
+        if (must_be_a_directory(final_component))
         {
             libexplain_string_buffer_printf
             (
@@ -107,9 +108,9 @@ libexplain_buffer_enotdir2(libexplain_string_buffer_t *sb,
 
         if
         (
-            oldpath_final_component->must_be_a_directory
+            must_be_a_directory(oldpath_final_component)
         ||
-            newpath_final_component->must_be_a_directory
+            must_be_a_directory(newpath_final_component)
         )
         {
             libexplain_string_buffer_printf
@@ -138,18 +139,5 @@ void
 libexplain_buffer_enotdir_fd(libexplain_string_buffer_t *sb, int fildes,
     const char *caption)
 {
-    struct stat     st;
-
-    libexplain_string_buffer_puts(sb, caption);
-    if (fstat(fildes, &st) >= 0)
-    {
-        libexplain_string_buffer_puts(sb, " refers to a ");
-        libexplain_buffer_file_type(sb, st.st_mode);
-        libexplain_string_buffer_puts(sb, ", not a ");
-    }
-    else
-    {
-        libexplain_string_buffer_puts(sb, " does not refer to a ");
-    }
-    libexplain_buffer_file_type(sb, S_IFDIR);
+    libexplain_buffer_wrong_file_type(sb, fildes, caption, S_IFDIR);
 }

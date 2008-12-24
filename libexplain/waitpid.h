@@ -24,6 +24,8 @@
   * @brief explain waitpid(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -94,7 +96,8 @@ int libexplain_waitpid_or_die(int pid, int *status, int options);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_waitpid(int pid, int *status, int options);
+const char *libexplain_waitpid(int pid, int *status, int options)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_waitpid function is
@@ -141,7 +144,8 @@ const char *libexplain_waitpid(int pid, int *status, int options);
   *     many other functions in this library.
   */
 const char *libexplain_errno_waitpid(int errnum, int pid, int *status,
-    int options);
+    int options)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_waitpid function is

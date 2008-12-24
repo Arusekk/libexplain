@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -28,5 +28,14 @@ libexplain_path_is_efault(const char *path)
 {
     struct stat     st;
 
+    if (!path)
+        return 1;
     return (lstat(path, &st) < 0 && errno == EFAULT);
+}
+
+
+int
+libexplain_pointer_is_efault(const void *ptr)
+{
+    return libexplain_path_is_efault((const char *)ptr);
 }

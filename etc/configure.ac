@@ -1,7 +1,7 @@
 dnl!
 dnl! libexplain - Explain errno values returned by libc functions
 dnl! Copyright (C) 2008 Peter Miller
-dnl! Written by Peter Miller <millerp@canb.auug.org.au>
+dnl! Written by Peter Miller <pmiller@opensource.org.au>
 dnl!
 dnl! This program is free software; you can redistribute it and/or
 dnl! modify it under the terms of the GNU General Public License as
@@ -203,12 +203,29 @@ AC_SUBST(GROFF_MM_MACROS)
 AC_MSG_RESULT([-m$GROFF_MM_MACROS])
 
 AC_CHECK_HEADERS(        \
+    arpa/inet.h          \
     fcntl.h              \
     libintl.h            \
     limits.h             \
+    linux/atalk.h        \
+    linux/atm.h          \
+    linux/irda.h         \
+    linux/netlink.h      \
+    linux/if_pppox.h     \
+    netpacket/packet.h   \
+    linux/x25.h          \
     mntent.h             \
+    net/ethernet.h       \
+    net/if.h             \
+    netax25/ax25.h       \
+    netash/ash.h         \
     netdb.h              \
+    neteconet/ec.h       \
     netinet/in.h         \
+    netipx/ipx.h         \
+    netiucv/iucv.h       \
+    netrom/netrom.h      \
+    netrose/rose.h       \
     pwd.h                \
     stddef.h             \
     stdlib.h             \
@@ -217,10 +234,13 @@ AC_CHECK_HEADERS(        \
     sys/file.h           \
     sys/mount.h          \
     sys/param.h          \
-    sys/time.h           \
-    sys/types.h          \
+    sys/resource.h       \
+    sys/select.h         \
     sys/socket.h         \
     sys/stat.h           \
+    sys/time.h           \
+    sys/types.h          \
+    sys/un.h             \
     sys/vfs.h            \
     sys/wait.h           \
     termios.h            \
@@ -262,11 +282,13 @@ then
 fi
 
 AC_SYS_LONG_FILE_NAMES
+AC_FUNC_STRERROR_R
 AC_CHECK_FUNCS(  \
     capget       \
     cap_get_proc \
     gettext      \
     lchown       \
+    hasmntopt    \
     mbrtowc      \
     remove       \
     setlocale    \

@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,8 @@
   * @file
   * @brief explain symlink(2) errors
   */
+
+#include <libexplain/warn_unused_result.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -87,7 +89,8 @@ void libexplain_symlink_or_die(const char *oldpath, const char *newpath);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_symlink(const char *oldpath, const char *newpath);
+const char *libexplain_symlink(const char *oldpath, const char *newpath)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_symlink function is used to obtain an
@@ -168,7 +171,8 @@ void libexplain_message_symlink(char *message, int message_size,
   *     this library.
   */
 const char *libexplain_errno_symlink(int errnum, const char *oldpath,
-    const char *newpath);
+    const char *newpath)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_errno_symlink function is used to obtain an

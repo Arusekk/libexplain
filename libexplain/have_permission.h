@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,16 +24,35 @@
 
 struct stat; /* forward */
 
+typedef struct libexplain_have_identity_t libexplain_have_identity_t;
+struct libexplain_have_identity_t
+{
+    int uid;
+    int gid;
+};
+
+/**
+  * The libexplain_have_identity_init function may be used to initialise
+  * an ID to the process effective ID.
+  *
+  * @param id
+  *     The identity to be initialised.
+  */
+void libexplain_have_identity_init(libexplain_have_identity_t *id);
+
 /**
   * The libexplain_have_read_permission function may be used to test
   * whether or not the current process has read permissions on an inode.
   *
   * @param st
   *    stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_read_permission(const struct stat *st);
+int libexplain_have_read_permission(const struct stat *st,
+    const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_explain_read_permission function may be used to
@@ -44,11 +63,13 @@ int libexplain_have_read_permission(const struct stat *st);
   *     The string buffer to print into.
   * @param st
   *     The stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
 int libexplain_explain_read_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st);
+    const struct stat *st, const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_have_write_permission function may be used to test
@@ -57,10 +78,13 @@ int libexplain_explain_read_permission(libexplain_string_buffer_t *sb,
   *
   * @param st
   *    stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_write_permission(const struct stat *st);
+int libexplain_have_write_permission(const struct stat *st,
+    const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_explain_write_permission function may be used to
@@ -71,11 +95,13 @@ int libexplain_have_write_permission(const struct stat *st);
   *     The string buffer to print into.
   * @param st
   *     The stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
 int libexplain_explain_write_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st);
+    const struct stat *st, const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_have_execute_permission function may be used to test
@@ -84,10 +110,13 @@ int libexplain_explain_write_permission(libexplain_string_buffer_t *sb,
   *
   * @param st
   *    stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_execute_permission(const struct stat *st);
+int libexplain_have_execute_permission(const struct stat *st,
+    const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_explain_execute_permission function may be used to
@@ -98,11 +127,13 @@ int libexplain_have_execute_permission(const struct stat *st);
   *     The string buffer to print into.
   * @param st
   *     The stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
 int libexplain_explain_execute_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st);
+    const struct stat *st, const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_have_search_permission function may be used to test
@@ -111,10 +142,13 @@ int libexplain_explain_execute_permission(libexplain_string_buffer_t *sb,
   *
   * @param st
   *    stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_search_permission(const struct stat *st);
+int libexplain_have_search_permission(const struct stat *st,
+    const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_explain_search_permission function may be used to
@@ -125,11 +159,13 @@ int libexplain_have_search_permission(const struct stat *st);
   *     The string buffer to print into.
   * @param st
   *     The stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
 int libexplain_explain_search_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st);
+    const struct stat *st, const libexplain_have_identity_t *hip);
 
 /**
   * The libexplain_have_inode_permission function may be used to test
@@ -138,9 +174,36 @@ int libexplain_explain_search_permission(libexplain_string_buffer_t *sb,
   *
   * @param st
   *    stat structure containing information about the file.
+  * @param hip
+  *    The user/process identity to check against.
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_inode_permission(const struct stat *st);
+int libexplain_have_inode_permission(const struct stat *st,
+    const libexplain_have_identity_t *hip);
+
+/**
+  * The libexplain_have_identity_kind_of_uid is used to obtain a string
+  * describing the kind of UID in the identity.
+  *
+  * @param hip
+  *     The identity of interest
+  * @returns
+  *     One of "real UID" or "effective UID", suitably translated.
+  */
+const char *libexplain_have_identity_kind_of_uid(
+    const libexplain_have_identity_t *hip);
+
+/**
+  * The libexplain_have_identity_kind_of_gid is used to obtain a string
+  * describing the kind of GID in the identity.
+  *
+  * @param hip
+  *     The identity of interest
+  * @returns
+  *     One of "real GID" or "effective GID", suitably translated.
+  */
+const char *libexplain_have_identity_kind_of_gid(
+    const libexplain_have_identity_t *hip);
 
 #endif /* LIBEXPLAIN_HAVE_PERMISSION_H */

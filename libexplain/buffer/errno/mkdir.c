@@ -19,6 +19,7 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
@@ -66,26 +67,7 @@ libexplain_buffer_errno_mkdir_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "the parent directory does not allow write permission "
-                "to the process; or, one of the directories in pathname "
-                "did not allow search permission"
-            );
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EEXIST:
@@ -104,6 +86,7 @@ libexplain_buffer_errno_mkdir_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "pathname already exists (not necessarily as a "
                 "directory); this includes the case where pathname is a "
                 "symbolic link, dangling or not"
@@ -139,10 +122,11 @@ libexplain_buffer_errno_mkdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOSPC:
-        // FIXME: ENOSPC can be caused by quota system, too.
+        /* FIXME: ENOSPC can be caused by quota system, too. */
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the file system containing pathname has no room for the new "
             "directory"
         );
@@ -157,6 +141,7 @@ libexplain_buffer_errno_mkdir_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the file system containing pathname does not support the "
             "creation of directories"
         );

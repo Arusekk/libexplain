@@ -81,9 +81,9 @@ libexplain_buffer_errno_fork_explanation(libexplain_string_buffer_t *sb,
             (
                 sb,
                 /*
-                 * xgettext: This message is used when * explaining
-                 * the capapbilities required to exceed system limits
-                 * on the numbe rof processes a user may execute
+                 * xgettext: This message is used when explaining
+                 * the capabilities required to exceed system limits
+                 * on the number of processes a user may execute
                  * simultaniously.
                  */
                 i18n("to exceed the limit on the number of processes, "

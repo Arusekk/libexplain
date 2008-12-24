@@ -24,10 +24,13 @@
 #include <libexplain/wrap_and_print.h>
 
 
-void
+int
 libexplain_socket_or_die(int domain, int type, int protocol)
 {
-    if (socket(domain, type, protocol) < 0)
+    int             result;
+
+    result = socket(domain, type, protocol);
+    if (result < 0)
     {
         libexplain_wrap_and_print
         (
@@ -36,4 +39,5 @@ libexplain_socket_or_die(int domain, int type, int protocol)
         );
         exit(EXIT_FAILURE);
     }
+    return result;
 }

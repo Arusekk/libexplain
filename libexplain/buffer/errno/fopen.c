@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/enomem.h>
@@ -27,6 +28,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 #include <libexplain/string_buffer.h>
+#include <libexplain/string_flags.h>
 
 
 static void
@@ -51,151 +53,18 @@ libexplain_buffer_errno_fopen_system_call(libexplain_string_buffer_t *sb,
 
 void
 libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
-    int errnum, const char *pathname, const char *flags_string)
+    int errnum, const char *pathname, const char *flags)
 {
-    int             flags_mode_part;
-    int             flags_flags_part;
-    int             flags_string_valid;
-    int             flags;
+    libexplain_string_flags_t sf;
     int             permission_mode;
-    int             rwa_seen;
-    const char      *cp;
-    unsigned char   c;
-    char            yuck_msg[50];
-    libexplain_string_buffer_t yuck_buf;
 
-    /*
-     * Parse the flags string.
-     *
-     * (It turns out glibc is more generous than this, when it comes to
-     * validity, but we only complain for EINVAL.  Different systems
-     * will see validity differently.)
-     */
-    rwa_seen = 0;
-    flags_mode_part = O_RDONLY;
-    flags_flags_part = 0;
-    flags_string_valid = 1;
-    cp = flags_string;
-    c = *cp++;
-    switch (c)
-    {
-    case 'b':
-        flags_flags_part |= O_BINARY;
-        c = *cp++;
-        break;
-
-    case 't':
-        flags_flags_part |= O_TEXT;
-        c = *cp++;
-        break;
-
-    default:
-        break;
-    }
-    switch (c)
-    {
-    case 'r':
-        flags_mode_part = O_RDONLY;
-        rwa_seen = 1;
-        break;
-
-    case 'w':
-        flags_mode_part = O_WRONLY;
-        flags_flags_part |= O_CREAT | O_TRUNC;
-        rwa_seen = 1;
-        break;
-
-    case 'a':
-        flags_mode_part = O_WRONLY;
-        flags_flags_part |= O_CREAT | O_APPEND;
-        rwa_seen = 1;
-        break;
-
-    case '\0':
-        --cp;
-        /* fall through... */
-
-    default:
-        flags_string_valid = 0;
-        break;
-    }
-    libexplain_string_buffer_init(&yuck_buf, yuck_msg, sizeof(yuck_msg));
-    for (;;)
-    {
-        c = *cp++;
-        switch (c)
-        {
-        case '+':
-            flags_mode_part = O_RDWR;
-            continue;
-
-        case 'b':
-            flags_flags_part |= O_BINARY;
-            continue;
-
-        case 'c':
-            /* no cancel */
-            continue;
-
-        case 'e':
-#ifdef O_CLOEXEC
-            flags_flags_part |= O_CLOEXEC;
-#endif
-            continue;
-
-        case 'm':
-            /* mmap */
-            continue;
-
-        case 't':
-            flags_flags_part |= O_TEXT;
-            continue;
-
-        case 'x':
-            flags_flags_part |= O_EXCL;
-            continue;
-
-        default:
-            flags_string_valid = 0;
-            libexplain_string_buffer_putc(&yuck_buf, c);
-            continue;
-
-        case '\0':
-            --cp;
-            break;
-        }
-        break;
-    }
-    flags = flags_mode_part | flags_flags_part;
+    libexplain_string_flags_init(&sf, flags);
     permission_mode = 0666;
     switch (errnum)
     {
     case EINVAL:
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the flags argument is not valid"
-        );
-        if (!rwa_seen)
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                ", you must specify 'r', 'w' or 'a' at the start of the string"
-            );
-        }
-        if (yuck_buf.position)
-        {
-            libexplain_string_buffer_printf
-            (
-                sb,
-                ", flag character%s ",
-                (yuck_buf.position == 1 ? "" : "s")
-            );
-            libexplain_string_buffer_puts_quoted(sb, yuck_msg);
-            libexplain_string_buffer_puts(sb, " unknown");
-        }
-        return;
+        libexplain_string_flags_einval(&sf, sb, "flags");
+        break;
 
     case ENOMEM:
         {
@@ -231,7 +100,7 @@ libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
             sb,
             errnum,
             pathname,
-            flags,
+            sf.flags,
             permission_mode
         );
         break;
@@ -261,4 +130,39 @@ libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
         flags_string
     );
     libexplain_explanation_assemble(&exp, sb);
+}
+
+
+void
+libexplain_string_flags_einval(const libexplain_string_flags_t *sf,
+    libexplain_string_buffer_t *sb, const char *caption)
+{
+    size_t          n;
+
+    libexplain_string_buffer_printf
+    (
+        sb,
+        "the %s argument is not valid",
+        caption
+    );
+    if (!sf->rwa_seen)
+    {
+        libexplain_string_buffer_puts
+        (
+            sb,
+            ", you must specify 'r', 'w' or 'a' at the start of the string"
+        );
+    }
+    n = strlen(sf->invalid);
+    if (n > 0)
+    {
+        libexplain_string_buffer_printf
+        (
+            sb,
+            ", flag character%s ",
+            (n == 1 ? "" : "s")
+        );
+        libexplain_string_buffer_puts_quoted(sb, sf->invalid);
+        libexplain_string_buffer_puts(sb, " unknown");
+    }
 }

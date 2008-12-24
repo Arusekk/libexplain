@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,8 @@
   * @file
   * @brief explain lseek(2) errors
   */
+
+#include <libexplain/warn_unused_result.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -94,7 +96,8 @@ long long libexplain_lseek_or_die(int fildes, long long offset, int whence);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_lseek(int fildes, long long offset, int whence);
+const char *libexplain_lseek(int fildes, long long offset, int whence)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_lseek function may be used to obtain a human
@@ -142,7 +145,8 @@ const char *libexplain_lseek(int fildes, long long offset, int whence);
   *     this library.
   */
 const char *libexplain_errno_lseek(int errnum, int fildes, long long offset,
-    int whence);
+    int whence)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_lseek function may be used to obtain

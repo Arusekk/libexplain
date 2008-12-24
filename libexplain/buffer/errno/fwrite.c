@@ -19,7 +19,7 @@
 #include <libexplain/buffer/errno/fwrite.h>
 #include <libexplain/buffer/errno/write.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/buffer/stream.h>
 #include <libexplain/explanation.h>
 #include <libexplain/stream_to_fildes.h>
 
@@ -34,8 +34,7 @@ libexplain_buffer_errno_fwrite_system_call(libexplain_string_buffer_t *sb,
     libexplain_string_buffer_printf(sb, ", size = %ld", (long)size);
     libexplain_string_buffer_printf(sb, ", nmemb = %ld", (long)nmemb);
     libexplain_string_buffer_puts(sb, ", fp = ");
-    libexplain_buffer_pointer(sb, fp);
-    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_buffer_stream(sb, fp);
     libexplain_string_buffer_putc(sb, ')');
 }
 

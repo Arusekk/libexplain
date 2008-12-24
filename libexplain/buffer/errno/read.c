@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +29,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/read.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
@@ -80,17 +81,24 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
             flags = fcntl(fildes, F_GETFL);
             if (flags >= 0)
             {
-                libexplain_string_buffer_puts
+                libexplain_buffer_gettext
                 (
                     sb,
-                    "the file descriptor is not open for reading ("
+                    /*
+                     * xgettext: This message is used when an attempt is
+                     * made to read from a file descriptor that was not
+                     * opened for reading.  The actual open mode will be
+                     * printed separately.
+                     */
+                    i18n("the file descriptor is not open for reading")
                 );
+                libexplain_string_buffer_puts(sb, " (");
                 libexplain_buffer_open_flags(sb, flags);
                 libexplain_string_buffer_putc(sb, ')');
             }
             else
             {
-                libexplain_buffer_ebadf(sb, "fildes");
+                libexplain_buffer_ebadf(sb, fildes, "fildes");
             }
         }
         break;

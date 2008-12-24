@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ chmod a+rx a/b
 test $? -eq 0 || no_result
 
 test_execve a/b/foobar > test.out 2>&1
-if test $? -e 1
+if test $? -ne 1
 then
     echo expected to fail
     cat test.out

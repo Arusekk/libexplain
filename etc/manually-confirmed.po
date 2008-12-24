@@ -1,0 +1,2182 @@
+#
+# libexplain - Explain errno values returned by libc functions
+# Copyright (C) 2008 Peter Miller
+# Written by Peter Miller <pmiller@opensource.org.au>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+msgid   ""
+msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
+        "POT-Creation-Date: 2008-12-24 14:50+1100\n"
+        "Content-Type: text/plain; charset=us-ascii\n"
+
+#.
+#. This message is used when a path name component is
+#. longer than the system limit (NAME_MAX, not PATH_MAX).
+#.
+#. %1$s => the name of the function call argument and the quoted
+#.         text of the offending path component.
+#.
+#, c-format
+msgid   "%s component is longer than the system limit"
+msgstr  "%s component is longer than the system limit"
+
+#.
+#. This message is used to explain an EINVAL error
+#. reported by a rename(2) system call, in the case where an
+#. attempt was made to make a directory a subdirectory of
+#. itself
+#.
+#. %1$s => the name of the source system call argument
+#. %2$s => the name of the destination system call argument
+#.
+#, c-format
+msgid   "%s contained a path prefix of %s; or, more generally, an attempt "
+        "was made to make a directory a subdirectory of itself"
+msgstr  "%s contained a path prefix of %s; or, more generally, an attempt "
+        "was made to make a directory a subdirectory of itself"
+
+#.
+#. This message is used when a path is being used as a
+#. directory, when does not exist.
+#.
+#. %1$s => the name of the system call argument, the quoted path
+#.         and the expected file type ("directory", already translated).
+#.
+#, c-format
+msgid   "%s does not exist"
+msgstr  "%s does not exist"
+
+#.
+#. This message is used when socket(2) and
+#. {bind(2) or connect(2)} disagree about the file
+#. descriptor's address family.
+#.
+#. %1$s => The name of the system call argument containing
+#.         the sockaddr with the erroneous address family.
+#. %2$s => The name of the system call argument
+#.         containing the socket file descriptor.
+#. %3$s => The value of the socket file descriptor's
+#.         address family, as obtained from the file
+#.         descriptor itself.
+#.
+#, c-format
+msgid   "%s does not have the correct address family, %s address family "
+        "is %s"
+msgstr  "%s does not have the correct address family, %s address family "
+        "is %s"
+
+#.
+#. This message is used when socket() and
+#. connect() disagree about the file descriptor's
+#. address family.  It is used when the file
+#. descriptor's actual address family cannot be
+#. determined.
+#.
+#. %1$s => The name of the system call argument containing
+#.         the sockaddr with the erroneous address family.
+#. %2$s => The name of the system call argument containing
+#.         the file descriptor with the other address family.
+#.
+#, c-format
+msgid   "%s does not have the same address family as %s"
+msgstr  "%s does not have the same address family as %s"
+
+#.
+#. This message is used when a file descriptor is
+#. passed to a system call, and it has the wrong file type,
+#. but the actual file type is unavailable.
+#.
+#. %1$s => The name of the offending system call argument
+#. %2$s => the required file type, already translated.
+#.
+#, c-format
+msgid   "%s does not refer to a %s"
+msgstr  "%s does not refer to a %s"
+
+#.
+#. This message is used to explain an EINVAL error
+#. reported by the pathconf system call.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "%s does not refer to a known file configuration value"
+msgstr  "%s does not refer to a known file configuration value"
+
+#.
+#. This message is used when a file descriptor is not
+#. valid and does not refer to an open file.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "%s does not refer to an open file"
+msgstr  "%s does not refer to an open file"
+
+#.
+#. This message is used when a pathname
+#. exceeds the maximum (system specific) path name
+#. length (in bytes, not characters).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "%s exceeds the system maximum path length"
+msgstr  "%s exceeds the system maximum path length"
+
+#.
+#. this message is printed when there is no
+#. extended explanation available.  In english, the stuff
+#. to the left of "because" is a statement of the problem,
+#. including function name and function argument names and
+#. values.
+#.
+#. Usually a longer message, including a prose explanation, is
+#. used.  This shorter message is used when there is no extended
+#. explanation, or when the user-supplied message buffer is too
+#. small.
+#.
+#. Depending on the grammar of the natural language being
+#. translated to, you may need to rearrange these two pieces
+#. using positional arguments.
+#.
+#. %1$s => the C text of the system call and its arguments
+#.         e.g. "open(pathname = "foo/bar", flags = O_RDONLY)"
+#. %2$s => the strerror text, plus the name and number of
+#.         the errno.h constant
+#.         e.g. "No such file or directory (2, ENOENT)"
+#.
+#, c-format
+msgid   "%s failed, %s"
+msgstr  "%s failed, %s"
+
+#.
+#. This message is used to join the problem to the
+#. explanation.  In english, the stuff to the left of "because"
+#. is a statement of the problem, including function name and
+#. function argument names and values; and the stuff to the
+#. right of "because" is the explanation text.
+#.
+#. Depending on the grammar of the language being translated to,
+#. you may need to rearrange these two pieces using positional
+#. arguments.
+#.
+#. %1$s => the C text of the system call and its arguments
+#.         e.g. "open(pathname = 'foo/bar', flags = O_RDONLY)"
+#. %2$s => the strerror text, plus the name and number of
+#.         the errno.h constant
+#.         e.g. "No such file or directory (2, ENOENT)"
+#. %3$s => the explanation text
+#.         e.g. "there is no 'bar' file in the pathname
+#.         'foo'; directory"
+#.
+#. For example:
+#.
+#. msgid "%s failed, %s because %s"
+#. msgstr "%3$s caused %2$s to be returned by %1$s"
+#.
+#. msgid "%s failed, %s because %s"
+#. msgstr "a %2$s error, due to %3$s, was reported by %1$s"
+#.
+#. This has a follow-on effect for how the explanations themselves
+#. are translated, to ensure that sensible sentences result.  In
+#. particular, the explanation portion should only ever be one
+#. sentence, so that a clause (e.g. above) may be appended.
+#.
+#, c-format
+msgid   "%s failed, %s because %s"
+msgstr  "%s failed, %s because %s"
+
+#.
+#. This message is used to explan an
+#. EACCES error reported by a rename(2) system
+#. call.  This is the generic explanation given when
+#. renaming directories when path_resolution(7) is
+#. unable to provide a more specific explanation.
+#.
+#. %1$s => The name of the offending system call argument.
+#.
+#, c-format
+msgid   "%s is a directory and does not allow write permission, this is "
+        "needed to update the \"..\" directory entry"
+msgstr  "%s is a directory and does not allow write permission, this is "
+        "needed to update the \"..\" directory entry"
+
+#.
+#. This message is used to explain an
+#. EISDIR error reported by a rename(2) system call,
+#. in the case where there is a file type mismatch.
+#.
+#. %1$s => the name of the source system call argument
+#. %2$s => the name of the destination system call argument
+#. %3$s => The file type of the destination,
+#.         e.g. "regular file"
+#.
+#, c-format
+msgid   "%s is a directory, but %s is a %s, not a directory"
+msgstr  "%s is a directory, but %s is a %s, not a directory"
+
+#.
+#. This message is used to explain an
+#. EISDIR error reported by a rename(2) system call,
+#. in the case where there is a file type mismatch,
+#. but the precise file type of oldpath cannot be
+#. determined.
+#.
+#. %1$s => the name of the source system call argument
+#. %2$s => the name of the destination system call argument
+#.
+#, c-format
+msgid   "%s is an existing directory, but %s is not a directory"
+msgstr  "%s is an existing directory, but %s is not a directory"
+
+#.
+#. This message is used to explain an
+#. EINVAL error reported by a bind(2) system call,
+#. in the case where a Unix domain socket address
+#. was accompanied by the wrong size; probably too
+#. short.
+#.
+#. %1$s => The name of the offending system call argument.
+#.
+#, c-format
+msgid   "%s is incorrect"
+msgstr  "%s is incorrect"
+
+#.
+#. This message is used when a path given in a path is
+#. larger that the (dialect specific) maximum path length.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "%s is larger than the maximum file size"
+msgstr  "%s is larger than the maximum file size"
+
+#.
+#. This message is used to explain and
+#. ENOTEMPTY or EEXIST error reported by a rename(2)
+#. system call, in the case where both oldpath and
+#. newpath are directpries, but newpath is not empty.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "%s is not an empty directory; that is, it contains entries other "
+        "than \".\" and \"..\""
+msgstr  "%s is not an empty directory; that is, it contains entries other "
+        "than \".\" and \"..\""
+
+#.
+#. This message is used when an attempt is made to write to
+#. a file descriptor that was not opened for writing.  The actual open
+#. mode will be printed separately.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#, c-format
+msgid   "%s is not open for writing"
+msgstr  "%s is not open for writing"
+
+#.
+#. This message is used when a file descriptor
+#. is detected that is negative, or larger than
+#. sysconf(_SC_OPEN_MAX).
+#.
+#. The range will be printed separately, if available, so do not
+#. mention sysconf(_SC_OPEN_MAX) in the translation.
+#.
+#, c-format
+msgid   "%s is outside the allowed range for file descriptors"
+msgstr  "%s is outside the allowed range for file descriptors"
+
+#.
+#. This message is used when a system call argument is
+#. passed a NULL pointer, and it should not be.
+#.
+#. %1$s => The name of the system call's offending argument.
+#.
+#, c-format
+msgid   "%s is the NULL pointer"
+msgstr  "%s is the NULL pointer"
+
+#.
+#. This message is used when a file descriptor is
+#. passed to a system call, and it has the wrong file type.
+#.
+#. %1$s => The name of the offending system call argument
+#. %2$s => the actual (wrong) file type, already translated.
+#. %3$s => the required file type, already translated.
+#.
+#, c-format
+msgid   "%s refers to a %s, not a %s"
+msgstr  "%s refers to a %s, not a %s"
+
+#.
+#. This message is used when a system call argument
+#. points to non-existent memory.  This is usually caused by
+#. either a NULL pointer, or an uninitialized variable, or a
+#. memory scribble.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "%s refers to memory that is outside the process's accessible "
+        "address space"
+msgstr  "%s refers to memory that is outside the process's accessible "
+        "address space"
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about
+#. undefined bits in a bitfield argument, e.g. access(2).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "%s was incorrectly specified, it contains undefined bits"
+msgstr  "%s was incorrectly specified, it contains undefined bits"
+
+#.
+#. This explanation is used in response to an ENOENT
+#. error.  This explanation is only used if a more specific
+#. cause cannot be determined.
+#.
+#. %1$s => the name of the offending system call argument.
+#. %2$s => always identical to the above.
+#.
+#, c-format
+msgid   "%s, or a directory component of %s, does not exist or is a "
+        "dangling symbolic link"
+msgstr  "%s, or a directory component of %s, does not exist or is a "
+        "dangling symbolic link"
+
+#.
+#. this message is issued when a system call
+#. succeeds, when there was, in fact, no error.
+#.
+#. %1$s => the C text of the system call and its arguments
+#.
+#, c-format
+msgid   "%s: success"
+msgstr  "%s: success"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a BSD whiteout
+#. file, used by the union file system.  Not present on all
+#. POSIX implementations.
+#.
+msgid   "BSD whiteout"
+msgstr  "BSD whiteout"
+
+#.
+#. This message is used to explain an
+#. ELOOP or EMLINK error reported by an open(2)
+#. system call, in the case where the O_NOFOLLOW
+#. flags was specified but the final path component
+#. was a symbolic link.
+#.
+msgid   "O_NOFOLLOW was specified but pathname refers to a symbolic link"
+msgstr  "O_NOFOLLOW was specified but pathname refers to a symbolic link"
+
+#.
+#. This message is used to explain an
+#. ENXIO error returned by an open(2) system call,
+#. in the case where a named pipe has no readers,
+#. and a non-blocking writer tried to open it.
+#.
+msgid   "O_NONBLOCK | O_WRONLY is set, and the named file is a FIFO, and "
+        "no process has the file open for reading"
+msgstr  "O_NONBLOCK | O_WRONLY is set, and the named file is a FIFO, and "
+        "no process has the file open for reading"
+
+#.
+#. This message is used to explain an
+#. ENXIO error returned by an open(2) system call.
+#. This is the generic explanation, used when no
+#. more specific cause can be determined.
+#.
+msgid   "O_NONBLOCK | O_WRONLY is set, the named file is a FIFO and no "
+        "process has the file open for reading; or, the file is a device "
+        "special file and no corresponding device exists"
+msgstr  "O_NONBLOCK | O_WRONLY is set, the named file is a FIFO and no "
+        "process has the file open for reading; or, the file is a device "
+        "special file and no corresponding device exists"
+
+#.
+#. this explanation is given for paths that are
+#. the empty string.
+#.
+#. %1$s => the name of the relevant system call argument.
+#.
+#, c-format
+msgid   "POSIX decrees that an empty %s must not be resolved successfully"
+msgstr  "POSIX decrees that an empty %s must not be resolved successfully"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a Solaris door.
+#. Not present on all POSIX implementations.
+#.
+msgid   "Solaris door"
+msgstr  "Solaris door"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a VxFS compressed
+#. file.  Not present on all POSIX implementations.
+#.
+msgid   "VxFS compressed file"
+msgstr  "VxFS compressed file"
+
+#.
+#. This explanation is used in response to an ENOENT
+#. error.  This explanation is only used if a more specific
+#. cause cannot be determined.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "a directory component of %s does not exist or is a dangling "
+        "symbolic link"
+msgstr  "a directory component of %s does not exist or is a dangling "
+        "symbolic link"
+
+#.
+#. This message is used when explaining an EIO error.
+#. Such errors are usually related to the underlying hardware of
+#. the device being used, or the special device that contains
+#. the file system the file is stored in.
+#.
+#. %1$s => The device named and device's file type
+#.
+#, c-format
+msgid   "a low-level I/O error occurred in the %s"
+msgstr  "a low-level I/O error occurred in the %s"
+
+#.
+#. This message is used when explaining an EIO error.
+#. Such errors are usually related to the underlying hardware of
+#. the device being used, or the special device that contains
+#. the file system the file is stored in.
+#.
+msgid   "a low-level I/O error occurred, probably in hardware"
+msgstr  "a low-level I/O error occurred, probably in hardware"
+
+#.
+#. This message is used to explain and EPROTO
+#. error reported by an accept(2) system call, in the case
+#. where a protocol error has occurred.
+#.
+msgid   "a protocol error has occurred; for example, the STREAMS protocol "
+        "stack has not been initialized"
+msgstr  "a protocol error has occurred; for example, the STREAMS protocol "
+        "stack has not been initialized"
+
+#.
+#. This message is used when a
+#. symbolic link loop has been detected,
+#. usually as a result of an ELOOP error.
+#.
+#. %1$s => The name of the offending system
+#.         call argument
+#. %2$s => The path of the first symlink in
+#.         the loop, already quoted.
+#.
+#, c-format
+msgid   "a symbolic link loop was encountered in %s, starting at %s"
+msgstr  "a symbolic link loop was encountered in %s, starting at %s"
+
+#.
+#. This message is used to explan an ECONNABORTED
+#. error reported by the accept(2) system call, in the case
+#. where an incoming connection has been aborted by the
+#. remote host.
+#.
+msgid   "an incoming connection has been aborted by the remote host"
+msgstr  "an incoming connection has been aborted by the remote host"
+
+#.
+#. This message is used when explaining why file
+#. access is denied, and the process is not root.
+#.
+msgid   "and the process is not privileged"
+msgstr  "and the process is not privileged"
+
+#.
+#. This message is used to explain an EADDRINUSE error.
+#.
+msgid   "another socket is already listening on the same port"
+msgstr  "another socket is already listening on the same port"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a block special
+#. device.
+#.
+msgid   "block special device"
+msgstr  "block special device"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a character
+#. special device.
+#.
+msgid   "character special device"
+msgstr  "character special device"
+
+#.
+#. This message is used to explain an
+#. EPERM error reported by a chown (or similar)
+#. system call, in the case where chown is
+#. restricted, i.e. when it is not sufficent to be
+#. the owner of the file to change its ownership.
+#.
+msgid   "chown is restricted"
+msgstr  "chown is restricted"
+
+#.
+#. the name of the current directory, rather than
+#. "." that not all users understand.
+#.
+msgid   "current directory"
+msgstr  "current directory"
+
+#.
+#. This message is issued when a file (or directory
+#. component) could not be found, but a sufficiently similar
+#. name has been found in the same directory.  This often helps
+#. with typographical errors.
+#.
+#. %1$s => the name (already quoted) and file type (already
+#.         translated) of the alternate file found.
+#.
+#, c-format
+msgid   "did you mean the %s instead?"
+msgstr  "did you mean the %s instead?"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a directory.
+#.
+msgid   "directory"
+msgstr  "directory"
+
+#.
+#. This message is used when further explaining a
+#. "process is not privileged" message, to include the specific
+#. absent capability.
+#.
+#. %1$s => the name of the capability,
+#.         e.g. "CAP_FOWNER"
+#.
+#, c-format
+msgid   "does not have the %s capability"
+msgstr  "does not have the %s capability"
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's GIDs are in use during the permissions
+#. check.  In this case, the effective gid.
+#.
+msgid   "effective GID"
+msgstr  "effective GID"
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's UIDs are in use during the permissions
+#. check.  In this case, the effective UID.
+#.
+msgid   "effective UID"
+msgstr  "effective UID"
+
+#.
+#. This message is used to explain an EPERM error
+#. reported by an accept(2) system call, in the case where
+#. firewall rules forbid connection.
+#.
+msgid   "firewall rules forbid connection"
+msgstr  "firewall rules forbid connection"
+
+#.
+#. This message is used when directory has a directory
+#. entry for the named component, but a directory was expected
+#. and something else was there instead.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in
+#.         it.  It will include the name of the function call
+#.         argument, the name of the directory, and the file
+#.         type "directory".
+#. %2$s => The name of the offending path component and file
+#.         type (will never have slashes).  It will be quoted.
+#. %3$s => the desired file type
+#.
+#, c-format
+msgid   "in the %s there is a %s, but it should be a %s"
+msgstr  "in the %s there is a %s, but it should be a %s"
+
+#.
+#. This message is used when explaining an ENOMEM
+#. error, when it is specific to kernel memory.
+#.
+msgid   "insufficient kernel memory was available"
+msgstr  "insufficient kernel memory was available"
+
+#.
+#. This message is used as a generic explanation
+#. of an ENOBUFS error returned by any system call that does
+#. not provide a more specific explanation.
+#.
+msgid   "insufficient kernel resources are available in the system to "
+        "complete the system call"
+msgstr  "insufficient kernel resources are available in the system to "
+        "complete the system call"
+
+#.
+#. This message is used when explaining an ENOMEM
+#. error, when it is specific to user space memory.
+#.
+#. Note that this may be followed by the actual limit, if
+#. available.
+#.
+msgid   "insufficient user-space memory was available"
+msgstr  "insufficient user-space memory was available"
+
+#.
+#. This message is used when explaining an ENOMEM
+#. error, when it is not possible to distinguish whether it was
+#. kernel memory of user space memory that was exhausted.
+#.
+msgid   "insufficient user-space or kernel memory was available"
+msgstr  "insufficient user-space or kernel memory was available"
+
+#.
+#. This message is issued when a user attempts to
+#. execute something that is not a file, such as a block special
+#. device.
+#.
+#. %1$s => the name of the system call argument, the name of the
+#.         final path component and the type of the file.
+#.
+#, c-format
+msgid   "it is not possible to execute the %s, only regular files can be "
+        "executed"
+msgstr  "it is not possible to execute the %s, only regular files can be "
+        "executed"
+
+#.
+#. This message is used to inform users of the
+#. listen(2) system call when they specify a backlog
+#. valie in excess of SOMAXCONN.
+#.
+#. %1$d => The maximum queue length for completely
+#.         established sockets waiting to be accepted.
+#.
+#, c-format
+msgid   "large backlog values are silently truncated to the system "
+        "maximum (SOMAXCONN, %d)"
+msgstr  "large backlog values are silently truncated to the system "
+        "maximum (SOMAXCONN, %d)"
+
+#.
+#. This message is used as an explanation for an
+#. EADDRINUSE error.  See connect(2) and bind(2) for more
+#. information.
+#.
+msgid   "local address is already in use; or, the address was in use very "
+        "recently"
+msgstr  "local address is already in use; or, the address was in use very "
+        "recently"
+
+#.
+#. This string is the type of a file (see
+#. stat(2) for more information) when that file is a
+#. multiplexed block special device.  Not present on all
+#. POSIX implementations.
+#.
+msgid   "multiplexed block special device"
+msgstr  "multiplexed block special device"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a multiplexed
+#. character special device.
+#. Not present on all POSIX implementations.
+#.
+msgid   "multiplexed character special device"
+msgstr  "multiplexed character special device"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a fifo.
+#.
+msgid   "named pipe"
+msgstr  "named pipe"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a named special
+#. file.  Not present on all POSIX implementations.
+#.
+msgid   "named special file"
+msgstr  "named special file"
+
+#.
+#. This message is used to explain an ENETUNREACH
+#. error reported by the connect(2) system call, in the case
+#. where network or host is unreachable.
+#.
+msgid   "network or host is unreachable; sometimes this is a routing "
+        "issue, sometimes the network is physically disconnected, "
+        "sometimes a router is turned off, sometimes the host is "
+        "physically disconnected, sometimes the host is turned off"
+msgstr  "network or host is unreachable; sometimes this is a routing "
+        "issue, sometimes the network is physically disconnected, "
+        "sometimes a router is turned off, sometimes the host is "
+        "physically disconnected, sometimes the host is turned off"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a network special
+#. file.  Not present on all POSIX implementations.
+#.
+msgid   "network special file"
+msgstr  "network special file"
+
+#.
+#. This message is used to explain an EAGAIN error
+#. reported by the connect(2) system call, in the case where
+#. no more free local ports or insufficient entries in the
+#. routing cache.
+#.
+msgid   "no more free local ports or insufficient entries in the routing "
+        "cache"
+msgstr  "no more free local ports or insufficient entries in the routing "
+        "cache"
+
+#.
+#. This message is used to supplement a
+#. rename(2) error explanation, and oldpath still
+#. exists.
+#.
+#. %1$s => the name of the relevant system call argument
+#.
+#, c-format
+msgid   "note that %s exists"
+msgstr  "note that %s exists"
+
+#.
+#. This message is used to supplement a
+#. rename(2) error explanation, and oldpath still
+#. exists.
+#.
+#. %1$s => the name of the relevant system call argument
+#.
+#, c-format
+msgid   "note that %s still exists"
+msgstr  "note that %s still exists"
+
+#.
+#. This message is used when supplementing an
+#. EACCES error returned by the access(2) system call,
+#. to remind users that it is an error if ANY of the
+#. access types in mode are denied, even if some of the
+#. other access types in mode would be permitted.
+#.
+msgid   "note that it is an error if any of the access types in mode are "
+        "denied, even if some of the other access types in mode would be "
+        "permitted"
+msgstr  "note that it is an error if any of the access types in mode are "
+        "denied, even if some of the other access types in mode would be "
+        "permitted"
+
+#.
+#. This message is used to supplement an explanation for
+#. an error reported by open(2) system call, and the caller used a
+#. flags combination with explicitly undefined behavior.
+#.
+msgid   "note that the behavior of O_EXCL is undefined if O_CREAT is not "
+        "specified"
+msgstr  "note that the behavior of O_EXCL is undefined if O_CREAT is not "
+        "specified"
+
+#.
+#. This message is used when explaining an EMLINK
+#. error, in the case where a specific cause could not be
+#. determined.
+#.
+msgid   "oldpath already has the maximum number of links to it, or "
+        "oldpath is a directory and the directory containing newpath has "
+        "the maximum number of links"
+msgstr  "oldpath already has the maximum number of links to it, or "
+        "oldpath is a directory and the directory containing newpath has "
+        "the maximum number of links"
+
+#.
+#. This message is used when explaining an
+#. EMLINK error, in the non-directory case where a file
+#. already has the maximum number of links.
+#.
+#. Note that this message may be followed by the actual
+#. limit in parentheses, so it helps of the last phrase
+#. can be sensably followed by it.
+#.
+#. %1$s => the file type of the problem file
+#.         (already translated)
+#.
+#, c-format
+msgid   "oldpath is a %s and already has the maximum number of links"
+msgstr  "oldpath is a %s and already has the maximum number of links"
+
+#.
+#. This message is used when explaining an
+#. EMLINK error, in the case where a directory needs to
+#. re-write its ".." directory entry, and the new ".."
+#. would thereby exceed the link limit.
+#.
+#. Note that this message may be followed by the actual
+#. limit in parentheses, so it helps of the last phrase
+#. can be sensably followed by it.
+#.
+#. %1$s => The name (already quoted) and file type
+#.         (already translated) of the directory of
+#.         newpath that has the problem.
+#.
+#, c-format
+msgid   "oldpath is a directory and the %s already has the maximum number "
+        "of links"
+msgstr  "oldpath is a directory and the %s already has the maximum number "
+        "of links"
+
+#.
+#. This message is used to explain an EBUSY error
+#. reported by a rename(2) system call.  This is the generic
+#. message given when a more specific explanation can not be
+#. determined.
+#.
+msgid   "oldpath or newpath is a directory that is in use by some process "
+        "(perhaps as current working directory, or as root directory, or "
+        "it was open for reading) or is in use by the system (for example "
+        "as mount point)"
+msgstr  "oldpath or newpath is a directory that is in use by some process "
+        "(perhaps as current working directory, or as root directory, or "
+        "it was open for reading) or is in use by the system (for example "
+        "as mount point)"
+
+#.
+#. This message is used to EPERM error
+#. reported by a rename(2) system call, in the case
+#. where newpath is an existing file and the directory
+#. containing it has the sticky bit set and the
+#. process's effective user ID is neither the user ID
+#. of the file to be replaced nor that of the directory
+#. containing it, and the process is not privileged.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "or %s is an existing file and the directory containing it has "
+        "the sticky bit set and the process's effective user ID is "
+        "neither the user ID of the file to be replaced nor that of the "
+        "directory containing it, and the process is not privileged"
+msgstr  "or %s is an existing file and the directory containing it has "
+        "the sticky bit set and the process's effective user ID is "
+        "neither the user ID of the file to be replaced nor that of the "
+        "directory containing it, and the process is not privileged"
+
+#.
+#. This message is used when getcwd() is
+#. trying to reconstruct the problem, and discovers that
+#. the process is probably running inside a chroot jail,
+#. and that the current directory is actually ouside
+#. that chroot jail.
+#.
+msgid   "or is outside your chroot jail"
+msgstr  "or is outside your chroot jail"
+
+#.
+#. This message is used to EPERM error reported by a
+#. rename(2) system call, in the case where the the file system
+#. containing pathname does not support renaming of the type
+#. requested.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "or the file system containing %s does not support renaming of "
+        "the type requested"
+msgstr  "or the file system containing %s does not support renaming of "
+        "the type requested"
+
+#.
+#. This message is used to explain an EFBIG
+#. or EOVERFLOW error reported by and open(2) system
+#. call.  The file is, in fact, too large to be opened
+#. without the O_LARGEFILE flag.
+#.
+#. %1$s => The size of the file, in parentheses
+#.
+#, c-format
+msgid   "pathname referes to a regular file that is too large to be "
+        "opened %s, the O_LARGEFILE flag is necessary"
+msgstr  "pathname referes to a regular file that is too large to be "
+        "opened %s, the O_LARGEFILE flag is necessary"
+
+#.
+#. This message is used to explain
+#. an ENODEV error reported by an open(2)
+#. system call, and the device does not
+#. actually exist.
+#.
+#. %1$s => the file type of the special file,
+#.         already translated.
+#. %2$s => the major and minor device numbers
+#.
+#. Example: "pathname refers to a block special file (42, 13) and no
+#.           corresponding device exists"
+#.
+#, c-format
+msgid   "pathname refers to a %s %s and no corresponding device exists"
+msgstr  "pathname refers to a %s %s and no corresponding device exists"
+
+#.
+#. This message is used to explain an EISDIR
+#. reported by an open(2) system call.  You may not open
+#. a directory for writing.
+#.
+msgid   "pathname refers to a directory and the access requested involved "
+        "writing"
+msgstr  "pathname refers to a directory and the access requested involved "
+        "writing"
+
+#.
+#. This message is used when explaining an EIO
+#. error, for a file open for both reading and writing.
+#.
+msgid   "possibly as a result of a preceeding read(2) or write(2) system "
+        "call"
+msgstr  "possibly as a result of a preceeding read(2) or write(2) system "
+        "call"
+
+#.
+#. This message is used when explaining an EIO
+#. error, for a file open only for reading.
+#.
+msgid   "possibly as a result of a preceeding read(2) system call"
+msgstr  "possibly as a result of a preceeding read(2) system call"
+
+#.
+#. This message is used when explaining an EIO
+#. error, for a file open only for writing.
+#.
+msgid   "possibly as a result of a preceeding write(2) system call"
+msgstr  "possibly as a result of a preceeding write(2) system call"
+
+#.
+#. This message is used when supplementing
+#. an explation an ENOMEM error, when it is specific to
+#. user space memory, and the process has an infinite
+#. memory limit, meaning that a system limit on the
+#. total amout of user space memory available to all
+#. processes has been exhausted.
+#.
+msgid   "probably by exhausting swap space"
+msgstr  "probably by exhausting swap space"
+
+#.
+#. This message is used when a wait*()
+#. function was called to wait for a process group
+#. that does not exist.
+#.
+#. %1$d => the process group number.
+#.
+#, c-format
+msgid   "process group %d does not exist"
+msgstr  "process group %d does not exist"
+
+#.
+#. This message is used when a wait*()
+#. function was called to wait for a process group
+#. that does not have any member process that is a
+#. child of this process.
+#.
+#. %1$d => is the process group number.
+#.
+#, c-format
+msgid   "process group %d does not have any member process that is a "
+        "child of this process"
+msgstr  "process group %d does not have any member process that is a "
+        "child of this process"
+
+#.
+#. This message is used to explain an EACCES error,
+#. when attempting to read a file, when path_resolution(7) can
+#. not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#. %2$s => identical to the above
+#.
+#, c-format
+msgid   "read access to %s was not allowed, or one of the directory "
+        "components of %s did not allow search permission"
+msgstr  "read access to %s was not allowed, or one of the directory "
+        "components of %s did not allow search permission"
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's GIDs are in use during the permissions
+#. check.  In this case, the real gid.
+#.
+msgid   "real GID"
+msgstr  "real GID"
+
+#.
+#. This phrase is used to distinguish which of
+#. the process's UIDs are in use during the permissions
+#. check.  In this case, the real UID.
+#.
+msgid   "real UID"
+msgstr  "real UID"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a regular file.
+#.
+msgid   "regular file"
+msgstr  "regular file"
+
+#.
+#. This message is used to explain an EACCES error,
+#. when path_resolution(7) can not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#.
+#, c-format
+msgid   "search permission is denied for a directory component of %s"
+msgstr  "search permission is denied for a directory component of %s"
+
+#.
+#. This message is used to explain an EACCES error,
+#. when attempting to create or remove a file, when
+#. path_resolution(7) can not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#. %2$s => identical to the above
+#.
+#, c-format
+msgid   "search permission is denied for a directory component of %s; or, "
+        "the directory containing %s is not writable by the user"
+msgstr  "search permission is denied for a directory component of %s; or, "
+        "the directory containing %s is not writable by the user"
+
+#.
+#. This message is used to supplement an
+#. EAGAIN explanation for the connect(2) system call, on
+#. Linux the numebr of local ports can be increased.
+#.
+msgid   "see the net.ipv4.ip_local_port_range sysctl in ip(7) for how to "
+        "increase the number of local ports"
+msgstr  "see the net.ipv4.ip_local_port_range sysctl in ip(7) for how to "
+        "increase the number of local ports"
+
+#.
+#. This message is used to explain an EINVAL
+#. error reported by the accept(2) system call, in the
+#. case where the maximum socket adress size given is
+#. invalid, e.g. negative.
+#.
+#. %1$d => The actual size passed (because the
+#.         recapitualtion fo the system call is going to
+#.         have a pointer in it, not the actual value).
+#.
+#, c-format
+msgid   "sock_addr_size is invalid (%d)"
+msgstr  "sock_addr_size is invalid (%d)"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a network socket.
+#.
+msgid   "socket"
+msgstr  "socket"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is a symbolic link.
+#.
+msgid   "symbolic link"
+msgstr  "symbolic link"
+
+#.
+#. This message is used when an argument of a
+#. system call is invalid.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "the %s argument was invalid"
+msgstr  "the %s argument was invalid"
+
+#.
+#. This message is used when directory has a directory
+#. entry for the named component, but a directory was expected
+#. and something else was there instead.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the offending path component (will never have
+#.         slashes).  It is already quoted.
+#. %2$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#, c-format
+msgid   "the %s in the %s is being used as a directory when it is not"
+msgstr  "the %s in the %s is being used as a directory when it is not"
+
+#.
+#. This message is used when there is a dangling
+#. symbolic link.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the final component of the path, the name of
+#.         symbolic link in question, will include the file type
+#.         "symbolic link", but will never have slashes.
+#. %2$s => The name of the directory that contains the symbolic link;
+#.         it may have zero, one or more slashes in it.  Will include
+#.         the name of the function call argument, the name of the
+#.         directory, and the file type "directory".
+#. %3$s => the non-existent thing the symbolic link point to
+#.
+#, c-format
+msgid   "the %s in the %s refers to %s that does not exist"
+msgstr  "the %s in the %s refers to %s that does not exist"
+
+#.
+#. This message is used when directory has a directory
+#. entry for the named component, but a directory was expected
+#. and something else was there instead.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the offending path component and file
+#.         type (will never have slashes).  It will be quoted.
+#. %2$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#, c-format
+msgid   "the %s in the %s should not exist yet"
+msgstr  "the %s in the %s should not exist yet"
+
+#.
+#. This message is used when an EPERM erro is
+#. returned by an open(2) system call, and the O_NOATIME
+#. open flag was specific, but the process lacked the
+#. permissions required.
+#.
+#. %1$s => the number and name of the process effective UID,
+#.         already quoted if needed
+#. %2$s => the file type of the file in question,
+#.         almost always "regular file" (already translated)
+#. %3$s => the number and name of the file owner UID,
+#.         already quoted if needed
+#.
+#, c-format
+msgid   "the O_NOATIME flags was specified, but the process effective UID "
+        "%s does not match the %s owner UID %s"
+msgstr  "the O_NOATIME flags was specified, but the process effective UID "
+        "%s does not match the %s owner UID %s"
+
+#.
+#. This message is used to explain an
+#. EWOULDBLOCK error returned by an open(2) system call,
+#. when the use of thr O_NONBLOCK flags would otherwise
+#. cause the open(2) system call to block.
+#.
+msgid   "the O_NONBLOCK flag was specified, and an incompatible lease was "
+        "held on the file"
+msgstr  "the O_NONBLOCK flag was specified, and an incompatible lease was "
+        "held on the file"
+
+#.
+#. This message is used when and EADDRINUSE error
+#. is seen, and the socket does not have the SO_REUSEADDR
+#. socket option enabled.  See socket(7) for more information.
+#.
+msgid   "the SO_REUSEADDR socket option can be used to shorten the wait"
+msgstr  "the SO_REUSEADDR socket option can be used to shorten the wait"
+
+#.
+#. This message is used when a child process
+#. terminates normally.  The exist status is reported.
+#.
+#, c-format
+msgid   "the child process terminated with exit status %s"
+msgstr  "the child process terminated with exit status %s"
+
+#.
+#. This message is used when a child process is
+#. resumed by delivering a signal (SIGCONT).
+#.
+#, c-format
+msgid   "the child process was resumed by delivery of the %s signal"
+msgstr  "the child process was resumed by delivery of the %s signal"
+
+#.
+#. This message is used when a child process is
+#. stopped by delivery of a signal.  The process is still
+#. there, is is stopped, not terminated.
+#.
+#, c-format
+msgid   "the child process was stopped by delivery of the %s signal"
+msgstr  "the child process was stopped by delivery of the %s signal"
+
+#.
+#. This message is used when a child process
+#. is terminated by the delivery of an uncaught signal.
+#.
+#, c-format
+msgid   "the child process was terminated by the %s signal"
+msgstr  "the child process was terminated by the %s signal"
+
+#.
+#. This message is used when a child process
+#. is terminated by the delivery of an uncaught signal.
+#. This also resulted in a core dump.
+#.
+#, c-format
+msgid   "the child process was terminated by the %s signal, core dumped"
+msgstr  "the child process was terminated by the %s signal, core dumped"
+
+#.
+#. This message is used to explain an ETIMEDOUT
+#. error reported by the connect(2) system call, in the case
+#. where the connection attempt took to long.
+#.
+msgid   "the connection attempt took to long; the server may be too busy "
+        "to accept new connections, or an intervening firewall may be "
+        "discarding your packets"
+msgstr  "the connection attempt took to long; the server may be too busy "
+        "to accept new connections, or an intervening firewall may be "
+        "discarding your packets"
+
+#.
+#. This message is used to EPERM error reported by
+#. a rename(2) system call, in the case where the directory
+#. containing oldpath has the sticky bit (S_ISVTX) set and the
+#. process's effective user ID is neither the user ID of the
+#. file to be deleted nor that of the directory containing it,
+#. and the process is not privileged.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the directory containing %s has the sticky bit (S_ISVTX) set and "
+        "the process's effective user ID is neither the user ID of the "
+        "file to be deleted nor that of the directory containing it, and "
+        "the process is not privileged"
+msgstr  "the directory containing %s has the sticky bit (S_ISVTX) set and "
+        "the process's effective user ID is neither the user ID of the "
+        "file to be deleted nor that of the directory containing it, and "
+        "the process is not privileged"
+
+#.
+#. %1$s => the kind of UID, either "effective UID" or "real
+#.         UID", already translated
+#. %2$s => the process's UID and the corresponding login name,
+#.         already quoted
+#. %3$s => the file's UID and the corresponding login name,
+#.         already quoted
+#. %4$s => the type of file to be removed (e.g. "regular file"),
+#.         already translated
+#. %5$s => the directory's UID and the corresponding login name,
+#.         already quoted
+#.
+#, c-format
+msgid   "the directory has the sticky bit (S_ISVTX) set and the process's "
+        "%s %s is neither the owner UID %s of the %s to be removed, nor "
+        "the owner UID %s of the directory containing it"
+msgstr  "the directory has the sticky bit (S_ISVTX) set and the process's "
+        "%s %s is neither the owner UID %s of the %s to be removed, nor "
+        "the owner UID %s of the directory containing it"
+
+#.
+#. This message is used when the process
+#. attempts to execute a regular file which would
+#. otherwise be executable, except that it resides
+#. on a file system that is mounted with the
+#. "noexec" option.
+#.
+msgid   "the executable is on a file system that is mounted with the "
+        "\"noexec\" option"
+msgstr  "the executable is on a file system that is mounted with the "
+        "\"noexec\" option"
+
+#.
+#. This message is used when the process
+#. attempts to execute a regular file which would
+#. otherwise be executable, except that it has the
+#. set-UID (S_ISUID) or set-GID (S_ISGID) bit set,
+#. and it resides on a file system that is mounted
+#. with the "nosuid" option.
+#.
+msgid   "the executable is on a file system that is mounted with the "
+        "\"nosuid\" option"
+msgstr  "the executable is on a file system that is mounted with the "
+        "\"nosuid\" option"
+
+#.
+#. This message is used when explaining an
+#. EEXIST error returned by an open(2) system call.
+#. Usually path_resolution(7) will have a better
+#. explanation, this explanation is only used when a
+#. more specific explanation is not available.
+#.
+msgid   "the file already exists when it should not (flags O_CREAT and "
+        "O_EXCL were used)"
+msgstr  "the file already exists when it should not (flags O_CREAT and "
+        "O_EXCL were used)"
+
+#.
+#. This message is used when an attempt is
+#. made to read from a file descriptor that was not
+#. opened for reading.  The actual open mode will be
+#. printed separately.
+#.
+msgid   "the file descriptor is not open for reading"
+msgstr  "the file descriptor is not open for reading"
+
+#.
+#. This message is used to provide an
+#. explanation for and ENOSPC error returned by an
+#. open(2) system call, in the case where there is no
+#. more room for a new file.
+#.
+#. %1$s => The name of the problematic system call argument
+#. %2$s => The file system mount point and usage,
+#.         in parentheses
+#.
+#, c-format
+msgid   "the file system containing %s %s has no room for the new file"
+msgstr  "the file system containing %s %s has no room for the new file"
+
+#.
+#. This message is used to explain an ENOSPC error
+#. reported by a rename(2) system call.
+#.
+#. It may optionally be followed by the actual mount point,
+#. so it helps if the sentance structure works for that
+#. case.
+#.
+msgid   "the file system containing the file has no room for the new "
+        "directory entry"
+msgstr  "the file system containing the file has no room for the new "
+        "directory entry"
+
+#.
+#. This message is used when explaining why some
+#. permission mode bits are ignored.
+#.
+#. %1$s => text representation of the "rwx" bits, including the
+#.         quotes.  The 3-character string will look like ls -l
+#.         output.
+#.
+#, c-format
+msgid   "the group permission mode %s is ignored"
+msgstr  "the group permission mode %s is ignored"
+
+#.
+#. This message is used to explain an EINVAL error
+#. reported by the pathconf system call.
+#.
+#. %1$s => the name of the system call argument containing
+#.         the 'name' selector, e.g. _PC_NAME_MAX
+#. %2$s => the name of the first argument, "pathname" or "fildes"
+#.
+#, c-format
+msgid   "the implementation does not support an association of %s with %s"
+msgstr  "the implementation does not support an association of %s with %s"
+
+#.
+#. This message is used to explain an EACCES
+#. error reported by a bind(2) system call, in the case
+#. where a privileged port is specific, and the process
+#. does not have permission.
+#.
+msgid   "the network port address is protected"
+msgstr  "the network port address is protected"
+
+#.
+#. This message is used when explaining why
+#. the "other" permission mode bits are ignored.
+#.
+#. %1$s => the "rwx" bits, including the quotes, like the
+#.         3-character string used in 'ls -l' output.
+#.
+#, c-format
+msgid   "the others permission mode %s is ignored"
+msgstr  "the others permission mode %s is ignored"
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permsiions.
+#.
+#. %1$s => the "rwx" mode representation, including the quotes, in a
+#.         form resembling the ls -l representation of mode bits.
+#.
+#, c-format
+msgid   "the others permission mode is %s"
+msgstr  "the others permission mode is %s"
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are ignored when determining
+#. file access permissions.
+#.
+#. %1$s => the kind of GID, "real GID" or "effective GID",
+#.         already translated
+#. %2$s => the GID of the process, number and name.
+#. %3$s => the file type, e.g. "directory" or "regular file"
+#. %4$s => the owner of the file, number and name.
+#. %5$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#, c-format
+msgid   "the process %s %s does not match the %s owner %s so the owner "
+        "permission mode %s is ignored"
+msgstr  "the process %s %s does not match the %s owner %s so the owner "
+        "permission mode %s is ignored"
+
+#.
+#. This message supplements the "no inode modify
+#. permission" message, explaining that the process effective UID
+#. must match the file owner UID.
+#.
+#. %1$s => thekind of UID, eother "real UID" or "effective UID"
+#.         already translated
+#. %2$s => the numeric UID of the process, and the corresponding
+#.         login name from the password file, if available.
+#. %3$s => the name of the offending system call argument,
+#.         possibly with some additional file type info
+#. %4$s => the numeric UID of the file owner, and the
+#.         corresponding login name from the password file, if
+#.         available.
+#.
+#, c-format
+msgid   "the process %s %s does not match the %s owner UID %s"
+msgstr  "the process %s %s does not match the %s owner UID %s"
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permissions.
+#.
+#. %1$s => the kind of GID, "real GID" or "effective GID",
+#.         already translated
+#. %2$s => the GID of the process, number and name.
+#. %3$s => the file type, e.g. 'directory' or 'regular file'
+#. %4$s => the group of the file, number and name.
+#. %5$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#, c-format
+msgid   "the process %s %s matches the %s group GID %s and the group "
+        "permission mode is %s"
+msgstr  "the process %s %s matches the %s group GID %s and the group "
+        "permission mode is %s"
+
+#.
+#. This message is used when explaining which
+#. permission mode bits are used when determining file access
+#. permissions.
+#.
+#. %1$s => the kind of UID, "real UID" or "effective UID",
+#.         already translated.
+#. %2$s => the UID of the process, number and name.
+#. %3$s => the file type, e.g. "directory" or "regular file"
+#. %4$s => the owner of the file, number and name.
+#. %5$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#, c-format
+msgid   "the process %s %s matches the %s owner UID %s and the owner "
+        "permission mode is %s"
+msgstr  "the process %s %s matches the %s owner UID %s and the owner "
+        "permission mode is %s"
+
+#.
+#. This message is used when a process fails to open a
+#. file because that process already has the maximum number of file
+#. descriptors open.
+#.
+msgid   "the process already has the maximum number of file descriptors "
+        "open"
+msgstr  "the process already has the maximum number of file descriptors "
+        "open"
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available,
+#. but the call attempted to only the GID.
+#.
+msgid   "the process did not have the required permissions to change the "
+        "group GID"
+msgstr  "the process did not have the required permissions to change the "
+        "group GID"
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available,
+#. but the call attempted to change only the UID.
+#.
+msgid   "the process did not have the required permissions to change the "
+        "owner UID"
+msgstr  "the process did not have the required permissions to change the "
+        "owner UID"
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available,
+#. but the call attempted to change both the UID and the GID.
+#.
+msgid   "the process did not have the required permissions to change the "
+        "owner UID and group GID"
+msgstr  "the process did not have the required permissions to change the "
+        "owner UID and group GID"
+
+#.
+#. The message is used when explaining an EPERM
+#. error reported by the chown(2) system call, in the case
+#. where no more specific explanation is available.
+#.
+msgid   "the process did not have the required permissions to change the "
+        "owner UID or group GID"
+msgstr  "the process did not have the required permissions to change the "
+        "owner UID or group GID"
+
+#.
+#. This message is used when wait(2) is called and
+#. the process does not have any unwaited-for child
+#. processes.
+#.
+msgid   "the process does not have any unwaited-for child processes"
+msgstr  "the process does not have any unwaited-for child processes"
+
+#.
+#. This message is used when a process does not have
+#. execute permission to something it attempts to execute; for
+#. example, one of the execve calls, or similar.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will in clude the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#, c-format
+msgid   "the process does not have execute permission to the %s in the %s"
+msgstr  "the process does not have execute permission to the %s in the %s"
+
+#.
+#. This message is used when a process does not have
+#. inode modification permission to something it attempts to
+#. modify); for example, fchmod.
+#.
+msgid   "the process does not have inode modification permission"
+msgstr  "the process does not have inode modification permission"
+
+#.
+#. This message is used when a process does not have
+#. inode modification permission to something it attempts to
+#. modify); for example, chmod.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will in clude the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#, c-format
+msgid   "the process does not have inode modification permission to the %"
+        "s in the %s"
+msgstr  "the process does not have inode modification permission to the %"
+        "s in the %s"
+
+#.
+#. This message is used when a process does not have
+#. read permission to something it attempts to
+#. open for reading; for example, open() or fopen().
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will include the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#, c-format
+msgid   "the process does not have read permission to the %s in the %s"
+msgstr  "the process does not have read permission to the %s in the %s"
+
+#.
+#. This message is used when a process does not have
+#. search permission to a directory it attempts to traverse.
+#. (Only used for problems with "." and "/".)
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The pathname, the directory in question.  It will
+#.         include the name of the function call argument, the
+#.         name of the directory, file type "directory".
+#.
+#, c-format
+msgid   "the process does not have search permission to the %s"
+msgstr  "the process does not have search permission to the %s"
+
+#.
+#. This message is used when a process does not have
+#. search permission to a directory it attempts to traverse.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the component of the path, the subdirectory in
+#.         question (will never have slashes).  It will in clude the
+#.         name of the file, and the file type "directory".
+#. %2$s => The name of the directory that contains the subdirectory in
+#.         question; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#, c-format
+msgid   "the process does not have search permission to the %s in the %s"
+msgstr  "the process does not have search permission to the %s in the %s"
+
+#.
+#. This message is used as a generic explanation
+#. of an EPERM error returned by any system call that does
+#. not provide a more specific explanation.
+#.
+msgid   "the process does not have the appropriate privileges to use this "
+        "system call"
+msgstr  "the process does not have the appropriate privileges to use this "
+        "system call"
+
+#.
+#. This message is used when a process does not have
+#. write permission to something it attempts to
+#. open for writing; for example, open() or fopen().
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => the name of the final component of the path, the
+#.         regular file in question (will never have slashes).
+#.         It will include the name of the file, and the file
+#.         type "regular file".
+#. %2$s => the name of the directory that contains the regular
+#.         file to be executed; it may have zero, one or more
+#.         slashes in it.  Will include the name of the function
+#.         call argument, the name of the directory, and the
+#.         file type "directory".
+#.
+#, c-format
+msgid   "the process does not have write permission to the %s in the %s"
+msgstr  "the process does not have write permission to the %s in the %s"
+
+#.
+#. This message is used when a process does not have write
+#. permission to a directoryin order to create a new directory entry;
+#. for example creat(), mkdir(), symlink(), etc.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the directory that is to receive the new
+#.         directory entry; it may have zero, one or more slashes in it.
+#.         Will include the name of the function call argument, the name
+#.         of the directory, and the file type "directory".
+#. %2$s => The name of the final component of the path, the
+#.         new directory entry in question (will never have slashes).
+#.         It will include the name of the new file, and the file type.
+#.
+#, c-format
+msgid   "the process does not have write permission to the %s, this is "
+        "needed to create the directory entry for the %s"
+msgstr  "the process does not have write permission to the %s, this is "
+        "needed to create the directory entry for the %s"
+
+#.
+#. This message is used when the process has
+#. insufficient permissions to a directory to remove a directory
+#. entry from it.
+#.
+#. %1$s => The name of the offending system call argument, the
+#.         quoted name of the corresponding directory, and its
+#.         file type already translated.
+#. %2$s => The quoted name of the directory component, and its
+#.         file type already translated.
+#.
+#, c-format
+msgid   "the process does not have write permission to the %s, this is "
+        "needed to remove the directory entry for the %s"
+msgstr  "the process does not have write permission to the %s, this is "
+        "needed to remove the directory entry for the %s"
+
+#.
+#. This message is used by the wait*()
+#. explanations to describe the relationship between SIGCHLD
+#. and the wait*() functions.
+#.
+msgid   "the process is ignoring the SIGCHLD signal, this means that "
+        "child processes that terminate will not persist until waited for"
+msgstr  "the process is ignoring the SIGCHLD signal, this means that "
+        "child processes that terminate will not persist until waited for"
+
+#.
+#. This message is use when a wait*()
+#. function is asked to wait for a process that does
+#. not exist.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the process specified by %s does not exist"
+msgstr  "the process specified by %s does not exist"
+
+#.
+#. This message is use when a wait*()
+#. function is asked to wait for a process that is
+#. not a child of the process.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the process specified by %s is not a child of this process"
+msgstr  "the process specified by %s is not a child of this process"
+
+#.
+#. This message is used to explain an EPERM error
+#. reported by the connect(2) system call, in the case where
+#. the process tried to connect to a broadcast address
+#. without having the socket broadcast flag enabled; or, the
+#. connection request failed because of a local firewall
+#. rule
+#.
+msgid   "the process tried to connect to a broadcast address without "
+        "having the socket broadcast flag enabled; or, the connection "
+        "request failed because of a local firewall rule"
+msgstr  "the process tried to connect to a broadcast address without "
+        "having the socket broadcast flag enabled; or, the connection "
+        "request failed because of a local firewall rule"
+
+#.
+#. This message is used to explain an ECONNREFUSED
+#. error reported by the connect(2) system call, in the
+#. case where the remote server is accessible but is not
+#. listening for connections to the given port; or, an
+#. intervening firewall refused the connection.
+#.
+msgid   "the remote server is accessible but is not listening for "
+        "connections to the given port; or, an intervening firewall "
+        "refused the connection"
+msgstr  "the remote server is accessible but is not listening for "
+        "connections to the given port; or, an intervening firewall "
+        "refused the connection"
+
+#.
+#. This message is used when explaining an
+#. EACCES error returned by an open(2) system call.
+#. Usually path_resolution(7) will have a better
+#. explanation, this explanation is only used when a
+#. more specific explanation is not available.
+#.
+msgid   "the requested access to the file is not allowed, or search "
+        "permission is denied for one of the directories in the path "
+        "prefix of pathname, or the file did not exist yet and write "
+        "access to the parent directory is not allowed"
+msgstr  "the requested access to the file is not allowed, or search "
+        "permission is denied for one of the directories in the path "
+        "prefix of pathname, or the file did not exist yet and write "
+        "access to the parent directory is not allowed"
+
+#.
+#. This message is used to explain an EADDRNOTAVAIL
+#. error reported by a bind(2) system call, in the case where
+#. the requested network address was not local or a nonexistent
+#. interface was requested.
+#.
+msgid   "the requested network address was not local or a nonexistent "
+        "interface was requested"
+msgstr  "the requested network address was not local or a nonexistent "
+        "interface was requested"
+
+#.
+#. This message is used when an AF_UNIX socket
+#. file already exists when it should not.  While the
+#. bind(2) call will create the entry in the file
+#. system, the correponding close(2) will not remove it
+#. again, the programmer must explicitly unlink(2) it.
+#.
+msgid   "the socket file already exists, and it should not; when you are "
+        "done with AF_UNIX sockets you must deliberately unlink(2) the "
+        "socket file, it does not happen automatically"
+msgstr  "the socket file already exists, and it should not; when you are "
+        "done with AF_UNIX sockets you must deliberately unlink(2) the "
+        "socket file, it does not happen automatically"
+
+#.
+#. This message is used to explain an EINVAL error
+#. returned by the bind(2) system call, in the case where
+#. the socket is already bound to an address.
+#.
+#. %1$s => a representation of the struct sockaddr that the
+#.         socket is already bound to.
+#.
+#, c-format
+msgid   "the socket is already bound to %s"
+msgstr  "the socket is already bound to %s"
+
+#.
+#. This message is used to explain an EINVAL
+#. error returned by the bind(2) system call, in the case
+#. where the socket is already bound to an address, but the
+#. address cannot be determined.
+#.
+msgid   "the socket is already bound to an address"
+msgstr  "the socket is already bound to an address"
+
+#.
+#. This message is used to explain an EISCONN
+#. error reported by the connect(2) system call, in the case
+#. where the socket is already connected.
+#.
+#. %1$s => The network address to which it is connected
+#.
+#, c-format
+msgid   "the socket is already connected to %s"
+msgstr  "the socket is already connected to %s"
+
+#.
+#. This message is used to explain an EISCONN
+#. error reported by the connect(2) system call, in the case
+#. where the socket is already connected, but the exact
+#. address cannot be determined.
+#.
+msgid   "the socket is already connected to a network address"
+msgstr  "the socket is already connected to a network address"
+
+#.
+#. This message is used to explain an EINVAL
+#. error returned by a listen(2) system call.
+#.
+msgid   "the socket is already connected, or the socket has been shut down"
+msgstr  "the socket is already connected, or the socket has been shut down"
+
+#.
+#. This message is used to explain an EAGAIN
+#. error reprted by an accept(2) system call, in the case
+#. where the socket is marked non-blocking (O_NONBLOCK) and
+#. no connections are waiting to be accepted.
+#.
+msgid   "the socket is marked non-blocking and no connections are present "
+        "to be accepted"
+msgstr  "the socket is marked non-blocking and no connections are present "
+        "to be accepted"
+
+#.
+#. This message is used to explain an EALREADY
+#. error reported by the connect(2) system call, in the
+#. case where the socket is non-blocking and a previous
+#. connection attempt has not yet been completed.
+#.
+msgid   "the socket is non-blocking and a previous connection attempt has "
+        "not yet been completed"
+msgstr  "the socket is non-blocking and a previous connection attempt has "
+        "not yet been completed"
+
+#.
+#. This message is used to explain an EINPROGRESS
+#. error reported by the connect(2) system call, in the
+#. case where the socket is non-blocking and the connection
+#. cannot be completed immediately.
+#.
+msgid   "the socket is non-blocking and the connection cannot be "
+        "completed immediately"
+msgstr  "the socket is non-blocking and the connection cannot be "
+        "completed immediately"
+
+#.
+#. This message is used to explain an EDESTADDRREQ
+#. error returned by a listen(2) system call.
+#.
+msgid   "the socket is not bound to a local address, and the protocol "
+        "does not support listening on an unbound socket"
+msgstr  "the socket is not bound to a local address, and the protocol "
+        "does not support listening on an unbound socket"
+
+#.
+#. This message is used to explain an EINVAL error
+#. reported by the accept(2) system call, in the case where
+#. the file descriptor is actually a socket, but is not in a
+#. state that permits the use of the accept(2) system call.
+#.
+msgid   "the socket is not listening for connections"
+msgstr  "the socket is not listening for connections"
+
+#.
+#. This message is used to explain an EOPNOTSUPP
+#. error returned by a listen(2) system call.
+#.
+msgid   "the socket is not of a type that supports the accept(2) system "
+        "call"
+msgstr  "the socket is not of a type that supports the accept(2) system "
+        "call"
+
+#.
+#. This message is used to explain an EOPNOTSUPP
+#. error returned by a listen(2) system call.
+#.
+msgid   "the socket is not of a type that supports the listen(2) system "
+        "call"
+msgstr  "the socket is not of a type that supports the listen(2) system "
+        "call"
+
+#.
+#. This message is used to explain fork(2) errors,
+#. when no more specific cause can be determined.
+#.
+msgid   "the system lacked the necessary resources to create another "
+        "process; or, the system-imposed limit on the total number of "
+        "processes under execution system-wide would be exceeded; or, the "
+        "system-imposed limit on the total number of processes under "
+        "execution by a single user {CHILD_MAX} would be exceeded"
+msgstr  "the system lacked the necessary resources to create another "
+        "process; or, the system-imposed limit on the total number of "
+        "processes under execution system-wide would be exceeded; or, the "
+        "system-imposed limit on the total number of processes under "
+        "execution by a single user {CHILD_MAX} would be exceeded"
+
+#.
+#. This message is used when explaining an ENFILE error.
+#.
+#. Note that it could be followed by the actual limit in
+#. preentheses (if it can be determined) so it helps of the last
+#. phrase in the message can sensably be followed by it.
+#.
+msgid   "the system limit on the total number of open files has been "
+        "reached"
+msgstr  "the system limit on the total number of open files has been "
+        "reached"
+
+#.
+#. This message is used when directory does not have a
+#. directory entry for the named component.
+#.
+#. Different language grammars may need to rearrange the parts.
+#.
+#. %1$s => The name of the offending path component (will never have
+#.         slashes).  It will be quoted.
+#. %2$s => The name of the directory that contains the problematic
+#.         component; it may have zero, one or more slashes in it.  Will
+#.         include the name of the function call argument, the name of
+#.         the directory, and the file type "directory".
+#.
+#, c-format
+msgid   "there is no %s in the %s"
+msgstr  "there is no %s in the %s"
+
+#.
+#. This message is used when getcwd() is trying
+#. to reconstruct the problem, and discovers that the
+#. backwards ".." chain is broken.
+#.
+#, c-format
+msgid   "there is no directory entry in %s that has the same inode number "
+        "as %s; this means that the directory has been unlinked"
+msgstr  "there is no directory entry in %s that has the same inode number "
+        "as %s; this means that the directory has been unlinked"
+
+#.
+#. This message is used to explain an
+#. ENODEV error reported by an open(2) system
+#. call, which shoudl actually have been a ENXIO
+#. error instead.  They are easy to confuse,
+#. they have exactly the same English text
+#. returned from strerror(3).
+#.
+msgid   "this is a Linux kernel bug, in this situation POSIX says ENXIO "
+        "should have been returned"
+msgstr  "this is a Linux kernel bug, in this situation POSIX says ENXIO "
+        "should have been returned"
+
+#.
+#. This message is used to explain that an error the
+#. user is reading is more likely to be a software bug than it
+#. is to be use user's fault.  E.g. things like EBADF and EFAULT
+#. that are clearly beyond the user's control.
+#.
+msgid   "this is more likely to be a software error (a bug) than it is to "
+        "be a user error"
+msgstr  "this is more likely to be a software error (a bug) than it is to "
+        "be a user error"
+
+#.
+#. This message is used when explaining
+#. the capabilities required to exceed system limits
+#. on the number of processes a user may execute
+#. simultaniously.
+#.
+msgid   "to exceed the limit on the number of processes, the process must "
+        "have either the CAP_SYS_ADMIN or the CAP_SYS_RESOURCE capability"
+msgstr  "to exceed the limit on the number of processes, the process must "
+        "have either the CAP_SYS_ADMIN or the CAP_SYS_RESOURCE capability"
+
+#.
+#. This message is used to explain an EACCES error,
+#. where nested #! interpreter files are attempted.
+#.
+#. %1$s => The quoted pathname of the first file that contains an
+#.         interpreter (#!) line, that points at yet another
+#.         interpreted file.
+#.
+#, c-format
+msgid   "too many levels of interpreters (%s)"
+msgstr  "too many levels of interpreters (%s)"
+
+#.
+#. This message is used when too
+#. may links (ELOOP or EMLINK) are seen when
+#. resolving a path.
+#.
+#. It may ioptionally be followed by the limit,
+#. in parentheses, so sentence structure that
+#. works that way would be a plus.
+#.
+#. %1$s => The name of the offending system call
+#.         argument.
+#.
+#, c-format
+msgid   "too many symbolic links were encountered in %s"
+msgstr  "too many symbolic links were encountered in %s"
+
+#.
+#. This string is the type of a file (see stat(2)
+#. for more information) when that file is of an unknown
+#. type, often the result of a bad inode block on a hard disk.
+#.
+msgid   "unknown file type"
+msgstr  "unknown file type"
+
+#.
+#. This message is used when streror (or strerror_r)
+#. is unable to translate an errno value, in which ase this
+#. fall-back message is used.  This does not occur with glibc,
+#. but other libc implemntations are more flakey.
+#.
+msgid   "unknown system error"
+msgstr  "unknown system error"
+
+#.
+#. This message is used when supplementing
+#. and explanation for an EACCES error reported by
+#. an access(2) system call, in the case where the
+#. effective ID does not match the actual ID.
+#.
+#. This text taken from the Linux access(2) man page.
+#.
+msgid   "warning: using access(2) to check if a user is authorized, for "
+        "example to verify a file before actually using open(2), creates "
+        "a security hole, because an attacker might exploit the short "
+        "time interval between checking the file and opening the file to "
+        "manipulate it; for this reason, this use of access(2) should be "
+        "avoided"
+msgstr  "warning: using access(2) to check if a user is authorized, for "
+        "example to verify a file before actually using open(2), creates "
+        "a security hole, because an attacker might exploit the short "
+        "time interval between checking the file and opening the file to "
+        "manipulate it; for this reason, this use of access(2) should be "
+        "avoided"
+
+#.
+#. This message is used to explain an EACCES error,
+#. when attempting to write a file, when path_resolution(7) can
+#. not find anything more specific.
+#.
+#. %1$s => the name of the problematic system call cargument
+#. %2$s => identical to the above
+#.
+#, c-format
+msgid   "write access to %s was not allowed, or one of the directory "
+        "components of %s did not allow search permission"
+msgstr  "write access to %s was not allowed, or one of the directory "
+        "components of %s did not allow search permission"
+
+#.
+#. This message is used when a process attempts to
+#. write to an executable file that is currently being executed.
+#.
+msgid   "write access was requested to an executable image that is "
+        "currently being executed"
+msgstr  "write access was requested to an executable image that is "
+        "currently being executed"
+
+#.
+#. This message is used to explan an EACCES
+#. error reported by a rename(2) system call.  This is
+#. the generic explanation given when renaming things
+#. other than directories when path_resolution(7) is
+#. unable to provide a more specific explanation.
+#.
+msgid   "write permission is denied for the directory containing oldpath "
+        "or newpath; or, search permission is denied for one of the "
+        "directory components of oldpath or newpath"
+msgstr  "write permission is denied for the directory containing oldpath "
+        "or newpath; or, search permission is denied for one of the "
+        "directory components of oldpath or newpath"
+
+#.
+#. This message is used when open(2) received an
+#. ENODEV error, and the pathname it attempted to open was a
+#. socket (first character "s" is ls(1) long output).  They
+#. probably meant to use a named pipe (first character "p" in
+#. ls(1) long outout).
+#.
+msgid   "you cannot use open(2) to open socket files, you must use connect"
+        "(2) instead; a named pipe may be what was intended"
+msgstr  "you cannot use open(2) to open socket files, you must use connect"
+        "(2) instead; a named pipe may be what was intended"

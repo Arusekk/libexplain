@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -51,15 +51,17 @@ void libexplain_buffer_errno_fcntl(struct libexplain_string_buffer_t *sb,
     int errnum, int fildes, int command, long arg);
 
 /**
-  * The libexplain_fcntl_command_parse function may be used to parse
-  * a text representation of a fcntl command argument, and return a
-  * numeric value.
+  * The libexplain_fcntl_command_parse function may be used to parse a text
+  * representation of a fcntl command argument, and return a numeric value.
+  * Prints error message and exits if string cannot be parsed.
   *
   * @param text
   *     The text to be parsed.
+  * @param captn
+  *     Additional caption to be added to error message, if needed.
   * @returns
-  *     integer value of command, or -1 on error
+  *     integer value of command
   */
-int libexplain_fcntl_command_parse(const char *text);
+int libexplain_fcntl_command_parse_or_die(const char *text, const char *captn);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FCNTL_H */

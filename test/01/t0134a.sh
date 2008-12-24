@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ access(pathname = "foobar", mode = W_OK | R_OK) failed, Permission denied
 (EACCES) because the process does not have read permission to the "foobar"
 regular file in the current directory; note that it is an error if any of
 the access types in mode are denied, even if some of the other access types
-in mode are permitted
+in mode would be permitted
 fubar
 test $? -eq 0 || no_result
 

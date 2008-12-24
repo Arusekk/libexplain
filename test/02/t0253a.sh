@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ TEST_SUBJECT="wait ECHILD"
 
 cat > test.ok << 'fubar'
 wait(status = 0xNNNNNNNN) failed, No child processes (ECHILD) because the
-calling process does not have any unwaited-for child processes
+process does not have any unwaited-for child processes
 fubar
 test $? -eq 0 || no_result
 

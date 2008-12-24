@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,10 +21,6 @@
 #define LIBEXPLAIN_BUFFER_ERRNO_READ_H
 
 #include <libexplain/string_buffer.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 struct libexplain_string_buffer_t; /* forward */
 
@@ -87,9 +83,5 @@ void libexplain_buffer_errno_read(libexplain_string_buffer_t *sb,
   */
 void libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_READ_H */

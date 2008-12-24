@@ -19,6 +19,7 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
@@ -30,6 +31,7 @@
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/readlink.h>
 #include <libexplain/buffer/file_type.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
@@ -39,14 +41,9 @@ static void
 libexplain_buffer_errno_readlink_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, char *data, int data_size)
 {
-    int             pathname_bad;
-
-    pathname_bad = errnum == EFAULT && libexplain_path_is_efault(pathname);
+    (void)errnum;
     libexplain_string_buffer_puts(sb, "readlink(pathname = ");
-    if (pathname_bad)
-        libexplain_buffer_pointer(sb, pathname);
-    else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
+    libexplain_buffer_pathname(sb, pathname);
     libexplain_string_buffer_puts(sb, ", data = ");
     libexplain_buffer_pointer(sb, data);
     libexplain_string_buffer_printf(sb, ", data_size = %d)", data_size);
@@ -67,40 +64,37 @@ libexplain_buffer_errno_readlink_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "search permission is denied for a component of pathname"
-            );
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
         if (libexplain_path_is_efault(pathname))
+        {
             libexplain_buffer_efault(sb, "pathname");
-        else
+            break;
+        }
+        if (libexplain_path_is_efault(data))
+        {
             libexplain_buffer_efault(sb, "data");
+            break;
+        }
         break;
 
     case EINVAL:
         if (data_size <= 0)
-            libexplain_string_buffer_puts(sb, "data_size is not positive");
+        {
+            libexplain_string_buffer_puts
+            (
+                sb,
+                /* FIXME: i18n */
+                "data_size is not positive"
+            );
+        }
         else
         {
             struct stat     st;
 
+            /* FIXME: libexplain_buffer_wrong_file_type */
             if (lstat(pathname, &st) >= 0)
             {
                 libexplain_string_buffer_puts(sb, "pathname is a ");

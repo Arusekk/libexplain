@@ -2,7 +2,7 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
 .\" Copyright (C) 2008 Peter Miller
-.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -56,7 +56,11 @@ because directory
 "no-such-dir" does not exist\fP
 .RE
 .PP
-The library also provides thread safe variants of each function.
+The good new is that for each of these functions there is a wrapper
+function, in this case \f[I]libexplain_open_or_die\fP(3), that includes
+the above code fragment.  Adding good error reporting is as simple as
+using a different, but similarly named, function.
+The library also provides thread safe variants of each explanation function.
 .br
 .ne 1i
 .SH HOME PAGE
@@ -113,7 +117,7 @@ It should be in the \f[I]LICENSE\fP file included with this distribution.
 .TS
 tab(;);
 l r l.
-Peter Miller;E-Mail:;millerp@canb.auug.org.au
+Peter Miller;E-Mail:;pmiller@opensource.org.au
 \f(CW/\e/\e*\fP;WWW:;http://www.canb.auug.org.au/~millerp/
 .TE
 .br

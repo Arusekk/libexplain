@@ -24,6 +24,8 @@
   * @brief explain link(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -89,7 +91,8 @@ void libexplain_link_or_die(const char *oldpath, const char *newpath);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_link(const char *oldpath, const char *newpath);
+const char *libexplain_link(const char *oldpath, const char *newpath)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_link function is
@@ -134,7 +137,8 @@ const char *libexplain_link(const char *oldpath, const char *newpath);
   *     many other functions in this library.
   */
 const char *libexplain_errno_link(int errnum, const char *oldpath,
-    const char *newpath);
+    const char *newpath)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_link function is

@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,31 +57,11 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'f':
-            flags = libexplain_open_flags_parse(optarg);
-            if (flags < 0)
-            {
-                fprintf
-                (
-                    stderr,
-                    "-f \"%s\" does not look like open flags\n",
-                    optarg
-                );
-                exit(EXIT_FAILURE);
-            }
+            flags = libexplain_open_flags_parse_or_die(optarg, "-f");
             break;
 
         case 'm':
-            mode = libexplain_permission_mode_parse(optarg);
-            if (mode < 0)
-            {
-                fprintf
-                (
-                    stderr,
-                    "-m \"%s\" does not look like a permission mode\n",
-                    optarg
-                );
-                exit(EXIT_FAILURE);
-            }
+            mode = libexplain_permission_mode_parse_or_die(optarg, "-m");
             break;
 
         case 'V':

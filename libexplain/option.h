@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -59,5 +59,16 @@ int libexplain_option_dialect_specific(void);
   *    dislayed.
   */
 int libexplain_option_debug(void);
+
+/**
+  * The libexplain_option_assemble_program_name option is used to
+  * determine whether or not the libexplain_assemble function should
+  * include the program name in the assembled messages.
+  *
+  * @returns
+  *     int; true (non-zero) is shall include program name, zero (false)
+  *     if shall not include program name.
+  */
+int libexplain_option_assemble_program_name(void);
 
 #endif /* LIBEXPLAIN_OPTION_H */

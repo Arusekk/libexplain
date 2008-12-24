@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -56,45 +56,6 @@
 
 %{
 
-
-const libexplain_parse_bits_table_t *
-libexplain_parse_bits_find_by_name(const char *name,
-    const libexplain_parse_bits_table_t *table, size_t table_size)
-{
-    const libexplain_parse_bits_table_t *tp;
-    const libexplain_parse_bits_table_t *end;
-
-    end = table + table_size;
-    for (tp = table; tp < end; ++tp)
-    {
-        if (0 == strcasecmp(tp->name, name))
-        {
-            return tp;
-        }
-    }
-    return 0;
-}
-
-
-const libexplain_parse_bits_table_t *
-libexplain_parse_bits_find_by_value(int value,
-    const libexplain_parse_bits_table_t *table, size_t table_size)
-{
-    const libexplain_parse_bits_table_t *tp;
-    const libexplain_parse_bits_table_t *end;
-
-    end = table + table_size;
-    for (tp = table; tp < end; ++tp)
-    {
-        if (tp->value == value)
-        {
-            return tp;
-        }
-    }
-    return 0;
-}
-
-
 static const libexplain_parse_bits_table_t *lex_table;
 static size_t   lex_table_size;
 static const char *lex_cp;
@@ -112,14 +73,19 @@ static void
 yyerror(const char *fmt, ...)
 {
     va_list         ap;
-    size_t          len;
 
+    if (error_buffer.position > 0)
+        libexplain_string_buffer_puts(&error_buffer, "; ");
     va_start(ap, fmt);
     libexplain_string_buffer_vprintf(&error_buffer, fmt, ap);
     va_end(ap);
-    len = strlen(fmt);
-    if (len > 0 && fmt[len - 1] != '\n')
-        libexplain_string_buffer_putc(&error_buffer, '\n');
+    if
+    (
+        error_buffer.position > 0
+    &&
+        error_buffer.message[error_buffer.position - 1] == '\n'
+    )
+        error_buffer.position--;
     ++error_count;
 }
 
@@ -211,6 +177,24 @@ yylex(void)
                     yylval.lv_number = tp->value;
                     return NUMBER;
                 }
+                tp =
+                    libexplain_parse_bits_find_by_name_fuzzy
+                    (
+                        name,
+                        lex_table,
+                        lex_table_size
+                    );
+                if (tp)
+                {
+                    yyerror
+                    (
+                        "name \"%s\" unknown, did you mean \"%s\" instead?",
+                        name,
+                        tp->name
+                    );
+                    yylval.lv_number = tp->value;
+                    return NUMBER;
+                }
                 yyerror("name \"%s\" unknown", name);
             }
             return 0;
@@ -259,9 +243,9 @@ yylex(void)
 
 int
 libexplain_parse_bits(const char *text,
-    const libexplain_parse_bits_table_t *table, size_t table_size)
+    const libexplain_parse_bits_table_t *table, size_t table_size,
+    int *result_p)
 {
-    error_message[0] = 0;
     libexplain_string_buffer_init
     (
         &error_buffer,
@@ -273,10 +257,12 @@ libexplain_parse_bits(const char *text,
     lex_cp = text;
     lex_table = table;
     lex_table_size = table_size;
+    result = -1;
     yyparse();
     if (error_count > 0)
         return -1;
-    return result;
+    return *result_p = result;
+    return 0;
 }
 
 

@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,9 +23,9 @@ TEST_SUBJECT="libexplain_open vs ENOSPC"
 
 fmt > test.ok << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, No space left on device
-(ENOSPC) because the file system containing the file ("/exmaple",
-99% full) has no room for the new directory entry; note that oldpath
-still exists
+(ENOSPC) because the file system containing the file has no room for
+the new directory entry ("/example", 99% full); note that oldpath still
+exists
 fubar
 test $? -eq 0 || no_result
 
@@ -35,7 +35,7 @@ test $? -eq 0 || no_result
 explain -e ENOSPC rename foo bar > test.out.raw
 test $? -eq 0 || fail
 
-sed 's|(".*", .*% full)|("/exmaple", 99% full)|' test.out.raw > test.out.cooked
+sed 's|(".*", .*% full)|("/example", 99% full)|' test.out.raw > test.out.cooked
 test $? -eq 0 || no_result
 
 fmt test.out.cooked > test.out

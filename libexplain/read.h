@@ -24,6 +24,8 @@
   * @brief explain read(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -94,7 +96,8 @@ long libexplain_read_or_die(int fildes, void *data, long data_size);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_read(int fildes, const void *data, long data_size);
+const char *libexplain_read(int fildes, const void *data, long data_size)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_read function is
@@ -142,7 +145,8 @@ const char *libexplain_read(int fildes, const void *data, long data_size);
   *     many other functions in this library.
   */
 const char *libexplain_errno_read(int errnum, int fildes, const void *data,
-    long data_size);
+    long data_size)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_read function is

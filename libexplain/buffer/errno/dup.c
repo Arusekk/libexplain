@@ -46,7 +46,7 @@ libexplain_buffer_errno_dup_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, "fildes");
+        libexplain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EBUSY:

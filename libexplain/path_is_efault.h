@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,5 +32,18 @@
   *    space), or 0 if the path is OK.
   */
 int libexplain_path_is_efault(const char *path);
+
+/**
+  * The libexplain_pointer_is_efault function may be used to determine
+  * whether or not a pointer is valid.  Typically this is used when
+  * handling ambiguous EFAULT situations.
+  *
+  * @param ptr
+  *    The pointer to be checked.
+  * @returns
+  *    int; 1 if the pointer is bad (points outside the process address
+  *    space), or 0 if the pointer is OK.
+  */
+int libexplain_pointer_is_efault(const void *ptr);
 
 #endif /* LIBEXPLAIN_PATH_IS_EFAULT_H */

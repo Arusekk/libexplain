@@ -24,6 +24,8 @@
   * @brief explain wait4(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -102,7 +104,8 @@ int libexplain_wait4_or_die(int pid, int *status, int options,
   *     many other functions in this library.
   */
 const char *libexplain_wait4(int pid, int *status, int options,
-    struct rusage *rusage);
+    struct rusage *rusage)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_wait4 function is
@@ -152,7 +155,8 @@ const char *libexplain_wait4(int pid, int *status, int options,
   *     many other functions in this library.
   */
 const char *libexplain_errno_wait4(int errnum, int pid, int *status,
-    int options, struct rusage *rusage);
+    int options, struct rusage *rusage)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_wait4 function is

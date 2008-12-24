@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ test $? -eq 0 || no_result
 cat > test.ok << 'fubar'
 open(pathname = "slink", flags = O_RDONLY | O_NOFOLLOW) failed, Too many
 levels of symbolic links (ELOOP) because O_NOFOLLOW was specified but
-pathname was a symbolic link
+pathname refers to a symbolic link
 fubar
 test $? -eq 0 || no_result
 

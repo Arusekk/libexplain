@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -37,45 +37,26 @@ static const libexplain_parse_bits_table_t table[] =
 void
 libexplain_buffer_access_mode(libexplain_string_buffer_t *sb, int mode)
 {
-    int             first;
-    int             other;
-
     if (mode == 0)
-    {
         libexplain_string_buffer_puts(sb, "F_OK");
-        return;
-    }
-    first = 1;
-    other = 0;
-    while (mode)
-    {
-        int             bit;
-        const libexplain_parse_bits_table_t *tp;
-
-        bit = (mode & -mode);
-        mode -= bit;
-        tp = libexplain_parse_bits_find_by_value(bit, table, SIZEOF(table));
-        if (tp)
-        {
-            if (!first)
-                libexplain_string_buffer_puts(sb, " | ");
-            libexplain_string_buffer_puts(sb, tp->name);
-            first = 0;
-        }
-        else
-            other |= bit;
-    }
-    if (other)
-    {
-        if (!first)
-            libexplain_string_buffer_puts(sb, " | ");
-        libexplain_string_buffer_printf(sb, "%#o", other);
-    }
+    else
+        libexplain_parse_bits_print(sb, mode, table, SIZEOF(table));
 }
 
 
 int
 libexplain_access_mode_parse(const char *text)
 {
-    return libexplain_parse_bits(text, table, SIZEOF(table));
+    int             result;
+
+    result = -1;
+    libexplain_parse_bits(text, table, SIZEOF(table), &result);
+    return result;
+}
+
+
+int
+libexplain_access_mode_parse_or_die(const char *text, const char *caption)
+{
+    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

@@ -1,7 +1,7 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
 .\" Copyright (C) 2008 Peter Miller
-.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -43,21 +43,44 @@ it is possible because the cause is no longer present.
 The \f[CW]LIBEXPLAIN_OPTIONS\fP environment variable may be used
 to control some of the content in the messages.
 .TP 8n
+debug
+Additional debugging messages for libexplain developers.
+Not generally useful to clients of the library.
+.TP 8n
 no-numeric-errno
 This option suppresses the numeric \f[I]errno\fP value from being
 included in the message, \f[I]e.g.\fP \[lq](ENOENT)\[rq] rather than
 \[lq](2, ENOENT)\[rq].
+This option is more generally of use in automated testing, to prevent
+UNIX dialect differences from producing false negatives.
 .TP 8n
 no-dialect-specific
-The option suppresses explanatory text specific to a prticular UNIX dialect.
+The option suppresses explanatory text specific to a particular UNIX dialect.
 It also suppresses printing system specific maximums.
-.PP
-These options are more generally of use in automated testing, to prevent
-UNIX dialect difference from producing false negatives.
+This option is more generally of use in automated testing, to prevent
+UNIX dialect differences from producing false negatives.
+.TP 8n
+no-program-name
+By default the libexplain_*_or_die functions include the name of the
+executing program at the start of the error message, and this helps
+users understand which command is throwing the error.
+This option may be used to suppress the inclusion of the program name,
+which may be of some interest to script writers.
+Program developers can use the \f[I]libexplain_program_name_set\fP(3)
+function is set the name of the command, if they wish to override
+the name that libexplain would otherwise obtain from the operating system.
+Program developers can use the \f[I]libexplain_program_name_assemble\fP(3)
+function is they wish to trump the environment variable.
 .SH Supported System Calls
 Each supported system call has its own \f[I]man\fP page.
-.\" please keep the follwoing list sorted
+.\" please keep the following list sorted
 .\" ----------  A  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_accept\fP(3)
+Explain \f[I]accept\fP(2) errors
+.TP 8n
+\f[I]libexplain_accept_or_die\fP(3)
+accept a connection on a socket and report errors
 .TP 8n
 \f[I]libexplain_access\fP(3)
 Explain \f[I]access\fP(2) errors
@@ -65,6 +88,12 @@ Explain \f[I]access\fP(2) errors
 \f[I]libexplain_access_or_die\fP(3)
 check permissions for a file and report errors
 .\" ----------  B  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_bind\fP(3)
+Explain \f[I]bind\fP(2) errors
+.TP 8n
+\f[I]libexplain_bind_or_die\fP(3)
+bind a name to a socket and report errors
 .\" ----------  C  ---------------------------------------------------------
 .TP 8n
 \f[I]libexplain_chdir\fP(3)
@@ -97,6 +126,12 @@ Explain \f[I]closedir\fP(3) errors
 \f[I]libexplain_closedir_or_die\fP(3)
 close a directory and report errors
 .TP 8n
+\f[I]libexplain_connect\fP(3)
+Explain \f[I]connect\fP(2) errors
+.TP 8n
+\f[I]libexplain_connect_or_die\fP(3)
+initiate a connection on a socket and report errors
+.TP 8n
 \f[I]libexplain_creat\fP(3)
 Explain \f[I]creat\fP(2) errors
 .TP 8n
@@ -108,6 +143,12 @@ create and open a file and report errors
 Explain \f[I]dup\fP(2) errors
 .TP 8n
 \f[I]libexplain_dup_or_die\fP(3)
+duplicate a file descriptor and report errors
+.TP 8n
+\f[I]libexplain_dup2\fP(3)
+Explain \f[I]dup2\fP(2) errors
+.TP 8n
+\f[I]libexplain_dup2_or_die\fP(3)
 duplicate a file descriptor and report errors
 .\" ----------  E  ---------------------------------------------------------
 .TP 8n
@@ -127,6 +168,12 @@ Explain \f[I]fchmod\fP(2) errors
 \f[I]libexplain_fchmod_or_die\fP(3)
 change permissions of a file and report errors
 .TP 8n
+\f[I]libexplain_fchown\fP(3)
+Explain \f[I]fchown\fP(2) errors
+.TP 8n
+\f[I]libexplain_fchown_or_die\fP(3)
+change ownership of a file and report errors
+.TP 8n
 \f[I]libexplain_fclose\fP(3)
 Explain \f[I]fclose\fP(2) errors
 .TP 8n
@@ -138,6 +185,12 @@ Explain \f[I]fcntl\fP(2) errors
 .TP 8n
 \f[I]libexplain_fcntl_or_die\fP(3)
 Manipulate a file descriptor and report errors
+.TP 8n
+\f[I]libexplain_fdopen\fP(3)
+Explain \f[I]fdopen\fP(3) errors
+.TP 8n
+\f[I]libexplain_fdopen_or_die\fP(3)
+stream open function and report errors
 .TP 8n
 \f[I]libexplain_ferror\fP(3)
 Explain \f[I]ferror\fP(3) errors
@@ -175,6 +228,18 @@ Explain \f[I]fork\fP(2) errors
 \f[I]libexplain_fork_or_die\fP(3)
 create a child process and report errors
 .TP 8n
+\f[I]libexplain_fpathconf\fP(3)
+Explain \f[I]fpathconf\fP(3) errors
+.TP 8n
+\f[I]libexplain_fpathconf_or_die\fP(3)
+get configuration values for files and report errors
+.TP 8n
+\f[I]libexplain_fputc\fP(3)
+Explain \f[I]fputc\fP(3) errors
+.TP 8n
+\f[I]libexplain_fputc_or_die\fP(3)
+output of characters and report errors
+.TP 8n
 \f[I]libexplain_fread\fP(3)
 Explain \f[I]fread\fP(3) errors
 .TP 8n
@@ -199,12 +264,24 @@ Explain \f[I]ftruncate\fP(2) errors
 \f[I]libexplain_ftruncate_or_die\fP(3)
 truncate a file to a specified length and report errors
 .TP 8n
+\f[I]libexplain_futimes\fP(3)
+Explain \f[I]futimes\fP(3) errors
+.TP 8n
+\f[I]libexplain_futimes_or_die\fP(3)
+blah blah and report errors
+.TP 8n
 \f[I]libexplain_fwrite\fP(3)
 Explain \f[I]fwrite\fP(3) errors
 .TP 8n
 \f[I]libexplain_fwrite_or_die\fP(3)
 binary stream output and report errors
 .\" ----------  G  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_getaddrinfo\fP(3)
+Explain \f[I]getaddrinfo\fP(3) errors
+.TP 8n
+\f[I]libexplain_getaddrinfo_or_die\fP(3)
+network address and and report errors
 .TP 8n
 \f[I]libexplain_getc\fP(3)
 Explain \f[I]getc\fP(3) errors
@@ -217,6 +294,18 @@ Explain \f[I]getchar\fP(3) errors
 .TP 8n
 \f[I]libexplain_getchar_or_die\fP(3)
 input of characters and report errors
+.TP 8n
+\f[I]libexplain_getcwd\fP(3)
+Explain \f[I]getcwd\fP(2) errors
+.TP 8n
+\f[I]libexplain_getcwd_or_die\fP(3)
+Get current working directory and report errors
+.TP 8n
+\f[I]libexplain_getrlimit\fP(3)
+Explain \f[I]getrlimit\fP(2) errors
+.TP 8n
+\f[I]libexplain_getrlimit_or_die\fP(3)
+get resource limits and report errors
 .TP 8n
 \f[I]libexplain_gettimeofday\fP(3)
 Explain \f[I]gettimeofday\fP(2) errors
@@ -239,6 +328,12 @@ Explain \f[I]link\fP(2) errors
 .TP 8n
 \f[I]libexplain_link_or_die\fP(3)
 make a new name for a file and report errors
+.TP 8n
+\f[I]libexplain_listen\fP(3)
+Explain \f[I]listen\fP(2) errors
+.TP 8n
+\f[I]libexplain_listen_or_die\fP(3)
+listen for connections on a socket and report errors
 .TP 8n
 \f[I]libexplain_lseek\fP(3)
 Explain \f[I]lseek\fP(2) errors
@@ -273,6 +368,24 @@ Explain \f[I]opendir\fP(3) errors
 \f[I]libexplain_opendir_or_die\fP(3)
 open a directory and report errors
 .\" ----------  P  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_pathconf\fP(3)
+Explain \f[I]pathconf\fP(3) errors
+.TP 8n
+\f[I]libexplain_pathconf_or_die\fP(3)
+get configuration values for files and report errors
+.TP 8n
+\f[I]libexplain_putc\fP(3)
+Explain \f[I]putc\fP(3) errors
+.TP 8n
+\f[I]libexplain_putc_or_die\fP(3)
+output of characters and report errors
+.TP 8n
+\f[I]libexplain_putchar\fP(3)
+Explain \f[I]putchar\fP(3) errors
+.TP 8n
+\f[I]libexplain_putchar_or_die\fP(3)
+output of characters and report errors
 .\" ----------  Q  ---------------------------------------------------------
 .\" ----------  R  ---------------------------------------------------------
 .TP 8n
@@ -306,6 +419,12 @@ Explain \f[I]rmdir\fP(2) errors
 \f[I]libexplain_rmdir_or_die\fP(3)
 delete a directory and report errors
 .\" ----------  S  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_select\fP(3)
+Explain \f[I]select\fP(2) errors
+.TP 8n
+\f[I]libexplain_select_or_die\fP(3)
+blah blah and report errors
 .TP 8n
 \f[I]libexplain_socket\fP(3)
 Explain \f[I]socket\fP(2) errors
@@ -400,4 +519,4 @@ libexplain version \*(v)
 .br
 Copyright \*(C) 2008 Peter Miller
 .SH AUTHOR
-Written by Peter Miller <millerp@canb.auug.org.au>
+Written by Peter Miller <pmiller@opensource.org.au>

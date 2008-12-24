@@ -24,6 +24,8 @@
   * @brief explain execve(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -93,7 +95,8 @@ void libexplain_execve_or_die(const char *pathname, char *const *argv,
   *     many other functions in this library.
   */
 const char *libexplain_execve(const char *pathname, char *const *argv,
-    char *const *envp);
+    char *const *envp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_execve function is
@@ -138,7 +141,8 @@ const char *libexplain_execve(const char *pathname, char *const *argv,
   *     many other functions in this library.
   */
 const char *libexplain_errno_execve(int errnum, const char *pathname,
-    char *const *argv, char *const *envp);
+    char *const *argv, char *const *envp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_execve function is

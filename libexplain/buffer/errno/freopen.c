@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -25,9 +25,9 @@
 #include <libexplain/buffer/errno/fflush.h>
 #include <libexplain/buffer/errno/fopen.h>
 #include <libexplain/buffer/errno/freopen.h>
-#include <libexplain/buffer/pointer.h>
-#include <libexplain/buffer/stream_to_pathname.h>
+#include <libexplain/buffer/stream.h>
 #include <libexplain/explanation.h>
+#include <libexplain/stream_to_fildes.h>
 
 
 static void
@@ -40,8 +40,7 @@ libexplain_buffer_errno_freopen_system_call(libexplain_string_buffer_t *sb,
     libexplain_string_buffer_puts(sb, ", flags = ");
     libexplain_string_buffer_puts_quoted(sb, flags);
     libexplain_string_buffer_puts(sb, ", fp = ");
-    libexplain_buffer_pointer(sb, fp);
-    libexplain_buffer_stream_to_pathname(sb, fp);
+    libexplain_buffer_stream(sb, fp);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -60,7 +59,7 @@ libexplain_buffer_errno_freopen_explanation(libexplain_string_buffer_t *sb,
         return;
 
     case EBADF:
-        libexplain_buffer_ebadf(sb, "fp");
+        libexplain_buffer_ebadf(sb, libexplain_stream_to_fildes(fp), "fp");
         break;
 
     case EINTR:

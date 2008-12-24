@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -46,5 +46,11 @@
 #ifndef F_OK
 #define F_OK 0
 #endif
+
+/*
+ * This is supposed to be declared in <unistd.h> by modern POSIX
+ * impelementations.  Sadly, some systems in common use get this wrong.
+ */
+extern char **environ;
 
 #endif /* LIBEXPLAIN_AC_UNISTD_H */

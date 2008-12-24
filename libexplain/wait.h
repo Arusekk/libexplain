@@ -24,6 +24,8 @@
   * @brief explain wait(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -85,7 +87,8 @@ int libexplain_wait_or_die(int *status);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_wait(int *status);
+const char *libexplain_wait(int *status)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_wait function is
@@ -127,7 +130,8 @@ const char *libexplain_wait(int *status);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_wait(int errnum, int *status);
+const char *libexplain_errno_wait(int errnum, int *status)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_wait function is

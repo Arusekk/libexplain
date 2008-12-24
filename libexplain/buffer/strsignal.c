@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -153,9 +153,9 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 int
-libexplain_signal_parse(const char *text)
+libexplain_signal_parse_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits(text, table, SIZEOF(table));
+    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }
 
 

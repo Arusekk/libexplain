@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,8 +21,10 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/caption_name_type.h>
 #include <libexplain/buffer/emlink.h>
 #include <libexplain/buffer/file_type.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/dirname.h>
 #include <libexplain/option.h>
 
@@ -37,50 +39,82 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
     {
         if (S_ISDIR(oldpath_st.st_mode))
         {
+            libexplain_string_buffer_t qnpdir_sb;
             char            npdir[PATH_MAX + 1];
+            char            qnpdir[PATH_MAX + 1];
 
             libexplain_dirname(npdir, newpath, sizeof(npdir));
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_init(&qnpdir_sb, qnpdir, sizeof(qnpdir));
+            libexplain_buffer_caption_name_type
             (
-                sb,
-                "oldpath is a directory and the "
+                &qnpdir_sb,
+                "newpath",
+                npdir,
+                S_IFDIR
             );
-            libexplain_string_buffer_puts_quoted(sb, npdir);
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_printf_gettext
             (
                 sb,
-                " directory already has the maximum number of links"
+                /*
+                 * xgettext: This message is used when explaining an
+                 * EMLINK error, in the case where a directory needs to
+                 * re-write its ".." directory entry, and the new ".."
+                 * would thereby exceed the link limit.
+                 *
+                 * Note that this message may be followed by the actual
+                 * limit in parentheses, so it helps of the last phrase
+                 * can be sensably followed by it.
+                 *
+                 * %1$s => The name (already quoted) and file type
+                 *         (already translated) of the directory of
+                 *         newpath that has the problem.
+                 */
+                i18n("oldpath is a directory and the %s already has the "
+                    "maximum number of links"),
+                qnpdir
             );
         }
         else
         {
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_t ftype_sb;
+            char ftype[100];
+
+            libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+            libexplain_buffer_file_type(&ftype_sb, oldpath_st.st_mode);
+            libexplain_string_buffer_printf_gettext
             (
                 sb,
-                "oldpath is a "
-            );
-            libexplain_buffer_file_type(sb, oldpath_st.st_mode);
-            libexplain_string_buffer_puts
-            (
-                sb,
-                " and already has the maximum number of links"
+                /*
+                 * xgettext: This message is used when explaining an
+                 * EMLINK error, in the non-directory case where a file
+                 * already has the maximum number of links.
+                 *
+                 * Note that this message may be followed by the actual
+                 * limit in parentheses, so it helps of the last phrase
+                 * can be sensably followed by it.
+                 *
+                 * %1$s => the file type of the problem file
+                 *         (already translated)
+                 */
+                i18n("oldpath is a %s and already has the maximum number "
+                    "of links"),
+                ftype
             );
         }
     }
     else
     {
-        /*
-         * Unable to locate a specific cause, use the generic explanation.
-         *
-         * (If can't stat, then will not be able to pconf either, so
-         * can't supplement explanation with the value of the maximum.)
-         */
-        libexplain_string_buffer_puts
+        libexplain_buffer_gettext
         (
             sb,
-            "oldpath already has the maximum number of links to it, "
-            "or oldpath is a directory and the directory containing "
-            "newpath has the maximum number of links"
+            /*
+             * xgettext: This message is used when explaining an EMLINK
+             * error, in the case where a specific cause could not be
+             * determined.
+             */
+            i18n("oldpath already has the maximum number of links to "
+            "it, or oldpath is a directory and the directory "
+            "containing newpath has the maximum number of links")
         );
     }
     if (libexplain_option_dialect_specific())

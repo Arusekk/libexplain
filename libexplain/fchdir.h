@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,6 +24,8 @@
   * @file
   * @brief explain fchdir(2) errors
   */
+
+#include <libexplain/warn_unused_result.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,7 +80,8 @@ void libexplain_fchdir_or_die(int fildes);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_fchdir(int fildes);
+const char *libexplain_fchdir(int fildes)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fchdir function is used to obtain an
@@ -152,7 +155,8 @@ void libexplain_message_fchdir(char *message, int message_size,
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_errno_fchdir(int errnum, int fildes);
+const char *libexplain_errno_fchdir(int errnum, int fildes)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_errno_fchdir function is used to obtain an

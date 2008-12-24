@@ -24,6 +24,8 @@
   * @brief explain system(3) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -105,7 +107,8 @@ void libexplain_system_success_or_die(const char *command);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_system(const char *command);
+const char *libexplain_system(const char *command)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_system function is
@@ -147,7 +150,8 @@ const char *libexplain_system(const char *command);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_system(int errnum, const char *command);
+const char *libexplain_errno_system(int errnum, const char *command)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_system function is

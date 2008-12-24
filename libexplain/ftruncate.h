@@ -24,6 +24,8 @@
   * @brief explain ftruncate(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -89,7 +91,8 @@ void libexplain_ftruncate_or_die(int fildes, long long length);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_ftruncate(int fildes, long long length);
+const char *libexplain_ftruncate(int fildes, long long length)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_ftruncate function is
@@ -134,7 +137,8 @@ const char *libexplain_ftruncate(int fildes, long long length);
   *     many other functions in this library.
   */
 const char *libexplain_errno_ftruncate(int errnum, int fildes,
-    long long length);
+    long long length)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_ftruncate function is

@@ -20,6 +20,7 @@
 #include <libexplain/ac/unistd.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/efbig.h>
 #include <libexplain/buffer/eintr.h>
@@ -65,25 +66,7 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "search permission is denied for a directory component of "
-                "pathname; or, pathname is not writable by the user "
-            );
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
@@ -101,6 +84,7 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
     case EINVAL:
         if (length < 0)
         {
+            /* FIXME: i18n */
             libexplain_string_buffer_puts(sb, "length is negative");
             break;
         }
@@ -108,6 +92,7 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
         {
             struct stat     st;
 
+            /* FIXME: libexplain_buffer_wrong_file_type */
             if (stat(pathname, &st) >= 0 && !S_ISREG(st.st_mode))
             {
                 libexplain_string_buffer_puts(sb, "pathname is a ");
@@ -129,6 +114,7 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the named file is a directory; "
             "directories may not be truncated, use unlink and rmdir instead"
         );
@@ -161,6 +147,7 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the underlying file system does not support extending a "
             "file beyond its current size"
         );

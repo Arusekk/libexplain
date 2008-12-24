@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -33,10 +33,11 @@ report_error(libexplain_string_buffer_t *sb, const char *caption)
         sb,
         /*
          * xgettext: This explanation is used in response to an ENOENT
-         * error.  Both of the %s strings are always identical.  The
-         * string is the name of one of the function call arguments.
-         * This explanation is only used if a more specific cause
-         * cannot be determined.
+         * error.  This explanation is only used if a more specific
+         * cause cannot be determined.
+         *
+         * %1$s => the name of the offending system call argument.
+         * %2$s => always identical to the above.
          */
         i18n("%s, or a directory component of %s, does not exist or is a "
             "dangling symbolic link"),
@@ -54,9 +55,10 @@ report_error_dirname(libexplain_string_buffer_t *sb, const char *caption)
         sb,
         /*
          * xgettext: This explanation is used in response to an ENOENT
-         * error.  The string is the name of one of the function call
-         * arguments.  This explanation is only used if a more specific
+         * error.  This explanation is only used if a more specific
          * cause cannot be determined.
+         *
+         * %1$s => the name of the offending system call argument.
          */
         i18n("a directory component of %s does not exist or is a dangling "
             "symbolic link"),

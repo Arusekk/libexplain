@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_CLOSEDIR_H
 #define LIBEXPLAIN_CLOSEDIR_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <dirent.h>
 
 /**
@@ -88,7 +91,8 @@ void libexplain_closedir_or_die(DIR *dir);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_closedir(DIR *dir);
+const char *libexplain_closedir(DIR *dir)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_closedir function is
@@ -130,7 +134,8 @@ const char *libexplain_closedir(DIR *dir);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_closedir(int errnum, DIR *dir);
+const char *libexplain_errno_closedir(int errnum, DIR *dir)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_closedir function is

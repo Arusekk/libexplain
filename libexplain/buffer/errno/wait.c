@@ -23,6 +23,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/wait.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/no_outstanding_children.h>
 #include <libexplain/buffer/note/sigchld.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
@@ -50,17 +51,7 @@ libexplain_buffer_errno_wait_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case ECHILD:
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used when wait(2) is called and
-             * the calling process does not have any unwaited-for child
-             * processes.
-             */
-            i18n("the calling process does not have any unwaited-for "
-            "child processes")
-        );
+        libexplain_buffer_no_outstanding_children(sb);
         libexplain_buffer_note_sigchld(sb);
         break;
 

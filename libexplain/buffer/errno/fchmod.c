@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,11 +21,13 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/does_not_have_inode_modify_permission.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/fchmod.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/uid.h>
 #include <libexplain/capability.h>
@@ -55,7 +57,7 @@ libexplain_buffer_errno_fchmod_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, "fildes");
+        libexplain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EIO:
@@ -63,46 +65,12 @@ libexplain_buffer_errno_fchmod_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EPERM:
-        {
-            libexplain_string_buffer_puts(sb, "the effective UID");
-            if (libexplain_option_dialect_specific())
-            {
-                libexplain_string_buffer_puts(sb, " (");
-                libexplain_buffer_uid(sb, geteuid());
-                libexplain_string_buffer_putc(sb, ')');
-            }
-            libexplain_string_buffer_puts
-            (
-                sb,
-                " does not match the owner of the file"
-            );
-            if (libexplain_option_dialect_specific())
-            {
-                struct stat     st;
-
-                if (fstat(fildes, &st) >= 0)
-                {
-                    libexplain_string_buffer_puts(sb, " (");
-                    libexplain_buffer_uid(sb, st.st_uid);
-                    libexplain_string_buffer_putc(sb, ')');
-                }
-            }
-            libexplain_string_buffer_puts
-            (
-                sb,
-                ", and the process is not privileged"
-            );
-#ifdef HAVE_SYS_CAPABILITY_H
-            if (libexplain_option_dialect_specific())
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    " (does not have the CAP_FOWNER capability)"
-                );
-            }
-#endif
-        }
+        libexplain_buffer_does_not_have_inode_modify_permission_fd
+        (
+            sb,
+            fildes,
+            "fildes"
+        );
         break;
 
     case EROFS:
@@ -110,7 +78,7 @@ libexplain_buffer_errno_fchmod_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanation for other errors */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,10 +31,11 @@
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/link.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/exdev.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/dirname.h>
 #include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
@@ -56,21 +57,11 @@ static void
 libexplain_buffer_errno_link_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
-    int             oldpath_bad;
-    int             newpath_bad;
-
-    oldpath_bad = errnum == EFAULT && libexplain_path_is_efault(oldpath);
-    newpath_bad = errnum == EFAULT && libexplain_path_is_efault(newpath);
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "link(oldpath = ");
-    if (oldpath_bad)
-        libexplain_buffer_pointer(sb, oldpath);
-    else
-        libexplain_string_buffer_puts_quoted(sb, oldpath);
+    libexplain_buffer_pathname(sb, oldpath);
     libexplain_string_buffer_puts(sb, ", newpath = ");
-    if (newpath_bad)
-        libexplain_buffer_pointer(sb, newpath);
-    else
-        libexplain_string_buffer_puts_quoted(sb, newpath);
+    libexplain_buffer_pathname(sb, newpath);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -136,11 +127,16 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
 
     case EFAULT:
         if (libexplain_path_is_efault(oldpath))
+        {
             libexplain_buffer_efault(sb, "oldpath");
+            break;
+        }
         if (libexplain_path_is_efault(newpath))
+        {
             libexplain_buffer_efault(sb, "newpath");
-        else
-            libexplain_buffer_efault(sb, "oldpath or newpath");
+            break;
+        }
+        libexplain_buffer_efault(sb, "oldpath or newpath");
         break;
 
     case EIO:
@@ -273,7 +269,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanation for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 

@@ -24,6 +24,8 @@
   * @brief explain utime(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -92,7 +94,8 @@ void libexplain_utime_or_die(const char *pathname, const struct utimbuf *times);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_utime(const char *pathname, const struct utimbuf *times);
+const char *libexplain_utime(const char *pathname, const struct utimbuf *times)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_utime function is
@@ -137,7 +140,8 @@ const char *libexplain_utime(const char *pathname, const struct utimbuf *times);
   *     many other functions in this library.
   */
 const char *libexplain_errno_utime(int errnum, const char *pathname,
-    const struct utimbuf *times);
+    const struct utimbuf *times)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_utime function is

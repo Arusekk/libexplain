@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@
 #include <libexplain/gcc_attributes.h>
 
 
-#if 1 // ndef HAVE_MNTENT_H
+#ifndef HAVE_MNTENT_H
 
 
 typedef struct bogus_t bogus_t;
@@ -137,3 +137,57 @@ endmntent(FILE *p)
 }
 
 #endif /* HAVE_MNTENT_H */
+
+#ifndef HAVE_HASMNTOPT
+
+#include <libexplain/ac/string.h>
+
+LINKAGE_HIDDEN
+char *
+hasmntopt(const struct mntent *mnt, const char *opt)
+{
+    const char      *cp;
+    size_t          opt_len;
+
+    opt_len = strlen(opt);
+    cp = mnt->mnt_opts;
+    for (;;)
+    {
+        unsigned char   c;
+        const char      *start;
+        const char      *end;
+        size_t          len;
+
+        c = *cp;
+        if (!cp)
+            return 0;
+        if (isspace(c) || c == ',')
+        {
+            ++cp;
+            continue;
+        }
+        start = cp;
+        for (;;)
+        {
+            ++cp;
+            c = *cp;
+            if (!c || isspace(c) || c == ',')
+                break;
+        }
+        end = cp;
+        len = end - start;
+        if
+        (
+            opt_len < len
+        &&
+            start[opt_len] == '='
+        &&
+            0 == memcmp(opt, start, opt_len)
+        )
+            return (char *)start;
+        if (opt_len == len && 0 == memcmp(opt, start, opt_len))
+            return (char *)start;
+    }
+}
+
+#endif

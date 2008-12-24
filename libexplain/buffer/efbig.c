@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -52,7 +52,15 @@ get_max_file_size(int file_size_bits)
 unsigned long long
 libexplain_get_max_file_size_by_pathname(const char *pathname)
 {
-    return get_max_file_size(pathconf(pathname, _PC_FILESIZEBITS));
+    long            nbits;
+
+#ifdef _PC_FILESIZEBITS
+    nbits = pathconf(pathname, _PC_FILESIZEBITS);
+#else
+    (void)pathname;
+    nbits = sizeof(off_t) * CHAR_BIT;
+#endif
+    return get_max_file_size(nbits);
 }
 
 
@@ -65,8 +73,9 @@ report_error(libexplain_string_buffer_t *sb, const char *caption,
         sb,
         /*
          * xgettext: This message is used when a path given in a path is
-         * larger that the (dialect specific) maximum path length.  The
-         * %s string is the name of the relevant system call argument.
+         * larger that the (dialect specific) maximum path length.
+         *
+         * %1$s => the name of the offending system call argument.
          */
         i18n("%s is larger than the maximum file size"),
         caption
@@ -97,7 +106,15 @@ libexplain_buffer_efbig(libexplain_string_buffer_t *sb, const char *pathname,
 unsigned long long
 libexplain_get_max_file_size_by_fildes(int fildes)
 {
-    return get_max_file_size(fpathconf(fildes, _PC_FILESIZEBITS));
+    long            nbits;
+
+#ifdef _PC_FILESIZEBITS
+    nbits = fpathconf(fildes, _PC_FILESIZEBITS);
+#else
+    (void)fildes;
+    nbits = sizeof(off_t) * CHAR_BIT;
+#endif
+    return get_max_file_size(nbits);
 }
 
 

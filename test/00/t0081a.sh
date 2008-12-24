@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@ TEST_SUBJECT="rename EISDIR"
 
 cat > test.ok << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, Is a directory (EISDIR)
-because newpath is an existing directory, but oldpath is a regular file;
-note that oldpath still exists; note that newpath exists
+because newpath is a directory, but oldpath is a regular file, not a
+directory; note that oldpath still exists; note that newpath exists
 fubar
 test $? -eq 0 || no_result
 

@@ -22,6 +22,7 @@
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/enotdir.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/readdir.h>
 #include <libexplain/buffer/dir_to_pathname.h>
 #include <libexplain/buffer/pointer.h>
@@ -56,7 +57,7 @@ libexplain_buffer_errno_readdir_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, "dir");
+        libexplain_buffer_ebadf(sb, fildes, "dir");
         break;
 
     case EFAULT:
@@ -80,7 +81,7 @@ libexplain_buffer_errno_readdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanations for other errors */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

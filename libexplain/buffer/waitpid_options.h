@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -40,9 +40,12 @@ void libexplain_buffer_waitpid_options(struct libexplain_string_buffer_t *sb,
   *
   * @param text
   *     The string to be parsed
+  * @param caption
+  *     additional text to be added to theh start of error messages
   * @returns
-  *     -1 on error, or the flags value if successful
+  *     the flags value
   */
-int libexplain_parse_waitpid_options(const char *text);
+int libexplain_parse_waitpid_options_or_die(const char *text,
+    const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_WAITPID_OPTIONS_H */

@@ -24,6 +24,8 @@
   * @brief explain fstat(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -90,7 +92,8 @@ void libexplain_fstat_or_die(int fildes, struct stat *buf);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_fstat(int fildes, struct stat *buf);
+const char *libexplain_fstat(int fildes, struct stat *buf)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fstat function is
@@ -134,7 +137,8 @@ const char *libexplain_fstat(int fildes, struct stat *buf);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_fstat(int errnum, int fildes, struct stat *buf);
+const char *libexplain_errno_fstat(int errnum, int fildes, struct stat *buf)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fstat function is

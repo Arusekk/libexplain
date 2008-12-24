@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,8 @@ version_shorter =
     [unsplit "." [word 1 [version_shorter]]
                  [word 2 [version_shorter]]];
 project_short = [fromto %.[version_short] % [project]];
-project_minus = [project_short]-[version_short];
+/* project_minus = [project_short]-[version_short]; */
+project_minus = [project_short]-[version];
 
 /* -------------------------------------------------------------------------
  * Section: Search path
@@ -351,6 +352,7 @@ c_incl_excludes =
  */
 stdio_exceptions =
     libexplain/fclose.h
+    libexplain/fdopen.h
     libexplain/ferror.h
     libexplain/fflush.h
     libexplain/fgetc.h
@@ -392,6 +394,15 @@ dirent_exceptions =
     libexplain/seekdir.h
     libexplain/telldir.h
     ;
+sys/select_exceptions =
+    libexplain/select.h
+    ;
+sys/socket_exceptions =
+    libexplain/accept.h
+    ;
+unistd_exceptions =
+    libexplain/getcwd.h
+    ;
 
 %0%.c.d: %0%.c
     set no-cascade
@@ -409,6 +420,10 @@ dirent_exceptions =
             ex = [stringset [ex] - "-ex=stdio.h"];
         if [in %0%.c [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
+        if [in %0%.c [sys/select_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/select.h"];
+        if [in %0%.c [unistd_exceptions]] then
+            ex = [stringset [ex] - "-ex=unistd.h"];
     }
 
     c_incl -nc -ns -eia -nrec
@@ -440,6 +455,12 @@ dirent_exceptions =
             ex = [stringset [ex] - "-ex=stdio.h"];
         if [in %0%.h [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
+        if [in %0%.h [sys/select_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/select.h"];
+        if [in %0%.h [sys/socket_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/socket.h"];
+        if [in %0%.h [unistd_exceptions]] then
+            ex = [stringset [ex] - "-ex=unistd.h"];
     }
 
     c_incl -nc -ns -eia -nrec

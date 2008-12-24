@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -57,6 +57,21 @@ void libexplain_explanation_init(libexplain_explanation_t *exp, int errnum);
   *     where to print the resulting completed explanation.
   */
 void libexplain_explanation_assemble(libexplain_explanation_t *exp,
+    libexplain_string_buffer_t *result);
+
+/**
+  * The libexplain_explanation_assemble_gai function may be used to
+  * carefully glue the problem statement and the explanation together,
+  * using internationalization, for which localizations may re-arrange
+  * the order.  (specific to getaddrinfo)
+  *
+  * @param exp
+  *     The explanation of interest.  You are expected to have filled out
+  *     the two string buffers already.
+  * @param result
+  *     where to print the resulting completed explanation.
+  */
+void libexplain_explanation_assemble_gai(libexplain_explanation_t *exp,
     libexplain_string_buffer_t *result);
 
 #endif /* LIBEXPLAIN_EXPLANATION_H */

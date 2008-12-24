@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_FREAD_H
 #define LIBEXPLAIN_FREAD_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <stdio.h>
 
 /**
@@ -100,7 +103,8 @@ long libexplain_fread_or_die(void *ptr, long size, long nmemb, FILE *fp);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_fread(void *ptr, long size, long nmemb, FILE *fp);
+const char *libexplain_fread(void *ptr, long size, long nmemb, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fread function is
@@ -150,7 +154,8 @@ const char *libexplain_fread(void *ptr, long size, long nmemb, FILE *fp);
   *     many other functions in this library.
   */
 const char *libexplain_errno_fread(int errnum, void *ptr, long size,
-    long nmemb, FILE *fp);
+    long nmemb, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fread function is

@@ -24,6 +24,8 @@
   * @brief explain gettimeofday(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -95,7 +97,8 @@ void libexplain_gettimeofday_or_die(struct timeval *tv, struct timezone *tz);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_gettimeofday(struct timeval *tv, struct timezone *tz);
+const char *libexplain_gettimeofday(struct timeval *tv, struct timezone *tz)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_gettimeofday function is
@@ -140,7 +143,8 @@ const char *libexplain_gettimeofday(struct timeval *tv, struct timezone *tz);
   *     many other functions in this library.
   */
 const char *libexplain_errno_gettimeofday(int errnum, struct timeval *tv,
-    struct timezone *tz);
+    struct timezone *tz)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_gettimeofday function is

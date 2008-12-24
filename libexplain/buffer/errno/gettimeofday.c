@@ -53,10 +53,16 @@ libexplain_buffer_errno_gettimeofday_explanation(
     switch (errnum)
     {
     case EFAULT:
-        if (tv && libexplain_path_is_efault((char *)tv))
+        if (tv && libexplain_pointer_is_efault(tv))
+        {
             libexplain_buffer_efault(sb, "tv");
-        else
+            break;
+        }
+        if (tz && libexplain_pointer_is_efault(tz))
+        {
             libexplain_buffer_efault(sb, "tz");
+            break;
+        }
         break;
 
     default:

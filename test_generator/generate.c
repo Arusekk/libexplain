@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <libexplain/ac/time.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/errno_info.h>
 #include <libexplain/fopen.h>
 #include <libexplain/fclose.h>
 #include <libexplain/sizeof.h>
@@ -128,6 +129,85 @@ try_to_get_synopsis(const char *function_name, int section)
         state = 0;
     }
     pclose(fp);
+}
+
+
+static void
+downcase_insitu(char *cp)
+{
+    for (;;)
+    {
+        unsigned char c = *cp;
+        if (!c)
+            break;
+        if (isupper(c))
+            *cp = tolower(c);
+        ++cp;
+    }
+}
+
+
+static void
+look_for_error_cases(const char *function_name, int section, FILE *ofp)
+{
+    const char      *cat;
+    FILE            *ifp;
+    char            filename[80];
+    char            command[200];
+
+    snprintf(synopsis, sizeof(synopsis), "blah blah");
+
+    cat = "cat";
+    snprintf(filename, sizeof(filename), "/usr/share/man/man%d/%s.%d.gz",
+        section, function_name, section);
+    if (0 == access(filename, R_OK))
+        cat = "gunzip";
+    else
+    {
+        snprintf(filename, sizeof(filename), "/usr/share/man/man%d/%s.%d",
+            section, function_name, section);
+    }
+
+    snprintf(command, sizeof(command), "%s < %s", cat, filename);
+    ifp = popen(command, "r");
+    if (!ifp)
+        return;
+    for (;;)
+    {
+        char            *cp;
+        char            *ep;
+        const libexplain_errno_info_t *eip;
+        char            line[1000];
+
+        if (!fgets(line, sizeof(line), ifp))
+            break;
+        if (line[0] != '.')
+            continue;
+        if (line[1] != 'B')
+            continue;
+        if (line[2] != ' ')
+            continue;
+        if (line[3] != 'E')
+            continue;
+        cp = line + 3;
+        ep = cp + 1;
+        while (*ep && !isspace((unsigned char)*ep))
+            ++ep;
+        *ep = 0;
+        eip = libexplain_errno_info_by_name(cp);
+        if (!eip)
+            continue;
+
+        fprintf(ofp, "    case %s:\n", cp);
+        downcase_insitu(cp);
+        fprintf(ofp, "        libexplain_buffer_%s(sb", cp);
+        if (0 == strcmp(cp, "ebadf"))
+            fprintf(ofp, ", fildes, \"fildes\"");
+        fprintf(ofp, ");\n");
+        fprintf(ofp, "        break;\n");
+        fprintf(ofp, "\n");
+    }
+    pclose(ifp);
 }
 
 
@@ -343,6 +423,28 @@ extract_name_from_declarator(const node_t *np)
 
 
 static void
+name_should_be_different(const char *name1, const char *name2)
+{
+    fprintf(stderr, "argument \"%s\" should be called \"%s\"\n", name1, name2);
+    exit(EXIT_FAILURE);
+}
+
+
+static void
+make_sure_name_is_acceptable(const char *name)
+{
+    if (0 == strcmp(name, "path"))
+        name_should_be_different(name, "pathname");
+    if (0 == strcmp(name, "fd"))
+        name_should_be_different(name, "fildes");
+    if (0 == strcmp(name, "buf"))
+        name_should_be_different(name, "data");
+    if (0 == strcmp(name, "bufsiz"))
+        name_should_be_different(name, "data_size");
+}
+
+
+static void
 synth_call_args2(const node_t *np, node_t *result)
 {
     if
@@ -366,6 +468,7 @@ synth_call_args2(const node_t *np, node_t *result)
             assert(node_is(np->child[0], "declaration_specifiers"));
             assert(node_is(np->child[1], "declarator"));
             name = extract_name_from_declarator(np->child[1]);
+            make_sure_name_is_acceptable(name);
             if (result->nchild)
                 node_push_back(result, node_new_literal(","));
             node_push_back(result, node_new_literal(name));
@@ -605,6 +708,16 @@ copy_file(const char *filename)
 }
 
 
+static void
+vim_line(FILE *fp, const char *before, const char *after)
+{
+    fprintf(fp, "%s vim:ts=8:sw=4:et", before);
+    if (after && *after)
+        fprintf(fp, " %s", after);
+    fprintf(fp, "\n");
+}
+
+
 void
 generate(node_t *declspec, node_t *decl)
 {
@@ -642,6 +755,8 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "  * @file\n");
     fprintf(fp, "  * @brief explain %s(%d) errors\n", function_name, section);
     fprintf(fp, "  */\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#include <libexplain/warn_unused_result.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "extern \"C\" {\n");
@@ -707,12 +822,16 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  *\n");
+    fprintf(fp, "  * The above code example is available pre-packaged as\n");
+    fprintf(fp, "  * the #libexplain_%s_or_die function.\n", function_name);
+    fprintf(fp, "  *\n");
     blurb_args(fp, call_args, function_name, section);
     blurb_returns(fp);
     fprintf(fp, "  */\n");
     fprintf(fp, "const char *libexplain_%s(", function_name);
     node_print(args, fp);
-    fprintf(fp, ");\n");
+    fprintf(fp, ")\n");
+    fprintf(fp, "%80s\n", "LIBEXPLAIN_WARN_UNUSED_RESULT;");
 
     fprintf(fp, "\n");
     fprintf(fp, "/**\n");
@@ -739,13 +858,17 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  *\n");
+    fprintf(fp, "  * The above code example is available pre-packaged as\n");
+    fprintf(fp, "  * the #libexplain_%s_or_die function.\n", function_name);
+    fprintf(fp, "  *\n");
     blurb_errnum(fp);
     blurb_args(fp, call_args, function_name, section);
     blurb_returns(fp);
     fprintf(fp, "  */\n");
     fprintf(fp, "const char *libexplain_errno_%s(int errnum, ", function_name);
     node_print(args, fp);
-    fprintf(fp, ");\n");
+    fprintf(fp, ")\n");
+    fprintf(fp, "%80s\n", "LIBEXPLAIN_WARN_UNUSED_RESULT;");
 
     fprintf(fp, "\n");
     fprintf(fp, "/**\n");
@@ -773,6 +896,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
+    fprintf(fp, "  *\n");
+    fprintf(fp, "  * The above code example is available pre-packaged as\n");
+    fprintf(fp, "  * the #libexplain_%s_or_die function.\n", function_name);
     fprintf(fp, "  *\n");
     blurb_message(fp);
     blurb_args(fp, call_args, function_name, section);
@@ -810,6 +936,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  *\n");
+    fprintf(fp, "  * The above code example is available pre-packaged as\n");
+    fprintf(fp, "  * the #libexplain_%s_or_die function.\n", function_name);
+    fprintf(fp, "  *\n");
     blurb_message(fp);
     blurb_errnum(fp);
     blurb_args(fp, call_args, function_name, section);
@@ -824,7 +953,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "}\n");
     fprintf(fp, "#endif\n");
 
-    fprintf(fp, "\n");
+    vim_line(fp, "\n/*", "*/");
     fprintf(fp, "#endif /* %s */\n", filename);
     libexplain_fclose_or_die(fp);
 
@@ -900,6 +1029,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
     fprintf(fp, ".RE\n");
+    fprintf(fp, ".PP\n");
+    fprintf(fp, "The above code example is available pre-packaged as the\n");
+    fprintf(fp, "\\f[I]libexplain_%s_or_die\\fP(3) function.\n", function_name);
     groff_args(fp, call_args, function_name, section);
     groff_returns(fp);
     fprintf(fp, ".\\\" ----------------------------------------------------\n");
@@ -934,6 +1066,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
     fprintf(fp, ".RE\n");
+    fprintf(fp, ".PP\n");
+    fprintf(fp, "The above code example is available pre-packaged as the\n");
+    fprintf(fp, "\\f[I]libexplain_%s_or_die\\fP(3) function.\n", function_name);
     groff_errnum(fp);
     groff_args(fp, call_args, function_name, section);
     groff_returns(fp);
@@ -973,6 +1108,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
     fprintf(fp, ".RE\n");
+    fprintf(fp, ".PP\n");
+    fprintf(fp, "The above code example is available pre-packaged as the\n");
+    fprintf(fp, "\\f[I]libexplain_%s_or_die\\fP(3) function.\n", function_name);
     groff_message(fp);
     groff_args(fp, call_args, function_name, section);
     fprintf(fp, ".\\\" ----------------------------------------------------\n");
@@ -1011,6 +1149,9 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, ".fi\n");
     fprintf(fp, ".ft R\n");
     fprintf(fp, ".RE\n");
+    fprintf(fp, ".PP\n");
+    fprintf(fp, "The above code example is available pre-packaged as the\n");
+    fprintf(fp, "\\f[I]libexplain_%s_or_die\\fP(3) function.\n", function_name);
     groff_message(fp);
     groff_errnum(fp);
     groff_args(fp, call_args, function_name, section);
@@ -1023,6 +1164,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "\\f[I]libexplain_%s_or_die\\fP(3)\n", function_name);
     fprintf(fp, "%s and report errors\n", synopsis);
     groff_footer(fp);
+    vim_line(fp, ".\\\"", 0);
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1091,6 +1233,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "\\f[I]exit\\fP(2)\n");
     fprintf(fp, "terminate the calling process\n");
     groff_footer(fp);
+    vim_line(fp, ".\\\"", 0);
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1124,6 +1267,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "        exit(EXIT_FAILURE);\n");
     fprintf(fp, "    }\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1147,6 +1291,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(call_args, fp);
     fprintf(fp, ");\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1177,6 +1322,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "    );\n");
     fprintf(fp, "    return libexplain_common_message_buffer;\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1208,6 +1354,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "\n");
     fprintf(fp, "    );\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1237,6 +1384,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(call_args, fp);
     fprintf(fp, ");\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1274,7 +1422,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(args, fp);
     fprintf(fp, ");\n");
 
-    fprintf(fp, "\n");
+    vim_line(fp, "\n/*", "*/");
     fprintf(fp, "#endif /* %s */\n", filename);
     libexplain_fclose_or_die(fp);
 
@@ -1322,15 +1470,13 @@ generate(node_t *declspec, node_t *decl)
     node_print(args, fp);
     fprintf(fp, ")\n");
     fprintf(fp, "{\n");
+    fprintf(fp, "    /*\n");
+    opengroup_url = "http://www.opengroup.org/onlinepubs/009695399";
+    fprintf(fp, "     * %s/functions/%s.html\n", opengroup_url, function_name);
+    fprintf(fp, "     */\n");
     fprintf(fp, "    switch (errnum)\n");
     fprintf(fp, "    {\n");
-    fprintf(fp, "    see\n");
-    opengroup_url = "http://www.opengroup.org/onlinepubs/009695399";
-    fprintf(fp, "    %s/nfindex.html\n", opengroup_url);
-    fprintf(fp, "    for a definitive error list.  If you are lucky\n");
-    fprintf(fp, "    %s/functions/%s.html\n", opengroup_url, function_name);
-    fprintf(fp, "    will take you directly to the function specification.\n");
-    fprintf(fp, "\n");
+    look_for_error_cases(function_name, section, fp);
     fprintf(fp, "    default:\n");
     fprintf(fp, "        libexplain_buffer_errno_generic(sb, errnum);\n");
     fprintf(fp, "        break;\n");
@@ -1366,6 +1512,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "    );\n");
     fprintf(fp, "    libexplain_explanation_assemble(&exp, sb);\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1440,6 +1587,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, ");\n");
     fprintf(fp, "    return EXIT_SUCCESS;\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1494,6 +1642,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, ")\n");
     fprintf(fp, "    );\n");
     fprintf(fp, "}\n");
+    vim_line(fp, "\n/*", "*/");
     libexplain_fclose_or_die(fp);
 
     /* ********************************************************************** */
@@ -1530,7 +1679,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "  */\n");
     fprintf(fp, "void explain_%s(int errnum, int argc, char **argv);\n",
         function_name);
-    fprintf(fp, "\n");
+    vim_line(fp, "\n/*", "*/");
     fprintf(fp, "#endif /* %s */\n", filename);
     libexplain_fclose_or_die(fp);
 

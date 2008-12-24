@@ -49,17 +49,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'm':
-            mode = libexplain_permission_mode_parse(optarg);
-            if (mode < 0)
-            {
-                fprintf
-                (
-                    stderr,
-                    "-m \"%s\" does not look like a permission mode\n",
-                    optarg
-                );
-                exit(EXIT_FAILURE);
-            }
+            mode = libexplain_permission_mode_parse_or_die(optarg, "-m");
             break;
 
         case 'V':

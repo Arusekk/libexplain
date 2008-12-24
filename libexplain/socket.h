@@ -24,6 +24,8 @@
   * @brief explain socket(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,7 +55,7 @@ extern "C" {
   *     On failure, prints an explanation and exits,
   *     it does not return.
   */
-void libexplain_socket_or_die(int domain, int type, int protocol);
+int libexplain_socket_or_die(int domain, int type, int protocol);
 
 /**
   * The libexplain_socket function is used to
@@ -94,7 +96,8 @@ void libexplain_socket_or_die(int domain, int type, int protocol);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_socket(int domain, int type, int protocol);
+const char *libexplain_socket(int domain, int type, int protocol)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_socket function is
@@ -141,7 +144,8 @@ const char *libexplain_socket(int domain, int type, int protocol);
   *     many other functions in this library.
   */
 const char *libexplain_errno_socket(int errnum, int domain, int type,
-    int protocol);
+    int protocol)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_socket function is

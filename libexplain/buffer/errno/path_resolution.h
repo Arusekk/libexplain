@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,6 +20,7 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_PATH_RESOLUTION_H
 #define LIBEXPLAIN_BUFFER_ERRNO_PATH_RESOLUTION_H
 
+#include <libexplain/have_permission.h>
 #include <libexplain/string_buffer.h>
 
 typedef struct libexplain_final_t libexplain_final_t;
@@ -34,9 +35,15 @@ struct libexplain_final_t
     unsigned        want_to_unlink  :1;
     unsigned        must_exist      :1;
     unsigned        must_not_exist  :1;
-    unsigned        must_be_a_directory :1;
-    unsigned        must_be_a_symbolic_link :1;
     unsigned        follow_symlink  :1;
+
+    /**
+      * This is set to 0 by default, meaning any file type is
+      * acceptable.  If you want a specific type, set this bit, and
+      * also set the st_mode member (below) to the desired file type,
+      * e.g. S_IFREG, S_IFDIR, etc.
+      */
+    unsigned        must_be_a_st_mode :1;
 
     /**
       * When want_to_execute is set, the executable file should be
@@ -50,8 +57,27 @@ struct libexplain_final_t
     /**
       * When want_to_create, this is an indication of what is about to
       * be created, so that it can be used to inform the error messages.
+      *
+      * When want a file to exist (the must_be_a_st_mode bit is set)
+      * this member indicates the desired file type.
+      *
+      * Defaults to S_IFREG.
       */
-    int             st_mode;
+    unsigned        st_mode;
+
+    /*
+     * The specific UID and GID to test against.
+     * Defaults to geteuid() and getegid().
+     * Required by the access(2) system call.
+     */
+    libexplain_have_identity_t id;
+
+    /*
+     * The specific maximum path length to test against.
+     * Defaults to -1, meaning use pathconf(_PC_PATH_MAX).
+     * This is needed when explaining sockaddr_un.sun_path errors.
+     */
+    long            path_max;
 
     /*
      * When you add to this struct, be sure to add to the
@@ -92,5 +118,8 @@ void libexplain_final_init(libexplain_final_t *final_component);
 int libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *pathname_caption,
     const libexplain_final_t *final_component);
+
+#define must_be_a_directory(fcp) \
+    (fcp->must_be_a_st_mode && fcp->st_mode == S_IFDIR)
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_PATH_RESOLUTION_H */

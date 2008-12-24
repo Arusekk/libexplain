@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,18 +26,18 @@
 void
 libexplain_buffer_rlimit(libexplain_string_buffer_t *sb, const struct rlimit *p)
 {
-    libexplain_string_buffer_puts(sb, " (");
+    libexplain_string_buffer_puts(sb, "{ rlim_cur = ");
     if (p->rlim_cur == RLIM_INFINITY)
-        libexplain_string_buffer_puts(sb, "infinity");
+        libexplain_string_buffer_puts(sb, "RLIM_INFINITY");
     else
         libexplain_string_buffer_printf(sb, "%lld", (long long)p->rlim_cur);
     if (p->rlim_cur != p->rlim_max)
     {
-        libexplain_string_buffer_puts(sb, ", max ");
+        libexplain_string_buffer_puts(sb, ", rlim_max = ");
         if (p->rlim_max == RLIM_INFINITY)
-            libexplain_string_buffer_puts(sb, "infinity");
+            libexplain_string_buffer_puts(sb, "RLIM_INFINITY");
         else
             libexplain_string_buffer_printf(sb, "%lld", (long long)p->rlim_max);
     }
-    libexplain_string_buffer_putc(sb, ')');
+    libexplain_string_buffer_puts(sb, " }");
 }

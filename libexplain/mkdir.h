@@ -24,6 +24,8 @@
   * @brief explain mkdir(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -89,7 +91,8 @@ void libexplain_mkdir_or_die(const char *pathname, int mode);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_mkdir(const char *pathname, int mode);
+const char *libexplain_mkdir(const char *pathname, int mode)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_mkdir function is
@@ -133,7 +136,8 @@ const char *libexplain_mkdir(const char *pathname, int mode);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_mkdir(int errnum, const char *pathname, int mode);
+const char *libexplain_errno_mkdir(int errnum, const char *pathname, int mode)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_mkdir function is

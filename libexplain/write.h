@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,8 @@
   * @file
   * @brief explain write(2) errors
   */
+
+#include <libexplain/warn_unused_result.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -93,7 +95,8 @@ long libexplain_write_or_die(int fildes, const void *data, long data_size);
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_write(int fildes, const void *data, long data_size);
+const char *libexplain_write(int fildes, const void *data, long data_size)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_write function may be used to obtain a human readable
@@ -139,7 +142,8 @@ const char *libexplain_write(int fildes, const void *data, long data_size);
   *     this library.
   */
 const char *libexplain_errno_write(int errnum, int fildes, const void *data,
-    long data_size);
+    long data_size)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_write function may be used to obtain a human

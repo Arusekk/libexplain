@@ -24,6 +24,8 @@
   * @brief explain dup(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -85,7 +87,8 @@ int libexplain_dup_or_die(int fildes);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_dup(int fildes);
+const char *libexplain_dup(int fildes)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_dup function is
@@ -127,7 +130,8 @@ const char *libexplain_dup(int fildes);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_dup(int errnum, int fildes);
+const char *libexplain_errno_dup(int errnum, int fildes)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_dup function is

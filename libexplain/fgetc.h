@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_FGETC_H
 #define LIBEXPLAIN_FGETC_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <stdio.h>
 
 /**
@@ -88,7 +91,8 @@ int libexplain_fgetc_or_die(FILE *fp);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_fgetc(FILE *fp);
+const char *libexplain_fgetc(FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_fgetc function is
@@ -131,7 +135,8 @@ const char *libexplain_fgetc(FILE *fp);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_fgetc(int errnum, FILE *fp);
+const char *libexplain_errno_fgetc(int errnum, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_fgetc function is

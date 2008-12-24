@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,17 +42,7 @@ explain_chmod(int errnum, int argc, char **argv)
         exit(EXIT_FAILURE);
 
     case 2:
-        mode = libexplain_permission_mode_parse(argv[1]);
-        if (mode < 0)
-        {
-            fprintf
-            (
-                stderr,
-                "argument \"%s\" does not look like a permission mode\n",
-                argv[1]
-            );
-            exit(EXIT_FAILURE);
-        }
+        mode = libexplain_permission_mode_parse_or_die(argv[1], "chmod arg 2");
         /* fall through... */
 
     case 1:

@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ TEST_SUBJECT="socket EINVAL"
 . test_prelude
 
 cat > test.ok << 'fubar'
-socket(domain = PF_INET, type = SOCK_STREAM, protocol = IPPROTO_TCP)
+socket(family = PF_INET, type = SOCK_STREAM, protocol = IPPROTO_TCP)
 failed, Invalid argument (EINVAL) because unknown protocol, or protocol
 family not available
 fubar

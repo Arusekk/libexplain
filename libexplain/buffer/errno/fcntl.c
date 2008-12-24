@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 #include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/check_fildes_range.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eintr.h>
@@ -83,9 +84,9 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 int
-libexplain_fcntl_command_parse(const char *text)
+libexplain_fcntl_command_parse_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits(text, table, sizeof(table));
+    return libexplain_parse_bits_or_die(text, table, sizeof(table), caption);
 }
 
 
@@ -210,7 +211,7 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
     case EBADF:
         if (fcntl(fildes, F_GETFL) < 0)
         {
-            libexplain_buffer_ebadf(sb, "fildes");
+            libexplain_buffer_ebadf(sb, fildes, "fildes");
             break;
         }
         switch (command)
@@ -288,23 +289,7 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
 #ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
 #endif
-            if (arg < 0)
-            {
-                libexplain_string_buffer_puts(sb, "the argument is negative");
-            }
-            else
-            {
-                long            n;
-
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    "the argument is greater than the maximum allowable value"
-                );
-                n = sysconf(_SC_OPEN_MAX);
-                if (n > 0)
-                    libexplain_string_buffer_printf(sb, " (%ld)", n);
-            }
+            libexplain_buffer_check_fildes_range(sb, arg, "arg");
             break;
 
 #ifdef F_SETSIG

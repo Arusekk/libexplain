@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,6 +23,7 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
@@ -31,11 +32,12 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/symlink.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/string_buffer.h>
@@ -45,21 +47,11 @@ static void
 libexplain_buffer_errno_symlink_system_call(libexplain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
-    int             oldpath_bad;
-    int             newpath_bad;
-
-    oldpath_bad = errnum == EFAULT && libexplain_path_is_efault(oldpath);
-    newpath_bad = errnum == EFAULT && libexplain_path_is_efault(newpath);
+    (void)errnum;
     libexplain_string_buffer_printf(sb, "symlink(oldpath = ");
-    if (oldpath_bad)
-        libexplain_buffer_pointer(sb, oldpath);
-    else
-        libexplain_string_buffer_puts_quoted(sb, oldpath);
+    libexplain_buffer_pathname(sb, oldpath);
     libexplain_string_buffer_puts(sb, ", newpath = ");
-    if (newpath_bad)
-        libexplain_buffer_pointer(sb, newpath);
-    else
-        libexplain_string_buffer_puts_quoted(sb, newpath);
+    libexplain_buffer_pathname(sb, newpath);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -79,29 +71,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                newpath,
-                "newpath",
-                &final_component
-            )
-        )
-        {
-            /*
-             * No specific cause was found, go with the generic explanation.
-             */
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "write access to the directory containing newpath is "
-                "denied, or one of the directories in the path prefix "
-                "of newpath did not allow search permission"
-            );
-        }
+        libexplain_buffer_eacces(sb, newpath, "newpath", &final_component);
         break;
 
     case EEXIST:
@@ -113,16 +83,22 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
                 libexplain_buffer_file_type(sb, st.st_mode);
             }
         }
+        /* FIXME: i18n */
         libexplain_string_buffer_puts(sb, " newpath already exists");
         break;
 
     case EFAULT:
         if (libexplain_path_is_efault(oldpath))
+        {
             libexplain_buffer_efault(sb, "oldpath");
-        else if (libexplain_path_is_efault(newpath))
+            break;
+        }
+        if (libexplain_path_is_efault(newpath))
+        {
             libexplain_buffer_efault(sb, "newpath");
-        else
-            libexplain_buffer_efault(sb, "oldpath or newpath");
+            break;
+        }
+        libexplain_buffer_efault(sb, "oldpath or newpath");
         break;
 
     case EIO:
@@ -145,6 +121,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
                 path_max = PATH_MAX;
             if (oldpath_len > (size_t)path_max)
             {
+                /* FIXME: i18n */
                 libexplain_string_buffer_puts(sb, "oldpath is too long");
                 libexplain_string_buffer_printf
                 (
@@ -173,6 +150,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "oldpath is the empty string; if you meant the current "
                 "directory, use \".\" instead"
             );
@@ -186,6 +164,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOSPC:
+        /* FIXME: i18n */
         libexplain_string_buffer_puts
         (
             sb,
@@ -204,6 +183,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EPERM:
+        /* FIXME: i18n */
         libexplain_string_buffer_puts
         (
             sb,
@@ -222,7 +202,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanation for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

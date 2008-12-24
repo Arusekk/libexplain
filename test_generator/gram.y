@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,7 +122,9 @@ static const res_tab_t res_tab[] =
     { "double", DOUBLE },
     { "enum", ENUM },
     { "extern", EXTERN },
+    { "fd_set", TYPE_NAME },
     { "float", FLOAT },
+    { "gid_t", TYPE_NAME },
     { "int", INT },
     { "long", LONG },
     { "mode_t", TYPE_NAME },
@@ -132,11 +134,14 @@ static const res_tab_t res_tab[] =
     { "register", REGISTER },
     { "short", SHORT },
     { "signed", SIGNED },
+    { "sigset_t", TYPE_NAME },
     { "size_t", TYPE_NAME },
+    { "socklen_t", TYPE_NAME },
     { "ssize_t", TYPE_NAME },
     { "static", STATIC },
     { "struct", STRUCT },
     { "typedef", TYPEDEF },
+    { "uid_t", TYPE_NAME },
     { "union", UNION },
     { "unsigned", UNSIGNED },
     { "void", VOID },

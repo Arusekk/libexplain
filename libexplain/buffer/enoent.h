@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,9 +31,9 @@ struct libexplain_final_t; /* forward */
   * @param sb
   *    The string buffer to print the explanation into
   * @param pathname
-  *    The offenting path
+  *    The offending path
   * @param pathname_caption
-  *    The name of the system call argument of the offenting path
+  *    The name of the system call argument of the offending path
   * @param pathname_final_component
   *    the attributes required of the final path component
   */
@@ -48,13 +48,13 @@ void libexplain_buffer_enoent(libexplain_string_buffer_t *sb,
   * @param sb
   *    The string buffer to print the explanation into
   * @param oldpath
-  *    The offenting path
+  *    The offending path
   * @param oldpath_caption
-  *    The name of the system call argument of the offenting path
+  *    The name of the system call argument of the offending path
   * @param oldpath_final_component
   *    the attributes required of the final path component
   * @param newpath
-  *    The offenting path
+  *    The offending path
   * @param newpath_caption
   *    The name of the system call argument of the offenting path
   * @param newpath_final_component

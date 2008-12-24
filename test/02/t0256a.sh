@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ TEST_SUBJECT="system"
 cat > test.ok << 'fubar'
 sh: ./snot: No such file or directory
 system(command = "./snot"): success, but the child process terminated with
-exit status 127, there is no "snot" file in the current directory
+exit status 127, there is no "snot" regular file in the current directory
 fubar
 test $? -eq 0 || no_result
 

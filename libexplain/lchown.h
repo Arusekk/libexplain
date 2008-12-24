@@ -24,6 +24,8 @@
   * @brief explain lchown(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -94,7 +96,8 @@ void libexplain_lchown_or_die(const char *pathname, int owner, int group);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_lchown(const char *pathname, int owner, int group);
+const char *libexplain_lchown(const char *pathname, int owner, int group)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_lchown function is
@@ -141,7 +144,8 @@ const char *libexplain_lchown(const char *pathname, int owner, int group);
   *     many other functions in this library.
   */
 const char *libexplain_errno_lchown(int errnum, const char *pathname, int owner,
-    int group);
+    int group)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_lchown function is

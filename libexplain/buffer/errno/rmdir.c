@@ -19,6 +19,7 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
@@ -26,8 +27,10 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/rmdir.h>
+#include <libexplain/buffer/note/still_exists.h>
 #include <libexplain/buffer/path_to_pid.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/capability.h>
@@ -109,31 +112,13 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
 
     libexplain_final_init(&final_component);
     final_component.want_to_unlink = 1;
-    final_component.must_be_a_directory = 1;
+    final_component.must_be_a_st_mode = 1;
+    final_component.st_mode = S_IFDIR;
 
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "write access to the directory containing pathname was "
-                "not allowed; or, one of the directories in the path "
-                "prefix of pathname did not allow search permission"
-            );
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EBUSY:
@@ -145,6 +130,7 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "pathname is currently in use by the system or some process "
             "that prevents its removal"
         );
@@ -171,6 +157,7 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "pathname has \".\" as last component"
         );
         break;
@@ -209,6 +196,7 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "pathname has \"..\" as its final component"
             );
         }
@@ -219,6 +207,7 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "pathname is not an empty directory; that is, it "
                 "contains entries other than \".\" and \"..\""
             );
@@ -244,6 +233,7 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the directory containing pathname has the sticky bit "
                 "(S_ISVTX) set and the process's effective user ID is neither "
                 "the user ID of the file to be deleted nor that of the "
@@ -273,22 +263,11 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanations for other errors */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 
-    {
-        struct stat     st;
-
-        if (lstat(pathname, &st) == 0)
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "; note that pathname still exists"
-            );
-        }
-    }
+    libexplain_buffer_note_if_still_exists(sb, pathname, "pathname");
 }
 
 

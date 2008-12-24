@@ -1,7 +1,7 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
 .\" Copyright (C) 2008 Peter Miller
-.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -45,9 +45,15 @@ will be less accurate than if the program itself were to use
 The functions understood include:
 .\" ----------  A  ---------------------------------------------------------
 .TP 8n
+accept \f[I]fildes\fP \f[I]addr\fP \f[I]addrlen\fP
+The \f[I]accept\fP(2) system call.
+.TP 8n
 access \f[I]pathname\fP
 The \f[I]access\fP(2) system call.
 .\" ----------  B  ---------------------------------------------------------
+.TP 8n
+bind \f[I]fildes\fP \f[I]addr\fP \f[I]sockaddr_size\fP
+The \f[I]bind\fP(2) system call.
 .\" ----------  C  ---------------------------------------------------------
 .TP 8n
 chdir \f[I]pathname\fP
@@ -65,12 +71,18 @@ The \f[I]close\fP(2) system call.
 closedir \f[I]dir\fP
 The \f[I]closedir\fP(3) system call.
 .TP 8n
+connect \f[I]fildes\fP \f[I]serv_addr\fP \f[I]serv_addr_size\fP
+The \f[I]connect\fP(2) system call.
+.TP 8n
 creat \f[I]pathname\fP [ \f[I]permission-mode\fP
 The \f[I]creat\fP(2) system call.
 .\" ----------  D  ---------------------------------------------------------
 .TP 8n
 dup \f[I]fildes\fP
 The \f[I]dup\fP(2) system call.
+.TP 8n
+dup2 \f[I]oldfd\fP \f[I]newfd\fP
+The \f[I]dup2\fP(2) system call.
 .\" ----------  E  ---------------------------------------------------------
 .TP 8n
 execve \f[I]pathname\fP \f[I]arg\fP...
@@ -80,8 +92,14 @@ The \f[I]execve\fP(2) system call.
 fchdir \f[I]pathname\fP
 The \f[I]fchdir\fP(2) system call.
 .TP 8n
+fchown \f[I]fildes\fP \f[I]owner\fP \f[I]group\fP
+The \f[I]fchown\fP(2) system call.
+.TP 8n
 fcntl \f[I]fildes\fP \f[I]command\fP [ \f[I]arg\fP ]
 The \f[I]fcntl\fP(2) system call.
+.TP 8n
+fdopen \f[I]fd\fP \f[I]mode\fP
+The \f[I]fdopen\fP(3) system call.
 .TP 8n
 ferror \f[I]fp\fP
 The \f[I]ferror\fP(3) system call.
@@ -95,6 +113,9 @@ The \f[I]fgets\fP(3) system call.
 fork
 The \f[I]fork\fP(2) system call.
 .TP 8n
+fpathconf \f[I]fildes\fP \f[I]name\fP
+The \f[I]fpathconf\fP(3) system call.
+.TP 8n
 fread \f[I]ptr\fP \f[I]size\fP \f[I]nmemb\fP \f[I]fp\fP
 The \f[I]fread\fP(3) system call.
 .TP 8n
@@ -106,11 +127,17 @@ The \f[I]mode\fP argument (a textual equivalent of the \f[I]open\fP
 system call's \f[I]flags\fP argument).
 See \f[I]fopen\fP(3) for more information.
 .TP 8n
+fputc \f[I]c\fP [ \f[I]fp\fP ]
+The \f[I]fputc\fP(3) system call.
+.TP 8n
 fstat \f[I]pathname\fP
 The \f[I]fstat\fP(2) system call.
 .TP 8n
 ftruncate \f[I]fildes\fP \f[I]length\fP
 The \f[I]ftruncate\fP(2) system call.
+.TP 8n
+futimes \f[I]fildes\fP \f[I]tv[0]\fP \f[I]tv[1]\fP
+The \f[I]futimes\fP(3) system call.
 .\" ----------  G  ---------------------------------------------------------
 .TP 8n
 getc \f[I]fp\fP
@@ -118,6 +145,12 @@ The \f[I]getc\fP(3) system call.
 .TP 8n
 getchar
 The \f[I]getchar\fP(3) system call.
+.TP 8n
+getcwd \f[I]buf\fP \f[I]size\fP
+The \f[I]getcwd\fP(2) system call.
+.TP 8n
+getrlimit \f[I]resource\fP \f[I]rlim\fP
+The \f[I]getrlimit\fP(2) system call.
 .TP 8n
 gettimeofday [ \f[I]tv\fP [ \f[I]tz\fP ] ]
 The \f[I]gettimeofday\fP(2) system call.
@@ -133,6 +166,9 @@ The \f[I]lchown\fP(2) system call.
 link \f[I]oldpath\fP \f[I]newpath\fP
 The \f[I]link\fP(2) system call.
 .TP 8n
+listen \f[I]fildes\fP \f[I]backlog\fP
+The \f[I]listen\fP(2) system call.
+.TP 8n
 lseek \f[I]fildes\fP \f[I]offset\fP \f[I]whence\fP
 The \f[I]lseek\fP(2) system call.
 .TP 8n
@@ -141,7 +177,7 @@ The \f[I]lstat\fP(2) system call.
 .\" ----------  M  ---------------------------------------------------------
 .TP 8n
 mkdir \f[I]pathname\fP [ \f[I]mode\fP ]
-The \f[I]mkdir\dP(2) system call.
+The \f[I]mkdir\fP(2) system call.
 .\" ----------  N  ---------------------------------------------------------
 .\" ----------  O  ---------------------------------------------------------
 .TP 8n
@@ -155,6 +191,15 @@ The \f[I]mode\fP argument may be numeric or symbolic.
 opendir \f[I]pathname\fP
 The \f[I]opendir\fP(3) system call.
 .\" ----------  P  ---------------------------------------------------------
+.TP 8n
+pathconf \f[I]pathname\fP \f[I]name\fP
+The \f[I]pathconf\fP(3) system call.
+.TP 8n
+putc \f[I]c\fP \f[I]fp\fP
+The \f[I]putc\fP(3) system call.
+.TP 8n
+putchar \f[I]c\fP
+The \f[I]putchar\fP(3) system call.
 .\" ----------  Q  ---------------------------------------------------------
 .\" ----------  R  ---------------------------------------------------------
 .TP 8n
@@ -165,6 +210,10 @@ rename \f[I]oldpath\fP \f[I]newpath\fP
 The \f[I]rename\fP(2) system call.
 .\" ----------  S  ---------------------------------------------------------
 .TP 8n
+select \f[I]nfds\fP \f[I]readfds\fP \f[I]writefds\fP \f[I]exceptfds\fP \
+\f[I]timeout\fP
+The \f[I]select\fP(2) system call.
+.TP 8n
 socket \f[I]domain\fP \f[I]type\fP \f[I]protocol\fP
 The \f[I]socket\fP(2) system call.
 .TP 8n
@@ -174,8 +223,8 @@ The \f[I]stat\fP(2) system call.
 strerror
 The error given will be printed out with all known detail.
 .TP 8n
-rename ymlinkf[I]oldpath\fP \f[I]newpath\fP
-The \f[I]ymlinkename\fP(2) system call.
+symlink \f[I]oldpath\fP \f[I]newpath\fP
+The \f[I]symlink\fP(2) system call.
 .TP 8n
 system \f[I]command\fP
 The \f[I]system\fP(3) system call.
@@ -235,4 +284,4 @@ Copyright
 \*(Y)
 Peter Miller
 .SH AUTHOR
-Written by Peter Miller <millerp@canb.auug.org.au>
+Written by Peter Miller <pmiller@opensource.org.au>

@@ -24,6 +24,8 @@
   * @brief explain truncate(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -89,7 +91,8 @@ void libexplain_truncate_or_die(const char *pathname, long long length);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_truncate(const char *pathname, long long length);
+const char *libexplain_truncate(const char *pathname, long long length)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_truncate function is
@@ -134,7 +137,8 @@ const char *libexplain_truncate(const char *pathname, long long length);
   *     many other functions in this library.
   */
 const char *libexplain_errno_truncate(int errnum, const char *pathname,
-    long long length);
+    long long length)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_truncate function is

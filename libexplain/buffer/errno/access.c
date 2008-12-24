@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,9 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/access_mode.h>
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
@@ -32,14 +34,15 @@
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/access.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/etxtbsy.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/path_to_pid.h>
-#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/dirname.h>
 #include <libexplain/explanation.h>
 #include <libexplain/have_permission.h>
-#include <libexplain/path_is_efault.h>
 #include <libexplain/pathname_is_a_directory.h>
 
 
@@ -47,14 +50,9 @@ static void
 libexplain_buffer_errno_access_call(libexplain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode)
 {
-    int             bad_pathname;
-
-    bad_pathname = errnum == EFAULT && libexplain_path_is_efault(pathname);
+    (void)errnum;
     libexplain_string_buffer_puts(sb, "access(pathname = ");
-    if (bad_pathname)
-        libexplain_buffer_pointer(sb, pathname);
-    else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
+    libexplain_buffer_pathname(sb, pathname);
     libexplain_string_buffer_puts(sb, ", mode = ");
     libexplain_buffer_access_mode(sb, mode);
     libexplain_string_buffer_putc(sb, ')');
@@ -66,43 +64,6 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode)
 {
     libexplain_final_t final_component;
-    int             bad_pathname;
-
-    /*
-     * The Linux access(2) man page says
-     *
-     *     The check is done using the calling process's real UID and
-     *     GID, rather than the effective IDs as is done when actually
-     *     attempting an operation (e.g., open(2)) on the file.  This
-     *     allows set-user-ID programs to easily determine the invoking
-     *     user's authority.
-     *
-     * FIXME: should we parameterize the path_resolution function to
-     * accomodate this test?  Especially when it is a bad idea:
-     *
-     *     Warning:  Using access() to check if a user is authorized
-     *     to, for example, open a file before actually doing so using
-     *     open(2) creates a security hole, because the user might
-     *     exploit the short time interval between checking and opening
-     *     the file to manipulate it.  For this reason, this use of this
-     *     system call should be avoided.
-     */
-    if (getuid() != geteuid() || getgid() != getgid())
-    {
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "{warning: using access(2) to check if a user is "
-            "authorized, for example to open a file before actually "
-            "using open(2), creates a security hole, because the user "
-            "might exploit the short time interval between checking "
-            "and opening the file to manipulate it; for this reason, "
-            "this use of access(2) should be avoided}"
-        );
-        return;
-    }
-
-    bad_pathname = errnum == EFAULT && libexplain_path_is_efault(pathname);
 
     /*
      * Translate the mode into final component flags.
@@ -120,27 +81,24 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
             final_component.want_to_execute = 1;
     }
 
+    /*
+     * The Linux access(2) man page says
+     *
+     *     The check is done using the process's real UID and
+     *     GID, rather than the effective IDs as is done when actually
+     *     attempting an operation (e.g., open(2)) on the file.  This
+     *     allows set-user-ID programs to easily determine the invoking
+     *     user's authority.
+     *
+     * we will warn them about this later.
+     */
+    final_component.id.uid = getuid();
+    final_component.id.gid = getgid();
+
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "the requested access to pathname would be denied"
-            );
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
 
         /*
          * If they asked for more than one permission, explain that they
@@ -149,13 +107,48 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
          */
         if (mode != (mode & -mode))
         {
-            libexplain_string_buffer_puts
+            libexplain_string_buffer_puts(sb, "; ");
+            libexplain_buffer_gettext
             (
                 sb,
-                "; note that it is an error if any of the access "
+                /*
+                 * xgettext: This message is used when supplementing an
+                 * EACCES error returned by the access(2) system call,
+                 * to remind users that it is an error if ANY of the
+                 * access types in mode are denied, even if some of the
+                 * other access types in mode would be permitted.
+                 */
+                i18n("note that it is an error if any of the access "
                 "types in mode are denied, even if some of the other "
-                "access types in mode are permitted"
+                "access types in mode would be permitted")
             );
+        }
+
+        if (getuid() != geteuid() || getgid() != getgid())
+        {
+            libexplain_string_buffer_puts(sb, "; ");
+            libexplain_buffer_gettext
+            (
+                sb,
+                /*
+                 * xgettext: This message is used when supplementing
+                 * and explanation for an EACCES error reported by
+                 * an access(2) system call, in the case where the
+                 * effective ID does not match the actual ID.
+                 *
+                 * This text taken from the Linux access(2) man page.
+                 */
+                i18n("warning: using access(2) to check if a user is "
+                "authorized, for example to verify a file before actually "
+                "using open(2), creates a security hole, because an attacker "
+                "might exploit the short time interval between checking "
+                "the file and opening the file to manipulate it; for this "
+                "reason, this use of access(2) should be avoided")
+            );
+
+            /*
+             * FIXME: should we mention setresuid as a better way?
+             */
         }
         break;
 
@@ -191,11 +184,7 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EINVAL:
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "mode was incorrectly specified"
-        );
+        libexplain_buffer_einval_bits(sb, "mode");
         break;
 
     case EIO:
@@ -211,7 +200,7 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no explanation for any other error */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 }

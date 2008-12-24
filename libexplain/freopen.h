@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,9 @@
 
 #ifndef LIBEXPLAIN_FREOPEN_H
 #define LIBEXPLAIN_FREOPEN_H
+
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
 
 #include <stdio.h>
 
@@ -93,7 +96,8 @@ void libexplain_freopen_or_die(const char *pathname, const char *flags,
   *     this library.
   */
 const char *libexplain_freopen(const char *pathname, const char *flags,
-    FILE *fp);
+    FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_freopen function is used to obtain an explanation
@@ -137,7 +141,8 @@ const char *libexplain_freopen(const char *pathname, const char *flags,
   *     this library.
   */
 const char *libexplain_errno_freopen(int errnum, const char *pathname,
-    const char *flags, FILE *fp);
+    const char *flags, FILE *fp)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_freopen function is used to obtain an

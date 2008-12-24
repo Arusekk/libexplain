@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,14 +35,31 @@ void libexplain_buffer_socket_type(struct libexplain_string_buffer_t *sb,
     int type);
 
 /**
-  * The libexplain_parse_socket_type function may be used to parse a
-  * string into a socket type value.
+  * The libexplain_buffer_socket_type_from_fildes function may be used
+  * to supplement an error explanation with the type of a socet, taken
+  * from the file descriptor.  Nothing is printed if thr socket type
+  * cannot be determined.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param fildes
+  *     the file descriptor to extract the socket type from and then print it
+  */
+void libexplain_buffer_socket_type_from_fildes(
+    struct libexplain_string_buffer_t *sb, int fildes);
+
+/**
+  * The libexplain_parse_socket_type_or_die function may be used to
+  * parse a string into a socket type value.  On error, prints a
+  * diagnostic and exits EXIT_FAILURE.
   *
   * @param text
   *     The string to parse.
+  * @param caption
+  *     addition text to add to start of error message
   * @returns
-  *     the socket type, or -1 on error
+  *     the socket type
   */
-int libexplain_parse_socket_type(const char *text);
+int libexplain_parse_socket_type_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKET_TYPE_H */

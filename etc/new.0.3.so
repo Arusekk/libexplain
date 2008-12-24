@@ -1,7 +1,7 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
 .\" Copyright (C) 2008 Peter Miller
-.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -17,17 +17,44 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 2 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
-.\" ------------------------------------------------------------------------
-.\" .PP
-.\" .if n *
-.\" .if t \(bu
-.\" .\" Change N
+.PP
+.if n *
+.if t \(bu
+.\" Change 12, 17, 21, 22, 23, 38, 45, 46, 48, 54
+Coverage now includes
+\f[I]accept\fP(2),
+\f[I]bind\fP(2),
+\f[I]connect\fP(2),
+\f[I]dup2\fP(2),
+\f[I]fchown\fP(2),
+\f[I]fdopen\fP(3),
+\f[I]fpathconf\fP(2),
+\f[I]fputc\fP(2),
+\f[I]futimes\fP(2),
+\f[I]getaddrinfo\fP(2),
+\f[I]getcwd\fP(2),
+\f[I]getrlimit\fP(2),
+\f[I]listen\fP(2),
+\f[I]pathconf\fP(2),
+\f[I]putc\fP(2),
+\f[I]putchar\fP(2),
+\f[I]select\fP(2).
+.PP
+.if n *
+.if t \(bu
+.\" Change 28, 29, 32, 33, 40, 43, 44
+Internationalization has been improved.
+.PP
+.if n *
+.if t \(bu
+.\" Change 25
+The thread safety of the code has been improved.
+.PP
+.if n *
+.if t \(bu
+.\" Change 18
+The code is now able to be compiled on OpenBSD.  The test suite still gives
+many false negatives, due to differences in strerror() results.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

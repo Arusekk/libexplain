@@ -1,7 +1,7 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
 .\" Copyright (C) 2008 Peter Miller
-.\" Written by Peter Miller <millerp@canb.auug.org.au>
+.\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -81,11 +81,13 @@ The library also provides thread safe variants of each function.
 <dt>file descriptors<dd>
     Where only a file descriptor is passed, the message will include the
     pathname of the file.
+    <p>
 
 <dt>EACCES<dd>
     When this is caused by a pathname component, rather than the last
     component, the name of the problematic component will be included in
     the message, along with some additional permissions information.
+    <p>
 
 <dt>ENOENT<dd>
     If this error is caused by a missing path component, rather than the
@@ -98,24 +100,29 @@ The library also provides thread safe variants of each function.
     <li> if there is a similarly named file in the directory,
     the name of the similar file will be included in the message.
     </ul>
+    <p>
 
 <dt>ENOTDIR<dd>
     The name of the component which is not a directory will be included
     in the message, along with its file type.
+    <p>
 
 <dt>ELOOP<dd>
     The path of the first symbolic link in
     the loop will be included in the message.
     Or, if there was too many indirections but no loop,
     this will be included in the message, along with the actual limit.
+    <p>
 
 <dt>EFAULT<dd>
     If a system call takes more than one pointer argument, the message
     will indicate which pointer is at fault.
+    <p>
 
 <dt>EEXIST<dd>
     If a file should not exists, but does, the message will include the
     existing file's file type.
+    <p>
 
 <dt><i>etc</i><dd>
     There are many more.
@@ -148,20 +155,20 @@ The following files are available for download:
 <tr> <th> File </th><th> Description </th> </tr>
 .br
 <tr>
-    <td> <a href="libexplain-\*(v).README" >libexplain-\*(v).README</a> </td>
+    <td> <a href="libexplain-\*(V).README" >libexplain-\*(V).README</a> </td>
     <td> The README file form the tarball. </td> </tr>
 .br
 <tr>
-    <td> <a href="libexplain-\*(v).tar.gz" >libexplain-\*(v).tar.gz</a> </td>
+    <td> <a href="libexplain-\*(V).tar.gz" >libexplain-\*(V).tar.gz</a> </td>
     <td> The complete source. </td> </tr>
 .br
 <tr>
-    <td> <a href="libexplain-\*(v).ae" >libexplain-\*(v).ae</a> </td>
+    <td> <a href="libexplain-\*(V).ae" >libexplain-\*(V).ae</a> </td>
     <td> The complete source, in <a href="http://aegis.sourceforge.net/"
     >aedist</a> format. </td> </tr>
 .br
 <tr>
-    <td> <a href="libexplain-\*(v).pdf" >libexplain-\*(v).pdf</a> </td>
+    <td> <a href="libexplain-\*(V).pdf" >libexplain-\*(V).pdf</a> </td>
     <td> The reference manual, in PDF format.
     </td> </tr>
 .br
@@ -178,14 +185,15 @@ The following files are available for download:
 <a href="http://www.fsf.org/">
 <img
 .br
-src="http://www.fsf.org/graphics/gnu-head-sm.jpg"
+src="http://upload.wikimedia.org/wikipedia/commons/b/bf/\
+GNU-FDL-ic%C3%B4ne-Transparente.PNG"
 border=0 width=129 height=122 alt="" /></a>
 .br
 </td><td valign="top" width="15%">
 .br
 Libexplain is written and owned by
-<a href="mailto:millerp@canb.auug.org.au"
->Peter Miller &lt;millerp@canb.auug.org.au&gt;</a>
+<a href="mailto:pmiller@opensource.org.au"
+>Peter Miller &lt;pmiller@opensource.org.au&gt;</a>
 and is freely distributable under the terms and conditions of the
 <a href="http://www.gnu.org/licenses/gpl.txt">GNU GPL</a>.
 .br

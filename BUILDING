@@ -209,20 +209,20 @@ INSTALLING LIBEXPLAIN
 GETTING HELP
         If you need assistance with the libexplain package, please do not
         hesitate to contact the author at
-                Peter Miller <millerp@canb.auug.org.au>
+                Peter Miller <pmiller@opensource.org.au>
         Any and all feedback is welcome.
 
         When reporting problems, please include the version number given by
         the
                 % explain -version
-                explain version 0.D003
+                explain version 0.4.D001
                 ...warranty disclaimer...
                 %
         command.  Please do not send this example; run the program for the
         exact version number.
 
 COPYRIGHT
-        libexplain version 0
+        libexplain version 0.4
         Copyright (C) 2008 Peter Miller
 
         The libexplain package is distributed in the hope that it will be
@@ -233,7 +233,7 @@ COPYRIGHT
         It should be in the LICENSE file included with this distribution.
 
 AUTHOR
-        Peter Miller   E-Mail:   millerp@canb.auug.org.au
+        Peter Miller   E-Mail:   pmiller@opensource.org.au
         /\/\*             WWW:   http://www.canb.auug.org.au/~millerp/
 
 

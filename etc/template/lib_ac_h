@@ -22,7 +22,7 @@
 
 #include <libexplain/config.h>
 
-#ifdef HAVE_${ident ${trim_dir ${trim_dir ${filename}}}}
+#ifdef HAVE_${upcase ${ident ${trim_dir ${trim_dir ${filename}}}}}
 #include <${trim_dir ${trim_dir ${filename}}}>
 #endif
 

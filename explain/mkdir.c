@@ -35,27 +35,17 @@ explain_mkdir(int errnum, int argc, char **argv)
     mode = 0777;
     switch (argc)
     {
-    default:
-        fprintf(stderr, "mkdir: requires 1 argument, not %d\n", argc);
-        exit(EXIT_FAILURE);
-
     case 2:
-        mode = libexplain_permission_mode_parse(argv[1]);
-        if (mode < 0)
-        {
-            fprintf
-            (
-                stderr,
-                "argument \"%s\" does not look like a permission mode\n",
-                argv[1]
-            );
-            exit(EXIT_FAILURE);
-        }
+        mode = libexplain_permission_mode_parse_or_die(argv[1], "mkdir arg 2");
         /* fall through... */
 
     case 1:
         pathname = argv[0];
         break;
+
+    default:
+        fprintf(stderr, "mkdir: requires 1 argument, not %d\n", argc);
+        exit(EXIT_FAILURE);
     }
 
     libexplain_wrap_and_print

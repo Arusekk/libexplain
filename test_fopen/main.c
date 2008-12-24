@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,10 @@
 #include <libexplain/fcntl.h>
 #include <libexplain/fflush.h>
 #include <libexplain/fopen.h>
+#include <libexplain/fputc.h>
 #include <libexplain/fread.h>
 #include <libexplain/fwrite.h>
+#include <libexplain/putc.h>
 #include <libexplain/version_print.h>
 
 
@@ -80,7 +82,9 @@ main(int argc, char **argv)
     {
         const char      *data;
 
-        data = "This is a test.\n";
+        libexplain_putc_or_die('T', fp);
+        libexplain_fputc_or_die('h', fp);
+        data = "is is a test.\n";
         libexplain_fwrite_or_die(data, 1, strlen(data), fp);
     }
     if ((fd_flags & O_ACCMODE) != O_WRONLY)

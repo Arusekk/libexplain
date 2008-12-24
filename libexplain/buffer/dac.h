@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -50,13 +50,31 @@ void libexplain_buffer_dac_read_search(libexplain_string_buffer_t *sb);
 void libexplain_buffer_dac_override(libexplain_string_buffer_t *sb);
 
 /**
-  * The libexplain_buffer_dac_new_raw function may be used to
+  * The libexplain_buffer_dac_net_raw function may be used to
   * explain the absence of the DAC_NET_RAW capability.
   *
   * @param sb
   *    The string buffer to print into.
   */
 void libexplain_buffer_dac_net_raw(libexplain_string_buffer_t *sb);
+
+/**
+  * The libexplain_buffer_dac_net_bind_service function may be used to
+  * explain the absence of the DAC_NET_BIND_SERVICE capability.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  */
+void libexplain_buffer_dac_net_bind_service(libexplain_string_buffer_t *sb);
+
+/**
+  * The libexplain_buffer_dac_chown function may be used to explain the
+  * absence of the DAC_CHOWN capability.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  */
+void libexplain_buffer_dac_chown(libexplain_string_buffer_t *sb);
 
 /**
   * The libexplain_buffer_and_the_process_is_not_privileged function is
@@ -69,5 +87,18 @@ void libexplain_buffer_dac_net_raw(libexplain_string_buffer_t *sb);
   */
 void libexplain_buffer_and_the_process_is_not_privileged(
     libexplain_string_buffer_t *sb);
+
+/**
+  * The libexplain_buffer_does_not_have_capability function is called
+  * by the above functions to insert text naming the absent specific
+  * capability.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param cap_name
+  *     The name of the required capability.
+  */
+void libexplain_buffer_does_not_have_capability(libexplain_string_buffer_t *sb,
+    const char *cap_name);
 
 #endif /* LIBEXPLAIN_BUFFER_DAC_H */

@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/sys/resource.h>
 #include <libexplain/ac/sys/wait.h>
 
 #include <libexplain/buffer/waitpid_options.h>
@@ -47,17 +48,8 @@ explain_wait3(int errnum, int argc, char **argv)
         /* fall through... */
 
     case 2:
-        options = libexplain_parse_waitpid_options(argv[1]);
-        if (options < 0)
-        {
-            fprintf
-            (
-                stderr,
-                "argument \"%s\" does not look like a waitpid options value",
-                argv[1]
-            );
-            exit(EXIT_FAILURE);
-        }
+        options =
+            libexplain_parse_waitpid_options_or_die(argv[1], "wait3 arg 2");
         /* fall through... */
 
     case 1:

@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,6 +20,7 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
@@ -28,9 +29,11 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/unlink.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/note/still_exists.h>
 #include <libexplain/buffer/path_to_pid.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
@@ -63,46 +66,7 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        if
-        (
-            libexplain_buffer_errno_path_resolution
-            (
-                sb,
-                errnum,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        )
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "write access to the directory containing pathname "
-                "is not allowed for the process's effective UID, or one "
-                "of the directories in pathname did not allow search "
-                "permission"
-            );
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "; or, the directory containing pathname has the "
-                "sticky bit (S_ISVTX) set and the process's effective UID "
-                "is neither the UID of the file to be deleted nor that "
-                "of the directory containing it, and the process is not "
-                "privileged"
-            );
-#ifdef HAVE_SYS_CAPABILITY_H
-            if (libexplain_option_dialect_specific())
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    " (does not have the CAP_FOWNER capability)"
-                );
-            }
-#endif
-        }
+        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EBUSY:
@@ -110,6 +74,7 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the file pathname "
             "is being used by the system or another process and the "
             "implementation considers this an error"
@@ -129,6 +94,7 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "pathname refers to a directory"
         );
         break;
@@ -171,9 +137,10 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the system does not allow unlinking of "
                 "directories, or unlinking of directories "
-                "requires privileges that the calling process "
+                "requires privileges that the process "
                 "does not have"
             );
             break;
@@ -195,6 +162,7 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the file system does not allow unlinking of files"
             );
             libexplain_buffer_mount_point(sb, pathname);
@@ -225,22 +193,11 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        /* no additional info for other errno values */
+        libexplain_buffer_errno_generic(sb, errnum);
         break;
     }
 
-    {
-        struct stat     st;
-
-        if (lstat(pathname, &st) == 0)
-        {
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "; note that pathname still exists"
-            );
-        }
-    }
+    libexplain_buffer_note_if_still_exists(sb, pathname, "pathname");
 }
 
 

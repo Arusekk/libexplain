@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -28,10 +28,12 @@
   *
   * @param sb
   *    The string buffer to print into
+  * @param fildes
+  *    The value of the manky file descriptor
   * @param caption
   *    the argument name to whinge about
   */
-void libexplain_buffer_ebadf(libexplain_string_buffer_t *sb,
+void libexplain_buffer_ebadf(libexplain_string_buffer_t *sb, int fildes,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_EBADF_H */

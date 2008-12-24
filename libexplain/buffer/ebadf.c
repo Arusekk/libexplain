@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,22 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/buffer/check_fildes_range.h>
 #include <libexplain/buffer/ebadf.h>
+#include <libexplain/buffer/software_error.h>
 #include <libexplain/gettext.h>
 
 
 void
-libexplain_buffer_ebadf(libexplain_string_buffer_t *sb, const char *caption)
+libexplain_buffer_ebadf(libexplain_string_buffer_t *sb, int fildes,
+    const char *caption)
 {
+    if (libexplain_buffer_check_fildes_range(sb, fildes, caption) >= 0)
+        libexplain_string_buffer_puts(sb, ", ");
     libexplain_string_buffer_printf_gettext
     (
         sb,
         /*
          * xgettext: This message is used when a file descriptor is not
-         * valid and does not refer to an open file.  The %s string is
-         * the name of a system call argument.
+         * valid and does not refer to an open file.
+         *
+         * %1$s => the name of the offending system call argument.
          */
         i18n("%s does not refer to an open file"),
         caption
     );
+    libexplain_buffer_software_error(sb);
 }

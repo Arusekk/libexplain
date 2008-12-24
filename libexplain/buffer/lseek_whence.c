@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,52 +24,35 @@
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 
+static const libexplain_parse_bits_table_t table[] =
+{
+    { "SEEK_SET", SEEK_SET },
+    { "SEEK_CUR", SEEK_CUR },
+    { "SEEK_END", SEEK_END },
+#ifdef SEEK_MAX
+    { "SEEK_MAX", SEEK_MAX },
+#endif
+    { "L_SET",    SEEK_SET },
+    { "L_INCR",   SEEK_CUR },
+    { "L_XTND",   SEEK_END },
+};
+
 
 void
 libexplain_buffer_lseek_whence(libexplain_string_buffer_t *sb, int whence)
 {
-    switch (whence)
-    {
-    case SEEK_SET:
-        libexplain_string_buffer_puts(sb, "SEEK_SET");
-        break;
+    const libexplain_parse_bits_table_t *tp;
 
-    case SEEK_CUR:
-        libexplain_string_buffer_puts(sb, "SEEK_CUR");
-        break;
-
-    case SEEK_END:
-        libexplain_string_buffer_puts(sb, "SEEK_END");
-        break;
-
-#if defined(SEEK_MAX) && SEEK_MAX != SEEK_END
-    case SEEK_MAX:
-        libexplain_string_buffer_puts(sb, "SEEK_MAX");
-        break;
-#endif
-
-    default:
+    tp = libexplain_parse_bits_find_by_value(whence, table, SIZEOF(table));
+    if (tp)
+        libexplain_string_buffer_puts(sb, tp->name);
+    else
         libexplain_string_buffer_printf(sb, "%d", whence);
-        break;
-    }
 }
 
 
 int
-libexplain_lseek_whence_parse(const char *text)
+libexplain_lseek_whence_parse_or_die(const char *text, const char *caption)
 {
-    static const libexplain_parse_bits_table_t table[] =
-    {
-        { "SEEK_SET", SEEK_SET },
-        { "SEEK_CUR", SEEK_CUR },
-        { "SEEK_END", SEEK_END },
-#ifdef SEEK_MAX
-        { "SEEK_MAX", SEEK_MAX },
-#endif
-        { "L_SET",    SEEK_SET },
-        { "L_INCR",   SEEK_CUR },
-        { "L_XTND",   SEEK_END },
-    };
-
-    return libexplain_parse_bits(text, table, SIZEOF(table));
+    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

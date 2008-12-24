@@ -24,6 +24,8 @@
   * @brief explain wait3(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -97,7 +99,8 @@ int libexplain_wait3_or_die(int *status, int options, struct rusage *rusage);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_wait3(int *status, int options, struct rusage *rusage);
+const char *libexplain_wait3(int *status, int options, struct rusage *rusage)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_wait3 function is
@@ -145,7 +148,8 @@ const char *libexplain_wait3(int *status, int options, struct rusage *rusage);
   *     many other functions in this library.
   */
 const char *libexplain_errno_wait3(int errnum, int *status, int options,
-    struct rusage *rusage);
+    struct rusage *rusage)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_wait3 function is

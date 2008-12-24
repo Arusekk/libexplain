@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 package=libexplain
 desc="$package - Explain errno values returned by libc functions"
-author="Peter Miller <millerp@canb.auug.org.au>"
+author="Peter Miller <pmiller@opensource.org.au>"
 year=`date '+%Y'`
 
 set -e
@@ -30,6 +30,7 @@ sed \
     -e "s|PACKAGE package.$|$package package.|" \
     -e 's|#[.] *[*] *$|#.|' \
     -e 's|#[.] *[*] |#. |' \
+    -e 's|charset=CHARSET|charset=us-ascii|' \
     -e 's|xgettext: *||' \
     $1 > $1.new
 mv $1.new $1

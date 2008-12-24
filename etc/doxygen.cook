@@ -1,7 +1,7 @@
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008 Peter Miller
- * Written by Peter Miller <millerp@canb.auug.org.au>
+ * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,13 @@ web-site/doc-internal/files =
     ;
 
 web-site/doc-external/files =
-    libexplain/libexplain.h
-    [collect c_incl -nc -ns -eia -nsri
-        [filter -I%0% [CPPFLAGS]]
-        [resolve libexplain/libexplain.h]
-        [addprefix -rlp\= [search_list]]
+    [sort
+        libexplain/libexplain.h
+        [collect c_incl -nc -ns -eia -nsri
+            [addprefix -I [search_list]]
+            [resolve libexplain/libexplain.h]
+            [addprefix -rlp\= [search_list]]
+        ]
     ]
     ;
 
@@ -76,7 +78,7 @@ OUTPUT_DIRECTORY       = doxygen-tmp
 # documented source files. You may enter file names like "myfile.cpp"
 # or directories like "/usr/src/myproject". Separate the files or
 # directories with spaces.
-INPUT = [unsplit " \\\n" [resolve [stringset [need] - etc/doxygen.cfg]]]
+INPUT = [unsplit " \\\n" [resolve [web-site/%/files]]]
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision
 # number.  This could be handy for archiving the generated
@@ -87,7 +89,7 @@ PROJECT_NUMBER = [version]
 # contain include files that are not input files but should be processed by
 # the preprocessor.
 INCLUDE_PATH = [remove_not_existing_paths
-             [unsplit " \\\n" [fromto -I%%0%% %%0%% [CPPFLAGS] ] ] ]
+             [unsplit " \\\n" [addprefix -I [search_list] ] ] ]
 
 # If the FULL_PATH_NAMES tag is set to YES then the STRIP_FROM_PATH tag
 # can be used to strip a user defined part of the path. Stripping is

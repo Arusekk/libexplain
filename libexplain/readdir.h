@@ -19,6 +19,9 @@
 #ifndef LIBEXPLAIN_READDIR_H
 #define LIBEXPLAIN_READDIR_H
 
+#include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
 #include <dirent.h>
 
 /**
@@ -89,7 +92,8 @@ struct dirent *libexplain_readdir_or_die(DIR *dir);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_readdir(DIR *dir);
+const char *libexplain_readdir(DIR *dir)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_readdir function is
@@ -133,7 +137,8 @@ const char *libexplain_readdir(DIR *dir);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_readdir(int errnum, DIR *dir);
+const char *libexplain_errno_readdir(int errnum, DIR *dir)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_readdir function is

@@ -24,6 +24,8 @@
   * @brief explain rmdir(2) errors
   */
 
+#include <libexplain/warn_unused_result.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -84,7 +86,8 @@ void libexplain_rmdir_or_die(const char *pathname);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_rmdir(const char *pathname);
+const char *libexplain_rmdir(const char *pathname)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_errno_rmdir function may be
@@ -126,7 +129,8 @@ const char *libexplain_rmdir(const char *pathname);
   *     it shares a return buffer across all threads, and
   *     many other functions in this library.
   */
-const char *libexplain_errno_rmdir(int errnum, const char *pathname);
+const char *libexplain_errno_rmdir(int errnum, const char *pathname)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The libexplain_message_rmdir function may

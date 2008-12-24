@@ -55,10 +55,16 @@ libexplain_buffer_errno_wait4_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EFAULT:
-        if (rusage && libexplain_path_is_efault((char *)rusage))
+        if (rusage && libexplain_pointer_is_efault(rusage))
+        {
             libexplain_buffer_efault(sb, "rusage");
-        else
+            break;
+        }
+        if (libexplain_pointer_is_efault(status))
+        {
             libexplain_buffer_efault(sb, "status");
+            break;
+        }
         break;
 
     default:

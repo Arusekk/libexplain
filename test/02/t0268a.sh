@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ TEST_SUBJECT="socket EAFNOSUPPORT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-socket(domain = 32767, type = SOCK_STREAM, protocol = IPPROTO_TCP) failed,
+socket(family = 32767, type = SOCK_STREAM, protocol = IPPROTO_TCP) failed,
 Address family not supported by protocol (EAFNOSUPPORT) because the
 operating system does not support the specified address family
 fubar

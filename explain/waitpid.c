@@ -41,17 +41,8 @@ explain_waitpid(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 3:
-        options = libexplain_parse_waitpid_options(argv[2]);
-        if (options < 0)
-        {
-            fprintf
-            (
-                stderr,
-                "argument \"%s\" does not look like a waitpid options value",
-                argv[2]
-            );
-            exit(EXIT_FAILURE);
-        }
+        options =
+            libexplain_parse_waitpid_options_or_die(argv[2], "waitpid arg 3");
         /* fall through... */
 
     case 2:

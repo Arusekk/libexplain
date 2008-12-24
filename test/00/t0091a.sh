@@ -2,7 +2,7 @@
 #
 # libexplain - Explain errno values returned by libc functions
 # Copyright (C) 2008 Peter Miller
-# Written by Peter Miller <millerp@canb.auug.org.au>
+# Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ TEST_SUBJECT="rename ENOTDIR"
 
 cat > test.ok << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, Not a directory (ENOTDIR)
-because oldpath is a directory, but newpath regular file is not a
+because oldpath is a directory, but newpath is a regular file, not a
 directory; note that oldpath still exists; note that newpath exists
 fubar
 test $? -eq 0 || no_result
