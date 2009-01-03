@@ -68,6 +68,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "non-blocking I/O has been selected using "
             "O_NONBLOCK and no data was immediately available for "
             "reading"
@@ -123,6 +124,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                     libexplain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the file descriptor is attached to an object "
                         "which is unsuitable for reading ("
                     );
@@ -135,6 +137,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                     libexplain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the file was opened with the O_DIRECT flag, "
                         "and either the address specified in data is "
                         "not suitably aligned, or the value specified "
@@ -148,6 +151,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                     libexplain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the file descriptor was created via a call to "
                         "timerfd_create(2) and the wrong size buffer was "
                         "given"
@@ -159,6 +163,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                 libexplain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "the file desriptor is attached to an object "
                     "which is unsuitable for reading; or, the file was "
                     "opened with the O_DIRECT flag, and either the "
@@ -203,6 +208,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                     libexplain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the process is in a background "
                         "process group, and tried to read from its "
                         "controlling tty, and either it is ignoring or "
@@ -217,6 +223,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                 libexplain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "the process is in an orphaned process "
                     "group and tried to read from its controlling tty"
                 );
@@ -232,9 +239,10 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
-            "the file descriptor refers to a directory, and "
-            "you must use getdents(2) to read directories, preferbly "
-            "via the higher-level interface provided by readdir(3)"
+            /* FIXME: i18n */
+            "fildes refers to a directory, and you must use getdents(2) to "
+            "read directories, preferably via the higher-level interface "
+            "provided by readdir(3)"
         );
         break;
 
@@ -242,6 +250,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the file is on a file system"
         );
         libexplain_buffer_mount_point_fd(sb, fildes);

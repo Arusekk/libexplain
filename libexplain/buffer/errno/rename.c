@@ -122,8 +122,7 @@ dir_vs_not_dir2(libexplain_string_buffer_t *sb, const char *dir_caption,
          * %1$s => the name of the source system call argument
          * %2$s => the name of the destination system call argument
          */
-        i18n("%s is an existing directory, but %s is "
-            "not a directory"),
+        i18n("%s is an existing directory, but %s is not a directory"),
         dir_caption,
         not_dir_caption
     );

@@ -23,7 +23,7 @@ TEST_SUBJECT="ftruncate EACCES"
 
 fmt > test.ok << 'fubar'
 ftruncate(fildes = 0, length = 0) failed, Permission denied (EACCES)
-because the process does not have write permission to the file
+because fildes is not open for writing (O_RDONLY | O_LARGEFILE)
 fubar
 test $? -eq 0 || no_result
 

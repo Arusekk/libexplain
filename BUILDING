@@ -215,15 +215,15 @@ GETTING HELP
         When reporting problems, please include the version number given by
         the
                 % explain -version
-                explain version 0.4.D001
+                explain version 0.D005
                 ...warranty disclaimer...
                 %
         command.  Please do not send this example; run the program for the
         exact version number.
 
 COPYRIGHT
-        libexplain version 0.4
-        Copyright (C) 2008 Peter Miller
+        libexplain version 0
+        Copyright (C) 2008, 2009 Peter Miller
 
         The libexplain package is distributed in the hope that it will be
         useful, but WITHOUT ANY WARRANTY; without even the implied warranty of

@@ -24,7 +24,7 @@ TEST_SUBJECT="truncate EISDIR"
 cat > test.ok << 'fubar'
 truncate(pathname = "foobar", length = 4) failed, Is a directory (EISDIR)
 because the named file is a directory; directories may not be truncated,
-use unlink and rmdir instead
+use rmdir(2) or remove(3) instead
 fubar
 test $? -eq 0 || no_result
 

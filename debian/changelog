@@ -1,9 +1,14 @@
-libexplain (0.4.D003) unstable; urgency=low
+libexplain (0.5.D001) unstable; urgency=low
 
-  * A problem with test 32 has been fixed, it didn't actually test anything, due
-    to an unterminated 'here' document.
+  * This change prepares libexplain for the next public release.
 
- -- Peter Miller <pmiller@opensource.org.au>  Wed, 24 Dec 2008 19:29:11 +1100
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 03 Jan 2009 21:03:42 +1100
+
+libexplain (0.D005) unstable; urgency=low
+
+  * Explain errno values returned by libc functions, branch 0.4.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 03 Jan 2009 20:44:07 +1100
 
 libexplain (0.D004) unstable; urgency=low
 
@@ -28,6 +33,49 @@ libexplain (0.D001) unstable; urgency=low
   * Explain errno values returned by libc functions, branch 0.0.
 
  -- Peter Miller <pmiller@opensource.org.au>  Sun, 26 Oct 2008 20:44:39 +1100
+
+libexplain (0.4.D008) unstable; urgency=low
+
+  * Closes: Bug#507855
+  * This change set fixes a problem with building the code on Debian sid, more
+    insulation was needed for sockaddr_uicv availability.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Tue, 30 Dec 2008 23:17:39 +1100
+
+libexplain (0.4.D007) unstable; urgency=low
+
+  * There is a new libexplain_system_success function, that performs all that
+    libexplain_system_success_or_die performs, except that it does not call
+    exit().
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sun, 28 Dec 2008 22:18:23 +1100
+
+libexplain (0.4.D006) unstable; urgency=low
+
+  * This change set improves the i18n support for EISDIR errors.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 27 Dec 2008 20:44:03 +1100
+
+libexplain (0.4.D005) unstable; urgency=low
+
+  * The pkg-config file was being installed into thw wrong place.
+  * My thanks to Conrad Parker for reporting this problem.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 25 Dec 2008 16:19:48 +1100
+
+libexplain (0.4.D004) unstable; urgency=low
+
+  * The web site now has a few more links from the front page into the Doxygen
+    documentation, and it mentions the *_or_die wrappers.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 25 Dec 2008 11:51:55 +1100
+
+libexplain (0.4.D003) unstable; urgency=low
+
+  * A problem with test 32 has been fixed, it didn't actually test anything, due
+    to an unterminated 'here' document.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Wed, 24 Dec 2008 19:34:32 +1100
 
 libexplain (0.4.D002) unstable; urgency=low
 

@@ -66,7 +66,7 @@ source_file_order =
     /*
      * For pkg-config
      */
-    libdir/pkg-config/[project_short].pc.in
+    libdir/pkgconfig/[project_short].pc.in
 
     /*
      * for message translators
@@ -113,7 +113,7 @@ aemakegen = aemakegen;
 Makefile.in: [source_files]
 {
     [aemakegen] -p [project] -c [change] -o [target]
-	libdir/pkg-config/[project_short].pc.in
+	libdir/pkgconfig/[project_short].pc.in
 	;
 }
 
@@ -129,7 +129,7 @@ debian/control: [source_files]
     set shallow
 {
     [aemakegen] -p [project] -c [change] --target\=debian
-	libdir/pkg-config/[project_short].pc.in
+	libdir/pkgconfig/[project_short].pc.in
 	;
 }
 
@@ -165,7 +165,7 @@ debian-package: web-site/[project_minus].tar.gz bin/test_user
     ;
 }
 
-libdir/pkg-config/[project_short].pc.in: [source_files]
+libdir/pkgconfig/[project_short].pc.in: [source_files]
 {
     [aemakegen] -p\=[project] -c\=[change] --target\=pkg-config
 	    > [target];

@@ -1,4 +1,4 @@
-usr/lib/pkg-config/libexplain.pc
+usr/lib/pkgconfig/libexplain.pc
 usr/lib/libexplain.a
 usr/lib/libexplain.la
 usr/lib/libexplain.so

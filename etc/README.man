@@ -50,10 +50,9 @@ if (fd < 0)
 If, for example, you were to try to open
 \f[CW]no-such-dir/some-file\fP, you would see a message like
 .RS
-\f[CW]open("no-such-dir/some-file", O_RDONLY) failed,
-No such file or directory (2, ENOENT)
-because directory
-"no-such-dir" does not exist\fP
+\f[CW]open(pathname = "no-such-dir/some-file", flags = O_RDONLY)
+failed, No such file or directory (2, ENOENT) because there is no
+"no-such-dir" directory in the current directory\fP
 .RE
 .PP
 The good new is that for each of these functions there is a wrapper

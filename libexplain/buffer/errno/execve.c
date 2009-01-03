@@ -97,6 +97,7 @@ libexplain_buffer_errno_execve_system_call(libexplain_string_buffer_t *sb,
                     libexplain_string_buffer_printf
                     (
                         sb,
+                        /* FIXME: i18n */
                         "... plus another %d command line arguments",
                         count(argv) - n
                     );
@@ -206,6 +207,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the total number of bytes in the argument list (argv) plus "
             "the environment (envp) is too large"
         );
@@ -336,6 +338,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "an ELF executable had more than one PT_INTERP segment "
                 "(tried to name more than one interpreter); or, the new "
                 "process image file has the appropriate permission and has "
@@ -366,7 +369,12 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
-                "an ELF interpreter was a directory"
+                /*
+                 * xgettext:  This message is used when explaining an EISDIR
+                 * error from an execve system call, in the case where an ELF
+                 * interpreter was a directory.
+                 */
+                i18n("an ELF interpreter was a directory")
             );
         }
         break;
@@ -376,6 +384,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "an ELF interpreter was not in a recognized format"
         );
         break;
@@ -423,6 +432,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "an executable is not in a recognized format, is for the wrong "
                 "architecture, or has some other format error that means it "
                 "cannot be executed"
@@ -440,9 +450,11 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EPERM:
+        /* FIXME: say which one */
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the file system is mounted nosuid; or, the pocess is being "
             "traced; or, the user is not the superuser, and the file "
             "has the set-user-ID or set-group-ID bit set"
@@ -453,6 +465,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "pathname is open for writing by one or more processes"
         );
         libexplain_buffer_path_to_pid(sb, pathname);

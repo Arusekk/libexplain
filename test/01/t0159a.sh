@@ -28,8 +28,8 @@ test $? -eq 0 || no_result
 
 cat > test.ok << 'fubar'
 chmod(pathname = "foobar", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
-failed, Operation not permitted (EPERM) because the effective UID does not
-match the owner of the file, and the process is not privileged
+failed, Operation not permitted (EPERM) because the process does not have
+inode modification permission, and the process is not privileged
 fubar
 test $? -eq 0 || no_result
 

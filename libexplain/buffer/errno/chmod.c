@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/errno.h>
 
+#include <libexplain/buffer/does_not_have_inode_modify_permission.h>
 #include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
@@ -117,23 +118,13 @@ libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            libexplain_buffer_does_not_have_inode_modify_permission_fd_st
             (
                 sb,
-                /* FIXME: i18n */
-                "the effective UID does not match the owner of the "
-                "file, and the process is not privileged"
+                (struct stat *)0,
+                "pathname",
+                &final_component.id
             );
-#ifdef HAVE_SYS_CAPABILITY_H
-            if (libexplain_option_dialect_specific())
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    " (does not have the CAP_FOWNER capability)"
-                );
-            }
-#endif
         }
         break;
 

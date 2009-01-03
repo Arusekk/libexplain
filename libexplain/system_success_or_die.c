@@ -123,8 +123,8 @@ command_on_path(const char *cmd)
 }
 
 
-void
-libexplain_system_success_or_die(const char *command)
+int
+libexplain_system_success(const char *command)
 {
     int             status;
 
@@ -132,9 +132,8 @@ libexplain_system_success_or_die(const char *command)
     if (status < 0)
     {
         libexplain_wrap_and_print(stderr, libexplain_system(command));
-        exit(EXIT_FAILURE);
     }
-    if (status != 0)
+    else if (status != 0)
     {
         libexplain_string_buffer_t sb;
         libexplain_string_buffer_init
@@ -189,6 +188,14 @@ libexplain_system_success_or_die(const char *command)
             }
         }
         libexplain_wrap_and_print(stderr, libexplain_common_message_buffer);
-        exit(EXIT_FAILURE);
     }
+    return status;
+}
+
+
+void
+libexplain_system_success_or_die(const char *command)
+{
+    if (libexplain_system_success(command))
+        exit(EXIT_FAILURE);
 }

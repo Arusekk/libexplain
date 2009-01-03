@@ -52,6 +52,26 @@ extern "C" {
 int libexplain_system_or_die(const char *command);
 
 /**
+  * The libexplain_system_success function is used to call the
+  * system(3) system call.  On failure (including any exits status
+  * other than EXIT_SUCCESS) an explanation will be printed to stderr,
+  * obtained from libexplain_system(3).
+  * The return value from system(3) is returned.
+  *
+  * This function is intended to be used in a fashion
+  * similar to the following example:
+  * @code
+  * int result = libexplain_system_success(command);
+  * @endcode
+  *
+  * @param command
+  *     The command, exactly as to be passed to the system(3) system call.
+  * @returns
+  *     the value returned by the system(3) system call.
+  */
+int libexplain_system_success(const char *command);
+
+/**
   * The libexplain_system_success_or_die function is used to call the
   * system(3) system call.  On failure (including any exits status
   * other than EXIT_SUCCESS) an explanation will be printed to stderr,
@@ -61,15 +81,15 @@ int libexplain_system_or_die(const char *command);
   * This function is intended to be used in a fashion
   * similar to the following example:
   * @code
-  * libexplain_system_or_die_mbz(command);
+  * libexplain_system_success_or_die(command);
   * @endcode
   *
   * @param command
   *     The command, exactly as to be passed to the system(3) system call.
   * @returns
   *     This function only returns on success (exit status EXIT_SUCCESS
-  *     (0) by the command).  On failure (inclusing non-zero exit
-  *     status), prints an explanation and exits, it does not return.
+  *     (0) by the command).  On failure (including non-zero exit
+  *     status), prints an explanation and exits; it does not return.
   */
 void libexplain_system_success_or_die(const char *command);
 

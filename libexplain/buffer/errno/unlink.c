@@ -20,6 +20,7 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
@@ -70,14 +71,18 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EBUSY:
-        /* not on Linux */
         libexplain_string_buffer_puts
         (
             sb,
-            /* FIXME: i18n */
-            "the file pathname "
-            "is being used by the system or another process and the "
-            "implementation considers this an error"
+            /*
+             * xgettext:  This error message is used to explain an
+             * unlink EBUSY error, in the case where the pathname is
+             * being used by the system or another process and the
+             * implementation considers this an error.  (This does not
+             * happen on Linux.)
+             */
+            i18n("the pathname is being used by the system or another "
+            "process and the implementation considers this an error")
         );
         libexplain_buffer_path_to_pid(sb, pathname);
         break;
@@ -94,8 +99,13 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
-            /* FIXME: i18n */
-            "pathname refers to a directory"
+            /*
+             * xgettext:  This message is used when explaining an EISDIR error
+             * reported by the unlink(2) system call, in the case where the
+             * named file is a directory.
+             */
+            i18n("the named file is a directory; directories may not be "
+            "unlinked, use rmdir(2) or remove(3) instead")
         );
         break;
 
@@ -137,11 +147,16 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
-                /* FIXME: i18n */
-                "the system does not allow unlinking of "
-                "directories, or unlinking of directories "
-                "requires privileges that the process "
-                "does not have"
+                /*
+                 * xgettext:  This message is uased to explain an EPERM error
+                 * reported by the unlink system call, in the case where the
+                 * system does not allow unlinking of directories, or unlinking
+                 * of directories requires privileges that the process does not
+                 * have.  This case does not happen on Linux.
+                 */
+                i18n("the system does not allow unlinking of directories, or "
+                "unlinking of directories requires privileges that the process "
+                "does not have")
             );
             break;
         }
@@ -162,29 +177,22 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
             libexplain_string_buffer_puts
             (
                 sb,
-                /* FIXME: i18n */
-                "the file system does not allow unlinking of files"
+                /*
+                 * xgettext:  This error message is used to explain an EPERM
+                 * error reported by the unlink(2) system call, in the case
+                 * where the file system does not allow unlinking of files;
+                 * or, the directory containing pathname has the sticky bit
+                 * (S_ISVTX) set and the process's effective UID is neither
+                 * the UID of the file to be deleted nor that of the directory
+                 * containing it.
+                 */
+                i18n("the file system does not allow unlinking of files; or, "
+                "the directory containing pathname has the sticky bit "
+                "(S_ISVTX) set and the process's effective UID is neither "
+                "the UID of the file to be deleted nor that of the directory "
+                "containing it")
             );
-            libexplain_buffer_mount_point(sb, pathname);
-            libexplain_string_buffer_puts
-            (
-                sb,
-                "; or, the directory containing pathname has the "
-                "sticky bit (S_ISVTX) set and the process's effective UID "
-                "is neither the UID of the file to be deleted nor that "
-                "of the directory containing it, and the process is not "
-                "privileged"
-            );
-#ifdef HAVE_SYS_CAPABILITY_H
-            if (libexplain_option_dialect_specific())
-            {
-                libexplain_string_buffer_puts
-                (
-                    sb,
-                    " (does not have the CAP_FOWNER capability)"
-                );
-            }
-#endif
+            libexplain_buffer_dac_fowner(sb);
         }
         break;
 

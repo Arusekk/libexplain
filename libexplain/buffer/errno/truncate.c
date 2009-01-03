@@ -114,9 +114,13 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
-            /* FIXME: i18n */
-            "the named file is a directory; "
-            "directories may not be truncated, use unlink and rmdir instead"
+            /*
+             * xgettext:  This message is used to explain an EISDIR error
+             * reported by the truncate(2) system call, in the case where the
+             * named file is a directory.
+             */
+            i18n("the named file is a directory; directories may not be "
+            "truncated, use rmdir(2) or remove(3) instead")
         );
         break;
 

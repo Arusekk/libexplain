@@ -124,11 +124,12 @@
   * If, for example, you were to try to open <tt>no-such-dir/some-file</tt>,
   * the above code would print the following error message:
   * @code
-  * open("no-such-dir/some-file", O_RDONLY) failed, No such file or directory
-  * (2, ENOENT) because directory "no-such-dir" does not exist
+  * open(pathname = "no-such-dir/some-file", flags = O_RDONLY)
+  * failed, No such file or directory (2, ENOENT) because there is no
+  * "no-such-dir" directory in the current directory
   * @endcode
   *
-  * The above code comes pre-packagd in the form of the
+  * The above code comes pre-packaged in the form of the
   * #libexplain_open_or_die function.  This is available for all
   * supported system calls.
   *

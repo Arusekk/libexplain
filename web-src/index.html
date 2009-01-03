@@ -50,7 +50,9 @@ Each system call has a dedicated libexplain function, for example
 fd = open(path, flags, mode);
 if (fd < 0)
 {
-    fprintf(stderr, "%s\en", libexplain_open(path, flags, mode));
+    fprintf(stderr, "%s\en", <a
+href="doc-external/open_8h.html#7c0bfc9a553438096c19b86dab687b2a"
+>libexplain_open</a>(path, flags, mode));
     exit(EXIT_FAILURE);
 }
 .fi
@@ -59,14 +61,23 @@ If, for example, you were to try to open
 .br
 <tt>no-such-dir/some-file</tt>, you would see a message like
 <blockquote>
-<tt>open("no-such-dir/some-file", O_RDONLY) failed,
-No such file or directory (2, ENOENT)
-because directory
-.br
-"no-such-dir" does not exist</tt>
+<tt>open(pathname = "no-such-dir/some-file", flags = O_RDONLY)
+failed, No such file or directory (2, ENOENT) because there is no
+"no-such-dir" directory in the current directory</tt>
 </blockquote>
 <p>
-The library also provides thread safe variants of each function.
+The good new is that for each of these functions there is a wrapper
+function, in this case <a
+href="doc-external/open_8h.html#ef4b43a41f11f51b07aa6a6162ad5bc1"
+><i>libexplain_open_or_die</i>(3)</a>,
+that includes
+the above code fragment.  Adding good error reporting is as simple as
+using a different, but similarly named, function.
+The library also provides thread safe variants of each explanation function.
+<p>
+The coverage for system calls is being improved all the time, as you can
+see from <a href="doc-external/files.html" >this documentation page</a>
+generated from the source code.
 
 <h2> Some Common Explanations </h2>
     <table align="right" width="30%" ><tr bgcolor="#eeeeee" ><td><img

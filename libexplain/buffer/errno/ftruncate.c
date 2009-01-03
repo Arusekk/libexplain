@@ -55,13 +55,6 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the process does not have write permission to the file"
-        );
-        break;
-
     case EBADF:
         if (libexplain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
             libexplain_buffer_ebadf(sb, fildes, "fildes");
@@ -78,6 +71,7 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
     case EINVAL:
         if (length < 0)
         {
+            /* FIXME: i18n */
             libexplain_string_buffer_puts(sb, "'length' is negative");
         }
         else
@@ -110,6 +104,7 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
                 libexplain_string_buffer_printf
                 (
                     sb,
+                    /* FIXME: i18n */
                     "'length' is larger than the maximum file size (2 ** %ld)",
                     file_size_bits
                 );
@@ -119,6 +114,7 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
             {
                 int             flags;
 
+                /* FIXME: i18n */
                 flags = fcntl(fildes, F_GETFL);
                 if (flags >= 0 && (flags & O_ACCMODE) == O_RDONLY)
                 {
@@ -169,6 +165,7 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EISDIR:
+        /* FIXME: i18n */
         libexplain_string_buffer_puts
         (
             sb,
@@ -187,6 +184,7 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
         libexplain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the underlying file system does not support extending a "
             "file beyond its current size"
         );

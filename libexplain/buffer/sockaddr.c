@@ -566,6 +566,7 @@ libexplain_buffer_sockaddr_af_bluetooth(libexplain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_IUCV
+#ifdef HAVE_NETIUCV_IUCV_H
 
 static void
 libexplain_buffer_sockaddr_af_iucv(libexplain_string_buffer_t *sb,
@@ -578,6 +579,7 @@ libexplain_buffer_sockaddr_af_iucv(libexplain_string_buffer_t *sb,
     libexplain_buffer_hexdump(sb, sa, sa_len);
 }
 
+#endif
 #endif
 
 #ifdef AF_RXRPC
@@ -839,6 +841,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_IUCV
+#ifdef HAVE_NETIUCV_IUCV_H
     case AF_IUCV:
         libexplain_buffer_sockaddr_af_iucv
         (
@@ -847,6 +850,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
             sa_len
         );
         break;
+#endif
 #endif
 
 #ifdef AF_RXRPC

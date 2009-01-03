@@ -1,4 +1,6 @@
 .br
+.so etc/new.0.5.so
+.br
 .so etc/new.0.4.so
 .br
 .so etc/new.0.3.so

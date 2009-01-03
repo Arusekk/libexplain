@@ -375,12 +375,12 @@ explain/waitpid.lo: explain/waitpid.c explain/waitpid.h libexplain/ac/stdio.h li
 explain/write.lo: explain/write.c explain/write.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h libexplain/write.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/write.c -o explain/write.lo
 
-libdir/pkg-config/libexplain.pc: libdir/pkg-config/libexplain.pc.in ./config.status
-	CONFIG_FILES=$@:libdir/pkg-config/libexplain.pc.in CONFIG_HEADERS= $(SH) ./config.status
+libdir/pkgconfig/libexplain.pc: libdir/pkgconfig/libexplain.pc.in ./config.status
+	CONFIG_FILES=$@:libdir/pkgconfig/libexplain.pc.in CONFIG_HEADERS= $(SH) ./config.status
 
-libdir/pkg-config/.libdir: libdir/.libdir
-	-$(INSTALL) -m 0755 -d $(LIBDIR)/pkg-config
-	@-test -d $(LIBDIR)/pkg-config && touch $@
+libdir/pkgconfig/.libdir: libdir/.libdir
+	-$(INSTALL) -m 0755 -d $(LIBDIR)/pkgconfig
+	@-test -d $(LIBDIR)/pkgconfig && touch $@
 	@sleep 1
 
 libdir/.libdir:
@@ -388,8 +388,8 @@ libdir/.libdir:
 	@-test -d $(LIBDIR) && touch $@
 	@sleep 1
 
-$(LIBDIR)/pkg-config/libexplain.pc: libdir/pkg-config/libexplain.pc libdir/pkg-config/.libdir
-	$(INSTALL_DATA) libdir/pkg-config/libexplain.pc $@
+$(LIBDIR)/pkgconfig/libexplain.pc: libdir/pkgconfig/libexplain.pc libdir/pkgconfig/.libdir
+	$(INSTALL_DATA) libdir/pkgconfig/libexplain.pc $@
 
 libexplain/ac/mntent.lo: libexplain/ac/mntent.c libexplain/ac/ctype.h libexplain/ac/mntent.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/string.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/ac/mntent.c -o libexplain/ac/mntent.lo
@@ -4248,7 +4248,7 @@ lib_obj = libexplain/ac/mntent.lo libexplain/ac/string.lo libexplain/accept.lo l
 
 libexplain/libexplain.la: $(lib_obj)
 	rm -f $@
-	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@  $(lib_obj) $(LIBS) -rpath $(LIBDIR) -version-info 4:0:3
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@  $(lib_obj) $(LIBS) -rpath $(LIBDIR) -version-info 5:0:4
 
 $(LIBDIR)/libexplain.la: libexplain/libexplain.la
 	$(LIBTOOL) --mode=install $(INSTALL_DATA) libexplain/libexplain.la $@
@@ -4983,7 +4983,7 @@ clean-obj:
 	rm -f explain/waitpid.lo
 	rm -f explain/write.lo
 	rm -f libdir/.libdir
-	rm -f libdir/pkg-config/.libdir
+	rm -f libdir/pkgconfig/.libdir
 	rm -f libexplain/.incl
 	rm -f libexplain/ac/mntent.lo
 	rm -f libexplain/ac/string.lo
@@ -5665,7 +5665,7 @@ distclean: clean
 	rm -f config.cache
 	rm -f config.log
 	rm -f config.status
-	rm -f libdir/pkg-config/libexplain.pc
+	rm -f libdir/pkgconfig/libexplain.pc
 	rm -f libexplain/config.h
 	rm -f script/test_prelude
 
@@ -5673,7 +5673,7 @@ install-bin: $(bindir)/explain
 
 install-man: $(mandir)/man1/explain.1 $(mandir)/man1/explain_license.1 $(mandir)/man3/libexplain.3 $(mandir)/man3/libexplain_accept.3 $(mandir)/man3/libexplain_accept_or_die.3 $(mandir)/man3/libexplain_access.3 $(mandir)/man3/libexplain_access_or_die.3 $(mandir)/man3/libexplain_bind.3 $(mandir)/man3/libexplain_bind_or_die.3 $(mandir)/man3/libexplain_chdir.3 $(mandir)/man3/libexplain_chdir_or_die.3 $(mandir)/man3/libexplain_chmod.3 $(mandir)/man3/libexplain_chmod_or_die.3 $(mandir)/man3/libexplain_chown.3 $(mandir)/man3/libexplain_chown_or_die.3 $(mandir)/man3/libexplain_close.3 $(mandir)/man3/libexplain_close_or_die.3 $(mandir)/man3/libexplain_closedir.3 $(mandir)/man3/libexplain_closedir_or_die.3 $(mandir)/man3/libexplain_connect.3 $(mandir)/man3/libexplain_connect_or_die.3 $(mandir)/man3/libexplain_creat.3 $(mandir)/man3/libexplain_creat_or_die.3 $(mandir)/man3/libexplain_dup.3 $(mandir)/man3/libexplain_dup2.3 $(mandir)/man3/libexplain_dup2_or_die.3 $(mandir)/man3/libexplain_dup_or_die.3 $(mandir)/man3/libexplain_execve.3 $(mandir)/man3/libexplain_execve_or_die.3 $(mandir)/man3/libexplain_fchdir.3 $(mandir)/man3/libexplain_fchdir_or_die.3 $(mandir)/man3/libexplain_fchmod.3 $(mandir)/man3/libexplain_fchmod_or_die.3 $(mandir)/man3/libexplain_fchown.3 $(mandir)/man3/libexplain_fchown_or_die.3 $(mandir)/man3/libexplain_fclose.3 $(mandir)/man3/libexplain_fclose_or_die.3 $(mandir)/man3/libexplain_fcntl.3 $(mandir)/man3/libexplain_fcntl_or_die.3 $(mandir)/man3/libexplain_fdopen.3 $(mandir)/man3/libexplain_fdopen_or_die.3 $(mandir)/man3/libexplain_ferror.3 $(mandir)/man3/libexplain_ferror_or_die.3 $(mandir)/man3/libexplain_fflush.3 $(mandir)/man3/libexplain_fflush_or_die.3 $(mandir)/man3/libexplain_fgetc.3 $(mandir)/man3/libexplain_fgetc_or_die.3 $(mandir)/man3/libexplain_fgets.3 $(mandir)/man3/libexplain_fgets_or_die.3 $(mandir)/man3/libexplain_fopen.3 $(mandir)/man3/libexplain_fopen_or_die.3 $(mandir)/man3/libexplain_fork.3 $(mandir)/man3/libexplain_fork_or_die.3 $(mandir)/man3/libexplain_fpathconf.3 $(mandir)/man3/libexplain_fpathconf_or_die.3 $(mandir)/man3/libexplain_fputc.3 $(mandir)/man3/libexplain_fputc_or_die.3 $(mandir)/man3/libexplain_fread.3 $(mandir)/man3/libexplain_fread_or_die.3 $(mandir)/man3/libexplain_freopen.3 $(mandir)/man3/libexplain_freopen_or_die.3 $(mandir)/man3/libexplain_fstat.3 $(mandir)/man3/libexplain_fstat_or_die.3 $(mandir)/man3/libexplain_ftruncate.3 $(mandir)/man3/libexplain_ftruncate_or_die.3 $(mandir)/man3/libexplain_futimes.3 $(mandir)/man3/libexplain_futimes_or_die.3 $(mandir)/man3/libexplain_fwrite.3 $(mandir)/man3/libexplain_fwrite_or_die.3 $(mandir)/man3/libexplain_getaddrinfo.3 $(mandir)/man3/libexplain_getaddrinfo_or_die.3 $(mandir)/man3/libexplain_getc.3 $(mandir)/man3/libexplain_getc_or_die.3 $(mandir)/man3/libexplain_getchar.3 $(mandir)/man3/libexplain_getchar_or_die.3 $(mandir)/man3/libexplain_getcwd.3 $(mandir)/man3/libexplain_getcwd_or_die.3 $(mandir)/man3/libexplain_getrlimit.3 $(mandir)/man3/libexplain_getrlimit_or_die.3 $(mandir)/man3/libexplain_gettimeofday.3 $(mandir)/man3/libexplain_gettimeofday_or_die.3 $(mandir)/man3/libexplain_lchown.3 $(mandir)/man3/libexplain_lchown_or_die.3 $(mandir)/man3/libexplain_license.3 $(mandir)/man3/libexplain_link.3 $(mandir)/man3/libexplain_link_or_die.3 $(mandir)/man3/libexplain_listen.3 $(mandir)/man3/libexplain_listen_or_die.3 $(mandir)/man3/libexplain_lseek.3 $(mandir)/man3/libexplain_lseek_or_die.3 $(mandir)/man3/libexplain_lstat.3 $(mandir)/man3/libexplain_lstat_or_die.3 $(mandir)/man3/libexplain_mkdir.3 $(mandir)/man3/libexplain_mkdir_or_die.3 $(mandir)/man3/libexplain_open.3 $(mandir)/man3/libexplain_open_or_die.3 $(mandir)/man3/libexplain_opendir.3 $(mandir)/man3/libexplain_opendir_or_die.3 $(mandir)/man3/libexplain_pathconf.3 $(mandir)/man3/libexplain_pathconf_or_die.3 $(mandir)/man3/libexplain_program_name.3 $(mandir)/man3/libexplain_putc.3 $(mandir)/man3/libexplain_putc_or_die.3 $(mandir)/man3/libexplain_putchar.3 $(mandir)/man3/libexplain_putchar_or_die.3 $(mandir)/man3/libexplain_read.3 $(mandir)/man3/libexplain_read_or_die.3 $(mandir)/man3/libexplain_readdir.3 $(mandir)/man3/libexplain_readdir_or_die.3 $(mandir)/man3/libexplain_readlink.3 $(mandir)/man3/libexplain_readlink_or_die.3 $(mandir)/man3/libexplain_remove.3 $(mandir)/man3/libexplain_remove_or_die.3 $(mandir)/man3/libexplain_rename.3 $(mandir)/man3/libexplain_rename_or_die.3 $(mandir)/man3/libexplain_rmdir.3 $(mandir)/man3/libexplain_rmdir_or_die.3 $(mandir)/man3/libexplain_select.3 $(mandir)/man3/libexplain_select_or_die.3 $(mandir)/man3/libexplain_socket.3 $(mandir)/man3/libexplain_socket_or_die.3 $(mandir)/man3/libexplain_stat.3 $(mandir)/man3/libexplain_stat_or_die.3 $(mandir)/man3/libexplain_symlink.3 $(mandir)/man3/libexplain_symlink_or_die.3 $(mandir)/man3/libexplain_system.3 $(mandir)/man3/libexplain_system_or_die.3 $(mandir)/man3/libexplain_truncate.3 $(mandir)/man3/libexplain_truncate_or_die.3 $(mandir)/man3/libexplain_unlink.3 $(mandir)/man3/libexplain_unlink_or_die.3 $(mandir)/man3/libexplain_utime.3 $(mandir)/man3/libexplain_utime_or_die.3 $(mandir)/man3/libexplain_wait.3 $(mandir)/man3/libexplain_wait3.3 $(mandir)/man3/libexplain_wait3_or_die.3 $(mandir)/man3/libexplain_wait4.3 $(mandir)/man3/libexplain_wait4_or_die.3 $(mandir)/man3/libexplain_wait_or_die.3 $(mandir)/man3/libexplain_waitpid.3 $(mandir)/man3/libexplain_waitpid_or_die.3 $(mandir)/man3/libexplain_write.3 $(mandir)/man3/libexplain_write_or_die.3
 
-install-libdir: $(LIBDIR)/libexplain.la $(LIBDIR)/pkg-config/libexplain.pc
+install-libdir: $(LIBDIR)/libexplain.la $(LIBDIR)/pkgconfig/libexplain.pc
 
 install-include: \
 	$(includedir)/libexplain/accept.h \
