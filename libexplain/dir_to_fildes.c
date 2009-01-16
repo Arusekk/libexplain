@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,11 @@ libexplain_dir_to_fildes(DIR *dir)
 {
     if (!dir)
         return -1;
-    if (libexplain_pointer_is_efault(dir))
+    /*
+     * DIR is an opaque type, so we don't really know how big
+     * is actually is.  So guess.
+     */
+    if (libexplain_pointer_is_efault(dir, sizeof(int)))
         return -1;
     return dirfd(dir);
 }

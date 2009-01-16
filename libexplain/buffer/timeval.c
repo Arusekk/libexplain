@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,7 +27,7 @@ void
 libexplain_buffer_timeval(libexplain_string_buffer_t *sb,
     const struct timeval *tvp)
 {
-    if (libexplain_pointer_is_efault(tvp))
+    if (libexplain_pointer_is_efault(tvp, sizeof(*tvp)))
     {
         libexplain_buffer_pointer(sb, tvp);
         return;

@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008 Peter Miller
+.\" Copyright (C) 2008, 2009 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -156,6 +156,12 @@ duplicate a file descriptor and report errors
 Explain \f[I]execve\fP(2) errors
 .TP 8n
 \f[I]libexplain_execve_or_die\fP(3)
+execute program and report errors
+.TP 8n
+\f[I]libexplain_execvp\fP(3)
+Explain \f[I]execvp\fP(3) errors
+.TP 8n
+\f[I]libexplain_execvp_or_die\fP(3)
 execute program and report errors
 .\" ----------  F  ---------------------------------------------------------
 .TP 8n
@@ -314,6 +320,12 @@ Explain \f[I]gettimeofday\fP(2) errors
 get time and report errors
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
+.TP 8n
+\f[I]libexplain_ioctl\fP(3)
+Explain \f[I]ioctl\fP(2) errors
+.TP 8n
+\f[I]libexplain_ioctl_or_die\fP(3)
+blah blah and report errors
 .\" ----------  K  ---------------------------------------------------------
 .\" ----------  L  ---------------------------------------------------------
 .TP 8n
@@ -348,6 +360,12 @@ Explain \f[I]lstat\fP(2) errors
 get file status and report errors
 .\" ----------  M  ---------------------------------------------------------
 .TP 8n
+\f[I]libexplain_malloc\fP(3)
+Explain \f[I]malloc\fP(3) errors
+.TP 8n
+\f[I]libexplain_malloc_or_die\fP(3)
+blah blah and report errors
+.TP 8n
 \f[I]libexplain_mkdir\fP(3)
 Explain \f[I]mkdir\fP(2) errors
 .TP 8n
@@ -374,6 +392,24 @@ Explain \f[I]pathconf\fP(3) errors
 .TP 8n
 \f[I]libexplain_pathconf_or_die\fP(3)
 get configuration values for files and report errors
+.TP 8n
+\f[I]libexplain_pclose\fP(3)
+Explain \f[I]pclose\fP(3) errors
+.TP 8n
+\f[I]libexplain_pclose_or_die\fP(3)
+blah blah and report errors
+.TP 8n
+\f[I]libexplain_pipe\fP(3)
+Explain \f[I]pipe\fP(2) errors
+.TP 8n
+\f[I]libexplain_pipe_or_die\fP(3)
+blah blah and report errors
+.TP 8n
+\f[I]libexplain_popen\fP(3)
+Explain \f[I]popen\fP(3) errors
+.TP 8n
+\f[I]libexplain_popen_or_die\fP(3)
+blah blah and report errors
 .TP 8n
 \f[I]libexplain_putc\fP(3)
 Explain \f[I]putc\fP(3) errors
@@ -406,6 +442,12 @@ Explain \f[I]readlink\fP(2) errors
 .TP 8n
 \f[I]libexplain_readlink_or_die\fP(3)
 read value of a symbolic link and report errors
+.TP 8n
+\f[I]libexplain_realloc\fP(3)
+Explain \f[I]realloc\fP(3) errors
+.TP 8n
+\f[I]libexplain_realloc_or_die\fP(3)
+blah blah and report errors
 .TP 8n
 \f[I]libexplain_rename\fP(3)
 Explain \f[I]rename\fP(2) errors

@@ -21,16 +21,18 @@
 
 #include <libexplain/string_buffer.h>
 
+struct ${basename $filename .h}; /* forward */
+
 /**
   * The ${ident ${trim_ext $filename}} function may be used to
+  * print a representation of a ${basename $filename .h} structure.
   *
   * @param sb
-  *    The string buffer to print into.
-  * @param arg
-  *    blah blah
-  * @returns
-  *    blah blah
+  *     The string buffer to print into.
+  * @param data
+  *     The ${basename $filename .h} structure to be printed.
   */
-void ${ident ${trim_ext $filename}}(libexplain_string_buffer_t *sb);
+void ${ident ${trim_ext $filename}}(libexplain_string_buffer_t *sb,
+    const struct ${basename $filename .h} *data);
 
 #endif /* ${ident ${upcase $filename}} */

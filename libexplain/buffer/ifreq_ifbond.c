@@ -1,0 +1,74 @@
+/*
+ * libexplain - Explain errno values returned by libc functions
+ * Copyright (C) 2009 Peter Miller
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <libexplain/ac/linux/if_bonding.h>
+
+#include <libexplain/buffer/ifreq_ifbond.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/path_is_efault.h>
+
+
+static void
+libexplain_buffer_ifbond(libexplain_string_buffer_t *sb,
+    const struct ifbond *data)
+{
+    if (libexplain_pointer_is_efault(data, sizeof(*data)))
+        libexplain_buffer_pointer(sb, data);
+    else
+    {
+        const struct ifbond *p;
+
+        p = data;
+        libexplain_string_buffer_printf
+        (
+            sb,
+            "{ bond_mode = %ld, num_slaves = %ld, miimon = %ld }",
+            (long)p->bond_mode,
+            (long)p->num_slaves,
+            (long)p->miimon
+        );
+    }
+}
+
+
+void
+libexplain_buffer_ifreq_ifbond(libexplain_string_buffer_t *sb,
+    const struct ifreq *data)
+{
+    if (libexplain_pointer_is_efault(data, sizeof(*data)))
+        libexplain_buffer_pointer(sb, data);
+    else
+    {
+        const struct ifreq *ifr;
+
+        /*
+         * This is actually a huge big sucky union.
+         */
+        ifr = data;
+        libexplain_string_buffer_puts(sb, "{ ifr_name = ");
+        libexplain_string_buffer_puts_quoted_n
+        (
+            sb,
+            ifr->ifr_name,
+            sizeof(ifr->ifr_name)
+        );
+        libexplain_string_buffer_puts(sb, ", ifr_data = ");
+        libexplain_buffer_ifbond(sb, ifr->ifr_data);
+        libexplain_string_buffer_puts(sb, " }");
+    }
+}

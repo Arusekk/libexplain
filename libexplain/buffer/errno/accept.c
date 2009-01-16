@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/errno.h>
 
+#include <libexplain/buffer/argument_is_invalid.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eintr.h>
@@ -103,20 +104,10 @@ libexplain_buffer_errno_accept_explanation(libexplain_string_buffer_t *sb,
     case EINVAL:
         if (*sock_addr_size <= 0)
         {
-            libexplain_string_buffer_printf_gettext
+            libexplain_buffer_argument_is_invalid
             (
                 sb,
-                /*
-                 * xgettext: This message is used to explain an EINVAL
-                 * error reported by the accept(2) system call, in the
-                 * case where the maximum socket adress size given is
-                 * invalid, e.g. negative.
-                 *
-                 * %1$d => The actual size passed (because the
-                 *         recapitualtion fo the system call is going to
-                 *         have a pointer in it, not the actual value).
-                 */
-                i18n("sock_addr_size is invalid (%d)"),
+                "sock_addr_size",
                 *sock_addr_size
             );
             break;
@@ -161,14 +152,21 @@ libexplain_buffer_errno_accept_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (libexplain_pointer_is_efault(sock_addr))
-        {
-            libexplain_buffer_efault(sb, "sock_addr");
-            break;
-        }
-        if (libexplain_pointer_is_efault(sock_addr_size))
+        if
+        (
+            libexplain_pointer_is_efault
+            (
+                sock_addr_size,
+                sizeof(*sock_addr_size)
+            )
+        )
         {
             libexplain_buffer_efault(sb, "sock_addr_size");
+            break;
+        }
+        if (libexplain_pointer_is_efault(sock_addr, *sock_addr_size))
+        {
+            libexplain_buffer_efault(sb, "sock_addr");
             break;
         }
         break;

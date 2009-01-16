@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,16 +23,25 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
+#include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/gcc_attributes.h>
 #include <libexplain/parse_bits.h>
+#include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/wrap_and_print.h>
+
+#define YYDEBUG 0
+
+#if YYDEBUG
+extern int yydebug;
+#endif
 
 %}
 
 %token BITWISE_AND
 %token BITWISE_OR
+%token COMMA
 %token JUNK
 %token LP
 %token MINUS
@@ -40,6 +49,11 @@
 %token PLUS
 %token RP
 %token TILDE
+%token FUNC_IOC
+%token FUNC_IO
+%token FUNC_IOR
+%token FUNC_IOW
+%token FUNC_IOWR
 
 %union
 {
@@ -90,6 +104,30 @@ yyerror(const char *fmt, ...)
 }
 
 
+static libexplain_parse_bits_table_t constants[] =
+{
+    { "NULL", 0 },
+    { "_IOC_NONE", _IOC_NONE },
+    { "_IOC_READ", _IOC_READ },
+    { "_IOC_WRITE", _IOC_WRITE },
+    { "IOC_IN", IOC_IN },
+    { "IOC_OUT", IOC_OUT },
+    { "IOC_INOUT", IOC_INOUT },
+    { "IOCSIZE_MASK", IOCSIZE_MASK },
+    { "IOCSIZE_SHIFT", IOCSIZE_SHIFT },
+};
+
+
+static libexplain_parse_bits_table_t keywords[] =
+{
+    { "_IO", FUNC_IO },
+    { "_IOC", FUNC_IOC },
+    { "_IOR", FUNC_IOR },
+    { "_IOWR", FUNC_IOWR },
+    { "_IOW", FUNC_IOW },
+};
+
+
 static int
 yylex(void)
 {
@@ -101,6 +139,9 @@ yylex(void)
         case '\0':
             --lex_cp;
             return 0;
+
+        case ',':
+            return COMMA;
 
         case '|':
             return BITWISE_OR;
@@ -122,6 +163,20 @@ yylex(void)
 
         case ')':
             return RP;
+
+        case '\'':
+            c = *lex_cp;
+            yylval.lv_number = 0;
+            if (c == '\0' || c == '\'')
+                return JUNK;
+            yylval.lv_number = c;
+            ++lex_cp;
+            c = *lex_cp;
+            if (c != '\'')
+                return JUNK;
+            /* FIXME: parse C escape sequences */
+            ++lex_cp;
+            return NUMBER;
 
         case '_':
         case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
@@ -178,6 +233,27 @@ yylex(void)
                     return NUMBER;
                 }
                 tp =
+                    libexplain_parse_bits_find_by_name
+                    (
+                        name,
+                        constants,
+                        SIZEOF(constants)
+                    );
+                if (tp)
+                {
+                    yylval.lv_number = tp->value;
+                    return NUMBER;
+                }
+                tp =
+                    libexplain_parse_bits_find_by_name
+                    (
+                        name,
+                        keywords,
+                        SIZEOF(keywords)
+                    );
+                if (tp)
+                    return tp->value;
+                tp =
                     libexplain_parse_bits_find_by_name_fuzzy
                     (
                         name,
@@ -197,7 +273,7 @@ yylex(void)
                 }
                 yyerror("name \"%s\" unknown", name);
             }
-            return 0;
+            return JUNK;
 
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
@@ -246,6 +322,9 @@ libexplain_parse_bits(const char *text,
     const libexplain_parse_bits_table_t *table, size_t table_size,
     int *result_p)
 {
+#if YYDEBUG
+    yydebug = 1;
+#endif
     libexplain_string_buffer_init
     (
         &error_buffer,
@@ -261,7 +340,7 @@ libexplain_parse_bits(const char *text,
     yyparse();
     if (error_count > 0)
         return -1;
-    return *result_p = result;
+    *result_p = result;
     return 0;
 }
 
@@ -302,4 +381,15 @@ expression
         { $$ = $1 & $3; }
     | expression BITWISE_OR expression
         { $$ = $1 | $3; }
+    | FUNC_IOC LP expression COMMA expression COMMA expression COMMA expression
+            RP
+        { $$ = _IOC($3, $5, $7, $9); }
+    | FUNC_IO LP expression COMMA expression RP
+        { $$ = _IO($3, $5); }
+    | FUNC_IOR LP expression COMMA expression COMMA expression RP
+        { $$ = _IOR($3, $5, $7); }
+    | FUNC_IOW LP expression COMMA expression COMMA expression RP
+        { $$ = _IOW($3, $5, $7); }
+    | FUNC_IOWR LP expression COMMA expression COMMA expression RP
+        { $$ = _IOWR($3, $5, $7); }
     ;

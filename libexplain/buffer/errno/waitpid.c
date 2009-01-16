@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -162,6 +162,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
          * caught.
          */
         libexplain_buffer_eintr(sb, "waitpid");
+        break;
 
     case EINVAL:
         libexplain_string_buffer_printf_gettext

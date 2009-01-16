@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008 Peter Miller
+.\" Copyright (C) 2008, 2009 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -253,7 +253,32 @@ Function prototype for the above.
 .\"
 .SS test_example/main.c
 This program should call \f[CR]libexplain_\fP\f[I]explain\fP\f[CW]_or_die\fP.
-.SH Tests
+.\" ------------------------------------------------------------------------
+.SH NEW IOCTL REQUESTS
+Each different \f[I]ioctl\fP(2) request is, in effect, yet another
+system call.  Except that they all have appallinlgly bad type safety.  I
+have seen fugly C++ classes with less overloading than \f[I]ioctl\fP(2).
+.TP
+libexplain/iocontrol/request_by_number.c
+This file as one include line for each \f[I]ioctl\fP(2) request.
+There is a \f[CW]table\fP array that contaisn a pointer to the
+libexplain_iocontrol_t variable declared in the above include.
+Keep both sets of lines sorted alphabetically,
+it makes it easier to detect duplicates.
+.TP
+libexplain/iocontrol/\f[I]name\fP.h
+Where \f[I]name\fP is the name of the \f[I]ioctl\fP(2) request in lower
+case.  This declares an global const variable describing how to handle
+it.
+.TP
+libexplain/iocontrol/\f[I]name\fP.c
+This defines the above global variable, and defines any static glue
+functions necessary to print a representation of it.
+You will probably have to read the kernel source to discover the errors
+the ioctl can return, and what causes them, in order to write the
+explanation function; they are almost never describe in the man pages.
+.\" ------------------------------------------------------------------------
+.SH TESTS
 Write at least one separate test for each case in the errnum switch.
 .SH Debian Notes
 You can check that the debian stuff builds by using

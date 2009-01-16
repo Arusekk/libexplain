@@ -15,6 +15,7 @@ usr/include/libexplain/creat.h
 usr/include/libexplain/dup.h
 usr/include/libexplain/dup2.h
 usr/include/libexplain/execve.h
+usr/include/libexplain/execvp.h
 usr/include/libexplain/fchdir.h
 usr/include/libexplain/fchmod.h
 usr/include/libexplain/fchown.h
@@ -41,6 +42,7 @@ usr/include/libexplain/getchar.h
 usr/include/libexplain/getcwd.h
 usr/include/libexplain/getrlimit.h
 usr/include/libexplain/gettimeofday.h
+usr/include/libexplain/ioctl.h
 usr/include/libexplain/large_file_support.h
 usr/include/libexplain/lchown.h
 usr/include/libexplain/libexplain.h
@@ -48,16 +50,21 @@ usr/include/libexplain/link.h
 usr/include/libexplain/listen.h
 usr/include/libexplain/lseek.h
 usr/include/libexplain/lstat.h
+usr/include/libexplain/malloc.h
 usr/include/libexplain/mkdir.h
 usr/include/libexplain/open.h
 usr/include/libexplain/opendir.h
 usr/include/libexplain/pathconf.h
+usr/include/libexplain/pclose.h
+usr/include/libexplain/pipe.h
+usr/include/libexplain/popen.h
 usr/include/libexplain/program_name.h
 usr/include/libexplain/putc.h
 usr/include/libexplain/putchar.h
 usr/include/libexplain/read.h
 usr/include/libexplain/readdir.h
 usr/include/libexplain/readlink.h
+usr/include/libexplain/realloc.h
 usr/include/libexplain/remove.h
 usr/include/libexplain/rename.h
 usr/include/libexplain/rmdir.h
@@ -102,6 +109,8 @@ usr/share/man/man3/libexplain_dup2_or_die.3
 usr/share/man/man3/libexplain_dup_or_die.3
 usr/share/man/man3/libexplain_execve.3
 usr/share/man/man3/libexplain_execve_or_die.3
+usr/share/man/man3/libexplain_execvp.3
+usr/share/man/man3/libexplain_execvp_or_die.3
 usr/share/man/man3/libexplain_fchdir.3
 usr/share/man/man3/libexplain_fchdir_or_die.3
 usr/share/man/man3/libexplain_fchmod.3
@@ -154,6 +163,8 @@ usr/share/man/man3/libexplain_getrlimit.3
 usr/share/man/man3/libexplain_getrlimit_or_die.3
 usr/share/man/man3/libexplain_gettimeofday.3
 usr/share/man/man3/libexplain_gettimeofday_or_die.3
+usr/share/man/man3/libexplain_ioctl.3
+usr/share/man/man3/libexplain_ioctl_or_die.3
 usr/share/man/man3/libexplain_lchown.3
 usr/share/man/man3/libexplain_lchown_or_die.3
 usr/share/man/man3/libexplain_license.3
@@ -165,6 +176,8 @@ usr/share/man/man3/libexplain_lseek.3
 usr/share/man/man3/libexplain_lseek_or_die.3
 usr/share/man/man3/libexplain_lstat.3
 usr/share/man/man3/libexplain_lstat_or_die.3
+usr/share/man/man3/libexplain_malloc.3
+usr/share/man/man3/libexplain_malloc_or_die.3
 usr/share/man/man3/libexplain_mkdir.3
 usr/share/man/man3/libexplain_mkdir_or_die.3
 usr/share/man/man3/libexplain_open.3
@@ -173,6 +186,12 @@ usr/share/man/man3/libexplain_opendir.3
 usr/share/man/man3/libexplain_opendir_or_die.3
 usr/share/man/man3/libexplain_pathconf.3
 usr/share/man/man3/libexplain_pathconf_or_die.3
+usr/share/man/man3/libexplain_pclose.3
+usr/share/man/man3/libexplain_pclose_or_die.3
+usr/share/man/man3/libexplain_pipe.3
+usr/share/man/man3/libexplain_pipe_or_die.3
+usr/share/man/man3/libexplain_popen.3
+usr/share/man/man3/libexplain_popen_or_die.3
 usr/share/man/man3/libexplain_program_name.3
 usr/share/man/man3/libexplain_putc.3
 usr/share/man/man3/libexplain_putc_or_die.3
@@ -184,6 +203,8 @@ usr/share/man/man3/libexplain_readdir.3
 usr/share/man/man3/libexplain_readdir_or_die.3
 usr/share/man/man3/libexplain_readlink.3
 usr/share/man/man3/libexplain_readlink_or_die.3
+usr/share/man/man3/libexplain_realloc.3
+usr/share/man/man3/libexplain_realloc_or_die.3
 usr/share/man/man3/libexplain_remove.3
 usr/share/man/man3/libexplain_remove_or_die.3
 usr/share/man/man3/libexplain_rename.3

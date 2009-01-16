@@ -1,0 +1,68 @@
+/*
+ * libexplain - Explain errno values returned by libc functions
+ * Copyright (C) 2009 Peter Miller
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <libexplain/ac/sys/ioctl.h>
+
+#include <libexplain/buffer/line_discipline.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/parse_bits.h>
+#include <libexplain/path_is_efault.h>
+#include <libexplain/sizeof.h>
+#include <libexplain/string_buffer.h>
+
+
+void
+libexplain_buffer_line_discipline(libexplain_string_buffer_t *sb, int data)
+{
+    static const libexplain_parse_bits_table_t table[] =
+    {
+        { "N_TTY", N_TTY },
+        { "N_SLIP", N_SLIP },
+        { "N_MOUSE", N_MOUSE },
+        { "N_PPP", N_PPP },
+        { "N_STRIP", N_STRIP },
+        { "N_AX25", N_AX25 },
+        { "N_X25", N_X25 },
+        { "N_6PACK", N_6PACK },
+        { "N_MASC", N_MASC },
+        { "N_R3964", N_R3964 },
+        { "N_PROFIBUS_FDL", N_PROFIBUS_FDL },
+        { "N_IRDA", N_IRDA },
+        { "N_SMSBLOCK", N_SMSBLOCK },
+        { "N_HDLC", N_HDLC },
+        { "N_SYNC_PPP", N_SYNC_PPP },
+        { "N_HCI", N_HCI },
+    };
+
+    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+}
+
+
+void
+libexplain_buffer_line_discipline_star(libexplain_string_buffer_t *sb,
+    const int *data)
+{
+    if (libexplain_pointer_is_efault(data, sizeof(*data)))
+        libexplain_buffer_pointer(sb, data);
+    else
+    {
+        libexplain_string_buffer_puts(sb, "{ ");
+        libexplain_buffer_line_discipline(sb, *data);
+        libexplain_string_buffer_puts(sb, " }");
+    }
+}

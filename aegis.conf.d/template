@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,15 +19,19 @@
 
 /*
  * The new file templates are very handy.  They allow all sorts of things
- * to be se automatically.  You need to edit them to add your own name,
+ * to be set automatically.  You need to edit them to add your own name,
  * and copyright conditions.
  */
 
 file_template =
 [
     {
-        pattern = [ "libexplain/buffer/*.c" ];
+        pattern = [ "libexplain/buffer/*.c", "libexplain/string_buffer/*.c" ];
         body = "${read_file ${source etc/template/lib_buf_c abs}}";
+    },
+    {
+        pattern = [ "libexplain/iocontrol/*.c" ];
+        body = "${read_file ${source etc/template/lib_ioc_c abs}}";
     },
     {
         pattern = [ "lib*/*.c" ];
@@ -42,7 +46,11 @@ file_template =
         body = "${read_file ${source etc/template/lib_ac_h abs}}";
     },
     {
-        pattern = [ "libexplain/buffer/*.h" ];
+        pattern = [ "libexplain/iocontrol/*.h" ];
+        body = "${read_file ${source etc/template/lib_ioc_h abs}}";
+    },
+    {
+        pattern = [ "libexplain/buffer/*.h", "libexplain/string_buffer/*.h" ];
         body = "${read_file ${source etc/template/lib_buf_h abs}}";
     },
     {
@@ -77,4 +85,12 @@ file_template =
         pattern = [ "*" ];
         body = "${read_file ${source etc/template/generic abs}}";
     }
+];
+
+filename_pattern_reject =
+[
+    "*[A-Z]*",
+    "*.cc",
+    "*.cxx",
+    "*.c++"
 ];

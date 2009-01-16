@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libexplain 0.5.D001\n"
+"Project-Id-Version: libexplain 0.6.D001\n"
 "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-"POT-Creation-Date: 2009-01-03 21:03+1100\n"
+"POT-Creation-Date: 2009-01-16 16:32+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,6 +265,20 @@ msgid "%s is incorrect"
 msgstr ""
 
 #.
+#. This message is used to explain an EINVAL
+#. error reported by the accept(2) system call (and others).
+#.
+#. %1$d => The name of the argument that has an invalid value
+#. %2$ld => The actual size passed (because the
+#.         recapitualtion fo the system call is going to
+#.         have a pointer in it, not the actual value).
+#.
+#: libexplain/buffer/argument_is_invalid.c:38
+#, c-format
+msgid "%s is invalid (%ld)"
+msgstr ""
+
+#.
 #. This message is used when a path given in a path is
 #. larger that the (dialect specific) maximum path length.
 #.
@@ -508,7 +522,7 @@ msgstr ""
 #. error reported by an accept(2) system call, in the case
 #. where a protocol error has occurred.
 #.
-#: libexplain/buffer/errno/accept.c:198
+#: libexplain/buffer/errno/accept.c:196
 msgid ""
 "a protocol error has occurred; for example, the STREAMS protocol stack "
 "has not been initialized"
@@ -534,7 +548,7 @@ msgstr ""
 #. error from an execve system call, in the case where an ELF
 #. interpreter was a directory.
 #.
-#: libexplain/buffer/errno/execve.c:377
+#: libexplain/buffer/errno/execve.c:378
 msgid "an ELF interpreter was a directory"
 msgstr ""
 
@@ -544,7 +558,7 @@ msgstr ""
 #. where an incoming connection has been aborted by the
 #. remote host.
 #.
-#: libexplain/buffer/errno/accept.c:95
+#: libexplain/buffer/errno/accept.c:96
 msgid "an incoming connection has been aborted by the remote host"
 msgstr ""
 
@@ -654,11 +668,22 @@ msgid "effective UID"
 msgstr ""
 
 #.
+#. This message is used to explain an ENOTTY
+#. error reported by an ioctl(2) system call, when a more
+#. specific explanation is not availble.
+#.
+#: libexplain/iocontrol/generic.c:177
+msgid ""
+"fildes is not associated with a character special device; or, fildes is "
+"not associated with an object to which request can be applied"
+msgstr ""
+
+#.
 #. This message is used to explain an EPERM error
 #. reported by an accept(2) system call, in the case where
 #. firewall rules forbid connection.
 #.
-#: libexplain/buffer/errno/accept.c:185
+#: libexplain/buffer/errno/accept.c:183
 msgid "firewall rules forbid connection"
 msgstr ""
 
@@ -720,6 +745,15 @@ msgstr ""
 #.
 #: libexplain/buffer/enomem.c:102
 msgid "insufficient user-space or kernel memory was available"
+msgstr ""
+
+#.
+#. This message is used to explain an EINVAL
+#. error reorted by an ioctl(2) system call, when a more
+#. specific explanation is not availble.
+#.
+#: libexplain/iocontrol/generic.c:164
+msgid "ioctl request or ioctl data is not valid"
 msgstr ""
 
 #.
@@ -1172,21 +1206,6 @@ msgid ""
 msgstr ""
 
 #.
-#. This message is used to explain an EINVAL
-#. error reported by the accept(2) system call, in the
-#. case where the maximum socket adress size given is
-#. invalid, e.g. negative.
-#.
-#. %1$d => The actual size passed (because the
-#.         recapitualtion fo the system call is going to
-#.         have a pointer in it, not the actual value).
-#.
-#: libexplain/buffer/errno/accept.c:119
-#, c-format
-msgid "sock_addr_size is invalid (%d)"
-msgstr ""
-
-#.
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a network socket.
 #.
@@ -1208,7 +1227,7 @@ msgstr ""
 #.
 #. %1$s => the name of the offending system call argument.
 #.
-#: libexplain/buffer/errno/waitpid.c:176
+#: libexplain/buffer/errno/waitpid.c:177
 #, c-format
 msgid "the %s argument was invalid"
 msgstr ""
@@ -1456,7 +1475,7 @@ msgstr ""
 #. opened for reading.  The actual open mode will be
 #. printed separately.
 #.
-#: libexplain/buffer/errno/read.c:94
+#: libexplain/buffer/errno/read.c:106
 msgid "the file descriptor is not open for reading"
 msgstr ""
 
@@ -1600,6 +1619,14 @@ msgstr ""
 msgid ""
 "the pathname is being used by the system or another process and the "
 "implementation considers this an error"
+msgstr ""
+
+#.
+#. This message is used to explain an EBUSY
+#. error reported by an ioctl TIOCSHAYESESP system call.
+#.
+#: libexplain/iocontrol/tiocshayesesp.c:92
+msgid "the port is in use"
 msgstr ""
 
 #.
@@ -2089,7 +2116,7 @@ msgstr ""
 #. where the socket is marked non-blocking (O_NONBLOCK) and
 #. no connections are waiting to be accepted.
 #.
-#: libexplain/buffer/errno/accept.c:76
+#: libexplain/buffer/errno/accept.c:77
 msgid ""
 "the socket is marked non-blocking and no connections are present to be "
 "accepted"
@@ -2135,7 +2162,7 @@ msgstr ""
 #. the file descriptor is actually a socket, but is not in a
 #. state that permits the use of the accept(2) system call.
 #.
-#: libexplain/buffer/errno/accept.c:133
+#: libexplain/buffer/errno/accept.c:124
 msgid "the socket is not listening for connections"
 msgstr ""
 
@@ -2143,7 +2170,7 @@ msgstr ""
 #. This message is used to explain an EOPNOTSUPP
 #. error returned by a listen(2) system call.
 #.
-#: libexplain/buffer/errno/accept.c:157
+#: libexplain/buffer/errno/accept.c:148
 msgid "the socket is not of a type that supports the accept(2) system call"
 msgstr ""
 
@@ -2190,6 +2217,37 @@ msgstr ""
 #.
 #: libexplain/buffer/enfile.c:102
 msgid "the system limit on the total number of open files has been reached"
+msgstr ""
+
+#.
+#. This message is used when explaining an EBUSY
+#. error repoorted by and ioctl TIOCCONS system call.
+#.
+#: libexplain/iocontrol/tioccons.c:43
+msgid "the terminal has already been redirected"
+msgstr ""
+
+#.
+#. This message is used when explaining an ENOTTY
+#. error reported by an ioctl TIOCGSID system call.
+#.
+#: libexplain/iocontrol/tiocgsid.c:43
+msgid ""
+"the tty is not a master pty or the tty is not the controlling tty of the "
+"process"
+msgstr ""
+
+#.
+#. This message is used to explain an ENOENT error
+#. returned by the execvp(3) system call.
+#.
+#. %1$s => the name and file type of the command, already quoted.
+#.         e.g. "\"bogus\" regular file"
+#. %2$s => the command search PATH, already quoted.
+#.
+#: libexplain/buffer/errno/execvp.c:207
+#, c-format
+msgid "there is no %s in any of the command search PATH directories (%s)"
 msgstr ""
 
 #.
@@ -2246,6 +2304,14 @@ msgstr ""
 msgid ""
 "this is more likely to be a software error (a bug) than it is to be a "
 "user error"
+msgstr ""
+
+#.
+#. This message is used when explaining an ENOTTY
+#. error reported by an ioctl TIOCPKT system call.
+#.
+#: libexplain/iocontrol/tiocpkt.c:56
+msgid "this may only be applied to the master side of a pseudo-terminal"
 msgstr ""
 
 #.

@@ -1,6 +1,6 @@
 dnl!
 dnl! libexplain - Explain errno values returned by libc functions
-dnl! Copyright (C) 2008 Peter Miller
+dnl! Copyright (C) 2008, 2009 Peter Miller
 dnl! Written by Peter Miller <pmiller@opensource.org.au>
 dnl!
 dnl! This program is free software; you can redistribute it and/or
@@ -202,53 +202,162 @@ fi
 AC_SUBST(GROFF_MM_MACROS)
 AC_MSG_RESULT([-m$GROFF_MM_MACROS])
 
-AC_CHECK_HEADERS(        \
-    arpa/inet.h          \
-    fcntl.h              \
-    libintl.h            \
-    limits.h             \
-    linux/atalk.h        \
-    linux/atm.h          \
-    linux/irda.h         \
-    linux/netlink.h      \
-    linux/if_pppox.h     \
-    netpacket/packet.h   \
-    linux/x25.h          \
-    mntent.h             \
-    net/ethernet.h       \
-    net/if.h             \
-    netax25/ax25.h       \
-    netash/ash.h         \
-    netdb.h              \
-    neteconet/ec.h       \
-    netinet/in.h         \
-    netipx/ipx.h         \
-    netiucv/iucv.h       \
-    netrom/netrom.h      \
-    netrose/rose.h       \
-    pwd.h                \
-    stddef.h             \
-    stdlib.h             \
-    string.h             \
-    sys/capability.h     \
-    sys/file.h           \
-    sys/mount.h          \
-    sys/param.h          \
-    sys/resource.h       \
-    sys/select.h         \
-    sys/socket.h         \
-    sys/stat.h           \
-    sys/time.h           \
-    sys/types.h          \
-    sys/un.h             \
-    sys/vfs.h            \
-    sys/wait.h           \
-    termios.h            \
-    time.h               \
-    unistd.h             \
-    utime.h              \
-    wchar.h              \
-    wctype.h             \
+AC_CHECK_HEADERS(          \
+    arpa/inet.h            \
+    bluetooth/bnep.h       \
+    bluetooth/cmtp.h       \
+    bluetooth/hci.h        \
+    bluetooth/hidp.h       \
+    bluetooth/rfcomm.h     \
+    fcntl.h                \
+    libintl.h              \
+    limits.h               \
+    linux/apm_bios.h       \
+    linux/arcfb.h          \
+    linux/atalk.h          \
+    linux/atm.h            \
+    linux/atm_eni.h        \
+    linux/atm_he.h         \
+    linux/atm_idt77105.h   \
+    linux/atm_nicstar.h    \
+    linux/atm_tcp.h        \
+    linux/atm_zatm.h       \
+    linux/atmarp.h         \
+    linux/atmbr2684.h      \
+    linux/atmclip.h        \
+    linux/atmdev.h         \
+    linux/atmlec.h         \
+    linux/atmmpc.h         \
+    linux/atmsvc.h         \
+    linux/auto_fs.h        \
+    linux/auto_fs4.h       \
+    linux/blkpg.h          \
+    linux/capi.h           \
+    linux/cciss_ioctl.h    \
+    linux/cdk.h            \
+    linux/chio.h           \
+    linux/cm4000_cs.h      \
+    linux/comstats.h       \
+    linux/dn.h             \
+    linux/dvb/audio.h      \
+    linux/dvb/ca.h         \
+    linux/dvb/dmx.h        \
+    linux/dvb/frontend.h   \
+    linux/dvb/net.h        \
+    linux/dvb/osd.h        \
+    linux/dvb/video.h      \
+    linux/ethtool.h        \
+    linux/ext2_fs.h        \
+    linux/fb.h             \
+    linux/fd.h             \
+    linux/firewire-cdev.h  \
+    linux/fs.h             \
+    linux/hayesesp.h       \
+    linux/hiddev.h         \
+    linux/hidraw.h         \
+    linux/hpet.h           \
+    linux/i2o-dev.h        \
+    linux/if.h             \
+    linux/if_bonding.h     \
+    linux/if_bridge.h      \
+    linux/if_frad.h        \
+    linux/if_ppp.h         \
+    linux/if_pppox.h       \
+    linux/if_pppox.h       \
+    linux/if_tun.h         \
+    linux/input.h          \
+    linux/ipmi.h           \
+    linux/ipv6.h           \
+    linux/irda.h           \
+    linux/isdn.h           \
+    linux/isdn_ppp.h       \
+    linux/ivtvfb.h         \
+    linux/joystick.h       \
+    linux/kd.h             \
+    linux/kvm.h            \
+    linux/matroxfb.h       \
+    linux/mii.h            \
+    linux/mmtimer.h        \
+    linux/msdos_fs.h       \
+    linux/mtio.h           \
+    linux/nbd.h            \
+    linux/ncp_fs.h         \
+    linux/netlink.h        \
+    linux/nvram.h          \
+    linux/phantom.h        \
+    linux/pmu.h            \
+    linux/ppdev.h          \
+    linux/radeonfb.h       \
+    linux/random.h         \
+    linux/raw.h            \
+    linux/reiserfs_fs.h    \
+    linux/rtc.h            \
+    linux/serial.h         \
+    linux/serio.h          \
+    linux/smb_fs.h         \
+    linux/socket.h         \
+    linux/sockios.h        \
+    linux/sonet.h          \
+    linux/sonypi.h         \
+    linux/spi/spidev.h     \
+    linux/suspend_ioctls.h \
+    linux/synclink.h       \
+    linux/tiocl.h          \
+    linux/udf_fs_i.h       \
+    linux/uinput.h         \
+    linux/usb/g_printer.h  \
+    linux/usb/gadgetfs.h   \
+    linux/usbdevice_fs.h   \
+    linux/video_decoder.h  \
+    linux/video_encoder.h  \
+    linux/videodev.h       \
+    linux/videodev2.h      \
+    linux/watchdog.h       \
+    linux/x25.h            \
+    mntent.h               \
+    net/ethernet.h         \
+    net/if.h               \
+    net/if_arp.h           \
+    net/if_ppp.h           \
+    net/route.h            \
+    netash/ash.h           \
+    netax25/ax25.h         \
+    netdb.h                \
+    neteconet/ec.h         \
+    netinet/in.h           \
+    netipx/ipx.h           \
+    netiucv/iucv.h         \
+    netpacket/packet.h     \
+    netrom/netrom.h        \
+    netrose/rose.h         \
+    pwd.h                  \
+    stddef.h               \
+    stdlib.h               \
+    string.h               \
+    sys/capability.h       \
+    sys/file.h             \
+    sys/ioctl.h            \
+    sys/mman.h             \
+    sys/mount.h            \
+    sys/mtio.h             \
+    sys/mtio.h             \
+    sys/param.h            \
+    sys/raw.h              \
+    sys/resource.h         \
+    sys/select.h           \
+    sys/socket.h           \
+    sys/stat.h             \
+    sys/time.h             \
+    sys/types.h            \
+    sys/un.h               \
+    sys/vfs.h              \
+    sys/wait.h             \
+    termios.h              \
+    time.h                 \
+    unistd.h               \
+    utime.h                \
+    wchar.h                \
+    wctype.h               \
     )
 
 if test "$HAVE_MNTENT_H" != "1"
@@ -284,12 +393,14 @@ fi
 AC_SYS_LONG_FILE_NAMES
 AC_FUNC_STRERROR_R
 AC_CHECK_FUNCS(  \
-    capget       \
     cap_get_proc \
+    capget       \
+    getpagesize  \
     gettext      \
-    lchown       \
     hasmntopt    \
+    lchown       \
     mbrtowc      \
+    mincore      \
     remove       \
     setlocale    \
     snprintf     \
@@ -563,7 +674,7 @@ AC_SUBST(PROGRAM_SUFFIX)
 AH_TOP(
 [/*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

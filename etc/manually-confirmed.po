@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2008-12-26 22:42+1100\n"
+        "POT-Creation-Date: 2009-01-16 12:08+1100\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
 #.
@@ -254,6 +254,19 @@ msgstr  "%s is an existing directory, but %s is not a directory"
 #, c-format
 msgid   "%s is incorrect"
 msgstr  "%s is incorrect"
+
+#.
+#. This message is used to explain an EINVAL
+#. error reported by the accept(2) system call (and others).
+#.
+#. %1$d => The name of the argument that has an invalid value
+#. %2$ld => The actual size passed (because the
+#.         recapitualtion fo the system call is going to
+#.         have a pointer in it, not the actual value).
+#.
+#, c-format
+msgid   "%s is invalid (%ld)"
+msgstr  "%s is invalid (%ld)"
 
 #.
 #. This message is used when a path given in a path is
@@ -612,6 +625,18 @@ msgid   "effective UID"
 msgstr  "effective UID"
 
 #.
+#. This message is used to explain an ENOTTY
+#. error reported by an ioctl(2) system call, when a more
+#. specific explanation is not availble.
+#.
+msgid   "fildes is not associated with a character special device; or, "
+        "fildes is not associated with an object to which request can be "
+        "applied"
+msgstr  "fildes is not associated with a character special device; or, "
+        "fildes is not associated with an object to which request can be "
+        "applied"
+
+#.
 #. This message is used to explain an EPERM error
 #. reported by an accept(2) system call, in the case where
 #. firewall rules forbid connection.
@@ -673,6 +698,14 @@ msgstr  "insufficient user-space memory was available"
 #.
 msgid   "insufficient user-space or kernel memory was available"
 msgstr  "insufficient user-space or kernel memory was available"
+
+#.
+#. This message is used to explain an EINVAL
+#. error reorted by an ioctl(2) system call, when a more
+#. specific explanation is not availble.
+#.
+msgid   "ioctl request or ioctl data is not valid"
+msgstr  "ioctl request or ioctl data is not valid"
 
 #.
 #. This message is issued when a user attempts to
@@ -1104,20 +1137,6 @@ msgstr  "see the net.ipv4.ip_local_port_range sysctl in ip(7) for how to "
         "increase the number of local ports"
 
 #.
-#. This message is used to explain an EINVAL
-#. error reported by the accept(2) system call, in the
-#. case where the maximum socket adress size given is
-#. invalid, e.g. negative.
-#.
-#. %1$d => The actual size passed (because the
-#.         recapitualtion fo the system call is going to
-#.         have a pointer in it, not the actual value).
-#.
-#, c-format
-msgid   "sock_addr_size is invalid (%d)"
-msgstr  "sock_addr_size is invalid (%d)"
-
-#.
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a network socket.
 #.
@@ -1506,6 +1525,13 @@ msgid   "the pathname is being used by the system or another process and "
         "the implementation considers this an error"
 msgstr  "the pathname is being used by the system or another process and "
         "the implementation considers this an error"
+
+#.
+#. This message is used to explain an EBUSY
+#. error reported by an ioctl TIOCSHAYESESP system call.
+#.
+msgid   "the port is in use"
+msgstr  "the port is in use"
 
 #.
 #. This message is used when explaining which
@@ -2074,6 +2100,34 @@ msgstr  "the system limit on the total number of open files has been "
         "reached"
 
 #.
+#. This message is used when explaining an EBUSY
+#. error repoorted by and ioctl TIOCCONS system call.
+#.
+msgid   "the terminal has already been redirected"
+msgstr  "the terminal has already been redirected"
+
+#.
+#. This message is used when explaining an ENOTTY
+#. error reported by an ioctl TIOCGSID system call.
+#.
+msgid   "the tty is not a master pty or the tty is not the controlling "
+        "tty of the process"
+msgstr  "the tty is not a master pty or the tty is not the controlling "
+        "tty of the process"
+
+#.
+#. This message is used to explain an ENOENT error
+#. returned by the execvp(3) system call.
+#.
+#. %1$s => the name and file type of the command, already quoted.
+#.         e.g. "\"bogus\" regular file"
+#. %2$s => the command search PATH, already quoted.
+#.
+#, c-format
+msgid   "there is no %s in any of the command search PATH directories (%s)"
+msgstr  "there is no %s in any of the command search PATH directories (%s)"
+
+#.
 #. This message is used when directory does not have a
 #. directory entry for the named component.
 #.
@@ -2124,6 +2178,13 @@ msgid   "this is more likely to be a software error (a bug) than it is to "
         "be a user error"
 msgstr  "this is more likely to be a software error (a bug) than it is to "
         "be a user error"
+
+#.
+#. This message is used when explaining an ENOTTY
+#. error reported by an ioctl TIOCPKT system call.
+#.
+msgid   "this may only be applied to the master side of a pseudo-terminal"
+msgstr  "this may only be applied to the master side of a pseudo-terminal"
 
 #.
 #. This message is used when explaining

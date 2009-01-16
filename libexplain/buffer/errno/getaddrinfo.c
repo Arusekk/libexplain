@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -67,12 +67,12 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
                 libexplain_buffer_efault(sb, "service");
                 break;
             }
-            if (hints && libexplain_pointer_is_efault(hints))
+            if (hints && libexplain_pointer_is_efault(hints, sizeof(*hints)))
             {
                 libexplain_buffer_efault(sb, "hints");
                 break;
             }
-            if (res && libexplain_pointer_is_efault(res))
+            if (res && libexplain_pointer_is_efault(res, sizeof(*res)))
             {
                 libexplain_buffer_efault(sb, "res");
                 break;

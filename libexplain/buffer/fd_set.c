@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -29,7 +29,7 @@ libexplain_buffer_fd_set(libexplain_string_buffer_t *sb, int nfds,
     int             fildes;
     int             first;
 
-    if (libexplain_pointer_is_efault(fds))
+    if (libexplain_pointer_is_efault(fds, sizeof(*fds)))
     {
         libexplain_buffer_pointer(sb, fds);
         return;

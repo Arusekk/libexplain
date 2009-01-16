@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -68,7 +68,7 @@ libexplain_buffer_errno_stat_explanation(libexplain_string_buffer_t *sb,
             libexplain_buffer_efault(sb, "pathname");
             break;
         }
-        if (libexplain_pointer_is_efault(buf))
+        if (libexplain_pointer_is_efault(buf, sizeof(*buf)))
         {
             libexplain_buffer_efault(sb, "buf");
             break;

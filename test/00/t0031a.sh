@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,13 +29,16 @@ space left on device (ENOSPC) because the file system containing pathname
 fubar
 test $? -eq 0 || no_result
 
-explain -e ENOSPC open fred O_WRONLY+O_CREAT+O_TRUNC > test.out.raw
+explain -e ENOSPC open fred O_WRONLY+O_CREAT+O_TRUNC > test.out4
 test $? -eq 0 || fail
 
-sed 's|(".*", .*% full)|("/example", 99% full)|' test.out.raw > test.out.cooked
+fmt -w700 test.out4 > test.out3
 test $? -eq 0 || no_result
 
-fmt test.out.cooked > test.out
+sed 's|(".*", .*% full)|("/example", 99% full)|' test.out3 > test.out2
+test $? -eq 0 || no_result
+
+fmt test.out2 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

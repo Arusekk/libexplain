@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -53,7 +53,7 @@ int libexplain_system_or_die(const char *command);
 
 /**
   * The libexplain_system_success function is used to call the
-  * system(3) system call.  On failure (including any exits status
+  * system(3) system call.  On failure (including any exit status
   * other than EXIT_SUCCESS) an explanation will be printed to stderr,
   * obtained from libexplain_system(3).
   * The return value from system(3) is returned.
@@ -73,7 +73,7 @@ int libexplain_system_success(const char *command);
 
 /**
   * The libexplain_system_success_or_die function is used to call the
-  * system(3) system call.  On failure (including any exits status
+  * system(3) system call.  On failure (including any exit status
   * other than EXIT_SUCCESS) an explanation will be printed to stderr,
   * obtained from libexplain_system(3), and then the process terminates
   * by calling exit(EXIT_FAILURE).

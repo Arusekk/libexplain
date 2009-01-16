@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -60,11 +60,75 @@ void libexplain_string_buffer_init(libexplain_string_buffer_t *sb,
 
 void libexplain_string_buffer_putc(libexplain_string_buffer_t *sb, int c);
 
+/**
+  * The libexplain_string_buffer_putc_quoted function is used to print
+  * a C character constant (i.e., including the single quotes), with
+  * escaping if necessary.
+  *
+  * @param sb
+  *    The string buffer to be initialised.
+  * @param c
+  *    The character to be printed as a C character constant.
+  */
+void libexplain_string_buffer_putc_quoted(libexplain_string_buffer_t *sb,
+    int c);
+
+/**
+  * The libexplain_string_buffer_putc_escaped function is used to print
+  * a character with C escaping.  This can be used for the contents of
+  * "string" and 'character' constants.
+  *
+  * @param sb
+  *    The string buffer to be initialised.
+  * @param c
+  *    The character to be printed if possible, and C escaped if not.
+  * @param delimiter
+  *    The delimiter character; '\'' for character constants,
+  *    '"' for string constants
+  */
+void libexplain_string_buffer_putc_escaped(libexplain_string_buffer_t *sb,
+    int c, int delimiter);
+
+/*
+ * The libexplain_string_buffer_puts function is used to print a string
+ * into the string buffer.
+ *
+ * @param sb
+ *     The string buffer to print into.
+ * @param s
+ *     The string to print into the string buffer.
+ */
 void libexplain_string_buffer_puts(libexplain_string_buffer_t *sb,
     const char *s);
 
+/*
+ * The libexplain_string_buffer_puts_quoted function is used to print
+ * a C string into the string buffer, complete with double quotes and
+ * escape sequences if necessary.
+ *
+ * @param sb
+ *     The string buffer to print into.
+ * @param s
+ *     The string to print into the string buffer.
+ */
 void libexplain_string_buffer_puts_quoted(libexplain_string_buffer_t *sb,
     const char *s);
+
+/*
+ * The libexplain_string_buffer_puts_quoted_n function is used to print
+ * a C string into the string buffer, complete with double quotes and
+ * escape sequences if necessary.  The length is limited to that given,
+ * unless a NUL is seen earlier.
+ *
+ * @param sb
+ *     The string buffer to print into.
+ * @param s
+ *     The string to print into the string buffer.
+ * @param n
+ *     The maximum length of the string.
+ */
+void libexplain_string_buffer_puts_quoted_n(libexplain_string_buffer_t *sb,
+    const char *s, size_t n);
 
 /**
   * The libexplain_string_buffer_printf function is used to print a

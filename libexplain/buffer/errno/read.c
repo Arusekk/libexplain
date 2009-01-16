@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/sys/mtio.h>
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
@@ -53,6 +54,17 @@ libexplain_buffer_errno_read_system_call(libexplain_string_buffer_t *sb,
         ", data_size = %lld)",
         (long long)data_size
     );
+}
+
+
+static int
+is_a_tape(int fildes)
+{
+    struct mtop     args;
+
+    args.mt_op = MTNOP;
+    args.mt_count = 0;
+    return (ioctl(fildes, MTIOCTOP, &args) >= 0);
 }
 
 
@@ -260,6 +272,23 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
             " that does not support Unix open file semantics, and the "
             "file has been deleted from underneath you"
         );
+        break;
+
+    case EOVERFLOW:
+        if (data_size > ((size_t)1 << 16) && is_a_tape(fildes))
+        {
+            libexplain_string_buffer_printf
+            (
+                sb,
+                /* FIXME: i18n */
+                "the tape read operation was supplied with a %ld byte "
+                    "buffer, however the kernal has been compiled with a limit "
+                    "smaller than this; you need to reconfigure your system, "
+                    "or recompile your tape device driver, to have a fixed "
+                    "limit of at least 64KiB",
+                (long)data_size
+            );
+        }
         break;
 
     default:

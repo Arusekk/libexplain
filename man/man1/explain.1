@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008 Peter Miller
+.\" Copyright (C) 2008, 2009 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -87,6 +87,9 @@ The \f[I]dup2\fP(2) system call.
 .TP 8n
 execve \f[I]pathname\fP \f[I]arg\fP...
 The \f[I]execve\fP(2) system call.
+.TP 8n
+execvp \f[I]pathname\fP \f[I]arg\fP...
+The \f[I]execvp\fP(3) system call.
 .\" ----------  F  ---------------------------------------------------------
 .TP 8n
 fchdir \f[I]pathname\fP
@@ -156,6 +159,9 @@ gettimeofday [ \f[I]tv\fP [ \f[I]tz\fP ] ]
 The \f[I]gettimeofday\fP(2) system call.
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
+.TP 8n
+ioctl \f[I]fildes\fP \f[I]request\fP \f[I]data\fP
+The \f[I]ioctl\fP(2) system call.
 .\" ----------  J  ---------------------------------------------------------
 .\" ----------  K  ---------------------------------------------------------
 .\" ----------  L  ---------------------------------------------------------
@@ -176,6 +182,9 @@ lstat \f[I]pathname\fP
 The \f[I]lstat\fP(2) system call.
 .\" ----------  M  ---------------------------------------------------------
 .TP 8n
+malloc \f[I]size\fP
+The \f[I]malloc\fP(3) system call.
+.TP 8n
 mkdir \f[I]pathname\fP [ \f[I]mode\fP ]
 The \f[I]mkdir\fP(2) system call.
 .\" ----------  N  ---------------------------------------------------------
@@ -195,6 +204,15 @@ The \f[I]opendir\fP(3) system call.
 pathconf \f[I]pathname\fP \f[I]name\fP
 The \f[I]pathconf\fP(3) system call.
 .TP 8n
+pclose \f[I]fp\fP
+The \f[I]pclose\fP(3) system call.
+.TP 8n
+pipe \f[I]pipefd\fP
+The \f[I]pipe\fP(2) system call.
+.TP 8n
+popen \f[I]command\fP \f[I]flags\fP
+The \f[I]popen\fP(3) system call.
+.TP 8n
 putc \f[I]c\fP \f[I]fp\fP
 The \f[I]putc\fP(3) system call.
 .TP 8n
@@ -205,6 +223,9 @@ The \f[I]putchar\fP(3) system call.
 .TP 8n
 read \f[I]fildes\fP \f[I]data\fP \f[I]data-size\fP
 The \f[I]read\fP(2) system call.
+.TP 8n
+realloc \f[I]ptr\fP \f[I]size\fP
+The \f[I]realloc\fP(3) system call.
 .TP 8n
 rename \f[I]oldpath\fP \f[I]newpath\fP
 The \f[I]rename\fP(2) system call.

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/sys/time.h>
 
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/errno/generic.h>
@@ -49,16 +50,15 @@ libexplain_buffer_errno_gettimeofday_explanation(
     libexplain_string_buffer_t *sb, int errnum, struct timeval *tv,
     struct timezone *tz)
 {
-    (void)tz;
     switch (errnum)
     {
     case EFAULT:
-        if (tv && libexplain_pointer_is_efault(tv))
+        if (tv && libexplain_pointer_is_efault(tv, sizeof(*tv)))
         {
             libexplain_buffer_efault(sb, "tv");
             break;
         }
-        if (tz && libexplain_pointer_is_efault(tz))
+        if (tz && libexplain_pointer_is_efault(tz, sizeof(*tz)))
         {
             libexplain_buffer_efault(sb, "tz");
             break;

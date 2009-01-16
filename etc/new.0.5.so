@@ -23,10 +23,33 @@
 .\" command, and then editing it to be more appropriate.
 .\"
 .\" ------------------------------------------------------------------------
-.\" .PP
-.\" .if n *
-.\" .if t \(bu
-.\" .\" Change N
+.PP
+.if n *
+.if t \(bu
+.\" Change 11, 23, 24, 25, 26, 27, 28
+Coverage has been extended to include
+execvp(3),
+ioctl(2),
+malloc(3),
+pclose(3),
+pipe(2),
+popen(3) and
+realloc(3)
+system calls.
+.PP
+.if n *
+.if t \(bu
+.\" Change 13, 14, 20, 22
+The coverage for ioctl(2) includes
+linux console controls,
+magnetic tape controls,
+socket controls, and
+terminal controls.
+.PP
+.if n *
+.if t \(bu
+.\" Change 18
+A false negative from test 31 has been fixed.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

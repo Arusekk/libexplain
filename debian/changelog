@@ -1,8 +1,14 @@
-libexplain (0.5.D001) unstable; urgency=low
+libexplain (0.6.D001) unstable; urgency=low
 
   * This change prepares libexplain for the next public release.
 
- -- Peter Miller <pmiller@opensource.org.au>  Sat, 03 Jan 2009 21:03:42 +1100
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 16:32:41 +1100
+
+libexplain (0.D006) unstable; urgency=low
+
+  * Explain errno values returned by libc functions, branch 0.5.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 16:03:56 +1100
 
 libexplain (0.D005) unstable; urgency=low
 
@@ -33,6 +39,150 @@ libexplain (0.D001) unstable; urgency=low
   * Explain errno values returned by libc functions, branch 0.0.
 
  -- Peter Miller <pmiller@opensource.org.au>  Sun, 26 Oct 2008 20:44:39 +1100
+
+libexplain (0.5.D021) unstable; urgency=low
+
+  * This change fixes a couple of small build broblems, relating to include file
+    insulation.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 15:53:59 +1100
+
+libexplain (0.5.D020) unstable; urgency=low
+
+  * The explanation for read(2) now includes the case where EOVERFLOW is
+    returned by some mag-tape device drivers, meaning 'this device driver is so
+    stupid it cant handle a request this big'.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 14:26:20 +1100
+
+libexplain (0.5.D019) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the execvp(3) system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 13:35:53 +1100
+
+libexplain (0.5.D018) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the realloc(2) system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 15 Jan 2009 13:40:06 +1100
+
+libexplain (0.5.D017) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the malloc(3) system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 15 Jan 2009 12:48:38 +1100
+
+libexplain (0.5.D016) unstable; urgency=low
+
+  * Explanatiosn are now available for error reported by the pclose(3) system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 15 Jan 2009 10:54:00 +1100
+
+libexplain (0.5.D015) unstable; urgency=low
+
+  * Explanations are now available for error reported by the popen(3) system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 15 Jan 2009 09:44:31 +1100
+
+libexplain (0.5.D014) unstable; urgency=low
+
+  * Explanations are now available for the errors reported by the pipe(2) system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 15 Jan 2009 08:28:14 +1100
+
+libexplain (0.5.D013) unstable; urgency=low
+
+  * The magnetic tape ioctl requests are now understood.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 15 Jan 2009 06:28:55 +1100
+
+libexplain (0.5.D012) unstable; urgency=low
+
+  * The libexplain_pointer_is_efault function now uses mincore() is it is
+    available.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Thu, 15 Jan 2009 00:04:33 +1100
+
+libexplain (0.5.D011) unstable; urgency=low
+
+  * The libexplain_pointer_is_efault function signature now includes a size, in
+    preparation for more rigorous checking.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Wed, 14 Jan 2009 22:41:23 +1100
+
+libexplain (0.5.D010) unstable; urgency=low
+
+  * More explanations are available for ioctl requests defined in <sys/socket.h>
+
+ -- Peter Miller <pmiller@opensource.org.au>  Wed, 14 Jan 2009 19:36:25 +1100
+
+libexplain (0.5.D009) unstable; urgency=low
+
+  * The remainder of the baseline functionality for ioctls has been refactored.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Tue, 13 Jan 2009 14:06:45 +1100
+
+libexplain (0.5.D008) unstable; urgency=low
+
+  * A false negative from test 31 has been fixed.  It was not properly coping
+    with wrapping variability.
+  * My thanks to Simon Horman for reporting this problem.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Mon, 12 Jan 2009 22:35:36 +1100
+
+libexplain (0.5.D007) unstable; urgency=low
+
+  * The project no longer contaisn files with upper case letters in their names.
+    This means that cut-and-paste of ioctl names will be warned about, because
+    they are supposed to be lower case.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sun, 11 Jan 2009 10:47:49 +1100
+
+libexplain (0.5.D006) unstable; urgency=low
+
+  * The implementation of ioctl has been changed.  It no longer requires all of
+    the ioctl include files in the same translation unit, which is good becuse
+    they don't play well together.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 10 Jan 2009 23:43:10 +1100
+
+libexplain (0.5.D005) unstable; urgency=low
+
+  * The ioctl support has been increased to cover Linux console operations.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Mon, 05 Jan 2009 00:04:44 +1100
+
+libexplain (0.5.D004) unstable; urgency=low
+
+  * This change adds ioctl data argument decoding for many TTY ioctl calls.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sun, 04 Jan 2009 18:35:26 +1100
+
+libexplain (0.5.D003) unstable; urgency=low
+
+  * Some explanations are available for some errors reported by the ioctl(2)
+    system call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sun, 04 Jan 2009 14:03:32 +1100
+
+libexplain (0.5.D002) unstable; urgency=low
+
+  * The web site now cites GNU LGPL, it was erroneosly citing GPL before.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sun, 04 Jan 2009 12:24:42 +1100
+
+libexplain (0.5.D001) unstable; urgency=low
+
+  * This change prepares libexplain for the next public release.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 03 Jan 2009 21:09:56 +1100
 
 libexplain (0.4.D008) unstable; urgency=low
 

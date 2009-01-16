@@ -27,6 +27,8 @@
 .so man/man3/libexplain_dup_or_die.3
 .so man/man3/libexplain_execve.3
 .so man/man3/libexplain_execve_or_die.3
+.so man/man3/libexplain_execvp.3
+.so man/man3/libexplain_execvp_or_die.3
 .so man/man3/libexplain_fchdir.3
 .so man/man3/libexplain_fchdir_or_die.3
 .so man/man3/libexplain_fchmod.3
@@ -79,6 +81,8 @@
 .so man/man3/libexplain_getrlimit_or_die.3
 .so man/man3/libexplain_gettimeofday.3
 .so man/man3/libexplain_gettimeofday_or_die.3
+.so man/man3/libexplain_ioctl.3
+.so man/man3/libexplain_ioctl_or_die.3
 .so man/man3/libexplain_lchown.3
 .so man/man3/libexplain_lchown_or_die.3
 .so man/man3/libexplain_license.3
@@ -90,6 +94,8 @@
 .so man/man3/libexplain_lseek_or_die.3
 .so man/man3/libexplain_lstat.3
 .so man/man3/libexplain_lstat_or_die.3
+.so man/man3/libexplain_malloc.3
+.so man/man3/libexplain_malloc_or_die.3
 .so man/man3/libexplain_mkdir.3
 .so man/man3/libexplain_mkdir_or_die.3
 .so man/man3/libexplain_open.3
@@ -98,6 +104,12 @@
 .so man/man3/libexplain_open_or_die.3
 .so man/man3/libexplain_pathconf.3
 .so man/man3/libexplain_pathconf_or_die.3
+.so man/man3/libexplain_pclose.3
+.so man/man3/libexplain_pclose_or_die.3
+.so man/man3/libexplain_pipe.3
+.so man/man3/libexplain_pipe_or_die.3
+.so man/man3/libexplain_popen.3
+.so man/man3/libexplain_popen_or_die.3
 .so man/man3/libexplain_program_name.3
 .so man/man3/libexplain_putc.3
 .so man/man3/libexplain_putchar.3
@@ -109,6 +121,8 @@
 .so man/man3/libexplain_readlink.3
 .so man/man3/libexplain_readlink_or_die.3
 .so man/man3/libexplain_read_or_die.3
+.so man/man3/libexplain_realloc.3
+.so man/man3/libexplain_realloc_or_die.3
 .so man/man3/libexplain_remove.3
 .so man/man3/libexplain_remove_or_die.3
 .so man/man3/libexplain_rename.3

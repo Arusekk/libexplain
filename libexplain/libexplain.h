@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,6 +44,7 @@
 #include <libexplain/dup.h>
 #include <libexplain/dup2.h>
 #include <libexplain/execve.h>
+#include <libexplain/execvp.h>
 #include <libexplain/fchdir.h>
 #include <libexplain/fchmod.h>
 #include <libexplain/fchown.h>
@@ -70,21 +71,27 @@
 #include <libexplain/getcwd.h>
 #include <libexplain/getrlimit.h>
 #include <libexplain/gettimeofday.h>
+#include <libexplain/ioctl.h>
 #include <libexplain/lchown.h>
 #include <libexplain/link.h>
 #include <libexplain/listen.h>
 #include <libexplain/lseek.h>
 #include <libexplain/lstat.h>
+#include <libexplain/malloc.h>
 #include <libexplain/mkdir.h>
 #include <libexplain/open.h>
 #include <libexplain/opendir.h>
 #include <libexplain/pathconf.h>
+#include <libexplain/pclose.h>
+#include <libexplain/pipe.h>
+#include <libexplain/popen.h>
 #include <libexplain/program_name.h>
 #include <libexplain/putc.h>
 #include <libexplain/putchar.h>
 #include <libexplain/read.h>
 #include <libexplain/readdir.h>
 #include <libexplain/readlink.h>
+#include <libexplain/realloc.h>
 #include <libexplain/remove.h>
 #include <libexplain/rename.h>
 #include <libexplain/rmdir.h>
@@ -124,7 +131,7 @@
   * If, for example, you were to try to open <tt>no-such-dir/some-file</tt>,
   * the above code would print the following error message:
   * @code
-  * open(pathname = "no-such-dir/some-file", flags = O_RDONLY)
+  * popen(command = "no-such-dir/some-file", flags = O_RDONLY)
   * failed, No such file or directory (2, ENOENT) because there is no
   * "no-such-dir" directory in the current directory
   * @endcode

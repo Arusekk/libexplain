@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,6 +43,7 @@
 #include <explain/dup.h>
 #include <explain/dup2.h>
 #include <explain/execve.h>
+#include <explain/execvp.h>
 #include <explain/fchdir.h>
 #include <explain/fchmod.h>
 #include <explain/fchown.h>
@@ -65,20 +66,26 @@
 #include <explain/getcwd.h>
 #include <explain/getrlimit.h>
 #include <explain/gettimeofday.h>
+#include <explain/ioctl.h>
 #include <explain/lchown.h>
 #include <explain/link.h>
 #include <explain/listen.h>
 #include <explain/lseek.h>
 #include <explain/lstat.h>
+#include <explain/malloc.h>
 #include <explain/mkdir.h>
 #include <explain/opendir.h>
 #include <explain/open.h>
 #include <explain/pathconf.h>
+#include <explain/pclose.h>
+#include <explain/pipe.h>
+#include <explain/popen.h>
 #include <explain/putc.h>
 #include <explain/putchar.h>
 #include <explain/read.h>
 #include <explain/readdir.h>
 #include <explain/readlink.h>
+#include <explain/realloc.h>
 #include <explain/remove.h>
 #include <explain/rename.h>
 #include <explain/rmdir.h>
@@ -155,6 +162,7 @@ static const table_t table[] =
     /* FIXME: add support for epoll_wait */
     /* FIXME: add support for eventfd */
     { "execve", explain_execve },
+    { "execvp", explain_execvp },
     /* ----------  F  ------------------------------------------------------- */
     /* FIXME: add support for faccess */
     /* FIXME: add support for fadvise64 */
@@ -243,7 +251,7 @@ static const table_t table[] =
     /* FIXME: add support for inotify_init */
     /* FIXME: add support for inotify_rm_watch */
     /* FIXME: add support for io_cancel */
-    /* FIXME: add support for ioctl */
+    { "ioctl", explain_ioctl },
     /* FIXME: add support for io_destroy */
     /* FIXME: add support for io_getevents */
     /* FIXME: add support for ioperm */
@@ -274,6 +282,7 @@ static const table_t table[] =
     /* ----------  M  ------------------------------------------------------- */
     /* FIXME: add support for madvise */
     /* FIXME: add support for madvise1 */
+    { "malloc", explain_malloc },
     /* FIXME: add support for mbind */
     /* FIXME: add support for migrate_pages */
     /* FIXME: add support for mincore */
@@ -317,12 +326,14 @@ static const table_t table[] =
     /* FIXME: add support for pciconfig_iobase */
     /* FIXME: add support for pciconfig_read */
     /* FIXME: add support for pciconfig_write */
+    { "pclose", explain_pclose },
     /* FIXME: add support for perror */
     /* FIXME: add support for personality */
     /* FIXME: add support for phys */
-    /* FIXME: add support for pipe */
+    { "pipe", explain_pipe },
     /* FIXME: add support for pivot_root */
     /* FIXME: add support for poll */
+    { "popen", explain_popen },
     /* FIXME: add support for ppoll */
     /* FIXME: add support for prctl */
     /* FIXME: add support for pread */
@@ -346,6 +357,7 @@ static const table_t table[] =
     { "readdir", explain_readdir },
     { "readlink", explain_readlink },
     /* FIXME: add support for readv */
+    { "realloc", explain_realloc },
     /* FIXME: add support for reboot */
     /* FIXME: add support for recv */
     /* FIXME: add support for recvfrom */

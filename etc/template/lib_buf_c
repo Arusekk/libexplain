@@ -17,9 +17,20 @@
  */
 
 #include <${trim_ext $filename}.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/path_is_efault.h>
 
 
 void
-${ident ${trim_ext $filename}}(libexplain_string_buffer_t *sb)
+${ident ${trim_ext $filename}}(libexplain_string_buffer_t *sb,
+    const struct ${basename $filename .c} *data)
 {
+    if (libexplain_pointer_is_efault(data, sizeof(*data)))
+        libexplain_buffer_pointer(sb, data);
+    else
+    {
+        libexplain_string_buffer_puts(sb, "{ ");
+        ...
+        libexplain_string_buffer_puts(sb, " }");
+    }
 }

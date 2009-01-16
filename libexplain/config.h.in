@@ -2,7 +2,7 @@
 
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,21 @@
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
+
+/* Define to 1 if you have the <bluetooth/bnep.h> header file. */
+#undef HAVE_BLUETOOTH_BNEP_H
+
+/* Define to 1 if you have the <bluetooth/cmtp.h> header file. */
+#undef HAVE_BLUETOOTH_CMTP_H
+
+/* Define to 1 if you have the <bluetooth/hci.h> header file. */
+#undef HAVE_BLUETOOTH_HCI_H
+
+/* Define to 1 if you have the <bluetooth/hidp.h> header file. */
+#undef HAVE_BLUETOOTH_HIDP_H
+
+/* Define to 1 if you have the <bluetooth/rfcomm.h> header file. */
+#undef HAVE_BLUETOOTH_RFCOMM_H
 
 /* Define to 1 if you have the `capget' function. */
 #undef HAVE_CAPGET
@@ -56,6 +71,9 @@
 
 /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
 #undef HAVE_FSEEKO
+
+/* Define to 1 if you have the `getpagesize' function. */
+#undef HAVE_GETPAGESIZE
 
 /* Define to 1 if you have the `gettext' function. */
 #undef HAVE_GETTEXT
@@ -87,20 +105,305 @@
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
+/* Define to 1 if you have the <linux/apm_bios.h> header file. */
+#undef HAVE_LINUX_APM_BIOS_H
+
+/* Define to 1 if you have the <linux/arcfb.h> header file. */
+#undef HAVE_LINUX_ARCFB_H
+
 /* Define to 1 if you have the <linux/atalk.h> header file. */
 #undef HAVE_LINUX_ATALK_H
+
+/* Define to 1 if you have the <linux/atmarp.h> header file. */
+#undef HAVE_LINUX_ATMARP_H
+
+/* Define to 1 if you have the <linux/atmbr2684.h> header file. */
+#undef HAVE_LINUX_ATMBR2684_H
+
+/* Define to 1 if you have the <linux/atmclip.h> header file. */
+#undef HAVE_LINUX_ATMCLIP_H
+
+/* Define to 1 if you have the <linux/atmdev.h> header file. */
+#undef HAVE_LINUX_ATMDEV_H
+
+/* Define to 1 if you have the <linux/atmlec.h> header file. */
+#undef HAVE_LINUX_ATMLEC_H
+
+/* Define to 1 if you have the <linux/atmmpc.h> header file. */
+#undef HAVE_LINUX_ATMMPC_H
+
+/* Define to 1 if you have the <linux/atmsvc.h> header file. */
+#undef HAVE_LINUX_ATMSVC_H
+
+/* Define to 1 if you have the <linux/atm_eni.h> header file. */
+#undef HAVE_LINUX_ATM_ENI_H
 
 /* Define to 1 if you have the <linux/atm.h> header file. */
 #undef HAVE_LINUX_ATM_H
 
+/* Define to 1 if you have the <linux/atm_he.h> header file. */
+#undef HAVE_LINUX_ATM_HE_H
+
+/* Define to 1 if you have the <linux/atm_idt77105.h> header file. */
+#undef HAVE_LINUX_ATM_IDT77105_H
+
+/* Define to 1 if you have the <linux/atm_nicstar.h> header file. */
+#undef HAVE_LINUX_ATM_NICSTAR_H
+
+/* Define to 1 if you have the <linux/atm_tcp.h> header file. */
+#undef HAVE_LINUX_ATM_TCP_H
+
+/* Define to 1 if you have the <linux/atm_zatm.h> header file. */
+#undef HAVE_LINUX_ATM_ZATM_H
+
+/* Define to 1 if you have the <linux/auto_fs4.h> header file. */
+#undef HAVE_LINUX_AUTO_FS4_H
+
+/* Define to 1 if you have the <linux/auto_fs.h> header file. */
+#undef HAVE_LINUX_AUTO_FS_H
+
+/* Define to 1 if you have the <linux/blkpg.h> header file. */
+#undef HAVE_LINUX_BLKPG_H
+
+/* Define to 1 if you have the <linux/capi.h> header file. */
+#undef HAVE_LINUX_CAPI_H
+
+/* Define to 1 if you have the <linux/cciss_ioctl.h> header file. */
+#undef HAVE_LINUX_CCISS_IOCTL_H
+
+/* Define to 1 if you have the <linux/cdk.h> header file. */
+#undef HAVE_LINUX_CDK_H
+
+/* Define to 1 if you have the <linux/chio.h> header file. */
+#undef HAVE_LINUX_CHIO_H
+
+/* Define to 1 if you have the <linux/cm4000_cs.h> header file. */
+#undef HAVE_LINUX_CM4000_CS_H
+
+/* Define to 1 if you have the <linux/comstats.h> header file. */
+#undef HAVE_LINUX_COMSTATS_H
+
+/* Define to 1 if you have the <linux/dn.h> header file. */
+#undef HAVE_LINUX_DN_H
+
+/* Define to 1 if you have the <linux/dvb/audio.h> header file. */
+#undef HAVE_LINUX_DVB_AUDIO_H
+
+/* Define to 1 if you have the <linux/dvb/ca.h> header file. */
+#undef HAVE_LINUX_DVB_CA_H
+
+/* Define to 1 if you have the <linux/dvb/dmx.h> header file. */
+#undef HAVE_LINUX_DVB_DMX_H
+
+/* Define to 1 if you have the <linux/dvb/frontend.h> header file. */
+#undef HAVE_LINUX_DVB_FRONTEND_H
+
+/* Define to 1 if you have the <linux/dvb/net.h> header file. */
+#undef HAVE_LINUX_DVB_NET_H
+
+/* Define to 1 if you have the <linux/dvb/osd.h> header file. */
+#undef HAVE_LINUX_DVB_OSD_H
+
+/* Define to 1 if you have the <linux/dvb/video.h> header file. */
+#undef HAVE_LINUX_DVB_VIDEO_H
+
+/* Define to 1 if you have the <linux/ethtool.h> header file. */
+#undef HAVE_LINUX_ETHTOOL_H
+
+/* Define to 1 if you have the <linux/ext2_fs.h> header file. */
+#undef HAVE_LINUX_EXT2_FS_H
+
+/* Define to 1 if you have the <linux/fb.h> header file. */
+#undef HAVE_LINUX_FB_H
+
+/* Define to 1 if you have the <linux/fd.h> header file. */
+#undef HAVE_LINUX_FD_H
+
+/* Define to 1 if you have the <linux/firewire-cdev.h> header file. */
+#undef HAVE_LINUX_FIREWIRE_CDEV_H
+
+/* Define to 1 if you have the <linux/fs.h> header file. */
+#undef HAVE_LINUX_FS_H
+
+/* Define to 1 if you have the <linux/hayesesp.h> header file. */
+#undef HAVE_LINUX_HAYESESP_H
+
+/* Define to 1 if you have the <linux/hiddev.h> header file. */
+#undef HAVE_LINUX_HIDDEV_H
+
+/* Define to 1 if you have the <linux/hidraw.h> header file. */
+#undef HAVE_LINUX_HIDRAW_H
+
+/* Define to 1 if you have the <linux/hpet.h> header file. */
+#undef HAVE_LINUX_HPET_H
+
+/* Define to 1 if you have the <linux/i2o-dev.h> header file. */
+#undef HAVE_LINUX_I2O_DEV_H
+
+/* Define to 1 if you have the <linux/if_bonding.h> header file. */
+#undef HAVE_LINUX_IF_BONDING_H
+
+/* Define to 1 if you have the <linux/if_bridge.h> header file. */
+#undef HAVE_LINUX_IF_BRIDGE_H
+
+/* Define to 1 if you have the <linux/if_frad.h> header file. */
+#undef HAVE_LINUX_IF_FRAD_H
+
+/* Define to 1 if you have the <linux/if.h> header file. */
+#undef HAVE_LINUX_IF_H
+
 /* Define to 1 if you have the <linux/if_pppox.h> header file. */
 #undef HAVE_LINUX_IF_PPPOX_H
+
+/* Define to 1 if you have the <linux/if_ppp.h> header file. */
+#undef HAVE_LINUX_IF_PPP_H
+
+/* Define to 1 if you have the <linux/if_tun.h> header file. */
+#undef HAVE_LINUX_IF_TUN_H
+
+/* Define to 1 if you have the <linux/input.h> header file. */
+#undef HAVE_LINUX_INPUT_H
+
+/* Define to 1 if you have the <linux/ipmi.h> header file. */
+#undef HAVE_LINUX_IPMI_H
+
+/* Define to 1 if you have the <linux/ipv6.h> header file. */
+#undef HAVE_LINUX_IPV6_H
 
 /* Define to 1 if you have the <linux/irda.h> header file. */
 #undef HAVE_LINUX_IRDA_H
 
+/* Define to 1 if you have the <linux/isdn.h> header file. */
+#undef HAVE_LINUX_ISDN_H
+
+/* Define to 1 if you have the <linux/isdn_ppp.h> header file. */
+#undef HAVE_LINUX_ISDN_PPP_H
+
+/* Define to 1 if you have the <linux/ivtvfb.h> header file. */
+#undef HAVE_LINUX_IVTVFB_H
+
+/* Define to 1 if you have the <linux/joystick.h> header file. */
+#undef HAVE_LINUX_JOYSTICK_H
+
+/* Define to 1 if you have the <linux/kd.h> header file. */
+#undef HAVE_LINUX_KD_H
+
+/* Define to 1 if you have the <linux/kvm.h> header file. */
+#undef HAVE_LINUX_KVM_H
+
+/* Define to 1 if you have the <linux/matroxfb.h> header file. */
+#undef HAVE_LINUX_MATROXFB_H
+
+/* Define to 1 if you have the <linux/mii.h> header file. */
+#undef HAVE_LINUX_MII_H
+
+/* Define to 1 if you have the <linux/mmtimer.h> header file. */
+#undef HAVE_LINUX_MMTIMER_H
+
+/* Define to 1 if you have the <linux/msdos_fs.h> header file. */
+#undef HAVE_LINUX_MSDOS_FS_H
+
+/* Define to 1 if you have the <linux/mtio.h> header file. */
+#undef HAVE_LINUX_MTIO_H
+
+/* Define to 1 if you have the <linux/nbd.h> header file. */
+#undef HAVE_LINUX_NBD_H
+
+/* Define to 1 if you have the <linux/ncp_fs.h> header file. */
+#undef HAVE_LINUX_NCP_FS_H
+
 /* Define to 1 if you have the <linux/netlink.h> header file. */
 #undef HAVE_LINUX_NETLINK_H
+
+/* Define to 1 if you have the <linux/nvram.h> header file. */
+#undef HAVE_LINUX_NVRAM_H
+
+/* Define to 1 if you have the <linux/phantom.h> header file. */
+#undef HAVE_LINUX_PHANTOM_H
+
+/* Define to 1 if you have the <linux/pmu.h> header file. */
+#undef HAVE_LINUX_PMU_H
+
+/* Define to 1 if you have the <linux/ppdev.h> header file. */
+#undef HAVE_LINUX_PPDEV_H
+
+/* Define to 1 if you have the <linux/radeonfb.h> header file. */
+#undef HAVE_LINUX_RADEONFB_H
+
+/* Define to 1 if you have the <linux/random.h> header file. */
+#undef HAVE_LINUX_RANDOM_H
+
+/* Define to 1 if you have the <linux/raw.h> header file. */
+#undef HAVE_LINUX_RAW_H
+
+/* Define to 1 if you have the <linux/reiserfs_fs.h> header file. */
+#undef HAVE_LINUX_REISERFS_FS_H
+
+/* Define to 1 if you have the <linux/rtc.h> header file. */
+#undef HAVE_LINUX_RTC_H
+
+/* Define to 1 if you have the <linux/serial.h> header file. */
+#undef HAVE_LINUX_SERIAL_H
+
+/* Define to 1 if you have the <linux/serio.h> header file. */
+#undef HAVE_LINUX_SERIO_H
+
+/* Define to 1 if you have the <linux/smb_fs.h> header file. */
+#undef HAVE_LINUX_SMB_FS_H
+
+/* Define to 1 if you have the <linux/socket.h> header file. */
+#undef HAVE_LINUX_SOCKET_H
+
+/* Define to 1 if you have the <linux/sockios.h> header file. */
+#undef HAVE_LINUX_SOCKIOS_H
+
+/* Define to 1 if you have the <linux/sonet.h> header file. */
+#undef HAVE_LINUX_SONET_H
+
+/* Define to 1 if you have the <linux/sonypi.h> header file. */
+#undef HAVE_LINUX_SONYPI_H
+
+/* Define to 1 if you have the <linux/spi/spidev.h> header file. */
+#undef HAVE_LINUX_SPI_SPIDEV_H
+
+/* Define to 1 if you have the <linux/suspend_ioctls.h> header file. */
+#undef HAVE_LINUX_SUSPEND_IOCTLS_H
+
+/* Define to 1 if you have the <linux/synclink.h> header file. */
+#undef HAVE_LINUX_SYNCLINK_H
+
+/* Define to 1 if you have the <linux/tiocl.h> header file. */
+#undef HAVE_LINUX_TIOCL_H
+
+/* Define to 1 if you have the <linux/udf_fs_i.h> header file. */
+#undef HAVE_LINUX_UDF_FS_I_H
+
+/* Define to 1 if you have the <linux/uinput.h> header file. */
+#undef HAVE_LINUX_UINPUT_H
+
+/* Define to 1 if you have the <linux/usbdevice_fs.h> header file. */
+#undef HAVE_LINUX_USBDEVICE_FS_H
+
+/* Define to 1 if you have the <linux/usb/gadgetfs.h> header file. */
+#undef HAVE_LINUX_USB_GADGETFS_H
+
+/* Define to 1 if you have the <linux/usb/g_printer.h> header file. */
+#undef HAVE_LINUX_USB_G_PRINTER_H
+
+/* Define to 1 if you have the <linux/videodev2.h> header file. */
+#undef HAVE_LINUX_VIDEODEV2_H
+
+/* Define to 1 if you have the <linux/videodev.h> header file. */
+#undef HAVE_LINUX_VIDEODEV_H
+
+/* Define to 1 if you have the <linux/video_decoder.h> header file. */
+#undef HAVE_LINUX_VIDEO_DECODER_H
+
+/* Define to 1 if you have the <linux/video_encoder.h> header file. */
+#undef HAVE_LINUX_VIDEO_ENCODER_H
+
+/* Define to 1 if you have the <linux/watchdog.h> header file. */
+#undef HAVE_LINUX_WATCHDOG_H
 
 /* Define to 1 if you have the <linux/x25.h> header file. */
 #undef HAVE_LINUX_X25_H
@@ -119,6 +422,9 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `mincore' function. */
+#undef HAVE_MINCORE
 
 /* Define to 1 if you have the <mntent.h> header file. */
 #undef HAVE_MNTENT_H
@@ -159,8 +465,17 @@
 /* Define to 1 if you have the <net/ethernet.h> header file. */
 #undef HAVE_NET_ETHERNET_H
 
+/* Define to 1 if you have the <net/if_arp.h> header file. */
+#undef HAVE_NET_IF_ARP_H
+
 /* Define to 1 if you have the <net/if.h> header file. */
 #undef HAVE_NET_IF_H
+
+/* Define to 1 if you have the <net/if_ppp.h> header file. */
+#undef HAVE_NET_IF_PPP_H
+
+/* Define to 1 if you have the <net/route.h> header file. */
+#undef HAVE_NET_ROUTE_H
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #undef HAVE_PWD_H
@@ -217,8 +532,17 @@
 /* Define to 1 if you have the <sys/file.h> header file. */
 #undef HAVE_SYS_FILE_H
 
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/mman.h> header file. */
+#undef HAVE_SYS_MMAN_H
+
 /* Define to 1 if you have the <sys/mount.h> header file. */
 #undef HAVE_SYS_MOUNT_H
+
+/* Define to 1 if you have the <sys/mtio.h> header file. */
+#undef HAVE_SYS_MTIO_H
 
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
    */
@@ -226,6 +550,9 @@
 
 /* Define to 1 if you have the <sys/param.h> header file. */
 #undef HAVE_SYS_PARAM_H
+
+/* Define to 1 if you have the <sys/raw.h> header file. */
+#undef HAVE_SYS_RAW_H
 
 /* Define to 1 if you have the <sys/resource.h> header file. */
 #undef HAVE_SYS_RESOURCE_H

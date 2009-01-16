@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_PATH_IS_EFAULT_H
 #define LIBEXPLAIN_PATH_IS_EFAULT_H
 
+#include <libexplain/ac/stddef.h>
+
 /**
   * The libexplain_path_is_efault function may be used to determine whether
   * or not a path pointer is a valid pointer.  Typically this is used
@@ -38,12 +40,15 @@ int libexplain_path_is_efault(const char *path);
   * whether or not a pointer is valid.  Typically this is used when
   * handling ambiguous EFAULT situations.
   *
-  * @param ptr
-  *    The pointer to be checked.
+  * @param data
+  *    Pointer to the base address of the memory to be checked.
+  * @param data_size
+  *    The size in bytes of the memory to be checked
+  *    (i.e. you can use sizeof(*data) in most situations).
   * @returns
   *    int; 1 if the pointer is bad (points outside the process address
   *    space), or 0 if the pointer is OK.
   */
-int libexplain_pointer_is_efault(const void *ptr);
+int libexplain_pointer_is_efault(const void *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_PATH_IS_EFAULT_H */

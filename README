@@ -36,17 +36,17 @@ HOME PAGE
 
           URL:    http://libexplain.sourceforge.net/
           File:   index.html              # the libexplain page
-          File:   libexplain.0.5.README   # Description, from the tar file
-          File:   libexplain.0.5.lsm      # Description, LSM format
-          File:   libexplain.0.5.tar.gz   # the complete source
-          File:   libexplain.0.5.pdf      # Reference Manual
+          File:   libexplain.0.6.README   # Description, from the tar file
+          File:   libexplain.0.6.lsm      # Description, LSM format
+          File:   libexplain.0.6.tar.gz   # the complete source
+          File:   libexplain.0.6.pdf      # Reference Manual
 
 BUILDING LIBEXPLAIN
        Full instructions for building libexplain may be found in the BUILDING
        file included in this distribution.
 
 COPYRIGHT
-       libexplain version 0.5
+       libexplain version 0.6
        Copyright (C) 2008, 2009 Peter Miller
 
        This program is free software; you can redistribute it and/or modify it
@@ -136,6 +136,14 @@ RELEASE NOTES
        releases.  For excruciating and complete detail, and also credits for
        those of you who have generously sent me suggestions and bug reports,
        see the etc/CHANGES.* files.
+
+       * Coverage has been extended to include execvp(3), ioctl(2), malloc(3),
+       pclose(3), pipe(2), popen(3) and realloc(3) system calls.
+
+       * The coverage for ioctl(2) includes linux console controls, magnetic
+       tape controls, socket controls, and terminal controls.
+
+       * A false negative from test 31 has been fixed.
 
    Version 0.5 (2009-Jan-03)
        * A build problem on Debian sid has been fixed.

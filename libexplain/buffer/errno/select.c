@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -113,22 +113,32 @@ libexplain_buffer_errno_select_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (readfds && libexplain_pointer_is_efault(readfds))
+        if (readfds && libexplain_pointer_is_efault(readfds, sizeof(*readfds)))
         {
             libexplain_buffer_efault(sb, "readfds");
             break;
         }
-        if (writefds && libexplain_pointer_is_efault(writefds))
+        if
+        (
+            writefds
+        &&
+            libexplain_pointer_is_efault(writefds, sizeof(*writefds))
+        )
         {
             libexplain_buffer_efault(sb, "writefds");
             break;
         }
-        if (exceptfds && libexplain_pointer_is_efault(exceptfds))
+        if
+        (
+            exceptfds
+        &&
+            libexplain_pointer_is_efault(exceptfds, sizeof(*exceptfds))
+        )
         {
             libexplain_buffer_efault(sb, "exceptfds");
             break;
         }
-        if (timeout && libexplain_pointer_is_efault(timeout))
+        if (timeout && libexplain_pointer_is_efault(timeout, sizeof(*timeout)))
         {
             libexplain_buffer_efault(sb, "timeout");
             break;

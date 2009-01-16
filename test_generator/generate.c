@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -441,6 +441,8 @@ make_sure_name_is_acceptable(const char *name)
         name_should_be_different(name, "data");
     if (0 == strcmp(name, "bufsiz"))
         name_should_be_different(name, "data_size");
+    if (0 == strcmp(name, "stream"))
+        name_should_be_different(name, "fp");
 }
 
 
@@ -696,7 +698,7 @@ copy_file(const char *filename)
 {
     char            command[1000];
 
-    fprintf(stderr, "copying %s...\n", filename);
+    fprintf(stderr, "modify %s...\n", filename);
     snprintf
     (
         command,
@@ -1688,9 +1690,7 @@ generate(node_t *declspec, node_t *decl)
     snprintf(filename, sizeof(filename), "explain/main.c");
     copy_file(filename);
     fp = libexplain_fopen_or_die(filename, "a");
-    fprintf(fp, "\n");
     fprintf(fp, "#include <explain/%s.h>\n", function_name);
-    fprintf(fp, "\n");
     fprintf(fp, "    { \"%s\", explain_%s },\n", function_name, function_name);
     libexplain_fclose_or_die(fp);
 
@@ -1712,7 +1712,6 @@ generate(node_t *declspec, node_t *decl)
     snprintf(filename, sizeof(filename), "libexplain/libexplain.h");
     copy_file(filename);
     fp = libexplain_fopen_or_die(filename, "a");
-    fprintf(fp, "\n");
     fprintf(fp, "#include <libexplain/%s.h>\n", function_name);
     libexplain_fclose_or_die(fp);
 

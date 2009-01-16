@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,49 +35,11 @@ libexplain_string_buffer_puts_quoted(libexplain_string_buffer_t *sb,
         unsigned char   c;
 
         c = *s++;
-        switch (c)
+        if (!c)
         {
-        case '\0':
             libexplain_string_buffer_putc(sb, '"');
             return;
-
-        case '\\':
-        case '"':
-            libexplain_string_buffer_putc(sb, '\\');
-            libexplain_string_buffer_putc(sb, c);
-            break;
-
-        case '\a':
-            libexplain_string_buffer_puts(sb, "\\a");
-            break;
-
-        case '\b':
-            libexplain_string_buffer_puts(sb, "\\b");
-            break;
-
-        case '\f':
-            libexplain_string_buffer_puts(sb, "\\f");
-            break;
-
-        case '\n':
-            libexplain_string_buffer_puts(sb, "\\n");
-            break;
-
-        case '\r':
-            libexplain_string_buffer_puts(sb, "\\r");
-            break;
-
-        case '\t':
-            libexplain_string_buffer_puts(sb, "\\t");
-            break;
-
-        case '\v':
-            libexplain_string_buffer_puts(sb, "\\v");
-            break;
-
-        default:
-            libexplain_string_buffer_putc(sb, c);
-            break;
         }
+        libexplain_string_buffer_putc_escaped(sb, c, '"');
     }
 }

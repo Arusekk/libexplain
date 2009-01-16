@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,6 +35,7 @@
 #include <libexplain/ac/sys/un.h>
 
 #include <libexplain/buffer/hexdump.h>
+#include <libexplain/buffer/in6_addr.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/sockaddr.h>
 #include <libexplain/buffer/address_family.h>
@@ -245,7 +246,6 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
     const struct sockaddr_in6 *sa, size_t sa_len)
 {
     unsigned short  port;
-    char            straddr[200];
 
     /*
      * print the port number, and name if we can
@@ -287,8 +287,7 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
      * print the IP address, and name if we can
      */
     libexplain_string_buffer_puts(sb, ", sin6_addr = ");
-    inet_ntop(AF_INET6, &sa->sin6_addr, straddr, sizeof(straddr));
-    libexplain_string_buffer_puts(sb, straddr);
+    libexplain_buffer_in6_addr(sb, &sa->sin6_addr);
     if (libexplain_option_dialect_specific())
     {
         struct hostent  *hep;
@@ -601,7 +600,7 @@ void
 libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
     const struct sockaddr *sa, int sa_len)
 {
-    if (libexplain_pointer_is_efault(sa))
+    if (libexplain_pointer_is_efault(sa, sizeof(*sa)))
     {
         libexplain_buffer_pointer(sb, sa);
         return;
