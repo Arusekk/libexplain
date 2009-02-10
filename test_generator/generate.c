@@ -73,7 +73,14 @@ try_to_get_synopsis(const char *function_name, int section)
     char            filename[80];
     char            command[200];
 
-    snprintf(synopsis, sizeof(synopsis), "blah blah");
+    snprintf
+    (
+        synopsis,
+        sizeof(synopsis),
+        "Execute \\f[I]%s\\fP(%d)",
+        function_name,
+        section
+    );
 
     cat = "cat";
     snprintf(filename, sizeof(filename), "/usr/share/man/man%d/%s.%d.gz",
@@ -713,7 +720,7 @@ copy_file(const char *filename)
 static void
 vim_line(FILE *fp, const char *before, const char *after)
 {
-    fprintf(fp, "%s vim:ts=8:sw=4:et", before);
+    fprintf(fp, "%s vim: set ts=8 sw=4 et", before);
     if (after && *after)
         fprintf(fp, " %s", after);
     fprintf(fp, "\n");

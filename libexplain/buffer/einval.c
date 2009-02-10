@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -33,7 +33,77 @@ libexplain_buffer_einval_bits(libexplain_string_buffer_t *sb,
          *
          * %1$s => the name of the offending system call argument
          */
-        i18n("%s was incorrectly specified, it contains undefined bits"),
+        i18n("the %s argument was incorrectly specified, it contained "
+            "undefined bits"),
         caption
     );
+}
+
+
+void
+libexplain_buffer_einval_too_small(libexplain_string_buffer_t *sb,
+    const char *caption, long value)
+{
+    if (value < 0)
+    {
+        libexplain_string_buffer_printf_gettext
+        (
+            sb,
+            /*
+             * xgettext: This message is used when explaining an EINVAL
+             * error returned by a system call that is complaining about a
+             * size being too small or negative (e.g. bind's sock_addr_size
+             * field).
+             *
+             * %1$s => the name of the offending system call argument
+             */
+            i18n("the %s argument was incorrectly specified, it was negative"),
+            caption
+        );
+    }
+    else
+    {
+        libexplain_string_buffer_printf_gettext
+        (
+            sb,
+            /*
+             * xgettext: This message is used when explaining an EINVAL
+             * error returned by a system call that is complaining about a
+             * size being too small or negative (e.g. bind's sock_addr_size
+             * field).
+             *
+             * %1$s => the name of the offending system call argument
+             */
+            i18n("the %s argument was incorrectly specified, it was too small"),
+            caption
+        );
+    }
+}
+
+
+void
+libexplain_buffer_einval_vague(libexplain_string_buffer_t *sb,
+    const char *caption)
+{
+    libexplain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This message is used when an argument of a
+         * system call results in an EINVAL error being reported.
+         *
+         * %1$s => the name of the offending system call argument.
+         */
+        i18n("the %s argument was incorrectly specified"),
+        caption
+    );
+}
+
+
+void
+libexplain_buffer_einval_value(libexplain_string_buffer_t *sb,
+    const char *caption, long value)
+{
+    libexplain_buffer_einval_vague(sb, caption);
+    libexplain_string_buffer_printf(sb, " (%ld)", value);
 }

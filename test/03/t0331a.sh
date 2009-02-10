@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="accept EPROTO"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-accept(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = 0xNNNNNNNN)
+accept(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = { 128 })
 failed, Protocol error (EPROTO) because a protocol error has occurred;
 for example, the STREAMS protocol stack has not been initialized
 fubar

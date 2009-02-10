@@ -387,9 +387,30 @@ expression
     | FUNC_IO LP expression COMMA expression RP
         { $$ = _IO($3, $5); }
     | FUNC_IOR LP expression COMMA expression COMMA expression RP
-        { $$ = _IOR($3, $5, $7); }
+        {
+            /*
+             * We don't use _IOR because this is a bit of a hack.  The
+             * _IOR define uses sizeof() on its last argument, but we
+             * want to specify the size explicitly.
+             */
+            $$ = _IOC(_IOC_READ, $3, $5, $7);
+        }
     | FUNC_IOW LP expression COMMA expression COMMA expression RP
-        { $$ = _IOW($3, $5, $7); }
+        {
+            /*
+             * We don't use _IOW because this is a bit of a hack.  The
+             * _IOW define uses sizeof() on its last argument, but we
+             * want to specify the size explicitly.
+             */
+            $$ = _IOC(_IOC_WRITE, $3, $5, $7);
+        }
     | FUNC_IOWR LP expression COMMA expression COMMA expression RP
-        { $$ = _IOWR($3, $5, $7); }
+        {
+            /*
+             * We don't use _IORW because this is a bit of a hack.  The
+             * _IORW define uses sizeof() on its last argument, but we
+             * want to specify the size explicitly.
+             */
+            $$ = _IOC(_IOC_READ | _IOC_WRITE, $3, $5, $7);
+        }
     ;

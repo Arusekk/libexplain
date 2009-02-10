@@ -274,7 +274,7 @@ truncate a file to a specified length and report errors
 Explain \f[I]futimes\fP(3) errors
 .TP 8n
 \f[I]libexplain_futimes_or_die\fP(3)
-blah blah and report errors
+Execute \f[I]futimes\fP(3) and report errors
 .TP 8n
 \f[I]libexplain_fwrite\fP(3)
 Explain \f[I]fwrite\fP(3) errors
@@ -307,11 +307,29 @@ Explain \f[I]getcwd\fP(2) errors
 \f[I]libexplain_getcwd_or_die\fP(3)
 Get current working directory and report errors
 .TP 8n
+\f[I]libexplain_getpeername\fP(3)
+Explain \f[I]getpeername\fP(2) errors
+.TP 8n
+\f[I]libexplain_getpeername_or_die\fP(3)
+Execute\f[I]getpeername\fP(2) and report errors
+.TP 8n
 \f[I]libexplain_getrlimit\fP(3)
 Explain \f[I]getrlimit\fP(2) errors
 .TP 8n
 \f[I]libexplain_getrlimit_or_die\fP(3)
 get resource limits and report errors
+.TP 8n
+\f[I]libexplain_getsockname\fP(3)
+Explain \f[I]getsockname\fP(2) errors
+.TP 8n
+\f[I]libexplain_getsockname_or_die\fP(3)
+Execute \f[I]getsockname\fP(2) and report errors
+.TP 8n
+\f[I]libexplain_getsockopt\fP(3)
+Explain \f[I]getsockopt\fP(2) errors
+.TP 8n
+\f[I]libexplain_getsockopt_or_die\fP(3)
+Execute \f[I]getsockopt\fP(2) and report errors
 .TP 8n
 \f[I]libexplain_gettimeofday\fP(3)
 Explain \f[I]gettimeofday\fP(2) errors
@@ -325,7 +343,7 @@ get time and report errors
 Explain \f[I]ioctl\fP(2) errors
 .TP 8n
 \f[I]libexplain_ioctl_or_die\fP(3)
-blah blah and report errors
+Execute \f[I]ioctl\fP(2) and report errors
 .\" ----------  K  ---------------------------------------------------------
 .\" ----------  L  ---------------------------------------------------------
 .TP 8n
@@ -364,7 +382,7 @@ get file status and report errors
 Explain \f[I]malloc\fP(3) errors
 .TP 8n
 \f[I]libexplain_malloc_or_die\fP(3)
-blah blah and report errors
+Execute \f[I]malloc\fP(3) and report errors
 .TP 8n
 \f[I]libexplain_mkdir\fP(3)
 Explain \f[I]mkdir\fP(2) errors
@@ -397,19 +415,19 @@ get configuration values for files and report errors
 Explain \f[I]pclose\fP(3) errors
 .TP 8n
 \f[I]libexplain_pclose_or_die\fP(3)
-blah blah and report errors
+Execute \f[I]pclose\fP(3) and report errors
 .TP 8n
 \f[I]libexplain_pipe\fP(3)
 Explain \f[I]pipe\fP(2) errors
 .TP 8n
 \f[I]libexplain_pipe_or_die\fP(3)
-blah blah and report errors
+Execute \f[I]pipe\fP(2) and report errors
 .TP 8n
 \f[I]libexplain_popen\fP(3)
 Explain \f[I]popen\fP(3) errors
 .TP 8n
 \f[I]libexplain_popen_or_die\fP(3)
-blah blah and report errors
+Execute \f[I]popen\fP(3) and report errors
 .TP 8n
 \f[I]libexplain_putc\fP(3)
 Explain \f[I]putc\fP(3) errors
@@ -447,7 +465,7 @@ read value of a symbolic link and report errors
 Explain \f[I]realloc\fP(3) errors
 .TP 8n
 \f[I]libexplain_realloc_or_die\fP(3)
-blah blah and report errors
+Execute \f[I]realloc\fP(3) and report errors
 .TP 8n
 \f[I]libexplain_rename\fP(3)
 Explain \f[I]rename\fP(2) errors
@@ -466,7 +484,13 @@ delete a directory and report errors
 Explain \f[I]select\fP(2) errors
 .TP 8n
 \f[I]libexplain_select_or_die\fP(3)
-blah blah and report errors
+execute \f[I]select\fP(2) and report errors
+.TP 8n
+\f[I]libexplain_setsockopt\fP(3)
+Explain \f[I]setsockopt\fP(2) errors
+.TP 8n
+\f[I]libexplain_setsockopt_or_die\fP(3)
+execute \f[I]setsockopt\fP(2) and report errors
 .TP 8n
 \f[I]libexplain_socket\fP(3)
 Explain \f[I]socket\fP(2) errors

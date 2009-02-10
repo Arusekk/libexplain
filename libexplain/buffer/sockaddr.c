@@ -1,3 +1,4 @@
+
 /*
  * libexplain - Explain errno values returned by libc functions
  * Copyright (C) 2008, 2009 Peter Miller
@@ -58,6 +59,32 @@ libexplain_buffer_sockaddr_af_unix(libexplain_string_buffer_t *sb,
 }
 
 
+void
+libexplain_buffer_in_addr(libexplain_string_buffer_t *sb,
+    const struct in_addr *addr)
+{
+    libexplain_string_buffer_puts(sb, inet_ntoa(*addr));
+    if (libexplain_option_dialect_specific())
+    {
+        struct hostent  *hep;
+
+        /*
+         * We make this dialect specific, because different systems will
+         * have different entries in their /etc/hosts file, or there
+         * could be transient DNS failures, and these could cause false
+         * negatives for automated testing.
+         */
+        /* FIXME: gethostbyaddr_r if available */
+        hep = gethostbyaddr(addr, sizeof(addr), AF_INET);
+        if (hep)
+        {
+            libexplain_string_buffer_putc(sb, ' ');
+            libexplain_string_buffer_puts_quoted(sb, hep->h_name);
+        }
+    }
+}
+
+
 /*
  * See ip(7) and inet(3) for more information.
  */
@@ -97,25 +124,7 @@ libexplain_buffer_sockaddr_af_inet(libexplain_string_buffer_t *sb,
      * print the IP address, and name if we can
      */
     libexplain_string_buffer_puts(sb, ", sin_addr = ");
-    libexplain_string_buffer_puts(sb, inet_ntoa(sa->sin_addr));
-    if (libexplain_option_dialect_specific())
-    {
-        struct hostent  *hep;
-
-        /*
-         * We make this dialect specific, because different systems will
-         * have different entries in their /etc/hosts file, or there
-         * could be transient DNS failures, and these could cause false
-         * negatives for automated testing.
-         */
-        /* FIXME: gethostbyaddr_r if available */
-        hep = gethostbyaddr(&sa->sin_addr, sizeof(sa->sin_addr), AF_INET);
-        if (hep)
-        {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, hep->h_name);
-        }
-    }
+    libexplain_buffer_in_addr(sb, &sa->sin_addr);
 }
 
 

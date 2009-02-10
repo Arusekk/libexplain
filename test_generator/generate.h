@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,10 +26,10 @@
   * The generate function is used to generate the content, give the
   * function declaration.
   *
-  * @param arg
-  *    blah blah
-  * @returns
-  *    blah blah
+  * @param declspec
+  *    The left ahnd side (the type) of the declaration.
+  * @param decl
+  *    The right hand side of the declaration (the symbol name).
   */
 void generate(node_t *declspec, node_t *decl);
 

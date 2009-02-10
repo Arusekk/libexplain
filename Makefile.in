@@ -276,8 +276,17 @@ explain/getchar.lo: explain/getchar.c explain/getchar.h libexplain/ac/stdio.h li
 explain/getcwd.lo: explain/getcwd.c explain/getcwd.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/sys/param.h libexplain/config.h libexplain/config.messy.h libexplain/getcwd.h libexplain/large_file_support.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/getcwd.c -o explain/getcwd.lo
 
+explain/getpeername.lo: explain/getpeername.c explain/getpeername.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/getpeername.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/getpeername.c -o explain/getpeername.lo
+
 explain/getrlimit.lo: explain/getrlimit.c explain/getrlimit.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/sys/resource.h libexplain/ac/time.h libexplain/buffer/resource.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/getrlimit.h libexplain/string_buffer.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/getrlimit.c -o explain/getrlimit.lo
+
+explain/getsockname.lo: explain/getsockname.c explain/getsockname.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/getsockname.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/getsockname.c -o explain/getsockname.lo
+
+explain/getsockopt.lo: explain/getsockopt.c explain/getsockopt.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/buffer/sockopt_level.h libexplain/buffer/sockopt_name.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/getsockopt.h libexplain/string_buffer.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/getsockopt.c -o explain/getsockopt.lo
 
 explain/gettimeofday.lo: explain/gettimeofday.c explain/gettimeofday.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/gettimeofday.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/gettimeofday.c -o explain/gettimeofday.lo
@@ -300,7 +309,7 @@ explain/lseek.lo: explain/lseek.c explain/lseek.h libexplain/ac/stdio.h libexpla
 explain/lstat.lo: explain/lstat.c explain/lstat.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/sys/stat.h libexplain/ac/sys/types.h libexplain/config.h libexplain/config.messy.h libexplain/lstat.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/lstat.c -o explain/lstat.lo
 
-explain/main.lo: explain/main.c explain/accept.h explain/access.h explain/bind.h explain/chdir.h explain/chmod.h explain/chown.h explain/close.h explain/closedir.h explain/connect.h explain/creat.h explain/dup.h explain/dup2.h explain/execve.h explain/execvp.h explain/fchdir.h explain/fchmod.h explain/fchown.h explain/fcntl.h explain/fdopen.h explain/ferror.h explain/fgetc.h explain/fgets.h explain/fopen.h explain/fork.h explain/fpathconf.h explain/fputc.h explain/fread.h explain/fstat.h explain/ftruncate.h explain/futimes.h explain/fwrite.h explain/getc.h explain/getchar.h explain/getcwd.h explain/getrlimit.h explain/gettimeofday.h explain/ioctl.h explain/lchown.h explain/link.h explain/listen.h explain/lseek.h explain/lstat.h explain/malloc.h explain/mkdir.h explain/open.h explain/opendir.h explain/pathconf.h explain/pclose.h explain/pipe.h explain/popen.h explain/putc.h explain/putchar.h explain/read.h explain/readdir.h explain/readlink.h explain/realloc.h explain/remove.h explain/rename.h explain/rmdir.h explain/select.h explain/socket.h explain/stat.h explain/strerror.h explain/symlink.h explain/system.h explain/truncate.h explain/unlink.h explain/utime.h explain/wait.h explain/wait3.h explain/wait4.h explain/waitpid.h explain/write.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/string.h libexplain/config.h libexplain/config.messy.h libexplain/errno_info.h libexplain/freopen.h libexplain/fstrcmp.h libexplain/gcc_attributes.h libexplain/large_file_support.h libexplain/sizeof.h libexplain/string_buffer.h libexplain/version_print.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
+explain/main.lo: explain/main.c explain/accept.h explain/access.h explain/bind.h explain/chdir.h explain/chmod.h explain/chown.h explain/close.h explain/closedir.h explain/connect.h explain/creat.h explain/dup.h explain/dup2.h explain/execve.h explain/execvp.h explain/fchdir.h explain/fchmod.h explain/fchown.h explain/fcntl.h explain/fdopen.h explain/ferror.h explain/fgetc.h explain/fgets.h explain/fopen.h explain/fork.h explain/fpathconf.h explain/fputc.h explain/fread.h explain/fstat.h explain/ftruncate.h explain/futimes.h explain/fwrite.h explain/getc.h explain/getchar.h explain/getcwd.h explain/getpeername.h explain/getrlimit.h explain/getsockname.h explain/getsockopt.h explain/gettimeofday.h explain/ioctl.h explain/lchown.h explain/link.h explain/listen.h explain/lseek.h explain/lstat.h explain/malloc.h explain/mkdir.h explain/open.h explain/opendir.h explain/pathconf.h explain/pclose.h explain/pipe.h explain/popen.h explain/putc.h explain/putchar.h explain/read.h explain/readdir.h explain/readlink.h explain/realloc.h explain/remove.h explain/rename.h explain/rmdir.h explain/select.h explain/setsockopt.h explain/socket.h explain/stat.h explain/strerror.h explain/symlink.h explain/system.h explain/truncate.h explain/unlink.h explain/utime.h explain/wait.h explain/wait3.h explain/wait4.h explain/waitpid.h explain/write.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/ac/string.h libexplain/config.h libexplain/config.messy.h libexplain/errno_info.h libexplain/freopen.h libexplain/fstrcmp.h libexplain/gcc_attributes.h libexplain/large_file_support.h libexplain/sizeof.h libexplain/string_buffer.h libexplain/version_print.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/main.c -o explain/main.lo
 
 explain/malloc.lo: explain/malloc.c explain/malloc.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/malloc.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
@@ -356,6 +365,9 @@ explain/rmdir.lo: explain/rmdir.c explain/rmdir.h libexplain/ac/stdio.h libexpla
 
 explain/select.lo: explain/select.c explain/select.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/config.h libexplain/config.messy.h libexplain/large_file_support.h libexplain/select.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/select.c -o explain/select.lo
+
+explain/setsockopt.lo: explain/setsockopt.c explain/setsockopt.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/buffer/sockopt_level.h libexplain/buffer/sockopt_name.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/setsockopt.h libexplain/string_buffer.h libexplain/strtol_or_die.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/setsockopt.c -o explain/setsockopt.lo
 
 explain/socket.lo: explain/socket.c explain/socket.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/stdio.h libexplain/ac/stdlib.h libexplain/buffer/address_family.h libexplain/buffer/socket_protocol.h libexplain/buffer/socket_type.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/socket.h libexplain/string_buffer.h libexplain/warn_unused_result.h libexplain/wrap_and_print.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c explain/socket.c -o explain/socket.lo
@@ -453,19 +465,16 @@ libexplain/bind_or_die.lo: libexplain/bind_or_die.c libexplain/ac/stdio.h libexp
 libexplain/buffer/access_mode.lo: libexplain/buffer/access_mode.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/unistd.h libexplain/buffer/access_mode.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/parse_bits.h libexplain/sizeof.h libexplain/string_buffer.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/access_mode.c -o libexplain/buffer/access_mode.lo
 
-libexplain/buffer/address_family.lo: libexplain/buffer/address_family.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/ac/sys/socket.h libexplain/ac/sys/types.h libexplain/buffer/address_family.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/parse_bits.h libexplain/sizeof.h libexplain/string_buffer.h
+libexplain/buffer/address_family.lo: libexplain/buffer/address_family.c libexplain/ac/sys/socket.h libexplain/buffer/address_family.h libexplain/parse_bits.h libexplain/sizeof.h
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/address_family.c -o libexplain/buffer/address_family.lo
 
-libexplain/buffer/addrinfo.lo: libexplain/buffer/addrinfo.c libexplain/ac/netdb.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/address_family.h libexplain/buffer/addrinfo.h libexplain/buffer/addrinfo_flags.h libexplain/buffer/pathname.h libexplain/buffer/pointer.h libexplain/buffer/sockaddr.h libexplain/buffer/socket_protocol.h libexplain/buffer/socket_type.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/parse_bits.h libexplain/path_is_efault.h libexplain/sizeof.h libexplain/string_buffer.h
+libexplain/buffer/addrinfo.lo: libexplain/buffer/addrinfo.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/addrinfo.c -o libexplain/buffer/addrinfo.lo
 
-libexplain/buffer/addrinfo_flags.lo: libexplain/buffer/addrinfo_flags.c libexplain/ac/netdb.h libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/addrinfo_flags.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/parse_bits.h libexplain/sizeof.h libexplain/string_buffer.h
+libexplain/buffer/addrinfo_flags.lo: libexplain/buffer/addrinfo_flags.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/addrinfo_flags.c -o libexplain/buffer/addrinfo_flags.lo
 
-libexplain/buffer/argument_is_invalid.lo: libexplain/buffer/argument_is_invalid.c libexplain/ac/stdarg.h libexplain/ac/stddef.h libexplain/buffer/argument_is_invalid.h libexplain/config.h libexplain/config.messy.h libexplain/gcc_attributes.h libexplain/string_buffer.h
-	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/argument_is_invalid.c -o libexplain/buffer/argument_is_invalid.lo
-
-libexplain/buffer/arpreq.lo: libexplain/buffer/arpreq.c libexplain/ac/net/if_arp.h libexplain/ac/stddef.h libexplain/buffer/arpreq.h libexplain/buffer/pointer.h libexplain/buffer/sockaddr.h libexplain/config.h libexplain/parse_bits.h libexplain/path_is_efault.h libexplain/sizeof.h libexplain/string_buffer.h
+libexplain/buffer/arpreq.lo: libexplain/buffer/arpreq.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/arpreq.c -o libexplain/buffer/arpreq.lo
 
 libexplain/buffer/caption_name_type.lo: libexplain/buffer/caption_name_type.c
@@ -561,11 +570,20 @@ libexplain/buffer/enametoolong.lo: libexplain/buffer/enametoolong.c
 libexplain/buffer/enfile.lo: libexplain/buffer/enfile.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enfile.c -o libexplain/buffer/enfile.lo
 
+libexplain/buffer/enobufs.lo: libexplain/buffer/enobufs.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enobufs.c -o libexplain/buffer/enobufs.lo
+
 libexplain/buffer/enoent.lo: libexplain/buffer/enoent.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enoent.c -o libexplain/buffer/enoent.lo
 
 libexplain/buffer/enomem.lo: libexplain/buffer/enomem.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enomem.c -o libexplain/buffer/enomem.lo
+
+libexplain/buffer/enoprotoopt.lo: libexplain/buffer/enoprotoopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enoprotoopt.c -o libexplain/buffer/enoprotoopt.lo
+
+libexplain/buffer/enotconn.lo: libexplain/buffer/enotconn.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enotconn.c -o libexplain/buffer/enotconn.lo
 
 libexplain/buffer/enotdir.lo: libexplain/buffer/enotdir.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/enotdir.c -o libexplain/buffer/enotdir.lo
@@ -693,8 +711,17 @@ libexplain/buffer/errno/getchar.lo: libexplain/buffer/errno/getchar.c
 libexplain/buffer/errno/getcwd.lo: libexplain/buffer/errno/getcwd.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/getcwd.c -o libexplain/buffer/errno/getcwd.lo
 
+libexplain/buffer/errno/getpeername.lo: libexplain/buffer/errno/getpeername.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/getpeername.c -o libexplain/buffer/errno/getpeername.lo
+
 libexplain/buffer/errno/getrlimit.lo: libexplain/buffer/errno/getrlimit.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/getrlimit.c -o libexplain/buffer/errno/getrlimit.lo
+
+libexplain/buffer/errno/getsockname.lo: libexplain/buffer/errno/getsockname.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/getsockname.c -o libexplain/buffer/errno/getsockname.lo
+
+libexplain/buffer/errno/getsockopt.lo: libexplain/buffer/errno/getsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/getsockopt.c -o libexplain/buffer/errno/getsockopt.lo
 
 libexplain/buffer/errno/gettimeofday.lo: libexplain/buffer/errno/gettimeofday.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/gettimeofday.c -o libexplain/buffer/errno/gettimeofday.lo
@@ -773,6 +800,9 @@ libexplain/buffer/errno/rmdir.lo: libexplain/buffer/errno/rmdir.c
 
 libexplain/buffer/errno/select.lo: libexplain/buffer/errno/select.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/select.c -o libexplain/buffer/errno/select.lo
+
+libexplain/buffer/errno/setsockopt.lo: libexplain/buffer/errno/setsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/setsockopt.c -o libexplain/buffer/errno/setsockopt.lo
 
 libexplain/buffer/errno/socket.lo: libexplain/buffer/errno/socket.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/errno/socket.c -o libexplain/buffer/errno/socket.lo
@@ -1016,6 +1046,15 @@ libexplain/buffer/socket_protocol.lo: libexplain/buffer/socket_protocol.c
 
 libexplain/buffer/socket_type.lo: libexplain/buffer/socket_type.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/socket_type.c -o libexplain/buffer/socket_type.lo
+
+libexplain/buffer/socklen.lo: libexplain/buffer/socklen.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/socklen.c -o libexplain/buffer/socklen.lo
+
+libexplain/buffer/sockopt_level.lo: libexplain/buffer/sockopt_level.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/sockopt_level.c -o libexplain/buffer/sockopt_level.lo
+
+libexplain/buffer/sockopt_name.lo: libexplain/buffer/sockopt_name.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/sockopt_name.c -o libexplain/buffer/sockopt_name.lo
 
 libexplain/buffer/software_error.lo: libexplain/buffer/software_error.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/buffer/software_error.c -o libexplain/buffer/software_error.lo
@@ -1362,8 +1401,17 @@ libexplain/errno/getchar.lo: libexplain/errno/getchar.c
 libexplain/errno/getcwd.lo: libexplain/errno/getcwd.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/getcwd.c -o libexplain/errno/getcwd.lo
 
+libexplain/errno/getpeername.lo: libexplain/errno/getpeername.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/getpeername.c -o libexplain/errno/getpeername.lo
+
 libexplain/errno/getrlimit.lo: libexplain/errno/getrlimit.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/getrlimit.c -o libexplain/errno/getrlimit.lo
+
+libexplain/errno/getsockname.lo: libexplain/errno/getsockname.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/getsockname.c -o libexplain/errno/getsockname.lo
+
+libexplain/errno/getsockopt.lo: libexplain/errno/getsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/getsockopt.c -o libexplain/errno/getsockopt.lo
 
 libexplain/errno/gettimeofday.lo: libexplain/errno/gettimeofday.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/gettimeofday.c -o libexplain/errno/gettimeofday.lo
@@ -1439,6 +1487,9 @@ libexplain/errno/rmdir.lo: libexplain/errno/rmdir.c
 
 libexplain/errno/select.lo: libexplain/errno/select.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/select.c -o libexplain/errno/select.lo
+
+libexplain/errno/setsockopt.lo: libexplain/errno/setsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/setsockopt.c -o libexplain/errno/setsockopt.lo
 
 libexplain/errno/socket.lo: libexplain/errno/socket.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/errno/socket.c -o libexplain/errno/socket.lo
@@ -1734,6 +1785,15 @@ $(includedir)/libexplain/getcwd.h: libexplain/getcwd.h libexplain/.incl
 libexplain/getcwd_or_die.lo: libexplain/getcwd_or_die.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getcwd_or_die.c -o libexplain/getcwd_or_die.lo
 
+libexplain/getpeername.lo: libexplain/getpeername.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getpeername.c -o libexplain/getpeername.lo
+
+$(includedir)/libexplain/getpeername.h: libexplain/getpeername.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/getpeername.h $@
+
+libexplain/getpeername_or_die.lo: libexplain/getpeername_or_die.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getpeername_or_die.c -o libexplain/getpeername_or_die.lo
+
 libexplain/getrlimit.lo: libexplain/getrlimit.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getrlimit.c -o libexplain/getrlimit.lo
 
@@ -1742,6 +1802,24 @@ $(includedir)/libexplain/getrlimit.h: libexplain/getrlimit.h libexplain/.incl
 
 libexplain/getrlimit_or_die.lo: libexplain/getrlimit_or_die.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getrlimit_or_die.c -o libexplain/getrlimit_or_die.lo
+
+libexplain/getsockname.lo: libexplain/getsockname.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getsockname.c -o libexplain/getsockname.lo
+
+$(includedir)/libexplain/getsockname.h: libexplain/getsockname.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/getsockname.h $@
+
+libexplain/getsockname_or_die.lo: libexplain/getsockname_or_die.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getsockname_or_die.c -o libexplain/getsockname_or_die.lo
+
+libexplain/getsockopt.lo: libexplain/getsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getsockopt.c -o libexplain/getsockopt.lo
+
+$(includedir)/libexplain/getsockopt.h: libexplain/getsockopt.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/getsockopt.h $@
+
+libexplain/getsockopt_or_die.lo: libexplain/getsockopt_or_die.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/getsockopt_or_die.c -o libexplain/getsockopt_or_die.lo
 
 libexplain/gettext.lo: libexplain/gettext.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/gettext.c -o libexplain/gettext.lo
@@ -2562,8 +2640,17 @@ libexplain/message/errno/getchar.lo: libexplain/message/errno/getchar.c
 libexplain/message/errno/getcwd.lo: libexplain/message/errno/getcwd.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/getcwd.c -o libexplain/message/errno/getcwd.lo
 
+libexplain/message/errno/getpeername.lo: libexplain/message/errno/getpeername.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/getpeername.c -o libexplain/message/errno/getpeername.lo
+
 libexplain/message/errno/getrlimit.lo: libexplain/message/errno/getrlimit.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/getrlimit.c -o libexplain/message/errno/getrlimit.lo
+
+libexplain/message/errno/getsockname.lo: libexplain/message/errno/getsockname.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/getsockname.c -o libexplain/message/errno/getsockname.lo
+
+libexplain/message/errno/getsockopt.lo: libexplain/message/errno/getsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/getsockopt.c -o libexplain/message/errno/getsockopt.lo
 
 libexplain/message/errno/gettimeofday.lo: libexplain/message/errno/gettimeofday.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/gettimeofday.c -o libexplain/message/errno/gettimeofday.lo
@@ -2639,6 +2726,9 @@ libexplain/message/errno/rmdir.lo: libexplain/message/errno/rmdir.c
 
 libexplain/message/errno/select.lo: libexplain/message/errno/select.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/select.c -o libexplain/message/errno/select.lo
+
+libexplain/message/errno/setsockopt.lo: libexplain/message/errno/setsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/setsockopt.c -o libexplain/message/errno/setsockopt.lo
 
 libexplain/message/errno/socket.lo: libexplain/message/errno/socket.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/errno/socket.c -o libexplain/message/errno/socket.lo
@@ -2751,8 +2841,17 @@ libexplain/message/getchar.lo: libexplain/message/getchar.c
 libexplain/message/getcwd.lo: libexplain/message/getcwd.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/getcwd.c -o libexplain/message/getcwd.lo
 
+libexplain/message/getpeername.lo: libexplain/message/getpeername.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/getpeername.c -o libexplain/message/getpeername.lo
+
 libexplain/message/getrlimit.lo: libexplain/message/getrlimit.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/getrlimit.c -o libexplain/message/getrlimit.lo
+
+libexplain/message/getsockname.lo: libexplain/message/getsockname.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/getsockname.c -o libexplain/message/getsockname.lo
+
+libexplain/message/getsockopt.lo: libexplain/message/getsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/getsockopt.c -o libexplain/message/getsockopt.lo
 
 libexplain/message/gettimeofday.lo: libexplain/message/gettimeofday.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/gettimeofday.c -o libexplain/message/gettimeofday.lo
@@ -2834,6 +2933,9 @@ libexplain/message/rmdir.lo: libexplain/message/rmdir.c
 
 libexplain/message/select.lo: libexplain/message/select.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/select.c -o libexplain/message/select.lo
+
+libexplain/message/setsockopt.lo: libexplain/message/setsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/setsockopt.c -o libexplain/message/setsockopt.lo
 
 libexplain/message/socket.lo: libexplain/message/socket.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/message/socket.c -o libexplain/message/socket.lo
@@ -3080,6 +3182,15 @@ $(includedir)/libexplain/select.h: libexplain/select.h libexplain/.incl
 
 libexplain/select_or_die.lo: libexplain/select_or_die.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/select_or_die.c -o libexplain/select_or_die.lo
+
+libexplain/setsockopt.lo: libexplain/setsockopt.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/setsockopt.c -o libexplain/setsockopt.lo
+
+$(includedir)/libexplain/setsockopt.h: libexplain/setsockopt.h libexplain/.incl
+	$(INSTALL_DATA) libexplain/setsockopt.h $@
+
+libexplain/setsockopt_or_die.lo: libexplain/setsockopt_or_die.c
+	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/setsockopt_or_die.c -o libexplain/setsockopt_or_die.lo
 
 libexplain/socket.lo: libexplain/socket.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c libexplain/socket.c -o libexplain/socket.lo
@@ -3674,6 +3785,16 @@ $(mandir)/man3/libexplain_getcwd_or_die.3: man/man3/libexplain_getcwd_or_die.3  
 	$(INSTALL_DATA) tmp $@
 	@rm -f tmp
 
+$(mandir)/man3/libexplain_getpeername.3: man/man3/libexplain_getpeername.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getpeername.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_getpeername_or_die.3: man/man3/libexplain_getpeername_or_die.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getpeername_or_die.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
 $(mandir)/man3/libexplain_getrlimit.3: man/man3/libexplain_getrlimit.3  man/man3/.mandir
 	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getrlimit.3 > tmp
 	$(INSTALL_DATA) tmp $@
@@ -3681,6 +3802,26 @@ $(mandir)/man3/libexplain_getrlimit.3: man/man3/libexplain_getrlimit.3  man/man3
 
 $(mandir)/man3/libexplain_getrlimit_or_die.3: man/man3/libexplain_getrlimit_or_die.3  man/man3/.mandir
 	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getrlimit_or_die.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_getsockname.3: man/man3/libexplain_getsockname.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getsockname.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_getsockname_or_die.3: man/man3/libexplain_getsockname_or_die.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getsockname_or_die.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_getsockopt.3: man/man3/libexplain_getsockopt.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getsockopt.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_getsockopt_or_die.3: man/man3/libexplain_getsockopt_or_die.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_getsockopt_or_die.3 > tmp
 	$(INSTALL_DATA) tmp $@
 	@rm -f tmp
 
@@ -3941,6 +4082,16 @@ $(mandir)/man3/libexplain_select.3: man/man3/libexplain_select.3  man/man3/.mand
 
 $(mandir)/man3/libexplain_select_or_die.3: man/man3/libexplain_select_or_die.3  man/man3/.mandir
 	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_select_or_die.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_setsockopt.3: man/man3/libexplain_setsockopt.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_setsockopt.3 > tmp
+	$(INSTALL_DATA) tmp $@
+	@rm -f tmp
+
+$(mandir)/man3/libexplain_setsockopt_or_die.3: man/man3/libexplain_setsockopt_or_die.3  man/man3/.mandir
+	$(SOELIM) -I. -Iman/man3 man/man3/libexplain_setsockopt_or_die.3 > tmp
 	$(INSTALL_DATA) tmp $@
 	@rm -f tmp
 
@@ -5154,6 +5305,72 @@ t0363a: test/03/t0363a.sh all
 t0364a: test/03/t0364a.sh all
 	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0364a.sh
 
+t0365a: test/03/t0365a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0365a.sh
+
+t0366a: test/03/t0366a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0366a.sh
+
+t0367a: test/03/t0367a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0367a.sh
+
+t0368a: test/03/t0368a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0368a.sh
+
+t0369a: test/03/t0369a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0369a.sh
+
+t0370a: test/03/t0370a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0370a.sh
+
+t0371a: test/03/t0371a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0371a.sh
+
+t0372a: test/03/t0372a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0372a.sh
+
+t0373a: test/03/t0373a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0373a.sh
+
+t0374a: test/03/t0374a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0374a.sh
+
+t0375a: test/03/t0375a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0375a.sh
+
+t0376a: test/03/t0376a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0376a.sh
+
+t0377a: test/03/t0377a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0377a.sh
+
+t0378a: test/03/t0378a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0378a.sh
+
+t0379a: test/03/t0379a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0379a.sh
+
+t0380a: test/03/t0380a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0380a.sh
+
+t0381a: test/03/t0381a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0381a.sh
+
+t0382a: test/03/t0382a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0382a.sh
+
+t0383a: test/03/t0383a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0383a.sh
+
+t0384a: test/03/t0384a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0384a.sh
+
+t0385a: test/03/t0385a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0385a.sh
+
+t0386a: test/03/t0386a.sh all
+	PATH=`pwd`/bin:$$PATH $(SH) test/03/t0386a.sh
+
 test_access/main.lo: test_access/main.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_access/main.c -o test_access/main.lo
 
@@ -5280,16 +5497,16 @@ test_user/main.lo: test_user/main.c
 test_utime/main.lo: test_utime/main.c
 	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) $(CFLAGS) -I. -c test_utime/main.c -o test_utime/main.lo
 
-lib_obj = libexplain/ac/mntent.lo libexplain/ac/string.lo libexplain/accept.lo libexplain/accept_or_die.lo libexplain/access.lo libexplain/access_or_die.lo libexplain/bind.lo libexplain/bind_or_die.lo libexplain/buffer/access_mode.lo libexplain/buffer/address_family.lo libexplain/buffer/addrinfo.lo libexplain/buffer/addrinfo_flags.lo libexplain/buffer/argument_is_invalid.lo libexplain/buffer/arpreq.lo libexplain/buffer/caption_name_type.lo libexplain/buffer/char.lo libexplain/buffer/char_data.lo libexplain/buffer/check_fildes_range.lo libexplain/buffer/console_font_op.lo libexplain/buffer/consolefontdesc.lo libexplain/buffer/dac/chown.lo libexplain/buffer/dac/does_not_have_capability.lo libexplain/buffer/dac/fowner.lo libexplain/buffer/dac/net_bind_service.lo libexplain/buffer/dac/net_raw.lo libexplain/buffer/dac/override.lo libexplain/buffer/dac/process_is_not_privileged.lo libexplain/buffer/dac/read_search.lo libexplain/buffer/dir_to_pathname.lo libexplain/buffer/dlci_add.lo libexplain/buffer/does_not_have_inode_modify_permission.lo libexplain/buffer/eacces.lo libexplain/buffer/eaddrinuse.lo libexplain/buffer/eafnosupport.lo libexplain/buffer/ebadf.lo libexplain/buffer/efault.lo libexplain/buffer/efbig.lo libexplain/buffer/eintr.lo libexplain/buffer/einval.lo libexplain/buffer/eio.lo libexplain/buffer/eloop.lo libexplain/buffer/emfile.lo libexplain/buffer/emlink.lo libexplain/buffer/enametoolong.lo libexplain/buffer/enfile.lo libexplain/buffer/enoent.lo libexplain/buffer/enomem.lo libexplain/buffer/enotdir.lo libexplain/buffer/enotsock.lo libexplain/buffer/erofs.lo libexplain/buffer/errno/accept.lo libexplain/buffer/errno/access.lo libexplain/buffer/errno/bind.lo libexplain/buffer/errno/chdir.lo libexplain/buffer/errno/chmod.lo libexplain/buffer/errno/chown.lo libexplain/buffer/errno/close.lo libexplain/buffer/errno/closedir.lo libexplain/buffer/errno/connect.lo libexplain/buffer/errno/creat.lo libexplain/buffer/errno/dup.lo libexplain/buffer/errno/dup2.lo libexplain/buffer/errno/execve.lo libexplain/buffer/errno/execvp.lo libexplain/buffer/errno/fchdir.lo libexplain/buffer/errno/fchmod.lo libexplain/buffer/errno/fchown.lo libexplain/buffer/errno/fclose.lo libexplain/buffer/errno/fcntl.lo libexplain/buffer/errno/fdopen.lo libexplain/buffer/errno/ferror.lo libexplain/buffer/errno/fflush.lo libexplain/buffer/errno/fgetc.lo libexplain/buffer/errno/fgets.lo libexplain/buffer/errno/fopen.lo libexplain/buffer/errno/fork.lo libexplain/buffer/errno/fpathconf.lo libexplain/buffer/errno/fputc.lo libexplain/buffer/errno/fread.lo libexplain/buffer/errno/freopen.lo libexplain/buffer/errno/fstat.lo libexplain/buffer/errno/ftruncate.lo libexplain/buffer/errno/futimes.lo libexplain/buffer/errno/fwrite.lo libexplain/buffer/errno/generic.lo libexplain/buffer/errno/getaddrinfo.lo libexplain/buffer/errno/getc.lo libexplain/buffer/errno/getchar.lo libexplain/buffer/errno/getcwd.lo libexplain/buffer/errno/getrlimit.lo libexplain/buffer/errno/gettimeofday.lo libexplain/buffer/errno/ioctl.lo libexplain/buffer/errno/lchown.lo libexplain/buffer/errno/link.lo libexplain/buffer/errno/listen.lo libexplain/buffer/errno/lseek.lo libexplain/buffer/errno/lstat.lo libexplain/buffer/errno/malloc.lo libexplain/buffer/errno/mkdir.lo libexplain/buffer/errno/open.lo libexplain/buffer/errno/opendir.lo libexplain/buffer/errno/path_resolution.lo libexplain/buffer/errno/pathconf.lo libexplain/buffer/errno/pclose.lo libexplain/buffer/errno/pipe.lo libexplain/buffer/errno/popen.lo libexplain/buffer/errno/putc.lo libexplain/buffer/errno/putchar.lo libexplain/buffer/errno/read.lo libexplain/buffer/errno/readdir.lo libexplain/buffer/errno/readlink.lo libexplain/buffer/errno/realloc.lo libexplain/buffer/errno/remove.lo libexplain/buffer/errno/rename.lo libexplain/buffer/errno/rmdir.lo libexplain/buffer/errno/select.lo libexplain/buffer/errno/socket.lo libexplain/buffer/errno/stat.lo libexplain/buffer/errno/symlink.lo libexplain/buffer/errno/system.lo libexplain/buffer/errno/truncate.lo libexplain/buffer/errno/unlink.lo libexplain/buffer/errno/utime.lo libexplain/buffer/errno/wait.lo libexplain/buffer/errno/wait3.lo libexplain/buffer/errno/wait4.lo libexplain/buffer/errno/waitpid.lo libexplain/buffer/errno/write.lo libexplain/buffer/etxtbsy.lo libexplain/buffer/exdev.lo libexplain/buffer/fd_set.lo libexplain/buffer/fildes_not_open_for_writing.lo libexplain/buffer/fildes_to_pathname.lo libexplain/buffer/file_type.lo libexplain/buffer/flock.lo libexplain/buffer/gai_strerror.lo libexplain/buffer/get_current_directory.lo libexplain/buffer/gettext.lo libexplain/buffer/gid.lo libexplain/buffer/hexdump.lo libexplain/buffer/ifconf.lo libexplain/buffer/ifreq_addr.lo libexplain/buffer/ifreq_brdaddr.lo libexplain/buffer/ifreq_dstaddr.lo libexplain/buffer/ifreq_flags.lo libexplain/buffer/ifreq_hwaddr.lo libexplain/buffer/ifreq_ifbond.lo libexplain/buffer/ifreq_ifindex.lo libexplain/buffer/ifreq_ifmap.lo libexplain/buffer/ifreq_mii.lo libexplain/buffer/ifreq_mtu.lo libexplain/buffer/ifreq_name.lo libexplain/buffer/ifreq_netmask.lo libexplain/buffer/ifreq_newname.lo libexplain/buffer/ifreq_qlen.lo libexplain/buffer/ifreq_settings.lo libexplain/buffer/ifreq_slave.lo libexplain/buffer/in6_addr.lo libexplain/buffer/in6_ifreq.lo libexplain/buffer/int.lo libexplain/buffer/is_the_null_pointer.lo libexplain/buffer/kbd_repeat.lo libexplain/buffer/kbdiacrs.lo libexplain/buffer/kbdiacrsuc.lo libexplain/buffer/kbentry.lo libexplain/buffer/kbkeycode.lo libexplain/buffer/kbsentry.lo libexplain/buffer/line_discipline.lo libexplain/buffer/lseek_whence.lo libexplain/buffer/mii_ioctl_data.lo libexplain/buffer/mount_point.lo libexplain/buffer/mtconfiginfo.lo libexplain/buffer/mtget.lo libexplain/buffer/mtop.lo libexplain/buffer/mtpos.lo libexplain/buffer/no_outstanding_children.lo libexplain/buffer/note/sigchld.lo libexplain/buffer/note/still_exists.lo libexplain/buffer/open_flags.lo libexplain/buffer/path_to_pid.lo libexplain/buffer/pathconf_name.lo libexplain/buffer/pathname.lo libexplain/buffer/permission_mode.lo libexplain/buffer/pid_t_star.lo libexplain/buffer/pointer.lo libexplain/buffer/pretty_size.lo libexplain/buffer/resource.lo libexplain/buffer/rlimit.lo libexplain/buffer/route_struct.lo libexplain/buffer/rtentry.lo libexplain/buffer/serial_multiport_struct.lo libexplain/buffer/serial_struct.lo libexplain/buffer/siocethtool.lo libexplain/buffer/siocgifbr.lo libexplain/buffer/sockaddr.lo libexplain/buffer/socket_protocol.lo libexplain/buffer/socket_type.lo libexplain/buffer/software_error.lo libexplain/buffer/stream.lo libexplain/buffer/stream_to_pathname.lo libexplain/buffer/strerror.lo libexplain/buffer/string_n.lo libexplain/buffer/strsignal.lo libexplain/buffer/termios.lo libexplain/buffer/timeval.lo libexplain/buffer/tioclinux.lo libexplain/buffer/tiocm.lo libexplain/buffer/uid.lo libexplain/buffer/unimapdesc.lo libexplain/buffer/utimbuf.lo libexplain/buffer/wait_status.lo libexplain/buffer/waitpid_options.lo libexplain/buffer/winsize.lo libexplain/buffer/wrong_file_type.lo libexplain/capability.lo libexplain/capability/chown.lo libexplain/capability/dac_override.lo libexplain/capability/dac_read_search.lo libexplain/capability/fowner.lo libexplain/capability/ipc_lock.lo libexplain/capability/ipc_owner.lo libexplain/capability/kill.lo libexplain/capability/lease.lo libexplain/capability/linux_immutable.lo libexplain/capability/mknod.lo libexplain/capability/net_admin.lo libexplain/capability/net_bind_service.lo libexplain/capability/net_broadcast.lo libexplain/capability/new_raw.lo libexplain/capability/setgid.lo libexplain/capability/setpcap.lo libexplain/capability/setuid.lo libexplain/capability/sys_admin.lo libexplain/capability/sys_boot.lo libexplain/capability/sys_chroot.lo libexplain/capability/sys_module.lo libexplain/capability/sys_nice.lo libexplain/capability/sys_pacct.lo libexplain/capability/sys_ptrace.lo libexplain/capability/sys_rawio.lo libexplain/capability/sys_resource.lo libexplain/capability/sys_time.lo libexplain/capability/sys_tty_config.lo libexplain/chdir.lo libexplain/chdir_or_die.lo libexplain/chmod.lo libexplain/chmod_or_die.lo libexplain/chown.lo libexplain/chown_or_die.lo libexplain/close.lo libexplain/close_or_die.lo libexplain/closedir.lo libexplain/closedir_or_die.lo libexplain/common_message_buffer.lo libexplain/connect.lo libexplain/connect_or_die.lo libexplain/count_directory_entries.lo libexplain/creat.lo libexplain/creat_or_die.lo libexplain/dir_to_fildes.lo libexplain/dirname.lo libexplain/dup.lo libexplain/dup2.lo libexplain/dup2_or_die.lo libexplain/dup_or_die.lo libexplain/errno/accept.lo libexplain/errno/access.lo libexplain/errno/bind.lo libexplain/errno/chdir.lo libexplain/errno/chmod.lo libexplain/errno/chown.lo libexplain/errno/close.lo libexplain/errno/closedir.lo libexplain/errno/connect.lo libexplain/errno/creat.lo libexplain/errno/dup.lo libexplain/errno/dup2.lo libexplain/errno/execve.lo libexplain/errno/execvp.lo libexplain/errno/fchdir.lo libexplain/errno/fchmod.lo libexplain/errno/fchown.lo libexplain/errno/fclose.lo libexplain/errno/fcntl.lo libexplain/errno/fdopen.lo libexplain/errno/ferror.lo libexplain/errno/fflush.lo libexplain/errno/fgetc.lo libexplain/errno/fgets.lo libexplain/errno/fopen.lo libexplain/errno/fork.lo libexplain/errno/fpathconf.lo libexplain/errno/fputc.lo libexplain/errno/fread.lo libexplain/errno/freopen.lo libexplain/errno/fstat.lo libexplain/errno/ftruncate.lo libexplain/errno/futimes.lo libexplain/errno/fwrite.lo libexplain/errno/getaddrinfo.lo libexplain/errno/getc.lo libexplain/errno/getchar.lo libexplain/errno/getcwd.lo libexplain/errno/getrlimit.lo libexplain/errno/gettimeofday.lo libexplain/errno/ioctl.lo libexplain/errno/lchown.lo libexplain/errno/link.lo libexplain/errno/listen.lo libexplain/errno/lseek.lo libexplain/errno/lstat.lo libexplain/errno/malloc.lo libexplain/errno/mkdir.lo libexplain/errno/open.lo libexplain/errno/opendir.lo libexplain/errno/pathconf.lo libexplain/errno/pclose.lo libexplain/errno/pipe.lo libexplain/errno/popen.lo libexplain/errno/putc.lo libexplain/errno/putchar.lo libexplain/errno/read.lo libexplain/errno/readdir.lo libexplain/errno/readlink.lo libexplain/errno/realloc.lo libexplain/errno/remove.lo libexplain/errno/rename.lo libexplain/errno/rmdir.lo libexplain/errno/select.lo libexplain/errno/socket.lo libexplain/errno/stat.lo libexplain/errno/symlink.lo libexplain/errno/system.lo libexplain/errno/truncate.lo libexplain/errno/unlink.lo libexplain/errno/utime.lo libexplain/errno/wait.lo libexplain/errno/wait3.lo libexplain/errno/wait4.lo libexplain/errno/waitpid.lo libexplain/errno/write.lo libexplain/errno_info.lo libexplain/errno_info/by_name.lo libexplain/errno_info/by_name_fuzzy.lo libexplain/errno_info/by_number.lo libexplain/errno_info/by_text.lo libexplain/errno_info/by_text_fuzzy.lo libexplain/execve.lo libexplain/execve_or_die.lo libexplain/execvp.lo libexplain/execvp_or_die.lo libexplain/explanation.lo libexplain/fchdir.lo libexplain/fchdir_or_die.lo libexplain/fchmod.lo libexplain/fchmod_or_die.lo libexplain/fchown.lo libexplain/fchown_or_die.lo libexplain/fclose.lo libexplain/fclose_or_die.lo libexplain/fcntl.lo libexplain/fcntl_or_die.lo libexplain/fdopen.lo libexplain/fdopen_or_die.lo libexplain/ferror.lo libexplain/ferror_or_die.lo libexplain/fflush.lo libexplain/fflush_or_die.lo libexplain/fgetc.lo libexplain/fgetc_or_die.lo libexplain/fgets.lo libexplain/fgets_or_die.lo libexplain/fildes_to_address_family.lo libexplain/fopen.lo libexplain/fopen_or_die.lo libexplain/fork.lo libexplain/fork_or_die.lo libexplain/fpathconf.lo libexplain/fpathconf_or_die.lo libexplain/fputc.lo libexplain/fputc_or_die.lo libexplain/fread.lo libexplain/fread_or_die.lo libexplain/freopen.lo libexplain/freopen_or_die.lo libexplain/fstat.lo libexplain/fstat_or_die.lo libexplain/fstrcmp.lo libexplain/ftruncate.lo libexplain/ftruncate_or_die.lo libexplain/futimes.lo libexplain/futimes_or_die.lo libexplain/fwrite.lo libexplain/fwrite_or_die.lo libexplain/getaddrinfo_or_die.lo libexplain/getc.lo libexplain/getc_or_die.lo libexplain/getchar.lo libexplain/getchar_or_die.lo libexplain/getcwd.lo libexplain/getcwd_or_die.lo libexplain/getrlimit.lo libexplain/getrlimit_or_die.lo libexplain/gettext.lo libexplain/gettimeofday.lo libexplain/gettimeofday_or_die.lo libexplain/group_in_groups.lo libexplain/have_permission.lo libexplain/iocontrol/fioasync.lo libexplain/iocontrol/fioclex.lo libexplain/iocontrol/fiogetown.lo libexplain/iocontrol/fionbio.lo libexplain/iocontrol/fionclex.lo libexplain/iocontrol/fionread.lo libexplain/iocontrol/fioqsize.lo libexplain/iocontrol/fiosetown.lo libexplain/iocontrol/generic.lo libexplain/iocontrol/gio_cmap.lo libexplain/iocontrol/gio_font.lo libexplain/iocontrol/gio_fontx.lo libexplain/iocontrol/gio_scrnmap.lo libexplain/iocontrol/gio_unimap.lo libexplain/iocontrol/gio_uniscrnmap.lo libexplain/iocontrol/kdaddio.lo libexplain/iocontrol/kddelio.lo libexplain/iocontrol/kddisabio.lo libexplain/iocontrol/kdenabio.lo libexplain/iocontrol/kdfontop.lo libexplain/iocontrol/kdgetkeycode.lo libexplain/iocontrol/kdgetled.lo libexplain/iocontrol/kdgetmode.lo libexplain/iocontrol/kdgkbdiacr.lo libexplain/iocontrol/kdgkbdiacruc.lo libexplain/iocontrol/kdgkbent.lo libexplain/iocontrol/kdgkbled.lo libexplain/iocontrol/kdgkbmeta.lo libexplain/iocontrol/kdgkbmode.lo libexplain/iocontrol/kdgkbsent.lo libexplain/iocontrol/kdgkbtype.lo libexplain/iocontrol/kdkbdrep.lo libexplain/iocontrol/kdmapdisp.lo libexplain/iocontrol/kdmktone.lo libexplain/iocontrol/kdsetkeycode.lo libexplain/iocontrol/kdsetled.lo libexplain/iocontrol/kdsetmode.lo libexplain/iocontrol/kdsigaccept.lo libexplain/iocontrol/kdskbdiacr.lo libexplain/iocontrol/kdskbdiacruc.lo libexplain/iocontrol/kdskbent.lo libexplain/iocontrol/kdskbled.lo libexplain/iocontrol/kdskbmeta.lo libexplain/iocontrol/kdskbmode.lo libexplain/iocontrol/kdskbsent.lo libexplain/iocontrol/kdunmapdisp.lo libexplain/iocontrol/kiocsound.lo libexplain/iocontrol/mtiocget.lo libexplain/iocontrol/mtiocgetconfig.lo libexplain/iocontrol/mtiocpos.lo libexplain/iocontrol/mtiocsetconfig.lo libexplain/iocontrol/mtioctop.lo libexplain/iocontrol/pio_cmap.lo libexplain/iocontrol/pio_font.lo libexplain/iocontrol/pio_fontreset.lo libexplain/iocontrol/pio_fontx.lo libexplain/iocontrol/pio_scrnmap.lo libexplain/iocontrol/pio_unimap.lo libexplain/iocontrol/pio_unimapclr.lo libexplain/iocontrol/pio_uniscrnmap.lo libexplain/iocontrol/print_data.lo libexplain/iocontrol/print_explanation.lo libexplain/iocontrol/print_name.lo libexplain/iocontrol/request_by_number.lo libexplain/iocontrol/siocadddlci.lo libexplain/iocontrol/siocaddmulti.lo libexplain/iocontrol/siocaddrt.lo libexplain/iocontrol/siocatmark.lo libexplain/iocontrol/siocbondchangeactive.lo libexplain/iocontrol/siocbondenslave.lo libexplain/iocontrol/siocbondinfoquery.lo libexplain/iocontrol/siocbondrelease.lo libexplain/iocontrol/siocbondsethwaddr.lo libexplain/iocontrol/siocbondslaveinfoquery.lo libexplain/iocontrol/siocbraddbr.lo libexplain/iocontrol/siocbraddif.lo libexplain/iocontrol/siocbrdelbr.lo libexplain/iocontrol/siocbrdelif.lo libexplain/iocontrol/siocdarp.lo libexplain/iocontrol/siocdeldlci.lo libexplain/iocontrol/siocdelmulti.lo libexplain/iocontrol/siocdelrt.lo libexplain/iocontrol/siocdifaddr.lo libexplain/iocontrol/siocdrarp.lo libexplain/iocontrol/siocethtool.lo libexplain/iocontrol/siocgarp.lo libexplain/iocontrol/siocgifaddr.lo libexplain/iocontrol/siocgifbr.lo libexplain/iocontrol/siocgifbrdaddr.lo libexplain/iocontrol/siocgifconf.lo libexplain/iocontrol/siocgifcount.lo libexplain/iocontrol/siocgifdivert.lo libexplain/iocontrol/siocgifdstaddr.lo libexplain/iocontrol/siocgifencap.lo libexplain/iocontrol/siocgifflags.lo libexplain/iocontrol/siocgifhwaddr.lo libexplain/iocontrol/siocgifindex.lo libexplain/iocontrol/siocgifmap.lo libexplain/iocontrol/siocgifmem.lo libexplain/iocontrol/siocgifmetric.lo libexplain/iocontrol/siocgifmtu.lo libexplain/iocontrol/siocgifname.lo libexplain/iocontrol/siocgifnetmask.lo libexplain/iocontrol/siocgifpflags.lo libexplain/iocontrol/siocgifslave.lo libexplain/iocontrol/siocgiftxqlen.lo libexplain/iocontrol/siocgifvlan.lo libexplain/iocontrol/siocgmiiphy.lo libexplain/iocontrol/siocgmiireg.lo libexplain/iocontrol/siocgpgrp.lo libexplain/iocontrol/siocgrarp.lo libexplain/iocontrol/siocgstamp.lo libexplain/iocontrol/siocgstampns.lo libexplain/iocontrol/siocinq.lo libexplain/iocontrol/siocoutq.lo libexplain/iocontrol/siocrtmsg.lo libexplain/iocontrol/siocsarp.lo libexplain/iocontrol/siocsifaddr.lo libexplain/iocontrol/siocsifbr.lo libexplain/iocontrol/siocsifbrdaddr.lo libexplain/iocontrol/siocsifdivert.lo libexplain/iocontrol/siocsifdstaddr.lo libexplain/iocontrol/siocsifencap.lo libexplain/iocontrol/siocsifflags.lo libexplain/iocontrol/siocsifhwaddr.lo libexplain/iocontrol/siocsifhwbroadcast.lo libexplain/iocontrol/siocsiflink.lo libexplain/iocontrol/siocsifmap.lo libexplain/iocontrol/siocsifmem.lo libexplain/iocontrol/siocsifmetric.lo libexplain/iocontrol/siocsifmtu.lo libexplain/iocontrol/siocsifname.lo libexplain/iocontrol/siocsifnetmask.lo libexplain/iocontrol/siocsifpflags.lo libexplain/iocontrol/siocsifslave.lo libexplain/iocontrol/siocsiftxqlen.lo libexplain/iocontrol/siocsifvlan.lo libexplain/iocontrol/siocsmiireg.lo libexplain/iocontrol/siocspgrp.lo libexplain/iocontrol/siocsrarp.lo libexplain/iocontrol/siocwandev.lo libexplain/iocontrol/tcflsh.lo libexplain/iocontrol/tcgeta.lo libexplain/iocontrol/tcgets.lo libexplain/iocontrol/tcsbrk.lo libexplain/iocontrol/tcsbrkp.lo libexplain/iocontrol/tcseta.lo libexplain/iocontrol/tcsets.lo libexplain/iocontrol/tcxonc.lo libexplain/iocontrol/tioccbrk.lo libexplain/iocontrol/tioccons.lo libexplain/iocontrol/tiocexcl.lo libexplain/iocontrol/tiocgetd.lo libexplain/iocontrol/tiocghayesesp.lo libexplain/iocontrol/tiocgicount.lo libexplain/iocontrol/tiocglcktrmios.lo libexplain/iocontrol/tiocgpgrp.lo libexplain/iocontrol/tiocgptn.lo libexplain/iocontrol/tiocgserial.lo libexplain/iocontrol/tiocgsid.lo libexplain/iocontrol/tiocgsoftcar.lo libexplain/iocontrol/tiocgwinsz.lo libexplain/iocontrol/tiocinq.lo libexplain/iocontrol/tioclinux.lo libexplain/iocontrol/tiocmbic.lo libexplain/iocontrol/tiocmbis.lo libexplain/iocontrol/tiocmget.lo libexplain/iocontrol/tiocmiwait.lo libexplain/iocontrol/tiocmset.lo libexplain/iocontrol/tiocnotty.lo libexplain/iocontrol/tiocnxcl.lo libexplain/iocontrol/tiocoutq.lo libexplain/iocontrol/tiocpkt.lo libexplain/iocontrol/tiocsbrk.lo libexplain/iocontrol/tiocsctty.lo libexplain/iocontrol/tiocserconfig.lo libexplain/iocontrol/tiocsergetlsr.lo libexplain/iocontrol/tiocsergetmulti.lo libexplain/iocontrol/tiocsergstruct.lo libexplain/iocontrol/tiocsergwild.lo libexplain/iocontrol/tiocsersetmulti.lo libexplain/iocontrol/tiocserswild.lo libexplain/iocontrol/tiocsetd.lo libexplain/iocontrol/tiocshayesesp.lo libexplain/iocontrol/tiocslcktrmios.lo libexplain/iocontrol/tiocspgrp.lo libexplain/iocontrol/tiocsptlck.lo libexplain/iocontrol/tiocsserial.lo libexplain/iocontrol/tiocssoftcar.lo libexplain/iocontrol/tiocsti.lo libexplain/iocontrol/tiocswinsz.lo libexplain/iocontrol/tiocttygstruct.lo libexplain/ioctl.lo libexplain/ioctl_or_die.lo libexplain/is_same_inode.lo libexplain/lchown.lo libexplain/lchown_or_die.lo libexplain/link.lo libexplain/link_or_die.lo libexplain/listen.lo libexplain/listen_or_die.lo libexplain/lseek.lo libexplain/lseek_or_die.lo libexplain/lsof.lo libexplain/lstat.lo libexplain/lstat_or_die.lo libexplain/malloc.lo libexplain/malloc_or_die.lo libexplain/message/accept.lo libexplain/message/access.lo libexplain/message/bind.lo libexplain/message/chdir.lo libexplain/message/chmod.lo libexplain/message/chown.lo libexplain/message/close.lo libexplain/message/closedir.lo libexplain/message/connect.lo libexplain/message/creat.lo libexplain/message/dup.lo libexplain/message/dup2.lo libexplain/message/errno/accept.lo libexplain/message/errno/access.lo libexplain/message/errno/bind.lo libexplain/message/errno/chdir.lo libexplain/message/errno/chmod.lo libexplain/message/errno/chown.lo libexplain/message/errno/close.lo libexplain/message/errno/closedir.lo libexplain/message/errno/connect.lo libexplain/message/errno/creat.lo libexplain/message/errno/dup.lo libexplain/message/errno/dup2.lo libexplain/message/errno/execve.lo libexplain/message/errno/execvp.lo libexplain/message/errno/fchdir.lo libexplain/message/errno/fchmod.lo libexplain/message/errno/fchown.lo libexplain/message/errno/fclose.lo libexplain/message/errno/fcntl.lo libexplain/message/errno/fdopen.lo libexplain/message/errno/ferror.lo libexplain/message/errno/fflush.lo libexplain/message/errno/fgetc.lo libexplain/message/errno/fgets.lo libexplain/message/errno/fopen.lo libexplain/message/errno/fork.lo libexplain/message/errno/fpathconf.lo libexplain/message/errno/fputc.lo libexplain/message/errno/fread.lo libexplain/message/errno/freopen.lo libexplain/message/errno/fstat.lo libexplain/message/errno/ftruncate.lo libexplain/message/errno/futimes.lo libexplain/message/errno/fwrite.lo libexplain/message/errno/getaddrinfo.lo libexplain/message/errno/getc.lo libexplain/message/errno/getchar.lo libexplain/message/errno/getcwd.lo libexplain/message/errno/getrlimit.lo libexplain/message/errno/gettimeofday.lo libexplain/message/errno/ioctl.lo libexplain/message/errno/lchown.lo libexplain/message/errno/link.lo libexplain/message/errno/listen.lo libexplain/message/errno/lseek.lo libexplain/message/errno/lstat.lo libexplain/message/errno/malloc.lo libexplain/message/errno/mkdir.lo libexplain/message/errno/open.lo libexplain/message/errno/opendir.lo libexplain/message/errno/pathconf.lo libexplain/message/errno/pclose.lo libexplain/message/errno/pipe.lo libexplain/message/errno/popen.lo libexplain/message/errno/putc.lo libexplain/message/errno/putchar.lo libexplain/message/errno/read.lo libexplain/message/errno/readdir.lo libexplain/message/errno/readlink.lo libexplain/message/errno/realloc.lo libexplain/message/errno/remove.lo libexplain/message/errno/rename.lo libexplain/message/errno/rmdir.lo libexplain/message/errno/select.lo libexplain/message/errno/socket.lo libexplain/message/errno/stat.lo libexplain/message/errno/symlink.lo libexplain/message/errno/system.lo libexplain/message/errno/truncate.lo libexplain/message/errno/unlink.lo libexplain/message/errno/utime.lo libexplain/message/errno/wait.lo libexplain/message/errno/wait3.lo libexplain/message/errno/wait4.lo libexplain/message/errno/waitpid.lo libexplain/message/errno/write.lo libexplain/message/execve.lo libexplain/message/execvp.lo libexplain/message/fchdir.lo libexplain/message/fchmod.lo libexplain/message/fchown.lo libexplain/message/fclose.lo libexplain/message/fcntl.lo libexplain/message/fdopen.lo libexplain/message/ferror.lo libexplain/message/fflush.lo libexplain/message/fgetc.lo libexplain/message/fgets.lo libexplain/message/fopen.lo libexplain/message/fork.lo libexplain/message/fpathconf.lo libexplain/message/fputc.lo libexplain/message/fread.lo libexplain/message/freopen.lo libexplain/message/fstat.lo libexplain/message/ftruncate.lo libexplain/message/futimes.lo libexplain/message/fwrite.lo libexplain/message/getc.lo libexplain/message/getchar.lo libexplain/message/getcwd.lo libexplain/message/getrlimit.lo libexplain/message/gettimeofday.lo libexplain/message/ioctl.lo libexplain/message/lchown.lo libexplain/message/link.lo libexplain/message/listen.lo libexplain/message/lseek.lo libexplain/message/lstat.lo libexplain/message/malloc.lo libexplain/message/mkdir.lo libexplain/message/open.lo libexplain/message/open_flags.lo libexplain/message/opendir.lo libexplain/message/pathconf.lo libexplain/message/pclose.lo libexplain/message/permission_mode.lo libexplain/message/pipe.lo libexplain/message/popen.lo libexplain/message/putc.lo libexplain/message/putchar.lo libexplain/message/read.lo libexplain/message/readdir.lo libexplain/message/readlink.lo libexplain/message/realloc.lo libexplain/message/remove.lo libexplain/message/rename.lo libexplain/message/rmdir.lo libexplain/message/select.lo libexplain/message/socket.lo libexplain/message/stat.lo libexplain/message/symlink.lo libexplain/message/system.lo libexplain/message/truncate.lo libexplain/message/unlink.lo libexplain/message/utime.lo libexplain/message/wait.lo libexplain/message/wait3.lo libexplain/message/wait4.lo libexplain/message/waitpid.lo libexplain/message/write.lo libexplain/mkdir.lo libexplain/mkdir_or_die.lo libexplain/open.lo libexplain/open_flags.lo libexplain/open_or_die.lo libexplain/opendir.lo libexplain/opendir_or_die.lo libexplain/option.lo libexplain/parse_bits.yacc.lo libexplain/parse_bits/find_by_name.lo libexplain/parse_bits/find_by_name_fuzzy.lo libexplain/parse_bits/find_by_value.lo libexplain/parse_bits/or_die.lo libexplain/parse_bits/print.lo libexplain/parse_bits/print_single.lo libexplain/path_is_efault.lo libexplain/pathconf.lo libexplain/pathconf_or_die.lo libexplain/pathname_is_a_directory.lo libexplain/pclose.lo libexplain/pclose_or_die.lo libexplain/pclose_success_or_die.lo libexplain/permission_mode.lo libexplain/pipe.lo libexplain/pipe_or_die.lo libexplain/popen.lo libexplain/popen_or_die.lo libexplain/program_name.lo libexplain/putc.lo libexplain/putc_or_die.lo libexplain/putchar.lo libexplain/putchar_or_die.lo libexplain/read.lo libexplain/read_or_die.lo libexplain/readdir.lo libexplain/readdir_or_die.lo libexplain/readlink.lo libexplain/readlink_or_die.lo libexplain/realloc.lo libexplain/realloc_or_die.lo libexplain/remove.lo libexplain/remove_or_die.lo libexplain/rename.lo libexplain/rename_or_die.lo libexplain/reverse_strerror.lo libexplain/rmdir.lo libexplain/rmdir_or_die.lo libexplain/same_dev.lo libexplain/select.lo libexplain/select_or_die.lo libexplain/socket.lo libexplain/socket_or_die.lo libexplain/stat.lo libexplain/stat_or_die.lo libexplain/stream_to_fildes.lo libexplain/string_buffer.lo libexplain/string_buffer/copy.lo libexplain/string_buffer/full.lo libexplain/string_buffer/path_join.lo libexplain/string_buffer/printf.lo libexplain/string_buffer/printf_gettext.lo libexplain/string_buffer/putc.lo libexplain/string_buffer/putc_escaped.lo libexplain/string_buffer/putc_quoted.lo libexplain/string_buffer/puts.lo libexplain/string_buffer/puts_quoted.lo libexplain/string_buffer/puts_quoted_n.lo libexplain/string_buffer/truncate.lo libexplain/string_buffer/vprintf.lo libexplain/string_buffer/write.lo libexplain/string_flags.lo libexplain/strtod_or_die.lo libexplain/strtol_or_die.lo libexplain/symlink.lo libexplain/symlink_or_die.lo libexplain/symloopmax.lo libexplain/system.lo libexplain/system_or_die.lo libexplain/system_success_or_die.lo libexplain/truncate.lo libexplain/truncate_or_die.lo libexplain/unlink.lo libexplain/unlink_or_die.lo libexplain/utime.lo libexplain/utime_or_die.lo libexplain/version.lo libexplain/version_print.lo libexplain/wait.lo libexplain/wait3.lo libexplain/wait3_or_die.lo libexplain/wait4.lo libexplain/wait4_or_die.lo libexplain/wait_or_die.lo libexplain/waitpid.lo libexplain/waitpid_or_die.lo libexplain/wrap_and_print.lo libexplain/write.lo libexplain/write_or_die.lo
+lib_obj = libexplain/ac/mntent.lo libexplain/ac/string.lo libexplain/accept.lo libexplain/accept_or_die.lo libexplain/access.lo libexplain/access_or_die.lo libexplain/bind.lo libexplain/bind_or_die.lo libexplain/buffer/access_mode.lo libexplain/buffer/address_family.lo libexplain/buffer/addrinfo.lo libexplain/buffer/addrinfo_flags.lo libexplain/buffer/arpreq.lo libexplain/buffer/caption_name_type.lo libexplain/buffer/char.lo libexplain/buffer/char_data.lo libexplain/buffer/check_fildes_range.lo libexplain/buffer/console_font_op.lo libexplain/buffer/consolefontdesc.lo libexplain/buffer/dac/chown.lo libexplain/buffer/dac/does_not_have_capability.lo libexplain/buffer/dac/fowner.lo libexplain/buffer/dac/net_bind_service.lo libexplain/buffer/dac/net_raw.lo libexplain/buffer/dac/override.lo libexplain/buffer/dac/process_is_not_privileged.lo libexplain/buffer/dac/read_search.lo libexplain/buffer/dir_to_pathname.lo libexplain/buffer/dlci_add.lo libexplain/buffer/does_not_have_inode_modify_permission.lo libexplain/buffer/eacces.lo libexplain/buffer/eaddrinuse.lo libexplain/buffer/eafnosupport.lo libexplain/buffer/ebadf.lo libexplain/buffer/efault.lo libexplain/buffer/efbig.lo libexplain/buffer/eintr.lo libexplain/buffer/einval.lo libexplain/buffer/eio.lo libexplain/buffer/eloop.lo libexplain/buffer/emfile.lo libexplain/buffer/emlink.lo libexplain/buffer/enametoolong.lo libexplain/buffer/enfile.lo libexplain/buffer/enobufs.lo libexplain/buffer/enoent.lo libexplain/buffer/enomem.lo libexplain/buffer/enoprotoopt.lo libexplain/buffer/enotconn.lo libexplain/buffer/enotdir.lo libexplain/buffer/enotsock.lo libexplain/buffer/erofs.lo libexplain/buffer/errno/accept.lo libexplain/buffer/errno/access.lo libexplain/buffer/errno/bind.lo libexplain/buffer/errno/chdir.lo libexplain/buffer/errno/chmod.lo libexplain/buffer/errno/chown.lo libexplain/buffer/errno/close.lo libexplain/buffer/errno/closedir.lo libexplain/buffer/errno/connect.lo libexplain/buffer/errno/creat.lo libexplain/buffer/errno/dup.lo libexplain/buffer/errno/dup2.lo libexplain/buffer/errno/execve.lo libexplain/buffer/errno/execvp.lo libexplain/buffer/errno/fchdir.lo libexplain/buffer/errno/fchmod.lo libexplain/buffer/errno/fchown.lo libexplain/buffer/errno/fclose.lo libexplain/buffer/errno/fcntl.lo libexplain/buffer/errno/fdopen.lo libexplain/buffer/errno/ferror.lo libexplain/buffer/errno/fflush.lo libexplain/buffer/errno/fgetc.lo libexplain/buffer/errno/fgets.lo libexplain/buffer/errno/fopen.lo libexplain/buffer/errno/fork.lo libexplain/buffer/errno/fpathconf.lo libexplain/buffer/errno/fputc.lo libexplain/buffer/errno/fread.lo libexplain/buffer/errno/freopen.lo libexplain/buffer/errno/fstat.lo libexplain/buffer/errno/ftruncate.lo libexplain/buffer/errno/futimes.lo libexplain/buffer/errno/fwrite.lo libexplain/buffer/errno/generic.lo libexplain/buffer/errno/getaddrinfo.lo libexplain/buffer/errno/getc.lo libexplain/buffer/errno/getchar.lo libexplain/buffer/errno/getcwd.lo libexplain/buffer/errno/getpeername.lo libexplain/buffer/errno/getrlimit.lo libexplain/buffer/errno/getsockname.lo libexplain/buffer/errno/getsockopt.lo libexplain/buffer/errno/gettimeofday.lo libexplain/buffer/errno/ioctl.lo libexplain/buffer/errno/lchown.lo libexplain/buffer/errno/link.lo libexplain/buffer/errno/listen.lo libexplain/buffer/errno/lseek.lo libexplain/buffer/errno/lstat.lo libexplain/buffer/errno/malloc.lo libexplain/buffer/errno/mkdir.lo libexplain/buffer/errno/open.lo libexplain/buffer/errno/opendir.lo libexplain/buffer/errno/path_resolution.lo libexplain/buffer/errno/pathconf.lo libexplain/buffer/errno/pclose.lo libexplain/buffer/errno/pipe.lo libexplain/buffer/errno/popen.lo libexplain/buffer/errno/putc.lo libexplain/buffer/errno/putchar.lo libexplain/buffer/errno/read.lo libexplain/buffer/errno/readdir.lo libexplain/buffer/errno/readlink.lo libexplain/buffer/errno/realloc.lo libexplain/buffer/errno/remove.lo libexplain/buffer/errno/rename.lo libexplain/buffer/errno/rmdir.lo libexplain/buffer/errno/select.lo libexplain/buffer/errno/setsockopt.lo libexplain/buffer/errno/socket.lo libexplain/buffer/errno/stat.lo libexplain/buffer/errno/symlink.lo libexplain/buffer/errno/system.lo libexplain/buffer/errno/truncate.lo libexplain/buffer/errno/unlink.lo libexplain/buffer/errno/utime.lo libexplain/buffer/errno/wait.lo libexplain/buffer/errno/wait3.lo libexplain/buffer/errno/wait4.lo libexplain/buffer/errno/waitpid.lo libexplain/buffer/errno/write.lo libexplain/buffer/etxtbsy.lo libexplain/buffer/exdev.lo libexplain/buffer/fd_set.lo libexplain/buffer/fildes_not_open_for_writing.lo libexplain/buffer/fildes_to_pathname.lo libexplain/buffer/file_type.lo libexplain/buffer/flock.lo libexplain/buffer/gai_strerror.lo libexplain/buffer/get_current_directory.lo libexplain/buffer/gettext.lo libexplain/buffer/gid.lo libexplain/buffer/hexdump.lo libexplain/buffer/ifconf.lo libexplain/buffer/ifreq_addr.lo libexplain/buffer/ifreq_brdaddr.lo libexplain/buffer/ifreq_dstaddr.lo libexplain/buffer/ifreq_flags.lo libexplain/buffer/ifreq_hwaddr.lo libexplain/buffer/ifreq_ifbond.lo libexplain/buffer/ifreq_ifindex.lo libexplain/buffer/ifreq_ifmap.lo libexplain/buffer/ifreq_mii.lo libexplain/buffer/ifreq_mtu.lo libexplain/buffer/ifreq_name.lo libexplain/buffer/ifreq_netmask.lo libexplain/buffer/ifreq_newname.lo libexplain/buffer/ifreq_qlen.lo libexplain/buffer/ifreq_settings.lo libexplain/buffer/ifreq_slave.lo libexplain/buffer/in6_addr.lo libexplain/buffer/in6_ifreq.lo libexplain/buffer/int.lo libexplain/buffer/is_the_null_pointer.lo libexplain/buffer/kbd_repeat.lo libexplain/buffer/kbdiacrs.lo libexplain/buffer/kbdiacrsuc.lo libexplain/buffer/kbentry.lo libexplain/buffer/kbkeycode.lo libexplain/buffer/kbsentry.lo libexplain/buffer/line_discipline.lo libexplain/buffer/lseek_whence.lo libexplain/buffer/mii_ioctl_data.lo libexplain/buffer/mount_point.lo libexplain/buffer/mtconfiginfo.lo libexplain/buffer/mtget.lo libexplain/buffer/mtop.lo libexplain/buffer/mtpos.lo libexplain/buffer/no_outstanding_children.lo libexplain/buffer/note/sigchld.lo libexplain/buffer/note/still_exists.lo libexplain/buffer/open_flags.lo libexplain/buffer/path_to_pid.lo libexplain/buffer/pathconf_name.lo libexplain/buffer/pathname.lo libexplain/buffer/permission_mode.lo libexplain/buffer/pid_t_star.lo libexplain/buffer/pointer.lo libexplain/buffer/pretty_size.lo libexplain/buffer/resource.lo libexplain/buffer/rlimit.lo libexplain/buffer/route_struct.lo libexplain/buffer/rtentry.lo libexplain/buffer/serial_multiport_struct.lo libexplain/buffer/serial_struct.lo libexplain/buffer/siocethtool.lo libexplain/buffer/siocgifbr.lo libexplain/buffer/sockaddr.lo libexplain/buffer/socket_protocol.lo libexplain/buffer/socket_type.lo libexplain/buffer/socklen.lo libexplain/buffer/sockopt_level.lo libexplain/buffer/sockopt_name.lo libexplain/buffer/software_error.lo libexplain/buffer/stream.lo libexplain/buffer/stream_to_pathname.lo libexplain/buffer/strerror.lo libexplain/buffer/string_n.lo libexplain/buffer/strsignal.lo libexplain/buffer/termios.lo libexplain/buffer/timeval.lo libexplain/buffer/tioclinux.lo libexplain/buffer/tiocm.lo libexplain/buffer/uid.lo libexplain/buffer/unimapdesc.lo libexplain/buffer/utimbuf.lo libexplain/buffer/wait_status.lo libexplain/buffer/waitpid_options.lo libexplain/buffer/winsize.lo libexplain/buffer/wrong_file_type.lo libexplain/capability.lo libexplain/capability/chown.lo libexplain/capability/dac_override.lo libexplain/capability/dac_read_search.lo libexplain/capability/fowner.lo libexplain/capability/ipc_lock.lo libexplain/capability/ipc_owner.lo libexplain/capability/kill.lo libexplain/capability/lease.lo libexplain/capability/linux_immutable.lo libexplain/capability/mknod.lo libexplain/capability/net_admin.lo libexplain/capability/net_bind_service.lo libexplain/capability/net_broadcast.lo libexplain/capability/new_raw.lo libexplain/capability/setgid.lo libexplain/capability/setpcap.lo libexplain/capability/setuid.lo libexplain/capability/sys_admin.lo libexplain/capability/sys_boot.lo libexplain/capability/sys_chroot.lo libexplain/capability/sys_module.lo libexplain/capability/sys_nice.lo libexplain/capability/sys_pacct.lo libexplain/capability/sys_ptrace.lo libexplain/capability/sys_rawio.lo libexplain/capability/sys_resource.lo libexplain/capability/sys_time.lo libexplain/capability/sys_tty_config.lo libexplain/chdir.lo libexplain/chdir_or_die.lo libexplain/chmod.lo libexplain/chmod_or_die.lo libexplain/chown.lo libexplain/chown_or_die.lo libexplain/close.lo libexplain/close_or_die.lo libexplain/closedir.lo libexplain/closedir_or_die.lo libexplain/common_message_buffer.lo libexplain/connect.lo libexplain/connect_or_die.lo libexplain/count_directory_entries.lo libexplain/creat.lo libexplain/creat_or_die.lo libexplain/dir_to_fildes.lo libexplain/dirname.lo libexplain/dup.lo libexplain/dup2.lo libexplain/dup2_or_die.lo libexplain/dup_or_die.lo libexplain/errno/accept.lo libexplain/errno/access.lo libexplain/errno/bind.lo libexplain/errno/chdir.lo libexplain/errno/chmod.lo libexplain/errno/chown.lo libexplain/errno/close.lo libexplain/errno/closedir.lo libexplain/errno/connect.lo libexplain/errno/creat.lo libexplain/errno/dup.lo libexplain/errno/dup2.lo libexplain/errno/execve.lo libexplain/errno/execvp.lo libexplain/errno/fchdir.lo libexplain/errno/fchmod.lo libexplain/errno/fchown.lo libexplain/errno/fclose.lo libexplain/errno/fcntl.lo libexplain/errno/fdopen.lo libexplain/errno/ferror.lo libexplain/errno/fflush.lo libexplain/errno/fgetc.lo libexplain/errno/fgets.lo libexplain/errno/fopen.lo libexplain/errno/fork.lo libexplain/errno/fpathconf.lo libexplain/errno/fputc.lo libexplain/errno/fread.lo libexplain/errno/freopen.lo libexplain/errno/fstat.lo libexplain/errno/ftruncate.lo libexplain/errno/futimes.lo libexplain/errno/fwrite.lo libexplain/errno/getaddrinfo.lo libexplain/errno/getc.lo libexplain/errno/getchar.lo libexplain/errno/getcwd.lo libexplain/errno/getpeername.lo libexplain/errno/getrlimit.lo libexplain/errno/getsockname.lo libexplain/errno/getsockopt.lo libexplain/errno/gettimeofday.lo libexplain/errno/ioctl.lo libexplain/errno/lchown.lo libexplain/errno/link.lo libexplain/errno/listen.lo libexplain/errno/lseek.lo libexplain/errno/lstat.lo libexplain/errno/malloc.lo libexplain/errno/mkdir.lo libexplain/errno/open.lo libexplain/errno/opendir.lo libexplain/errno/pathconf.lo libexplain/errno/pclose.lo libexplain/errno/pipe.lo libexplain/errno/popen.lo libexplain/errno/putc.lo libexplain/errno/putchar.lo libexplain/errno/read.lo libexplain/errno/readdir.lo libexplain/errno/readlink.lo libexplain/errno/realloc.lo libexplain/errno/remove.lo libexplain/errno/rename.lo libexplain/errno/rmdir.lo libexplain/errno/select.lo libexplain/errno/setsockopt.lo libexplain/errno/socket.lo libexplain/errno/stat.lo libexplain/errno/symlink.lo libexplain/errno/system.lo libexplain/errno/truncate.lo libexplain/errno/unlink.lo libexplain/errno/utime.lo libexplain/errno/wait.lo libexplain/errno/wait3.lo libexplain/errno/wait4.lo libexplain/errno/waitpid.lo libexplain/errno/write.lo libexplain/errno_info.lo libexplain/errno_info/by_name.lo libexplain/errno_info/by_name_fuzzy.lo libexplain/errno_info/by_number.lo libexplain/errno_info/by_text.lo libexplain/errno_info/by_text_fuzzy.lo libexplain/execve.lo libexplain/execve_or_die.lo libexplain/execvp.lo libexplain/execvp_or_die.lo libexplain/explanation.lo libexplain/fchdir.lo libexplain/fchdir_or_die.lo libexplain/fchmod.lo libexplain/fchmod_or_die.lo libexplain/fchown.lo libexplain/fchown_or_die.lo libexplain/fclose.lo libexplain/fclose_or_die.lo libexplain/fcntl.lo libexplain/fcntl_or_die.lo libexplain/fdopen.lo libexplain/fdopen_or_die.lo libexplain/ferror.lo libexplain/ferror_or_die.lo libexplain/fflush.lo libexplain/fflush_or_die.lo libexplain/fgetc.lo libexplain/fgetc_or_die.lo libexplain/fgets.lo libexplain/fgets_or_die.lo libexplain/fildes_to_address_family.lo libexplain/fopen.lo libexplain/fopen_or_die.lo libexplain/fork.lo libexplain/fork_or_die.lo libexplain/fpathconf.lo libexplain/fpathconf_or_die.lo libexplain/fputc.lo libexplain/fputc_or_die.lo libexplain/fread.lo libexplain/fread_or_die.lo libexplain/freopen.lo libexplain/freopen_or_die.lo libexplain/fstat.lo libexplain/fstat_or_die.lo libexplain/fstrcmp.lo libexplain/ftruncate.lo libexplain/ftruncate_or_die.lo libexplain/futimes.lo libexplain/futimes_or_die.lo libexplain/fwrite.lo libexplain/fwrite_or_die.lo libexplain/getaddrinfo_or_die.lo libexplain/getc.lo libexplain/getc_or_die.lo libexplain/getchar.lo libexplain/getchar_or_die.lo libexplain/getcwd.lo libexplain/getcwd_or_die.lo libexplain/getpeername.lo libexplain/getpeername_or_die.lo libexplain/getrlimit.lo libexplain/getrlimit_or_die.lo libexplain/getsockname.lo libexplain/getsockname_or_die.lo libexplain/getsockopt.lo libexplain/getsockopt_or_die.lo libexplain/gettext.lo libexplain/gettimeofday.lo libexplain/gettimeofday_or_die.lo libexplain/group_in_groups.lo libexplain/have_permission.lo libexplain/iocontrol/fioasync.lo libexplain/iocontrol/fioclex.lo libexplain/iocontrol/fiogetown.lo libexplain/iocontrol/fionbio.lo libexplain/iocontrol/fionclex.lo libexplain/iocontrol/fionread.lo libexplain/iocontrol/fioqsize.lo libexplain/iocontrol/fiosetown.lo libexplain/iocontrol/generic.lo libexplain/iocontrol/gio_cmap.lo libexplain/iocontrol/gio_font.lo libexplain/iocontrol/gio_fontx.lo libexplain/iocontrol/gio_scrnmap.lo libexplain/iocontrol/gio_unimap.lo libexplain/iocontrol/gio_uniscrnmap.lo libexplain/iocontrol/kdaddio.lo libexplain/iocontrol/kddelio.lo libexplain/iocontrol/kddisabio.lo libexplain/iocontrol/kdenabio.lo libexplain/iocontrol/kdfontop.lo libexplain/iocontrol/kdgetkeycode.lo libexplain/iocontrol/kdgetled.lo libexplain/iocontrol/kdgetmode.lo libexplain/iocontrol/kdgkbdiacr.lo libexplain/iocontrol/kdgkbdiacruc.lo libexplain/iocontrol/kdgkbent.lo libexplain/iocontrol/kdgkbled.lo libexplain/iocontrol/kdgkbmeta.lo libexplain/iocontrol/kdgkbmode.lo libexplain/iocontrol/kdgkbsent.lo libexplain/iocontrol/kdgkbtype.lo libexplain/iocontrol/kdkbdrep.lo libexplain/iocontrol/kdmapdisp.lo libexplain/iocontrol/kdmktone.lo libexplain/iocontrol/kdsetkeycode.lo libexplain/iocontrol/kdsetled.lo libexplain/iocontrol/kdsetmode.lo libexplain/iocontrol/kdsigaccept.lo libexplain/iocontrol/kdskbdiacr.lo libexplain/iocontrol/kdskbdiacruc.lo libexplain/iocontrol/kdskbent.lo libexplain/iocontrol/kdskbled.lo libexplain/iocontrol/kdskbmeta.lo libexplain/iocontrol/kdskbmode.lo libexplain/iocontrol/kdskbsent.lo libexplain/iocontrol/kdunmapdisp.lo libexplain/iocontrol/kiocsound.lo libexplain/iocontrol/mtiocget.lo libexplain/iocontrol/mtiocgetconfig.lo libexplain/iocontrol/mtiocpos.lo libexplain/iocontrol/mtiocsetconfig.lo libexplain/iocontrol/mtioctop.lo libexplain/iocontrol/pio_cmap.lo libexplain/iocontrol/pio_font.lo libexplain/iocontrol/pio_fontreset.lo libexplain/iocontrol/pio_fontx.lo libexplain/iocontrol/pio_scrnmap.lo libexplain/iocontrol/pio_unimap.lo libexplain/iocontrol/pio_unimapclr.lo libexplain/iocontrol/pio_uniscrnmap.lo libexplain/iocontrol/print_data.lo libexplain/iocontrol/print_explanation.lo libexplain/iocontrol/print_name.lo libexplain/iocontrol/request_by_number.lo libexplain/iocontrol/siocadddlci.lo libexplain/iocontrol/siocaddmulti.lo libexplain/iocontrol/siocaddrt.lo libexplain/iocontrol/siocatmark.lo libexplain/iocontrol/siocbondchangeactive.lo libexplain/iocontrol/siocbondenslave.lo libexplain/iocontrol/siocbondinfoquery.lo libexplain/iocontrol/siocbondrelease.lo libexplain/iocontrol/siocbondsethwaddr.lo libexplain/iocontrol/siocbondslaveinfoquery.lo libexplain/iocontrol/siocbraddbr.lo libexplain/iocontrol/siocbraddif.lo libexplain/iocontrol/siocbrdelbr.lo libexplain/iocontrol/siocbrdelif.lo libexplain/iocontrol/siocdarp.lo libexplain/iocontrol/siocdeldlci.lo libexplain/iocontrol/siocdelmulti.lo libexplain/iocontrol/siocdelrt.lo libexplain/iocontrol/siocdifaddr.lo libexplain/iocontrol/siocdrarp.lo libexplain/iocontrol/siocethtool.lo libexplain/iocontrol/siocgarp.lo libexplain/iocontrol/siocgifaddr.lo libexplain/iocontrol/siocgifbr.lo libexplain/iocontrol/siocgifbrdaddr.lo libexplain/iocontrol/siocgifconf.lo libexplain/iocontrol/siocgifcount.lo libexplain/iocontrol/siocgifdivert.lo libexplain/iocontrol/siocgifdstaddr.lo libexplain/iocontrol/siocgifencap.lo libexplain/iocontrol/siocgifflags.lo libexplain/iocontrol/siocgifhwaddr.lo libexplain/iocontrol/siocgifindex.lo libexplain/iocontrol/siocgifmap.lo libexplain/iocontrol/siocgifmem.lo libexplain/iocontrol/siocgifmetric.lo libexplain/iocontrol/siocgifmtu.lo libexplain/iocontrol/siocgifname.lo libexplain/iocontrol/siocgifnetmask.lo libexplain/iocontrol/siocgifpflags.lo libexplain/iocontrol/siocgifslave.lo libexplain/iocontrol/siocgiftxqlen.lo libexplain/iocontrol/siocgifvlan.lo libexplain/iocontrol/siocgmiiphy.lo libexplain/iocontrol/siocgmiireg.lo libexplain/iocontrol/siocgpgrp.lo libexplain/iocontrol/siocgrarp.lo libexplain/iocontrol/siocgstamp.lo libexplain/iocontrol/siocgstampns.lo libexplain/iocontrol/siocinq.lo libexplain/iocontrol/siocoutq.lo libexplain/iocontrol/siocrtmsg.lo libexplain/iocontrol/siocsarp.lo libexplain/iocontrol/siocsifaddr.lo libexplain/iocontrol/siocsifbr.lo libexplain/iocontrol/siocsifbrdaddr.lo libexplain/iocontrol/siocsifdivert.lo libexplain/iocontrol/siocsifdstaddr.lo libexplain/iocontrol/siocsifencap.lo libexplain/iocontrol/siocsifflags.lo libexplain/iocontrol/siocsifhwaddr.lo libexplain/iocontrol/siocsifhwbroadcast.lo libexplain/iocontrol/siocsiflink.lo libexplain/iocontrol/siocsifmap.lo libexplain/iocontrol/siocsifmem.lo libexplain/iocontrol/siocsifmetric.lo libexplain/iocontrol/siocsifmtu.lo libexplain/iocontrol/siocsifname.lo libexplain/iocontrol/siocsifnetmask.lo libexplain/iocontrol/siocsifpflags.lo libexplain/iocontrol/siocsifslave.lo libexplain/iocontrol/siocsiftxqlen.lo libexplain/iocontrol/siocsifvlan.lo libexplain/iocontrol/siocsmiireg.lo libexplain/iocontrol/siocspgrp.lo libexplain/iocontrol/siocsrarp.lo libexplain/iocontrol/siocwandev.lo libexplain/iocontrol/tcflsh.lo libexplain/iocontrol/tcgeta.lo libexplain/iocontrol/tcgets.lo libexplain/iocontrol/tcsbrk.lo libexplain/iocontrol/tcsbrkp.lo libexplain/iocontrol/tcseta.lo libexplain/iocontrol/tcsets.lo libexplain/iocontrol/tcxonc.lo libexplain/iocontrol/tioccbrk.lo libexplain/iocontrol/tioccons.lo libexplain/iocontrol/tiocexcl.lo libexplain/iocontrol/tiocgetd.lo libexplain/iocontrol/tiocghayesesp.lo libexplain/iocontrol/tiocgicount.lo libexplain/iocontrol/tiocglcktrmios.lo libexplain/iocontrol/tiocgpgrp.lo libexplain/iocontrol/tiocgptn.lo libexplain/iocontrol/tiocgserial.lo libexplain/iocontrol/tiocgsid.lo libexplain/iocontrol/tiocgsoftcar.lo libexplain/iocontrol/tiocgwinsz.lo libexplain/iocontrol/tiocinq.lo libexplain/iocontrol/tioclinux.lo libexplain/iocontrol/tiocmbic.lo libexplain/iocontrol/tiocmbis.lo libexplain/iocontrol/tiocmget.lo libexplain/iocontrol/tiocmiwait.lo libexplain/iocontrol/tiocmset.lo libexplain/iocontrol/tiocnotty.lo libexplain/iocontrol/tiocnxcl.lo libexplain/iocontrol/tiocoutq.lo libexplain/iocontrol/tiocpkt.lo libexplain/iocontrol/tiocsbrk.lo libexplain/iocontrol/tiocsctty.lo libexplain/iocontrol/tiocserconfig.lo libexplain/iocontrol/tiocsergetlsr.lo libexplain/iocontrol/tiocsergetmulti.lo libexplain/iocontrol/tiocsergstruct.lo libexplain/iocontrol/tiocsergwild.lo libexplain/iocontrol/tiocsersetmulti.lo libexplain/iocontrol/tiocserswild.lo libexplain/iocontrol/tiocsetd.lo libexplain/iocontrol/tiocshayesesp.lo libexplain/iocontrol/tiocslcktrmios.lo libexplain/iocontrol/tiocspgrp.lo libexplain/iocontrol/tiocsptlck.lo libexplain/iocontrol/tiocsserial.lo libexplain/iocontrol/tiocssoftcar.lo libexplain/iocontrol/tiocsti.lo libexplain/iocontrol/tiocswinsz.lo libexplain/iocontrol/tiocttygstruct.lo libexplain/ioctl.lo libexplain/ioctl_or_die.lo libexplain/is_same_inode.lo libexplain/lchown.lo libexplain/lchown_or_die.lo libexplain/link.lo libexplain/link_or_die.lo libexplain/listen.lo libexplain/listen_or_die.lo libexplain/lseek.lo libexplain/lseek_or_die.lo libexplain/lsof.lo libexplain/lstat.lo libexplain/lstat_or_die.lo libexplain/malloc.lo libexplain/malloc_or_die.lo libexplain/message/accept.lo libexplain/message/access.lo libexplain/message/bind.lo libexplain/message/chdir.lo libexplain/message/chmod.lo libexplain/message/chown.lo libexplain/message/close.lo libexplain/message/closedir.lo libexplain/message/connect.lo libexplain/message/creat.lo libexplain/message/dup.lo libexplain/message/dup2.lo libexplain/message/errno/accept.lo libexplain/message/errno/access.lo libexplain/message/errno/bind.lo libexplain/message/errno/chdir.lo libexplain/message/errno/chmod.lo libexplain/message/errno/chown.lo libexplain/message/errno/close.lo libexplain/message/errno/closedir.lo libexplain/message/errno/connect.lo libexplain/message/errno/creat.lo libexplain/message/errno/dup.lo libexplain/message/errno/dup2.lo libexplain/message/errno/execve.lo libexplain/message/errno/execvp.lo libexplain/message/errno/fchdir.lo libexplain/message/errno/fchmod.lo libexplain/message/errno/fchown.lo libexplain/message/errno/fclose.lo libexplain/message/errno/fcntl.lo libexplain/message/errno/fdopen.lo libexplain/message/errno/ferror.lo libexplain/message/errno/fflush.lo libexplain/message/errno/fgetc.lo libexplain/message/errno/fgets.lo libexplain/message/errno/fopen.lo libexplain/message/errno/fork.lo libexplain/message/errno/fpathconf.lo libexplain/message/errno/fputc.lo libexplain/message/errno/fread.lo libexplain/message/errno/freopen.lo libexplain/message/errno/fstat.lo libexplain/message/errno/ftruncate.lo libexplain/message/errno/futimes.lo libexplain/message/errno/fwrite.lo libexplain/message/errno/getaddrinfo.lo libexplain/message/errno/getc.lo libexplain/message/errno/getchar.lo libexplain/message/errno/getcwd.lo libexplain/message/errno/getpeername.lo libexplain/message/errno/getrlimit.lo libexplain/message/errno/getsockname.lo libexplain/message/errno/getsockopt.lo libexplain/message/errno/gettimeofday.lo libexplain/message/errno/ioctl.lo libexplain/message/errno/lchown.lo libexplain/message/errno/link.lo libexplain/message/errno/listen.lo libexplain/message/errno/lseek.lo libexplain/message/errno/lstat.lo libexplain/message/errno/malloc.lo libexplain/message/errno/mkdir.lo libexplain/message/errno/open.lo libexplain/message/errno/opendir.lo libexplain/message/errno/pathconf.lo libexplain/message/errno/pclose.lo libexplain/message/errno/pipe.lo libexplain/message/errno/popen.lo libexplain/message/errno/putc.lo libexplain/message/errno/putchar.lo libexplain/message/errno/read.lo libexplain/message/errno/readdir.lo libexplain/message/errno/readlink.lo libexplain/message/errno/realloc.lo libexplain/message/errno/remove.lo libexplain/message/errno/rename.lo libexplain/message/errno/rmdir.lo libexplain/message/errno/select.lo libexplain/message/errno/setsockopt.lo libexplain/message/errno/socket.lo libexplain/message/errno/stat.lo libexplain/message/errno/symlink.lo libexplain/message/errno/system.lo libexplain/message/errno/truncate.lo libexplain/message/errno/unlink.lo libexplain/message/errno/utime.lo libexplain/message/errno/wait.lo libexplain/message/errno/wait3.lo libexplain/message/errno/wait4.lo libexplain/message/errno/waitpid.lo libexplain/message/errno/write.lo libexplain/message/execve.lo libexplain/message/execvp.lo libexplain/message/fchdir.lo libexplain/message/fchmod.lo libexplain/message/fchown.lo libexplain/message/fclose.lo libexplain/message/fcntl.lo libexplain/message/fdopen.lo libexplain/message/ferror.lo libexplain/message/fflush.lo libexplain/message/fgetc.lo libexplain/message/fgets.lo libexplain/message/fopen.lo libexplain/message/fork.lo libexplain/message/fpathconf.lo libexplain/message/fputc.lo libexplain/message/fread.lo libexplain/message/freopen.lo libexplain/message/fstat.lo libexplain/message/ftruncate.lo libexplain/message/futimes.lo libexplain/message/fwrite.lo libexplain/message/getc.lo libexplain/message/getchar.lo libexplain/message/getcwd.lo libexplain/message/getpeername.lo libexplain/message/getrlimit.lo libexplain/message/getsockname.lo libexplain/message/getsockopt.lo libexplain/message/gettimeofday.lo libexplain/message/ioctl.lo libexplain/message/lchown.lo libexplain/message/link.lo libexplain/message/listen.lo libexplain/message/lseek.lo libexplain/message/lstat.lo libexplain/message/malloc.lo libexplain/message/mkdir.lo libexplain/message/open.lo libexplain/message/open_flags.lo libexplain/message/opendir.lo libexplain/message/pathconf.lo libexplain/message/pclose.lo libexplain/message/permission_mode.lo libexplain/message/pipe.lo libexplain/message/popen.lo libexplain/message/putc.lo libexplain/message/putchar.lo libexplain/message/read.lo libexplain/message/readdir.lo libexplain/message/readlink.lo libexplain/message/realloc.lo libexplain/message/remove.lo libexplain/message/rename.lo libexplain/message/rmdir.lo libexplain/message/select.lo libexplain/message/setsockopt.lo libexplain/message/socket.lo libexplain/message/stat.lo libexplain/message/symlink.lo libexplain/message/system.lo libexplain/message/truncate.lo libexplain/message/unlink.lo libexplain/message/utime.lo libexplain/message/wait.lo libexplain/message/wait3.lo libexplain/message/wait4.lo libexplain/message/waitpid.lo libexplain/message/write.lo libexplain/mkdir.lo libexplain/mkdir_or_die.lo libexplain/open.lo libexplain/open_flags.lo libexplain/open_or_die.lo libexplain/opendir.lo libexplain/opendir_or_die.lo libexplain/option.lo libexplain/parse_bits.yacc.lo libexplain/parse_bits/find_by_name.lo libexplain/parse_bits/find_by_name_fuzzy.lo libexplain/parse_bits/find_by_value.lo libexplain/parse_bits/or_die.lo libexplain/parse_bits/print.lo libexplain/parse_bits/print_single.lo libexplain/path_is_efault.lo libexplain/pathconf.lo libexplain/pathconf_or_die.lo libexplain/pathname_is_a_directory.lo libexplain/pclose.lo libexplain/pclose_or_die.lo libexplain/pclose_success_or_die.lo libexplain/permission_mode.lo libexplain/pipe.lo libexplain/pipe_or_die.lo libexplain/popen.lo libexplain/popen_or_die.lo libexplain/program_name.lo libexplain/putc.lo libexplain/putc_or_die.lo libexplain/putchar.lo libexplain/putchar_or_die.lo libexplain/read.lo libexplain/read_or_die.lo libexplain/readdir.lo libexplain/readdir_or_die.lo libexplain/readlink.lo libexplain/readlink_or_die.lo libexplain/realloc.lo libexplain/realloc_or_die.lo libexplain/remove.lo libexplain/remove_or_die.lo libexplain/rename.lo libexplain/rename_or_die.lo libexplain/reverse_strerror.lo libexplain/rmdir.lo libexplain/rmdir_or_die.lo libexplain/same_dev.lo libexplain/select.lo libexplain/select_or_die.lo libexplain/setsockopt.lo libexplain/setsockopt_or_die.lo libexplain/socket.lo libexplain/socket_or_die.lo libexplain/stat.lo libexplain/stat_or_die.lo libexplain/stream_to_fildes.lo libexplain/string_buffer.lo libexplain/string_buffer/copy.lo libexplain/string_buffer/full.lo libexplain/string_buffer/path_join.lo libexplain/string_buffer/printf.lo libexplain/string_buffer/printf_gettext.lo libexplain/string_buffer/putc.lo libexplain/string_buffer/putc_escaped.lo libexplain/string_buffer/putc_quoted.lo libexplain/string_buffer/puts.lo libexplain/string_buffer/puts_quoted.lo libexplain/string_buffer/puts_quoted_n.lo libexplain/string_buffer/truncate.lo libexplain/string_buffer/vprintf.lo libexplain/string_buffer/write.lo libexplain/string_flags.lo libexplain/strtod_or_die.lo libexplain/strtol_or_die.lo libexplain/symlink.lo libexplain/symlink_or_die.lo libexplain/symloopmax.lo libexplain/system.lo libexplain/system_or_die.lo libexplain/system_success_or_die.lo libexplain/truncate.lo libexplain/truncate_or_die.lo libexplain/unlink.lo libexplain/unlink_or_die.lo libexplain/utime.lo libexplain/utime_or_die.lo libexplain/version.lo libexplain/version_print.lo libexplain/wait.lo libexplain/wait3.lo libexplain/wait3_or_die.lo libexplain/wait4.lo libexplain/wait4_or_die.lo libexplain/wait_or_die.lo libexplain/waitpid.lo libexplain/waitpid_or_die.lo libexplain/wrap_and_print.lo libexplain/write.lo libexplain/write_or_die.lo
 
 libexplain/libexplain.la: $(lib_obj)
 	rm -f $@
-	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@  $(lib_obj) $(LIBS) -rpath $(LIBDIR) -version-info 6:0:5
+	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@  $(lib_obj) $(LIBS) -rpath $(LIBDIR) -version-info 7:0:6
 
 $(LIBDIR)/libexplain.la: libexplain/libexplain.la
 	$(LIBTOOL) --mode=install $(INSTALL_DATA) libexplain/libexplain.la $@
 
-explain_obj = explain/accept.lo explain/access.lo explain/bind.lo explain/chdir.lo explain/chmod.lo explain/chown.lo explain/close.lo explain/closedir.lo explain/connect.lo explain/creat.lo explain/dup.lo explain/dup2.lo explain/execve.lo explain/execvp.lo explain/fchdir.lo explain/fchmod.lo explain/fchown.lo explain/fcntl.lo explain/fdopen.lo explain/ferror.lo explain/fgetc.lo explain/fgets.lo explain/fopen.lo explain/fork.lo explain/fpathconf.lo explain/fputc.lo explain/fread.lo explain/fstat.lo explain/ftruncate.lo explain/futimes.lo explain/fwrite.lo explain/getc.lo explain/getchar.lo explain/getcwd.lo explain/getrlimit.lo explain/gettimeofday.lo explain/ioctl.lo explain/lchown.lo explain/link.lo explain/listen.lo explain/lseek.lo explain/lstat.lo explain/main.lo explain/malloc.lo explain/mkdir.lo explain/open.lo explain/opendir.lo explain/pathconf.lo explain/pclose.lo explain/pipe.lo explain/popen.lo explain/putc.lo explain/putchar.lo explain/read.lo explain/readdir.lo explain/readlink.lo explain/realloc.lo explain/remove.lo explain/rename.lo explain/rmdir.lo explain/select.lo explain/socket.lo explain/stat.lo explain/strerror.lo explain/symlink.lo explain/system.lo explain/truncate.lo explain/unlink.lo explain/utime.lo explain/wait.lo explain/wait3.lo explain/wait4.lo explain/waitpid.lo explain/write.lo
+explain_obj = explain/accept.lo explain/access.lo explain/bind.lo explain/chdir.lo explain/chmod.lo explain/chown.lo explain/close.lo explain/closedir.lo explain/connect.lo explain/creat.lo explain/dup.lo explain/dup2.lo explain/execve.lo explain/execvp.lo explain/fchdir.lo explain/fchmod.lo explain/fchown.lo explain/fcntl.lo explain/fdopen.lo explain/ferror.lo explain/fgetc.lo explain/fgets.lo explain/fopen.lo explain/fork.lo explain/fpathconf.lo explain/fputc.lo explain/fread.lo explain/fstat.lo explain/ftruncate.lo explain/futimes.lo explain/fwrite.lo explain/getc.lo explain/getchar.lo explain/getcwd.lo explain/getpeername.lo explain/getrlimit.lo explain/getsockname.lo explain/getsockopt.lo explain/gettimeofday.lo explain/ioctl.lo explain/lchown.lo explain/link.lo explain/listen.lo explain/lseek.lo explain/lstat.lo explain/main.lo explain/malloc.lo explain/mkdir.lo explain/open.lo explain/opendir.lo explain/pathconf.lo explain/pclose.lo explain/pipe.lo explain/popen.lo explain/putc.lo explain/putchar.lo explain/read.lo explain/readdir.lo explain/readlink.lo explain/realloc.lo explain/remove.lo explain/rename.lo explain/rmdir.lo explain/select.lo explain/setsockopt.lo explain/socket.lo explain/stat.lo explain/strerror.lo explain/symlink.lo explain/system.lo explain/truncate.lo explain/unlink.lo explain/utime.lo explain/wait.lo explain/wait3.lo explain/wait4.lo explain/waitpid.lo explain/write.lo
 
 bin/explain$(EXEEXT): $(explain_obj) libexplain/libexplain.la .bin
 	$(LIBTOOL) --mode=link $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $(explain_obj) libexplain/libexplain.la
@@ -5969,7 +6186,29 @@ sure: t0001a \
 	t0361a \
 	t0362a \
 	t0363a \
-	t0364a
+	t0364a \
+	t0365a \
+	t0366a \
+	t0367a \
+	t0368a \
+	t0369a \
+	t0370a \
+	t0371a \
+	t0372a \
+	t0373a \
+	t0374a \
+	t0375a \
+	t0376a \
+	t0377a \
+	t0378a \
+	t0379a \
+	t0380a \
+	t0381a \
+	t0382a \
+	t0383a \
+	t0384a \
+	t0385a \
+	t0386a
 	@echo Passed All Tests
 
 clean-obj:
@@ -6011,7 +6250,10 @@ clean-obj:
 	rm -f explain/getc.lo
 	rm -f explain/getchar.lo
 	rm -f explain/getcwd.lo
+	rm -f explain/getpeername.lo
 	rm -f explain/getrlimit.lo
+	rm -f explain/getsockname.lo
+	rm -f explain/getsockopt.lo
 	rm -f explain/gettimeofday.lo
 	rm -f explain/ioctl.lo
 	rm -f explain/lchown.lo
@@ -6038,6 +6280,7 @@ clean-obj:
 	rm -f explain/rename.lo
 	rm -f explain/rmdir.lo
 	rm -f explain/select.lo
+	rm -f explain/setsockopt.lo
 	rm -f explain/socket.lo
 	rm -f explain/stat.lo
 	rm -f explain/strerror.lo
@@ -6066,7 +6309,6 @@ clean-obj:
 	rm -f libexplain/buffer/address_family.lo
 	rm -f libexplain/buffer/addrinfo.lo
 	rm -f libexplain/buffer/addrinfo_flags.lo
-	rm -f libexplain/buffer/argument_is_invalid.lo
 	rm -f libexplain/buffer/arpreq.lo
 	rm -f libexplain/buffer/caption_name_type.lo
 	rm -f libexplain/buffer/char.lo
@@ -6099,8 +6341,11 @@ clean-obj:
 	rm -f libexplain/buffer/emlink.lo
 	rm -f libexplain/buffer/enametoolong.lo
 	rm -f libexplain/buffer/enfile.lo
+	rm -f libexplain/buffer/enobufs.lo
 	rm -f libexplain/buffer/enoent.lo
 	rm -f libexplain/buffer/enomem.lo
+	rm -f libexplain/buffer/enoprotoopt.lo
+	rm -f libexplain/buffer/enotconn.lo
 	rm -f libexplain/buffer/enotdir.lo
 	rm -f libexplain/buffer/enotsock.lo
 	rm -f libexplain/buffer/erofs.lo
@@ -6143,7 +6388,10 @@ clean-obj:
 	rm -f libexplain/buffer/errno/getc.lo
 	rm -f libexplain/buffer/errno/getchar.lo
 	rm -f libexplain/buffer/errno/getcwd.lo
+	rm -f libexplain/buffer/errno/getpeername.lo
 	rm -f libexplain/buffer/errno/getrlimit.lo
+	rm -f libexplain/buffer/errno/getsockname.lo
+	rm -f libexplain/buffer/errno/getsockopt.lo
 	rm -f libexplain/buffer/errno/gettimeofday.lo
 	rm -f libexplain/buffer/errno/ioctl.lo
 	rm -f libexplain/buffer/errno/lchown.lo
@@ -6170,6 +6418,7 @@ clean-obj:
 	rm -f libexplain/buffer/errno/rename.lo
 	rm -f libexplain/buffer/errno/rmdir.lo
 	rm -f libexplain/buffer/errno/select.lo
+	rm -f libexplain/buffer/errno/setsockopt.lo
 	rm -f libexplain/buffer/errno/socket.lo
 	rm -f libexplain/buffer/errno/stat.lo
 	rm -f libexplain/buffer/errno/symlink.lo
@@ -6251,6 +6500,9 @@ clean-obj:
 	rm -f libexplain/buffer/sockaddr.lo
 	rm -f libexplain/buffer/socket_protocol.lo
 	rm -f libexplain/buffer/socket_type.lo
+	rm -f libexplain/buffer/socklen.lo
+	rm -f libexplain/buffer/sockopt_level.lo
+	rm -f libexplain/buffer/sockopt_name.lo
 	rm -f libexplain/buffer/software_error.lo
 	rm -f libexplain/buffer/stream.lo
 	rm -f libexplain/buffer/stream_to_pathname.lo
@@ -6357,7 +6609,10 @@ clean-obj:
 	rm -f libexplain/errno/getc.lo
 	rm -f libexplain/errno/getchar.lo
 	rm -f libexplain/errno/getcwd.lo
+	rm -f libexplain/errno/getpeername.lo
 	rm -f libexplain/errno/getrlimit.lo
+	rm -f libexplain/errno/getsockname.lo
+	rm -f libexplain/errno/getsockopt.lo
 	rm -f libexplain/errno/gettimeofday.lo
 	rm -f libexplain/errno/ioctl.lo
 	rm -f libexplain/errno/lchown.lo
@@ -6383,6 +6638,7 @@ clean-obj:
 	rm -f libexplain/errno/rename.lo
 	rm -f libexplain/errno/rmdir.lo
 	rm -f libexplain/errno/select.lo
+	rm -f libexplain/errno/setsockopt.lo
 	rm -f libexplain/errno/socket.lo
 	rm -f libexplain/errno/stat.lo
 	rm -f libexplain/errno/symlink.lo
@@ -6455,8 +6711,14 @@ clean-obj:
 	rm -f libexplain/getchar_or_die.lo
 	rm -f libexplain/getcwd.lo
 	rm -f libexplain/getcwd_or_die.lo
+	rm -f libexplain/getpeername.lo
+	rm -f libexplain/getpeername_or_die.lo
 	rm -f libexplain/getrlimit.lo
 	rm -f libexplain/getrlimit_or_die.lo
+	rm -f libexplain/getsockname.lo
+	rm -f libexplain/getsockname_or_die.lo
+	rm -f libexplain/getsockopt.lo
+	rm -f libexplain/getsockopt_or_die.lo
 	rm -f libexplain/gettext.lo
 	rm -f libexplain/gettimeofday.lo
 	rm -f libexplain/gettimeofday_or_die.lo
@@ -6721,7 +6983,10 @@ clean-obj:
 	rm -f libexplain/message/errno/getc.lo
 	rm -f libexplain/message/errno/getchar.lo
 	rm -f libexplain/message/errno/getcwd.lo
+	rm -f libexplain/message/errno/getpeername.lo
 	rm -f libexplain/message/errno/getrlimit.lo
+	rm -f libexplain/message/errno/getsockname.lo
+	rm -f libexplain/message/errno/getsockopt.lo
 	rm -f libexplain/message/errno/gettimeofday.lo
 	rm -f libexplain/message/errno/ioctl.lo
 	rm -f libexplain/message/errno/lchown.lo
@@ -6747,6 +7012,7 @@ clean-obj:
 	rm -f libexplain/message/errno/rename.lo
 	rm -f libexplain/message/errno/rmdir.lo
 	rm -f libexplain/message/errno/select.lo
+	rm -f libexplain/message/errno/setsockopt.lo
 	rm -f libexplain/message/errno/socket.lo
 	rm -f libexplain/message/errno/stat.lo
 	rm -f libexplain/message/errno/symlink.lo
@@ -6784,7 +7050,10 @@ clean-obj:
 	rm -f libexplain/message/getc.lo
 	rm -f libexplain/message/getchar.lo
 	rm -f libexplain/message/getcwd.lo
+	rm -f libexplain/message/getpeername.lo
 	rm -f libexplain/message/getrlimit.lo
+	rm -f libexplain/message/getsockname.lo
+	rm -f libexplain/message/getsockopt.lo
 	rm -f libexplain/message/gettimeofday.lo
 	rm -f libexplain/message/ioctl.lo
 	rm -f libexplain/message/lchown.lo
@@ -6812,6 +7081,7 @@ clean-obj:
 	rm -f libexplain/message/rename.lo
 	rm -f libexplain/message/rmdir.lo
 	rm -f libexplain/message/select.lo
+	rm -f libexplain/message/setsockopt.lo
 	rm -f libexplain/message/socket.lo
 	rm -f libexplain/message/stat.lo
 	rm -f libexplain/message/symlink.lo
@@ -6877,6 +7147,8 @@ clean-obj:
 	rm -f libexplain/same_dev.lo
 	rm -f libexplain/select.lo
 	rm -f libexplain/select_or_die.lo
+	rm -f libexplain/setsockopt.lo
+	rm -f libexplain/setsockopt_or_die.lo
 	rm -f libexplain/socket.lo
 	rm -f libexplain/socket_or_die.lo
 	rm -f libexplain/stat.lo
@@ -7031,7 +7303,7 @@ distclean: clean
 
 install-bin: $(bindir)/explain
 
-install-man: $(mandir)/man1/explain.1 $(mandir)/man1/explain_license.1 $(mandir)/man3/libexplain.3 $(mandir)/man3/libexplain_accept.3 $(mandir)/man3/libexplain_accept_or_die.3 $(mandir)/man3/libexplain_access.3 $(mandir)/man3/libexplain_access_or_die.3 $(mandir)/man3/libexplain_bind.3 $(mandir)/man3/libexplain_bind_or_die.3 $(mandir)/man3/libexplain_chdir.3 $(mandir)/man3/libexplain_chdir_or_die.3 $(mandir)/man3/libexplain_chmod.3 $(mandir)/man3/libexplain_chmod_or_die.3 $(mandir)/man3/libexplain_chown.3 $(mandir)/man3/libexplain_chown_or_die.3 $(mandir)/man3/libexplain_close.3 $(mandir)/man3/libexplain_close_or_die.3 $(mandir)/man3/libexplain_closedir.3 $(mandir)/man3/libexplain_closedir_or_die.3 $(mandir)/man3/libexplain_connect.3 $(mandir)/man3/libexplain_connect_or_die.3 $(mandir)/man3/libexplain_creat.3 $(mandir)/man3/libexplain_creat_or_die.3 $(mandir)/man3/libexplain_dup.3 $(mandir)/man3/libexplain_dup2.3 $(mandir)/man3/libexplain_dup2_or_die.3 $(mandir)/man3/libexplain_dup_or_die.3 $(mandir)/man3/libexplain_execve.3 $(mandir)/man3/libexplain_execve_or_die.3 $(mandir)/man3/libexplain_execvp.3 $(mandir)/man3/libexplain_execvp_or_die.3 $(mandir)/man3/libexplain_fchdir.3 $(mandir)/man3/libexplain_fchdir_or_die.3 $(mandir)/man3/libexplain_fchmod.3 $(mandir)/man3/libexplain_fchmod_or_die.3 $(mandir)/man3/libexplain_fchown.3 $(mandir)/man3/libexplain_fchown_or_die.3 $(mandir)/man3/libexplain_fclose.3 $(mandir)/man3/libexplain_fclose_or_die.3 $(mandir)/man3/libexplain_fcntl.3 $(mandir)/man3/libexplain_fcntl_or_die.3 $(mandir)/man3/libexplain_fdopen.3 $(mandir)/man3/libexplain_fdopen_or_die.3 $(mandir)/man3/libexplain_ferror.3 $(mandir)/man3/libexplain_ferror_or_die.3 $(mandir)/man3/libexplain_fflush.3 $(mandir)/man3/libexplain_fflush_or_die.3 $(mandir)/man3/libexplain_fgetc.3 $(mandir)/man3/libexplain_fgetc_or_die.3 $(mandir)/man3/libexplain_fgets.3 $(mandir)/man3/libexplain_fgets_or_die.3 $(mandir)/man3/libexplain_fopen.3 $(mandir)/man3/libexplain_fopen_or_die.3 $(mandir)/man3/libexplain_fork.3 $(mandir)/man3/libexplain_fork_or_die.3 $(mandir)/man3/libexplain_fpathconf.3 $(mandir)/man3/libexplain_fpathconf_or_die.3 $(mandir)/man3/libexplain_fputc.3 $(mandir)/man3/libexplain_fputc_or_die.3 $(mandir)/man3/libexplain_fread.3 $(mandir)/man3/libexplain_fread_or_die.3 $(mandir)/man3/libexplain_freopen.3 $(mandir)/man3/libexplain_freopen_or_die.3 $(mandir)/man3/libexplain_fstat.3 $(mandir)/man3/libexplain_fstat_or_die.3 $(mandir)/man3/libexplain_ftruncate.3 $(mandir)/man3/libexplain_ftruncate_or_die.3 $(mandir)/man3/libexplain_futimes.3 $(mandir)/man3/libexplain_futimes_or_die.3 $(mandir)/man3/libexplain_fwrite.3 $(mandir)/man3/libexplain_fwrite_or_die.3 $(mandir)/man3/libexplain_getaddrinfo.3 $(mandir)/man3/libexplain_getaddrinfo_or_die.3 $(mandir)/man3/libexplain_getc.3 $(mandir)/man3/libexplain_getc_or_die.3 $(mandir)/man3/libexplain_getchar.3 $(mandir)/man3/libexplain_getchar_or_die.3 $(mandir)/man3/libexplain_getcwd.3 $(mandir)/man3/libexplain_getcwd_or_die.3 $(mandir)/man3/libexplain_getrlimit.3 $(mandir)/man3/libexplain_getrlimit_or_die.3 $(mandir)/man3/libexplain_gettimeofday.3 $(mandir)/man3/libexplain_gettimeofday_or_die.3 $(mandir)/man3/libexplain_ioctl.3 $(mandir)/man3/libexplain_ioctl_or_die.3 $(mandir)/man3/libexplain_lchown.3 $(mandir)/man3/libexplain_lchown_or_die.3 $(mandir)/man3/libexplain_license.3 $(mandir)/man3/libexplain_link.3 $(mandir)/man3/libexplain_link_or_die.3 $(mandir)/man3/libexplain_listen.3 $(mandir)/man3/libexplain_listen_or_die.3 $(mandir)/man3/libexplain_lseek.3 $(mandir)/man3/libexplain_lseek_or_die.3 $(mandir)/man3/libexplain_lstat.3 $(mandir)/man3/libexplain_lstat_or_die.3 $(mandir)/man3/libexplain_malloc.3 $(mandir)/man3/libexplain_malloc_or_die.3 $(mandir)/man3/libexplain_mkdir.3 $(mandir)/man3/libexplain_mkdir_or_die.3 $(mandir)/man3/libexplain_open.3 $(mandir)/man3/libexplain_open_or_die.3 $(mandir)/man3/libexplain_opendir.3 $(mandir)/man3/libexplain_opendir_or_die.3 $(mandir)/man3/libexplain_pathconf.3 $(mandir)/man3/libexplain_pathconf_or_die.3 $(mandir)/man3/libexplain_pclose.3 $(mandir)/man3/libexplain_pclose_or_die.3 $(mandir)/man3/libexplain_pipe.3 $(mandir)/man3/libexplain_pipe_or_die.3 $(mandir)/man3/libexplain_popen.3 $(mandir)/man3/libexplain_popen_or_die.3 $(mandir)/man3/libexplain_program_name.3 $(mandir)/man3/libexplain_putc.3 $(mandir)/man3/libexplain_putc_or_die.3 $(mandir)/man3/libexplain_putchar.3 $(mandir)/man3/libexplain_putchar_or_die.3 $(mandir)/man3/libexplain_read.3 $(mandir)/man3/libexplain_read_or_die.3 $(mandir)/man3/libexplain_readdir.3 $(mandir)/man3/libexplain_readdir_or_die.3 $(mandir)/man3/libexplain_readlink.3 $(mandir)/man3/libexplain_readlink_or_die.3 $(mandir)/man3/libexplain_realloc.3 $(mandir)/man3/libexplain_realloc_or_die.3 $(mandir)/man3/libexplain_remove.3 $(mandir)/man3/libexplain_remove_or_die.3 $(mandir)/man3/libexplain_rename.3 $(mandir)/man3/libexplain_rename_or_die.3 $(mandir)/man3/libexplain_rmdir.3 $(mandir)/man3/libexplain_rmdir_or_die.3 $(mandir)/man3/libexplain_select.3 $(mandir)/man3/libexplain_select_or_die.3 $(mandir)/man3/libexplain_socket.3 $(mandir)/man3/libexplain_socket_or_die.3 $(mandir)/man3/libexplain_stat.3 $(mandir)/man3/libexplain_stat_or_die.3 $(mandir)/man3/libexplain_symlink.3 $(mandir)/man3/libexplain_symlink_or_die.3 $(mandir)/man3/libexplain_system.3 $(mandir)/man3/libexplain_system_or_die.3 $(mandir)/man3/libexplain_truncate.3 $(mandir)/man3/libexplain_truncate_or_die.3 $(mandir)/man3/libexplain_unlink.3 $(mandir)/man3/libexplain_unlink_or_die.3 $(mandir)/man3/libexplain_utime.3 $(mandir)/man3/libexplain_utime_or_die.3 $(mandir)/man3/libexplain_wait.3 $(mandir)/man3/libexplain_wait3.3 $(mandir)/man3/libexplain_wait3_or_die.3 $(mandir)/man3/libexplain_wait4.3 $(mandir)/man3/libexplain_wait4_or_die.3 $(mandir)/man3/libexplain_wait_or_die.3 $(mandir)/man3/libexplain_waitpid.3 $(mandir)/man3/libexplain_waitpid_or_die.3 $(mandir)/man3/libexplain_write.3 $(mandir)/man3/libexplain_write_or_die.3
+install-man: $(mandir)/man1/explain.1 $(mandir)/man1/explain_license.1 $(mandir)/man3/libexplain.3 $(mandir)/man3/libexplain_accept.3 $(mandir)/man3/libexplain_accept_or_die.3 $(mandir)/man3/libexplain_access.3 $(mandir)/man3/libexplain_access_or_die.3 $(mandir)/man3/libexplain_bind.3 $(mandir)/man3/libexplain_bind_or_die.3 $(mandir)/man3/libexplain_chdir.3 $(mandir)/man3/libexplain_chdir_or_die.3 $(mandir)/man3/libexplain_chmod.3 $(mandir)/man3/libexplain_chmod_or_die.3 $(mandir)/man3/libexplain_chown.3 $(mandir)/man3/libexplain_chown_or_die.3 $(mandir)/man3/libexplain_close.3 $(mandir)/man3/libexplain_close_or_die.3 $(mandir)/man3/libexplain_closedir.3 $(mandir)/man3/libexplain_closedir_or_die.3 $(mandir)/man3/libexplain_connect.3 $(mandir)/man3/libexplain_connect_or_die.3 $(mandir)/man3/libexplain_creat.3 $(mandir)/man3/libexplain_creat_or_die.3 $(mandir)/man3/libexplain_dup.3 $(mandir)/man3/libexplain_dup2.3 $(mandir)/man3/libexplain_dup2_or_die.3 $(mandir)/man3/libexplain_dup_or_die.3 $(mandir)/man3/libexplain_execve.3 $(mandir)/man3/libexplain_execve_or_die.3 $(mandir)/man3/libexplain_execvp.3 $(mandir)/man3/libexplain_execvp_or_die.3 $(mandir)/man3/libexplain_fchdir.3 $(mandir)/man3/libexplain_fchdir_or_die.3 $(mandir)/man3/libexplain_fchmod.3 $(mandir)/man3/libexplain_fchmod_or_die.3 $(mandir)/man3/libexplain_fchown.3 $(mandir)/man3/libexplain_fchown_or_die.3 $(mandir)/man3/libexplain_fclose.3 $(mandir)/man3/libexplain_fclose_or_die.3 $(mandir)/man3/libexplain_fcntl.3 $(mandir)/man3/libexplain_fcntl_or_die.3 $(mandir)/man3/libexplain_fdopen.3 $(mandir)/man3/libexplain_fdopen_or_die.3 $(mandir)/man3/libexplain_ferror.3 $(mandir)/man3/libexplain_ferror_or_die.3 $(mandir)/man3/libexplain_fflush.3 $(mandir)/man3/libexplain_fflush_or_die.3 $(mandir)/man3/libexplain_fgetc.3 $(mandir)/man3/libexplain_fgetc_or_die.3 $(mandir)/man3/libexplain_fgets.3 $(mandir)/man3/libexplain_fgets_or_die.3 $(mandir)/man3/libexplain_fopen.3 $(mandir)/man3/libexplain_fopen_or_die.3 $(mandir)/man3/libexplain_fork.3 $(mandir)/man3/libexplain_fork_or_die.3 $(mandir)/man3/libexplain_fpathconf.3 $(mandir)/man3/libexplain_fpathconf_or_die.3 $(mandir)/man3/libexplain_fputc.3 $(mandir)/man3/libexplain_fputc_or_die.3 $(mandir)/man3/libexplain_fread.3 $(mandir)/man3/libexplain_fread_or_die.3 $(mandir)/man3/libexplain_freopen.3 $(mandir)/man3/libexplain_freopen_or_die.3 $(mandir)/man3/libexplain_fstat.3 $(mandir)/man3/libexplain_fstat_or_die.3 $(mandir)/man3/libexplain_ftruncate.3 $(mandir)/man3/libexplain_ftruncate_or_die.3 $(mandir)/man3/libexplain_futimes.3 $(mandir)/man3/libexplain_futimes_or_die.3 $(mandir)/man3/libexplain_fwrite.3 $(mandir)/man3/libexplain_fwrite_or_die.3 $(mandir)/man3/libexplain_getaddrinfo.3 $(mandir)/man3/libexplain_getaddrinfo_or_die.3 $(mandir)/man3/libexplain_getc.3 $(mandir)/man3/libexplain_getc_or_die.3 $(mandir)/man3/libexplain_getchar.3 $(mandir)/man3/libexplain_getchar_or_die.3 $(mandir)/man3/libexplain_getcwd.3 $(mandir)/man3/libexplain_getcwd_or_die.3 $(mandir)/man3/libexplain_getpeername.3 $(mandir)/man3/libexplain_getpeername_or_die.3 $(mandir)/man3/libexplain_getrlimit.3 $(mandir)/man3/libexplain_getrlimit_or_die.3 $(mandir)/man3/libexplain_getsockname.3 $(mandir)/man3/libexplain_getsockname_or_die.3 $(mandir)/man3/libexplain_getsockopt.3 $(mandir)/man3/libexplain_getsockopt_or_die.3 $(mandir)/man3/libexplain_gettimeofday.3 $(mandir)/man3/libexplain_gettimeofday_or_die.3 $(mandir)/man3/libexplain_ioctl.3 $(mandir)/man3/libexplain_ioctl_or_die.3 $(mandir)/man3/libexplain_lchown.3 $(mandir)/man3/libexplain_lchown_or_die.3 $(mandir)/man3/libexplain_license.3 $(mandir)/man3/libexplain_link.3 $(mandir)/man3/libexplain_link_or_die.3 $(mandir)/man3/libexplain_listen.3 $(mandir)/man3/libexplain_listen_or_die.3 $(mandir)/man3/libexplain_lseek.3 $(mandir)/man3/libexplain_lseek_or_die.3 $(mandir)/man3/libexplain_lstat.3 $(mandir)/man3/libexplain_lstat_or_die.3 $(mandir)/man3/libexplain_malloc.3 $(mandir)/man3/libexplain_malloc_or_die.3 $(mandir)/man3/libexplain_mkdir.3 $(mandir)/man3/libexplain_mkdir_or_die.3 $(mandir)/man3/libexplain_open.3 $(mandir)/man3/libexplain_open_or_die.3 $(mandir)/man3/libexplain_opendir.3 $(mandir)/man3/libexplain_opendir_or_die.3 $(mandir)/man3/libexplain_pathconf.3 $(mandir)/man3/libexplain_pathconf_or_die.3 $(mandir)/man3/libexplain_pclose.3 $(mandir)/man3/libexplain_pclose_or_die.3 $(mandir)/man3/libexplain_pipe.3 $(mandir)/man3/libexplain_pipe_or_die.3 $(mandir)/man3/libexplain_popen.3 $(mandir)/man3/libexplain_popen_or_die.3 $(mandir)/man3/libexplain_program_name.3 $(mandir)/man3/libexplain_putc.3 $(mandir)/man3/libexplain_putc_or_die.3 $(mandir)/man3/libexplain_putchar.3 $(mandir)/man3/libexplain_putchar_or_die.3 $(mandir)/man3/libexplain_read.3 $(mandir)/man3/libexplain_read_or_die.3 $(mandir)/man3/libexplain_readdir.3 $(mandir)/man3/libexplain_readdir_or_die.3 $(mandir)/man3/libexplain_readlink.3 $(mandir)/man3/libexplain_readlink_or_die.3 $(mandir)/man3/libexplain_realloc.3 $(mandir)/man3/libexplain_realloc_or_die.3 $(mandir)/man3/libexplain_remove.3 $(mandir)/man3/libexplain_remove_or_die.3 $(mandir)/man3/libexplain_rename.3 $(mandir)/man3/libexplain_rename_or_die.3 $(mandir)/man3/libexplain_rmdir.3 $(mandir)/man3/libexplain_rmdir_or_die.3 $(mandir)/man3/libexplain_select.3 $(mandir)/man3/libexplain_select_or_die.3 $(mandir)/man3/libexplain_setsockopt.3 $(mandir)/man3/libexplain_setsockopt_or_die.3 $(mandir)/man3/libexplain_socket.3 $(mandir)/man3/libexplain_socket_or_die.3 $(mandir)/man3/libexplain_stat.3 $(mandir)/man3/libexplain_stat_or_die.3 $(mandir)/man3/libexplain_symlink.3 $(mandir)/man3/libexplain_symlink_or_die.3 $(mandir)/man3/libexplain_system.3 $(mandir)/man3/libexplain_system_or_die.3 $(mandir)/man3/libexplain_truncate.3 $(mandir)/man3/libexplain_truncate_or_die.3 $(mandir)/man3/libexplain_unlink.3 $(mandir)/man3/libexplain_unlink_or_die.3 $(mandir)/man3/libexplain_utime.3 $(mandir)/man3/libexplain_utime_or_die.3 $(mandir)/man3/libexplain_wait.3 $(mandir)/man3/libexplain_wait3.3 $(mandir)/man3/libexplain_wait3_or_die.3 $(mandir)/man3/libexplain_wait4.3 $(mandir)/man3/libexplain_wait4_or_die.3 $(mandir)/man3/libexplain_wait_or_die.3 $(mandir)/man3/libexplain_waitpid.3 $(mandir)/man3/libexplain_waitpid_or_die.3 $(mandir)/man3/libexplain_write.3 $(mandir)/man3/libexplain_write_or_die.3
 
 install-libdir: $(LIBDIR)/libexplain.la $(LIBDIR)/pkgconfig/libexplain.pc
 
@@ -7074,7 +7346,10 @@ install-include: \
 	$(includedir)/libexplain/getc.h \
 	$(includedir)/libexplain/getchar.h \
 	$(includedir)/libexplain/getcwd.h \
+	$(includedir)/libexplain/getpeername.h \
 	$(includedir)/libexplain/getrlimit.h \
+	$(includedir)/libexplain/getsockname.h \
+	$(includedir)/libexplain/getsockopt.h \
 	$(includedir)/libexplain/gettimeofday.h \
 	$(includedir)/libexplain/ioctl.h \
 	$(includedir)/libexplain/large_file_support.h \
@@ -7103,6 +7378,7 @@ install-include: \
 	$(includedir)/libexplain/rename.h \
 	$(includedir)/libexplain/rmdir.h \
 	$(includedir)/libexplain/select.h \
+	$(includedir)/libexplain/setsockopt.h \
 	$(includedir)/libexplain/socket.h \
 	$(includedir)/libexplain/stat.h \
 	$(includedir)/libexplain/symlink.h \

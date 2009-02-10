@@ -69,7 +69,10 @@
 #include <libexplain/getc.h>
 #include <libexplain/getchar.h>
 #include <libexplain/getcwd.h>
+#include <libexplain/getpeername.h>
 #include <libexplain/getrlimit.h>
+#include <libexplain/getsockname.h>
+#include <libexplain/getsockopt.h>
 #include <libexplain/gettimeofday.h>
 #include <libexplain/ioctl.h>
 #include <libexplain/lchown.h>
@@ -96,6 +99,7 @@
 #include <libexplain/rename.h>
 #include <libexplain/rmdir.h>
 #include <libexplain/select.h>
+#include <libexplain/setsockopt.h>
 #include <libexplain/socket.h>
 #include <libexplain/stat.h>
 #include <libexplain/symlink.h>

@@ -30,45 +30,63 @@ libexplain_buffer_mtop_op(libexplain_string_buffer_t *sb, int data)
 {
     static const libexplain_parse_bits_table_t table[] =
     {
-        { "MTRESET", MTRESET },
-#ifdef MTFSF
-        { "MTFSF", MTFSF },
-#endif
 #ifdef MTBSF
         { "MTBSF", MTBSF },
-#endif
-#ifdef MTFSR
-        { "MTFSR", MTFSR },
-#endif
-#ifdef MTBSR
-        { "MTBSR", MTBSR },
-#endif
-#ifdef MTWEOF
-        { "MTWEOF", MTWEOF },
-#endif
-#ifdef MTREW
-        { "MTREW", MTREW },
-#endif
-#ifdef MTOFFL
-        { "MTOFFL", MTOFFL },
-#endif
-#ifdef MTNOP
-        { "MTNOP", MTNOP },
-#endif
-#ifdef MTRETEN
-        { "MTRETEN", MTRETEN },
 #endif
 #ifdef MTBSFM
         { "MTBSFM", MTBSFM },
 #endif
-#ifdef MTFSFM
-        { "MTFSFM", MTFSFM },
+#ifdef MTBSR
+        { "MTBSR", MTBSR },
+#endif
+#ifdef MTBSS
+        { "MTBSS", MTBSS },
+#endif
+#ifdef MTCOMPRESSION
+        { "MTCOMPRESSION", MTCOMPRESSION },
 #endif
 #ifdef MTEOM
         { "MTEOM", MTEOM },
 #endif
 #ifdef MTERASE
         { "MTERASE", MTERASE },
+#endif
+#ifdef MTFSF
+        { "MTFSF", MTFSF },
+#endif
+#ifdef MTFSFM
+        { "MTFSFM", MTFSFM },
+#endif
+#ifdef MTFSR
+        { "MTFSR", MTFSR },
+#endif
+#ifdef MTFSS
+        { "MTFSS", MTFSS },
+#endif
+#ifdef MTGRSZ
+        /* not linux: get record size */
+        { "MTGRSZ", MTGRSZ },
+#endif
+#ifdef MTLOAD
+        { "MTLOAD", MTLOAD },
+#endif
+#ifdef MTLOCK
+        { "MTLOCK", MTLOCK },
+#endif
+#ifdef MTMKPART
+        { "MTMKPART", MTMKPART },
+#endif
+#ifdef MTNBSF
+        { "MTNBSF", MTNBSF },
+#endif
+#ifdef MTNFSF
+        { "MTNFSF", MTNFSF },
+#endif
+#ifdef MTNOP
+        { "MTNOP", MTNOP },
+#endif
+#ifdef MTOFFL
+        { "MTOFFL", MTOFFL },
 #endif
 #ifdef MTRAS1
         { "MTRAS1", MTRAS1 },
@@ -79,50 +97,48 @@ libexplain_buffer_mtop_op(libexplain_string_buffer_t *sb, int data)
 #ifdef MTRAS3
         { "MTRAS3", MTRAS3 },
 #endif
+#ifdef MTRESET
+        { "MTRESET", MTRESET },
+#endif
+#ifdef MTRETEN
+        { "MTRETEN", MTRETEN },
+#endif
+#ifdef MTREW
+        { "MTREW", MTREW },
+#endif
+#ifdef MTSEEK
+        { "MTSEEK", MTSEEK },
+#endif
 #ifdef MTSETBLK
         { "MTSETBLK", MTSETBLK },
 #endif
 #ifdef MTSETDENSITY
         { "MTSETDENSITY", MTSETDENSITY },
 #endif
-#ifdef MTSEEK
-        { "MTSEEK", MTSEEK },
-#endif
-#ifdef MTTELL
-        { "MTTELL", MTTELL },
-#endif
 #ifdef MTSETDRVBUFFER
         { "MTSETDRVBUFFER", MTSETDRVBUFFER },
-#endif
-#ifdef MTFSS
-        { "MTFSS", MTFSS },
-#endif
-#ifdef MTBSS
-        { "MTBSS", MTBSS },
-#endif
-#ifdef MTWSM
-        { "MTWSM", MTWSM },
-#endif
-#ifdef MTLOCK
-        { "MTLOCK", MTLOCK },
-#endif
-#ifdef MTUNLOCK
-        { "MTUNLOCK", MTUNLOCK },
-#endif
-#ifdef MTLOAD
-        { "MTLOAD", MTLOAD },
-#endif
-#ifdef MTUNLOAD
-        { "MTUNLOAD", MTUNLOAD },
-#endif
-#ifdef MTCOMPRESSION
-        { "MTCOMPRESSION", MTCOMPRESSION },
 #endif
 #ifdef MTSETPART
         { "MTSETPART", MTSETPART },
 #endif
-#ifdef MTMKPART
-        { "MTMKPART", MTMKPART },
+#ifdef MTSRSZ
+        /* Solaris version of MTSETBLK */
+        { "MTSRSZ", MTSRSZ },
+#endif
+#ifdef MTTELL
+        { "MTTELL", MTTELL },
+#endif
+#ifdef MTUNLOAD
+        { "MTUNLOAD", MTUNLOAD },
+#endif
+#ifdef MTUNLOCK
+        { "MTUNLOCK", MTUNLOCK },
+#endif
+#ifdef MTWEOF
+        { "MTWEOF", MTWEOF },
+#endif
+#ifdef MTWSM
+        { "MTWSM", MTWSM },
 #endif
     };
 

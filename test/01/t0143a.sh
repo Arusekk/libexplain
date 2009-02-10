@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@ TEST_SUBJECT="access EINVAL"
 
 cat > test.ok << 'fubar'
 access(pathname = "foobar", mode = X_OK | W_OK | 0x50) failed, Invalid
-argument (EINVAL) because mode was incorrectly specified, it contains
-undefined bits
+argument (EINVAL) because the mode argument was incorrectly specified, it
+contained undefined bits
 fubar
 test $? -eq 0 || no_result
 

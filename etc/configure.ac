@@ -204,6 +204,7 @@ AC_MSG_RESULT([-m$GROFF_MM_MACROS])
 
 AC_CHECK_HEADERS(          \
     arpa/inet.h            \
+    bluetooth/bluetooth.h  \
     bluetooth/bnep.h       \
     bluetooth/cmtp.h       \
     bluetooth/hci.h        \
@@ -303,6 +304,7 @@ AC_CHECK_HEADERS(          \
     linux/suspend_ioctls.h \
     linux/synclink.h       \
     linux/tiocl.h          \
+    linux/types.h          \
     linux/udf_fs_i.h       \
     linux/uinput.h         \
     linux/usb/g_printer.h  \

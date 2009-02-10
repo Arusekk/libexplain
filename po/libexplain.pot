@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libexplain 0.6.D001\n"
+"Project-Id-Version: libexplain 0.7.D001\n"
 "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-"POT-Creation-Date: 2009-01-16 16:32+1100\n"
+"POT-Creation-Date: 2009-02-10 21:39+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,34 +251,6 @@ msgid "%s is an existing directory, but %s is not a directory"
 msgstr ""
 
 #.
-#. This message is used to explain an
-#. EINVAL error reported by a bind(2) system call,
-#. in the case where a Unix domain socket address
-#. was accompanied by the wrong size; probably too
-#. short.
-#.
-#. %1$s => The name of the offending system call argument.
-#.
-#: libexplain/buffer/errno/bind.c:232
-#, c-format
-msgid "%s is incorrect"
-msgstr ""
-
-#.
-#. This message is used to explain an EINVAL
-#. error reported by the accept(2) system call (and others).
-#.
-#. %1$d => The name of the argument that has an invalid value
-#. %2$ld => The actual size passed (because the
-#.         recapitualtion fo the system call is going to
-#.         have a pointer in it, not the actual value).
-#.
-#: libexplain/buffer/argument_is_invalid.c:38
-#, c-format
-msgid "%s is invalid (%ld)"
-msgstr ""
-
-#.
 #. This message is used when a path given in a path is
 #. larger that the (dialect specific) maximum path length.
 #.
@@ -366,18 +338,6 @@ msgstr ""
 msgid ""
 "%s refers to memory that is outside the process's accessible address "
 "space"
-msgstr ""
-
-#.
-#. This message is used when explaining an EINVAL
-#. error returned by a system call that is complaining about
-#. undefined bits in a bitfield argument, e.g. access(2).
-#.
-#. %1$s => the name of the offending system call argument
-#.
-#: libexplain/buffer/einval.c:36
-#, c-format
-msgid "%s was incorrectly specified, it contains undefined bits"
 msgstr ""
 
 #.
@@ -522,7 +482,7 @@ msgstr ""
 #. error reported by an accept(2) system call, in the case
 #. where a protocol error has occurred.
 #.
-#: libexplain/buffer/errno/accept.c:196
+#: libexplain/buffer/errno/accept.c:206
 msgid ""
 "a protocol error has occurred; for example, the STREAMS protocol stack "
 "has not been initialized"
@@ -558,7 +518,7 @@ msgstr ""
 #. where an incoming connection has been aborted by the
 #. remote host.
 #.
-#: libexplain/buffer/errno/accept.c:96
+#: libexplain/buffer/errno/accept.c:97
 msgid "an incoming connection has been aborted by the remote host"
 msgstr ""
 
@@ -683,7 +643,7 @@ msgstr ""
 #. reported by an accept(2) system call, in the case where
 #. firewall rules forbid connection.
 #.
-#: libexplain/buffer/errno/accept.c:183
+#: libexplain/buffer/errno/accept.c:193
 msgid "firewall rules forbid connection"
 msgstr ""
 
@@ -721,7 +681,7 @@ msgstr ""
 #. of an ENOBUFS error returned by any system call that does
 #. not provide a more specific explanation.
 #.
-#: libexplain/buffer/errno/generic.c:75
+#: libexplain/buffer/enobufs.c:34
 msgid ""
 "insufficient kernel resources are available in the system to complete "
 "the system call"
@@ -1107,7 +1067,7 @@ msgstr ""
 #.
 #. %1$d => the process group number.
 #.
-#: libexplain/buffer/errno/waitpid.c:147
+#: libexplain/buffer/errno/waitpid.c:148
 #, c-format
 msgid "process group %d does not exist"
 msgstr ""
@@ -1120,7 +1080,7 @@ msgstr ""
 #.
 #. %1$d => is the process group number.
 #.
-#: libexplain/buffer/errno/waitpid.c:130
+#: libexplain/buffer/errno/waitpid.c:131
 #, c-format
 msgid ""
 "process group %d does not have any member process that is a child of "
@@ -1222,14 +1182,77 @@ msgid "symbolic link"
 msgstr ""
 
 #.
+#. This message is used to explain an ENOTCONN
+#. error reported by the getpeername system call, and others.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#: libexplain/buffer/enotconn.c:34
+#, c-format
+msgid "the %s argument refers to a socket that is not connected"
+msgstr ""
+
+#.
+#. This message is used to describe an ENOPROTOOPT
+#. error reported by the getsockopt system call.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#: libexplain/buffer/enoprotoopt.c:35
+#, c-format
+msgid ""
+"the %s argument refers to an option that is unknown at the level "
+"indicated"
+msgstr ""
+
+#.
 #. This message is used when an argument of a
-#. system call is invalid.
+#. system call results in an EINVAL error being reported.
 #.
 #. %1$s => the name of the offending system call argument.
 #.
-#: libexplain/buffer/errno/waitpid.c:177
+#: libexplain/buffer/einval.c:97
 #, c-format
-msgid "the %s argument was invalid"
+msgid "the %s argument was incorrectly specified"
+msgstr ""
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about
+#. undefined bits in a bitfield argument, e.g. access(2).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/einval.c:36
+#, c-format
+msgid ""
+"the %s argument was incorrectly specified, it contained undefined bits"
+msgstr ""
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about a
+#. size being too small or negative (e.g. bind's sock_addr_size
+#. field).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/einval.c:60
+#, c-format
+msgid "the %s argument was incorrectly specified, it was negative"
+msgstr ""
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about a
+#. size being too small or negative (e.g. bind's sock_addr_size
+#. field).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/einval.c:77
+#, c-format
+msgid "the %s argument was incorrectly specified, it was too small"
 msgstr ""
 
 #.
@@ -1579,7 +1602,7 @@ msgstr ""
 #. where a privileged port is specific, and the process
 #. does not have permission.
 #.
-#: libexplain/buffer/errno/bind.c:171
+#: libexplain/buffer/errno/bind.c:172
 msgid "the network port address is protected"
 msgstr ""
 
@@ -1887,7 +1910,7 @@ msgstr ""
 #. of an EPERM error returned by any system call that does
 #. not provide a more specific explanation.
 #.
-#: libexplain/buffer/errno/generic.c:53
+#: libexplain/buffer/errno/generic.c:54
 msgid ""
 "the process does not have the appropriate privileges to use this system "
 "call"
@@ -1971,7 +1994,7 @@ msgstr ""
 #.
 #. %1$s => the name of the offending system call argument
 #.
-#: libexplain/buffer/errno/waitpid.c:103
+#: libexplain/buffer/errno/waitpid.c:104
 #, c-format
 msgid "the process specified by %s does not exist"
 msgstr ""
@@ -1983,7 +2006,7 @@ msgstr ""
 #.
 #. %1$s => the name of the offending system call argument
 #.
-#: libexplain/buffer/errno/waitpid.c:86
+#: libexplain/buffer/errno/waitpid.c:87
 #, c-format
 msgid "the process specified by %s is not a child of this process"
 msgstr ""
@@ -2037,7 +2060,7 @@ msgstr ""
 #. the requested network address was not local or a nonexistent
 #. interface was requested.
 #.
-#: libexplain/buffer/errno/bind.c:273
+#: libexplain/buffer/errno/bind.c:265
 msgid ""
 "the requested network address was not local or a nonexistent interface "
 "was requested"
@@ -2050,7 +2073,7 @@ msgstr ""
 #. system, the correponding close(2) will not remove it
 #. again, the programmer must explicitly unlink(2) it.
 #.
-#: libexplain/buffer/errno/bind.c:190
+#: libexplain/buffer/errno/bind.c:191
 msgid ""
 "the socket file already exists, and it should not; when you are done "
 "with AF_UNIX sockets you must deliberately unlink(2) the socket file, it "
@@ -2065,7 +2088,7 @@ msgstr ""
 #. %1$s => a representation of the struct sockaddr that the
 #.         socket is already bound to.
 #.
-#: libexplain/buffer/errno/bind.c:107
+#: libexplain/buffer/errno/bind.c:108
 #, c-format
 msgid "the socket is already bound to %s"
 msgstr ""
@@ -2076,7 +2099,7 @@ msgstr ""
 #. where the socket is already bound to an address, but the
 #. address cannot be determined.
 #.
-#: libexplain/buffer/errno/bind.c:122
+#: libexplain/buffer/errno/bind.c:123
 msgid "the socket is already bound to an address"
 msgstr ""
 
@@ -2116,7 +2139,7 @@ msgstr ""
 #. where the socket is marked non-blocking (O_NONBLOCK) and
 #. no connections are waiting to be accepted.
 #.
-#: libexplain/buffer/errno/accept.c:77
+#: libexplain/buffer/errno/accept.c:78
 msgid ""
 "the socket is marked non-blocking and no connections are present to be "
 "accepted"
@@ -2162,7 +2185,7 @@ msgstr ""
 #. the file descriptor is actually a socket, but is not in a
 #. state that permits the use of the accept(2) system call.
 #.
-#: libexplain/buffer/errno/accept.c:124
+#: libexplain/buffer/errno/accept.c:134
 msgid "the socket is not listening for connections"
 msgstr ""
 
@@ -2170,7 +2193,7 @@ msgstr ""
 #. This message is used to explain an EOPNOTSUPP
 #. error returned by a listen(2) system call.
 #.
-#: libexplain/buffer/errno/accept.c:148
+#: libexplain/buffer/errno/accept.c:158
 msgid "the socket is not of a type that supports the accept(2) system call"
 msgstr ""
 

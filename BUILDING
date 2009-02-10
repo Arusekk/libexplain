@@ -215,7 +215,7 @@ GETTING HELP
         When reporting problems, please include the version number given by
         the
                 % explain -version
-                explain version 0.D006
+                explain version 0.D007
                 ...warranty disclaimer...
                 %
         command.  Please do not send this example; run the program for the

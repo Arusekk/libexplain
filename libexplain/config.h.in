@@ -29,6 +29,9 @@
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
 
+/* Define to 1 if you have the <bluetooth/bluetooth.h> header file. */
+#undef HAVE_BLUETOOTH_BLUETOOTH_H
+
 /* Define to 1 if you have the <bluetooth/bnep.h> header file. */
 #undef HAVE_BLUETOOTH_BNEP_H
 
@@ -374,6 +377,9 @@
 
 /* Define to 1 if you have the <linux/tiocl.h> header file. */
 #undef HAVE_LINUX_TIOCL_H
+
+/* Define to 1 if you have the <linux/types.h> header file. */
+#undef HAVE_LINUX_TYPES_H
 
 /* Define to 1 if you have the <linux/udf_fs_i.h> header file. */
 #undef HAVE_LINUX_UDF_FS_I_H

@@ -18,10 +18,10 @@
 
 #include <libexplain/ac/errno.h>
 
-#include <libexplain/buffer/argument_is_invalid.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eintr.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/enfile.h>
 #include <libexplain/buffer/enotsock.h>
@@ -31,6 +31,7 @@
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/socket_type.h>
+#include <libexplain/buffer/socklen.h>
 #include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
 
@@ -46,7 +47,7 @@ libexplain_buffer_errno_accept_system_call(libexplain_string_buffer_t *sb,
     libexplain_string_buffer_puts(sb, ", sock_addr = ");
     libexplain_buffer_pointer(sb, sock_addr);
     libexplain_string_buffer_printf(sb, ", sock_addr_size = ");
-    libexplain_buffer_pointer(sb, sock_addr_size);
+    libexplain_buffer_socklen_star(sb, sock_addr_size);
     libexplain_string_buffer_putc(sb, ')');
 }
 
@@ -102,9 +103,18 @@ libexplain_buffer_errno_accept_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EINVAL:
-        if (*sock_addr_size <= 0)
+        if
+        (
+            !libexplain_pointer_is_efault
+            (
+                sock_addr_size,
+                sizeof(*sock_addr_size)
+            )
+        &&
+            *sock_addr_size <= 0
+        )
         {
-            libexplain_buffer_argument_is_invalid
+            libexplain_buffer_einval_too_small
             (
                 sb,
                 "sock_addr_size",

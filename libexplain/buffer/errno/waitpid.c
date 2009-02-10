@@ -23,6 +23,7 @@
 
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eintr.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/waitpid.h>
 #include <libexplain/buffer/gettext.h>
@@ -165,18 +166,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EINVAL:
-        libexplain_string_buffer_printf_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used when an argument of a
-             * system call is invalid.
-             *
-             * %1$s => the name of the offending system call argument.
-             */
-            i18n("the %s argument was invalid"),
-            "options"
-        );
+        libexplain_buffer_einval_bits(sb, "options");
         libexplain_string_buffer_printf
         (
             sb,

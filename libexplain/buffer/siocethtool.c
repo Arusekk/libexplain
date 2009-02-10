@@ -72,7 +72,9 @@ libexplain_buffer_siocethtool(libexplain_string_buffer_t *sb,
                 { "ETHTOOL_GGSO", ETHTOOL_GGSO },
                 { "ETHTOOL_GFLAGS", ETHTOOL_GFLAGS },
                 { "ETHTOOL_GPFLAGS", ETHTOOL_GPFLAGS },
+#ifdef ETHTOOL_GRXFH
                 { "ETHTOOL_GRXFH", ETHTOOL_GRXFH },
+#endif
             };
             const struct ethtool_cmd *etp;
 

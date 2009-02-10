@@ -152,8 +152,22 @@ The \f[I]getchar\fP(3) system call.
 getcwd \f[I]buf\fP \f[I]size\fP
 The \f[I]getcwd\fP(2) system call.
 .TP 8n
+getpeername \f[I]fildes\fP \f[I]sock_addr\fP \f[I]sock_addr_size\fP
+The \f[I]getpeername\fP(2) system call.
+.TP 8n
+setsockopt \f[I]fildes\fP \f[I]level\fP \f[I]name\fP \f[I]data\fP \
+\f[I]data_size\fP
+The \f[I]setsockopt\fP(2) system call.
+.TP 8n
 getrlimit \f[I]resource\fP \f[I]rlim\fP
 The \f[I]getrlimit\fP(2) system call.
+.TP 8n
+getsockname \f[I]fildes\fP [ \f[I]sock_addr\fP [ \f[I]sock_addr_size\fP ]]
+The \f[I]getsockname\fP(2) system call.
+.TP 8n
+getsockopt \f[I]fildes\fP \f[I]level\fP \f[I]name\fP \f[I]data\fP \
+\f[I]data_size\fP
+The \f[I]getsockopt\fP(2) system call.
 .TP 8n
 gettimeofday [ \f[I]tv\fP [ \f[I]tz\fP ] ]
 The \f[I]gettimeofday\fP(2) system call.

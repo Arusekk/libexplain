@@ -153,15 +153,17 @@ EBADF;libexplain_buffer_ebadf
 EFAULT;libexplain_buffer_efault
 EFBIG;libexplain_buffer_efbig
 EINTR;libexplain_buffer_eintr
-EINVAL;libexplain_buffer_einval
+EINVAL;libexplain_buffer_einval_vague, \f[I]etc\fP
 EIO;libexplain_buffer_eio
 ELOOP;libexplain_buffer_eloop
 EMFILE;libexplain_buffer_emfile
 EMLINK;libexplain_buffer_emlink
 ENAMETOOLONG;libexplain_buffer_enametoolong
 ENFILE;libexplain_buffer_enfile
+ENOBUFS;libexplain_buffer_enobufs
 ENOENT;libexplain_buffer_enoent
 ENOMEM;libexplain_buffer_enomem
+ENOTCONN;libexplain_buffer_enotconn
 ENOTDIR;libexplain_buffer_enotdir
 ENOTSOCK;libexplain_buffer_enotsock
 EROFS;libexplain_buffer_erofs

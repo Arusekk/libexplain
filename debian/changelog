@@ -1,8 +1,14 @@
-libexplain (0.6.D001) unstable; urgency=low
+libexplain (0.7.D001) unstable; urgency=low
 
-  * This change prepares libexplain for the next public release.
+  * This change set prepares libexplain for the next public release.
 
- -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 16:32:41 +1100
+ -- Peter Miller <pmiller@opensource.org.au>  Tue, 10 Feb 2009 21:40:00 +1100
+
+libexplain (0.D007) unstable; urgency=low
+
+  * Explain errno values returned by libc functions, branch 0.6.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Tue, 10 Feb 2009 20:59:32 +1100
 
 libexplain (0.D006) unstable; urgency=low
 
@@ -39,6 +45,61 @@ libexplain (0.D001) unstable; urgency=low
   * Explain errno values returned by libc functions, branch 0.0.
 
  -- Peter Miller <pmiller@opensource.org.au>  Sun, 26 Oct 2008 20:44:39 +1100
+
+libexplain (0.6.D008) unstable; urgency=low
+
+  * A bug has been fixed in the formatting of socket addresses printed as the
+    "pathname" of the file descriptor, it was leaving out the space character.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Tue, 10 Feb 2009 12:49:03 +1100
+
+libexplain (0.6.D007) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the setsockopt system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sun, 08 Feb 2009 22:51:11 +1100
+
+libexplain (0.6.D006) unstable; urgency=low
+
+  * Explanations are now available for errors reported by the getsockopt system
+    call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sun, 08 Feb 2009 11:30:03 +1100
+
+libexplain (0.6.D005) unstable; urgency=low
+
+  * There are now explanations available for errors reported by the getsockname
+    system call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 07 Feb 2009 09:00:00 +1100
+
+libexplain (0.6.D004) unstable; urgency=low
+
+  * There are now explanations available for errors reported by the getpeername
+    system call.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 06 Feb 2009 16:34:16 +1100
+
+libexplain (0.6.D003) unstable; urgency=low
+
+  * This change set fixes a number of build problems on Debian Sid.
+  * My thanks to Simon Horman for reporting these problems.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Mon, 19 Jan 2009 22:40:15 +1100
+
+libexplain (0.6.D002) unstable; urgency=low
+
+  * This change adds more mag tape ioctl controls, from operating systems other
+    than linux.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 23:12:31 +1100
+
+libexplain (0.6.D001) unstable; urgency=low
+
+  * This change prepares libexplain for the next public release.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 16 Jan 2009 16:43:17 +1100
 
 libexplain (0.5.D021) unstable; urgency=low
 

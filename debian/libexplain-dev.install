@@ -40,7 +40,10 @@ usr/include/libexplain/getaddrinfo.h
 usr/include/libexplain/getc.h
 usr/include/libexplain/getchar.h
 usr/include/libexplain/getcwd.h
+usr/include/libexplain/getpeername.h
 usr/include/libexplain/getrlimit.h
+usr/include/libexplain/getsockname.h
+usr/include/libexplain/getsockopt.h
 usr/include/libexplain/gettimeofday.h
 usr/include/libexplain/ioctl.h
 usr/include/libexplain/large_file_support.h
@@ -69,6 +72,7 @@ usr/include/libexplain/remove.h
 usr/include/libexplain/rename.h
 usr/include/libexplain/rmdir.h
 usr/include/libexplain/select.h
+usr/include/libexplain/setsockopt.h
 usr/include/libexplain/socket.h
 usr/include/libexplain/stat.h
 usr/include/libexplain/symlink.h
@@ -159,8 +163,14 @@ usr/share/man/man3/libexplain_getchar.3
 usr/share/man/man3/libexplain_getchar_or_die.3
 usr/share/man/man3/libexplain_getcwd.3
 usr/share/man/man3/libexplain_getcwd_or_die.3
+usr/share/man/man3/libexplain_getpeername.3
+usr/share/man/man3/libexplain_getpeername_or_die.3
 usr/share/man/man3/libexplain_getrlimit.3
 usr/share/man/man3/libexplain_getrlimit_or_die.3
+usr/share/man/man3/libexplain_getsockname.3
+usr/share/man/man3/libexplain_getsockname_or_die.3
+usr/share/man/man3/libexplain_getsockopt.3
+usr/share/man/man3/libexplain_getsockopt_or_die.3
 usr/share/man/man3/libexplain_gettimeofday.3
 usr/share/man/man3/libexplain_gettimeofday_or_die.3
 usr/share/man/man3/libexplain_ioctl.3
@@ -213,6 +223,8 @@ usr/share/man/man3/libexplain_rmdir.3
 usr/share/man/man3/libexplain_rmdir_or_die.3
 usr/share/man/man3/libexplain_select.3
 usr/share/man/man3/libexplain_select_or_die.3
+usr/share/man/man3/libexplain_setsockopt.3
+usr/share/man/man3/libexplain_setsockopt_or_die.3
 usr/share/man/man3/libexplain_socket.3
 usr/share/man/man3/libexplain_socket_or_die.3
 usr/share/man/man3/libexplain_stat.3

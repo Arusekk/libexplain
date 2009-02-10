@@ -21,7 +21,7 @@
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/hayesesp.h>
 
-#include <libexplain/buffer/argument_is_invalid.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/iocontrol/generic.h>
@@ -100,17 +100,12 @@ print_explanation(const libexplain_iocontrol_t *p,
             q = data;
             if (q->flow_on >= q->flow_off)
             {
-                libexplain_buffer_argument_is_invalid
-                (
-                    sb,
-                    "data->flow_on",
-                    q->flow_on
-                );
+                libexplain_buffer_einval_value(sb, "data->flow_on", q->flow_on);
                 break;
             }
             if (q->rx_trigger < 1 || q->rx_trigger > 1023)
             {
-                libexplain_buffer_argument_is_invalid
+                libexplain_buffer_einval_value
                 (
                     sb,
                     "data->rx_trigger",
@@ -120,7 +115,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->tx_trigger > 1023)
             {
-                libexplain_buffer_argument_is_invalid
+                libexplain_buffer_einval_value
                 (
                     sb,
                     "data->tx_trigger",
@@ -130,7 +125,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->flow_off < 1 || q->flow_off > 1023)
             {
-                libexplain_buffer_argument_is_invalid
+                libexplain_buffer_einval_value
                 (
                     sb,
                     "data->flow_off",
@@ -140,7 +135,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->flow_on < 1 || q->flow_on > 1023)
             {
-                libexplain_buffer_argument_is_invalid
+                libexplain_buffer_einval_value
                 (
                     sb,
                     "data->flow_on",
@@ -150,7 +145,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->pio_threshold < 1 || q->pio_threshold > 1024)
             {
-                libexplain_buffer_argument_is_invalid
+                libexplain_buffer_einval_value
                 (
                     sb,
                     "data->pio_threshold",

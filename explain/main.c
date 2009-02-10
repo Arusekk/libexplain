@@ -64,7 +64,10 @@
 #include <explain/getc.h>
 #include <explain/getchar.h>
 #include <explain/getcwd.h>
+#include <explain/getpeername.h>
 #include <explain/getrlimit.h>
+#include <explain/getsockname.h>
+#include <explain/getsockopt.h>
 #include <explain/gettimeofday.h>
 #include <explain/ioctl.h>
 #include <explain/lchown.h>
@@ -90,6 +93,7 @@
 #include <explain/rename.h>
 #include <explain/rmdir.h>
 #include <explain/select.h>
+#include <explain/setsockopt.h>
 #include <explain/socket.h>
 #include <explain/stat.h>
 #include <explain/strerror.h>
@@ -220,7 +224,7 @@ static const table_t table[] =
     /* FIXME: add support for get_kernel_syms */
     /* FIXME: add support for get_mempolicy */
     /* FIXME: add support for getpagesize */
-    /* FIXME: add support for getpeername */
+    { "getpeername", explain_getpeername },
     /* FIXME: add support for getpgid */
     /* FIXME: add support for getpgrp */
     /* FIXME: add support for getpid */
@@ -234,8 +238,8 @@ static const table_t table[] =
     /* FIXME: add support for getrusage */
     /* FIXME: add support for gets */
     /* FIXME: add support for getsid */
-    /* FIXME: add support for getsockname */
-    /* FIXME: add support for getsockopt */
+    { "getsockname", explain_getsockname },
+    { "getsockopt", explain_getsockopt },
     /* FIXME: add support for get_thread_area */
     /* FIXME: add support for gettid */
     { "gettimeofday", explain_gettimeofday },
@@ -422,7 +426,7 @@ static const table_t table[] =
     /* FIXME: add support for setrlimit */
     /* FIXME: add support for set_robust_list */
     /* FIXME: add support for setsid */
-    /* FIXME: add support for setsockopt */
+    { "setsockopt", explain_setsockopt },
     /* FIXME: add support for set_thread_area */
     /* FIXME: add support for set_tid_address */
     /* FIXME: add support for settimeofday */

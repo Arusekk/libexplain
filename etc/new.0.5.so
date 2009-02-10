@@ -16,13 +16,6 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 5 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
-.\" ------------------------------------------------------------------------
 .PP
 .if n *
 .if t \(bu

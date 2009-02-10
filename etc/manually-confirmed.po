@@ -18,7 +18,7 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2009-01-16 12:08+1100\n"
+        "POT-Creation-Date: 2009-02-08 19:40+1100\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
 #.
@@ -243,32 +243,6 @@ msgid   "%s is an existing directory, but %s is not a directory"
 msgstr  "%s is an existing directory, but %s is not a directory"
 
 #.
-#. This message is used to explain an
-#. EINVAL error reported by a bind(2) system call,
-#. in the case where a Unix domain socket address
-#. was accompanied by the wrong size; probably too
-#. short.
-#.
-#. %1$s => The name of the offending system call argument.
-#.
-#, c-format
-msgid   "%s is incorrect"
-msgstr  "%s is incorrect"
-
-#.
-#. This message is used to explain an EINVAL
-#. error reported by the accept(2) system call (and others).
-#.
-#. %1$d => The name of the argument that has an invalid value
-#. %2$ld => The actual size passed (because the
-#.         recapitualtion fo the system call is going to
-#.         have a pointer in it, not the actual value).
-#.
-#, c-format
-msgid   "%s is invalid (%ld)"
-msgstr  "%s is invalid (%ld)"
-
-#.
 #. This message is used when a path given in a path is
 #. larger that the (dialect specific) maximum path length.
 #.
@@ -350,17 +324,6 @@ msgid   "%s refers to memory that is outside the process's accessible "
         "address space"
 msgstr  "%s refers to memory that is outside the process's accessible "
         "address space"
-
-#.
-#. This message is used when explaining an EINVAL
-#. error returned by a system call that is complaining about
-#. undefined bits in a bitfield argument, e.g. access(2).
-#.
-#. %1$s => the name of the offending system call argument
-#.
-#, c-format
-msgid   "%s was incorrectly specified, it contains undefined bits"
-msgstr  "%s was incorrectly specified, it contains undefined bits"
 
 #.
 #. This explanation is used in response to an ENOENT
@@ -1151,14 +1114,73 @@ msgid   "symbolic link"
 msgstr  "symbolic link"
 
 #.
+#. This message is used to explain an ENOTCONN
+#. error reported by the getpeername system call, and others.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument refers to a socket that is not connected"
+msgstr  "the %s argument refers to a socket that is not connected"
+
+#.
+#. This message is used to describe an ENOPROTOOPT
+#. error reported by the getsockopt system call.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument refers to an option that is unknown at the level "
+        "indicated"
+msgstr  "the %s argument refers to an option that is unknown at the level "
+        "indicated"
+
+#.
 #. This message is used when an argument of a
-#. system call is invalid.
+#. system call results in an EINVAL error being reported.
 #.
 #. %1$s => the name of the offending system call argument.
 #.
 #, c-format
-msgid   "the %s argument was invalid"
-msgstr  "the %s argument was invalid"
+msgid   "the %s argument was incorrectly specified"
+msgstr  "the %s argument was incorrectly specified"
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about
+#. undefined bits in a bitfield argument, e.g. access(2).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument was incorrectly specified, it contained "
+        "undefined bits"
+msgstr  "the %s argument was incorrectly specified, it contained "
+        "undefined bits"
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about a
+#. size being too small or negative (e.g. bind's sock_addr_size
+#. field).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument was incorrectly specified, it was negative"
+msgstr  "the %s argument was incorrectly specified, it was negative"
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about a
+#. size being too small or negative (e.g. bind's sock_addr_size
+#. field).
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument was incorrectly specified, it was too small"
+msgstr  "the %s argument was incorrectly specified, it was too small"
 
 #.
 #. This message is used when directory has a directory

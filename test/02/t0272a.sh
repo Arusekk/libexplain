@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@ TEST_SUBJECT="socket ENOBUFS"
 
 cat > test.ok << 'fubar'
 socket(family = PF_UNSPEC, type = 0, protocol = IPPROTO_IP) failed, No
-buffer space available (ENOBUFS) because the socket cannot be created until
-sufficient resources are available
+buffer space available (ENOBUFS) because insufficient kernel resources are
+available in the system to complete the system call
 fubar
 test $? -eq 0 || no_result
 

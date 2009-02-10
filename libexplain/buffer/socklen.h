@@ -16,22 +16,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBEXPLAIN_BUFFER_ARGUMENT_IS_INVALID_H
-#define LIBEXPLAIN_BUFFER_ARGUMENT_IS_INVALID_H
+#ifndef LIBEXPLAIN_BUFFER_SOCKLEN_H
+#define LIBEXPLAIN_BUFFER_SOCKLEN_H
 
+#include <libexplain/ac/sys/socket.h>
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_argument_is_invalid function may be used to
+  * The libexplain_buffer_socklen function may be used to
+  * print a representation of a socklen_t value.
   *
   * @param sb
-  *    The string buffer to print into.
-  * @param name
-  *    The name of the problematic argument.
-  * @param value
-  *    The value of the problematic argument.
+  *     The string buffer to print into.
+  * @param data
+  *     The socklen structure to be printed.
   */
-void libexplain_buffer_argument_is_invalid(libexplain_string_buffer_t *sb,
-    const char *name, long value);
+void libexplain_buffer_socklen(libexplain_string_buffer_t *sb,
+    const socklen_t data);
 
-#endif /* LIBEXPLAIN_BUFFER_ARGUMENT_IS_INVALID_H */
+/**
+  * The libexplain_buffer_socklen_star function may be used to
+  * print a representation of a socklen_t* value.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param data
+  *     The socklen structure to be printed.
+  */
+void libexplain_buffer_socklen_star(libexplain_string_buffer_t *sb,
+    const socklen_t *data);
+
+#endif /* LIBEXPLAIN_BUFFER_SOCKLEN_H */

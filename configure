@@ -5287,8 +5287,11 @@ echo "${ECHO_T}-m$GROFF_MM_MACROS" >&6; }
 
 
 
+
+
 for ac_header in \
     arpa/inet.h            \
+    bluetooth/bluetooth.h  \
     bluetooth/bnep.h       \
     bluetooth/cmtp.h       \
     bluetooth/hci.h        \
@@ -5388,6 +5391,7 @@ for ac_header in \
     linux/suspend_ioctls.h \
     linux/synclink.h       \
     linux/tiocl.h          \
+    linux/types.h          \
     linux/udf_fs_i.h       \
     linux/uinput.h         \
     linux/usb/g_printer.h  \

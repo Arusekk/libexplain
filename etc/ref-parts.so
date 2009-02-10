@@ -77,8 +77,14 @@
 .so man/man3/libexplain_getc_or_die.3
 .so man/man3/libexplain_getcwd.3
 .so man/man3/libexplain_getcwd_or_die.3
+.so man/man3/libexplain_getpeername.3
+.so man/man3/libexplain_getpeername_or_die.3
 .so man/man3/libexplain_getrlimit.3
 .so man/man3/libexplain_getrlimit_or_die.3
+.so man/man3/libexplain_getsockname.3
+.so man/man3/libexplain_getsockname_or_die.3
+.so man/man3/libexplain_getsockopt.3
+.so man/man3/libexplain_getsockopt_or_die.3
 .so man/man3/libexplain_gettimeofday.3
 .so man/man3/libexplain_gettimeofday_or_die.3
 .so man/man3/libexplain_ioctl.3
@@ -131,6 +137,8 @@
 .so man/man3/libexplain_rmdir_or_die.3
 .so man/man3/libexplain_select.3
 .so man/man3/libexplain_select_or_die.3
+.so man/man3/libexplain_setsockopt.3
+.so man/man3/libexplain_setsockopt_or_die.3
 .so man/man3/libexplain_socket.3
 .so man/man3/libexplain_socket_or_die.3
 .so man/man3/libexplain_stat.3

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,9 +19,12 @@
 
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/socket.h>
+#include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/sockaddr.h>
 #include <libexplain/lsof.h>
 #include <libexplain/string_buffer.h>
 
@@ -50,8 +53,8 @@ n_callback(libexplain_lsof_t *context, const char *name)
 #endif
 
 
-void
-libexplain_buffer_fildes_to_pathname(libexplain_string_buffer_t *sb, int fildes)
+static void
+libexplain_buffer_fildes_to_path(libexplain_string_buffer_t *sb, int fildes)
 {
 #ifdef PROC_FS_USEFUL
     int             n;
@@ -75,4 +78,54 @@ libexplain_buffer_fildes_to_pathname(libexplain_string_buffer_t *sb, int fildes)
     snprintf(options, sizeof(options), "-p %d -d %d", getpid(), fildes);
     libexplain_lsof(options, &obj.inherited);
 #endif
+}
+
+
+static int
+libexplain_buffer_fildes_to_sockaddr(libexplain_string_buffer_t *sb, int fildes)
+{
+    struct sockaddr_storage sa;
+    socklen_t       sas;
+
+    /*
+     * Print the address of the local end of the connection.
+     */
+    sas = sizeof(sa);
+    if (getsockname(fildes, (struct sockaddr *)&sa, &sas) < 0)
+        return -1;
+    libexplain_string_buffer_putc(sb, ' ');
+    libexplain_buffer_sockaddr(sb, (struct sockaddr *)&sa, sas);
+
+    /*
+     * If available, also
+     * print the address of the remote end of the connection.
+     */
+    sas = sizeof(sa);
+    if (getpeername(fildes, (struct sockaddr *)&sa, &sas) < 0)
+        return 0;
+    libexplain_string_buffer_puts(sb, " => ");
+    libexplain_buffer_sockaddr(sb, (struct sockaddr *)&sa, sas);
+    return 0;
+}
+
+
+void
+libexplain_buffer_fildes_to_pathname(libexplain_string_buffer_t *sb, int fildes)
+{
+    struct stat st;
+
+    if (fstat(fildes, &st) < 0)
+        return;
+    switch (st.st_mode & S_IFMT)
+    {
+    case S_IFSOCK:
+        if (libexplain_buffer_fildes_to_sockaddr(sb, fildes))
+            goto oops;
+        break;
+
+    default:
+        oops:
+        libexplain_buffer_fildes_to_path(sb, fildes);
+        break;
+    }
 }

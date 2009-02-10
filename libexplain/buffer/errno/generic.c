@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/enfile.h>
+#include <libexplain/buffer/enobufs.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/gettext.h>
@@ -64,17 +65,7 @@ libexplain_buffer_errno_generic(libexplain_string_buffer_t *sb, int errnum)
         break;
 
     case ENOBUFS:
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used as a generic explanation
-             * of an ENOBUFS error returned by any system call that does
-             * not provide a more specific explanation.
-             */
-            i18n("insufficient kernel resources are available in the "
-            "system to complete the system call")
-        );
+        libexplain_buffer_enobufs(sb);
         break;
 
     default:

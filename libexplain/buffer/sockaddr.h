@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,6 +21,8 @@
 
 #include <libexplain/string_buffer.h>
 
+struct in_addr; /* forward */
+
 /**
   * The libexplain_buffer_sockaddr function may be used to
   *
@@ -33,5 +35,17 @@
   */
 void libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
     const struct sockaddr *sa, int sa_len);
+
+/**
+  * The libexplain_buffer_in_addr function is used
+  * to print a representation of an in_addr structure.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param addr
+  *    Pointer to the in address of interest
+  */
+void libexplain_buffer_in_addr(libexplain_string_buffer_t *sb,
+    const struct in_addr *addr);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKADDR_H */

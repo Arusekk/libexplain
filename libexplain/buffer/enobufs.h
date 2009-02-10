@@ -16,27 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/buffer/argument_is_invalid.h>
+#ifndef LIBEXPLAIN_BUFFER_ENOBUFS_H
+#define LIBEXPLAIN_BUFFER_ENOBUFS_H
 
+#include <libexplain/string_buffer.h>
 
-void
-libexplain_buffer_argument_is_invalid(libexplain_string_buffer_t *sb,
-    const char *name, long value)
-{
-    libexplain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used to explain an EINVAL
-         * error reported by the accept(2) system call (and others).
-         *
-         * %1$d => The name of the argument that has an invalid value
-         * %2$ld => The actual size passed (because the
-         *         recapitualtion fo the system call is going to
-         *         have a pointer in it, not the actual value).
-         */
-        i18n("%s is invalid (%ld)"),
-        name,
-        value
-    );
-}
+struct enobufs; /* forward */
+
+/**
+  * The libexplain_buffer_enobufs function may be used to
+  * print a generic explanation for and ENOBUFS error.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  */
+void libexplain_buffer_enobufs(libexplain_string_buffer_t *sb);
+
+#endif /* LIBEXPLAIN_BUFFER_ENOBUFS_H */

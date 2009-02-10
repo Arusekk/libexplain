@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -28,6 +28,7 @@
 #include <libexplain/buffer/eafnosupport.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
@@ -217,20 +218,11 @@ libexplain_buffer_errno_bind_explanation(libexplain_string_buffer_t *sb,
         {
             if (libexplain_fildes_to_address_family(fildes) == AF_UNIX)
             {
-                libexplain_string_buffer_printf_gettext
+                libexplain_buffer_einval_too_small
                 (
                     sb,
-                    /*
-                     * xgettext:  This message is used to explain an
-                     * EINVAL error reported by a bind(2) system call,
-                     * in the case where a Unix domain socket address
-                     * was accompanied by the wrong size; probably too
-                     * short.
-                     *
-                     * %1$s => The name of the offending system call argument.
-                     */
-                    i18n("%s is incorrect"),
-                    "sock_addr_size"
+                    "sock_addr_size",
+                    sock_addr_size
                 );
             }
             else
