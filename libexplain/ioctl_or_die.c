@@ -22,6 +22,7 @@
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/ioctl.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -34,6 +35,7 @@ libexplain_ioctl_or_die(int fildes, int request, void *data)
     result = ioctl(fildes, request, data);
     if (result == -1 && errno != 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print
         (
             stderr,
@@ -44,4 +46,4 @@ libexplain_ioctl_or_die(int fildes, int request, void *data)
     return result;
 }
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et */

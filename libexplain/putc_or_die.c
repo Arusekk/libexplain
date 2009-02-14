@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/option.h>
 #include <libexplain/putc.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -30,6 +31,7 @@ static
 void
 libexplain_putc_or_die_failed(int c, FILE *fp)
 {
+    libexplain_program_name_assemble_internal(1);
     libexplain_wrap_and_print(stderr, libexplain_putc(c, fp));
     exit(EXIT_FAILURE);
 }

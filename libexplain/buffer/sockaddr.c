@@ -64,7 +64,15 @@ libexplain_buffer_in_addr(libexplain_string_buffer_t *sb,
     const struct in_addr *addr)
 {
     libexplain_string_buffer_puts(sb, inet_ntoa(*addr));
-    if (libexplain_option_dialect_specific())
+    if (ntohl(addr->s_addr) == INADDR_ANY)
+    {
+        libexplain_string_buffer_puts(sb, " INADDR_ANY");
+    }
+    else if (ntohl(addr->s_addr) == INADDR_BROADCAST)
+    {
+        libexplain_string_buffer_puts(sb, " INADDR_BROADCAST");
+    }
+    else if (libexplain_option_dialect_specific())
     {
         struct hostent  *hep;
 
@@ -99,7 +107,7 @@ libexplain_buffer_sockaddr_af_inet(libexplain_string_buffer_t *sb,
      */
     (void)sa_len;
     port = ntohs(sa->sin_port);
-    libexplain_string_buffer_printf(sb, ", sin_port = %hu", port);
+    libexplain_string_buffer_printf(sb, ", sin_port = %u", port);
     if (libexplain_option_dialect_specific())
     {
         struct servent  *sep;
@@ -110,9 +118,9 @@ libexplain_buffer_sockaddr_af_inet(libexplain_string_buffer_t *sb,
          * could cause false negatives for automated testing.
          */
         /* FIXME: use getservbyport_r if available */
-        sep = getservbyport(port, "tcp");
+        sep = getservbyport(sa->sin_port, "tcp");
         if (!sep)
-            sep = getservbyport(port, "udp");
+            sep = getservbyport(sa->sin_port, "udp");
         if (sep)
         {
             libexplain_string_buffer_putc(sb, ' ');
@@ -261,7 +269,7 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
      */
     (void)sa_len;
     port = ntohs(sa->sin6_port);
-    libexplain_string_buffer_printf(sb, ", sin_port = %hu", port);
+    libexplain_string_buffer_printf(sb, ", sin_port = %u", port);
     if (libexplain_option_dialect_specific())
     {
         struct servent  *sep;

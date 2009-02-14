@@ -1,7 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
 .\" Copyright (C) 2009 Peter Miller
-.\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -20,16 +19,11 @@
 .\"
 .\" you can create the initial cut of this file using the
 .\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 6 -unf
+.\"             -p libexplain.0 -c 8 -unf
 .\" command, and then editing it to be more appropriate.
 .\"
 .\" ------------------------------------------------------------------------
-.\" .PP
-.\" .if n *
-.\" .if t \(bu
-.\" .\" Change N
-.\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.6 (2009-Jan-16)
-.\" vim:ts=8:sw=4:et
+.SS Version 0.8 (2009-Feb-14)
+.\" vim: set ts=8 sw=4 et

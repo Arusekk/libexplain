@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/common_message_buffer.h>
+#include <libexplain/program_name.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/strtod_or_die.h>
 #include <libexplain/wrap_and_print.h>
@@ -36,6 +37,8 @@ libexplain_strtod_or_die(const char *cp)
     n = strtod(cp, &ep);
     if (cp == ep || *ep)
     {
+        const char      *prog;
+
         libexplain_string_buffer_t sb;
         libexplain_string_buffer_init
         (
@@ -43,6 +46,12 @@ libexplain_strtod_or_die(const char *cp)
             libexplain_common_message_buffer,
             libexplain_common_message_buffer_size
         );
+        prog = libexplain_program_name_get();
+        if (prog && *prog)
+        {
+            libexplain_string_buffer_puts(&sb, prog);
+            libexplain_string_buffer_puts(&sb, ": ");
+        }
         libexplain_string_buffer_puts(&sb, "the string ");
         libexplain_string_buffer_puts_quoted(&sb, cp);
         libexplain_string_buffer_puts(&sb, " doesn't look like a number");

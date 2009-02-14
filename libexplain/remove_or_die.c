@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,9 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/option.h>
 #include <libexplain/remove.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -44,6 +46,7 @@ libexplain_remove_or_die(const char *pathname)
 {
     if (remove(pathname) < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_remove(pathname));
         exit(EXIT_FAILURE);
     }

@@ -21,6 +21,7 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/execvp.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -29,6 +30,7 @@ libexplain_execvp_or_die(const char *pathname, char *const *argv)
 {
     if (execvp(pathname, argv) < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_execvp(pathname, argv));
         exit(EXIT_FAILURE);
     }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <libexplain/ac/sys/stat.h>
 
 #include <libexplain/chmod.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -30,6 +31,7 @@ libexplain_chmod_or_die(const char *pathname, int mode)
 {
     if (chmod(pathname, mode))
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_chmod(pathname, mode));
         exit(EXIT_FAILURE);
     }

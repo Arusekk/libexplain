@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -64,7 +64,7 @@ void libexplain_program_name_set(const char *name);
   * whether or not the name of the calling process is to be included in
   * error messages issued by the libexplain_*_or_die functions.  If not
   * expolicitly set, is controlled by the LIBEXPLAIN_OPTIONS environemnt
-  * variable, or defaults to true if not set there either.
+  * variable, or defaults to false if not set there either.
   *
   * @param yesno
   *     non-zero (true) to have program name included,

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libexplain 0.7.D001\n"
+"Project-Id-Version: libexplain 0.8.D001\n"
 "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-"POT-Creation-Date: 2009-02-10 21:39+1100\n"
+"POT-Creation-Date: 2009-02-14 14:09+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,7 +161,7 @@ msgstr ""
 #.         the errno.h constant
 #.         e.g. "No such file or directory (2, ENOENT)"
 #.
-#: libexplain/explanation.c:121
+#: libexplain/explanation.c:127
 #, c-format
 msgid "%s failed, %s"
 msgstr ""
@@ -199,7 +199,7 @@ msgstr ""
 #. particular, the explanation portion should only ever be one
 #. sentence, so that a clause (e.g. above) may be appended.
 #.
-#: libexplain/explanation.c:176
+#: libexplain/explanation.c:182
 #, c-format
 msgid "%s failed, %s because %s"
 msgstr ""
@@ -361,7 +361,7 @@ msgstr ""
 #.
 #. %1$s => the C text of the system call and its arguments
 #.
-#: libexplain/explanation.c:75
+#: libexplain/explanation.c:81
 #, c-format
 msgid "%s: success"
 msgstr ""

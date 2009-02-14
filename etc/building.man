@@ -360,8 +360,8 @@ To run this test suite, use the command
 .ft R
 .RE
 .PP
-The tests take a few seconds each,
-with a few very fast,
+The tests take a fraction of a second each,
+with most very fast,
 and a couple very slow,
 but it varies greatly depending on your CPU.
 .PP
@@ -372,6 +372,8 @@ Passed All Tests
 .ft R
 .RE
 should appear at the end of the make.
+.PP
+Please Note: you will get false negatives if you run the tests as root.
 .br
 .ne 1i
 .SH INSTALLING LIBEXPLAIN

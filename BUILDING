@@ -183,12 +183,15 @@ TESTING LIBEXPLAIN
                 Passed All Tests
                 %
 
-        The tests take a few seconds each, with a few very fast, and a couple
-        very slow, but it varies greatly depending on your CPU.
+        The tests take a fraction of a second each, with most very fast, and a
+        couple very slow, but it varies greatly depending on your CPU.
 
         If all went well, the message
                 Passed All Tests
         should appear at the end of the make.
+
+        Please Note: you will get false negatives if you run the tests as
+        root.
 
 INSTALLING LIBEXPLAIN
         As explained in the SITE CONFIGURATION section, above, the libexplain
@@ -215,7 +218,7 @@ GETTING HELP
         When reporting problems, please include the version number given by
         the
                 % explain -version
-                explain version 0.D007
+                explain version 0.D008
                 ...warranty disclaimer...
                 %
         command.  Please do not send this example; run the program for the

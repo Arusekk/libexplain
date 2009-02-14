@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,14 @@ or write(2) system call
 fubar
 test $? -eq 0 || no_result
 
+fmt > test.ok2 << 'fubar'
+chmod(pathname = "foobar", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+failed, Input/output error (EIO) because a low-level I/O error occurred,
+probably in hardware, possibly as a result of a preceeding read(2) or
+write(2) system call
+fubar
+test $? -eq 0 || no_result
+
 touch foobar
 test $? -eq 0 || no_result
 
@@ -44,7 +52,7 @@ test $? -eq 0 || no_result
 fmt test.out2 > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out
+diff test.ok test.out || diff test.ok2 test.out >/dev/null
 test $? -eq 0 || fail
 
 #

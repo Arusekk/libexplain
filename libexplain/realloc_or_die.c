@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/option.h>
 #include <libexplain/realloc.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -38,6 +39,7 @@ libexplain_realloc_or_die(void *ptr, size_t size)
     result = ptr ? realloc(ptr, ok_size) : malloc(ok_size);
     if (!result)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_realloc(ptr, size));
         exit(EXIT_FAILURE);
     }

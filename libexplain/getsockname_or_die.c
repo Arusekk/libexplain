@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/getsockname.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -29,6 +30,7 @@ libexplain_getsockname_or_die(int fildes, struct sockaddr *sock_addr,
 {
     if (getsockname(fildes, sock_addr, sock_addr_size) < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print
         (
             stderr,

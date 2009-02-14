@@ -1257,6 +1257,7 @@ generate(node_t *declspec, node_t *decl)
     fprintf(fp, "#include <libexplain/ac/stdlib.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "#include <libexplain/%s.h>\n", function_name);
+    fprintf(fp, "#include <libexplain/option.h>\n");
     fprintf(fp, "#include <libexplain/wrap_and_print.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "\n");
@@ -1269,6 +1270,7 @@ generate(node_t *declspec, node_t *decl)
     node_print(call_args, fp);
     fprintf(fp, ") < 0)\n");
     fprintf(fp, "    {\n");
+    fprintf(fp, "        libexplain_program_name_assemble_internal(1);\n");
     fprintf(fp, "        libexplain_wrap_and_print(stderr, ");
     fprintf(fp, "libexplain_%s(", function_name);
     node_print(call_args, fp);

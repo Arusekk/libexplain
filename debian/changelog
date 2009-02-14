@@ -1,8 +1,14 @@
-libexplain (0.7.D001) unstable; urgency=low
+libexplain (0.8.D001) unstable; urgency=low
 
   * This change set prepares libexplain for the next public release.
 
- -- Peter Miller <pmiller@opensource.org.au>  Tue, 10 Feb 2009 21:40:00 +1100
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 14 Feb 2009 14:09:44 +1100
+
+libexplain (0.D008) unstable; urgency=low
+
+  * Explain errno values returned by libc functions, branch 0.7.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 14 Feb 2009 12:35:59 +1100
 
 libexplain (0.D007) unstable; urgency=low
 
@@ -45,6 +51,47 @@ libexplain (0.D001) unstable; urgency=low
   * Explain errno values returned by libc functions, branch 0.0.
 
  -- Peter Miller <pmiller@opensource.org.au>  Sun, 26 Oct 2008 20:44:39 +1100
+
+libexplain (0.7.D006) unstable; urgency=low
+
+  * A weird bug with the debian packaging has been fixed.  Basically, if you
+    don't use debuild -sa the tarball produced can be missing some files.  WTF?
+
+ -- Peter Miller <pmiller@opensource.org.au>  Sat, 14 Feb 2009 08:58:34 +1100
+
+libexplain (0.7.D005) unstable; urgency=low
+
+  * The program name is more carefully doled out.  The *_or_die functions now
+    print the program name, unless overridden by the LIBEXPLAIN_OPTIONS
+    environment variables.  Otherwise, the program name is NOT inserted (it is
+    assumed that the program will do that for itself).
+
+ -- Peter Miller <pmiller@opensource.org.au>  Fri, 13 Feb 2009 20:43:18 +1100
+
+libexplain (0.7.D004) unstable; urgency=low
+
+  * The decoding of IPv4 sockaddr structs has been improved.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Wed, 11 Feb 2009 23:12:44 +1100
+
+libexplain (0.7.D003) unstable; urgency=low
+
+  * Change 11 has been reverted, it was wrong.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Wed, 11 Feb 2009 10:14:01 +1100
+
+libexplain (0.7.D002) unstable; urgency=low
+
+  * A bug has been fixed in the sin_port decoding, it was using too many ntohs
+    calls.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Tue, 10 Feb 2009 22:42:18 +1100
+
+libexplain (0.7.D001) unstable; urgency=low
+
+  * This change set prepares libexplain for the next public release.
+
+ -- Peter Miller <pmiller@opensource.org.au>  Tue, 10 Feb 2009 21:49:25 +1100
 
 libexplain (0.6.D008) unstable; urgency=low
 

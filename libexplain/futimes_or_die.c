@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 #include <libexplain/ac/sys/time.h>
 
 #include <libexplain/futimes.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -29,9 +30,10 @@ libexplain_futimes_or_die(int fildes, const struct timeval *tv)
 {
     if (futimes(fildes, tv) < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_futimes(fildes, tv));
         exit(EXIT_FAILURE);
     }
 }
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et */

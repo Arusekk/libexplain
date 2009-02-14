@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -81,7 +81,7 @@ web-site/%.tar.gz: [source_file_order] debian/control
 	rm web-site/%.tar
     	    set clearstat;
     [tar-cmd] --create --file - --dereference
-            [resolve [source_file_order]] debian
+            [resolve [sort [source_file_order]]] debian
 	| tardy -unu 0 -gnu 0 -una Peter -gna Miller
     	    -p % -ms 0644 -mc 07022 -now
     	    [prepost "-rp=" "" [search_list]]
@@ -158,7 +158,11 @@ debian-package: web-site/[project_minus].tar.gz bin/test_user
     echo Options Indexes > .htaccess &&
     tar xzf ../[project_minus].tar.gz &&
     cd [project_minus] &&
-    dpkg-buildpackage -sgpg [key] &&
+#if 0
+    dpkg-buildpackage -sgpg [key] -sa &&
+#else
+    debuild [key] -sa &&
+#endif
     cd .. &&
     rm -rf [project_minus] &&
     lintian *.changes

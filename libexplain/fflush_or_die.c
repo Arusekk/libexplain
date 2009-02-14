@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/fflush.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -29,6 +30,7 @@ libexplain_fflush_or_die(FILE *fp)
 {
     if (fflush(fp))
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_fflush(fp));
         exit(EXIT_FAILURE);
     }

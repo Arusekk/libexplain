@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/freopen.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -28,6 +29,7 @@ libexplain_freopen_or_die(const char *pathname, const char *flags, FILE *fp)
 {
     if (!freopen(pathname, flags, fp))
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print
         (
             stderr,

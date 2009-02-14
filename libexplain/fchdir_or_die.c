@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/fchdir.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -30,6 +31,7 @@ libexplain_fchdir_or_die(int fildes)
 {
     if (fchdir(fildes) < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_fchdir(fildes));
         exit(EXIT_FAILURE);
     }

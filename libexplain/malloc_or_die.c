@@ -21,6 +21,7 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/malloc.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -39,6 +40,7 @@ libexplain_malloc_or_die(size_t size)
     result = malloc(ok_size);
     if (!result)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_malloc(size));
         exit(EXIT_FAILURE);
     }

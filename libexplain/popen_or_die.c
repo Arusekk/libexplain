@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/popen.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -31,6 +32,7 @@ libexplain_popen_or_die(const char *command, const char *flags)
     fp = popen(command, flags);
     if (!fp)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_popen(command, flags));
         exit(EXIT_FAILURE);
     }

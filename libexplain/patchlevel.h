@@ -1,2 +1,2 @@
-#define PATCHLEVEL "0.7.D001"
+#define PATCHLEVEL "0.8.D001"
 #define COPYRIGHT_YEARS "2008, 2009"

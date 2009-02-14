@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -57,8 +57,14 @@ libexplain_explanation_assemble_common(libexplain_explanation_t *exp,
 
     if (libexplain_option_assemble_program_name())
     {
-        libexplain_string_buffer_puts(result, libexplain_program_name_get());
-        libexplain_string_buffer_puts(result, ": ");
+        const char      *prog;
+
+        prog = libexplain_program_name_get();
+        if (prog && *prog)
+        {
+            libexplain_string_buffer_puts(result, prog);
+            libexplain_string_buffer_puts(result, ": ");
+        }
     }
 
     if (exp->errnum == 0)

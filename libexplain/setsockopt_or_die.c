@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/option.h>
 #include <libexplain/setsockopt.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -29,6 +30,7 @@ libexplain_setsockopt_or_die(int fildes, int level, int name, void *data,
 {
     if (setsockopt(fildes, level, name, data, data_size) < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print
         (
             stderr,

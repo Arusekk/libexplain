@@ -24,6 +24,7 @@
 #include <libexplain/buffer/wait_status.h>
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/pclose.h>
+#include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -36,6 +37,7 @@ libexplain_pclose_success(FILE *fp)
     status = pclose(fp);
     if (status < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_pclose(fp));
     }
     else if (status != 0)

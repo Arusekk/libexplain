@@ -16,14 +16,18 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 7 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
+.PP
+.if n *
+.if t \(bu
+.\" Change 15
+A problem with the Debian packaging has been fixed.
+.PP
+.if n *
+.if t \(bu
+.\" Change 13
+The decoding of IPv4 sockaddr structs has been improved.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
 .SS Version 0.7 (2009-Feb-10)
-.\" vim:ts=8:sw=4:et
+.\" vim: set ts=8 sw=4 et

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/option.h>
 #include <libexplain/readlink.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -32,6 +33,7 @@ libexplain_readlink_or_die(const char *pathname, char *data, int data_size)
     result = readlink(pathname, data, data_size);
     if (result < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print
         (
             stderr,

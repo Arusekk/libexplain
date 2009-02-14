@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -70,5 +70,19 @@ int libexplain_option_debug(void);
   *     if shall not include program name.
   */
 int libexplain_option_assemble_program_name(void);
+
+/**
+  * The libexplain_program_name_assemble_internal function is used
+  * to control whether or not the name of the calling process is to
+  * be included in error messages issued by the libexplain_*_or_die
+  * functions.  This will have a precedence below the LIBEXPLAIN_OPTIONS
+  * environment variable, but higher than default.  It is intended for
+  * use bu the libexplain_*_or_die functions.
+  *
+  * @param yesno
+  *     non-zero (true) to have program name included,
+  *     zero (false) to have program name excluded.
+  */
+void libexplain_program_name_assemble_internal(int yesno);
 
 #endif /* LIBEXPLAIN_OPTION_H */

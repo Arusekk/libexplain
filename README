@@ -36,17 +36,17 @@ HOME PAGE
 
           URL:    http://libexplain.sourceforge.net/
           File:   index.html              # the libexplain page
-          File:   libexplain.0.7.README   # Description, from the tar file
-          File:   libexplain.0.7.lsm      # Description, LSM format
-          File:   libexplain.0.7.tar.gz   # the complete source
-          File:   libexplain.0.7.pdf      # Reference Manual
+          File:   libexplain.0.8.README   # Description, from the tar file
+          File:   libexplain.0.8.lsm      # Description, LSM format
+          File:   libexplain.0.8.tar.gz   # the complete source
+          File:   libexplain.0.8.pdf      # Reference Manual
 
 BUILDING LIBEXPLAIN
        Full instructions for building libexplain may be found in the BUILDING
        file included in this distribution.
 
 COPYRIGHT
-       libexplain version 0.7
+       libexplain version 0.8
        Copyright (C) 2008, 2009 Peter Miller
 
        This program is free software; you can redistribute it and/or modify it
@@ -136,6 +136,11 @@ RELEASE NOTES
        releases.  For excruciating and complete detail, and also credits for
        those of you who have generously sent me suggestions and bug reports,
        see the etc/CHANGES.* files.
+
+   Version 0.8 (2009-Feb-14)
+       * A problem with the Debian packaging has been fixed.
+
+       * The decoding of IPv4 sockaddr structs has been improved.
 
    Version 0.7 (2009-Feb-10)
        * Coverage has been extended to include getsockopt(2), getpeername(2),

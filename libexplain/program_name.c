@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,6 +34,8 @@ libexplain_program_name_set_real(const char *name)
 {
     const char      *cp;
 
+    if (!name)
+        name = "";
     progname[0] = '\0';
     if (!name)
         return;
@@ -114,16 +116,14 @@ libexplain_program_name_get(void)
         return progname;
 
     /*
-     * bash(1) set the "_" environment variable,
+     * bash(1) sets the "_" environment variable,
      * use that if available.
      */
     libexplain_program_name_set_real(getenv("_"));
     if (progname[0])
         return progname;
 
-    libexplain_program_name_set_real("?unknown?program?name?");
-    assert(progname[0]);
-    return progname;
+    return "";
 }
 
 
@@ -131,6 +131,6 @@ void
 libexplain_program_name_set(const char *name)
 {
     libexplain_program_name_set_real(name);
-    if (progname[0])
-        libexplain_program_name_assemble(1);
+    if (!progname[0])
+        libexplain_program_name_assemble(0);
 }

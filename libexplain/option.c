@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/errno.h>
 #include <libexplain/ac/ctype.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/stdlib.h>
@@ -29,19 +30,37 @@
 #include <libexplain/wrap_and_print.h>
 
 
+typedef enum option_level_t option_level_t;
+enum option_level_t
+{
+    option_level_default,
+    option_level_something_or_die,
+    option_level_environment_variable,
+    option_level_client,
+};
+
+typedef char option_value_t;
+
+typedef struct option_t option_t;
+struct option_t
+{
+    option_level_t level;
+    option_value_t value;
+};
+
 typedef char value_t;
 
 static int initialised;
-static value_t debug;
-static value_t numeric_errno = 1;
-static value_t dialect_specific = 1;
-static value_t assemble_program_name = 1;
+static option_t debug = { option_level_default, 0 };
+static option_t numeric_errno = { option_level_default, 1 };
+static option_t dialect_specific = { option_level_default, 1 };
+static option_t assemble_program_name = { option_level_default, 0 };
 
 typedef struct table_t table_t;
 struct table_t
 {
     const char      *name;
-    value_t         *location;
+    option_t        *location;
 };
 
 static const table_t table[] =
@@ -55,7 +74,7 @@ static const table_t table[] =
 
 
 static void
-process(char *name)
+process(char *name, option_level_t level)
 {
     const table_t   *tp;
     value_t         value;
@@ -81,11 +100,15 @@ process(char *name)
     {
         if (0 == strcmp(tp->name, name))
         {
-            *tp->location = value;
+            if (level >= tp->location->level)
+            {
+                tp->location->level = level;
+                tp->location->value = value;
+            }
             return;
         }
     }
-    if (debug)
+    if (debug.value)
     {
         const table_t   *best_tp;
         double          best_weight;
@@ -112,7 +135,11 @@ process(char *name)
         libexplain_string_buffer_puts(&buf, " unknown");
         if (best_tp)
         {
-            *best_tp->location = value;
+            if (level >= best_tp->location->level)
+            {
+                best_tp->location->level = level;
+                best_tp->location->value = value;
+            }
 
             libexplain_string_buffer_puts(&buf, ", assuming you meant ");
             libexplain_string_buffer_puts_quoted(&buf, best_tp->name);
@@ -127,7 +154,9 @@ static void
 initialise(void)
 {
     const char      *cp;
+    int             err;
 
+    err = errno;
     initialised = 1;
     cp = getenv("LIBEXPLAIN_OPTIONS");
     if (!cp)
@@ -165,8 +194,9 @@ initialise(void)
             --np;
         *np = '\0';
 
-        process(name);
+        process(name, option_level_environment_variable);
     }
+    errno = err;
 }
 
 
@@ -175,7 +205,7 @@ libexplain_option_debug(void)
 {
     if (!initialised)
         initialise();
-    return debug;
+    return debug.value;
 }
 
 
@@ -184,7 +214,7 @@ libexplain_option_numeric_errno(void)
 {
     if (!initialised)
         initialise();
-    return numeric_errno;
+    return numeric_errno.value;
 }
 
 
@@ -193,7 +223,7 @@ libexplain_option_dialect_specific(void)
 {
     if (!initialised)
         initialise();
-    return dialect_specific;
+    return dialect_specific.value;
 }
 
 
@@ -202,14 +232,39 @@ libexplain_option_assemble_program_name(void)
 {
     if (!initialised)
         initialise();
-    return assemble_program_name;
+    return assemble_program_name.value;
 }
 
 
 void
 libexplain_program_name_assemble(int yesno)
 {
+    /*
+     * This is the public interface, it has highest
+     * precedence.  For the internal interface, see the
+     * libexplain_program_name_assemble_internal function.
+     */
     if (!initialised)
         initialise();
-    assemble_program_name = !!yesno;
+    if (assemble_program_name.level <= option_level_client)
+    {
+        assemble_program_name.level = option_level_client;
+        assemble_program_name.value = !!yesno;
+    }
+}
+
+
+void
+libexplain_program_name_assemble_internal(int yesno)
+{
+    /*
+     * This is the private interface.
+     */
+    if (!initialised)
+        initialise();
+    if (assemble_program_name.level <= option_level_something_or_die)
+    {
+        assemble_program_name.level = option_level_something_or_die;
+        assemble_program_name.value = !!yesno;
+    }
 }

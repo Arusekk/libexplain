@@ -21,6 +21,7 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/pipe.h>
+#include <libexplain/option.h>
 #include <libexplain/wrap_and_print.h>
 
 
@@ -29,6 +30,7 @@ libexplain_pipe_or_die(int *pipefd)
 {
     if (pipe(pipefd) < 0)
     {
+        libexplain_program_name_assemble_internal(1);
         libexplain_wrap_and_print(stderr, libexplain_pipe(pipefd));
         exit(EXIT_FAILURE);
     }
