@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,21 +22,21 @@
 
 
 int
-libexplain_reverse_strerror(const char *text)
+explain_reverse_strerror(const char *text)
 {
-    const libexplain_errno_info_t *tp;
+    const explain_errno_info_t *tp;
 
     /*
      * Look for an exact match.
      */
-    tp = libexplain_errno_info_by_text(text);
+    tp = explain_errno_info_by_text(text);
     if (tp)
         return tp->error_number;
 
     /*
      * No exact match, look for a fuzzy match.
      */
-    tp = libexplain_errno_info_by_text_fuzzy(text);
+    tp = explain_errno_info_by_text_fuzzy(text);
     if (tp)
         return tp->error_number;
 

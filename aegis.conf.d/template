@@ -26,6 +26,10 @@
 file_template =
 [
     {
+        pattern = [ "libexplain/buffer/e*.c" ];
+        body = "${read_file ${source etc/template/lib_buf_ec abs}}";
+    },
+    {
         pattern = [ "libexplain/buffer/*.c", "libexplain/string_buffer/*.c" ];
         body = "${read_file ${source etc/template/lib_buf_c abs}}";
     },
@@ -48,6 +52,10 @@ file_template =
     {
         pattern = [ "libexplain/iocontrol/*.h" ];
         body = "${read_file ${source etc/template/lib_ioc_h abs}}";
+    },
+    {
+        pattern = [ "libexplain/buffer/e*.h" ];
+        body = "${read_file ${source etc/template/lib_buf_eh abs}}";
     },
     {
         pattern = [ "libexplain/buffer/*.h", "libexplain/string_buffer/*.h" ];

@@ -24,7 +24,7 @@
 struct mtconfiginfo; /* forward */
 
 /**
-  * The libexplain_buffer_mtconfiginfo function may be used to
+  * The explain_buffer_mtconfiginfo function may be used to
   * print a representation of a mtconfiginfo structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct mtconfiginfo; /* forward */
   * @param data
   *     The mtconfiginfo structure to be printed.
   */
-void libexplain_buffer_mtconfiginfo(libexplain_string_buffer_t *sb,
+void explain_buffer_mtconfiginfo(explain_string_buffer_t *sb,
     const struct mtconfiginfo *data);
 
 #endif /* LIBEXPLAIN_BUFFER_MTCONFIGINFO_H */

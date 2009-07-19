@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,14 +23,14 @@
 
 
 const char *
-libexplain_errno_readdir(int errnum, DIR *dir)
+explain_errno_readdir(int errnum, DIR *dir)
 {
-    libexplain_message_errno_readdir
+    explain_message_errno_readdir
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         dir
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }

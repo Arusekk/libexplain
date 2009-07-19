@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -63,28 +63,28 @@ get_mode(const char *pathname)
 
 
 static void
-libexplain_buffer_errno_rename_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_rename_system_call(explain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "rename(oldpath = ");
-    libexplain_buffer_pathname(sb, oldpath);
-    libexplain_string_buffer_puts(sb, ", newpath = ");
-    libexplain_buffer_pathname(sb, newpath);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "rename(oldpath = ");
+    explain_buffer_pathname(sb, oldpath);
+    explain_string_buffer_puts(sb, ", newpath = ");
+    explain_buffer_pathname(sb, newpath);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-dir_vs_not_dir(libexplain_string_buffer_t *sb, const char *dir_caption,
+dir_vs_not_dir(explain_string_buffer_t *sb, const char *dir_caption,
     const char *not_dir_caption, const struct stat *not_dir_st)
 {
-    libexplain_string_buffer_t ftype_sb;
+    explain_string_buffer_t ftype_sb;
     char            ftype[40];
 
-    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-    libexplain_buffer_file_type(&ftype_sb, not_dir_st->st_mode);
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    explain_buffer_file_type(&ftype_sb, not_dir_st->st_mode);
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -106,10 +106,10 @@ dir_vs_not_dir(libexplain_string_buffer_t *sb, const char *dir_caption,
 
 
 static void
-dir_vs_not_dir2(libexplain_string_buffer_t *sb, const char *dir_caption,
+dir_vs_not_dir2(explain_string_buffer_t *sb, const char *dir_caption,
     const char *not_dir_caption)
 {
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -130,16 +130,16 @@ dir_vs_not_dir2(libexplain_string_buffer_t *sb, const char *dir_caption,
 
 
 static void
-libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_rename_explanation(explain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
-    libexplain_final_t oldpath_final_component;
-    libexplain_final_t newpath_final_component;
+    explain_final_t oldpath_final_component;
+    explain_final_t newpath_final_component;
 
-    libexplain_final_init(&oldpath_final_component);
+    explain_final_init(&oldpath_final_component);
     oldpath_final_component.want_to_unlink = 1;
     oldpath_final_component.st_mode = get_mode(oldpath);
-    libexplain_final_init(&newpath_final_component);
+    explain_final_init(&newpath_final_component);
     newpath_final_component.must_exist = 0;
     newpath_final_component.want_to_create = 1;
     newpath_final_component.st_mode = oldpath_final_component.st_mode;
@@ -159,14 +159,14 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
             &&
                 S_ISDIR(oldpath_st.st_mode)
             &&
-                !libexplain_have_write_permission
+                !explain_have_write_permission
                 (
                     &oldpath_st,
                     &oldpath_final_component.id
                 )
             )
             {
-                libexplain_string_buffer_printf_gettext
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -192,7 +192,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
          */
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -201,7 +201,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 &oldpath_final_component
             )
         &&
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -215,7 +215,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
              * Unable to find anything specific, give the generic
              * explanation.
              */
-            libexplain_buffer_gettext
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -234,11 +234,11 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EBUSY:
-        if (libexplain_buffer_path_users(sb, oldpath, "oldpath") > 0)
+        if (explain_buffer_path_users(sb, oldpath, "oldpath") > 0)
             break;
-        if (libexplain_buffer_path_users(sb, newpath, "newpath") > 0)
+        if (explain_buffer_path_users(sb, newpath, "newpath") > 0)
             break;
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -255,21 +255,21 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (libexplain_path_is_efault(oldpath))
+        if (explain_path_is_efault(oldpath))
         {
-            libexplain_buffer_efault(sb, "oldpath");
+            explain_buffer_efault(sb, "oldpath");
             break;
         }
-        if (libexplain_path_is_efault(newpath))
+        if (explain_path_is_efault(newpath))
         {
-            libexplain_buffer_efault(sb, "newpath");
+            explain_buffer_efault(sb, "newpath");
             break;
         }
-        libexplain_buffer_efault(sb, "oldpath or newpath");
+        explain_buffer_efault(sb, "oldpath or newpath");
         break;
 
     case EINVAL:
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -305,7 +305,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ELOOP:
-        libexplain_buffer_eloop2
+        explain_buffer_eloop2
         (
             sb,
             oldpath,
@@ -318,11 +318,11 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EMLINK:
-        libexplain_buffer_emlink(sb, oldpath, newpath);
+        explain_buffer_emlink(sb, oldpath, newpath);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong2
+        explain_buffer_enametoolong2
         (
             sb,
             oldpath,
@@ -335,7 +335,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent2
+        explain_buffer_enoent2
         (
             sb,
             oldpath,
@@ -348,11 +348,11 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOSPC:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -366,11 +366,11 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
             i18n("the file system containing the file has no room for "
             "the new directory entry")
         );
-        libexplain_buffer_mount_point(sb, oldpath);
+        explain_buffer_mount_point(sb, oldpath);
         break;
 
     case ENOTDIR:
-        if (libexplain_pathname_is_a_directory(oldpath))
+        if (explain_pathname_is_a_directory(oldpath))
         {
             struct stat     newpath_st;
 
@@ -386,7 +386,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
             }
         }
 
-        libexplain_buffer_enotdir2
+        explain_buffer_enotdir2
         (
             sb,
             oldpath,
@@ -403,7 +403,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         {
             int             count;
 
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -419,16 +419,16 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 "newpath"
             );
 
-            count = libexplain_count_directory_entries(newpath);
+            count = explain_count_directory_entries(newpath);
             if (count > 0)
-                libexplain_string_buffer_printf(sb, " (%d)", count);
+                explain_string_buffer_printf(sb, " (%d)", count);
         }
         break;
 
     case EPERM:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errno,
@@ -437,7 +437,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 &oldpath_final_component
             )
         &&
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errno,
@@ -447,7 +447,7 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -468,17 +468,17 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 "oldpath"
             );
 #ifdef HAVE_SYS_CAPABILITY_H
-            if (libexplain_option_dialect_specific())
+            if (explain_option_dialect_specific())
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     " (does not have the CAP_FOWNER capability)"
                 );
             }
 #endif
-            libexplain_string_buffer_puts(sb, "; ");
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_puts(sb, "; ");
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -500,17 +500,17 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
                 "newpath"
             );
 #ifdef HAVE_SYS_CAPABILITY_H
-            if (libexplain_option_dialect_specific())
+            if (explain_option_dialect_specific())
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     " (does not have the CAP_FOWNER capability)"
                 );
             }
 #endif
-            libexplain_string_buffer_puts(sb, "; ");
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_puts(sb, "; ");
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -529,46 +529,46 @@ libexplain_buffer_errno_rename_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, newpath, "newpath");
+        explain_buffer_erofs(sb, newpath, "newpath");
         break;
 
     case EXDEV:
-        libexplain_buffer_exdev(sb, oldpath, newpath, "rename");
+        explain_buffer_exdev(sb, oldpath, newpath, "rename");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 
     /*
      * Let the user know where things stand after the failure.
      */
-    libexplain_buffer_note_if_still_exists(sb, oldpath, "oldpath");
-    libexplain_buffer_note_if_exists(sb, newpath, "newpath");
+    explain_buffer_note_if_still_exists(sb, oldpath, "oldpath");
+    explain_buffer_note_if_exists(sb, newpath, "newpath");
 }
 
 
 void
-libexplain_buffer_errno_rename(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_rename(explain_string_buffer_t *sb, int errnum,
     const char *oldpath, const char *newpath)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_rename_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_rename_system_call
     (
         &exp.system_call_sb,
         errnum,
         oldpath,
         newpath
     );
-    libexplain_buffer_errno_rename_explanation
+    explain_buffer_errno_rename_explanation
     (
         &exp.explanation_sb,
         errnum,
         oldpath,
         newpath
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

@@ -21,16 +21,16 @@
 
 
 const char *
-libexplain_errno_malloc(int errnum, size_t size)
+explain_errno_malloc(int errnum, size_t size)
 {
-    libexplain_message_errno_malloc
+    explain_message_errno_malloc
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         size
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }
 
 /* vim:ts=8:sw=4:et */

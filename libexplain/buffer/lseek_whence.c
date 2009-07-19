@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "SEEK_SET", SEEK_SET },
     { "SEEK_CUR", SEEK_CUR },
@@ -39,20 +39,20 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_lseek_whence(libexplain_string_buffer_t *sb, int whence)
+explain_buffer_lseek_whence(explain_string_buffer_t *sb, int whence)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
 
-    tp = libexplain_parse_bits_find_by_value(whence, table, SIZEOF(table));
+    tp = explain_parse_bits_find_by_value(whence, table, SIZEOF(table));
     if (tp)
-        libexplain_string_buffer_puts(sb, tp->name);
+        explain_string_buffer_puts(sb, tp->name);
     else
-        libexplain_string_buffer_printf(sb, "%d", whence);
+        explain_string_buffer_printf(sb, "%d", whence);
 }
 
 
 int
-libexplain_lseek_whence_parse_or_die(const char *text, const char *caption)
+explain_lseek_whence_parse_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,24 +24,24 @@
 
 struct stat; /* forward */
 
-typedef struct libexplain_have_identity_t libexplain_have_identity_t;
-struct libexplain_have_identity_t
+typedef struct explain_have_identity_t explain_have_identity_t;
+struct explain_have_identity_t
 {
     int uid;
     int gid;
 };
 
 /**
-  * The libexplain_have_identity_init function may be used to initialise
+  * The explain_have_identity_init function may be used to initialise
   * an ID to the process effective ID.
   *
   * @param id
   *     The identity to be initialised.
   */
-void libexplain_have_identity_init(libexplain_have_identity_t *id);
+void explain_have_identity_init(explain_have_identity_t *id);
 
 /**
-  * The libexplain_have_read_permission function may be used to test
+  * The explain_have_read_permission function may be used to test
   * whether or not the current process has read permissions on an inode.
   *
   * @param st
@@ -51,11 +51,11 @@ void libexplain_have_identity_init(libexplain_have_identity_t *id);
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_read_permission(const struct stat *st,
-    const libexplain_have_identity_t *hip);
+int explain_have_read_permission(const struct stat *st,
+    const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_explain_read_permission function may be used to
+  * The explain_explain_read_permission function may be used to
   * explain why the current process (does not) have read permissions on
   * an inode.
   *
@@ -68,11 +68,11 @@ int libexplain_have_read_permission(const struct stat *st,
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_explain_read_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st, const libexplain_have_identity_t *hip);
+int explain_explain_read_permission(explain_string_buffer_t *sb,
+    const struct stat *st, const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_have_write_permission function may be used to test
+  * The explain_have_write_permission function may be used to test
   * whether or not the current process has write permissions on an
   * inode.
   *
@@ -83,11 +83,11 @@ int libexplain_explain_read_permission(libexplain_string_buffer_t *sb,
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_write_permission(const struct stat *st,
-    const libexplain_have_identity_t *hip);
+int explain_have_write_permission(const struct stat *st,
+    const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_explain_write_permission function may be used to
+  * The explain_explain_write_permission function may be used to
   * explain why the current process (does not) have write permissions on
   * an inode.
   *
@@ -100,11 +100,11 @@ int libexplain_have_write_permission(const struct stat *st,
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_explain_write_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st, const libexplain_have_identity_t *hip);
+int explain_explain_write_permission(explain_string_buffer_t *sb,
+    const struct stat *st, const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_have_execute_permission function may be used to test
+  * The explain_have_execute_permission function may be used to test
   * whether or not the current process has execute permissions on an
   * inode.
   *
@@ -115,11 +115,11 @@ int libexplain_explain_write_permission(libexplain_string_buffer_t *sb,
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_execute_permission(const struct stat *st,
-    const libexplain_have_identity_t *hip);
+int explain_have_execute_permission(const struct stat *st,
+    const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_explain_execute_permission function may be used to
+  * The explain_explain_execute_permission function may be used to
   * explain why the current process (does not) have execute permissions
   * on an inode.
   *
@@ -132,11 +132,11 @@ int libexplain_have_execute_permission(const struct stat *st,
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_explain_execute_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st, const libexplain_have_identity_t *hip);
+int explain_explain_execute_permission(explain_string_buffer_t *sb,
+    const struct stat *st, const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_have_search_permission function may be used to test
+  * The explain_have_search_permission function may be used to test
   * whether or not the current process has search permissions on an
   * inode.
   *
@@ -147,11 +147,11 @@ int libexplain_explain_execute_permission(libexplain_string_buffer_t *sb,
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_search_permission(const struct stat *st,
-    const libexplain_have_identity_t *hip);
+int explain_have_search_permission(const struct stat *st,
+    const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_explain_search_permission function may be used to
+  * The explain_explain_search_permission function may be used to
   * explain why the current process (does not) have search permissions
   * on an inode.
   *
@@ -164,11 +164,11 @@ int libexplain_have_search_permission(const struct stat *st,
   * @returns
   *     int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_explain_search_permission(libexplain_string_buffer_t *sb,
-    const struct stat *st, const libexplain_have_identity_t *hip);
+int explain_explain_search_permission(explain_string_buffer_t *sb,
+    const struct stat *st, const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_have_inode_permission function may be used to test
+  * The explain_have_inode_permission function may be used to test
   * whether or not the current process has inode changing permissions
   * (utimes, chmod, etc) to an inode.
   *
@@ -179,11 +179,11 @@ int libexplain_explain_search_permission(libexplain_string_buffer_t *sb,
   * @returns
   *    int; nonzero(true) if have permission, zero (false) if not.
   */
-int libexplain_have_inode_permission(const struct stat *st,
-    const libexplain_have_identity_t *hip);
+int explain_have_inode_permission(const struct stat *st,
+    const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_have_identity_kind_of_uid is used to obtain a string
+  * The explain_have_identity_kind_of_uid is used to obtain a string
   * describing the kind of UID in the identity.
   *
   * @param hip
@@ -191,11 +191,11 @@ int libexplain_have_inode_permission(const struct stat *st,
   * @returns
   *     One of "real UID" or "effective UID", suitably translated.
   */
-const char *libexplain_have_identity_kind_of_uid(
-    const libexplain_have_identity_t *hip);
+const char *explain_have_identity_kind_of_uid(
+    const explain_have_identity_t *hip);
 
 /**
-  * The libexplain_have_identity_kind_of_gid is used to obtain a string
+  * The explain_have_identity_kind_of_gid is used to obtain a string
   * describing the kind of GID in the identity.
   *
   * @param hip
@@ -203,7 +203,7 @@ const char *libexplain_have_identity_kind_of_uid(
   * @returns
   *     One of "real GID" or "effective GID", suitably translated.
   */
-const char *libexplain_have_identity_kind_of_gid(
-    const libexplain_have_identity_t *hip);
+const char *explain_have_identity_kind_of_gid(
+    const explain_have_identity_t *hip);
 
 #endif /* LIBEXPLAIN_HAVE_PERMISSION_H */

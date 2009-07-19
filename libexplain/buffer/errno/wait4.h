@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
 struct rusage; /* forward */
 
 /**
-  * The libexplain_buffer_errno_wait4 function
+  * The explain_buffer_errno_wait4 function
   * is used to obtain an explanation of an error returned
   * by the wait4(2) system call.
   * The least the message will contain is the value of
@@ -51,12 +51,12 @@ struct rusage; /* forward */
   * @param rusage
   *     The original rusage, exactly as passed to the wait4(2) system call.
   */
-void libexplain_buffer_errno_wait4(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_wait4(explain_string_buffer_t *sb, int errnum,
     int pid, int *status, int options, struct rusage *rusage);
 
 /**
-  * The libexplain_buffer_errno_wait4_explanation function is used by
-  * the libexplain_buffer_errno_wait4 functions, and others, to obtain
+  * The explain_buffer_errno_wait4_explanation function is used by
+  * the explain_buffer_errno_wait4 functions, and others, to obtain
   * an explanation of an error returned by a wait4(2) system call.
   *
   * @param sb
@@ -72,7 +72,7 @@ void libexplain_buffer_errno_wait4(libexplain_string_buffer_t *sb, int errnum,
   * @param rusage
   *     The original rusage, exactly as passed to the wait4(2) system call.
   */
-void libexplain_buffer_errno_wait4_explanation(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_wait4_explanation(explain_string_buffer_t *sb,
     int errnum, int pid, int *status, int options, struct rusage *rusage);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WAIT4_H */

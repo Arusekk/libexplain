@@ -25,12 +25,10 @@
 
 
 void
-libexplain_fputc_or_die(int c, FILE *fp)
+explain_fputc_or_die(int c, FILE *fp)
 {
-    if (fputc(c, fp) < 0)
+    if (explain_fputc_on_error(c, fp) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fputc(c, fp));
         exit(EXIT_FAILURE);
     }
 }

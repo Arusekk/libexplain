@@ -25,11 +25,11 @@
 
 
 void
-libexplain_buffer_ifreq_addr(libexplain_string_buffer_t *sb,
+explain_buffer_ifreq_addr(explain_string_buffer_t *sb,
     const struct ifreq *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
         const struct ifreq *ifr;
@@ -39,15 +39,15 @@ libexplain_buffer_ifreq_addr(libexplain_string_buffer_t *sb,
          * the interface name and the interface hardware address.
          */
         ifr = data;
-        libexplain_string_buffer_puts(sb, "{ ifr_name = ");
-        libexplain_string_buffer_puts_quoted_n
+        explain_string_buffer_puts(sb, "{ ifr_name = ");
+        explain_string_buffer_puts_quoted_n
         (
             sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
-        libexplain_string_buffer_puts(sb, ", ifr_addr = ");
-        libexplain_buffer_sockaddr(sb, &ifr->ifr_addr, sizeof(ifr->ifr_addr));
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, ", ifr_addr = ");
+        explain_buffer_sockaddr(sb, &ifr->ifr_addr, sizeof(ifr->ifr_addr));
+        explain_string_buffer_puts(sb, " }");
     }
 }

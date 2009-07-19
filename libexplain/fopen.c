@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 
 
 const char *
-libexplain_fopen(const char *path, const char *mode)
+explain_fopen(const char *path, const char *mode)
 {
-    return libexplain_errno_fopen(errno, path, mode);
+    return explain_errno_fopen(errno, path, mode);
 }

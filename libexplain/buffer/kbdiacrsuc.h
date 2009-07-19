@@ -24,7 +24,7 @@
 struct kbdiacrsuc; /* forward */
 
 /**
-  * The libexplain_buffer_kbdiacrsuc function may be used to
+  * The explain_buffer_kbdiacrsuc function may be used to
   * print a representation of a kbdiacrsuc structure value.
   *
   * @param sb
@@ -34,7 +34,7 @@ struct kbdiacrsuc; /* forward */
   * @param extra
   *     if to print entries as well
   */
-void libexplain_buffer_kbdiacrsuc(libexplain_string_buffer_t *sb,
+void explain_buffer_kbdiacrsuc(explain_string_buffer_t *sb,
     const struct kbdiacrsuc *value, int extra);
 
 #endif /* LIBEXPLAIN_BUFFER_KBDIACRSUC_H */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,31 +27,31 @@
 
 
 static void
-report_error(libexplain_string_buffer_t *sb, const char *caption)
+report_error(explain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "too many symbolic links were encountered in resolving %s",
         caption
     );
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
         int             symloop_max;
 
-        symloop_max = libexplain_symloopmax();
-        libexplain_string_buffer_printf(sb, " (%d)", symloop_max);
+        symloop_max = explain_symloopmax();
+        explain_string_buffer_printf(sb, " (%d)", symloop_max);
     }
 }
 
 
 void
-libexplain_buffer_eloop(libexplain_string_buffer_t *sb, const char *pathname,
-    const char *pathname_caption, const libexplain_final_t *final_component)
+explain_buffer_eloop(explain_string_buffer_t *sb, const char *pathname,
+    const char *pathname_caption, const explain_final_t *final_component)
 {
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ELOOP,
@@ -71,15 +71,15 @@ libexplain_buffer_eloop(libexplain_string_buffer_t *sb, const char *pathname,
 
 
 void
-libexplain_buffer_eloop2(libexplain_string_buffer_t *sb,
+explain_buffer_eloop2(explain_string_buffer_t *sb,
     const char *oldpath, const char *oldpath_caption,
-    const libexplain_final_t *oldpath_final_component,
+    const explain_final_t *oldpath_final_component,
     const char *newpath, const char *newpath_caption,
-    const libexplain_final_t *newpath_final_component)
+    const explain_final_t *newpath_final_component)
 {
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ELOOP,
@@ -88,7 +88,7 @@ libexplain_buffer_eloop2(libexplain_string_buffer_t *sb,
             oldpath_final_component
         )
     &&
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ELOOP,

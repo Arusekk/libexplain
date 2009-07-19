@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 
 void
-libexplain_lsof(const char *lsof_options, libexplain_lsof_t *context)
+explain_lsof(const char *lsof_options, explain_lsof_t *context)
 {
     FILE            *fp;
     char            command[200];
@@ -41,7 +41,7 @@ libexplain_lsof(const char *lsof_options, libexplain_lsof_t *context)
         "lsof -Ffnp0 %s %s %s",
         (lsof_options[0] ? "-a" : ""),
         lsof_options,
-        (libexplain_option_debug() ? "2> /dev/null" : "")
+        (explain_option_debug() ? "2> /dev/null" : "")
     );
     fp = popen(command, "r");
     if (!fp)
@@ -69,7 +69,7 @@ libexplain_lsof(const char *lsof_options, libexplain_lsof_t *context)
                 *lp++ = '\0';
                 /*
                  * The lsof(1) man page says that -F0 NUL terminates the
-                 * lines, but is actually terminates them with "\0\n"
+                 * lines, but it actually terminates them with "\0\n"
                  * instead, except when it uses just "\0".  Sheesh.
                  */
                 c = getc(fp);

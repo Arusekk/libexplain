@@ -16,22 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/sys/stat.h>
 
-#include <libexplain/option.h>
 #include <libexplain/stat.h>
-#include <libexplain/wrap_and_print.h>
 
 
 void
-libexplain_stat_or_die(const char *pathname, struct stat *buf)
+explain_stat_or_die(const char *pathname, struct stat *buf)
 {
-    if (stat(pathname, buf) < 0)
+    if (explain_stat_on_error(pathname, buf) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_stat(pathname, buf));
         exit(EXIT_FAILURE);
     }
 }

@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol.h>
 
 /**
-  * The libexplain_iocontrol_tcsets global variable is
+  * The explain_iocontrol_tcsets global variable is
   * used to store information ablut the TCSETS
   * I/O control.
   *
@@ -32,8 +32,8 @@
   *     are ambiguous, and (b) the includes files have bugs making it
   *     impossible to include all of them in the same combilation unit.
   */
-extern const libexplain_iocontrol_t libexplain_iocontrol_tcsets;
-extern const libexplain_iocontrol_t libexplain_iocontrol_tcsetsf;
-extern const libexplain_iocontrol_t libexplain_iocontrol_tcsetsw;
+extern const explain_iocontrol_t explain_iocontrol_tcsets;
+extern const explain_iocontrol_t explain_iocontrol_tcsetsf;
+extern const explain_iocontrol_t explain_iocontrol_tcsetsw;
 
 #endif /* LIBEXPLAIN_IOCONTROL_TCSETS_H */

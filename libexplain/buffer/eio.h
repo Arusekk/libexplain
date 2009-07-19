@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,16 +23,16 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_eio function may be used to
+  * The explain_buffer_eio function may be used to
   * print a description of an EIO error.
   *
   * @param sb
   *    The buffer to print the explanation on
   */
-void libexplain_buffer_eio(libexplain_string_buffer_t *sb);
+void explain_buffer_eio(explain_string_buffer_t *sb);
 
 /**
-  * The libexplain_buffer_eio_fildes function may be used to
+  * The explain_buffer_eio_fildes function may be used to
   * print a description of an EIO error.
   *
   * @param sb
@@ -40,10 +40,10 @@ void libexplain_buffer_eio(libexplain_string_buffer_t *sb);
   * @param fildes
   *    the file descriptor with the problem.
   */
-void libexplain_buffer_eio_fildes(libexplain_string_buffer_t *sb, int fildes);
+void explain_buffer_eio_fildes(explain_string_buffer_t *sb, int fildes);
 
 /**
-  * The libexplain_buffer_eio_path function may be used to
+  * The explain_buffer_eio_path function may be used to
   * print a description of an EIO error.
   *
   * @param sb
@@ -51,11 +51,11 @@ void libexplain_buffer_eio_fildes(libexplain_string_buffer_t *sb, int fildes);
   * @param path
   *    the file with the problem.
   */
-void libexplain_buffer_eio_path(libexplain_string_buffer_t *sb,
+void explain_buffer_eio_path(explain_string_buffer_t *sb,
     const char *path);
 
 /**
-  * The libexplain_buffer_eio_path_dirname function may be used to
+  * The explain_buffer_eio_path_dirname function may be used to
   * print a description of an EIO error.
   *
   * @param sb
@@ -63,7 +63,7 @@ void libexplain_buffer_eio_path(libexplain_string_buffer_t *sb,
   * @param path
   *    the file in the directory with the problem.
   */
-void libexplain_buffer_eio_path_dirname(libexplain_string_buffer_t *sb,
+void explain_buffer_eio_path_dirname(explain_string_buffer_t *sb,
     const char *path);
 
 #endif /* LIBEXPLAIN_BUFFER_EIO_H */

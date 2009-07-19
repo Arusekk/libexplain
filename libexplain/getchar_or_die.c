@@ -29,10 +29,10 @@ static
 #endif
 
 void
-libexplain_getchar_or_die_failed(void)
+explain_getchar_or_die_failed(void)
 {
-    libexplain_program_name_assemble_internal(1);
-    libexplain_wrap_and_print(stderr, libexplain_getchar());
+    explain_program_name_assemble_internal(1);
+    explain_wrap_and_print(stderr, explain_getchar());
     exit(EXIT_FAILURE);
 }
 
@@ -40,13 +40,13 @@ libexplain_getchar_or_die_failed(void)
 #if __GNUC__ < 3
 
 int
-libexplain_getchar_or_die(void)
+explain_getchar_or_die(void)
 {
     int             result;
 
     result = getchar();
     if (result == EOF && ferror(stdin))
-        libexplain_getchar_or_die_failed();
+        explain_getchar_or_die_failed();
     return result;
 }
 

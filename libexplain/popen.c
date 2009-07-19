@@ -22,9 +22,9 @@
 
 
 const char *
-libexplain_popen(const char *command, const char *flags)
+explain_popen(const char *command, const char *flags)
 {
-    return libexplain_errno_popen(errno, command, flags);
+    return explain_errno_popen(errno, command, flags);
 }
 
 /* vim:ts=8:sw=4:et */

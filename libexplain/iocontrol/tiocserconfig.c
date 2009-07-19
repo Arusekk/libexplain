@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocserconfig.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocserconfig =
+const explain_iocontrol_t explain_iocontrol_tiocserconfig =
 {
     "TIOCSERCONFIG", /* name */
     TIOCSERCONFIG, /* value */

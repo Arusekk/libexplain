@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_STRERROR_H
 #define LIBEXPLAIN_BUFFER_STRERROR_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_strerror function may be used to insert
+  * The explain_buffer_strerror function may be used to insert
   * strerror text into the given buffer, along with its numkber and
   * name.
   *
@@ -32,7 +32,7 @@ struct libexplain_string_buffer_t; /* forward */
   * @param errnum
   *    The errno value to be described.
   */
-void libexplain_buffer_strerror(struct libexplain_string_buffer_t *sb,
+void explain_buffer_strerror(struct explain_string_buffer_t *sb,
     int errnum);
 
 #endif /* LIBEXPLAIN_BUFFER_STRERROR_H */

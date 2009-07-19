@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -25,7 +25,7 @@
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "EAI_BADFLAGS", EAI_BADFLAGS },
     { "EAI_NONAME", EAI_NONAME },
@@ -49,35 +49,35 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_gai_strerror(libexplain_string_buffer_t *sb, int errnum)
+explain_buffer_gai_strerror(explain_string_buffer_t *sb, int errnum)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
     int             first;
 
     if (errnum > 0)
     {
-        libexplain_buffer_strerror(sb, errnum);
+        explain_buffer_strerror(sb, errnum);
         return;
     }
 
-    libexplain_string_buffer_puts(sb, gai_strerror(errnum));
+    explain_string_buffer_puts(sb, gai_strerror(errnum));
 
     first = 1;
-    if (libexplain_option_numeric_errno())
+    if (explain_option_numeric_errno())
     {
-        libexplain_string_buffer_printf(sb, " (%d", errnum);
+        explain_string_buffer_printf(sb, " (%d", errnum);
         first = 0;
     }
-    tp = libexplain_parse_bits_find_by_value(errnum, table, SIZEOF(table));
+    tp = explain_parse_bits_find_by_value(errnum, table, SIZEOF(table));
     if (tp)
     {
         if (first)
-            libexplain_string_buffer_puts(sb, " (");
+            explain_string_buffer_puts(sb, " (");
         else
-            libexplain_string_buffer_puts(sb, ", ");
-        libexplain_string_buffer_puts(sb, tp->name);
+            explain_string_buffer_puts(sb, ", ");
+        explain_string_buffer_puts(sb, tp->name);
         first = 0;
     }
     if (!first)
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_putc(sb, ')');
 }

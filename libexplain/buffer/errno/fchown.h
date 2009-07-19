@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_fchown function
+  * The explain_buffer_errno_fchown function
   * is used to obtain an explanation of an error returned
   * by the fchown(2) system call.
   * The least the message will contain is the value of
@@ -47,7 +47,7 @@
   * @param group
   *     The original group, exactly as passed to the fchown(2) system call.
   */
-void libexplain_buffer_errno_fchown(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_fchown(explain_string_buffer_t *sb, int errnum,
     int fildes, int owner, int group);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FCHOWN_H */

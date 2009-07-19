@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,12 +23,12 @@
 
 
 void
-libexplain_buffer_eaddrinuse(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_eaddrinuse(explain_string_buffer_t *sb, int fildes)
 {
     int             reuseaddr;
     socklen_t       optlen;
 
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -56,8 +56,8 @@ libexplain_buffer_eaddrinuse(libexplain_string_buffer_t *sb, int fildes)
          * Other unix dialects only require that the re-user use this
          * option.
          */
-        libexplain_string_buffer_puts(sb, ", ");
-        libexplain_buffer_gettext
+        explain_string_buffer_puts(sb, ", ");
+        explain_buffer_gettext
         (
             sb,
             /*

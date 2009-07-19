@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,12 +26,12 @@
 
 
 void
-libexplain_buffer_caption_name_type(libexplain_string_buffer_t *sb,
+explain_buffer_caption_name_type(explain_string_buffer_t *sb,
     const char *caption, const char *name, int st_mode)
 {
     if (name && S_ISDIR(st_mode) && 0 == strcmp(name, "."))
     {
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -46,16 +46,16 @@ libexplain_buffer_caption_name_type(libexplain_string_buffer_t *sb,
     /* the rule is: [caption] [name] type */
     if (caption)
     {
-        libexplain_string_buffer_puts(sb, caption);
-        libexplain_string_buffer_putc(sb, ' ');
+        explain_string_buffer_puts(sb, caption);
+        explain_string_buffer_putc(sb, ' ');
     }
     if (name)
     {
-        libexplain_string_buffer_puts_quoted(sb, name);
-        libexplain_string_buffer_putc(sb, ' ');
+        explain_string_buffer_puts_quoted(sb, name);
+        explain_string_buffer_putc(sb, ' ');
     }
     if (st_mode < 0)
-        libexplain_string_buffer_puts(sb, "file");
+        explain_string_buffer_puts(sb, "file");
     else
-        libexplain_buffer_file_type(sb, st_mode);
+        explain_buffer_file_type(sb, st_mode);
 }

@@ -26,15 +26,13 @@
 
 
 int
-libexplain_creat_or_die(const char *pathname, int mode)
+explain_creat_or_die(const char *pathname, int mode)
 {
     int             fildes;
 
-    fildes = creat(pathname, mode);
+    fildes = explain_creat_on_error(pathname, mode);
     if (fildes < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_creat(pathname, mode));
         exit(EXIT_FAILURE);
     }
     return fildes;

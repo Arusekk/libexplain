@@ -24,20 +24,20 @@
 
 
 void
-libexplain_buffer_dlci_add(libexplain_string_buffer_t *sb,
+explain_buffer_dlci_add(explain_string_buffer_t *sb,
     const struct dlci_add *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ devname = ");
-        libexplain_string_buffer_puts_quoted_n
+        explain_string_buffer_puts(sb, "{ devname = ");
+        explain_string_buffer_puts_quoted_n
         (
             sb,
             data->devname,
             sizeof(data->devname)
         );
-        libexplain_string_buffer_printf(sb, ", dlci %d }", data->dlci);
+        explain_string_buffer_printf(sb, ", dlci %d }", data->dlci);
     }
 }

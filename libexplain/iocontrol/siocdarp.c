@@ -28,18 +28,18 @@
 #ifdef SIOCDARP
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_arpreq(sb, data);
+    explain_buffer_arpreq(sb, data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocdarp =
+const explain_iocontrol_t explain_iocontrol_siocdarp =
 {
     "SIOCDARP", /* name */
     SIOCDARP, /* value */
@@ -51,7 +51,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_siocdarp =
 
 #else /* ndef SIOCDARP */
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocdarp =
+const explain_iocontrol_t explain_iocontrol_siocdarp =
 {
     0, /* name */
     0, /* value */

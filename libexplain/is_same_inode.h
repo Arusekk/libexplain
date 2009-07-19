@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 struct stat; /* forward */
 
 /**
-  * The libexplain_is_same_inode function may be used to compare two
+  * The explain_is_same_inode function may be used to compare two
   * stat structs to determine whether or not they describe the same
   * inode.
   *
@@ -34,6 +34,6 @@ struct stat; /* forward */
   * @returns
   *    int; 0 if not the same, 1 if the same
   */
-int libexplain_is_same_inode(const struct stat *st1, const struct stat *st2);
+int explain_is_same_inode(const struct stat *st1, const struct stat *st2);
 
 #endif /* LIBEXPLAIN_IS_SAME_INODE_H */

@@ -21,19 +21,19 @@
 
 
 const char *
-libexplain_errno_getsockname(int errnum, int fildes, struct sockaddr *sock_addr,
+explain_errno_getsockname(int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
-    libexplain_message_errno_getsockname
+    explain_message_errno_getsockname
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         fildes,
         sock_addr,
         sock_addr_size
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }
 
 /* vim:ts=8:sw=4:et */

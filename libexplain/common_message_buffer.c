@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 #include <libexplain/common_message_buffer.h>
 
 
-char libexplain_common_message_buffer[PATH_MAX * 2 + 200];
+char explain_common_message_buffer[PATH_MAX * 2 + 200];
 
-const unsigned libexplain_common_message_buffer_size =
-    sizeof(libexplain_common_message_buffer);
+const unsigned explain_common_message_buffer_size =
+    sizeof(explain_common_message_buffer);

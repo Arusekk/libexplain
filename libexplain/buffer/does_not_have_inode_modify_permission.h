@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,10 +22,10 @@
 #include <libexplain/string_buffer.h>
 
 struct stat; /* forward */
-struct libexplain_have_identity_t; /* forward */
+struct explain_have_identity_t; /* forward */
 
 /**
-  * The libexplain_buffer_does_not_have_inode_modify_permission function
+  * The explain_buffer_does_not_have_inode_modify_permission function
   * may be used to provide an explanation in the case where a process
   * does not have sufficent permissions to modify an inode.
   *
@@ -44,13 +44,13 @@ struct libexplain_have_identity_t; /* forward */
   * @param hip
   *    The process ID for this operation.
   */
-void libexplain_buffer_does_not_have_inode_modify_permission(
-    libexplain_string_buffer_t *sb, const char *comp,
+void explain_buffer_does_not_have_inode_modify_permission(
+    explain_string_buffer_t *sb, const char *comp,
     const struct stat *comp_st, const char *caption, const char *dir,
-    const struct stat *dir_st, const struct libexplain_have_identity_t *hip);
+    const struct stat *dir_st, const struct explain_have_identity_t *hip);
 
 /**
-  * The libexplain_buffer_does_not_have_inode_modify_permission1 function
+  * The explain_buffer_does_not_have_inode_modify_permission1 function
   * may be used to provide an explanation in the case where a process
   * does not have sufficent permissions to modify an inode.
   *
@@ -65,13 +65,13 @@ void libexplain_buffer_does_not_have_inode_modify_permission(
   * @param hip
   *    The process ID for this operation.
   */
-void libexplain_buffer_does_not_have_inode_modify_permission1(
-    libexplain_string_buffer_t *sb, const char *pathname,
+void explain_buffer_does_not_have_inode_modify_permission1(
+    explain_string_buffer_t *sb, const char *pathname,
     const struct stat *pathname_st, const char *caption,
-    const struct libexplain_have_identity_t *hip);
+    const struct explain_have_identity_t *hip);
 
 /**
-  * The libexplain_buffer_does_not_have_inode_modify_permission_fd
+  * The explain_buffer_does_not_have_inode_modify_permission_fd
   * function may be used to provide an explanation in the case where a
   * process does not have sufficent permissions to modify an inode, as
   * given by a file descriptor.
@@ -83,11 +83,11 @@ void libexplain_buffer_does_not_have_inode_modify_permission1(
   * @param fildes_caption
   *    The name of the problematic system call argument
   */
-void libexplain_buffer_does_not_have_inode_modify_permission_fd(
-    libexplain_string_buffer_t *sb, int fildes, const char *fildes_caption);
+void explain_buffer_does_not_have_inode_modify_permission_fd(
+    explain_string_buffer_t *sb, int fildes, const char *fildes_caption);
 
 /**
-  * The libexplain_buffer_does_not_have_inode_modify_permission_fd_st
+  * The explain_buffer_does_not_have_inode_modify_permission_fd_st
   * function may be used to provide an explanation in the case where a
   * process does not have sufficent permissions to modify an inode, as
   * given by a file descriptor.
@@ -101,8 +101,8 @@ void libexplain_buffer_does_not_have_inode_modify_permission_fd(
   * @param hip
   *    The process ID for this operation.
   */
-void libexplain_buffer_does_not_have_inode_modify_permission_fd_st(
-    libexplain_string_buffer_t *sb, const struct stat *fildes_st,
-    const char *fildes_caption, const struct libexplain_have_identity_t *hip);
+void explain_buffer_does_not_have_inode_modify_permission_fd_st(
+    explain_string_buffer_t *sb, const struct stat *fildes_st,
+    const char *fildes_caption, const struct explain_have_identity_t *hip);
 
 #endif /* LIBEXPLAIN_BUFFER_DOES_NOT_HAVE_INODE_MODIFY_PERMISSION_H */

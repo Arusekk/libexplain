@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,15 +20,15 @@
 #ifndef LIBEXPLAIN_BUFFER_ENFILE_H
 #define LIBEXPLAIN_BUFFER_ENFILE_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_enfile function may be used to insert an
+  * The explain_buffer_enfile function may be used to insert an
   * explanation of the ENFILE error into the given buffer.
   *
   * @param sb
   *    The buffer to write into
   */
-void libexplain_buffer_enfile(struct libexplain_string_buffer_t *sb);
+void explain_buffer_enfile(struct explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_ENFILE_H */

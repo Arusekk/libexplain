@@ -24,7 +24,7 @@
 struct console_font_op; /* forward */
 
 /**
-  * The libexplain_buffer_console_font_op function may be used to
+  * The explain_buffer_console_font_op function may be used to
   * print a representation of a console_font_op structure value.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct console_font_op; /* forward */
   * @param value
   *     The console_font_op structure value to be printed.
   */
-void libexplain_buffer_console_font_op(libexplain_string_buffer_t *sb,
+void explain_buffer_console_font_op(explain_string_buffer_t *sb,
     const struct console_font_op *value);
 
 #endif /* LIBEXPLAIN_BUFFER_CONSOLE_FONT_OP_H */

@@ -21,13 +21,13 @@
 
 
 void
-libexplain_message_errno_malloc(char *message, int message_size, int errnum,
+explain_message_errno_malloc(char *message, int message_size, int errnum,
     size_t size)
 {
-    libexplain_string_buffer_t sb;
+    explain_string_buffer_t sb;
 
-    libexplain_string_buffer_init(&sb, message, message_size);
-    libexplain_buffer_errno_malloc(&sb, errnum, size);
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_malloc(&sb, errnum, size);
 }
 
 /* vim:ts=8:sw=4:et */

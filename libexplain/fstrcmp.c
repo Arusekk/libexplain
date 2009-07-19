@@ -1,6 +1,6 @@
 /*
  * cook - file construction tool
- * Copyright (C) 1991, 1993, 1994, 1997, 2001, 2005-2008 Peter Miller
+ * Copyright (C) 1991, 1993, 1994, 1997, 2001, 2005-2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -286,7 +286,7 @@ findsnake(int depth, long A, long N, long B, long M)
 
 
 double
-libexplain_fstrcmp(const char *s1, const char *s2)
+explain_fstrcmp(const char *s1, const char *s2)
 {
     double          result;
     snake_t         *sp;        /* current snake element */
@@ -421,7 +421,7 @@ downcase(char *out, const char *in)
 
 
 double
-libexplain_fstrcasecmp(const char *s1, const char *s2)
+explain_fstrcasecmp(const char *s1, const char *s2)
 {
     size_t          len1;
     char            *lc1;
@@ -432,20 +432,20 @@ libexplain_fstrcasecmp(const char *s1, const char *s2)
     len1 = strlen(s1) + 1;
     lc1 = malloc(len1);
     if (!lc1)
-        return libexplain_fstrcmp(s1, s2);
+        return explain_fstrcmp(s1, s2);
     downcase(lc1, s1);
 
     len2 = strlen(s2) + 1;
     lc2 = malloc(len2);
     if (!lc2)
     {
-        result = libexplain_fstrcmp(lc1, s2);
+        result = explain_fstrcmp(lc1, s2);
         free(lc1);
         return result;
     }
     downcase(lc2, s2);
 
-    result = libexplain_fstrcmp(lc1, lc2);
+    result = explain_fstrcmp(lc1, lc2);
     free(lc1);
     free(lc2);
     return result;

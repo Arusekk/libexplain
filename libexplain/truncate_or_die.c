@@ -16,26 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/unistd.h>
 
-#include <libexplain/option.h>
 #include <libexplain/truncate.h>
-#include <libexplain/wrap_and_print.h>
 
 
 void
-libexplain_truncate_or_die(const char *pathname, long long length)
+explain_truncate_or_die(const char *pathname, long long length)
 {
-    if (truncate(pathname, length) < 0)
+    if (explain_truncate_on_error(pathname, length) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_truncate(pathname, length)
-        );
         exit(EXIT_FAILURE);
     }
 }

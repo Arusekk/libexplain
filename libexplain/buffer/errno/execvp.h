@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_execvp function
+  * The explain_buffer_errno_execvp function
   * is used to obtain an explanation of an error returned
   * by the execvp(3) system call.
   * The least the message will contain is the value of
@@ -45,7 +45,7 @@
   * @param argv
   *     The original argv, exactly as passed to the execvp(3) system call.
   */
-void libexplain_buffer_errno_execvp(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_execvp(explain_string_buffer_t *sb, int errnum,
     const char *pathname, char *const *argv);
 
 /* vim:ts=8:sw=4:et */

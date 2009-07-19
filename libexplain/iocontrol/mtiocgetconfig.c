@@ -26,7 +26,7 @@
 #define MTIOCGETCONFIG -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_mtiocgetconfig =
+const explain_iocontrol_t explain_iocontrol_mtiocgetconfig =
 {
     "MTIOCGETCONFIG", /* name */
     MTIOCGETCONFIG, /* value */

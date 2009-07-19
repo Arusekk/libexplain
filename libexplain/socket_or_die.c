@@ -16,29 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/sys/socket.h>
 
-#include <libexplain/option.h>
 #include <libexplain/socket.h>
-#include <libexplain/wrap_and_print.h>
 
 
 int
-libexplain_socket_or_die(int domain, int type, int protocol)
+explain_socket_or_die(int domain, int type, int protocol)
 {
     int             result;
 
-    result = socket(domain, type, protocol);
+    result = explain_socket_on_error(domain, type, protocol);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_socket(domain, type, protocol)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

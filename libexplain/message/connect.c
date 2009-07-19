@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_connect(char *message, int message_size, int fildes,
+explain_message_connect(char *message, int message_size, int fildes,
     const struct sockaddr *serv_addr, int serv_addr_size)
 {
-    libexplain_message_errno_connect
+    explain_message_errno_connect
     (
         message,
         message_size,

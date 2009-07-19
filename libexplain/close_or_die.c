@@ -26,12 +26,10 @@
 
 
 void
-libexplain_close_or_die(int fildes)
+explain_close_or_die(int fildes)
 {
-    if (close(fildes) < 0)
+    if (explain_close_on_error(fildes) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_close(fildes));
         exit(EXIT_FAILURE);
     }
 }

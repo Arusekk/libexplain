@@ -22,9 +22,9 @@
 
 
 const char *
-libexplain_malloc(size_t size)
+explain_malloc(size_t size)
 {
-    return libexplain_errno_malloc(errno, size);
+    return explain_errno_malloc(errno, size);
 }
 
 /* vim:ts=8:sw=4:et */

@@ -24,7 +24,7 @@
 struct winsize; /* forward */
 
 /**
-  * The libexplain_buffer_winsize function may be used to
+  * The explain_buffer_winsize function may be used to
   * print a representation of a struct winsize value.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct winsize; /* forward */
   * @param value
   *    The winsize structure to be printed.
   */
-void libexplain_buffer_winsize(libexplain_string_buffer_t *sb,
+void explain_buffer_winsize(explain_string_buffer_t *sb,
     const struct winsize *value);
 
 #endif /* LIBEXPLAIN_BUFFER_WINSIZE_H */

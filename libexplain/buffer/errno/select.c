@@ -34,21 +34,21 @@
 
 
 static void
-libexplain_buffer_errno_select_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_select_system_call(explain_string_buffer_t *sb,
     int errnum, int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
     struct timeval *timeout)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "select(nfds = %d", nfds);
-    libexplain_string_buffer_puts(sb, ", readfds = ");
-    libexplain_buffer_fd_set(sb, nfds, readfds);
-    libexplain_string_buffer_puts(sb, ", writefds = ");
-    libexplain_buffer_fd_set(sb, nfds, writefds);
-    libexplain_string_buffer_puts(sb, ", exceptfds = ");
-    libexplain_buffer_fd_set(sb, nfds, exceptfds);
-    libexplain_string_buffer_puts(sb, ", timeout = ");
-    libexplain_buffer_timeval(sb, timeout);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "select(nfds = %d", nfds);
+    explain_string_buffer_puts(sb, ", readfds = ");
+    explain_buffer_fd_set(sb, nfds, readfds);
+    explain_string_buffer_puts(sb, ", writefds = ");
+    explain_buffer_fd_set(sb, nfds, writefds);
+    explain_string_buffer_puts(sb, ", exceptfds = ");
+    explain_buffer_fd_set(sb, nfds, exceptfds);
+    explain_string_buffer_puts(sb, ", timeout = ");
+    explain_buffer_timeval(sb, timeout);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
@@ -63,7 +63,7 @@ file_descriptor_is_open(int fildes)
 
 
 static void
-libexplain_buffer_errno_select_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
     int errnum, int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
     struct timeval *timeout)
 {
@@ -97,11 +97,11 @@ libexplain_buffer_errno_select_explanation(libexplain_string_buffer_t *sb,
                 char            caption[40];
 
                 snprintf(caption, sizeof(caption), "fildes %d", fildes);
-                libexplain_buffer_ebadf(sb, fildes, caption);
+                explain_buffer_ebadf(sb, fildes, caption);
             }
             else
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     "an invalid file descriptor was given in one of the sets; "
@@ -113,86 +113,86 @@ libexplain_buffer_errno_select_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (readfds && libexplain_pointer_is_efault(readfds, sizeof(*readfds)))
+        if (readfds && explain_pointer_is_efault(readfds, sizeof(*readfds)))
         {
-            libexplain_buffer_efault(sb, "readfds");
+            explain_buffer_efault(sb, "readfds");
             break;
         }
         if
         (
             writefds
         &&
-            libexplain_pointer_is_efault(writefds, sizeof(*writefds))
+            explain_pointer_is_efault(writefds, sizeof(*writefds))
         )
         {
-            libexplain_buffer_efault(sb, "writefds");
+            explain_buffer_efault(sb, "writefds");
             break;
         }
         if
         (
             exceptfds
         &&
-            libexplain_pointer_is_efault(exceptfds, sizeof(*exceptfds))
+            explain_pointer_is_efault(exceptfds, sizeof(*exceptfds))
         )
         {
-            libexplain_buffer_efault(sb, "exceptfds");
+            explain_buffer_efault(sb, "exceptfds");
             break;
         }
-        if (timeout && libexplain_pointer_is_efault(timeout, sizeof(*timeout)))
+        if (timeout && explain_pointer_is_efault(timeout, sizeof(*timeout)))
         {
-            libexplain_buffer_efault(sb, "timeout");
+            explain_buffer_efault(sb, "timeout");
             break;
         }
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "select");
+        explain_buffer_eintr(sb, "select");
         break;
 
     case EINVAL:
         if (nfds < 0)
         {
-            libexplain_string_buffer_puts(sb, "nfds is negative");
+            explain_string_buffer_puts(sb, "nfds is negative");
             break;
         }
         if (nfds > FD_SETSIZE)
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "nfds is greater than FD_SETSIZE"
             );
-            if (libexplain_option_dialect_specific())
-                libexplain_string_buffer_printf(sb, " (%d)", FD_SETSIZE);
+            if (explain_option_dialect_specific())
+                explain_string_buffer_printf(sb, " (%d)", FD_SETSIZE);
             break;
         }
         if (timeout && (timeout->tv_sec < 0 || timeout->tv_usec < 0))
         {
-            libexplain_string_buffer_puts(sb, "timeout is invalid");
+            explain_string_buffer_puts(sb, "timeout is invalid");
             break;
         }
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_select(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_select(explain_string_buffer_t *sb, int errnum,
     int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
     struct timeval *timeout)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_select_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_select_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -202,7 +202,7 @@ libexplain_buffer_errno_select(libexplain_string_buffer_t *sb, int errnum,
         exceptfds,
         timeout
     );
-    libexplain_buffer_errno_select_explanation
+    explain_buffer_errno_select_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -212,5 +212,5 @@ libexplain_buffer_errno_select(libexplain_string_buffer_t *sb, int errnum,
         exceptfds,
         timeout
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

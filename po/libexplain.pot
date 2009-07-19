@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libexplain 0.8.D001\n"
+"Project-Id-Version: libexplain 0.14.D001\n"
 "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-"POT-Creation-Date: 2009-02-14 14:09+1100\n"
+"POT-Creation-Date: 2009-07-19 22:53+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 #. %1$s => the name of the function call argument and the quoted
 #.         text of the offending path component.
 #.
-#: libexplain/buffer/errno/path_resolution.c:750
+#: libexplain/buffer/errno/path_resolution.c:751
 #, c-format
 msgid "%s component is longer than the system limit"
 msgstr ""
@@ -51,7 +51,7 @@ msgstr ""
 #. %1$s => the name of the system call argument, the quoted path
 #.         and the expected file type ("directory", already translated).
 #.
-#: libexplain/buffer/errno/path_resolution.c:262
+#: libexplain/buffer/errno/path_resolution.c:263
 #, c-format
 msgid "%s does not exist"
 msgstr ""
@@ -134,7 +134,7 @@ msgstr ""
 #.
 #. %1$s => the name of the offending system call argument
 #.
-#: libexplain/buffer/errno/path_resolution.c:1064
+#: libexplain/buffer/errno/path_resolution.c:1085
 #, c-format
 msgid "%s exceeds the system maximum path length"
 msgstr ""
@@ -202,6 +202,20 @@ msgstr ""
 #: libexplain/explanation.c:182
 #, c-format
 msgid "%s failed, %s because %s"
+msgstr ""
+
+#.
+#. this error message is issued to explain an ENOSYS
+#. or EOPNOTSUPP error in the case where a system call is not
+#. supported for a particular device (or perhapse si not
+#. supported by the device driver).
+#.
+#. %1$s => the type of the special file (already translated)
+#. %2$s => the name of the offending system call.
+#.
+#: libexplain/buffer/enosys.c:68
+#, c-format
+msgid "%s is a %s that does not support the %s system call"
 msgstr ""
 
 #.
@@ -277,6 +291,19 @@ msgid ""
 msgstr ""
 
 #.
+#. This error message is issued to explain an ENOSYS
+#. or EOPNOTSUPP or ENOTTY error, in the generic case.  There are
+#. more specific messages, try to use those instead.
+#.
+#. %1$s => the name of the offending system call argument
+#. %2$s => the name of the offending system call
+#.
+#: libexplain/buffer/enosys.c:45
+#, c-format
+msgid "%s is not associated with an object to which %s can be applied"
+msgstr ""
+
+#.
 #. This message is used when an attempt is made to write to
 #. a file descriptor that was not opened for writing.  The actual open
 #. mode will be printed separately.
@@ -286,6 +313,17 @@ msgstr ""
 #: libexplain/buffer/fildes_not_open_for_writing.c:54
 #, c-format
 msgid "%s is not open for writing"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an ESOCKTNOSUPPORT error.
+#.
+#. %1$s => the name of the offending system call
+#.
+#: libexplain/buffer/esocktnosupport.c:36
+#, c-format
+msgid "%s is not supported by the network type"
 msgstr ""
 
 #.
@@ -323,6 +361,18 @@ msgstr ""
 #: libexplain/buffer/wrong_file_type.c:53
 #, c-format
 msgid "%s refers to a %s, not a %s"
+msgstr ""
+
+#.
+#. This message is used to explain an EISDIR
+#. reported by an open(2) system call.  You may not open a
+#. directory for writing.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#: libexplain/buffer/eisdir.c:42
+#, c-format
+msgid "%s refers to a directory and the access requested involved writing"
 msgstr ""
 
 #.
@@ -367,12 +417,24 @@ msgid "%s: success"
 msgstr ""
 
 #.
+#. this error message is issued when the acct(2)
+#. system call is used against a Linux kernel that does not
+#. have BSD process accounting compiled in.
+#.
+#: libexplain/buffer/errno/acct.c:119
+msgid ""
+"BSD process accounting has not been enabled when the operating system "
+"kernel was compiled (the kernel configuration parameter controlling this "
+"feature is CONFIG_BSD_PROCESS_ACCT)"
+msgstr ""
+
+#.
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a BSD whiteout
 #. file, used by the union file system.  Not present on all
 #. POSIX implementations.
 #.
-#: libexplain/buffer/file_type.c:226
+#: libexplain/buffer/file_type.c:240
 msgid "BSD whiteout"
 msgstr ""
 
@@ -383,7 +445,7 @@ msgstr ""
 #. flags was specified but the final path component
 #. was a symbolic link.
 #.
-#: libexplain/buffer/errno/open.c:326
+#: libexplain/buffer/errno/open.c:313
 msgid "O_NOFOLLOW was specified but pathname refers to a symbolic link"
 msgstr ""
 
@@ -393,7 +455,7 @@ msgstr ""
 #. in the case where a named pipe has no readers,
 #. and a non-blocking writer tried to open it.
 #.
-#: libexplain/buffer/errno/open.c:430
+#: libexplain/buffer/errno/open.c:417
 msgid ""
 "O_NONBLOCK | O_WRONLY is set, and the named file is a FIFO, and no "
 "process has the file open for reading"
@@ -405,7 +467,7 @@ msgstr ""
 #. This is the generic explanation, used when no
 #. more specific cause can be determined.
 #.
-#: libexplain/buffer/errno/open.c:411
+#: libexplain/buffer/errno/open.c:398
 msgid ""
 "O_NONBLOCK | O_WRONLY is set, the named file is a FIFO and no process "
 "has the file open for reading; or, the file is a device special file and "
@@ -418,7 +480,7 @@ msgstr ""
 #.
 #. %1$s => the name of the relevant system call argument.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1025
+#: libexplain/buffer/errno/path_resolution.c:1046
 #, c-format
 msgid "POSIX decrees that an empty %s must not be resolved successfully"
 msgstr ""
@@ -428,7 +490,7 @@ msgstr ""
 #. for more information) when that file is a Solaris door.
 #. Not present on all POSIX implementations.
 #.
-#: libexplain/buffer/file_type.c:210
+#: libexplain/buffer/file_type.c:224
 msgid "Solaris door"
 msgstr ""
 
@@ -437,7 +499,7 @@ msgstr ""
 #. for more information) when that file is a VxFS compressed
 #. file.  Not present on all POSIX implementations.
 #.
-#: libexplain/buffer/file_type.c:180
+#: libexplain/buffer/file_type.c:194
 msgid "VxFS compressed file"
 msgstr ""
 
@@ -462,7 +524,7 @@ msgstr ""
 #.
 #. %1$s => The device named and device's file type
 #.
-#: libexplain/buffer/eio.c:221
+#: libexplain/buffer/eio.c:152
 #, c-format
 msgid "a low-level I/O error occurred in the %s"
 msgstr ""
@@ -473,19 +535,17 @@ msgstr ""
 #. the device being used, or the special device that contains
 #. the file system the file is stored in.
 #.
-#: libexplain/buffer/eio.c:103
+#: libexplain/buffer/eio.c:104
 msgid "a low-level I/O error occurred, probably in hardware"
 msgstr ""
 
 #.
-#. This message is used to explain and EPROTO
-#. error reported by an accept(2) system call, in the case
-#. where a protocol error has occurred.
+#. This message is used to explain and EPROTO error reported
+#. by an accept(2) system call, in the case where a protocol error has
+#. occurred.
 #.
-#: libexplain/buffer/errno/accept.c:206
-msgid ""
-"a protocol error has occurred; for example, the STREAMS protocol stack "
-"has not been initialized"
+#: libexplain/buffer/eproto.c:35
+msgid "a protocol error has occurred"
 msgstr ""
 
 #.
@@ -498,7 +558,7 @@ msgstr ""
 #. %2$s => The path of the first symlink in
 #.         the loop, already quoted.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1499
+#: libexplain/buffer/errno/path_resolution.c:1528
 #, c-format
 msgid "a symbolic link loop was encountered in %s, starting at %s"
 msgstr ""
@@ -508,17 +568,16 @@ msgstr ""
 #. error from an execve system call, in the case where an ELF
 #. interpreter was a directory.
 #.
-#: libexplain/buffer/errno/execve.c:378
+#: libexplain/buffer/errno/execve.c:382
 msgid "an ELF interpreter was a directory"
 msgstr ""
 
 #.
-#. This message is used to explan an ECONNABORTED
-#. error reported by the accept(2) system call, in the case
-#. where an incoming connection has been aborted by the
-#. remote host.
+#. This message is used to explan an ECONNABORTED error
+#. reported by the accept(2) system call, in the case where an incoming
+#. connection has been aborted by the remote host.
 #.
-#: libexplain/buffer/errno/accept.c:97
+#: libexplain/buffer/econnaborted.c:34
 msgid "an incoming connection has been aborted by the remote host"
 msgstr ""
 
@@ -542,7 +601,7 @@ msgstr ""
 #. for more information) when that file is a block special
 #. device.
 #.
-#: libexplain/buffer/file_type.c:77
+#: libexplain/buffer/file_type.c:91
 msgid "block special device"
 msgstr ""
 
@@ -551,7 +610,7 @@ msgstr ""
 #. for more information) when that file is a character
 #. special device.
 #.
-#: libexplain/buffer/file_type.c:102
+#: libexplain/buffer/file_type.c:116
 msgid "character special device"
 msgstr ""
 
@@ -562,7 +621,7 @@ msgstr ""
 #. restricted, i.e. when it is not sufficent to be
 #. the owner of the file to change its ownership.
 #.
-#: libexplain/buffer/errno/chown.c:97
+#: libexplain/buffer/errno/chown.c:98
 msgid "chown is restricted"
 msgstr ""
 
@@ -583,7 +642,7 @@ msgstr ""
 #. %1$s => the name (already quoted) and file type (already
 #.         translated) of the alternate file found.
 #.
-#: libexplain/buffer/errno/path_resolution.c:132
+#: libexplain/buffer/errno/path_resolution.c:133
 #, c-format
 msgid "did you mean the %s instead?"
 msgstr ""
@@ -592,7 +651,7 @@ msgstr ""
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a directory.
 #.
-#: libexplain/buffer/file_type.c:89
+#: libexplain/buffer/file_type.c:103
 msgid "directory"
 msgstr ""
 
@@ -628,22 +687,11 @@ msgid "effective UID"
 msgstr ""
 
 #.
-#. This message is used to explain an ENOTTY
-#. error reported by an ioctl(2) system call, when a more
-#. specific explanation is not availble.
-#.
-#: libexplain/iocontrol/generic.c:177
-msgid ""
-"fildes is not associated with a character special device; or, fildes is "
-"not associated with an object to which request can be applied"
-msgstr ""
-
-#.
 #. This message is used to explain an EPERM error
 #. reported by an accept(2) system call, in the case where
 #. firewall rules forbid connection.
 #.
-#: libexplain/buffer/errno/accept.c:193
+#: libexplain/buffer/eperm/accept.c:34
 msgid "firewall rules forbid connection"
 msgstr ""
 
@@ -663,7 +711,7 @@ msgstr ""
 #.         type (will never have slashes).  It will be quoted.
 #. %3$s => the desired file type
 #.
-#: libexplain/buffer/errno/path_resolution.c:871
+#: libexplain/buffer/errno/path_resolution.c:872
 #, c-format
 msgid "in the %s there is a %s, but it should be a %s"
 msgstr ""
@@ -712,7 +760,7 @@ msgstr ""
 #. error reorted by an ioctl(2) system call, when a more
 #. specific explanation is not availble.
 #.
-#: libexplain/iocontrol/generic.c:164
+#: libexplain/iocontrol/generic.c:165
 msgid "ioctl request or ioctl data is not valid"
 msgstr ""
 
@@ -724,10 +772,18 @@ msgstr ""
 #. %1$s => the name of the system call argument, the name of the
 #.         final path component and the type of the file.
 #.
-#: libexplain/buffer/errno/path_resolution.c:345
+#: libexplain/buffer/errno/path_resolution.c:346
 #, c-format
 msgid ""
 "it is not possible to execute the %s, only regular files can be executed"
+msgstr ""
+
+#.
+#. This string is the type of a file (see stat(2) for
+#. more information) when that file is a Linux kernel special file.
+#.
+#: libexplain/buffer/file_type.c:41
+msgid "kernel special file"
 msgstr ""
 
 #.
@@ -761,7 +817,7 @@ msgstr ""
 #. multiplexed block special device.  Not present on all
 #. POSIX implementations.
 #.
-#: libexplain/buffer/file_type.c:165
+#: libexplain/buffer/file_type.c:179
 msgid "multiplexed block special device"
 msgstr ""
 
@@ -771,7 +827,7 @@ msgstr ""
 #. character special device.
 #. Not present on all POSIX implementations.
 #.
-#: libexplain/buffer/file_type.c:129
+#: libexplain/buffer/file_type.c:143
 msgid "multiplexed character special device"
 msgstr ""
 
@@ -779,7 +835,7 @@ msgstr ""
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a fifo.
 #.
-#: libexplain/buffer/file_type.c:114
+#: libexplain/buffer/file_type.c:128
 msgid "named pipe"
 msgstr ""
 
@@ -788,7 +844,7 @@ msgstr ""
 #. for more information) when that file is a named special
 #. file.  Not present on all POSIX implementations.
 #.
-#: libexplain/buffer/file_type.c:144
+#: libexplain/buffer/file_type.c:158
 msgid "named special file"
 msgstr ""
 
@@ -810,7 +866,7 @@ msgstr ""
 #. for more information) when that file is a network special
 #. file.  Not present on all POSIX implementations.
 #.
-#: libexplain/buffer/file_type.c:195
+#: libexplain/buffer/file_type.c:209
 msgid "network special file"
 msgstr ""
 
@@ -867,7 +923,7 @@ msgstr ""
 #. an error reported by open(2) system call, and the caller used a
 #. flags combination with explicitly undefined behavior.
 #.
-#: libexplain/buffer/errno/open.c:596
+#: libexplain/buffer/errno/open.c:584
 msgid ""
 "note that the behavior of O_EXCL is undefined if O_CREAT is not specified"
 msgstr ""
@@ -988,7 +1044,7 @@ msgstr ""
 #.
 #. %1$s => The size of the file, in parentheses
 #.
-#: libexplain/buffer/errno/open.c:278
+#: libexplain/buffer/errno/open.c:279
 #, c-format
 msgid ""
 "pathname referes to a regular file that is too large to be opened %s, "
@@ -1008,26 +1064,16 @@ msgstr ""
 #. Example: "pathname refers to a block special file (42, 13) and no
 #.           corresponding device exists"
 #.
-#: libexplain/buffer/errno/open.c:130
+#: libexplain/buffer/errno/open.c:131
 #, c-format
 msgid "pathname refers to a %s %s and no corresponding device exists"
-msgstr ""
-
-#.
-#. This message is used to explain an EISDIR
-#. reported by an open(2) system call.  You may not open
-#. a directory for writing.
-#.
-#: libexplain/buffer/errno/open.c:301
-msgid ""
-"pathname refers to a directory and the access requested involved writing"
 msgstr ""
 
 #.
 #. This message is used when explaining an EIO
 #. error, for a file open for both reading and writing.
 #.
-#: libexplain/buffer/eio.c:83
+#: libexplain/buffer/eio.c:84
 msgid ""
 "possibly as a result of a preceeding read(2) or write(2) system call"
 msgstr ""
@@ -1036,7 +1082,7 @@ msgstr ""
 #. This message is used when explaining an EIO
 #. error, for a file open only for reading.
 #.
-#: libexplain/buffer/eio.c:59
+#: libexplain/buffer/eio.c:60
 msgid "possibly as a result of a preceeding read(2) system call"
 msgstr ""
 
@@ -1044,7 +1090,7 @@ msgstr ""
 #. This message is used when explaining an EIO
 #. error, for a file open only for writing.
 #.
-#: libexplain/buffer/eio.c:71
+#: libexplain/buffer/eio.c:72
 msgid "possibly as a result of a preceeding write(2) system call"
 msgstr ""
 
@@ -1124,7 +1170,7 @@ msgstr ""
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a regular file.
 #.
-#: libexplain/buffer/file_type.c:64
+#: libexplain/buffer/file_type.c:78
 msgid "regular file"
 msgstr ""
 
@@ -1169,16 +1215,87 @@ msgstr ""
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a network socket.
 #.
-#: libexplain/buffer/file_type.c:40
+#: libexplain/buffer/file_type.c:54
 msgid "socket"
+msgstr ""
+
+#.
+#. This error message is issued to explain an
+#. EOVERFLOW error.  This is the generic form, some system calls
+#. have much more specific EOVERFLOW explaianions, and those
+#. should be used if preference whenever possible.
+#.
+#: libexplain/buffer/eoverflow.c:35
+msgid "some values were too large to be represented in the returned struct"
 msgstr ""
 
 #.
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a symbolic link.
 #.
-#: libexplain/buffer/file_type.c:52
+#: libexplain/buffer/file_type.c:66
 msgid "symbolic link"
+msgstr ""
+
+#.
+#. this error message is issued to explain
+#. an ENOSYS or EOPNOTSUPP error in the case where
+#. a system call is not supported for a particular
+#. device (or perhapse not supported by the device
+#. driver).
+#.
+#. %1$s => the file system path of the device special file
+#. %2$s => the type of the special file (already translated)
+#. %3$s => the name of the offending system call.
+#.
+#: libexplain/buffer/enosys.c:179
+#, c-format
+msgid "the %s %s does not support the %s system call"
+msgstr ""
+
+#.
+#. This error message is issued when a call to
+#. strtol is given a string containing no digits.
+#. Similarly for related functions.
+#.
+#: libexplain/buffer/einval.c:144
+#, c-format
+msgid "the %s argument does not appear to be a number"
+msgstr ""
+
+#.
+#. This error message is issued when a DIR* pointer
+#. does not refer to a valid directory stream.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/ebadf.c:84
+#, c-format
+msgid "the %s argument does not refer a valid directory stream"
+msgstr ""
+
+#.
+#. This error message is issued when a FILE* pointer
+#. does not refer to a valid file stream.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/ebadf.c:66
+#, c-format
+msgid "the %s argument does not refer a valid file stream"
+msgstr ""
+
+#.
+#. This error message is issued when the signalfd system
+#. call reposrt an EINVAL error, in the case where the file descriptor
+#. is actually open, but does not refer to a valid signalfd file
+#. descriptor.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#: libexplain/buffer/einval/signalfd.c:36
+#, c-format
+msgid "the %s argument does not refer to a valid signalfd file descriptor"
 msgstr ""
 
 #.
@@ -1211,7 +1328,7 @@ msgstr ""
 #.
 #. %1$s => the name of the offending system call argument.
 #.
-#: libexplain/buffer/einval.c:97
+#: libexplain/buffer/einval.c:117
 #, c-format
 msgid "the %s argument was incorrectly specified"
 msgstr ""
@@ -1245,6 +1362,18 @@ msgstr ""
 #.
 #. This message is used when explaining an EINVAL
 #. error returned by a system call that is complaining about a
+#. size being too large.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#: libexplain/buffer/einval.c:98
+#, c-format
+msgid "the %s argument was incorrectly specified, it was too large"
+msgstr ""
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about a
 #. size being too small or negative (e.g. bind's sock_addr_size
 #. field).
 #.
@@ -1253,6 +1382,23 @@ msgstr ""
 #: libexplain/buffer/einval.c:77
 #, c-format
 msgid "the %s argument was incorrectly specified, it was too small"
+msgstr ""
+
+#.
+#. This message is used when explaining an EINVAL or
+#. ENAMETOOLONG error returned by the gethostname system call,
+#. in the case where the supplied data buffer is smaller than
+#. the actual host name.
+#.
+#. %1$s => the name of the offending system call argument
+#. %2$d => the minimum size (in bytes) needed to hold the actual
+#.         host name
+#.
+#: libexplain/buffer/errno/gethostname.c:91
+#, c-format
+msgid ""
+"the %s argument was incorrectly specified, the actual host name requires "
+"at least %d bytes, or preferably use the HOST_NAME_MAX macro"
 msgstr ""
 
 #.
@@ -1269,7 +1415,7 @@ msgstr ""
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:788
+#: libexplain/buffer/errno/path_resolution.c:789
 #, c-format
 msgid "the %s in the %s is being used as a directory when it is not"
 msgstr ""
@@ -1289,7 +1435,7 @@ msgstr ""
 #.         directory, and the file type "directory".
 #. %3$s => the non-existent thing the symbolic link point to
 #.
-#: libexplain/buffer/errno/path_resolution.c:720
+#: libexplain/buffer/errno/path_resolution.c:721
 #, c-format
 msgid "the %s in the %s refers to %s that does not exist"
 msgstr ""
@@ -1308,9 +1454,41 @@ msgstr ""
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:826
+#: libexplain/buffer/errno/path_resolution.c:827
 #, c-format
 msgid "the %s in the %s should not exist yet"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an ERESTART error.
+#.
+#. This differs from EINTR in that it is provoked by ptrace()ing
+#. an executable being debugged.
+#.
+#. %1$s => the name of the offending system call
+#.
+#: libexplain/buffer/erestart.c:37
+#, c-format
+msgid ""
+"the %s was interrupted and should be restarted (this should only ever "
+"occur when debugging a program)"
+msgstr ""
+
+#.
+#. this error message is issued to explain an
+#. EWOULDBLOCK error.  It is a generic response, suitable for
+#. many system calls, however there are also some more specific
+#. EWOULDBLOCK messages that contributors should check for
+#. re-usability before using this one.
+#.
+#. %1$s => the name of the system call
+#.
+#: libexplain/buffer/ewouldblock.c:44
+#, c-format
+msgid ""
+"the %s would have had to wait to complete however it was instructed not "
+"to do so"
 msgstr ""
 
 #.
@@ -1326,7 +1504,7 @@ msgstr ""
 #. %3$s => the number and name of the file owner UID,
 #.         already quoted if needed
 #.
-#: libexplain/buffer/errno/open.c:490
+#: libexplain/buffer/errno/open.c:477
 #, c-format
 msgid ""
 "the O_NOATIME flags was specified, but the process effective UID %s does "
@@ -1339,7 +1517,7 @@ msgstr ""
 #. when the use of thr O_NONBLOCK flags would otherwise
 #. cause the open(2) system call to block.
 #.
-#: libexplain/buffer/errno/open.c:524
+#: libexplain/buffer/errno/open.c:511
 msgid ""
 "the O_NONBLOCK flag was specified, and an incompatible lease was held on "
 "the file"
@@ -1444,7 +1622,7 @@ msgstr ""
 #. %5$s => the directory's UID and the corresponding login name,
 #.         already quoted
 #.
-#: libexplain/buffer/errno/path_resolution.c:962
+#: libexplain/buffer/errno/path_resolution.c:963
 #, c-format
 msgid ""
 "the directory has the sticky bit (S_ISVTX) set and the process's %s %s "
@@ -1459,7 +1637,7 @@ msgstr ""
 #. on a file system that is mounted with the
 #. "noexec" option.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1881
+#: libexplain/buffer/errno/path_resolution.c:1910
 msgid ""
 "the executable is on a file system that is mounted with the \"noexec\" "
 "option"
@@ -1473,7 +1651,7 @@ msgstr ""
 #. and it resides on a file system that is mounted
 #. with the "nosuid" option.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1908
+#: libexplain/buffer/errno/path_resolution.c:1937
 msgid ""
 "the executable is on a file system that is mounted with the \"nosuid\" "
 "option"
@@ -1486,7 +1664,7 @@ msgstr ""
 #. explanation, this explanation is only used when a
 #. more specific explanation is not available.
 #.
-#: libexplain/buffer/errno/open.c:240
+#: libexplain/buffer/errno/open.c:241
 msgid ""
 "the file already exists when it should not (flags O_CREAT and O_EXCL "
 "were used)"
@@ -1498,8 +1676,23 @@ msgstr ""
 #. opened for reading.  The actual open mode will be
 #. printed separately.
 #.
-#: libexplain/buffer/errno/read.c:106
+#: libexplain/buffer/errno/read.c:104
 msgid "the file descriptor is not open for reading"
+msgstr ""
+
+#.
+#. this error message is issued to explain
+#. an ENOSYS or EOPNOTSUPP error in the case where a
+#. file system does not support a particular system
+#. call.
+#.
+#. %1$s => the mount point of the file system,
+#.         in parentheses
+#. %2$s => the name of the offending system call.
+#.
+#: libexplain/buffer/enosys.c:110
+#, c-format
+msgid "the file system %s does not support the %s system call"
 msgstr ""
 
 #.
@@ -1512,7 +1705,7 @@ msgstr ""
 #. %2$s => The file system mount point and usage,
 #.         in parentheses
 #.
-#: libexplain/buffer/errno/open.c:382
+#: libexplain/buffer/errno/open.c:369
 #, c-format
 msgid "the file system containing %s %s has no room for the new file"
 msgstr ""
@@ -1549,6 +1742,19 @@ msgid ""
 msgstr ""
 
 #.
+#. this error message is issued to explain
+#. an ENOSYS or EOPNOTSUPP error in the case where a
+#. file system does not support a particular system
+#. call.
+#.
+#. %1$s => the name of the offending system call.
+#.
+#: libexplain/buffer/enosys.c:129
+#, c-format
+msgid "the file system does not support the %s system call"
+msgstr ""
+
+#.
 #. This message is used when explaining why some
 #. permission mode bits are ignored.
 #.
@@ -1562,6 +1768,23 @@ msgid "the group permission mode %s is ignored"
 msgstr ""
 
 #.
+#. this error message is issued when a process
+#. attempts to set the hostname, and the hostname contains
+#. characters not in the RFC1035 spec (section 2.3.1).
+#.
+#: libexplain/buffer/errno/sethostname.c:315
+msgid "the hostname specified contains invalid characters"
+msgstr ""
+
+#.
+#. this error message is issued when a process
+#. attempts to set the hostname, and the name is too long.
+#.
+#: libexplain/buffer/errno/sethostname.c:333
+msgid "the hostname specified is too long"
+msgstr ""
+
+#.
 #. This message is used to explain an EINVAL error
 #. reported by the pathconf system call.
 #.
@@ -1572,6 +1795,35 @@ msgstr ""
 #: libexplain/buffer/errno/pathconf.c:79
 #, c-format
 msgid "the implementation does not support an association of %s with %s"
+msgstr ""
+
+#.
+#. This message is issued to explain an ENODEV error
+#. reported by the eventfs, eventpoll, signalfd and timerfd system
+#. call.
+#.
+#: libexplain/buffer/enodev.c:36
+msgid "the kernel could not mount the internal anonymous inode device"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an ENONET error.
+#.
+#: libexplain/buffer/enonet.c:33
+msgid ""
+"the local host is not connected to any network, or is not connected to "
+"the network required for the connection"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an ENETDOWN error.
+#.
+#: libexplain/buffer/enetdown.c:33
+msgid ""
+"the local network cable is not plugged in, or a local network router or "
+"switch or hub is switched off"
 msgstr ""
 
 #.
@@ -1604,6 +1856,14 @@ msgstr ""
 #.
 #: libexplain/buffer/errno/bind.c:172
 msgid "the network port address is protected"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an EPROTONOSUPPORT error.
+#.
+#: libexplain/buffer/eprotonosupport.c:33
+msgid "the network protocol requested is not available on this system"
 msgstr ""
 
 #.
@@ -1745,12 +2005,11 @@ msgid "the process already has the maximum number of file descriptors open"
 msgstr ""
 
 #.
-#. The message is used when explaining an EPERM
-#. error reported by the chown(2) system call, in the case
-#. where no more specific explanation is available,
-#. but the call attempted to only the GID.
+#. The message is used when explaining an EPERM error reported
+#. by the chown(2) system call, in the case where no more specific
+#. explanation is available, but the call attempted to change the GID.
 #.
-#: libexplain/buffer/errno/chown.c:268
+#: libexplain/buffer/eperm.c:35
 msgid ""
 "the process did not have the required permissions to change the group GID"
 msgstr ""
@@ -1761,7 +2020,7 @@ msgstr ""
 #. where no more specific explanation is available,
 #. but the call attempted to change only the UID.
 #.
-#: libexplain/buffer/errno/chown.c:250
+#: libexplain/buffer/errno/chown.c:251
 msgid ""
 "the process did not have the required permissions to change the owner UID"
 msgstr ""
@@ -1772,7 +2031,7 @@ msgstr ""
 #. where no more specific explanation is available,
 #. but the call attempted to change both the UID and the GID.
 #.
-#: libexplain/buffer/errno/chown.c:235
+#: libexplain/buffer/errno/chown.c:236
 msgid ""
 "the process did not have the required permissions to change the owner "
 "UID and group GID"
@@ -1783,10 +2042,19 @@ msgstr ""
 #. error reported by the chown(2) system call, in the case
 #. where no more specific explanation is available.
 #.
-#: libexplain/buffer/errno/chown.c:282
+#: libexplain/buffer/errno/chown.c:272
 msgid ""
 "the process did not have the required permissions to change the owner "
 "UID or group GID"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an ESRCH error, in the case where the pid was
+#. positive.
+#.
+#: libexplain/buffer/esrch.c:36
+msgid "the process does not exist"
 msgstr ""
 
 #.
@@ -1814,7 +2082,7 @@ msgstr ""
 #.         call argument, the name of the directory, and the
 #.         file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:488
+#: libexplain/buffer/errno/path_resolution.c:489
 #, c-format
 msgid "the process does not have execute permission to the %s in the %s"
 msgstr ""
@@ -1852,6 +2120,53 @@ msgid ""
 msgstr ""
 
 #.
+#. This error message is issued when a
+#. process attempts to change its root directory.
+#.
+#: libexplain/buffer/errno/chroot.c:106
+msgid "the process does not have permission to change its root directory"
+msgstr ""
+
+#.
+#. xgetetxt:  This error message is issued to explain an EPERM error
+#. of they nice system call, in the case where the calling process
+#. attempted to increase its priority by supplying a negative value
+#. but has insufficient privileges.
+#.
+#: libexplain/buffer/errno/nice.c:59
+msgid "the process does not have permission to increase its priority"
+msgstr ""
+
+#.
+#. This error message is issued to explain an
+#. EPERM error reported by the kill(2) system call.
+#.
+#: libexplain/buffer/eperm/kill.c:34
+msgid ""
+"the process does not have permission to send the signal to any of the "
+"target processes"
+msgstr ""
+
+#.
+#. this error message is issued when a process
+#. attempts to set the hostname without sufficient privilege.
+#.
+#: libexplain/buffer/errno/sethostname.c:356
+msgid "the process does not have permission to set the hostname"
+msgstr ""
+
+#.
+#. This error message is issued to explain an
+#. EPERM error reported by the adjtimex (etc) system call.
+#.
+#: libexplain/buffer/eperm/sys_time.c:34
+#, c-format
+msgid ""
+"the process does not have permission to use the %s system call to modify "
+"the system time"
+msgstr ""
+
+#.
 #. This message is used when a process does not have
 #. read permission to something it attempts to
 #. open for reading; for example, open() or fopen().
@@ -1867,7 +2182,7 @@ msgstr ""
 #.         call argument, the name of the directory, and the
 #.         file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:548
+#: libexplain/buffer/errno/path_resolution.c:549
 #, c-format
 msgid "the process does not have read permission to the %s in the %s"
 msgstr ""
@@ -1882,7 +2197,7 @@ msgstr ""
 #.         include the name of the function call argument, the
 #.         name of the directory, file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:429
+#: libexplain/buffer/errno/path_resolution.c:430
 #, c-format
 msgid "the process does not have search permission to the %s"
 msgstr ""
@@ -1900,7 +2215,7 @@ msgstr ""
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:390
+#: libexplain/buffer/errno/path_resolution.c:391
 #, c-format
 msgid "the process does not have search permission to the %s in the %s"
 msgstr ""
@@ -1910,7 +2225,7 @@ msgstr ""
 #. of an EPERM error returned by any system call that does
 #. not provide a more specific explanation.
 #.
-#: libexplain/buffer/errno/generic.c:54
+#: libexplain/buffer/errno/generic.c:64
 msgid ""
 "the process does not have the appropriate privileges to use this system "
 "call"
@@ -1932,7 +2247,7 @@ msgstr ""
 #.         call argument, the name of the directory, and the
 #.         file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:607
+#: libexplain/buffer/errno/path_resolution.c:608
 #, c-format
 msgid "the process does not have write permission to the %s in the %s"
 msgstr ""
@@ -1951,7 +2266,7 @@ msgstr ""
 #.         new directory entry in question (will never have slashes).
 #.         It will include the name of the new file, and the file type.
 #.
-#: libexplain/buffer/errno/path_resolution.c:658
+#: libexplain/buffer/errno/path_resolution.c:659
 #, c-format
 msgid ""
 "the process does not have write permission to the %s, this is needed to "
@@ -1969,11 +2284,30 @@ msgstr ""
 #. %2$s => The quoted name of the directory component, and its
 #.         file type already translated.
 #.
-#: libexplain/buffer/errno/path_resolution.c:914
+#: libexplain/buffer/errno/path_resolution.c:915
 #, c-format
 msgid ""
 "the process does not have write permission to the %s, this is needed to "
 "remove the directory entry for the %s"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an ESRCH error, in the case where the pid was
+#. negative.
+#.
+#: libexplain/buffer/esrch.c:49
+msgid "the process group does not exist"
+msgstr ""
+
+#.
+#. This error message is issued when a process
+#. attempts to enable or disable process accounting without
+#. sufficient privilege.
+#.
+#: libexplain/buffer/errno/acct.c:142
+msgid ""
+"the process has insufficient privilege to control process accounting"
 msgstr ""
 
 #.
@@ -2027,6 +2361,36 @@ msgid ""
 msgstr ""
 
 #.
+#. This eror message is issued to explain an
+#. EHOSTUNREACH error.
+#.
+#: libexplain/buffer/ehostunreach.c:33
+msgid ""
+"the remote host does not appear to be connected to the network or is "
+"turned off"
+msgstr ""
+
+#.
+#. This error message is issued to explain an
+#. EHOSTDOWN error.
+#.
+#: libexplain/buffer/ehostdown.c:33
+msgid ""
+"the remote host has disappeared without cleanly closing its network "
+"connections"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports an ENETUNREACH error.
+#.
+#: libexplain/buffer/enetunreach.c:33
+msgid ""
+"the remote network is unreachable, or an intermediate network router is "
+"down or unplugged"
+msgstr ""
+
+#.
 #. This message is used to explain an ECONNREFUSED
 #. error reported by the connect(2) system call, in the
 #. case where the remote server is accessible but is not
@@ -2046,7 +2410,7 @@ msgstr ""
 #. explanation, this explanation is only used when a
 #. more specific explanation is not available.
 #.
-#: libexplain/buffer/errno/open.c:204
+#: libexplain/buffer/errno/open.c:205
 msgid ""
 "the requested access to the file is not allowed, or search permission is "
 "denied for one of the directories in the path prefix of pathname, or the "
@@ -2064,6 +2428,19 @@ msgstr ""
 msgid ""
 "the requested network address was not local or a nonexistent interface "
 "was requested"
+msgstr ""
+
+#.
+#. This error message is issued when a call to a
+#. function would result in a return value that cannot be
+#. represented by the return data type.
+#.
+#. The explanation has to make sense to a user without a
+#. mathematical background, so saying things like "magnitude
+#. exceeds data type representation limits" doesn't cut it.
+#.
+#: libexplain/buffer/erange.c:38
+msgid "the resulting value would have been too large to store"
 msgstr ""
 
 #.
@@ -2139,7 +2516,7 @@ msgstr ""
 #. where the socket is marked non-blocking (O_NONBLOCK) and
 #. no connections are waiting to be accepted.
 #.
-#: libexplain/buffer/errno/accept.c:78
+#: libexplain/buffer/ewouldblock.c:63
 msgid ""
 "the socket is marked non-blocking and no connections are present to be "
 "accepted"
@@ -2185,16 +2562,17 @@ msgstr ""
 #. the file descriptor is actually a socket, but is not in a
 #. state that permits the use of the accept(2) system call.
 #.
-#: libexplain/buffer/errno/accept.c:134
+#: libexplain/buffer/einval/not_listening.c:35
 msgid "the socket is not listening for connections"
 msgstr ""
 
 #.
-#. This message is used to explain an EOPNOTSUPP
-#. error returned by a listen(2) system call.
+#. This message is used to explain an ENOSYS or EOPNOTSUPP
+#. error returned by a (accept, listen, etc) system call.
 #.
-#: libexplain/buffer/errno/accept.c:158
-msgid "the socket is not of a type that supports the accept(2) system call"
+#: libexplain/buffer/enosys/socket.c:34
+#, c-format
+msgid "the socket is not of a type that supports the %s system call"
 msgstr ""
 
 #.
@@ -2251,6 +2629,17 @@ msgid "the terminal has already been redirected"
 msgstr ""
 
 #.
+#. This error message is issued when a system call
+#. reports an ETIMEDOUT error.
+#.
+#. %1$s => the name of the offending system call
+#.
+#: libexplain/buffer/etimedout.c:34
+#, c-format
+msgid "the time limit expired before %s was able to complete"
+msgstr ""
+
+#.
 #. This message is used when explaining an ENOTTY
 #. error reported by an ioctl TIOCGSID system call.
 #.
@@ -2258,6 +2647,16 @@ msgstr ""
 msgid ""
 "the tty is not a master pty or the tty is not the controlling tty of the "
 "process"
+msgstr ""
+
+#.
+#. This error message is issued when a system call
+#. reports a EINVAL error, in the case where an argument's value
+#. is outside the valid range.
+#.
+#: libexplain/buffer/einval/out_of_range.c:35
+#, c-format
+msgid "the value of the %s argument is outside the valid range"
 msgstr ""
 
 #.
@@ -2286,7 +2685,7 @@ msgstr ""
 #.         include the name of the function call argument, the name of
 #.         the directory, and the file type "directory".
 #.
-#: libexplain/buffer/errno/path_resolution.c:317
+#: libexplain/buffer/errno/path_resolution.c:318
 #, c-format
 msgid "there is no %s in the %s"
 msgstr ""
@@ -2311,7 +2710,7 @@ msgstr ""
 #. they have exactly the same English text
 #. returned from strerror(3).
 #.
-#: libexplain/buffer/errno/open.c:566
+#: libexplain/buffer/errno/open.c:553
 msgid ""
 "this is a Linux kernel bug, in this situation POSIX says ENXIO should "
 "have been returned"
@@ -2338,6 +2737,18 @@ msgid "this may only be applied to the master side of a pseudo-terminal"
 msgstr ""
 
 #.
+#. This error message is issued to explain an ENOSYS
+#. or EOPNOTSUPP or ENOTTY error, in the generic case.  There are
+#. more specific messages, try to use those instead.
+#.
+#. %1$s => the name of the offending system call
+#.
+#: libexplain/buffer/enosys/vague.c:37
+#, c-format
+msgid "this system does not support the %s system call"
+msgstr ""
+
+#.
 #. This message is used when explaining
 #. the capabilities required to exceed system limits
 #. on the number of processes a user may execute
@@ -2357,7 +2768,7 @@ msgstr ""
 #.         interpreter (#!) line, that points at yet another
 #.         interpreted file.
 #.
-#: libexplain/buffer/errno/path_resolution.c:236
+#: libexplain/buffer/errno/path_resolution.c:237
 #, c-format
 msgid "too many levels of interpreters (%s)"
 msgstr ""
@@ -2374,7 +2785,7 @@ msgstr ""
 #. %1$s => The name of the offending system call
 #.         argument.
 #.
-#: libexplain/buffer/errno/path_resolution.c:1629
+#: libexplain/buffer/errno/path_resolution.c:1658
 #, c-format
 msgid "too many symbolic links were encountered in %s"
 msgstr ""
@@ -2384,7 +2795,7 @@ msgstr ""
 #. for more information) when that file is of an unknown
 #. type, often the result of a bad inode block on a hard disk.
 #.
-#: libexplain/buffer/file_type.c:240
+#: libexplain/buffer/file_type.c:254
 msgid "unknown file type"
 msgstr ""
 
@@ -2461,7 +2872,7 @@ msgstr ""
 #. probably meant to use a named pipe (first character "p" in
 #. ls(1) long outout).
 #.
-#: libexplain/buffer/errno/open.c:89
+#: libexplain/buffer/errno/open.c:90
 msgid ""
 "you cannot use open(2) to open socket files, you must use connect(2) "
 "instead; a named pipe may be what was intended"

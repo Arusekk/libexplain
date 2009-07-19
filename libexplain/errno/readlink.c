@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,22 +16,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/unistd.h>
+
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/readlink.h>
 
 
 const char *
-libexplain_errno_readlink(int errnum, const char *pathname, char *data,
-    int data_size)
+explain_errno_readlink(int errnum, const char *pathname, char *data,
+    size_t data_size)
 {
-    libexplain_message_errno_readlink
+    explain_message_errno_readlink
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         pathname,
         data,
         data_size
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }

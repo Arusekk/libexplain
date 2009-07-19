@@ -25,15 +25,13 @@
 
 
 FILE *
-libexplain_fdopen_or_die(int fildes, const char *mode)
+explain_fdopen_or_die(int fildes, const char *mode)
 {
     FILE            *fp;
 
-    fp = fdopen(fildes, mode);
+    fp = explain_fdopen_on_error(fildes, mode);
     if (!fp)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fdopen(fildes, mode));
         exit(EXIT_FAILURE);
     }
     return fp;

@@ -28,23 +28,11 @@
 
 
 void
-libexplain_getaddrinfo_or_die(const char *node, const char *service,
+explain_getaddrinfo_or_die(const char *node, const char *service,
     const struct addrinfo *hints, struct addrinfo **res)
 {
-    int             errcode;
-
-    errcode = getaddrinfo(node, service, hints, res);
-    assert(EAI_SYSTEM < 0);
-    if (errcode == EAI_SYSTEM)
-        errcode = errno;
-    if (errcode)
+    if (explain_getaddrinfo_on_error(node, service, hints, res))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_errcode_getaddrinfo(errcode, node, service, hints, res)
-        );
         exit(EXIT_FAILURE);
     }
 }

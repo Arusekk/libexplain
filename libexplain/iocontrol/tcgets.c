@@ -23,7 +23,7 @@
 
 
 /* #include <sys/ioctl.h> => <asm/ioctls.h> */
-const libexplain_iocontrol_t libexplain_iocontrol_tcgets =
+const explain_iocontrol_t explain_iocontrol_tcgets =
 {
     "TCGETS", /* name */
     TCGETS, /* value */

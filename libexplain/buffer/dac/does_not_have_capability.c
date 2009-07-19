@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,11 +20,11 @@
 
 
 void
-libexplain_buffer_does_not_have_capability(libexplain_string_buffer_t *sb,
+explain_buffer_does_not_have_capability(explain_string_buffer_t *sb,
     const char *name)
 {
-    libexplain_string_buffer_puts(sb, " (");
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_puts(sb, " (");
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -38,5 +38,5 @@ libexplain_buffer_does_not_have_capability(libexplain_string_buffer_t *sb,
         i18n("does not have the %s capability"),
         name
     );
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_putc(sb, ')');
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_hexdump function may be used to dump data in
+  * The explain_buffer_hexdump function may be used to dump data in
   * hex form to the given string buffer.
   *
   * @param sb
@@ -32,7 +32,7 @@
   * @param data_size
   *    The size of the data to dump
   */
-void libexplain_buffer_hexdump(libexplain_string_buffer_t *sb, const void *data,
+void explain_buffer_hexdump(explain_string_buffer_t *sb, const void *data,
     size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_HEXDUMP_H */

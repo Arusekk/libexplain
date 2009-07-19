@@ -25,17 +25,11 @@
 
 
 void
-libexplain_getsockname_or_die(int fildes, struct sockaddr *sock_addr,
+explain_getsockname_or_die(int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
-    if (getsockname(fildes, sock_addr, sock_addr_size) < 0)
+    if (explain_getsockname_on_error(fildes, sock_addr, sock_addr_size) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_getsockname(fildes, sock_addr, sock_addr_size)
-        );
         exit(EXIT_FAILURE);
     }
 }

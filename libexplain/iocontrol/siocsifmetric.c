@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/siocsifmetric.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocsifmetric =
+const explain_iocontrol_t explain_iocontrol_siocsifmetric =
 {
     "SIOCSIFMETRIC", /* name */
     SIOCSIFMETRIC, /* value */

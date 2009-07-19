@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_chmod function may be used to obtain a
+  * The explain_buffer_errno_chmod function may be used to obtain a
   * detailed explanation of an error returned by a chmod(2) system call.
   *
   * @param sb
@@ -35,7 +35,7 @@
   * @param mode
   *    The original mode, acactly as passed to the chmod(2) system call.
   */
-void libexplain_buffer_errno_chmod(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_chmod(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CHMOD_H */

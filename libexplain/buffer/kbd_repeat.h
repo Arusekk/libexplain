@@ -24,7 +24,7 @@
 struct kbd_repeat; /* forward */
 
 /**
-  * The libexplain_buffer_kbd_repeat function may be used to
+  * The explain_buffer_kbd_repeat function may be used to
   * print a representation of a kbd_repeat structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct kbd_repeat; /* forward */
   * @param data
   *     The kbd_repeat structure to be printed.
   */
-void libexplain_buffer_kbd_repeat(libexplain_string_buffer_t *sb,
+void explain_buffer_kbd_repeat(explain_string_buffer_t *sb,
     const struct kbd_repeat *data);
 
 #endif /* LIBEXPLAIN_BUFFER_KBD_REPEAT_H */

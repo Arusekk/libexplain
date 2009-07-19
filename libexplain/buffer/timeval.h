@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@
 struct timeval; /* forward */
 
 /**
-  * The libexplain_buffer_timeval function may be used to
+  * The explain_buffer_timeval function may be used to
   * print a representation of a struct timeval value.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct timeval; /* forward */
   * @param tvp
   *    Pointer to the timeval of interest.
   */
-void libexplain_buffer_timeval(libexplain_string_buffer_t *sb,
+void explain_buffer_timeval(explain_string_buffer_t *sb,
     const struct timeval *tvp);
 
 #endif /* LIBEXPLAIN_BUFFER_TIMEVAL_H */

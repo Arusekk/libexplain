@@ -21,9 +21,9 @@
 
 
 void
-libexplain_buffer_enobufs(libexplain_string_buffer_t *sb)
+explain_buffer_enobufs(explain_string_buffer_t *sb)
 {
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*

@@ -26,7 +26,7 @@
 #define KDGETLED -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdgetled =
+const explain_iocontrol_t explain_iocontrol_kdgetled =
 {
     "KDGETLED", /* name */
     KDGETLED, /* value */

@@ -28,7 +28,7 @@
 #define SIOCGIFVLAN -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocgifvlan =
+const explain_iocontrol_t explain_iocontrol_siocgifvlan =
 {
     "SIOCGIFVLAN", /* name */
     SIOCGIFVLAN, /* value */

@@ -22,10 +22,10 @@
 
 
 void
-libexplain_buffer_pid_t_star(libexplain_string_buffer_t *sb, const pid_t *value)
+explain_buffer_pid_t_star(explain_string_buffer_t *sb, const pid_t *value)
 {
-    if (libexplain_pointer_is_efault(value, sizeof(*value)))
-        libexplain_buffer_pointer(sb, value);
+    if (explain_pointer_is_efault(value, sizeof(*value)))
+        explain_buffer_pointer(sb, value);
     else
-        libexplain_string_buffer_printf(sb, "{ %ld }", (long)*value);
+        explain_string_buffer_printf(sb, "{ %ld }", (long)*value);
 }

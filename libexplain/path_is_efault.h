@@ -23,7 +23,7 @@
 #include <libexplain/ac/stddef.h>
 
 /**
-  * The libexplain_path_is_efault function may be used to determine whether
+  * The explain_path_is_efault function may be used to determine whether
   * or not a path pointer is a valid pointer.  Typically this is used
   * when handling ambiguous EFAULT situations.
   *
@@ -33,10 +33,10 @@
   *    int; 1 if the path is bad (points outside the process address
   *    space), or 0 if the path is OK.
   */
-int libexplain_path_is_efault(const char *path);
+int explain_path_is_efault(const char *path);
 
 /**
-  * The libexplain_pointer_is_efault function may be used to determine
+  * The explain_pointer_is_efault function may be used to determine
   * whether or not a pointer is valid.  Typically this is used when
   * handling ambiguous EFAULT situations.
   *
@@ -49,6 +49,6 @@ int libexplain_path_is_efault(const char *path);
   *    int; 1 if the pointer is bad (points outside the process address
   *    space), or 0 if the pointer is OK.
   */
-int libexplain_pointer_is_efault(const void *data, size_t data_size);
+int explain_pointer_is_efault(const void *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_PATH_IS_EFAULT_H */

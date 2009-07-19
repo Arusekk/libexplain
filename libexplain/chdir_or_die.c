@@ -26,12 +26,10 @@
 
 
 void
-libexplain_chdir_or_die(const char * pathname)
+explain_chdir_or_die(const char * pathname)
 {
-    if (chdir(pathname) < 0)
+    if (explain_chdir_on_error(pathname) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_chdir(pathname));
         exit(EXIT_FAILURE);
     }
 }

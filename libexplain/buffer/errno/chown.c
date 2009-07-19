@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +31,7 @@
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
+#include <libexplain/buffer/eperm.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/chown.h>
 #include <libexplain/buffer/errno/generic.h>
@@ -46,26 +47,26 @@
 
 
 static void
-libexplain_buffer_errno_chown_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_chown_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int owner, int group)
 {
-    libexplain_string_buffer_puts(sb, "chown(pathname = ");
+    explain_string_buffer_puts(sb, "chown(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", owner = ");
-    libexplain_buffer_uid(sb, owner);
-    libexplain_string_buffer_puts(sb, ", group = ");
-    libexplain_buffer_gid(sb, group);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_puts(sb, ", owner = ");
+    explain_buffer_uid(sb, owner);
+    explain_string_buffer_puts(sb, ", group = ");
+    explain_buffer_gid(sb, group);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static int
-libexplain_buffer_eperm_chown_st(libexplain_string_buffer_t *sb,
+explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
     const char *pathname, const struct stat *st, int chown_restricted,
-    int owner, int group, const libexplain_final_t *final_component)
+    int owner, int group, const explain_final_t *final_component)
 {
     uid_t           uid;
 
@@ -78,13 +79,13 @@ libexplain_buffer_eperm_chown_st(libexplain_string_buffer_t *sb,
             (
                 (!chown_restricted && uid == st->st_uid)
             ||
-                libexplain_capability_chown()
+                explain_capability_chown()
             );
         if (!may_change_file_owner)
         {
             if (chown_restricted)
             {
-                libexplain_buffer_gettext
+                explain_buffer_gettext
                 (
                     sb,
                     /*
@@ -96,13 +97,13 @@ libexplain_buffer_eperm_chown_st(libexplain_string_buffer_t *sb,
                      */
                     i18n("chown is restricted")
                 );
-                libexplain_buffer_dac_chown(sb);
+                explain_buffer_dac_chown(sb);
             }
             else
             {
                 if (!pathname)
                 {
-                   libexplain_buffer_does_not_have_inode_modify_permission_fd_st
+                   explain_buffer_does_not_have_inode_modify_permission_fd_st
                     (
                         sb,
                         st,
@@ -112,7 +113,7 @@ libexplain_buffer_eperm_chown_st(libexplain_string_buffer_t *sb,
                 }
                 else
                 {
-                    libexplain_buffer_does_not_have_inode_modify_permission1
+                    explain_buffer_does_not_have_inode_modify_permission1
                     (
                         sb,
                         pathname,
@@ -141,18 +142,18 @@ libexplain_buffer_eperm_chown_st(libexplain_string_buffer_t *sb,
                 (
                     uid == st->st_uid
                 &&
-                    libexplain_group_in_groups
+                    explain_group_in_groups
                     (
                         group,
                         &final_component->id
                     )
                 )
             ||
-                libexplain_capability_chown()
+                explain_capability_chown()
             );
         if (!may_change_file_group)
         {
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 /* FIXME: i18n */
@@ -163,46 +164,46 @@ libexplain_buffer_eperm_chown_st(libexplain_string_buffer_t *sb,
 
             if (uid != st->st_uid)
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     " (effective uid is "
                 );
-                libexplain_buffer_uid(sb, uid);
-                libexplain_string_buffer_puts
+                explain_buffer_uid(sb, uid);
+                explain_string_buffer_puts
                 (
                     sb,
                     " but needs to be "
                 );
-                libexplain_buffer_uid(sb, st->st_uid);
-                libexplain_string_buffer_putc(sb, ')');
+                explain_buffer_uid(sb, st->st_uid);
+                explain_string_buffer_putc(sb, ')');
             }
             if
             (
-                !libexplain_group_in_groups
+                !explain_group_in_groups
                 (
                     group,
                     &final_component->id
                 )
             )
             {
-                libexplain_string_buffer_puts(sb, " (group ");
-                libexplain_buffer_uid(sb, group);
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts(sb, " (group ");
+                explain_buffer_uid(sb, group);
+                explain_string_buffer_puts
                 (
                     sb,
                     " is not the effective gid "
                 );
-                libexplain_buffer_uid(sb, getegid());
-                libexplain_string_buffer_puts
+                explain_buffer_uid(sb, getegid());
+                explain_string_buffer_puts
                 (
                     sb,
                     " and not in the supplementary gid list "
                 );
-                libexplain_buffer_gid_supplementary(sb);
-                libexplain_string_buffer_putc(sb, ')');
+                explain_buffer_gid_supplementary(sb);
+                explain_string_buffer_putc(sb, ')');
             }
-            libexplain_buffer_dac_chown(sb);
+            explain_buffer_dac_chown(sb);
             return 0;
         }
     }
@@ -216,14 +217,14 @@ libexplain_buffer_eperm_chown_st(libexplain_string_buffer_t *sb,
 
 
 static void
-libexplain_buffer_eperm_chown_vague(libexplain_string_buffer_t *sb, int owner,
+explain_buffer_eperm_chown_vague(explain_string_buffer_t *sb, int owner,
     int group)
 {
     if (owner >= 0)
     {
         if (group >= 0)
         {
-            libexplain_buffer_gettext
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -238,7 +239,7 @@ libexplain_buffer_eperm_chown_vague(libexplain_string_buffer_t *sb, int owner,
         }
         else
         {
-            libexplain_buffer_gettext
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -256,22 +257,11 @@ libexplain_buffer_eperm_chown_vague(libexplain_string_buffer_t *sb, int owner,
     {
         if (group >= 0)
         {
-            libexplain_buffer_gettext
-            (
-                sb,
-                /*
-                 * xgettext: The message is used when explaining an EPERM
-                 * error reported by the chown(2) system call, in the case
-                 * where no more specific explanation is available,
-                 * but the call attempted to only the GID.
-                 */
-                i18n("the process did not have the required permissions "
-                "to change the group GID")
-            );
+            explain_buffer_eperm_setgid(sb);
         }
         else
         {
-            libexplain_buffer_gettext
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -284,14 +274,14 @@ libexplain_buffer_eperm_chown_vague(libexplain_string_buffer_t *sb, int owner,
             );
         }
     }
-    libexplain_buffer_dac_chown(sb);
+    explain_buffer_dac_chown(sb);
 }
 
 
 static void
-libexplain_buffer_eperm_chown(libexplain_string_buffer_t *sb,
+explain_buffer_eperm_chown(explain_string_buffer_t *sb,
     const char *pathname, int owner, int group,
-    libexplain_final_t *final_component)
+    explain_final_t *final_component)
 {
     int             chown_restricted;
 
@@ -316,7 +306,7 @@ libexplain_buffer_eperm_chown(libexplain_string_buffer_t *sb,
      */
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             EPERM,
@@ -340,7 +330,7 @@ libexplain_buffer_eperm_chown(libexplain_string_buffer_t *sb,
         {
             if
             (
-                libexplain_buffer_eperm_chown_st
+                explain_buffer_eperm_chown_st
                 (
                     sb,
                     pathname,
@@ -357,16 +347,16 @@ libexplain_buffer_eperm_chown(libexplain_string_buffer_t *sb,
         }
     }
 
-    libexplain_buffer_eperm_chown_vague(sb, owner, group);
+    explain_buffer_eperm_chown_vague(sb, owner, group);
 }
 
 
 static void
-libexplain_buffer_eperm_chown_fd(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_eperm_chown_fd(explain_string_buffer_t *sb, int fildes,
     int owner, int group)
 {
     int             chown_restricted;
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     /*
      * We have to ask whether or not the chown(2) system call
@@ -381,7 +371,7 @@ libexplain_buffer_eperm_chown_fd(libexplain_string_buffer_t *sb, int fildes,
      *  if chown not restricted, it means owner can chown the file.
      */
     chown_restricted = !!fpathconf(fildes, _PC_CHOWN_RESTRICTED);
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     if (owner >= 0 && chown_restricted && group < 0)
         final_component.want_to_modify_inode = 0;
     else
@@ -398,7 +388,7 @@ libexplain_buffer_eperm_chown_fd(libexplain_string_buffer_t *sb, int fildes,
         {
             if
             (
-                libexplain_buffer_eperm_chown_st
+                explain_buffer_eperm_chown_st
                 (
                     sb,
                     0,
@@ -414,20 +404,20 @@ libexplain_buffer_eperm_chown_fd(libexplain_string_buffer_t *sb, int fildes,
                 return;
         }
     }
-    libexplain_buffer_eperm_chown_vague(sb, owner, group);
+    explain_buffer_eperm_chown_vague(sb, owner, group);
 }
 
 
 static void
-libexplain_buffer_errno_chown_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_chown_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int owner, int group)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_modify_inode = 1;
 
-    libexplain_buffer_errno_chown_explanation_fc
+    explain_buffer_errno_chown_explanation_fc
     (
         sb,
         errnum,
@@ -440,28 +430,28 @@ libexplain_buffer_errno_chown_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_chown_explanation_fc(libexplain_string_buffer_t *sb,
+explain_buffer_errno_chown_explanation_fc(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int owner, int group,
-    libexplain_final_t *final_component)
+    explain_final_t *final_component)
 {
     final_component->want_to_modify_inode = 1;
 
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", final_component);
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case EINVAL:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
@@ -473,11 +463,11 @@ libexplain_buffer_errno_chown_explanation_fc(libexplain_string_buffer_t *sb,
         break;
 
     case ELOOP:
-        libexplain_buffer_eloop(sb, pathname, "pathname", final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -487,19 +477,19 @@ libexplain_buffer_errno_chown_explanation_fc(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", final_component);
         break;
 
     case EPERM:
-        libexplain_buffer_eperm_chown
+        explain_buffer_eperm_chown
         (
             sb,
             pathname,
@@ -510,18 +500,18 @@ libexplain_buffer_errno_chown_explanation_fc(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_fchown_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, int owner, int group)
 {
     /*
@@ -530,15 +520,15 @@ libexplain_buffer_errno_fchown_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EIO:
-        libexplain_buffer_eio_fildes(sb, fildes);
+        explain_buffer_eio_fildes(sb, fildes);
         break;
 
     case EINVAL:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
@@ -550,32 +540,32 @@ libexplain_buffer_errno_fchown_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case EPERM:
-        libexplain_buffer_eperm_chown_fd(sb, fildes, owner, group);
+        explain_buffer_eperm_chown_fd(sb, fildes, owner, group);
         break;
 
     case EROFS:
-        libexplain_buffer_erofs_fildes(sb, fildes, "fildes");
+        explain_buffer_erofs_fildes(sb, fildes, "fildes");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_chown(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int owner, int group)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_chown_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_chown_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -583,7 +573,7 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
         owner,
         group
     );
-    libexplain_buffer_errno_chown_explanation
+    explain_buffer_errno_chown_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -591,5 +581,5 @@ libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
         owner,
         group
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

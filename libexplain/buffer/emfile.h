@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,13 +23,13 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_emfile function i sused to print an
+  * The explain_buffer_emfile function i sused to print an
   * explanation of the EMFILE error into the given buffer, including
   * "because".
   *
   * @param sb
   *     The string buffer to print into.
   */
-void libexplain_buffer_emfile(libexplain_string_buffer_t *sb);
+void explain_buffer_emfile(explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_EMFILE_H */

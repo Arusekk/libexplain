@@ -27,12 +27,10 @@
 
 
 void
-libexplain_access_or_die(const char *pathname, int mode)
+explain_access_or_die(const char *pathname, int mode)
 {
-    if (access(pathname, mode) < 0)
+    if (explain_access_on_error(pathname, mode) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_access(pathname, mode));
         exit(EXIT_FAILURE);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@
 #include <libexplain/errno_info/table.h>
 
 
-const libexplain_errno_info_t *
-libexplain_errno_info_by_text(const char *text)
+const explain_errno_info_t *
+explain_errno_info_by_text(const char *text)
 {
-    const libexplain_errno_info_t *tp;
-    const libexplain_errno_info_t *end;
+    const explain_errno_info_t *tp;
+    const explain_errno_info_t *end;
 
-    end = libexplain_errno_info + libexplain_errno_info_size;
-    for (tp = libexplain_errno_info; tp < end; ++tp)
+    end = explain_errno_info + explain_errno_info_size;
+    for (tp = explain_errno_info; tp < end; ++tp)
     {
         if (0 == strcasecmp(strerror(tp->error_number), text))
             return tp;

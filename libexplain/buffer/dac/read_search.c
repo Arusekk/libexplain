@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,16 +23,16 @@
 
 
 void
-libexplain_buffer_dac_read_search(libexplain_string_buffer_t *sb)
+explain_buffer_dac_read_search(explain_string_buffer_t *sb)
 {
-    if (libexplain_capability_dac_override())
+    if (explain_capability_dac_override())
         return;
-    libexplain_string_buffer_puts(sb, ", ");
-    libexplain_buffer_and_the_process_is_not_privileged(sb);
+    explain_string_buffer_puts(sb, ", ");
+    explain_buffer_and_the_process_is_not_privileged(sb);
 #ifdef HAVE_SYS_CAPABILITY_H
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
-        libexplain_buffer_does_not_have_capability(sb, "DAC_READ_SEARCH");
+        explain_buffer_does_not_have_capability(sb, "DAC_READ_SEARCH");
     }
 #endif
 }

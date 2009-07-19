@@ -22,9 +22,9 @@
 
 
 void
-libexplain_message_pclose(char *message, int message_size, FILE *fp)
+explain_message_pclose(char *message, int message_size, FILE *fp)
 {
-    libexplain_message_errno_pclose
+    explain_message_errno_pclose
     (
         message,
         message_size,

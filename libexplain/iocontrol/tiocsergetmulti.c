@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocsergetmulti.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocsergetmulti =
+const explain_iocontrol_t explain_iocontrol_tiocsergetmulti =
 {
     "TIOCSERGETMULTI", /* name */
     TIOCSERGETMULTI, /* value */

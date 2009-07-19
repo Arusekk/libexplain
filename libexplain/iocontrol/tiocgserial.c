@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocgserial.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocgserial =
+const explain_iocontrol_t explain_iocontrol_tiocgserial =
 {
     "TIOCGSERIAL", /* name */
     TIOCGSERIAL, /* value */

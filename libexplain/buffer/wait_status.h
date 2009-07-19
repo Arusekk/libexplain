@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_wait_status function may be used to decode a
+  * The explain_buffer_wait_status function may be used to decode a
   * status value returned by wait(2) et al, and print it on the given
   * string buffer.
   *
@@ -32,6 +32,6 @@
   * @param status
   *    The status value to decode.  See wait(2) for more information.
   */
-void libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status);
+void explain_buffer_wait_status(explain_string_buffer_t *sb, int status);
 
 #endif /* LIBEXPLAIN_BUFFER_WAIT_STATUS_H */

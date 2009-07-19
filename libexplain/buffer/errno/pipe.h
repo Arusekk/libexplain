@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_pipe function
+  * The explain_buffer_errno_pipe function
   * is used to obtain an explanation of an error returned
   * by the pipe(2) system call.
   * The least the message will contain is the value of
@@ -43,7 +43,7 @@
   * @param pipefd
   *     The original pipefd, exactly as passed to the pipe(2) system call.
   */
-void libexplain_buffer_errno_pipe(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_pipe(explain_string_buffer_t *sb, int errnum,
     int *pipefd);
 
 /* vim:ts=8:sw=4:et */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_pointer function may be used to
+  * The explain_buffer_pointer function may be used to
   * print a pointer, just like %p, only better.
   *
   * @param sb
@@ -31,6 +31,6 @@
   * @param ptr
   *     The pointer value to print
   */
-void libexplain_buffer_pointer(libexplain_string_buffer_t *sb, const void *ptr);
+void explain_buffer_pointer(explain_string_buffer_t *sb, const void *ptr);
 
 #endif /* LIBEXPLAIN_BUFFER_POINTER_H */

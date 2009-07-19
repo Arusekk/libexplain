@@ -24,7 +24,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_getsockname function is used to
+  * The explain_buffer_errno_getsockname function is used to
   * obtain an explanation of an error returned by the getsockname(2)
   * system call.  The least the message will contain is the value of
   * strerror(errnum), but usually it will do much better, and indicate
@@ -49,7 +49,7 @@
   *     The original sock_addr_size, exactly as passed to the
   *     getsockname(2) system call.
   */
-void libexplain_buffer_errno_getsockname(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_getsockname(explain_string_buffer_t *sb,
     int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size);
 

@@ -21,15 +21,15 @@
 
 
 void
-libexplain_string_buffer_puts_quoted(libexplain_string_buffer_t *sb,
+explain_string_buffer_puts_quoted(explain_string_buffer_t *sb,
     const char *s)
 {
     if (!s)
     {
-        libexplain_string_buffer_puts(sb, "NULL");
+        explain_string_buffer_puts(sb, "NULL");
         return;
     }
-    libexplain_string_buffer_putc(sb, '"');
+    explain_string_buffer_putc(sb, '"');
     for (;;)
     {
         unsigned char   c;
@@ -37,9 +37,9 @@ libexplain_string_buffer_puts_quoted(libexplain_string_buffer_t *sb,
         c = *s++;
         if (!c)
         {
-            libexplain_string_buffer_putc(sb, '"');
+            explain_string_buffer_putc(sb, '"');
             return;
         }
-        libexplain_string_buffer_putc_escaped(sb, c, '"');
+        explain_string_buffer_putc_escaped(sb, c, '"');
     }
 }

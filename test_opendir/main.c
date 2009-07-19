@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -51,7 +51,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return 0;
 
         default:
@@ -62,16 +62,16 @@ main(int argc, char **argv)
         usage();
     pathname = argv[optind];
 
-    dp = libexplain_opendir_or_die(pathname);
+    dp = explain_opendir_or_die(pathname);
     for (;;)
     {
         struct dirent   *dep;
 
-        dep = libexplain_readdir_or_die(dp);
+        dep = explain_readdir_or_die(dp);
         if (!dep)
             break;
         printf("%s\n", dep->d_name);
     }
-    libexplain_closedir_or_die(dp);
+    explain_closedir_or_die(dp);
     return 0;
 }

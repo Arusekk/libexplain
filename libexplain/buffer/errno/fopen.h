@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_fopen function is used to obtain an
+  * The explain_buffer_errno_fopen function is used to obtain an
   * explanation of an error returned by the fopen(3) function.  The
   * least the message will contain is the value of strerror(errno), but
   * usually it will do much better, and indicate the underlying cause in
@@ -43,12 +43,12 @@
   * @param mode
   *     The original mode, exactly has passed to the fopen(3) system call.
   */
-void libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_fopen(explain_string_buffer_t *sb, int errnum,
     const char *path, const char *mode);
 
 /**
-  * The libexplain_buffer_errno_fopen_explanation function is used by the
-  * libexplain_buffer_errno_fopen function (and others) to print the
+  * The explain_buffer_errno_fopen_explanation function is used by the
+  * explain_buffer_errno_fopen function (and others) to print the
   * extended "because..." part of the explanation.
   *
   * @param sb
@@ -60,7 +60,7 @@ void libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
   * @param mode
   *     The original mode, exactly has passed to the fopen(3) system call.
   */
-void libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_fopen_explanation(explain_string_buffer_t *sb,
     int errnum, const char *path, const char *mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FOPEN_H */

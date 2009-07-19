@@ -29,10 +29,10 @@ static
 #endif
 
 void
-libexplain_getc_or_die_failed(FILE *fp)
+explain_getc_or_die_failed(FILE *fp)
 {
-    libexplain_program_name_assemble_internal(1);
-    libexplain_wrap_and_print(stderr, libexplain_getc(fp));
+    explain_program_name_assemble_internal(1);
+    explain_wrap_and_print(stderr, explain_getc(fp));
     exit(EXIT_FAILURE);
 }
 
@@ -40,13 +40,13 @@ libexplain_getc_or_die_failed(FILE *fp)
 #if __GNUC__ < 3
 
 int
-libexplain_getc_or_die(FILE *fp)
+explain_getc_or_die(FILE *fp)
 {
     int             c;
 
     c = getc(fp);
     if (c == EOF && ferror(fp))
-        libexplain_getc_or_die_failed(fp);
+        explain_getc_or_die_failed(fp);
     return c;
 }
 

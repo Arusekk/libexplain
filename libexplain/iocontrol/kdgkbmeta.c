@@ -26,7 +26,7 @@
 #define KDGKBMETA -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdgkbmeta =
+const explain_iocontrol_t explain_iocontrol_kdgkbmeta =
 {
     "KDGKBMETA", /* name */
     KDGKBMETA, /* value */

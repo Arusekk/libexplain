@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_eintr function may be used to report an EINTR
+  * The explain_buffer_eintr function may be used to report an EINTR
   * error, using a common explanation for all system calls.
   *
   * @param sb
@@ -31,7 +31,7 @@
   * @param caption
   *    the name of the operation this is not complete
   */
-void libexplain_buffer_eintr(libexplain_string_buffer_t *sb,
+void explain_buffer_eintr(explain_string_buffer_t *sb,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_EINTR_H */

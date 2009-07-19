@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,14 @@
 #include <libexplain/parse_bits.h>
 
 
-const libexplain_parse_bits_table_t *
-libexplain_parse_bits_find_by_name_fuzzy(const char *name,
-    const libexplain_parse_bits_table_t *table, size_t table_size)
+const explain_parse_bits_table_t *
+explain_parse_bits_find_by_name_fuzzy(const char *name,
+    const explain_parse_bits_table_t *table, size_t table_size)
 {
-    const libexplain_parse_bits_table_t *tp;
-    const libexplain_parse_bits_table_t *end;
+    const explain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *end;
     double          best_weight;
-    const libexplain_parse_bits_table_t *best_tp;
+    const explain_parse_bits_table_t *best_tp;
 
     end = table + table_size;
     best_weight = 0.6;
@@ -37,7 +37,7 @@ libexplain_parse_bits_find_by_name_fuzzy(const char *name,
     {
         double          weight;
 
-        weight = libexplain_fstrcasecmp(name, tp->name);
+        weight = explain_fstrcasecmp(name, tp->name);
         if (best_weight < weight)
         {
             best_weight = weight;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 
 int
-libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
+explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
     const struct stat *st1)
 {
     FILE            *fp;
@@ -53,12 +53,12 @@ libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
                 /*
                  * Insert the name of the mount point.
                  */
-                libexplain_string_buffer_puts(sb, " (");
-                libexplain_string_buffer_puts_quoted(sb, mnt->mnt_dir);
+                explain_string_buffer_puts(sb, " (");
+                explain_string_buffer_puts_quoted(sb, mnt->mnt_dir);
 
                 /*
                  * If possible, insert the percentage used of the file
-                 * system, similar to how df(1) have a %used column.
+                 * system, similar to how df(1) has a %used column.
                  */
                 if (statfs(mnt->mnt_dir, &f) == 0)
                 {
@@ -73,7 +73,7 @@ libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
                     used = blocks - f.f_bavail;
                     if (blocks > 0 && used >= 0 && used <= (long)f.f_blocks)
                     {
-                        libexplain_string_buffer_printf
+                        explain_string_buffer_printf
                         (
                             sb,
                             ", %d%% full",
@@ -81,7 +81,7 @@ libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
                         );
                     }
                 }
-                libexplain_string_buffer_putc(sb, ')');
+                explain_string_buffer_putc(sb, ')');
 
                 endmntent(fp);
                 return 0;
@@ -94,40 +94,40 @@ libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
 
 
 int
-libexplain_buffer_mount_point_fd(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_mount_point_fd(explain_string_buffer_t *sb, int fildes)
 {
     struct stat     st;
 
     if (fstat(fildes, &st) < 0)
         return -1;
-    return libexplain_buffer_mount_point_stat(sb, &st);
+    return explain_buffer_mount_point_stat(sb, &st);
 }
 
 
 int
-libexplain_buffer_mount_point(libexplain_string_buffer_t *sb, const char *path)
+explain_buffer_mount_point(explain_string_buffer_t *sb, const char *path)
 {
     struct stat     st;
 
     if (lstat(path, &st) < 0)
         return -1;
-    return libexplain_buffer_mount_point_stat(sb, &st);
+    return explain_buffer_mount_point_stat(sb, &st);
 }
 
 
 int
-libexplain_buffer_mount_point_dirname(libexplain_string_buffer_t *sb,
+explain_buffer_mount_point_dirname(explain_string_buffer_t *sb,
     const char *path)
 {
     char            dir[PATH_MAX + 1];
 
-    libexplain_dirname(dir, path, sizeof(dir));
-    return libexplain_buffer_mount_point(sb, dir);
+    explain_dirname(dir, path, sizeof(dir));
+    return explain_buffer_mount_point(sb, dir);
 }
 
 
 static int
-libexplain_mount_point_option(const char *pathname, const char *option)
+explain_mount_point_option(const char *pathname, const char *option)
 {
     FILE            *fp;
     struct stat     st1;
@@ -173,14 +173,14 @@ libexplain_mount_point_option(const char *pathname, const char *option)
 
 
 int
-libexplain_mount_point_noexec(const char *pathname)
+explain_mount_point_noexec(const char *pathname)
 {
-    return libexplain_mount_point_option(pathname, "noexec");
+    return explain_mount_point_option(pathname, "noexec");
 }
 
 
 int
-libexplain_mount_point_nosuid(const char *pathname)
+explain_mount_point_nosuid(const char *pathname)
 {
-    return libexplain_mount_point_option(pathname, "nosuid");
+    return explain_mount_point_option(pathname, "nosuid");
 }

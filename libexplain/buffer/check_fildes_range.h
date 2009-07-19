@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_check_fildes_range function may be used to
+  * The explain_buffer_check_fildes_range function may be used to
   * check that a file descriptor is within the acceptable range, and
   * print an explanation if it is not.
   *
@@ -37,7 +37,7 @@
   *    0 if printed an explanation,
   *    -1 if not out of range (no explanation printed)
   */
-int libexplain_buffer_check_fildes_range(libexplain_string_buffer_t *sb,
+int explain_buffer_check_fildes_range(explain_string_buffer_t *sb,
     int fildes, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_CHECK_FILDES_RANGE_H */

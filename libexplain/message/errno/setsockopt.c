@@ -21,13 +21,13 @@
 
 
 void
-libexplain_message_errno_setsockopt(char *message, int message_size, int errnum,
+explain_message_errno_setsockopt(char *message, int message_size, int errnum,
     int fildes, int level, int name, void *data, socklen_t data_size)
 {
-    libexplain_string_buffer_t sb;
+    explain_string_buffer_t sb;
 
-    libexplain_string_buffer_init(&sb, message, message_size);
-    libexplain_buffer_errno_setsockopt
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_setsockopt
     (
         &sb,
         errnum,

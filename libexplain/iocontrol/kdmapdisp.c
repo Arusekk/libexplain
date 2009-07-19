@@ -26,7 +26,7 @@
 #define KDMAPDISP -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdmapdisp =
+const explain_iocontrol_t explain_iocontrol_kdmapdisp =
 {
     "KDMAPDISP", /* name */
     KDMAPDISP, /* value */

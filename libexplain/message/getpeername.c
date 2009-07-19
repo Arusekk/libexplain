@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_getpeername(char *message, int message_size, int fildes,
+explain_message_getpeername(char *message, int message_size, int fildes,
     struct sockaddr *sock_addr, socklen_t *sock_addr_size)
 {
-    libexplain_message_errno_getpeername
+    explain_message_errno_getpeername
     (
         message,
         message_size,

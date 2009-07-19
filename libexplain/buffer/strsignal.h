@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_strsignal function may be used to decode a
-  * signal number an pront information about it into the given string
+  * The explain_buffer_strsignal function may be used to decode a
+  * signal number an print information about it into the given string
   * buffer.
   *
   * @param sb
@@ -32,19 +32,6 @@
   * @param signum
   *    The number of the signal to be decoded
   */
-void libexplain_buffer_strsignal(libexplain_string_buffer_t *sb, int signum);
-
-/**
-  * The libexplain_signal_parse function may be used to parse text and
-  * extract the signal number.
-  *
-  * @param text
-  *     The text to be parsed.
-  * @param caption
-  *     addition text to add to start of error message
-  * @returns
-  *     the signal number
-  */
-int libexplain_signal_parse_or_die(const char *text, const char *caption);
+void explain_buffer_strsignal(explain_string_buffer_t *sb, int signum);
 
 #endif /* LIBEXPLAIN_BUFFER_STRSIGNAL_H */

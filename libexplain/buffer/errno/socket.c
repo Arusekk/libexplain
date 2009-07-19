@@ -33,17 +33,17 @@
 
 
 static void
-libexplain_buffer_errno_socket_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_socket_system_call(explain_string_buffer_t *sb,
     int errnum, int family, int type, int protocol)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "socket(family = ");
-    libexplain_buffer_address_family(sb, family);
-    libexplain_string_buffer_puts(sb, ", type = ");
-    libexplain_buffer_socket_type(sb, type);
-    libexplain_string_buffer_puts(sb, ", protocol = ");
-    libexplain_buffer_socket_protocol(sb, protocol);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "socket(family = ");
+    explain_buffer_address_family(sb, family);
+    explain_string_buffer_puts(sb, ", type = ");
+    explain_buffer_socket_type(sb, type);
+    explain_string_buffer_puts(sb, ", protocol = ");
+    explain_buffer_socket_protocol(sb, protocol);
+    explain_string_buffer_putc(sb, ')');
 
     /*
      * Afterwards,
@@ -58,7 +58,7 @@ libexplain_buffer_errno_socket_system_call(libexplain_string_buffer_t *sb,
 
 
 static void
-libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_socket_explanation(explain_string_buffer_t *sb,
     int errnum, int family, int type, int protocol)
 {
     /*
@@ -82,7 +82,7 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
     {
     case EACCES:
     case EPERM:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the process does not have permission to create a socket of "
@@ -97,7 +97,7 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
 #ifdef SOCK_PACKET
         case SOCK_PACKET:
 #endif
-            libexplain_buffer_dac_net_raw(sb);
+            explain_buffer_dac_net_raw(sb);
             break;
 
         default:
@@ -107,7 +107,7 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EAFNOSUPPORT:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the operating system does not support the specified "
@@ -116,7 +116,7 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EINVAL:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "unknown protocol, or protocol family not available"
@@ -124,23 +124,23 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EMFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
         break;
 
     case ENFILE:
-        libexplain_buffer_enfile(sb);
+        explain_buffer_enfile(sb);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOBUFS:
-        libexplain_buffer_enobufs(sb);
+        explain_buffer_enobufs(sb);
         break;
 
     case EPROTONOSUPPORT:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the protocol type or the specified protocol is not "
@@ -149,20 +149,20 @@ libexplain_buffer_errno_socket_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_socket(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_socket(explain_string_buffer_t *sb, int errnum,
     int family, int type, int protocol)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_socket_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_socket_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -170,7 +170,7 @@ libexplain_buffer_errno_socket(libexplain_string_buffer_t *sb, int errnum,
         type,
         protocol
     );
-    libexplain_buffer_errno_socket_explanation
+    explain_buffer_errno_socket_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -178,5 +178,5 @@ libexplain_buffer_errno_socket(libexplain_string_buffer_t *sb, int errnum,
         type,
         protocol
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

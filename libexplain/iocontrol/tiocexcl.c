@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocexcl.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocexcl =
+const explain_iocontrol_t explain_iocontrol_tiocexcl =
 {
     "TIOCEXCL", /* name */
     TIOCEXCL, /* value */

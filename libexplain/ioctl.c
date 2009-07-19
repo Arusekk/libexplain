@@ -22,9 +22,9 @@
 
 
 const char *
-libexplain_ioctl(int fildes, int request, void *data)
+explain_ioctl(int fildes, int request, void *data)
 {
-    return libexplain_errno_ioctl(errno, fildes, request, data);
+    return explain_errno_ioctl(errno, fildes, request, data);
 }
 
 /* vim:ts=8:sw=4:et */

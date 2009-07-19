@@ -24,23 +24,23 @@
 
 
 void
-libexplain_buffer_ifconf(libexplain_string_buffer_t *sb,
+explain_buffer_ifconf(explain_string_buffer_t *sb,
     const struct ifconf *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
         const struct ifconf *p;
 
         p = data;
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ ifc_len = %d, ifc_req = ",
             p->ifc_len
         );
-        libexplain_buffer_pointer(sb, p->ifc_buf);
-        libexplain_string_buffer_puts(sb, " }");
+        explain_buffer_pointer(sb, p->ifc_buf);
+        explain_string_buffer_puts(sb, " }");
     }
 }

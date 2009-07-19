@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,22 +31,22 @@
 
 
 static void
-libexplain_buffer_errno_freopen_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_freopen_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags, FILE *fp)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "freopen(pathname = ");
-    libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", flags = ");
-    libexplain_string_buffer_puts_quoted(sb, flags);
-    libexplain_string_buffer_puts(sb, ", fp = ");
-    libexplain_buffer_stream(sb, fp);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "freopen(pathname = ");
+    explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_puts(sb, ", flags = ");
+    explain_string_buffer_puts_quoted(sb, flags);
+    explain_string_buffer_puts(sb, ", fp = ");
+    explain_buffer_stream(sb, fp);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_freopen_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_freopen_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags, FILE *fp)
 {
     switch (errnum)
@@ -55,24 +55,24 @@ libexplain_buffer_errno_freopen_explanation(libexplain_string_buffer_t *sb,
     case EFBIG:
     case ENOSPC:
     case EPIPE:
-        libexplain_buffer_errno_fflush_explanation(sb, errnum, fp);
+        explain_buffer_errno_fflush_explanation(sb, errnum, fp);
         return;
 
     case EBADF:
-        libexplain_buffer_ebadf(sb, libexplain_stream_to_fildes(fp), "fp");
+        explain_buffer_ebadf(sb, explain_stream_to_fildes(fp), "fp");
         break;
 
     case EINTR:
     case EIO:
-        libexplain_buffer_errno_fclose_explanation(sb, errnum, fp);
+        explain_buffer_errno_fclose_explanation(sb, errnum, fp);
         return;
 
     default:
-        libexplain_buffer_errno_fopen_explanation(sb, errnum, pathname, flags);
+        explain_buffer_errno_fopen_explanation(sb, errnum, pathname, flags);
         break;
     }
 
-    libexplain_string_buffer_puts
+    explain_string_buffer_puts
     (
         sb,
         "; note that while the FILE stream is no longer valid, the "
@@ -82,13 +82,13 @@ libexplain_buffer_errno_freopen_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
+explain_buffer_errno_freopen(struct explain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags, FILE *fp)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_freopen_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_freopen_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -96,7 +96,7 @@ libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
         flags,
         fp
     );
-    libexplain_buffer_errno_freopen_explanation
+    explain_buffer_errno_freopen_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -104,5 +104,5 @@ libexplain_buffer_errno_freopen(struct libexplain_string_buffer_t *sb,
         flags,
         fp
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

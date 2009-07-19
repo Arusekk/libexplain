@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_PATHNAME_IS_A_DIRECTORY_H
 
 /**
-  * The libexplain_pathname_is_a_directory function may be used to
+  * The explain_pathname_is_a_directory function may be used to
   * determine whether or not a given pathname refers to a directory.
   *
   * @param pathname
@@ -31,6 +31,6 @@
   *    (false) if the file does not exists, or does exist but is not a
   *    directory.
   */
-int libexplain_pathname_is_a_directory(const char *pathname);
+int explain_pathname_is_a_directory(const char *pathname);
 
 #endif /* LIBEXPLAIN_PATHNAME_IS_A_DIRECTORY_H */

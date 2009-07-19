@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocsergwild.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocsergwild =
+const explain_iocontrol_t explain_iocontrol_tiocsergwild =
 {
     "TIOCSERGWILD", /* name */
     TIOCSERGWILD, /* value */

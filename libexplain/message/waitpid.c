@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_waitpid(char *message, int message_size, int pid,
+explain_message_waitpid(char *message, int message_size, int pid,
     int *status, int options)
 {
-    libexplain_message_errno_waitpid
+    explain_message_errno_waitpid
     (
         message,
         message_size,

@@ -22,9 +22,9 @@
 
 
 void
-libexplain_message_pipe(char *message, int message_size, int *pipefd)
+explain_message_pipe(char *message, int message_size, int *pipefd)
 {
-    libexplain_message_errno_pipe
+    explain_message_errno_pipe
     (
         message,
         message_size,

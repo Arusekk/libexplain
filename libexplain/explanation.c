@@ -28,16 +28,16 @@
 
 
 void
-libexplain_explanation_init(libexplain_explanation_t *exp, int errnum)
+explain_explanation_init(explain_explanation_t *exp, int errnum)
 {
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &exp->system_call_sb,
         exp->system_call,
         sizeof(exp->system_call)
     );
     exp->errnum = errnum;
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &exp->explanation_sb,
         exp->explanation,
@@ -47,29 +47,29 @@ libexplain_explanation_init(libexplain_explanation_t *exp, int errnum)
 
 
 static void
-libexplain_explanation_assemble_common(libexplain_explanation_t *exp,
-    const char *strerror_text, libexplain_string_buffer_t *result)
+explain_explanation_assemble_common(explain_explanation_t *exp,
+    const char *strerror_text, explain_string_buffer_t *result)
 {
     long            fmt_len;
     long            prob_len;
     long            exp_len;
     int             err_len;
 
-    if (libexplain_option_assemble_program_name())
+    if (explain_option_assemble_program_name())
     {
         const char      *prog;
 
-        prog = libexplain_program_name_get();
+        prog = explain_program_name_get();
         if (prog && *prog)
         {
-            libexplain_string_buffer_puts(result, prog);
-            libexplain_string_buffer_puts(result, ": ");
+            explain_string_buffer_puts(result, prog);
+            explain_string_buffer_puts(result, ": ");
         }
     }
 
     if (exp->errnum == 0)
     {
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             result,
             /*
@@ -96,10 +96,10 @@ libexplain_explanation_assemble_common(libexplain_explanation_t *exp,
         if (prob_len + err_len + 20 > (long)result->maximum)
         {
             long new_len = (long)result->maximum - (fmt_len + err_len);
-            libexplain_string_buffer_truncate(&exp->explanation_sb, new_len);
+            explain_string_buffer_truncate(&exp->explanation_sb, new_len);
         }
 
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             result,
             /*
@@ -140,10 +140,10 @@ libexplain_explanation_assemble_common(libexplain_explanation_t *exp,
         {
             goto use_short_form;
         }
-        libexplain_string_buffer_truncate(&exp->explanation_sb, new_exp_len);
+        explain_string_buffer_truncate(&exp->explanation_sb, new_exp_len);
     }
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         result,
         /*
@@ -188,40 +188,40 @@ libexplain_explanation_assemble_common(libexplain_explanation_t *exp,
 
 
 void
-libexplain_explanation_assemble(libexplain_explanation_t *exp,
-    libexplain_string_buffer_t *result)
+explain_explanation_assemble(explain_explanation_t *exp,
+    explain_string_buffer_t *result)
 {
     char            errstr[100];
-    libexplain_string_buffer_t errstr_sb;
+    explain_string_buffer_t errstr_sb;
 
     if (exp->errnum == 0)
     {
-        libexplain_explanation_assemble_common(exp, "", result);
+        explain_explanation_assemble_common(exp, "", result);
         return;
     }
 
-    libexplain_string_buffer_init(&errstr_sb, errstr, sizeof(errstr));
-    libexplain_buffer_strerror(&errstr_sb, exp->errnum);
+    explain_string_buffer_init(&errstr_sb, errstr, sizeof(errstr));
+    explain_buffer_strerror(&errstr_sb, exp->errnum);
 
-    libexplain_explanation_assemble_common(exp, errstr, result);
+    explain_explanation_assemble_common(exp, errstr, result);
 }
 
 
 void
-libexplain_explanation_assemble_gai(libexplain_explanation_t *exp,
-    libexplain_string_buffer_t *result)
+explain_explanation_assemble_gai(explain_explanation_t *exp,
+    explain_string_buffer_t *result)
 {
     char            errstr[100];
-    libexplain_string_buffer_t errstr_sb;
+    explain_string_buffer_t errstr_sb;
 
     if (exp->errnum == 0)
     {
-        libexplain_explanation_assemble_common(exp, "", result);
+        explain_explanation_assemble_common(exp, "", result);
         return;
     }
 
-    libexplain_string_buffer_init(&errstr_sb, errstr, sizeof(errstr));
-    libexplain_buffer_gai_strerror(&errstr_sb, exp->errnum);
+    explain_string_buffer_init(&errstr_sb, errstr, sizeof(errstr));
+    explain_buffer_gai_strerror(&errstr_sb, exp->errnum);
 
-    libexplain_explanation_assemble_common(exp, errstr, result);
+    explain_explanation_assemble_common(exp, errstr, result);
 }

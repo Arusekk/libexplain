@@ -25,10 +25,10 @@
 
 
 static void
-libexplain_buffer_if_settings(libexplain_string_buffer_t *sb,
+explain_buffer_if_settings(explain_string_buffer_t *sb,
     const struct if_settings *data)
 {
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "{ type = %u, size = %u }",
@@ -39,11 +39,11 @@ libexplain_buffer_if_settings(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_ifreq_settings(libexplain_string_buffer_t *sb,
+explain_buffer_ifreq_settings(explain_string_buffer_t *sb,
     const struct ifreq *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
         const struct ifreq *ifr;
@@ -53,15 +53,27 @@ libexplain_buffer_ifreq_settings(libexplain_string_buffer_t *sb,
          * is given the interface name and the settings.
          */
         ifr = data;
-        libexplain_string_buffer_puts(sb, "{ ifr_name = ");
-        libexplain_string_buffer_puts_quoted_n
+        explain_string_buffer_puts(sb, "{ ifr_name = ");
+        explain_string_buffer_puts_quoted_n
         (
             sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
-        libexplain_string_buffer_puts(sb, ", ifr_settings = ");
-        libexplain_buffer_if_settings(sb, &ifr->ifr_settings);
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, ", ifr_settings = ");
+#if 0
+        explain_buffer_if_settings(sb, &ifr->ifr_settings);
+#else
+        /*
+         * Mysteriously, not all <net/if.h> files have irf->ifr_settings.
+         * This is happening on Linux 32-bits vs 64-bits.  FIIK.
+         */
+        explain_buffer_if_settings
+        (
+            sb,
+            (const struct if_settings *)&ifr->ifr_ifru
+        );
+#endif
+        explain_string_buffer_puts(sb, " }");
     }
 }

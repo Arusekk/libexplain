@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/siocsiflink.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocsiflink =
+const explain_iocontrol_t explain_iocontrol_siocsiflink =
 {
     "SIOCSIFLINK", /* name */
     SIOCSIFLINK, /* value */

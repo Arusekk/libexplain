@@ -28,9 +28,9 @@
 #ifdef HAVE_LINUX_KD_H
 
 static void
-libexplain_buffer_kdskbmode(libexplain_string_buffer_t *sb, int data)
+explain_buffer_kdskbmode(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "K_RAW", K_RAW },
         { "K_XLATE", K_XLATE },
@@ -38,23 +38,23 @@ libexplain_buffer_kdskbmode(libexplain_string_buffer_t *sb, int data)
         { "K_UNICODE", K_UNICODE },
     };
 
-    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
 
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_kdskbmode(sb, (int)data);
+    explain_buffer_kdskbmode(sb, (int)data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdskbmode =
+const explain_iocontrol_t explain_iocontrol_kdskbmode =
 {
     "KDSKBMODE", /* name */
     KDSKBMODE, /* value */
@@ -66,7 +66,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_kdskbmode =
 
 #else
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdskbmode =
+const explain_iocontrol_t explain_iocontrol_kdskbmode =
 {
     0, /* name */
     0, /* value */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,7 +20,7 @@
 
 
 void
-libexplain_buffer_hexdump(libexplain_string_buffer_t *sb, const void *data,
+explain_buffer_hexdump(explain_string_buffer_t *sb, const void *data,
     size_t data_size)
 {
     const unsigned char *cp;
@@ -28,7 +28,7 @@ libexplain_buffer_hexdump(libexplain_string_buffer_t *sb, const void *data,
     cp = data;
     while (data_size > 0)
     {
-        libexplain_string_buffer_printf(sb, " %02X", *cp++);
+        explain_string_buffer_printf(sb, " %02X", *cp++);
         --data_size;
     }
 }

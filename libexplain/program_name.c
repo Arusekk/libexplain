@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/unistd.h>
 
@@ -30,7 +31,7 @@ static char progname[NAME_MAX + 1];
 
 
 static void
-libexplain_program_name_set_real(const char *name)
+explain_program_name_set_real(const char *name)
 {
     const char      *cp;
 
@@ -56,6 +57,14 @@ libexplain_program_name_set_real(const char *name)
         }
         if (*cp == '\0')
             break;
+
+        /*
+         * GNU Libtool makes intermediate binaries with "lt-" prefixes,
+         * ignore them when we see them.
+         */
+        if (0 == memcmp(cp, "lt-", 3))
+            cp += 3;
+
         pnp = progname;
         for (;;)
         {
@@ -73,11 +82,11 @@ libexplain_program_name_set_real(const char *name)
 #ifndef PROC_FS_USEFUL
 
 static void
-n_callback(libexplain_lsof_t *context, const char *name)
+n_callback(explain_lsof_t *context, const char *name)
 {
     if (context->fildes == LIBEXPLAIN_LSOF_FD_txt)
     {
-        libexplain_program_name_set_real(name);
+        explain_program_name_set_real(name);
     }
 }
 
@@ -85,7 +94,7 @@ n_callback(libexplain_lsof_t *context, const char *name)
 
 
 const char *
-libexplain_program_name_get(void)
+explain_program_name_get(void)
 {
     if (progname[0])
         return progname;
@@ -99,17 +108,17 @@ libexplain_program_name_get(void)
         if (n > 0)
         {
             buf[n] = 0;
-            libexplain_program_name_set_real(buf);
+            explain_program_name_set_real(buf);
         }
     }
 #else
     {
-        libexplain_lsof_t obj;
+        explain_lsof_t obj;
         char            options[40];
 
         obj.n_callback = n_callback;
         snprintf(options, sizeof(options), "-p %d", getpid());
-        libexplain_lsof(options, &obj);
+        explain_lsof(options, &obj);
     }
 #endif
     if (progname[0])
@@ -119,7 +128,7 @@ libexplain_program_name_get(void)
      * bash(1) sets the "_" environment variable,
      * use that if available.
      */
-    libexplain_program_name_set_real(getenv("_"));
+    explain_program_name_set_real(getenv("_"));
     if (progname[0])
         return progname;
 
@@ -128,9 +137,9 @@ libexplain_program_name_get(void)
 
 
 void
-libexplain_program_name_set(const char *name)
+explain_program_name_set(const char *name)
 {
-    libexplain_program_name_set_real(name);
+    explain_program_name_set_real(name);
     if (!progname[0])
-        libexplain_program_name_assemble(0);
+        explain_program_name_assemble(0);
 }

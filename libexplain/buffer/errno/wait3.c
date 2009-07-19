@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,25 +27,25 @@
 
 
 static void
-libexplain_buffer_errno_wait3_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_wait3_system_call(explain_string_buffer_t *sb,
     int errnum, int *status, int options, struct rusage *rusage)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "wait3(status = ");
-    libexplain_buffer_pointer(sb, status);
-    libexplain_string_buffer_puts(sb, ", options = ");
-    libexplain_buffer_waitpid_options(sb, options);
-    libexplain_string_buffer_puts(sb, ", rusage = ");
-    libexplain_buffer_pointer(sb, rusage);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "wait3(status = ");
+    explain_buffer_pointer(sb, status);
+    explain_string_buffer_puts(sb, ", options = ");
+    explain_buffer_waitpid_options(sb, options);
+    explain_string_buffer_puts(sb, ", rusage = ");
+    explain_buffer_pointer(sb, rusage);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_wait3_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_wait3_explanation(explain_string_buffer_t *sb,
     int errnum, int *status, int options, struct rusage *rusage)
 {
-    libexplain_buffer_errno_wait4_explanation
+    explain_buffer_errno_wait4_explanation
     (
         sb,
         errnum,
@@ -58,13 +58,13 @@ libexplain_buffer_errno_wait3_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_wait3(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_wait3(explain_string_buffer_t *sb, int errnum,
     int *status, int options, struct rusage *rusage)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_wait3_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_wait3_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -72,7 +72,7 @@ libexplain_buffer_errno_wait3(libexplain_string_buffer_t *sb, int errnum,
         options,
         rusage
     );
-    libexplain_buffer_errno_wait3_explanation
+    explain_buffer_errno_wait3_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -80,5 +80,5 @@ libexplain_buffer_errno_wait3(libexplain_string_buffer_t *sb, int errnum,
         options,
         rusage
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

@@ -26,12 +26,10 @@
 
 
 void
-libexplain_getrlimit_or_die(int resource, struct rlimit *rlim)
+explain_getrlimit_or_die(int resource, struct rlimit *rlim)
 {
-    if (getrlimit(resource, rlim) < 0)
+    if (explain_getrlimit_on_error(resource, rlim) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_getrlimit(resource, rlim));
         exit(EXIT_FAILURE);
     }
 }

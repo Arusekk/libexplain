@@ -26,7 +26,7 @@
 #define KDGKBTYPE -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdgkbtype =
+const explain_iocontrol_t explain_iocontrol_kdgkbtype =
 {
     "KDGKBTYPE", /* name */
     KDGKBTYPE, /* value */

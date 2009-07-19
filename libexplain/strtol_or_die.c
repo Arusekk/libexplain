@@ -16,51 +16,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
+#include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdlib.h>
 
-#include <libexplain/common_message_buffer.h>
-#include <libexplain/option.h>
-#include <libexplain/program_name.h>
-#include <libexplain/string_buffer.h>
-#include <libexplain/strtol_or_die.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/strtol.h>
 
 
 long
-libexplain_strtol_or_die(const char *cp)
+explain_strtol_or_die(const char *nptr, char **endptr, int base)
 {
-    char            *ep;
-    long            n;
+    int             err;
+    long            result;
 
-    ep = 0;
-    n = strtol(cp, &ep, 0);
-    if (cp == ep || *ep)
-    {
-        libexplain_string_buffer_t sb;
-        libexplain_string_buffer_init
-        (
-            &sb,
-            libexplain_common_message_buffer,
-            libexplain_common_message_buffer_size
-        );
-        libexplain_program_name_assemble_internal(1);
-        if (libexplain_option_assemble_program_name())
-        {
-            const char      *prog;
-
-            prog = libexplain_program_name_get();
-            if (prog && *prog)
-            {
-                libexplain_string_buffer_puts(&sb, prog);
-                libexplain_string_buffer_puts(&sb, ": ");
-            }
-        }
-        libexplain_string_buffer_puts(&sb, "the string ");
-        libexplain_string_buffer_puts_quoted(&sb, cp);
-        libexplain_string_buffer_puts(&sb, " doesn't look like a number");
-        libexplain_wrap_and_print(stderr, libexplain_common_message_buffer);
+    err = errno;
+    errno = 0;
+    result = explain_strtol_on_error(nptr, endptr, base);
+    if (errno)
         exit(EXIT_FAILURE);
-    }
-    return n;
+    errno = err;
+    return result;
 }

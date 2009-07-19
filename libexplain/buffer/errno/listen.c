@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -34,20 +34,20 @@
 
 
 static void
-libexplain_buffer_errno_listen_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_listen_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, int backlog)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "listen(");
-    libexplain_string_buffer_printf(sb, "fildes = %d", fildes);
-    libexplain_string_buffer_puts(sb, ", ");
-    libexplain_string_buffer_printf(sb, "backlog = %d", backlog);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "listen(");
+    explain_string_buffer_printf(sb, "fildes = %d", fildes);
+    explain_string_buffer_puts(sb, ", ");
+    explain_string_buffer_printf(sb, "backlog = %d", backlog);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-append_getsockname(libexplain_string_buffer_t *sb, int fildes)
+append_getsockname(explain_string_buffer_t *sb, int fildes)
 {
     struct sockaddr_storage sas;
     struct sockaddr *sa;
@@ -57,8 +57,8 @@ append_getsockname(libexplain_string_buffer_t *sb, int fildes)
     sa_len = sizeof(sas);
     if (getsockname(fildes, sa, &sa_len) >= 0)
     {
-        libexplain_string_buffer_putc(sb, ' ');
-        libexplain_buffer_sockaddr(sb, sa, sa_len);
+        explain_string_buffer_putc(sb, ' ');
+        explain_buffer_sockaddr(sb, sa, sa_len);
     }
 }
 
@@ -96,7 +96,7 @@ get_somaxconn(void)
 
 
 static void
-libexplain_buffer_errno_listen_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_listen_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, int backlog)
 {
     /*
@@ -105,7 +105,7 @@ libexplain_buffer_errno_listen_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EADDRINUSE:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -117,15 +117,15 @@ libexplain_buffer_errno_listen_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case ENOTSOCK:
-        libexplain_buffer_enotsock(sb, fildes, "fildes");
+        explain_buffer_enotsock(sb, fildes, "fildes");
         break;
 
     case EOPNOTSUPP:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -135,11 +135,11 @@ libexplain_buffer_errno_listen_explanation(libexplain_string_buffer_t *sb,
             i18n("the socket is not of a type that supports the "
             "listen(2) system call")
         );
-        libexplain_buffer_socket_type_from_fildes(sb, fildes);
+        explain_buffer_socket_type_from_fildes(sb, fildes);
         break;
 
     case EDESTADDRREQ:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -150,12 +150,12 @@ libexplain_buffer_errno_listen_explanation(libexplain_string_buffer_t *sb,
             "protocol does not support listening on an unbound socket")
         );
         append_getsockname(sb, fildes);
-        libexplain_buffer_socket_type_from_fildes(sb, fildes);
+        explain_buffer_socket_type_from_fildes(sb, fildes);
         break;
 
     case EINVAL:
         /* FIXME: which is it? */
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -169,18 +169,18 @@ libexplain_buffer_errno_listen_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
         int             somaxconn;
 
         somaxconn = get_somaxconn();
         if (somaxconn > 0 && backlog > somaxconn)
         {
-            libexplain_string_buffer_puts(sb, "; ");
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_puts(sb, "; ");
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -201,25 +201,25 @@ libexplain_buffer_errno_listen_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_listen(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_listen(explain_string_buffer_t *sb, int errnum,
     int fildes, int backlog)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_listen_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_listen_system_call
     (
         &exp.system_call_sb,
         errnum,
         fildes,
         backlog
     );
-    libexplain_buffer_errno_listen_explanation
+    explain_buffer_errno_listen_explanation
     (
         &exp.explanation_sb,
         errnum,
         fildes,
         backlog
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

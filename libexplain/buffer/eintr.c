@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,9 @@
 
 
 void
-libexplain_buffer_eintr(libexplain_string_buffer_t *sb, const char *caption)
+explain_buffer_eintr(explain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "the process was interrupted by a signal before the %s was complete",

@@ -27,18 +27,18 @@
 
 
 static void
-libexplain_buffer_errno_realloc_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_realloc_system_call(explain_string_buffer_t *sb,
     int errnum, void *ptr, size_t size)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "realloc(ptr = ");
-    libexplain_buffer_pointer(sb, ptr);
-    libexplain_string_buffer_printf(sb, ", size = %lu)", (unsigned long)size);
+    explain_string_buffer_puts(sb, "realloc(ptr = ");
+    explain_buffer_pointer(sb, ptr);
+    explain_string_buffer_printf(sb, ", size = %lu)", (unsigned long)size);
 }
 
 
 static void
-libexplain_buffer_errno_realloc_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_realloc_explanation(explain_string_buffer_t *sb,
     int errnum, void *ptr, size_t size)
 {
     /*
@@ -49,38 +49,38 @@ libexplain_buffer_errno_realloc_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case ENOMEM:
-        libexplain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_realloc(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_realloc(explain_string_buffer_t *sb, int errnum,
     void *ptr, size_t size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_realloc_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_realloc_system_call
     (
         &exp.system_call_sb,
         errnum,
         ptr,
         size
     );
-    libexplain_buffer_errno_realloc_explanation
+    explain_buffer_errno_realloc_explanation
     (
         &exp.explanation_sb,
         errnum,
         ptr,
         size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

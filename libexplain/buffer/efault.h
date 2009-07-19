@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_EFAULT_H
 #define LIBEXPLAIN_BUFFER_EFAULT_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_efault function may be used to
+  * The explain_buffer_efault function may be used to
   * emit a generic EFAULT explanation.
   *
   * @param sb
@@ -31,7 +31,7 @@ struct libexplain_string_buffer_t; /* forward */
   * @param caption
   *    The name of the offending function argument
   */
-void libexplain_buffer_efault(struct libexplain_string_buffer_t *sb,
+void explain_buffer_efault(struct explain_string_buffer_t *sb,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_EFAULT_H */

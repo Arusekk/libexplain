@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 
 
 const char *
-libexplain_fread(void *ptr, long size, long nmemb, FILE *fp)
+explain_fread(void *ptr, size_t size, size_t nmemb, FILE *fp)
 {
-    return libexplain_errno_fread(errno, ptr, size, nmemb, fp);
+    return explain_errno_fread(errno, ptr, size, nmemb, fp);
 }

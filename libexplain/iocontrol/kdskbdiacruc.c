@@ -23,21 +23,21 @@
 #include <libexplain/iocontrol/kdskbdiacruc.h>
 
 
-#ifdef HAVE_LINUX_KD_H
+#if defined(HAVE_LINUX_KD_H) && defined(KDSKBDIACRUC)
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_kbdiacrsuc(sb, data, 1);
+    explain_buffer_kbdiacrsuc(sb, data, 1);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdskbdiacruc =
+const explain_iocontrol_t explain_iocontrol_kdskbdiacruc =
 {
     "KDSKBDIACRUC", /* name */
     KDSKBDIACRUC, /* value */
@@ -49,7 +49,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_kdskbdiacruc =
 
 #else
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdskbdiacruc =
+const explain_iocontrol_t explain_iocontrol_kdskbdiacruc =
 {
     0, /* name */
     0, /* value */
@@ -59,4 +59,4 @@ const libexplain_iocontrol_t libexplain_iocontrol_kdskbdiacruc =
     0, /* print_explanation */
 };
 
-#endif /* HAVE_LINUX_KD_H */
+#endif /* defined(HAVE_LINUX_KD_H) && defined(KDSKBDIACRUC) */

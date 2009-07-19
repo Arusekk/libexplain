@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/ac/stddef.h>
 
 /**
-  * The libexplain_open_flags function may be used to decode the flags
+  * The explain_open_flags function may be used to decode the flags
   * argument to the open(2) system call into a humnan readable string,
   * which is one representation of how it would be written by a coder.
   *
@@ -34,10 +34,10 @@
   * @note
   *    not thread safe because of shared buffer
   */
-const char *libexplain_open_flags(int flags);
+const char *explain_open_flags(int flags);
 
 /**
-  * The libexplain_message_open_flags function may be used to decode the
+  * The explain_message_open_flags function may be used to decode the
   * flags argument to the open(2) system call into a humnan readable
   * string, which is one representation of how it would be written by a
   * coder.
@@ -50,13 +50,13 @@ const char *libexplain_open_flags(int flags);
   * @param flags
   *    the flags argument passed to the open(2) system call, second argument
   */
-void libexplain_message_open_flags(char *message, size_t message_size,
+void explain_message_open_flags(char *message, size_t message_size,
     int flags);
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_open_flags function may be used to decode the
+  * The explain_buffer_open_flags function may be used to decode the
   * flags argument to the open(2) system call into a humnan readable
   * string, which is one representation of how it would be written by a
   * coder.
@@ -67,11 +67,11 @@ struct libexplain_string_buffer_t; /* forward */
   * @param flags
   *    the flags argument passed to the open(2) system call, second argument
   */
-void libexplain_buffer_open_flags(struct libexplain_string_buffer_t *sb,
+void explain_buffer_open_flags(struct explain_string_buffer_t *sb,
     int flags);
 
 /**
-  * The libexplain_open_flags_parse_or_die function may be used to parse
+  * The explain_open_flags_parse_or_die function may be used to parse
   * a strings containing a symbolic representation of open() flags,
   * turning it into a open flags value.
   *
@@ -86,6 +86,6 @@ void libexplain_buffer_open_flags(struct libexplain_string_buffer_t *sb,
   *     and exit(EXIT_FAILURE) is called.  If there is an error, this
   *     function will not return.
   */
-int libexplain_open_flags_parse_or_die(const char *text, const char *caption);
+int explain_open_flags_parse_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_OPEN_FLAGS_H */

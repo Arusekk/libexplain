@@ -24,11 +24,11 @@
 
 
 void
-libexplain_buffer_ifreq_newname(libexplain_string_buffer_t *sb,
+explain_buffer_ifreq_newname(explain_string_buffer_t *sb,
     const struct ifreq *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
         const struct ifreq *ifr;
@@ -39,20 +39,20 @@ libexplain_buffer_ifreq_newname(libexplain_string_buffer_t *sb,
          * name.
          */
         ifr = data;
-        libexplain_string_buffer_puts(sb, "{ ifr_name = ");
-        libexplain_string_buffer_puts_quoted_n
+        explain_string_buffer_puts(sb, "{ ifr_name = ");
+        explain_string_buffer_puts_quoted_n
         (
             sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
-        libexplain_string_buffer_puts(sb, ", ifr_newname = ");
-        libexplain_string_buffer_puts_quoted_n
+        explain_string_buffer_puts(sb, ", ifr_newname = ");
+        explain_string_buffer_puts_quoted_n
         (
             sb,
             ifr->ifr_newname,
             sizeof(ifr->ifr_newname)
         );
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }

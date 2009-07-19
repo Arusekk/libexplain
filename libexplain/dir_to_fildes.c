@@ -22,7 +22,7 @@
 
 
 int
-libexplain_dir_to_fildes(DIR *dir)
+explain_dir_to_fildes(DIR *dir)
 {
     if (!dir)
         return -1;
@@ -30,7 +30,7 @@ libexplain_dir_to_fildes(DIR *dir)
      * DIR is an opaque type, so we don't really know how big
      * is actually is.  So guess.
      */
-    if (libexplain_pointer_is_efault(dir, sizeof(int)))
+    if (explain_pointer_is_efault(dir, sizeof(int)))
         return -1;
     return dirfd(dir);
 }

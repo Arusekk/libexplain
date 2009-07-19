@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,25 +37,25 @@
 
 
 static void
-libexplain_buffer_errno_chdir_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_chdir_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
-    libexplain_string_buffer_printf(sb, "chdir(pathname = ");
+    explain_string_buffer_printf(sb, "chdir(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_chdir_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_chdir_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_search = 1;
     final_component.must_be_a_st_mode = 1;
     final_component.st_mode = S_IFDIR;
@@ -63,24 +63,24 @@ libexplain_buffer_errno_chdir_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -90,42 +90,42 @@ libexplain_buffer_errno_chdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_chdir(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_chdir(explain_string_buffer_t *sb, int errnum,
     const char *pathname)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_chdir_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_chdir_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname
     );
-    libexplain_buffer_errno_chdir_explanation
+    explain_buffer_errno_chdir_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

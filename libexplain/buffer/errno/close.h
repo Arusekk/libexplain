@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_close function is used to obtain an
+  * The explain_buffer_errno_close function is used to obtain an
   * explanation of an error returned by the close(2) function.  The
   * least the message will contain is the value of strerror(errnum), but
   * usually it will do much better, and indicate the underlying cause in
@@ -42,12 +42,12 @@
   *    The original file descriptor, exactly as passed to the close(2)
   *    system call.
   */
-void libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_close(explain_string_buffer_t *sb, int errnum,
     int fildes);
 
 /**
-  * The libexplain_buffer_errno_close_explanation function is used by the
-  * libexplain_buffer_errno_close function (and others) to print the
+  * The explain_buffer_errno_close_explanation function is used by the
+  * explain_buffer_errno_close function (and others) to print the
   * extended "because..." part of the explanation.
   *
   * @param sb
@@ -58,7 +58,7 @@ void libexplain_buffer_errno_close(libexplain_string_buffer_t *sb, int errnum,
   *    The original file descriptor, exactly as passed to the close(2)
   *    system call.
   */
-void libexplain_buffer_errno_close_explanation(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_close_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CLOSE_H */

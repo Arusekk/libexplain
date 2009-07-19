@@ -24,7 +24,7 @@
 struct enotconn; /* forward */
 
 /**
-  * The libexplain_buffer_enotconn function may be used to
+  * The explain_buffer_enotconn function may be used to
   * explain an ENOTCONN error reported by socket funtions.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct enotconn; /* forward */
   * @param caption
   *     The name of the offending system call argument.
   */
-void libexplain_buffer_enotconn(libexplain_string_buffer_t *sb,
+void explain_buffer_enotconn(explain_string_buffer_t *sb,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOTCONN_H */

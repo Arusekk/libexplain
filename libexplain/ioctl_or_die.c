@@ -27,20 +27,14 @@
 
 
 int
-libexplain_ioctl_or_die(int fildes, int request, void *data)
+explain_ioctl_or_die(int fildes, int request, void *data)
 {
     int             result;
 
     errno = 0;
-    result = ioctl(fildes, request, data);
+    result = explain_ioctl_on_error(fildes, request, data);
     if (result == -1 && errno != 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_ioctl(fildes, request, data)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

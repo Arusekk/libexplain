@@ -22,9 +22,9 @@
 
 
 const char *
-libexplain_realloc(void *ptr, size_t size)
+explain_realloc(void *ptr, size_t size)
 {
-    return libexplain_errno_realloc(errno, ptr, size);
+    return explain_errno_realloc(errno, ptr, size);
 }
 
 /* vim:ts=8:sw=4:et */

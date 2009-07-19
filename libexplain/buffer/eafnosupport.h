@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@
 struct sockaddr; /* forward */
 
 /**
-  * The libexplain_buffer_eafnosupport function may be used to explan an
+  * The explain_buffer_eafnosupport function may be used to explan an
   * EAFNOSUPPORT error, which occurs when a socket attempts to bind or
   * connect to an address of a different address family.
   *
@@ -41,7 +41,7 @@ struct sockaddr; /* forward */
   *    The name of the system call argument that holds the address that
   *    attempted to bind or connect
   */
-void libexplain_buffer_eafnosupport(libexplain_string_buffer_t *sb, int fildes,
+void explain_buffer_eafnosupport(explain_string_buffer_t *sb, int fildes,
     const char *fildes_caption, const struct sockaddr *sock_addr,
     const char *sock_addr_caption);
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@
 #include <libexplain/have_permission.h>
 #include <libexplain/string_buffer.h>
 
-typedef struct libexplain_final_t libexplain_final_t;
-struct libexplain_final_t
+typedef struct explain_final_t explain_final_t;
+struct explain_final_t
 {
     unsigned        want_to_read    :1;
     unsigned        want_to_write   :1;
@@ -70,7 +70,7 @@ struct libexplain_final_t
      * Defaults to geteuid() and getegid().
      * Required by the access(2) system call.
      */
-    libexplain_have_identity_t id;
+    explain_have_identity_t id;
 
     /*
      * The specific maximum path length to test against.
@@ -81,22 +81,22 @@ struct libexplain_final_t
 
     /*
      * When you add to this struct, be sure to add to the
-     * libexplain_final_init() code which initialises the fields to
+     * explain_final_init() code which initialises the fields to
      * default settings.
      */
 };
 
 /**
-  * The libexplain_final_init function is used to initialise all of the
-  * members of a libexplain_final_t struct to their defaults (usually 0).
+  * The explain_final_init function is used to initialise all of the
+  * members of a explain_final_t struct to their defaults (usually 0).
   *
   * @param final_component
   *     Pointer to struct to be initialised.
   */
-void libexplain_final_init(libexplain_final_t *final_component);
+void explain_final_init(explain_final_t *final_component);
 
 /**
-  * The libexplain_buffer_errno_path_resolution function may be used to
+  * The explain_buffer_errno_path_resolution function may be used to
   * check a path for problems.
   *
   * @param sb
@@ -115,9 +115,9 @@ void libexplain_final_init(libexplain_final_t *final_component);
   *    -1 on failure, meaning it didn't find an error or it didn't find
   *    the expected error.
   */
-int libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
+int explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *pathname_caption,
-    const libexplain_final_t *final_component);
+    const explain_final_t *final_component);
 
 #define must_be_a_directory(fcp) \
     (fcp->must_be_a_st_mode && fcp->st_mode == S_IFDIR)

@@ -26,12 +26,10 @@
 
 
 void
-libexplain_dup2_or_die(int oldfd, int newfd)
+explain_dup2_or_die(int oldfd, int newfd)
 {
-    if (dup2(oldfd, newfd) < 0)
+    if (explain_dup2_on_error(oldfd, newfd) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_dup2(oldfd, newfd));
         exit(EXIT_FAILURE);
     }
 }

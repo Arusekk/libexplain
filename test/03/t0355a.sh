@@ -27,8 +27,7 @@ ioctl(fildes = 42, request = MTIOCSETCONFIG, data = { mt_type = 0, ifc_type
 0, have_fsr = 0, have_bsr = 0, have_eod = 0, have_seek = 0, have_tell = 0,
 have_ras1 = 0, have_ras2 = 0, have_ras3 = 0, have_qfa = 0, }) failed,
 Inappropriate ioctl for device (ENOTTY) because fildes is not associated
-with a character special device; or, fildes is not associated with an
-object to which request can be applied
+with an object to which ioctl MTIOCSETCONFIG can be applied
 fubar
 test $? -eq 0 || no_result
 

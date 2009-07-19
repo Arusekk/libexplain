@@ -26,24 +26,24 @@
 #ifdef HAVE_LINUX_KD_H
 
 void
-libexplain_buffer_kbkeycode(libexplain_string_buffer_t *sb,
+explain_buffer_kbkeycode(explain_string_buffer_t *sb,
     const struct kbkeycode *data, int extra)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_printf(sb, "{ scancode = %#x", data->scancode);
+        explain_string_buffer_printf(sb, "{ scancode = %#x", data->scancode);
         if (extra)
         {
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 ", keycode = %#x",
                 data->keycode
             );
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }
 

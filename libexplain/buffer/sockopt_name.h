@@ -24,7 +24,7 @@
 struct sockopt_name; /* forward */
 
 /**
-  * The libexplain_buffer_sockopt_name function may be used to
+  * The explain_buffer_sockopt_name function may be used to
   * print a representation of a sockopt name.
   *
   * @param sb
@@ -35,11 +35,11 @@ struct sockopt_name; /* forward */
   * @param name
   *     The sockopt_name value to be printed.
   */
-void libexplain_buffer_sockopt_name(libexplain_string_buffer_t *sb, int level,
+void explain_buffer_sockopt_name(explain_string_buffer_t *sb, int level,
     int name);
 
 /**
-  * The libexplain_parse_sockopt_name_or_die function is used to parse a
+  * The explain_parse_sockopt_name_or_die function is used to parse a
   * text string into a sockopt name value.  It parses all levels.
   *
   * @param text
@@ -50,6 +50,6 @@ void libexplain_buffer_sockopt_name(libexplain_string_buffer_t *sb, int level,
   *     The sockopt name value.  On error it prints a fatal error
   *     message and exits.
   */
-int libexplain_parse_sockopt_name_or_die(const char *text, const char *caption);
+int explain_parse_sockopt_name_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKOPT_NAME_H */

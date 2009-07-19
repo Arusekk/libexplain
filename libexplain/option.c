@@ -112,7 +112,7 @@ process(char *name, option_level_t level)
     {
         const table_t   *best_tp;
         double          best_weight;
-        libexplain_string_buffer_t buf;
+        explain_string_buffer_t buf;
         char            message[200];
 
         best_tp = 0;
@@ -121,7 +121,7 @@ process(char *name, option_level_t level)
         {
             double          weight;
 
-            weight = libexplain_fstrcmp(tp->name, name);
+            weight = explain_fstrcmp(tp->name, name);
             if (best_weight < weight)
             {
                 best_tp = tp;
@@ -129,10 +129,10 @@ process(char *name, option_level_t level)
             }
         }
 
-        libexplain_string_buffer_init(&buf, message, sizeof(message));
-        libexplain_string_buffer_puts(&buf, "libexplain: Warning: option ");
-        libexplain_string_buffer_puts_quoted(&buf, name);
-        libexplain_string_buffer_puts(&buf, " unknown");
+        explain_string_buffer_init(&buf, message, sizeof(message));
+        explain_string_buffer_puts(&buf, "libexplain: Warning: option ");
+        explain_string_buffer_puts_quoted(&buf, name);
+        explain_string_buffer_puts(&buf, " unknown");
         if (best_tp)
         {
             if (level >= best_tp->location->level)
@@ -141,11 +141,11 @@ process(char *name, option_level_t level)
                 best_tp->location->value = value;
             }
 
-            libexplain_string_buffer_puts(&buf, ", assuming you meant ");
-            libexplain_string_buffer_puts_quoted(&buf, best_tp->name);
-            libexplain_string_buffer_puts(&buf, " instead");
+            explain_string_buffer_puts(&buf, ", assuming you meant ");
+            explain_string_buffer_puts_quoted(&buf, best_tp->name);
+            explain_string_buffer_puts(&buf, " instead");
         }
-        libexplain_wrap_and_print(stderr, message);
+        explain_wrap_and_print(stderr, message);
     }
 }
 
@@ -201,7 +201,7 @@ initialise(void)
 
 
 int
-libexplain_option_debug(void)
+explain_option_debug(void)
 {
     if (!initialised)
         initialise();
@@ -210,7 +210,7 @@ libexplain_option_debug(void)
 
 
 int
-libexplain_option_numeric_errno(void)
+explain_option_numeric_errno(void)
 {
     if (!initialised)
         initialise();
@@ -219,7 +219,7 @@ libexplain_option_numeric_errno(void)
 
 
 int
-libexplain_option_dialect_specific(void)
+explain_option_dialect_specific(void)
 {
     if (!initialised)
         initialise();
@@ -228,7 +228,7 @@ libexplain_option_dialect_specific(void)
 
 
 int
-libexplain_option_assemble_program_name(void)
+explain_option_assemble_program_name(void)
 {
     if (!initialised)
         initialise();
@@ -237,12 +237,12 @@ libexplain_option_assemble_program_name(void)
 
 
 void
-libexplain_program_name_assemble(int yesno)
+explain_program_name_assemble(int yesno)
 {
     /*
      * This is the public interface, it has highest
      * precedence.  For the internal interface, see the
-     * libexplain_program_name_assemble_internal function.
+     * explain_program_name_assemble_internal function.
      */
     if (!initialised)
         initialise();
@@ -255,7 +255,7 @@ libexplain_program_name_assemble(int yesno)
 
 
 void
-libexplain_program_name_assemble_internal(int yesno)
+explain_program_name_assemble_internal(int yesno)
 {
     /*
      * This is the private interface.

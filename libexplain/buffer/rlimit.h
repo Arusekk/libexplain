@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,11 +20,11 @@
 #ifndef LIBEXPLAIN_BUFFER_RLIMIT_H
 #define LIBEXPLAIN_BUFFER_RLIMIT_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 struct rlimit; /* forward */
 
 /**
-  * The libexplain_buffer_rlimit function may be used to insert a human
+  * The explain_buffer_rlimit function may be used to insert a human
   * readable representation of an rlimit struct into the given buffer.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct rlimit; /* forward */
   * @param lim
   *    Pointer to the rlimit struct to be printed
   */
-void libexplain_buffer_rlimit(struct libexplain_string_buffer_t *sb,
+void explain_buffer_rlimit(struct explain_string_buffer_t *sb,
     const struct rlimit *lim);
 
 #endif /* LIBEXPLAIN_BUFFER_RLIMIT_H */

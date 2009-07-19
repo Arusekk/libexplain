@@ -48,31 +48,31 @@
  * See unix(7) for more information.
  */
 static void
-libexplain_buffer_sockaddr_af_unix(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_unix(explain_string_buffer_t *sb,
     const struct sockaddr_un *sa, size_t sa_len)
 {
     if (sa_len > sizeof(sa->sun_family))
     {
-        libexplain_string_buffer_puts(sb, ", sun_path = ");
-        libexplain_string_buffer_puts_quoted(sb, sa->sun_path);
+        explain_string_buffer_puts(sb, ", sun_path = ");
+        explain_string_buffer_puts_quoted(sb, sa->sun_path);
     }
 }
 
 
 void
-libexplain_buffer_in_addr(libexplain_string_buffer_t *sb,
+explain_buffer_in_addr(explain_string_buffer_t *sb,
     const struct in_addr *addr)
 {
-    libexplain_string_buffer_puts(sb, inet_ntoa(*addr));
+    explain_string_buffer_puts(sb, inet_ntoa(*addr));
     if (ntohl(addr->s_addr) == INADDR_ANY)
     {
-        libexplain_string_buffer_puts(sb, " INADDR_ANY");
+        explain_string_buffer_puts(sb, " INADDR_ANY");
     }
     else if (ntohl(addr->s_addr) == INADDR_BROADCAST)
     {
-        libexplain_string_buffer_puts(sb, " INADDR_BROADCAST");
+        explain_string_buffer_puts(sb, " INADDR_BROADCAST");
     }
-    else if (libexplain_option_dialect_specific())
+    else if (explain_option_dialect_specific())
     {
         struct hostent  *hep;
 
@@ -86,8 +86,8 @@ libexplain_buffer_in_addr(libexplain_string_buffer_t *sb,
         hep = gethostbyaddr(addr, sizeof(addr), AF_INET);
         if (hep)
         {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, hep->h_name);
+            explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts_quoted(sb, hep->h_name);
         }
     }
 }
@@ -97,7 +97,7 @@ libexplain_buffer_in_addr(libexplain_string_buffer_t *sb,
  * See ip(7) and inet(3) for more information.
  */
 static void
-libexplain_buffer_sockaddr_af_inet(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_inet(explain_string_buffer_t *sb,
     const struct sockaddr_in *sa, size_t sa_len)
 {
     unsigned short  port;
@@ -107,8 +107,8 @@ libexplain_buffer_sockaddr_af_inet(libexplain_string_buffer_t *sb,
      */
     (void)sa_len;
     port = ntohs(sa->sin_port);
-    libexplain_string_buffer_printf(sb, ", sin_port = %u", port);
-    if (libexplain_option_dialect_specific())
+    explain_string_buffer_printf(sb, ", sin_port = %u", port);
+    if (explain_option_dialect_specific())
     {
         struct servent  *sep;
 
@@ -123,31 +123,31 @@ libexplain_buffer_sockaddr_af_inet(libexplain_string_buffer_t *sb,
             sep = getservbyport(sa->sin_port, "udp");
         if (sep)
         {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, sep->s_name);
+            explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts_quoted(sb, sep->s_name);
         }
     }
 
     /*
      * print the IP address, and name if we can
      */
-    libexplain_string_buffer_puts(sb, ", sin_addr = ");
-    libexplain_buffer_in_addr(sb, &sa->sin_addr);
+    explain_string_buffer_puts(sb, ", sin_addr = ");
+    explain_buffer_in_addr(sb, &sa->sin_addr);
 }
 
 
 #ifdef AF_AX25
 
 static void
-libexplain_buffer_sockaddr_af_ax25(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_ax25(explain_string_buffer_t *sb,
     const struct sockaddr_ax25 *sa, size_t sa_len)
 {
     /* amateur radio stuff */
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_ax25 */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/netax25/ax25.h */
 }
 
@@ -156,14 +156,14 @@ libexplain_buffer_sockaddr_af_ax25(libexplain_string_buffer_t *sb,
 #ifdef AF_IPX
 
 static void
-libexplain_buffer_sockaddr_af_ipx(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_ipx(explain_string_buffer_t *sb,
     const struct sockaddr_ipx *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_ipx */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/netipx/ipx.h */
 }
 
@@ -172,14 +172,14 @@ libexplain_buffer_sockaddr_af_ipx(libexplain_string_buffer_t *sb,
 #ifdef AF_APPLETALK
 
 static void
-libexplain_buffer_sockaddr_af_appletalk(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_appletalk(explain_string_buffer_t *sb,
     const struct sockaddr_at *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_at */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /*
      * file /usr/include/linux/atalk.h
      * sat_port
@@ -192,15 +192,15 @@ libexplain_buffer_sockaddr_af_appletalk(libexplain_string_buffer_t *sb,
 #ifdef AF_NETROM
 
 static void
-libexplain_buffer_sockaddr_af_netrom(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_netrom(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
     /* amateur radio stuff */
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_netrom */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/netrom/netrom.h */
 }
 
@@ -209,14 +209,14 @@ libexplain_buffer_sockaddr_af_netrom(libexplain_string_buffer_t *sb,
 #ifdef AF_BRIDGE
 
 static void
-libexplain_buffer_sockaddr_af_bridge(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_bridge(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_bridge */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -224,14 +224,14 @@ libexplain_buffer_sockaddr_af_bridge(libexplain_string_buffer_t *sb,
 #ifdef AF_ATMPVC
 
 static void
-libexplain_buffer_sockaddr_af_atmpvc(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_atmpvc(explain_string_buffer_t *sb,
     const struct sockaddr_atmpvc *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_atmpvc */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/linux/atm.h */
 }
 
@@ -243,12 +243,12 @@ libexplain_buffer_sockaddr_af_atmpvc(libexplain_string_buffer_t *sb,
  * See x25(7) for more information.
  */
 static void
-libexplain_buffer_sockaddr_af_x25(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_x25(explain_string_buffer_t *sb,
     const struct sockaddr_x25 *sa, size_t sa_len)
 {
     (void)sa_len;
-    libexplain_string_buffer_puts(sb, ", sx25_addr = ");
-    libexplain_string_buffer_puts_quoted(sb, sa->sx25_addr.x25_addr);
+    explain_string_buffer_puts(sb, ", sx25_addr = ");
+    explain_string_buffer_puts_quoted(sb, sa->sx25_addr.x25_addr);
 }
 
 #endif
@@ -259,7 +259,7 @@ libexplain_buffer_sockaddr_af_x25(libexplain_string_buffer_t *sb,
  * See man ipv6(7) for more information.
  */
 static void
-libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_inet6(explain_string_buffer_t *sb,
     const struct sockaddr_in6 *sa, size_t sa_len)
 {
     unsigned short  port;
@@ -269,8 +269,8 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
      */
     (void)sa_len;
     port = ntohs(sa->sin6_port);
-    libexplain_string_buffer_printf(sb, ", sin_port = %u", port);
-    if (libexplain_option_dialect_specific())
+    explain_string_buffer_printf(sb, ", sin_port = %u", port);
+    if (explain_option_dialect_specific())
     {
         struct servent  *sep;
 
@@ -285,14 +285,14 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
             sep = getservbyport(port, "udp");
         if (sep)
         {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, sep->s_name);
+            explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts_quoted(sb, sep->s_name);
         }
     }
 
     if (sa->sin6_flowinfo != 0)
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             ", sin6_flowinfo = %ld",
@@ -303,9 +303,9 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
     /*
      * print the IP address, and name if we can
      */
-    libexplain_string_buffer_puts(sb, ", sin6_addr = ");
-    libexplain_buffer_in6_addr(sb, &sa->sin6_addr);
-    if (libexplain_option_dialect_specific())
+    explain_string_buffer_puts(sb, ", sin6_addr = ");
+    explain_buffer_in6_addr(sb, &sa->sin6_addr);
+    if (explain_option_dialect_specific())
     {
         struct hostent  *hep;
 
@@ -319,8 +319,8 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
         hep = gethostbyaddr(&sa->sin6_addr, sizeof(sa->sin6_addr), AF_INET6);
         if (hep)
         {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, hep->h_name);
+            explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts_quoted(sb, hep->h_name);
         }
     }
 
@@ -332,7 +332,7 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
          * link scope addresses, in that case sin6_scope_id contains the
          * interface index (see netdevice(7))
          */
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             ", sin6_scope_id = %ld",
@@ -346,15 +346,15 @@ libexplain_buffer_sockaddr_af_inet6(libexplain_string_buffer_t *sb,
 #ifdef AF_ROSE
 
 static void
-libexplain_buffer_sockaddr_af_rose(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_rose(explain_string_buffer_t *sb,
     const struct sockaddr_rose *sa, size_t sa_len)
 {
     /* amateur radio stuff */
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_rose */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/netrose/rose.h */
 }
 
@@ -363,14 +363,14 @@ libexplain_buffer_sockaddr_af_rose(libexplain_string_buffer_t *sb,
 #ifdef AF_DECnet
 
 static void
-libexplain_buffer_sockaddr_af_decnet(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_decnet(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_decnet */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -378,14 +378,14 @@ libexplain_buffer_sockaddr_af_decnet(libexplain_string_buffer_t *sb,
 #ifdef AF_NETBEUI
 
 static void
-libexplain_buffer_sockaddr_af_netbeui(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_netbeui(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
     /* FIXME: decode sockaddr_netbeui */
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -393,14 +393,14 @@ libexplain_buffer_sockaddr_af_netbeui(libexplain_string_buffer_t *sb,
 #ifdef AF_SECURITY
 
 static void
-libexplain_buffer_sockaddr_af_security(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_security(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_security */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -408,14 +408,14 @@ libexplain_buffer_sockaddr_af_security(libexplain_string_buffer_t *sb,
 #ifdef AF_KEY
 
 static void
-libexplain_buffer_sockaddr_af_key(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_key(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_key */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -423,14 +423,14 @@ libexplain_buffer_sockaddr_af_key(libexplain_string_buffer_t *sb,
 #ifdef AF_NETLINK
 
 static void
-libexplain_buffer_sockaddr_af_netlink(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_netlink(explain_string_buffer_t *sb,
     const struct sockaddr_nl *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_nl */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/linux/netlink.h */
 }
 
@@ -439,14 +439,33 @@ libexplain_buffer_sockaddr_af_netlink(libexplain_string_buffer_t *sb,
 #ifdef AF_PACKET
 
 static void
-libexplain_buffer_sockaddr_af_packet(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_packet(explain_string_buffer_t *sb,
     const struct sockaddr_ll *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
-    /* FIXME: decode sockaddr_ll */
-    if (sa_len > sizeof(*sa))
-        sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    unsigned        alen;
+
+    explain_string_buffer_puts(sb, ", ");
+    if (sa_len < sizeof(*sa))
+    {
+        explain_buffer_hexdump(sb, sa, sa_len);
+        return;
+    }
+    explain_string_buffer_printf
+    (
+        sb,
+        "sll_protocol = %u, ",
+        sa->sll_protocol
+    );
+    explain_string_buffer_printf(sb, "sll_ifindex = %d, ", sa->sll_ifindex);
+    explain_string_buffer_printf(sb, "sll_hatype = %u, ", sa->sll_hatype);
+    explain_string_buffer_printf(sb, "sll_pkttype = %u, ", sa->sll_pkttype);
+    explain_string_buffer_printf(sb, "sll_halen = %u, ", sa->sll_halen);
+    explain_string_buffer_puts(sb, "sll_addr = { ");
+    alen = sa->sll_halen;
+    if (alen > sizeof(sa->sll_addr))
+        alen = sizeof(sa->sll_addr);
+    explain_buffer_hexdump(sb, sa->sll_addr, alen);
+    explain_string_buffer_puts(sb, " }");
 }
 
 #endif
@@ -454,14 +473,14 @@ libexplain_buffer_sockaddr_af_packet(libexplain_string_buffer_t *sb,
 #ifdef AF_ASH
 
 static void
-libexplain_buffer_sockaddr_af_ash(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_ash(explain_string_buffer_t *sb,
     const struct sockaddr_ash *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_ash */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/netash/ash.h */
 }
 
@@ -470,14 +489,14 @@ libexplain_buffer_sockaddr_af_ash(libexplain_string_buffer_t *sb,
 #ifdef AF_ECONET
 
 static void
-libexplain_buffer_sockaddr_af_econet(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_econet(explain_string_buffer_t *sb,
     const struct sockaddr_ec *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_ec */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/neteconet/ec.h */
 }
 
@@ -486,14 +505,14 @@ libexplain_buffer_sockaddr_af_econet(libexplain_string_buffer_t *sb,
 #ifdef AF_ATMSVC
 
 static void
-libexplain_buffer_sockaddr_af_atmsvc(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_atmsvc(explain_string_buffer_t *sb,
     const struct sockaddr_atmsvc *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_atmsvc */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -501,14 +520,14 @@ libexplain_buffer_sockaddr_af_atmsvc(libexplain_string_buffer_t *sb,
 #ifdef AF_SNA
 
 static void
-libexplain_buffer_sockaddr_af_sna(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_sna(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_sna */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -516,14 +535,14 @@ libexplain_buffer_sockaddr_af_sna(libexplain_string_buffer_t *sb,
 #ifdef AF_IRDA
 
 static void
-libexplain_buffer_sockaddr_af_irda(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_irda(explain_string_buffer_t *sb,
     const struct sockaddr_irda *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_irda */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -531,14 +550,14 @@ libexplain_buffer_sockaddr_af_irda(libexplain_string_buffer_t *sb,
 #ifdef AF_PPPOX
 
 static void
-libexplain_buffer_sockaddr_af_pppox(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_pppox(explain_string_buffer_t *sb,
     const struct sockaddr_pppox *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_pppox */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
     /* file /usr/include/linux/if_pppox.h */
 }
 
@@ -547,14 +566,14 @@ libexplain_buffer_sockaddr_af_pppox(libexplain_string_buffer_t *sb,
 #ifdef AF_WANPIPE
 
 static void
-libexplain_buffer_sockaddr_af_wanpipe(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_wanpipe(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_wanpipe */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -562,14 +581,14 @@ libexplain_buffer_sockaddr_af_wanpipe(libexplain_string_buffer_t *sb,
 #ifdef AF_BLUETOOTH
 
 static void
-libexplain_buffer_sockaddr_af_bluetooth(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_bluetooth(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_(something) */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 
     /*
      * file /usr/include/bluetooth/hci.h:    struct sockaddr_hci
@@ -585,14 +604,14 @@ libexplain_buffer_sockaddr_af_bluetooth(libexplain_string_buffer_t *sb,
 #ifdef HAVE_NETIUCV_IUCV_H
 
 static void
-libexplain_buffer_sockaddr_af_iucv(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_iucv(explain_string_buffer_t *sb,
     const struct sockaddr_iucv *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_iucv */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
@@ -601,36 +620,36 @@ libexplain_buffer_sockaddr_af_iucv(libexplain_string_buffer_t *sb,
 #ifdef AF_RXRPC
 
 static void
-libexplain_buffer_sockaddr_af_rxrpc(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr_af_rxrpc(explain_string_buffer_t *sb,
     const struct sockaddr *sa, size_t sa_len)
 {
-    libexplain_string_buffer_putc(sb, ',');
+    explain_string_buffer_putc(sb, ',');
     /* FIXME: decode sockaddr_rxrpc */
     if (sa_len > sizeof(*sa))
         sa_len = sizeof(*sa);
-    libexplain_buffer_hexdump(sb, sa, sa_len);
+    explain_buffer_hexdump(sb, sa, sa_len);
 }
 
 #endif
 
 void
-libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
+explain_buffer_sockaddr(explain_string_buffer_t *sb,
     const struct sockaddr *sa, int sa_len)
 {
-    if (libexplain_pointer_is_efault(sa, sizeof(*sa)))
+    if (explain_pointer_is_efault(sa, sizeof(*sa)))
     {
-        libexplain_buffer_pointer(sb, sa);
+        explain_buffer_pointer(sb, sa);
         return;
     }
-    libexplain_string_buffer_puts(sb, "{ sa_family = ");
-    libexplain_buffer_address_family(sb, sa->sa_family);
+    explain_string_buffer_puts(sb, "{ sa_family = ");
+    explain_buffer_address_family(sb, sa->sa_family);
     switch (sa->sa_family)
     {
     case AF_UNSPEC:
         break;
 
     case AF_UNIX:
-        libexplain_buffer_sockaddr_af_unix
+        explain_buffer_sockaddr_af_unix
         (
             sb,
             (const struct sockaddr_un *)sa,
@@ -639,7 +658,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
         break;
 
     case AF_INET:
-        libexplain_buffer_sockaddr_af_inet
+        explain_buffer_sockaddr_af_inet
         (
             sb,
             (const struct sockaddr_in *)sa,
@@ -649,7 +668,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_AX25
     case AF_AX25:
-        libexplain_buffer_sockaddr_af_ax25
+        explain_buffer_sockaddr_af_ax25
         (
             sb,
             (const struct sockaddr_ax25 *)sa,
@@ -660,7 +679,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_IPX
     case AF_IPX:
-        libexplain_buffer_sockaddr_af_ipx
+        explain_buffer_sockaddr_af_ipx
         (
             sb,
             (const struct sockaddr_ipx *)sa,
@@ -671,7 +690,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_APPLETALK
     case AF_APPLETALK:
-        libexplain_buffer_sockaddr_af_appletalk
+        explain_buffer_sockaddr_af_appletalk
         (
             sb,
             (const struct sockaddr_at *)sa,
@@ -682,19 +701,19 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_NETROM
     case AF_NETROM:
-        libexplain_buffer_sockaddr_af_netrom(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_netrom(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_BRIDGE
     case AF_BRIDGE:
-        libexplain_buffer_sockaddr_af_bridge(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_bridge(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_ATMPVC
     case AF_ATMPVC:
-        libexplain_buffer_sockaddr_af_atmpvc
+        explain_buffer_sockaddr_af_atmpvc
         (
             sb,
             (const struct sockaddr_atmpvc *)sa,
@@ -705,7 +724,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_X25
     case AF_X25:
-        libexplain_buffer_sockaddr_af_x25
+        explain_buffer_sockaddr_af_x25
         (
             sb,
             (const struct sockaddr_x25 *)sa,
@@ -716,7 +735,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_INET6
     case AF_INET6:
-        libexplain_buffer_sockaddr_af_inet6
+        explain_buffer_sockaddr_af_inet6
         (
             sb,
             (const struct sockaddr_in6 *)sa,
@@ -727,7 +746,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_ROSE
     case AF_ROSE:
-        libexplain_buffer_sockaddr_af_rose
+        explain_buffer_sockaddr_af_rose
         (
             sb,
             (const struct sockaddr_rose *)sa,
@@ -738,32 +757,32 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_DECnet
     case AF_DECnet:
-        libexplain_buffer_sockaddr_af_decnet(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_decnet(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_NETBEUI
     case AF_NETBEUI:
-        libexplain_buffer_sockaddr_af_netbeui(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_netbeui(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_SECURITY
     case AF_SECURITY:
-        libexplain_buffer_sockaddr_af_security(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_security(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_KEY
     case AF_KEY:
-        libexplain_buffer_sockaddr_af_key(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_key(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_NETLINK
     case AF_NETLINK:
  /* case AF_ROUTE: */
-        libexplain_buffer_sockaddr_af_netlink
+        explain_buffer_sockaddr_af_netlink
         (
             sb,
             (const struct sockaddr_nl *)sa,
@@ -774,7 +793,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_PACKET
     case AF_PACKET:
-        libexplain_buffer_sockaddr_af_packet
+        explain_buffer_sockaddr_af_packet
         (
             sb,
             (const struct sockaddr_ll *)sa,
@@ -785,7 +804,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_ASH
     case AF_ASH:
-        libexplain_buffer_sockaddr_af_ash
+        explain_buffer_sockaddr_af_ash
         (
             sb,
             (const struct sockaddr_ash *)sa,
@@ -796,7 +815,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_ECONET
     case AF_ECONET:
-        libexplain_buffer_sockaddr_af_econet
+        explain_buffer_sockaddr_af_econet
         (
             sb,
             (const struct sockaddr_ec *)sa,
@@ -807,7 +826,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_ATMSVC
     case AF_ATMSVC:
-        libexplain_buffer_sockaddr_af_atmsvc
+        explain_buffer_sockaddr_af_atmsvc
         (
             sb,
             (const struct sockaddr_atmsvc *)sa,
@@ -818,13 +837,13 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_SNA
     case AF_SNA:
-        libexplain_buffer_sockaddr_af_sna(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_sna(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_IRDA
     case AF_IRDA:
-        libexplain_buffer_sockaddr_af_irda
+        explain_buffer_sockaddr_af_irda
         (
             sb,
             (const struct sockaddr_irda *)sa,
@@ -835,7 +854,7 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_PPPOX
     case AF_PPPOX:
-        libexplain_buffer_sockaddr_af_pppox
+        explain_buffer_sockaddr_af_pppox
         (
             sb,
             (const struct sockaddr_pppox *)sa,
@@ -846,20 +865,20 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_WANPIPE
     case AF_WANPIPE:
-        libexplain_buffer_sockaddr_af_wanpipe(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_wanpipe(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_BLUETOOTH
     case AF_BLUETOOTH:
-        libexplain_buffer_sockaddr_af_bluetooth(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_bluetooth(sb, sa, sa_len);
         break;
 #endif
 
 #ifdef AF_IUCV
 #ifdef HAVE_NETIUCV_IUCV_H
     case AF_IUCV:
-        libexplain_buffer_sockaddr_af_iucv
+        explain_buffer_sockaddr_af_iucv
         (
             sb,
             (const struct sockaddr_iucv *)sa,
@@ -871,15 +890,15 @@ libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
 
 #ifdef AF_RXRPC
     case AF_RXRPC:
-        libexplain_buffer_sockaddr_af_rxrpc(sb, sa, sa_len);
+        explain_buffer_sockaddr_af_rxrpc(sb, sa, sa_len);
         break;
 #endif
 
     default:
         /* no idea */
-        libexplain_string_buffer_putc(sb, ',');
-        libexplain_buffer_hexdump(sb, sa, sa_len);
+        explain_string_buffer_putc(sb, ',');
+        explain_buffer_hexdump(sb, sa, sa_len);
         break;
     }
-    libexplain_string_buffer_puts(sb, " }");
+    explain_string_buffer_puts(sb, " }");
 }

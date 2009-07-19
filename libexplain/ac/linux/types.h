@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_AC_LINUX_TYPES_H
 #define LIBEXPLAIN_AC_LINUX_TYPES_H
 
-#include <libexplain/config.h>
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_LINUX_TYPES_H
 #include <linux/types.h>

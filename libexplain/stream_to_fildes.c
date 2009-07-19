@@ -22,7 +22,7 @@
 
 
 int
-libexplain_stream_to_fildes(FILE *fp)
+explain_stream_to_fildes(FILE *fp)
 {
     /*
      * The Linux fclose(3) man page says
@@ -44,7 +44,7 @@ libexplain_stream_to_fildes(FILE *fp)
      * implementations may keep the FILE pointer valid if the underlying
      * file descriptor is still valid.
      */
-    if (libexplain_pointer_is_efault(fp, sizeof(*fp)))
+    if (explain_pointer_is_efault(fp, sizeof(*fp)))
         return -1;
     return fileno(fp);
 }

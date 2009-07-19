@@ -26,8 +26,8 @@ A build problem on Debian sid has been fixed.
 .if n *
 .if t \(bu
 .\" Change 17
-There is a new \f[I]libexplain_system_success\fP(3) function, that performs
-all that \f[I]libexplain_system_success_or_die\fP(3) performs, except that
+There is a new \f[I]explain_system_success\fP(3) function, that performs
+all that \f[I]explain_system_success_or_die\fP(3) performs, except that
 it does not call \f[I]exit\fP(2).
 .PP
 .if n *

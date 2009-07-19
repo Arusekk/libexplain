@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,13 +24,13 @@
 
 
 void
-libexplain_string_flags_init(libexplain_string_flags_t *sf, const char *flags)
+explain_string_flags_init(explain_string_flags_t *sf, const char *flags)
 {
     int             acc_mode;
     int             options;
     const char      *cp;
     unsigned char   c;
-    libexplain_string_buffer_t yuck_buf;
+    explain_string_buffer_t yuck_buf;
 
     /*
      * Parse the flags string.
@@ -87,7 +87,7 @@ libexplain_string_flags_init(libexplain_string_flags_t *sf, const char *flags)
         sf->flags_string_valid = 0;
         break;
     }
-    libexplain_string_buffer_init(&yuck_buf, sf->invalid, sizeof(sf->invalid));
+    explain_string_buffer_init(&yuck_buf, sf->invalid, sizeof(sf->invalid));
     for (;;)
     {
         c = *cp++;
@@ -125,7 +125,7 @@ libexplain_string_flags_init(libexplain_string_flags_t *sf, const char *flags)
 
         default:
             sf->flags_string_valid = 0;
-            libexplain_string_buffer_putc(&yuck_buf, c);
+            explain_string_buffer_putc(&yuck_buf, c);
             continue;
 
         case '\0':

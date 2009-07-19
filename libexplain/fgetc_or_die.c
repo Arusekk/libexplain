@@ -25,15 +25,15 @@
 
 
 int
-libexplain_fgetc_or_die(FILE *fp)
+explain_fgetc_or_die(FILE *fp)
 {
     int             result;
 
     result = getc(fp);
     if (result == EOF && ferror(fp))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fgetc(fp));
+        explain_program_name_assemble_internal(1);
+        explain_wrap_and_print(stderr, explain_fgetc(fp));
         exit(EXIT_FAILURE);
     }
     return result;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_select function
+  * The explain_buffer_errno_select function
   * is used to obtain an explanation of an error returned
   * by the select(2) system call.
   * The least the message will contain is the value of
@@ -53,7 +53,7 @@
   * @param timeout
   *     The original timeout, exactly as passed to the select(2) system call.
   */
-void libexplain_buffer_errno_select(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_select(explain_string_buffer_t *sb, int errnum,
     int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
     struct timeval *timeout);
 

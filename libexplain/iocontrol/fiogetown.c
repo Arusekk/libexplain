@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/fiogetown.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_fiogetown =
+const explain_iocontrol_t explain_iocontrol_fiogetown =
 {
     "FIOGETOWN", /* name */
     FIOGETOWN, /* value */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 
 
 void
-libexplain_dirname(char *dir, const char *path, size_t dir_size)
+explain_dirname(char *dir, const char *path, size_t dir_size)
 {
     const char      *slash;
     size_t          len;
@@ -70,7 +70,7 @@ libexplain_dirname(char *dir, const char *path, size_t dir_size)
 
 
 void
-libexplain_basename(char *filename, const char *path, size_t filename_size)
+explain_basename(char *filename, const char *path, size_t filename_size)
 {
     char *          filename_end;
     const char      *slash;

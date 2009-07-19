@@ -25,15 +25,13 @@
 
 
 char *
-libexplain_getcwd_or_die(char *data, size_t data_size)
+explain_getcwd_or_die(char *data, size_t data_size)
 {
     char            *result;
 
-    result = getcwd(data, data_size);
+    result = explain_getcwd_on_error(data, data_size);
     if (!result)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_getcwd(data, data_size));
         exit(EXIT_FAILURE);
     }
     return result;

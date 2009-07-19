@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 #endif
 
 /**
-  * The libexplain_buffer_gettext function may be used to translate a
+  * The explain_buffer_gettext function may be used to translate a
   * string via gettext, and then print it on the given string buffer.
   *
   * @param sb
@@ -35,10 +35,10 @@
   * @param str
   *    The string to be localized and printed.
   */
-void libexplain_buffer_gettext(libexplain_string_buffer_t *sb, const char *str);
+void explain_buffer_gettext(explain_string_buffer_t *sb, const char *str);
 
 /**
-  * The libexplain_buffer_gettext_printf function may be used to
+  * The explain_buffer_gettext_printf function may be used to
   * translate a string via gettext, and then use it as the format string
   * for a printf into the given string buffer.
   *
@@ -48,7 +48,7 @@ void libexplain_buffer_gettext(libexplain_string_buffer_t *sb, const char *str);
   *    The format string describing the rest of the arguments, to be
   *    localized and printed.
   */
-void libexplain_buffer_gettext_printf(libexplain_string_buffer_t *sb,
+void explain_buffer_gettext_printf(explain_string_buffer_t *sb,
     const char *fmt, ...)
                                                  LIBEXPLAIN_FORMAT_PRINTF(2, 3);
 

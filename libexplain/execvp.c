@@ -22,9 +22,9 @@
 
 
 const char *
-libexplain_execvp(const char *pathname, char *const *argv)
+explain_execvp(const char *pathname, char *const *argv)
 {
-    return libexplain_errno_execvp(errno, pathname, argv);
+    return explain_errno_execvp(errno, pathname, argv);
 }
 
 /* vim:ts=8:sw=4:et */

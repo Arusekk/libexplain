@@ -28,31 +28,31 @@
 #ifdef HAVE_LINUX_KD_H
 
 static void
-libexplain_buffer_kdskbmeta(libexplain_string_buffer_t *sb, int data)
+explain_buffer_kdskbmeta(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "K_METABIT", K_METABIT },
         { "K_ESCPREFIX", K_ESCPREFIX },
     };
 
-    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
 
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_kdskbmeta(sb, (int)data);
+    explain_buffer_kdskbmeta(sb, (int)data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdskbmeta =
+const explain_iocontrol_t explain_iocontrol_kdskbmeta =
 {
     "KDSKBMETA", /* name */
     KDSKBMETA, /* value */
@@ -64,7 +64,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_kdskbmeta =
 
 #else
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdskbmeta =
+const explain_iocontrol_t explain_iocontrol_kdskbmeta =
 {
     0, /* name */
     0, /* value */

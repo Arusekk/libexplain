@@ -22,11 +22,11 @@
 
 
 const char *
-libexplain_setsockopt(int fildes, int level, int name, void *data,
+explain_setsockopt(int fildes, int level, int name, void *data,
     socklen_t data_size)
 {
     return
-        libexplain_errno_setsockopt
+        explain_errno_setsockopt
         (
             errno,
             fildes,

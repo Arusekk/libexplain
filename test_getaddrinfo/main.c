@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ main(int argc, char **argv)
         {
         case 'f':
             hints.ai_family =
-                libexplain_parse_address_family_or_die(optarg, "-f");
+                explain_parse_address_family_or_die(optarg, "-f");
             break;
 
         case 'n':
@@ -71,12 +71,12 @@ main(int argc, char **argv)
 
         case 'o':
             hints.ai_flags =
-                libexplain_parse_addrinfo_flags_or_die(optarg, "-o");
+                explain_parse_addrinfo_flags_or_die(optarg, "-o");
             break;
 
         case 'p':
             hints.ai_protocol =
-                libexplain_parse_socket_protocol_or_die(optarg, "-p");
+                explain_parse_socket_protocol_or_die(optarg, "-p");
             break;
 
         case 's':
@@ -85,11 +85,11 @@ main(int argc, char **argv)
 
         case 't':
             hints.ai_socktype =
-                libexplain_parse_socket_type_or_die(optarg, "-t");
+                explain_parse_socket_type_or_die(optarg, "-t");
             break;
 
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return EXIT_SUCCESS;
 
         default:
@@ -99,16 +99,16 @@ main(int argc, char **argv)
     if (optind != argc)
         usage();
 
-    libexplain_getaddrinfo_or_die(node, service, &hints, &res);
+    explain_getaddrinfo_or_die(node, service, &hints, &res);
     for (p = res; p; p = p->ai_next)
     {
-        libexplain_string_buffer_t buf_sb;
+        explain_string_buffer_t buf_sb;
         char            buf[1000];
 
-        libexplain_string_buffer_init(&buf_sb, buf, sizeof(buf));
-        libexplain_buffer_addrinfo(&buf_sb, p);
-        libexplain_string_buffer_putc(&buf_sb, ',');
-        libexplain_wrap_and_print(stdout, buf);
+        explain_string_buffer_init(&buf_sb, buf, sizeof(buf));
+        explain_buffer_addrinfo(&buf_sb, p);
+        explain_string_buffer_putc(&buf_sb, ',');
+        explain_wrap_and_print(stdout, buf);
     }
     return EXIT_SUCCESS;
 }

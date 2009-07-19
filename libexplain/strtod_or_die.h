@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_STRTOD_OR_DIE_H
 
 /**
-  * The libexplain_strtod_or_die function may be used to interpret a
+  * The explain_strtod_or_die function may be used to interpret a
   * string as a number.  If there is any error, a suitable message is
   * printed to stderr, and the process exits.
   *
@@ -30,6 +30,6 @@
   * @returns
   *    the number
   */
-double libexplain_strtod_or_die(const char *text);
+double explain_strtod_or_die(const char *text);
 
 #endif /* LIBEXPLAIN_STRTOD_OR_DIE_H */

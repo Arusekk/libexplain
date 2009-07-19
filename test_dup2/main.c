@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/dup2.h>
-#include <libexplain/strtol_or_die.h>
+#include <libexplain/strtol.h>
 #include <libexplain/version_print.h>
 
 
@@ -48,7 +48,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return EXIT_SUCCESS;
 
         default:
@@ -57,9 +57,9 @@ main(int argc, char **argv)
     }
     if (optind + 2 != argc)
         usage();
-    oldfd = libexplain_strtol_or_die(argv[optind]);
-    newfd = libexplain_strtol_or_die(argv[optind + 1]);
+    oldfd = explain_strtol_or_die(argv[optind], 0, 0);
+    newfd = explain_strtol_or_die(argv[optind + 1], 0, 0);
 
-    libexplain_dup2_or_die(oldfd, newfd);
+    explain_dup2_or_die(oldfd, newfd);
     return EXIT_SUCCESS;
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,19 +22,19 @@
 
 
 void
-libexplain_buffer_gettext(libexplain_string_buffer_t *sb, const char *text)
+explain_buffer_gettext(explain_string_buffer_t *sb, const char *text)
 {
-    libexplain_string_buffer_puts(sb, libexplain_gettext(text));
+    explain_string_buffer_puts(sb, explain_gettext(text));
 }
 
 
 void
-libexplain_buffer_gettext_printf(libexplain_string_buffer_t *sb,
+explain_buffer_gettext_printf(explain_string_buffer_t *sb,
     const char *fmt, ...)
 {
     va_list         ap;
 
     va_start(ap, fmt);
-    libexplain_string_buffer_vprintf(sb, libexplain_gettext(fmt), ap);
+    explain_string_buffer_vprintf(sb, explain_gettext(fmt), ap);
     va_end(ap);
 }

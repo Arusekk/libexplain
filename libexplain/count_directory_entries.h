@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_COUNT_DIRECTORY_ENTRIES_H
 
 /**
-  * The libexplain_count_directory_entries function may be used to
+  * The explain_count_directory_entries function may be used to
   * count the number of directory entries, not counting "." and ".."
   *
   * @param pathname
@@ -29,6 +29,6 @@
   * @returns
   *    The number of dorectory entries.
   */
-int libexplain_count_directory_entries(const char *pathname);
+int explain_count_directory_entries(const char *pathname);
 
 #endif /* LIBEXPLAIN_COUNT_DIRECTORY_ENTRIES_H */

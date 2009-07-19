@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,7 @@
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "AI_PASSIVE", AI_PASSIVE },
 #ifdef AI_CANONNAME
@@ -60,15 +60,15 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_addrinfo_flags(libexplain_string_buffer_t *sb, int value)
+explain_buffer_addrinfo_flags(explain_string_buffer_t *sb, int value)
 {
-    libexplain_parse_bits_print(sb, value, table, SIZEOF(table));
+    explain_parse_bits_print(sb, value, table, SIZEOF(table));
 }
 
 
 int
-libexplain_parse_addrinfo_flags_or_die(const char *text,
+explain_parse_addrinfo_flags_or_die(const char *text,
     const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

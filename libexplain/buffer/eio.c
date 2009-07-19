@@ -31,6 +31,7 @@
 #endif
 #include <libexplain/ac/termios.h>
 
+#include <libexplain/buffer/device_name.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
@@ -38,18 +39,18 @@
 
 
 static void
-possibly_as_a_result_of_a_preceeding(libexplain_string_buffer_t *sb, int fildes)
+possibly_as_a_result_of_a_preceeding(explain_string_buffer_t *sb, int fildes)
 {
     int             flags;
 
     flags = fcntl(fildes, F_GETFL);
     if (flags < 0)
         flags = O_RDWR;
-    libexplain_string_buffer_puts(sb, ", ");
+    explain_string_buffer_puts(sb, ", ");
     switch (flags & O_ACCMODE)
     {
     case O_RDONLY:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -61,7 +62,7 @@ possibly_as_a_result_of_a_preceeding(libexplain_string_buffer_t *sb, int fildes)
         break;
 
     case O_WRONLY:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -73,7 +74,7 @@ possibly_as_a_result_of_a_preceeding(libexplain_string_buffer_t *sb, int fildes)
         break;
 
     default:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -89,9 +90,9 @@ possibly_as_a_result_of_a_preceeding(libexplain_string_buffer_t *sb, int fildes)
 
 
 static void
-libexplain_buffer_eio_generic(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_eio_generic(explain_string_buffer_t *sb, int fildes)
 {
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -107,107 +108,37 @@ libexplain_buffer_eio_generic(libexplain_string_buffer_t *sb, int fildes)
 
 
 void
-libexplain_buffer_eio(libexplain_string_buffer_t *sb)
+explain_buffer_eio(explain_string_buffer_t *sb)
 {
-    libexplain_buffer_eio_generic(sb, -1);
+    explain_buffer_eio_generic(sb, -1);
 }
 
 
-static int
-dev_stat_recursive(libexplain_string_buffer_t *path, dev_t dev, struct stat *st,
-    libexplain_string_buffer_t *dev_buf)
-{
-    DIR             *dp;
-    int             pos;
-    int             result;
-
-    result = -1;
-    dp = opendir(path->message);
-    if (!dp)
-        return -1;
-    pos = path->position;
-    for (;;)
-    {
-        struct dirent   *dep;
-        struct stat     st2;
-
-        dep = readdir(dp);
-        if (!dep)
-            break;
-        if (0 == strcmp(dep->d_name, "."))
-            continue;
-        if (0 == strcmp(dep->d_name, ".."))
-            continue;
-        path->position = pos;
-        path->message[pos] = '\0';
-        libexplain_string_buffer_path_join(path, dep->d_name);
-        if (lstat(path->message, &st2) >= 0)
-        {
-            switch (st2.st_mode & S_IFMT)
-            {
-            case S_IFDIR:
-                if (dev_stat_recursive(path, dev, st, dev_buf) >= 0)
-                    result = 0;
-                break;
-
-            case S_IFBLK:
-            case S_IFCHR:
-                if (dev == st2.st_rdev)
-                {
-                    if
-                    (
-                        !dev_buf->position
-                    ||
-                        path->position < dev_buf->position
-                    )
-                    {
-                        dev_buf->position = 0;
-                        *st = st2;
-                        libexplain_string_buffer_puts(dev_buf, path->message);
-                    }
-                    result = 0;
-                }
-                break;
-
-            default:
-                /* ignore everything else */
-                break;
-            }
-        }
-    }
-    closedir(dp);
-    return result;
-}
 
 
 static int
-dev_stat(dev_t dev, struct stat *st, libexplain_string_buffer_t *dev_buf)
+dev_stat(dev_t dev, struct stat *st, explain_string_buffer_t *dev_buf)
 {
-    libexplain_string_buffer_t sb;
-    char            path[PATH_MAX + 1];
-
-    libexplain_string_buffer_init(&sb, path, sizeof(path));
-    libexplain_string_buffer_puts(&sb, "/dev");
-    return dev_stat_recursive(&sb, dev, st, dev_buf);
+    return explain_buffer_device_name(dev_buf, dev, st);
 }
 
 
 static void
-a_low_level_io_error_occurred(libexplain_string_buffer_t *sb,
+a_low_level_io_error_occurred(explain_string_buffer_t *sb,
     const char *device_path, const struct stat *st)
 {
     char            ftype[300];
-    libexplain_string_buffer_t ftype_sb;
+    explain_string_buffer_t ftype_sb;
 
-    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
     if (device_path[0])
     {
-        libexplain_string_buffer_puts_quoted(&ftype_sb, device_path);
-        libexplain_string_buffer_putc(&ftype_sb, ' ');
+        explain_string_buffer_puts_quoted(&ftype_sb, device_path);
+        explain_string_buffer_putc(&ftype_sb, ' ');
     }
-    libexplain_buffer_file_type(&ftype_sb, st->st_mode);
+    explain_buffer_file_type(&ftype_sb, st->st_mode);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -225,13 +156,13 @@ a_low_level_io_error_occurred(libexplain_string_buffer_t *sb,
 
 
 static void
-libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_eio_stat(explain_string_buffer_t *sb, int fildes,
     struct stat *st)
 {
     char            dev_path[150];
-    libexplain_string_buffer_t dev_buf;
+    explain_string_buffer_t dev_buf;
 
-    libexplain_string_buffer_init(&dev_buf, dev_path, sizeof(dev_path));
+    explain_string_buffer_init(&dev_buf, dev_path, sizeof(dev_path));
     assert(dev_path[0] == '\0');
     switch (st->st_mode & S_IFMT)
     {
@@ -239,7 +170,7 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
     case S_IFREG:
         if (dev_stat(st->st_dev, st, &dev_buf) < 0)
         {
-            libexplain_buffer_eio(sb);
+            explain_buffer_eio(sb);
             return;
         }
         break;
@@ -250,51 +181,55 @@ libexplain_buffer_eio_stat(libexplain_string_buffer_t *sb, int fildes,
         break;
     }
 
-    if (S_ISBLK(st->st_mode) || S_ISCHR(st->st_mode))
+    switch (st->st_mode & S_IFMT)
     {
+    case S_IFBLK:
+    case S_IFCHR:
         a_low_level_io_error_occurred(sb, dev_path, st);
         possibly_as_a_result_of_a_preceeding(sb, fildes);
-        return;
-    }
+        break;;
 
-    libexplain_buffer_eio_generic(sb, fildes);
+    default:
+        explain_buffer_eio_generic(sb, fildes);
+        break;
+    }
 }
 
 
 void
-libexplain_buffer_eio_fildes(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_eio_fildes(explain_string_buffer_t *sb, int fildes)
 {
     struct stat     st;
 
     if (fstat(fildes, &st) < 0)
     {
-        libexplain_buffer_eio(sb);
+        explain_buffer_eio(sb);
         return;
     }
-    return libexplain_buffer_eio_stat(sb, fildes, &st);
+    return explain_buffer_eio_stat(sb, fildes, &st);
 }
 
 
 void
-libexplain_buffer_eio_path(libexplain_string_buffer_t *sb, const char *path)
+explain_buffer_eio_path(explain_string_buffer_t *sb, const char *path)
 {
     struct stat     st;
 
     if (stat(path, &st) < 0 && lstat(path, &st) < 0)
     {
-        libexplain_buffer_eio(sb);
+        explain_buffer_eio(sb);
         return;
     }
-    return libexplain_buffer_eio_stat(sb, -1, &st);
+    return explain_buffer_eio_stat(sb, -1, &st);
 }
 
 
 void
-libexplain_buffer_eio_path_dirname(libexplain_string_buffer_t *sb,
+explain_buffer_eio_path_dirname(explain_string_buffer_t *sb,
     const char *path)
 {
     char            path_dir[PATH_MAX + 1];
 
-    libexplain_dirname(path_dir, path, sizeof(path_dir));
-    libexplain_buffer_eio_path(sb, path_dir);
+    explain_dirname(path_dir, path, sizeof(path_dir));
+    explain_buffer_eio_path(sb, path_dir);
 }

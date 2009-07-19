@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,12 +23,12 @@
 
 
 void
-libexplain_buffer_eacces(libexplain_string_buffer_t *sb, const char *pathname,
-    const char *caption, const libexplain_final_t *final_component)
+explain_buffer_eacces(explain_string_buffer_t *sb, const char *pathname,
+    const char *caption, const explain_final_t *final_component)
 {
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             EACCES,
@@ -40,7 +40,7 @@ libexplain_buffer_eacces(libexplain_string_buffer_t *sb, const char *pathname,
     {
         if (final_component->want_to_unlink || final_component->want_to_create)
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -60,7 +60,7 @@ libexplain_buffer_eacces(libexplain_string_buffer_t *sb, const char *pathname,
         }
         else if (final_component->want_to_read)
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -85,7 +85,7 @@ libexplain_buffer_eacces(libexplain_string_buffer_t *sb, const char *pathname,
             final_component->want_to_modify_inode
         )
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -105,7 +105,7 @@ libexplain_buffer_eacces(libexplain_string_buffer_t *sb, const char *pathname,
         }
         else
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*

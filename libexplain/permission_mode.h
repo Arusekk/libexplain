@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,10 +22,10 @@
 
 #include <libexplain/ac/stddef.h>
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_permission_mode function may be used to decode
+  * The explain_buffer_permission_mode function may be used to decode
   * a set of permission mode bits into human readable text, something
   * like the programmer would have written.
   *
@@ -35,11 +35,11 @@ struct libexplain_string_buffer_t; /* forward */
   * @param mode
   *    the permission mode bits to be decoded
   */
-void libexplain_buffer_permission_mode(struct libexplain_string_buffer_t *sb,
+void explain_buffer_permission_mode(struct explain_string_buffer_t *sb,
     int mode);
 
 /**
-  * The libexplain_message_permission_mode function may be used to
+  * The explain_message_permission_mode function may be used to
   * decode a set of permission mode bits into human readable text,
   * something like the programmer would have written.
   *
@@ -51,11 +51,11 @@ void libexplain_buffer_permission_mode(struct libexplain_string_buffer_t *sb,
   * @param mode
   *    the permission mode bits to be decoded
   */
-void libexplain_message_permission_mode(char *message, size_t message_size,
+void explain_message_permission_mode(char *message, size_t message_size,
     int mode);
 
 /**
-  * The libexplain_permission_mode function may be used to decode a set
+  * The explain_permission_mode function may be used to decode a set
   * of permission mode bits into human readable text, something like the
   * programmer would have written.
   *
@@ -67,10 +67,10 @@ void libexplain_message_permission_mode(char *message, size_t message_size,
   * @note
   *    this function is not thread safe.
   */
-const char *libexplain_permission_mode(int mode);
+const char *explain_permission_mode(int mode);
 
 /**
-  * The libexplain_permission_mode_parse_or_die function may be used to
+  * The explain_permission_mode_parse_or_die function may be used to
   * parse a strings containing a symbolic representation of a permission
   * mode, turning it into a permission mode value.
   *
@@ -85,6 +85,6 @@ const char *libexplain_permission_mode(int mode);
   *     and exit(EXIT_FAILURE) is called.  If there is an error, this
   *     function will not return.
   */
-int libexplain_permission_mode_parse_or_die(const char *text, const char *cptn);
+int explain_permission_mode_parse_or_die(const char *text, const char *cptn);
 
 #endif /* LIBEXPLAIN_PERMISSION_MODE_H */

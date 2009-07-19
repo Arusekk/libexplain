@@ -28,9 +28,9 @@
 #ifdef HAVE_LINUX_KD_H
 
 static void
-libexplain_buffer_kdsetmode(libexplain_string_buffer_t *sb, int led)
+explain_buffer_kdsetmode(explain_string_buffer_t *sb, int led)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "KD_TEXT", KD_TEXT },
         { "KD_GRAPHICS", KD_GRAPHICS },
@@ -38,23 +38,23 @@ libexplain_buffer_kdsetmode(libexplain_string_buffer_t *sb, int led)
         { "KD_TEXT1", KD_TEXT1 },
     };
 
-    libexplain_parse_bits_print_single(sb, led, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, led, table, SIZEOF(table));
 }
 
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_kdsetmode(sb, (int)data);
+    explain_buffer_kdsetmode(sb, (int)data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdsetmode =
+const explain_iocontrol_t explain_iocontrol_kdsetmode =
 {
     "KDSETMODE", /* name */
     KDSETMODE, /* value */
@@ -66,7 +66,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_kdsetmode =
 
 #else
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdsetmode =
+const explain_iocontrol_t explain_iocontrol_kdsetmode =
 {
     0, /* name */
     0, /* value */

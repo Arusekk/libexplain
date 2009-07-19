@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,7 +43,7 @@
 #define O_LARGEFILE 0
 #endif
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "O_RDONLY", O_RDONLY },
     { "O_WRONLY", O_WRONLY },
@@ -77,7 +77,7 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_open_flags(libexplain_string_buffer_t *sb, int flags)
+explain_buffer_open_flags(explain_string_buffer_t *sb, int flags)
 {
     int             low_bits;
     int             other;
@@ -87,43 +87,43 @@ libexplain_buffer_open_flags(libexplain_string_buffer_t *sb, int flags)
     switch (low_bits)
     {
     case O_RDONLY:
-        libexplain_string_buffer_puts(sb, "O_RDONLY");
+        explain_string_buffer_puts(sb, "O_RDONLY");
         break;
 
     case O_RDWR:
-        libexplain_string_buffer_puts(sb, "O_RDWR");
+        explain_string_buffer_puts(sb, "O_RDWR");
         break;
 
     case O_WRONLY:
-        libexplain_string_buffer_puts(sb, "O_WRONLY");
+        explain_string_buffer_puts(sb, "O_WRONLY");
         break;
 
     default:
-        libexplain_string_buffer_printf(sb, "%d", low_bits);
+        explain_string_buffer_printf(sb, "%d", low_bits);
         break;
     }
     other = 0;
     while (flags)
     {
         int             bit;
-        const libexplain_parse_bits_table_t *tp;
+        const explain_parse_bits_table_t *tp;
 
         bit = (flags & -flags);
         flags -= bit;
-        libexplain_string_buffer_puts(sb, " | ");
-        tp = libexplain_parse_bits_find_by_value(bit, table, SIZEOF(table));
+        explain_string_buffer_puts(sb, " | ");
+        tp = explain_parse_bits_find_by_value(bit, table, SIZEOF(table));
         if (tp)
-            libexplain_string_buffer_puts(sb, tp->name);
+            explain_string_buffer_puts(sb, tp->name);
         else
             other |= bit;
     }
     if (other)
-        libexplain_string_buffer_printf(sb, " | %#o", other);
+        explain_string_buffer_printf(sb, " | %#o", other);
 }
 
 
 int
-libexplain_open_flags_parse_or_die(const char *text, const char *caption)
+explain_open_flags_parse_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

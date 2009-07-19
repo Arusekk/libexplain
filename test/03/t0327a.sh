@@ -24,7 +24,7 @@ TEST_SUBJECT="accept EOPNOTSUPP"
 fmt > test.ok << 'fubar'
 accept(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = { 128 })
 failed, Operation not supported (EOPNOTSUPP) because the socket is not
-of a type that supports the accept(2) system call
+of a type that supports the accept system call
 fubar
 test $? -eq 0 || no_result
 

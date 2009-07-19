@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,25 +44,25 @@
 
 
 static void
-libexplain_buffer_errno_symlink_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_symlink_system_call(explain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "symlink(oldpath = ");
-    libexplain_buffer_pathname(sb, oldpath);
-    libexplain_string_buffer_puts(sb, ", newpath = ");
-    libexplain_buffer_pathname(sb, newpath);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "symlink(oldpath = ");
+    explain_buffer_pathname(sb, oldpath);
+    explain_string_buffer_puts(sb, ", newpath = ");
+    explain_buffer_pathname(sb, newpath);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_symlink_explanation(explain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.must_exist = 0;
     final_component.must_not_exist = 1;
     final_component.want_to_create = 1;
@@ -71,7 +71,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, newpath, "newpath", &final_component);
+        explain_buffer_eacces(sb, newpath, "newpath", &final_component);
         break;
 
     case EEXIST:
@@ -79,35 +79,35 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
             struct stat st;
             if (lstat(newpath, &st) == 0)
             {
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_buffer_file_type(sb, st.st_mode);
+                explain_string_buffer_putc(sb, ' ');
+                explain_buffer_file_type(sb, st.st_mode);
             }
         }
         /* FIXME: i18n */
-        libexplain_string_buffer_puts(sb, " newpath already exists");
+        explain_string_buffer_puts(sb, " newpath already exists");
         break;
 
     case EFAULT:
-        if (libexplain_path_is_efault(oldpath))
+        if (explain_path_is_efault(oldpath))
         {
-            libexplain_buffer_efault(sb, "oldpath");
+            explain_buffer_efault(sb, "oldpath");
             break;
         }
-        if (libexplain_path_is_efault(newpath))
+        if (explain_path_is_efault(newpath))
         {
-            libexplain_buffer_efault(sb, "newpath");
+            explain_buffer_efault(sb, "newpath");
             break;
         }
-        libexplain_buffer_efault(sb, "oldpath or newpath");
+        explain_buffer_efault(sb, "oldpath or newpath");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path_dirname(sb, newpath);
+        explain_buffer_eio_path_dirname(sb, newpath);
         break;
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, newpath, "newpath", &final_component);
+        explain_buffer_eloop(sb, newpath, "newpath", &final_component);
         break;
 
     case ENAMETOOLONG:
@@ -122,8 +122,8 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
             if (oldpath_len > (size_t)path_max)
             {
                 /* FIXME: i18n */
-                libexplain_string_buffer_puts(sb, "oldpath is too long");
-                libexplain_string_buffer_printf
+                explain_string_buffer_puts(sb, "oldpath is too long");
+                explain_string_buffer_printf
                 (
                     sb,
                     " (%ld > %ld)",
@@ -133,7 +133,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_buffer_enametoolong
+                explain_buffer_enametoolong
                 (
                     sb,
                     newpath,
@@ -147,7 +147,7 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
     case ENOENT:
         if (!*oldpath)
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /* FIXME: i18n */
@@ -156,22 +156,22 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
             );
             break;
         }
-        libexplain_buffer_enoent(sb, newpath, "newpath", &final_component);
+        explain_buffer_enoent(sb, newpath, "newpath", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOSPC:
         /* FIXME: i18n */
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the file system containing newpath"
         );
-        libexplain_buffer_mount_point_dirname(sb, newpath);
-        libexplain_string_buffer_puts
+        explain_buffer_mount_point_dirname(sb, newpath);
+        explain_string_buffer_puts
         (
             sb,
             " has no room for the new directory entry"
@@ -179,18 +179,18 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, newpath, "newpath", &final_component);
+        explain_buffer_enotdir(sb, newpath, "newpath", &final_component);
         break;
 
     case EPERM:
         /* FIXME: i18n */
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the file system containing newpath"
         );
-        libexplain_buffer_mount_point_dirname(sb, newpath);
-        libexplain_string_buffer_puts
+        explain_buffer_mount_point_dirname(sb, newpath);
+        explain_string_buffer_puts
         (
             sb,
             " does not support the creation of symbolic links"
@@ -198,36 +198,36 @@ libexplain_buffer_errno_symlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, newpath, "newpath");
+        explain_buffer_erofs(sb, newpath, "newpath");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_symlink(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_symlink(explain_string_buffer_t *sb, int errnum,
     const char *oldpath, const char *newpath)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_symlink_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_symlink_system_call
     (
         &exp.system_call_sb,
         errnum,
         oldpath,
         newpath
     );
-    libexplain_buffer_errno_symlink_explanation
+    explain_buffer_errno_symlink_explanation
     (
         &exp.explanation_sb,
         errnum,
         oldpath,
         newpath
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

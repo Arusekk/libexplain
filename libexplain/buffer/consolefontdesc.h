@@ -24,7 +24,7 @@
 struct consolefontdesc;
 
 /**
-  * The libexplain_buffer_consolefontdesc function may be used to
+  * The explain_buffer_consolefontdesc function may be used to
   * print a representation of a consolefontdesc structure value.
   *
   * @param sb
@@ -34,7 +34,7 @@ struct consolefontdesc;
   * @param extra
   *    Whether or not to print the chardata member.
   */
-void libexplain_buffer_consolefontdesc(libexplain_string_buffer_t *sb,
+void explain_buffer_consolefontdesc(explain_string_buffer_t *sb,
     const struct consolefontdesc *value, int extra);
 
 #endif /* LIBEXPLAIN_BUFFER_CONSOLEFONTDESC_H */

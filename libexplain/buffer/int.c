@@ -22,21 +22,21 @@
 
 
 void
-libexplain_buffer_int(libexplain_string_buffer_t *sb, int data)
+explain_buffer_int(explain_string_buffer_t *sb, int data)
 {
-    libexplain_string_buffer_printf(sb, "%d", data);
+    explain_string_buffer_printf(sb, "%d", data);
 }
 
 
 void
-libexplain_buffer_int_star(libexplain_string_buffer_t *sb, const int *data)
+explain_buffer_int_star(explain_string_buffer_t *sb, const int *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ ");
-        libexplain_buffer_int(sb, *data);
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, "{ ");
+        explain_buffer_int(sb, *data);
+        explain_string_buffer_puts(sb, " }");
     }
 }

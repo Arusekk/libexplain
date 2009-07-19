@@ -29,10 +29,9 @@ static
 #endif
 
 void
-libexplain_putchar_or_die_failed(int c)
+explain_putchar_or_die_failed(int c)
 {
-    libexplain_program_name_assemble_internal(1);
-    libexplain_wrap_and_print(stderr, libexplain_putchar(c));
+    explain_putchar_on_error_failed(c);
     exit(EXIT_FAILURE);
 }
 
@@ -40,10 +39,10 @@ libexplain_putchar_or_die_failed(int c)
 #if __GNUC__ < 3
 
 void
-libexplain_putchar_or_die(int c)
+explain_putchar_or_die(int c)
 {
     if (putchar(c) == EOF)
-        libexplain_putchar_or_die_failed(c);
+        explain_putchar_or_die_failed(c);
 }
 
 #endif

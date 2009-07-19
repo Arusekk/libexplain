@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_realloc(char *message, int message_size, void *ptr,
+explain_message_realloc(char *message, int message_size, void *ptr,
     size_t size)
 {
-    libexplain_message_errno_realloc(message, message_size, errno, ptr, size);
+    explain_message_errno_realloc(message, message_size, errno, ptr, size);
 }
 
 /* vim:ts=8:sw=4:et */

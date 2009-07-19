@@ -26,9 +26,9 @@
 
 
 static void
-libexplain_buffer_mii_reg(libexplain_string_buffer_t *sb, int data)
+explain_buffer_mii_reg(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "MII_BMCR", MII_BMCR },
         { "MII_BMSR", MII_BMSR },
@@ -37,9 +37,15 @@ libexplain_buffer_mii_reg(libexplain_string_buffer_t *sb, int data)
         { "MII_ADVERTISE", MII_ADVERTISE },
         { "MII_LPA", MII_LPA },
         { "MII_EXPANSION", MII_EXPANSION },
+#ifdef MII_CTRL1000
         { "MII_CTRL1000", MII_CTRL1000 },
+#endif
+#ifdef MII_STAT1000
         { "MII_STAT1000", MII_STAT1000 },
+#endif
+#ifdef MII_ESTATUS
         { "MII_ESTATUS", MII_ESTATUS },
+#endif
         { "MII_DCOUNTER", MII_DCOUNTER },
         { "MII_FCSCOUNTER", MII_FCSCOUNTER },
         { "MII_NWAYTEST", MII_NWAYTEST },
@@ -51,14 +57,14 @@ libexplain_buffer_mii_reg(libexplain_string_buffer_t *sb, int data)
         { "MII_NCONFIG", MII_NCONFIG },
     };
 
-    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
 
 
 static void
-libexplain_buffer_mii_bmcr(libexplain_string_buffer_t *sb, int data)
+explain_buffer_mii_bmcr(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "BMCR_RESV", BMCR_RESV },
         { "BMCR_SPEED1000", BMCR_SPEED1000 },
@@ -73,14 +79,14 @@ libexplain_buffer_mii_bmcr(libexplain_string_buffer_t *sb, int data)
         { "BMCR_RESET", BMCR_RESET },
     };
 
-    libexplain_parse_bits_print(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print(sb, data, table, SIZEOF(table));
 }
 
 
 static void
-libexplain_buffer_mii_bmsr(libexplain_string_buffer_t *sb, int data)
+explain_buffer_mii_bmsr(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "BMSR_ERCAP", BMSR_ERCAP },
         { "BMSR_JCD", BMSR_JCD },
@@ -89,9 +95,15 @@ libexplain_buffer_mii_bmsr(libexplain_string_buffer_t *sb, int data)
         { "BMSR_RFAULT", BMSR_RFAULT },
         { "BMSR_ANEGCOMPLETE", BMSR_ANEGCOMPLETE },
         { "BMSR_RESV", BMSR_RESV },
+#ifdef BMSR_ESTATEN
         { "BMSR_ESTATEN", BMSR_ESTATEN },
+#endif
+#ifdef BMSR_100HALF2
         { "BMSR_100HALF2", BMSR_100HALF2 },
+#endif
+#ifdef BMSR_100FULL2
         { "BMSR_100FULL2", BMSR_100FULL2 },
+#endif
         { "BMSR_10HALF", BMSR_10HALF },
         { "BMSR_10FULL", BMSR_10FULL },
         { "BMSR_100HALF", BMSR_100HALF },
@@ -99,69 +111,93 @@ libexplain_buffer_mii_bmsr(libexplain_string_buffer_t *sb, int data)
         { "BMSR_100BASE4", BMSR_100BASE4 },
     };
 
-    libexplain_parse_bits_print(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print(sb, data, table, SIZEOF(table));
 }
 
 
 static void
-libexplain_buffer_mii_ad(libexplain_string_buffer_t *sb, int data)
+explain_buffer_mii_ad(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "ADVERTISE_SLCT", ADVERTISE_SLCT },
         { "ADVERTISE_CSMA", ADVERTISE_CSMA },
         { "ADVERTISE_10HALF", ADVERTISE_10HALF },
+#ifdef ADVERTISE_1000XFULL
         { "ADVERTISE_1000XFULL", ADVERTISE_1000XFULL },
+#endif
         { "ADVERTISE_10FULL", ADVERTISE_10FULL },
+#ifdef ADVERTISE_1000XHALF
         { "ADVERTISE_1000XHALF", ADVERTISE_1000XHALF },
+#endif
         { "ADVERTISE_100HALF", ADVERTISE_100HALF },
+#ifdef ADVERTISE_1000XPAUSE
         { "ADVERTISE_1000XPAUSE", ADVERTISE_1000XPAUSE },
+#endif
         { "ADVERTISE_100FULL", ADVERTISE_100FULL },
+#ifdef ADVERTISE_1000XPSE_ASYM
         { "ADVERTISE_1000XPSE_ASYM", ADVERTISE_1000XPSE_ASYM },
+#endif
         { "ADVERTISE_100BASE4", ADVERTISE_100BASE4 },
+#ifdef ADVERTISE_PAUSE_CAP
         { "ADVERTISE_PAUSE_CAP", ADVERTISE_PAUSE_CAP },
+#endif
+#ifdef ADVERTISE_PAUSE_ASYM
         { "ADVERTISE_PAUSE_ASYM", ADVERTISE_PAUSE_ASYM },
+#endif
         { "ADVERTISE_RESV", ADVERTISE_RESV },
         { "ADVERTISE_RFAULT", ADVERTISE_RFAULT },
         { "ADVERTISE_LPACK", ADVERTISE_LPACK },
         { "ADVERTISE_NPAGE", ADVERTISE_NPAGE },
     };
 
-    libexplain_parse_bits_print(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print(sb, data, table, SIZEOF(table));
 }
 
 
 static void
-libexplain_buffer_mii_lpa(libexplain_string_buffer_t *sb, int data)
+explain_buffer_mii_lpa(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "LPA_SLCT", LPA_SLCT },
         { "LPA_10HALF", LPA_10HALF },
+#ifdef LPA_1000XFULL
         { "LPA_1000XFULL", LPA_1000XFULL },
+#endif
         { "LPA_10FULL", LPA_10FULL },
+#ifdef LPA_1000XHALF
         { "LPA_1000XHALF", LPA_1000XHALF },
+#endif
         { "LPA_100HALF", LPA_100HALF },
+#ifdef LPA_1000XPAUSE
         { "LPA_1000XPAUSE", LPA_1000XPAUSE },
+#endif
         { "LPA_100FULL", LPA_100FULL },
+#ifdef LPA_1000XPAUSE_ASYM
         { "LPA_1000XPAUSE_ASYM", LPA_1000XPAUSE_ASYM },
+#endif
         { "LPA_100BASE4", LPA_100BASE4 },
+#ifdef LPA_PAUSE_CAP
         { "LPA_PAUSE_CAP", LPA_PAUSE_CAP },
+#endif
+#ifdef LPA_PAUSE_ASYM
         { "LPA_PAUSE_ASYM", LPA_PAUSE_ASYM },
+#endif
         { "LPA_RESV", LPA_RESV },
         { "LPA_RFAULT", LPA_RFAULT },
         { "LPA_LPACK", LPA_LPACK },
         { "LPA_NPAGE", LPA_NPAGE },
     };
 
-    libexplain_parse_bits_print(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print(sb, data, table, SIZEOF(table));
 }
 
 
 static void
-libexplain_buffer_mii_expansion(libexplain_string_buffer_t *sb, int data)
+explain_buffer_mii_expansion(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "EXPANSION_NWAY", EXPANSION_NWAY },
         { "EXPANSION_LCWP", EXPANSION_LCWP },
@@ -170,60 +206,60 @@ libexplain_buffer_mii_expansion(libexplain_string_buffer_t *sb, int data)
         { "EXPANSION_MFAULTS", EXPANSION_MFAULTS },
     };
 
-    libexplain_parse_bits_print(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print(sb, data, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_mii_ioctl_data(libexplain_string_buffer_t *sb,
+explain_buffer_mii_ioctl_data(explain_string_buffer_t *sb,
     const struct mii_ioctl_data *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_printf(sb, "{ phy_id = %d, ", data->phy_id);
-        libexplain_string_buffer_puts(sb, "reg_num = %d, ");
-        libexplain_buffer_mii_reg(sb, data->reg_num);
+        explain_string_buffer_printf(sb, "{ phy_id = %d, ", data->phy_id);
+        explain_string_buffer_puts(sb, "reg_num = %d, ");
+        explain_buffer_mii_reg(sb, data->reg_num);
         switch (data->reg_num)
         {
         case MII_BMCR:
-            libexplain_string_buffer_puts(sb, ", val_in = ");
-            libexplain_buffer_mii_bmcr(sb, data->val_in);
-            libexplain_string_buffer_puts(sb, ", val_out = ");
-            libexplain_buffer_mii_bmcr(sb, data->val_out);
+            explain_string_buffer_puts(sb, ", val_in = ");
+            explain_buffer_mii_bmcr(sb, data->val_in);
+            explain_string_buffer_puts(sb, ", val_out = ");
+            explain_buffer_mii_bmcr(sb, data->val_out);
             break;
 
         case MII_BMSR:
-            libexplain_string_buffer_puts(sb, ", val_in = ");
-            libexplain_buffer_mii_bmsr(sb, data->val_in);
-            libexplain_string_buffer_puts(sb, ", val_out = ");
-            libexplain_buffer_mii_bmsr(sb, data->val_out);
+            explain_string_buffer_puts(sb, ", val_in = ");
+            explain_buffer_mii_bmsr(sb, data->val_in);
+            explain_string_buffer_puts(sb, ", val_out = ");
+            explain_buffer_mii_bmsr(sb, data->val_out);
             break;
 
         case MII_ADVERTISE:
-            libexplain_string_buffer_puts(sb, ", val_in = ");
-            libexplain_buffer_mii_ad(sb, data->val_in);
-            libexplain_string_buffer_puts(sb, ", val_out = ");
-            libexplain_buffer_mii_ad(sb, data->val_out);
+            explain_string_buffer_puts(sb, ", val_in = ");
+            explain_buffer_mii_ad(sb, data->val_in);
+            explain_string_buffer_puts(sb, ", val_out = ");
+            explain_buffer_mii_ad(sb, data->val_out);
             break;
 
         case MII_LPA:
-            libexplain_string_buffer_puts(sb, ", val_in = ");
-            libexplain_buffer_mii_lpa(sb, data->val_in);
-            libexplain_string_buffer_puts(sb, ", val_out = ");
-            libexplain_buffer_mii_lpa(sb, data->val_out);
+            explain_string_buffer_puts(sb, ", val_in = ");
+            explain_buffer_mii_lpa(sb, data->val_in);
+            explain_string_buffer_puts(sb, ", val_out = ");
+            explain_buffer_mii_lpa(sb, data->val_out);
             break;
 
         case MII_EXPANSION:
-            libexplain_string_buffer_puts(sb, ", val_in = ");
-            libexplain_buffer_mii_expansion(sb, data->val_in);
-            libexplain_string_buffer_puts(sb, ", val_out = ");
-            libexplain_buffer_mii_expansion(sb, data->val_out);
+            explain_string_buffer_puts(sb, ", val_in = ");
+            explain_buffer_mii_expansion(sb, data->val_in);
+            explain_string_buffer_puts(sb, ", val_out = ");
+            explain_buffer_mii_expansion(sb, data->val_out);
             break;
 
         default:
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 ", val_in = %d, val_out = %d",
@@ -232,6 +268,6 @@ libexplain_buffer_mii_ioctl_data(libexplain_string_buffer_t *sb,
             );
             break;
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }

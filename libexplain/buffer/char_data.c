@@ -27,23 +27,23 @@
 
 
 void
-libexplain_buffer_char_data(libexplain_string_buffer_t *sb, const void *data,
+explain_buffer_char_data(explain_string_buffer_t *sb, const void *data,
     size_t data_size)
 {
-    if (libexplain_pointer_is_efault(data, data_size))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, data_size))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_putc(sb, '{');
+        explain_string_buffer_putc(sb, '{');
         if (data_size <= A_FEW_BYTES)
-            libexplain_buffer_hexdump(sb, data, data_size);
-        else if (libexplain_option_debug())
-            libexplain_buffer_hexdump(sb, data, data_size);
+            explain_buffer_hexdump(sb, data, data_size);
+        else if (explain_option_debug())
+            explain_buffer_hexdump(sb, data, data_size);
         else
         {
-            libexplain_buffer_hexdump(sb, data, A_FEW_BYTES);
-            libexplain_string_buffer_puts(sb, ", ...");
+            explain_buffer_hexdump(sb, data, A_FEW_BYTES);
+            explain_string_buffer_puts(sb, ", ...");
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -40,51 +40,51 @@
 
 
 static void
-libexplain_buffer_errno_chmod_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_chmod_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode)
 {
-    libexplain_string_buffer_puts(sb, "chmod(pathname = ");
+    explain_string_buffer_puts(sb, "chmod(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", mode = ");
-    libexplain_buffer_permission_mode(sb, mode);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_puts(sb, ", mode = ");
+    explain_buffer_permission_mode(sb, mode);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     (void)mode;
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_modify_inode = 1;
 
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -94,21 +94,21 @@ libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EPERM:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -118,7 +118,7 @@ libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_buffer_does_not_have_inode_modify_permission_fd_st
+            explain_buffer_does_not_have_inode_modify_permission_fd_st
             (
                 sb,
                 (struct stat *)0,
@@ -129,36 +129,36 @@ libexplain_buffer_errno_chmod_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_chmod(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_chmod(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_chmod_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_chmod_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         mode
     );
-    libexplain_buffer_errno_chmod_explanation
+    explain_buffer_errno_chmod_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         mode
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

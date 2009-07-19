@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol.h>
 
 /**
-  * The libexplain_iocontrol_siocsmiireg global variable is
+  * The explain_iocontrol_siocsmiireg global variable is
   * used to store information about the SIOCSMIIREG
   * I/O control.
   *
@@ -32,6 +32,6 @@
   *     are ambiguous, and (b) the includes files have bugs making it
   *     impossible to include all of them in the same combilation unit.
   */
-extern const libexplain_iocontrol_t libexplain_iocontrol_siocsmiireg;
+extern const explain_iocontrol_t explain_iocontrol_siocsmiireg;
 
 #endif /* LIBEXPLAIN_IOCONTROL_SIOCSMIIREG_H */

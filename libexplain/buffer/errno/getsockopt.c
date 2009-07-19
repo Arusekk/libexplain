@@ -36,27 +36,27 @@
 
 
 static void
-libexplain_buffer_errno_getsockopt_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_getsockopt_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, int level, int name, void *data,
     socklen_t *data_size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "getsockopt(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", level = ");
-    libexplain_buffer_sockopt_level(sb, level);
-    libexplain_string_buffer_puts(sb, ", name = ");
-    libexplain_buffer_sockopt_name(sb, level, name);
-    libexplain_string_buffer_puts(sb, ", data = ");
-    libexplain_buffer_pointer(sb, data);
-    libexplain_string_buffer_puts(sb, ", data_size = ");
-    libexplain_buffer_socklen_star(sb, data_size);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "getsockopt(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", level = ");
+    explain_buffer_sockopt_level(sb, level);
+    explain_string_buffer_puts(sb, ", name = ");
+    explain_buffer_sockopt_name(sb, level, name);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_buffer_pointer(sb, data);
+    explain_string_buffer_puts(sb, ", data_size = ");
+    explain_buffer_socklen_star(sb, data_size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_getsockopt_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_getsockopt_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, int level, int name, void *data,
     socklen_t *data_size)
 {
@@ -68,52 +68,52 @@ libexplain_buffer_errno_getsockopt_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFAULT:
-        if (libexplain_pointer_is_efault(data_size, sizeof(*data_size)))
+        if (explain_pointer_is_efault(data_size, sizeof(*data_size)))
         {
-            libexplain_buffer_efault(sb, "data_size");
+            explain_buffer_efault(sb, "data_size");
             break;
         }
-        if (libexplain_pointer_is_efault(data, *data_size))
+        if (explain_pointer_is_efault(data, *data_size))
         {
-            libexplain_buffer_efault(sb, "data");
+            explain_buffer_efault(sb, "data");
             break;
         }
         goto dunno;
 
     case EINVAL:
-        if (libexplain_pointer_is_efault(data_size, sizeof(*data_size)))
+        if (explain_pointer_is_efault(data_size, sizeof(*data_size)))
             goto dunno;
-        libexplain_buffer_einval_too_small(sb, "data_size", *data_size);
+        explain_buffer_einval_too_small(sb, "data_size", *data_size);
         break;
 
     case ENOPROTOOPT:
-        libexplain_buffer_enoprotoopt(sb, "name");
+        explain_buffer_enoprotoopt(sb, "name");
         break;
 
     case ENOTSOCK:
-        libexplain_buffer_enotsock(sb, fildes, "fildes");
+        explain_buffer_enotsock(sb, fildes, "fildes");
         break;
 
     default:
         dunno:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_getsockopt(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_getsockopt(explain_string_buffer_t *sb, int errnum,
     int fildes, int level, int name, void *data, socklen_t *data_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_getsockopt_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_getsockopt_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -123,7 +123,7 @@ libexplain_buffer_errno_getsockopt(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_buffer_errno_getsockopt_explanation
+    explain_buffer_errno_getsockopt_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -133,7 +133,7 @@ libexplain_buffer_errno_getsockopt(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

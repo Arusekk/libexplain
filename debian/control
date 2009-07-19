@@ -3,8 +3,9 @@ Section: devel
 Priority: optional
 Maintainer: Peter Miller <pmiller@opensource.org.au>
 Homepage: http://libexplain.sourceforge.net/
+XS-DM-Upload-Allowed: yes
 Build-Depends: bison, debhelper (>= 5), groff, libcap-dev, libtool, lsof
-Standards-Version: 3.8.0
+Standards-Version: 3.8.2
 
 Package: explain
 Section: devel
@@ -13,10 +14,10 @@ Architecture: any
 Description: utility to explain system call errors
  This package provides a command to explain Unix and Linux system call errors,
  after the fact.
-Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain1, lsof
+Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain9, lsof
 
-Package: libexplain1
-Section: devel
+Package: libexplain9
+Section: libs
 Priority: optional
 Architecture: any
 Description: Explain errno values returned by libc functions
@@ -26,8 +27,8 @@ Description: Explain errno values returned by libc functions
  libexplain function.
 Depends: ${misc:Depends}, ${shlibs:Depends}, lsof
 
-Package: libexplain1-dbg
-Section: libdevel
+Package: libexplain9-dbg
+Section: debug
 Priority: extra
 Architecture: any
 Description: Explain errno values returned by libc functions - debugging symbols
@@ -36,7 +37,7 @@ Description: Explain errno values returned by libc functions - debugging symbols
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
 Depends: ${misc:Depends}, ${shlibs:Depends}, lsof,
- libexplain1 (= ${binary:Version})
+ libexplain9 (= ${binary:Version})
 
 Package: libexplain-dev
 Section: libdevel
@@ -47,5 +48,5 @@ Description: Explain errno values returned by libc functions - development files
  system call errors.  The library is not quite a drop-in replacement for
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
-Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain1 (= ${binary:Version}),
- libexplain1-dbg (= ${binary:Version}), lsof
+Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain9 (= ${binary:Version}),
+ lsof

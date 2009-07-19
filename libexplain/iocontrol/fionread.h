@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol.h>
 
 /**
-  * The libexplain_iocontrol_fionread global variable is
+  * The explain_iocontrol_fionread global variable is
   * used to store information about the FIONREAD
   * I/O control.
   *
@@ -32,6 +32,6 @@
   *     are ambiguous, and (b) the includes files have bugs making it
   *     impossible to include all of them in the same combilation unit.
   */
-extern const libexplain_iocontrol_t libexplain_iocontrol_fionread;
+extern const explain_iocontrol_t explain_iocontrol_fionread;
 
 #endif /* LIBEXPLAIN_IOCONTROL_FIONREAD_H */

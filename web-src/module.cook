@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,12 +21,15 @@ integration-build-targets +=
     [fromto web-src/%0% web-site/%0%
         [match_mask web-src/%0%.html [source_files]]
     ]
-    web-site/books.png
-    web-site/books.64.png
-    web-site/books.128.png
-    web-site/libexplain.png
-    web-site/libexplain.64.png
-    web-site/libexplain.128.png
+    [fromto web-src/%0%.png.uue web-site/%0%.png
+        [match_mask web-src/%0%.png.uue [source_files]]
+    ]
+    [fromto web-src/%0%.png.uue web-site/%0%.128.png
+        [match_mask web-src/%0%.png.uue [source_files]]
+    ]
+    [fromto web-src/%0%.png.uue web-site/%0%.64.png
+        [match_mask web-src/%0%.png.uue [source_files]]
+    ]
     web-site/fixme.html
     web-site/[project_minus].README
     web-site/[project_minus].pdf

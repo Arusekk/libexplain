@@ -27,12 +27,10 @@
 
 
 void
-libexplain_fchmod_or_die(int fildes, int mode)
+explain_fchmod_or_die(int fildes, int mode)
 {
-    if (fchmod(fildes, mode) < 0)
+    if (explain_fchmod_on_error(fildes, mode) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fchmod(fildes, mode));
         exit(EXIT_FAILURE);
     }
 }

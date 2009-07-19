@@ -24,7 +24,7 @@
 struct unimapdesc; /* forward */
 
 /**
-  * The libexplain_buffer_unimapdesc function may be used to
+  * The explain_buffer_unimapdesc function may be used to
   * print a representation of a unimapdesc structure value.
   *
   * @param sb
@@ -34,7 +34,7 @@ struct unimapdesc; /* forward */
   * @param extra
   *    if are to print entries as well.
   */
-void libexplain_buffer_unimapdesc(libexplain_string_buffer_t *sb,
+void explain_buffer_unimapdesc(explain_string_buffer_t *sb,
     const struct unimapdesc *value, int extra);
 
 #endif /* LIBEXPLAIN_BUFFER_UNIMAPDESC_H */

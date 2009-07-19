@@ -32,14 +32,14 @@
 #ifdef TIOCSHAYESESP
 
 static void
-libexplain_buffer_hayes_esp_config(libexplain_string_buffer_t *sb,
+explain_buffer_hayes_esp_config(explain_string_buffer_t *sb,
     const struct hayes_esp_config *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ flow_on = %d, "
@@ -63,26 +63,26 @@ libexplain_buffer_hayes_esp_config(libexplain_string_buffer_t *sb,
 
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_hayes_esp_config(sb, data);
+    explain_buffer_hayes_esp_config(sb, data);
 }
 
 
 static void
-print_explanation(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+print_explanation(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
     switch (errnum)
     {
     case EBUSY:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -100,12 +100,12 @@ print_explanation(const libexplain_iocontrol_t *p,
             q = data;
             if (q->flow_on >= q->flow_off)
             {
-                libexplain_buffer_einval_value(sb, "data->flow_on", q->flow_on);
+                explain_buffer_einval_value(sb, "data->flow_on", q->flow_on);
                 break;
             }
             if (q->rx_trigger < 1 || q->rx_trigger > 1023)
             {
-                libexplain_buffer_einval_value
+                explain_buffer_einval_value
                 (
                     sb,
                     "data->rx_trigger",
@@ -115,7 +115,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->tx_trigger > 1023)
             {
-                libexplain_buffer_einval_value
+                explain_buffer_einval_value
                 (
                     sb,
                     "data->tx_trigger",
@@ -125,7 +125,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->flow_off < 1 || q->flow_off > 1023)
             {
-                libexplain_buffer_einval_value
+                explain_buffer_einval_value
                 (
                     sb,
                     "data->flow_off",
@@ -135,7 +135,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->flow_on < 1 || q->flow_on > 1023)
             {
-                libexplain_buffer_einval_value
+                explain_buffer_einval_value
                 (
                     sb,
                     "data->flow_on",
@@ -145,7 +145,7 @@ print_explanation(const libexplain_iocontrol_t *p,
             }
             if (q->pio_threshold < 1 || q->pio_threshold > 1024)
             {
-                libexplain_buffer_einval_value
+                explain_buffer_einval_value
                 (
                     sb,
                     "data->pio_threshold",
@@ -157,7 +157,7 @@ print_explanation(const libexplain_iocontrol_t *p,
         break;
 
     default:
-        libexplain_iocontrol_generic.print_explanation
+        explain_iocontrol_generic.print_explanation
         (
             p,
             sb,
@@ -171,7 +171,7 @@ print_explanation(const libexplain_iocontrol_t *p,
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocshayesesp =
+const explain_iocontrol_t explain_iocontrol_tiocshayesesp =
 {
     "TIOCSHAYESESP", /* name */
     TIOCSHAYESESP, /* value */
@@ -183,7 +183,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_tiocshayesesp =
 
 #else
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocshayesesp =
+const explain_iocontrol_t explain_iocontrol_tiocshayesesp =
 {
     0, /* name */
     -1, /* value */

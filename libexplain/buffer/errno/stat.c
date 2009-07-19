@@ -37,51 +37,51 @@
 
 
 static void
-libexplain_buffer_errno_stat_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_stat_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const struct stat *buf)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "stat(pathname = ");
-    libexplain_buffer_pathname(sb, pathname);
-    libexplain_string_buffer_printf(sb, ", buf = %p)", buf);
+    explain_string_buffer_printf(sb, "stat(pathname = ");
+    explain_buffer_pathname(sb, pathname);
+    explain_string_buffer_printf(sb, ", buf = %p)", buf);
 }
 
 
 static void
-libexplain_buffer_errno_stat_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_stat_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const struct stat *buf)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     (void)buf;
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
 
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
-        if (libexplain_path_is_efault(pathname))
+        if (explain_path_is_efault(pathname))
         {
-            libexplain_buffer_efault(sb, "pathname");
+            explain_buffer_efault(sb, "pathname");
             break;
         }
-        if (libexplain_pointer_is_efault(buf, sizeof(*buf)))
+        if (explain_pointer_is_efault(buf, sizeof(*buf)))
         {
-            libexplain_buffer_efault(sb, "buf");
+            explain_buffer_efault(sb, "buf");
             break;
         }
         break;
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -91,44 +91,44 @@ libexplain_buffer_errno_stat_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_stat(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_stat(explain_string_buffer_t *sb, int errnum,
     const char *pathname, const struct stat *buf)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_stat_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_stat_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         buf
     );
-    libexplain_buffer_errno_stat_explanation
+    explain_buffer_errno_stat_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         buf
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

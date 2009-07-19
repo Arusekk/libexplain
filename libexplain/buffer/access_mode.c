@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "F_OK", F_OK },
     { "R_OK", R_OK },
@@ -35,28 +35,28 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_access_mode(libexplain_string_buffer_t *sb, int mode)
+explain_buffer_access_mode(explain_string_buffer_t *sb, int mode)
 {
     if (mode == 0)
-        libexplain_string_buffer_puts(sb, "F_OK");
+        explain_string_buffer_puts(sb, "F_OK");
     else
-        libexplain_parse_bits_print(sb, mode, table, SIZEOF(table));
+        explain_parse_bits_print(sb, mode, table, SIZEOF(table));
 }
 
 
 int
-libexplain_access_mode_parse(const char *text)
+explain_access_mode_parse(const char *text)
 {
     int             result;
 
     result = -1;
-    libexplain_parse_bits(text, table, SIZEOF(table), &result);
+    explain_parse_bits(text, table, SIZEOF(table), &result);
     return result;
 }
 
 
 int
-libexplain_access_mode_parse_or_die(const char *text, const char *caption)
+explain_access_mode_parse_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

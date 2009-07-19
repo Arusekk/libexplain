@@ -23,6 +23,7 @@
 
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/enosys.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/iocontrol/generic.h>
@@ -31,7 +32,7 @@
 #include <libexplain/string_buffer.h>
 
 
-static const libexplain_parse_bits_table_t ioc_dir_table[] =
+static const explain_parse_bits_table_t ioc_dir_table[] =
 {
     { "_IOC_NONE", _IOC_NONE },
     { "_IOC_WRITE", _IOC_WRITE },
@@ -40,26 +41,26 @@ static const libexplain_parse_bits_table_t ioc_dir_table[] =
 
 
 static void
-libexplain_buffer_ioc_dir(libexplain_string_buffer_t *sb, int ioc_dir)
+explain_buffer_ioc_dir(explain_string_buffer_t *sb, int ioc_dir)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
 
     tp =
-        libexplain_parse_bits_find_by_value
+        explain_parse_bits_find_by_value
         (
             ioc_dir,
             ioc_dir_table,
             SIZEOF(ioc_dir_table)
         );
     if (tp)
-        libexplain_string_buffer_puts(sb, tp->name);
+        explain_string_buffer_puts(sb, tp->name);
     else
-        libexplain_string_buffer_printf(sb, "%d", ioc_dir);
+        explain_string_buffer_printf(sb, "%d", ioc_dir);
 }
 
 
 static void
-print_name(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_name(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
@@ -68,7 +69,7 @@ print_name(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
     (void)data;
     if (SIOCDEVPRIVATE <= request && request < SIOCDEVPRIVATE + 16)
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "SIOCDEVPRIVATE + %d",
@@ -77,7 +78,7 @@ print_name(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
     }
     else if (SIOCPROTOPRIVATE <= request && request < SIOCPROTOPRIVATE + 16)
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "SIOCPROTOPRIVATE + %d",
@@ -100,40 +101,40 @@ print_name(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
         case _IOC_NONE:
             if (ioc_size != 0)
                 goto yuck;
-            libexplain_string_buffer_puts(sb, "_IO(");
+            explain_string_buffer_puts(sb, "_IO(");
             break;
 
         case _IOC_READ:
-            libexplain_string_buffer_puts(sb, "_IOR(");
+            explain_string_buffer_puts(sb, "_IOR(");
             break;
 
         case _IOC_WRITE:
-            libexplain_string_buffer_puts(sb, "_IOW(");
+            explain_string_buffer_puts(sb, "_IOW(");
             break;
 
         case _IOC_READ | _IOC_WRITE:
-            libexplain_string_buffer_puts(sb, "_IORW(");
+            explain_string_buffer_puts(sb, "_IORW(");
             break;
 
         default:
             yuck:
-            libexplain_string_buffer_puts(sb, "_IOC(");
-            libexplain_buffer_ioc_dir(sb, ioc_dir);
-            libexplain_string_buffer_puts(sb, ", ");
+            explain_string_buffer_puts(sb, "_IOC(");
+            explain_buffer_ioc_dir(sb, ioc_dir);
+            explain_string_buffer_puts(sb, ", ");
             break;
         }
         if (ioc_type >= 0 && ioc_type < 256 && isprint(ioc_type))
-            libexplain_string_buffer_putc_quoted(sb, ioc_type);
+            explain_string_buffer_putc_quoted(sb, ioc_type);
         else
-            libexplain_string_buffer_printf(sb, "%#x", ioc_type);
-        libexplain_string_buffer_printf(sb, ", %#x, %#x)", ioc_nr, ioc_size);
+            explain_string_buffer_printf(sb, "%#x", ioc_type);
+        explain_string_buffer_printf(sb, ", %#x, %#x)", ioc_nr, ioc_size);
     }
 }
 
 
 static void
-print_explanation(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+print_explanation(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
     /*
@@ -145,15 +146,15 @@ print_explanation(const libexplain_iocontrol_t *p,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "data");
+        explain_buffer_efault(sb, "data");
         break;
 
     case EINVAL:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -166,28 +167,32 @@ print_explanation(const libexplain_iocontrol_t *p,
         break;
 
     case ENOTTY:
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext:  This message is used to explain an ENOTTY
-             * error reported by an ioctl(2) system call, when a more
-             * specific explanation is not availble.
-             */
-            i18n("fildes is not associated with a character special device; "
-            "or, fildes is not associated with an object to which request can "
-            "be applied")
-        );
+    case ENOSYS:
+#if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
+    case EOPNOTSUPP:
+#endif
+        {
+            char            syscall[30];
+            explain_string_buffer_t syscall_buf;
+
+            explain_string_buffer_init(&syscall_buf, syscall, sizeof(syscall));
+            explain_string_buffer_puts(&syscall_buf, "ioctl ");
+            if (p->name)
+                explain_string_buffer_puts(&syscall_buf, p->name);
+            else
+                explain_string_buffer_printf(&syscall_buf, "0x%#X", request);
+            explain_buffer_enosys_fildes(sb, fildes, "fildes", syscall);
+        }
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_generic =
+const explain_iocontrol_t explain_iocontrol_generic =
 {
     NULL, /* name */
     -1, /* value */

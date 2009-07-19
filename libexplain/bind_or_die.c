@@ -26,17 +26,11 @@
 
 
 void
-libexplain_bind_or_die(int fildes, const struct sockaddr *sock_addr,
+explain_bind_or_die(int fildes, const struct sockaddr *sock_addr,
     int sock_addr_size)
 {
-    if (bind(fildes, sock_addr, sock_addr_size) < 0)
+    if (explain_bind_on_error(fildes, sock_addr, sock_addr_size) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_bind(fildes, sock_addr, sock_addr_size)
-        );
         exit(EXIT_FAILURE);
     }
 }

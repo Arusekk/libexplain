@@ -23,13 +23,7 @@
 #include <libexplain/ac/sys/socket.h>
 
 #ifdef HAVE_NET_IF_H
-# ifdef __linux__
-   /* these two conflict, because they have a common ancestor */
-#  define _NET_IF_H 1
-#  include <linux/if.h>
-# else
-#  include <net/if.h>
-# endif
+#include <net/if.h>
 #endif
 
 #endif /* LIBEXPLAIN_AC_NET_IF_H */

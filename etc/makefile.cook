@@ -78,14 +78,19 @@ web-site/%.tar.gz: [source_file_order] debian/control
     set shallow ingredients-fingerprint
 {
     if [exists web-site/%.tar] then
-	rm web-site/%.tar
-    	    set clearstat;
+        rm web-site/%.tar
+            set clearstat;
     [tar-cmd] --create --file - --dereference
-            [resolve [sort [source_file_order]]] debian
-	| tardy -unu 0 -gnu 0 -una Peter -gna Miller
-    	    -p % -ms 0644 -mc 07022 -now
-    	    [prepost "-rp=" "" [search_list]]
-	> web-site/%.tar;
+            [resolve [sort [source_file_order]]]
+	    debian/changelog
+	    debian/compat
+	    debian/control
+	    debian/rules
+	    'debian/*.install'
+        | tardy -unu 0 -gnu 0 -una Peter -gna Miller
+            -p % -ms 0644 -mc 07022 -now
+            [prepost "-rp=" "" [search_list]]
+        > web-site/%.tar;
     gzip -9 -v web-site/%.tar;
 }
 
@@ -100,10 +105,10 @@ vs_file = libexplain/patchlevel.h;
     set shallow
 {
     echo "'#define PATCHLEVEL \""[version]"\"'"
-	> [target];
+        > [target];
     aesub -p [project] -c [change]
-    	    "'#define COPYRIGHT_YEARS \"${copyright_years}\"'"
-	>> [target];
+            "'#define COPYRIGHT_YEARS \"${copyright_years}\"'"
+        >> [target];
 }
 
 cascade libexplain/version.c = [vs_file];
@@ -113,8 +118,9 @@ aemakegen = aemakegen;
 Makefile.in: [source_files]
 {
     [aemakegen] -p [project] -c [change] -o [target]
-	libdir/pkgconfig/[project_short].pc.in
-	;
+        libdir/pkgconfig/[project_short].pc.in
+        ;
+    cat [resolve etc/makefile-tail] >> [target];
 }
 
 etc/version.so:
@@ -125,12 +131,17 @@ etc/version.so:
     aesub "'.ds Y) ${copyright_years}'" >> [target];
 }
 
-debian/control: [source_files]
+debian/control
+debian/explain.install
+debian/libexplain-dev.install
+debian/changelog: [source_files]
     set shallow
 {
+    /* This actually makes more files than just debian/control */
     [aemakegen] -p [project] -c [change] --target\=debian
-	libdir/pkgconfig/[project_short].pc.in
-	;
+        libdir/pkgconfig/[project_short].pc.in
+        libexplain/public_config.h
+        ;
 }
 
 
@@ -146,16 +157,37 @@ if [in [fromto %1D%2 %2 [version]] 001 002 003 004] then
 }
 
 debian-package: web-site/[project_minus].tar.gz bin/test_user
+    debian/changelog
 {
+    local vsn = [collect head -1 [resolve debian/changelog]
+                         | sed "'s|.*(\\([^()]*\\).*|\\1|'" ];
+    vsn = [fromto %-1 % [vsn]];
+    function print "vsn = '"[vsn]"'";
+    if [not [in [count [vsn]] 1]] then
+        fail "debian version not right";
+    local tarball = [project_short]_[vsn].orig.tar.gz;
+
     local user = [collect [resolve bin/test_user]];
     local key = ;
     if [in [user] archives] then
-	key = -k19CEC7D5;
+        key = -k19CEC7D5;
+    else
+        key = -us -uc;
 
+    /*
+     * We fake the .orig.tar.gz file to not have a debian/ directory,
+     * by filtering it out with tardy.  This silences a PITA lintian
+     * warning, for no real benefit.
+     */
+
+    unset GPG_AGENT_INFO &&
     rm -rf web-site/debian &&
     mkdir -p web-site/debian &&
     cd web-site/debian &&
     echo Options Indexes > .htaccess &&
+    gunzip < ../[project_minus].tar.gz
+        | tardy -exclude "'"[project_minus]"/debian/*'"
+        | gzip -9 > [tarball] &&
     tar xzf ../[project_minus].tar.gz &&
     cd [project_minus] &&
 #if 0
@@ -165,12 +197,19 @@ debian-package: web-site/[project_minus].tar.gz bin/test_user
 #endif
     cd .. &&
     rm -rf [project_minus] &&
-    lintian *.changes
+    lintian -iIv --pedantic *.changes
     ;
 }
 
 libdir/pkgconfig/[project_short].pc.in: [source_files]
 {
     [aemakegen] -p\=[project] -c\=[change] --target\=pkg-config
-	    > [target];
+            > [target];
 }
+
+libexplain/public_config.h: etc/large.awk libexplain/config.h
+{
+    awk -f [resolve etc/large.awk libexplain/config.h] > [target];
+}
+
+cascade libexplain/large_file_support.h = libexplain/public_config.h;

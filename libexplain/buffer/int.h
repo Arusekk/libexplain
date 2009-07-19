@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_int function may be used to print an integer
+  * The explain_buffer_int function may be used to print an integer
   * value.
   *
   * @param sb
@@ -30,10 +30,10 @@
   * @param value
   *    The value to be printed.
   */
-void libexplain_buffer_int(libexplain_string_buffer_t *sb, int value);
+void explain_buffer_int(explain_string_buffer_t *sb, int value);
 
 /**
-  * The libexplain_buffer_int_star function may be used to print an integer
+  * The explain_buffer_int_star function may be used to print an integer
   * value.
   *
   * @param sb
@@ -41,7 +41,7 @@ void libexplain_buffer_int(libexplain_string_buffer_t *sb, int value);
   * @param value
   *    a pointer to the value to be printed.
   */
-void libexplain_buffer_int_star(libexplain_string_buffer_t *sb,
+void explain_buffer_int_star(explain_string_buffer_t *sb,
     const int *value);
 
 #endif /* LIBEXPLAIN_BUFFER_INT_H */

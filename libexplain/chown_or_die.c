@@ -26,12 +26,10 @@
 
 
 void
-libexplain_chown_or_die(const char *path, int owner, int group)
+explain_chown_or_die(const char *path, int owner, int group)
 {
-    if (chown(path, owner, group) < 0)
+    if (explain_chown_on_error(path, owner, group) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_chown(path, owner, group));
         exit(EXIT_FAILURE);
     }
 }

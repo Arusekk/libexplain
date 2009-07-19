@@ -32,17 +32,24 @@
   */
 
 #include <libexplain/accept.h>
+#include <libexplain/accept4.h>
 #include <libexplain/access.h>
+#include <libexplain/acct.h>
+#include <libexplain/adjtime.h>
+#include <libexplain/adjtimex.h>
 #include <libexplain/bind.h>
 #include <libexplain/chdir.h>
 #include <libexplain/chmod.h>
 #include <libexplain/chown.h>
+#include <libexplain/chroot.h>
 #include <libexplain/close.h>
 #include <libexplain/closedir.h>
 #include <libexplain/connect.h>
 #include <libexplain/creat.h>
+#include <libexplain/dirfd.h>
 #include <libexplain/dup.h>
 #include <libexplain/dup2.h>
+#include <libexplain/eventfd.h>
 #include <libexplain/execve.h>
 #include <libexplain/execvp.h>
 #include <libexplain/fchdir.h>
@@ -55,6 +62,8 @@
 #include <libexplain/fflush.h>
 #include <libexplain/fgetc.h>
 #include <libexplain/fgets.h>
+#include <libexplain/fileno.h>
+#include <libexplain/flock.h>
 #include <libexplain/fopen.h>
 #include <libexplain/fork.h>
 #include <libexplain/fpathconf.h>
@@ -62,6 +71,8 @@
 #include <libexplain/fread.h>
 #include <libexplain/freopen.h>
 #include <libexplain/fstat.h>
+#include <libexplain/fstatfs.h>
+#include <libexplain/ftime.h>
 #include <libexplain/ftruncate.h>
 #include <libexplain/futimes.h>
 #include <libexplain/fwrite.h>
@@ -69,12 +80,15 @@
 #include <libexplain/getc.h>
 #include <libexplain/getchar.h>
 #include <libexplain/getcwd.h>
+#include <libexplain/getgroups.h>
+#include <libexplain/gethostname.h>
 #include <libexplain/getpeername.h>
 #include <libexplain/getrlimit.h>
 #include <libexplain/getsockname.h>
 #include <libexplain/getsockopt.h>
 #include <libexplain/gettimeofday.h>
 #include <libexplain/ioctl.h>
+#include <libexplain/kill.h>
 #include <libexplain/lchown.h>
 #include <libexplain/link.h>
 #include <libexplain/listen.h>
@@ -82,15 +96,19 @@
 #include <libexplain/lstat.h>
 #include <libexplain/malloc.h>
 #include <libexplain/mkdir.h>
+#include <libexplain/nice.h>
 #include <libexplain/open.h>
 #include <libexplain/opendir.h>
 #include <libexplain/pathconf.h>
 #include <libexplain/pclose.h>
 #include <libexplain/pipe.h>
 #include <libexplain/popen.h>
+#include <libexplain/pread.h>
 #include <libexplain/program_name.h>
+#include <libexplain/public_config.h>
 #include <libexplain/putc.h>
 #include <libexplain/putchar.h>
+#include <libexplain/pwrite.h>
 #include <libexplain/read.h>
 #include <libexplain/readdir.h>
 #include <libexplain/readlink.h>
@@ -99,11 +117,26 @@
 #include <libexplain/rename.h>
 #include <libexplain/rmdir.h>
 #include <libexplain/select.h>
+#include <libexplain/setgroups.h>
+#include <libexplain/sethostname.h>
 #include <libexplain/setsockopt.h>
+#include <libexplain/signalfd.h>
 #include <libexplain/socket.h>
 #include <libexplain/stat.h>
+#include <libexplain/statfs.h>
+#include <libexplain/strdup.h>
+#include <libexplain/strndup.h>
+#include <libexplain/strtod.h>
+#include <libexplain/strtof.h>
+#include <libexplain/strtol.h>
+#include <libexplain/strtold.h>
+#include <libexplain/strtoll.h>
+#include <libexplain/strtoul.h>
+#include <libexplain/strtoull.h>
 #include <libexplain/symlink.h>
 #include <libexplain/system.h>
+#include <libexplain/time.h>
+#include <libexplain/timerfd_create.h>
 #include <libexplain/truncate.h>
 #include <libexplain/unlink.h>
 #include <libexplain/utime.h>
@@ -127,7 +160,7 @@
   * fd = open(path, flags, mode);
   * if (fd < 0)
   * {
-  *     fprintf(stderr, "%s\n", libexplain_open(path, flags, mode));
+  *     fprintf(stderr, "%s\n", explain_open(path, flags, mode));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
@@ -141,12 +174,12 @@
   * @endcode
   *
   * The above code comes pre-packaged in the form of the
-  * #libexplain_open_or_die function.  This is available for all
+  * #explain_open_or_die function.  This is available for all
   * supported system calls.
   *
   * The library also provides thread safe function variations.
   *
-  * \ref lfs "Large File Support"
+  * @ref lfs "Large File Support"
   */
 
 #endif /* LIBEXPLAIN_LIBEXPLAIN_H */

@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_execvp(char *message, int message_size, const char *pathname,
+explain_message_execvp(char *message, int message_size, const char *pathname,
     char *const *argv)
 {
-    libexplain_message_errno_execvp
+    explain_message_errno_execvp
     (
         message,
         message_size,

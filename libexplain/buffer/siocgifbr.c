@@ -24,9 +24,9 @@
 
 
 static void
-libexplain_buffer_brctl(libexplain_string_buffer_t *sb, int data)
+explain_buffer_brctl(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "BRCTL_GET_VERSION", BRCTL_GET_VERSION },
         { "BRCTL_GET_BRIDGES", BRCTL_GET_BRIDGES },
@@ -49,15 +49,15 @@ libexplain_buffer_brctl(libexplain_string_buffer_t *sb, int data)
         { "BRCTL_GET_FDB_ENTRIES", BRCTL_GET_FDB_ENTRIES },
     };
 
-    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_siocgifbr(libexplain_string_buffer_t *sb,
+explain_buffer_siocgifbr(explain_string_buffer_t *sb,
     const unsigned long data[3])
 {
-    libexplain_string_buffer_puts(sb, "{ ");
-    libexplain_buffer_brctl(sb, data[0]);
-    libexplain_string_buffer_printf(sb, ", %lu, %lu }", data[1], data[2]);
+    explain_string_buffer_puts(sb, "{ ");
+    explain_buffer_brctl(sb, data[0]);
+    explain_string_buffer_printf(sb, ", %lu, %lu }", data[1], data[2]);
 }

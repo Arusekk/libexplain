@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tcgeta.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tcgeta =
+const explain_iocontrol_t explain_iocontrol_tcgeta =
 {
     "TCGETA", /* name */
     TCGETA, /* value */

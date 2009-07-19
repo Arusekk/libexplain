@@ -16,29 +16,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
-#include <libexplain/option.h>
 #include <libexplain/select.h>
-#include <libexplain/wrap_and_print.h>
 
 
 int
-libexplain_select_or_die(int nfds, fd_set *readfds, fd_set *writefds,
+explain_select_or_die(int nfds, fd_set *readfds, fd_set *writefds,
     fd_set *exceptfds, struct timeval *timeout)
 {
     int             result;
 
-    result = select(nfds, readfds, writefds, exceptfds, timeout);
+    result =
+        explain_select_on_error(nfds, readfds, writefds, exceptfds, timeout);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_select(nfds, readfds, writefds, exceptfds, timeout)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

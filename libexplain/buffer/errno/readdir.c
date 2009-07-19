@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -25,47 +25,58 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/readdir.h>
 #include <libexplain/buffer/dir_to_pathname.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/dir_to_fildes.h>
 #include <libexplain/explanation.h>
+#include <libexplain/path_is_efault.h>
 
 
 static void
-libexplain_buffer_errno_readdir_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_readdir_system_call(explain_string_buffer_t *sb,
     int errnum, DIR *dir)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "readdir(dir = ");
-    libexplain_buffer_pointer(sb, dir);
-    libexplain_buffer_dir_to_pathname(sb, dir);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "readdir(dir = ");
+    explain_buffer_pointer(sb, dir);
+    explain_buffer_dir_to_pathname(sb, dir);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_readdir_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_readdir_explanation(explain_string_buffer_t *sb,
     int errnum, DIR *dir)
 {
     int             fildes;
 
-    fildes = -1;
-    if (dir)
-        fildes = dirfd(dir);
-
     /*
      * Most of these errors are from getdents(2).
      */
+    if (dir == NULL)
+    {
+        explain_buffer_is_the_null_pointer(sb, "dir");
+        return;
+    }
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "dir");
+        explain_buffer_ebadf_dir(sb, "dir");
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "internal buffer");
+        /*
+         * DIR is an opaque type, so we don't really know how big
+         * is actually is.  So guess.
+         */
+        if (explain_pointer_is_efault(dir, sizeof(int)))
+            explain_buffer_efault(sb, "dir");
+        else
+            explain_buffer_efault(sb, "internal buffer");
         break;
 
     case EINVAL:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "internal buffer is too small"
@@ -73,38 +84,40 @@ libexplain_buffer_errno_readdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EIO:
-        libexplain_buffer_eio_fildes(sb, fildes);
+        fildes = explain_dir_to_fildes(dir);
+        explain_buffer_eio_fildes(sb, fildes);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir_fd(sb, fildes, "dir");
+        fildes = explain_dir_to_fildes(dir);
+        explain_buffer_enotdir_fd(sb, fildes, "dir");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_readdir(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_readdir(explain_string_buffer_t *sb, int errnum,
     DIR *dir)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_readdir_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_readdir_system_call
     (
         &exp.system_call_sb,
         errnum,
         dir
     );
-    libexplain_buffer_errno_readdir_explanation
+    explain_buffer_errno_readdir_explanation
     (
         &exp.explanation_sb,
         errnum,
         dir
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

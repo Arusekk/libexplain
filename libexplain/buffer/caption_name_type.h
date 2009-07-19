@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_caption_name_type function may be used to
+  * The explain_buffer_caption_name_type function may be used to
   *
   * @param sb
   *    The string buffer to print into.
@@ -34,7 +34,7 @@
   * @param st_mode
   *    The file type (S_IFREG, etc)
   */
-void libexplain_buffer_caption_name_type(libexplain_string_buffer_t *sb,
+void explain_buffer_caption_name_type(explain_string_buffer_t *sb,
     const char *caption, const char *name, int st_mode);
 
 #endif /* LIBEXPLAIN_BUFFER_CAPTION_NAME_TYPE_H */

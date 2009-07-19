@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_malloc function
+  * The explain_buffer_errno_malloc function
   * is used to obtain an explanation of an error returned
   * by the malloc(3) system call.
   * The least the message will contain is the value of
@@ -43,8 +43,23 @@
   * @param size
   *     The original size, exactly as passed to the malloc(3) system call.
   */
-void libexplain_buffer_errno_malloc(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_malloc(explain_string_buffer_t *sb, int errnum,
     size_t size);
+
+/**
+  * The explain_buffer_errno_malloc_explanation function
+  * is used to obtain an explanation of an error returned
+  * by the malloc(3) system call, the part after "because".
+  *
+  * @param sb
+  *     The string buffer to print the message into.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param size
+  *     The original size, exactly as passed to the malloc(3) system call.
+  */
+void explain_buffer_errno_malloc_explanation(explain_string_buffer_t *sb,
+    int errnum, size_t size);
 
 /* vim:ts=8:sw=4:et */
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_MALLOC_H */

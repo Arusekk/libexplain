@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocgsoftcar.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocgsoftcar =
+const explain_iocontrol_t explain_iocontrol_tiocgsoftcar =
 {
     "TIOCGSOFTCAR", /* name */
     TIOCGSOFTCAR, /* value */

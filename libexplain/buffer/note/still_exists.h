@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_note_still_exists function may be used to
+  * The explain_buffer_note_still_exists function may be used to
   * supplement an explataion with information about the existence of a
   * particular pathname.
   *
@@ -31,11 +31,11 @@
   * @param caption
   *    The name of the system call argument of interest
   */
-void libexplain_buffer_note_still_exists(libexplain_string_buffer_t *sb,
+void explain_buffer_note_still_exists(explain_string_buffer_t *sb,
     const char *caption);
 
 /**
-  * The libexplain_buffer_note_if_still_exists function may be used to
+  * The explain_buffer_note_if_still_exists function may be used to
   * supplement an explataion with information about the existence of a
   * particular pathname.
   *
@@ -46,11 +46,11 @@ void libexplain_buffer_note_still_exists(libexplain_string_buffer_t *sb,
   * @param caption
   *    The name of the system call argument of interest
   */
-void libexplain_buffer_note_if_still_exists(libexplain_string_buffer_t *sb,
+void explain_buffer_note_if_still_exists(explain_string_buffer_t *sb,
     const char *pathname, const char *caption);
 
 /**
-  * The libexplain_buffer_note_exists function may be used to
+  * The explain_buffer_note_exists function may be used to
   * supplement an explataion with information about the existence of a
   * particular pathname.
   *
@@ -59,11 +59,11 @@ void libexplain_buffer_note_if_still_exists(libexplain_string_buffer_t *sb,
   * @param caption
   *    The name of the system call argument of interest
   */
-void libexplain_buffer_note_exists(libexplain_string_buffer_t *sb,
+void explain_buffer_note_exists(explain_string_buffer_t *sb,
     const char *caption);
 
 /**
-  * The libexplain_buffer_note_if_exists function may be used to
+  * The explain_buffer_note_if_exists function may be used to
   * supplement an explataion with information about the existence of a
   * particular pathname.
   *
@@ -74,7 +74,7 @@ void libexplain_buffer_note_exists(libexplain_string_buffer_t *sb,
   * @param caption
   *    The name of the system call argument of interest
   */
-void libexplain_buffer_note_if_exists(libexplain_string_buffer_t *sb,
+void explain_buffer_note_if_exists(explain_string_buffer_t *sb,
     const char *pathname, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_NOTE_STILL_EXISTS_H */

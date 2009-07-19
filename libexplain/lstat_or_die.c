@@ -26,12 +26,10 @@
 
 
 void
-libexplain_lstat_or_die(const char *pathname, struct stat *buf)
+explain_lstat_or_die(const char *pathname, struct stat *buf)
 {
-    if (lstat(pathname, buf) < 0)
+    if (explain_lstat_on_error(pathname, buf) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_lstat(pathname, buf));
         exit(EXIT_FAILURE);
     }
 }

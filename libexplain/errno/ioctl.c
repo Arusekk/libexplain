@@ -21,18 +21,18 @@
 
 
 const char *
-libexplain_errno_ioctl(int errnum, int fildes, int request, void *data)
+explain_errno_ioctl(int errnum, int fildes, int request, void *data)
 {
-    libexplain_message_errno_ioctl
+    explain_message_errno_ioctl
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         fildes,
         request,
         data
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }
 
 /* vim:ts=8:sw=4:et */

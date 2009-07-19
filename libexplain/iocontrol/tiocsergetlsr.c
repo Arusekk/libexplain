@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocsergetlsr.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocsergetlsr =
+const explain_iocontrol_t explain_iocontrol_tiocsergetlsr =
 {
     "TIOCSERGETLSR", /* name */
     TIOCSERGETLSR, /* value */

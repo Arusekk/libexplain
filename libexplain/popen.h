@@ -26,225 +26,248 @@
 
 #include <libexplain/warn_unused_result.h>
 
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <stdio.h>
-
 /**
-  * The libexplain_popen_or_die function is
-  * used to call the popen(3) system call.  On
-  * failure an explanation will be printed to stderr,
-  * obtained from libexplain_popen(3), and
-  * then the process terminates by calling
-  * exit(EXIT_FAILURE).
+  * The explain_popen_or_die function is used to call the <i>popen</i>(3)
+  * system call. On failure an explanation will be printed to stderr,
+  * obtained from the explain_popen(3) function, and then the process
+  * terminates by calling exit(EXIT_FAILURE).
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
-  * FILE *fp = libexplain_popen_or_die(command, flags);
+  * FILE *fp = explain_popen_or_die(command, flags);
   * @endcode
   *
   * @param command
-  *     The command, exactly as to be passed to the popen(3) system call.
+  *     The command, exactly as to be passed to the <i>popen</i>(3) system
+  *     call.
   * @param flags
-  *     The flags, exactly as to be passed to the popen(3) system call.
+  *     The flags, exactly as to be passed to the <i>popen</i>(3) system
+  *     call.
   * @returns
-  *     This function only returns on success, see popen(3) for more
-  *     information.  On failure, prints an explanation and exits, it
-  *     does not return.
+  *     This function only returns on success. On failure, prints an
+  *     explanation and exits, it does not return.
   */
-FILE *libexplain_popen_or_die(const char *command, const char *flags);
+FILE *explain_popen_or_die(const char *command, const char *flags);
 
 /**
-  * The libexplain_popen function is used to
-  * obtain an explanation of an error returned by the
-  * popen(3) system call.
-  * The least the message will contain is the value of
-  * strerror(errno), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_popen_on_error function is used to call the <i>popen</i>(3)
+  * system call. On failure an explanation will be printed to stderr,
+  * obtained from the explain_popen(3) function.
   *
-  * The errno global variable will be used to obtain the
-  * error value to be decoded.
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * FILE *fp = explain_popen_on_error(command, flags);
+  * if (!fp)
+  * {
+  *     ...cope with error
+  *     ...no need to print error message
+  * }
+  * @endcode
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * @param command
+  *     The command, exactly as to be passed to the <i>popen</i>(3) system
+  *     call.
+  * @param flags
+  *     The flags, exactly as to be passed to the <i>popen</i>(3) system
+  *     call.
+  * @returns
+  *     The value returned by the wrapped <i>popen</i>(3) system call.
+  */
+FILE *explain_popen_on_error(const char *command, const char *flags)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+
+/**
+  * The explain_popen function is used to obtain an explanation of an error
+  * returned by the <i>popen</i>(3) system call. The least the message will
+  * contain is the value of <tt>strerror(errno)</tt>, but usually it will
+  * do much better, and indicate the underlying cause in more detail.
+  *
+  * The errno global variable will be used to obtain the error value to be
+  * decoded.
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * FILE *fp = popen(command, flags);
   * if (!fp)
   * {
-  *     fprintf(stderr, "%s\n", libexplain_popen(command, flags));
+  *     fprintf(stderr, "%s\n", explain_popen(command, flags));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_popen_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_popen_or_die function.
   *
   * @param command
-  *     The original command, exactly as passed to the popen(3) system call.
+  *     The original command, exactly as passed to the <i>popen</i>(3)
+  *     system call.
   * @param flags
-  *     The original flags, exactly as passed to the popen(3) system call.
+  *     The original flags, exactly as passed to the <i>popen</i>(3) system
+  *     call.
   * @returns
-  *     The message explaining the error.  This
-  *     message buffer is shared by all libexplain
-  *     functions which do not supply a buffer in their
-  *     argument list.  This will be overwritten by the
-  *     next call to any libexplain function which shares
-  *     this buffer, including other threads.
+  *     The message explaining the error. This message buffer is shared by
+  *     all libexplain functions which do not supply a buffer in their
+  *     argument list. This will be overwritten by the next call to any
+  *     libexplain function which shares this buffer, including other
+  *     threads.
   * @note
-  *     This function is <b>not</b> thread safe, because
-  *     it shares a return buffer across all threads, and
-  *     many other functions in this library.
+  *     This function is <b>not</b> thread safe, because it shares a return
+  *     buffer across all threads, and many other functions in this
+  *     library.
   */
-const char *libexplain_popen(const char *command, const char *flags)
+const char *explain_popen(const char *command, const char *flags)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
-  * The libexplain_errno_popen function is
-  * used to obtain an explanation of an error returned by
-  * the popen(3) system call.
-  * The least the message will contain is the value of
-  * strerror(errnum), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_errno_popen function is used to obtain an explanation of an
+  * error returned by the <i>popen</i>(3) system call. The least the
+  * message will contain is the value of <tt>strerror(errnum)</tt>, but
+  * usually it will do much better, and indicate the underlying cause in
+  * more detail.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * FILE *fp = popen(command, flags);
   * if (!fp)
   * {
   *     int err = errno;
-  *     fprintf(stderr, "%s\n", libexplain_popen(err, command, flags));
+  *     fprintf(stderr, "%s\n", explain_errno_popen(err, command, flags));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_popen_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_popen_or_die function.
   *
   * @param errnum
-  *     The error value to be decoded, usually obtained
-  *     from the errno global variable just before this
-  *     function is called.  This is necessary if you need
-  *     to call <b>any</b> code between the system call to
-  *     be explained and this function, because many libc
-  *     functions will alter the value of errno.
+  *     The error value to be decoded, usually obtained from the errno
+  *     global variable just before this function is called. This is
+  *     necessary if you need to call <b>any</b> code between the system
+  *     call to be explained and this function, because many libc functions
+  *     will alter the value of errno.
   * @param command
-  *     The original command, exactly as passed to the popen(3) system call.
+  *     The original command, exactly as passed to the <i>popen</i>(3)
+  *     system call.
   * @param flags
-  *     The original flags, exactly as passed to the popen(3) system call.
+  *     The original flags, exactly as passed to the <i>popen</i>(3) system
+  *     call.
   * @returns
-  *     The message explaining the error.  This
-  *     message buffer is shared by all libexplain
-  *     functions which do not supply a buffer in their
-  *     argument list.  This will be overwritten by the
-  *     next call to any libexplain function which shares
-  *     this buffer, including other threads.
+  *     The message explaining the error. This message buffer is shared by
+  *     all libexplain functions which do not supply a buffer in their
+  *     argument list. This will be overwritten by the next call to any
+  *     libexplain function which shares this buffer, including other
+  *     threads.
   * @note
-  *     This function is <b>not</b> thread safe, because
-  *     it shares a return buffer across all threads, and
-  *     many other functions in this library.
+  *     This function is <b>not</b> thread safe, because it shares a return
+  *     buffer across all threads, and many other functions in this
+  *     library.
   */
-const char *libexplain_errno_popen(int errnum, const char *command,
+const char *explain_errno_popen(int errnum, const char *command,
     const char *flags)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
-  * The libexplain_message_popen function is
-  * used to obtain an explanation of an error returned by
-  * the popen(3) system call.
-  * The least the message will contain is the value of
-  * strerror(errno), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_message_popen function is used to obtain an explanation of
+  * an error returned by the <i>popen</i>(3) system call. The least the
+  * message will contain is the value of <tt>strerror(errnum)</tt>, but
+  * usually it will do much better, and indicate the underlying cause in
+  * more detail.
   *
-  * The errno global variable will be used to obtain the
-  * error value to be decoded.
+  * The errno global variable will be used to obtain the error value to be
+  * decoded.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * FILE *fp = popen(command, flags);
   * if (!fp)
   * {
   *     char message[3000];
-  *     libexplain_message_popen(message, sizeof(message), command, flags);
+  *     explain_message_popen(message, sizeof(message), command, flags);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_popen_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_popen_or_die function.
   *
   * @param message
-  *     The location in which to store the returned
-  *     message.  If a suitable message return buffer is
-  *     supplied, this function is thread safe.
+  *     The location in which to store the returned message. If a suitable
+  *     message return buffer is supplied, this function is thread safe.
   * @param message_size
-  *     The size in bytes of the location in which to
-  *     store the returned message.
+  *     The size in bytes of the location in which to store the returned
+  *     message.
   * @param command
-  *     The original command, exactly as passed to the popen(3) system call.
+  *     The original command, exactly as passed to the <i>popen</i>(3)
+  *     system call.
   * @param flags
-  *     The original flags, exactly as passed to the popen(3) system call.
+  *     The original flags, exactly as passed to the <i>popen</i>(3) system
+  *     call.
   */
-void libexplain_message_popen(char *message, int message_size,
-    const char *command, const char *flags);
+void explain_message_popen(char *message, int message_size, const char *command,
+    const char *flags);
 
 /**
-  * The libexplain_message_errno_popen
-  * function is used to obtain an explanation of an error
-  * returned by the
-  * popen(3) system call.
+  * The explain_message_errno_popen function is used to obtain an
+  * explanation of an error returned by the <i>popen</i>(3) system call.
   * The least the message will contain is the value of
-  * strerror(errnum), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * <tt>strerror(errnum)</tt>, but usually it will do much better, and
+  * indicate the underlying cause in more detail.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * FILE *fp = popen(command, flags);
   * if (!fp)
   * {
   *     int err = errno;
   *     char message[3000];
-  *     libexplain_message_errno_popen(message, sizeof(message),
-  *         err, command, flags);
+  *     explain_message_errno_popen(message, sizeof(message), err, command,
+  *         flags);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_popen_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_popen_or_die function.
   *
   * @param message
-  *     The location in which to store the returned
-  *     message.  If a suitable message return buffer is
-  *     supplied, this function is thread safe.
+  *     The location in which to store the returned message. If a suitable
+  *     message return buffer is supplied, this function is thread safe.
   * @param message_size
-  *     The size in bytes of the location in which to
-  *     store the returned message.
+  *     The size in bytes of the location in which to store the returned
+  *     message.
   * @param errnum
-  *     The error value to be decoded, usually obtained
-  *     from the errno global variable just before this
-  *     function is called.  This is necessary if you need
-  *     to call <b>any</b> code between the system call to
-  *     be explained and this function, because many libc
-  *     functions will alter the value of errno.
+  *     The error value to be decoded, usually obtained from the errno
+  *     global variable just before this function is called. This is
+  *     necessary if you need to call <b>any</b> code between the system
+  *     call to be explained and this function, because many libc functions
+  *     will alter the value of errno.
   * @param command
-  *     The original command, exactly as passed to the popen(3) system call.
+  *     The original command, exactly as passed to the <i>popen</i>(3)
+  *     system call.
   * @param flags
-  *     The original flags, exactly as passed to the popen(3) system call.
+  *     The original flags, exactly as passed to the <i>popen</i>(3) system
+  *     call.
   */
-void libexplain_message_errno_popen(char *message, int message_size, int errnum,
+void explain_message_errno_popen(char *message, int message_size, int errnum,
     const char *command, const char *flags);
 
 #ifdef __cplusplus
 }
 #endif
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et */
 #endif /* LIBEXPLAIN_POPEN_H */

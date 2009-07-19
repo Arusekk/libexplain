@@ -24,20 +24,14 @@
 #include <libexplain/wrap_and_print.h>
 
 
-long
-libexplain_fread_or_die(void *ptr, long size, long nmemb, FILE *fp)
+size_t
+explain_fread_or_die(void *ptr, size_t size, size_t nmemb, FILE *fp)
 {
-    long            result;
+    size_t          result;
 
-    result = fread(ptr, size, nmemb, fp);
+    result = explain_fread_on_error(ptr, size, nmemb, fp);
     if (result == 0 && ferror(fp))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_fread(ptr, size, nmemb, fp)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

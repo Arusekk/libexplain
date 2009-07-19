@@ -26,7 +26,7 @@
 #define KDGETMODE -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdgetmode =
+const explain_iocontrol_t explain_iocontrol_kdgetmode =
 {
     "KDGETMODE", /* name */
     KDGETMODE, /* value */

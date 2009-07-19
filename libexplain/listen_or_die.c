@@ -26,12 +26,10 @@
 
 
 void
-libexplain_listen_or_die(int fildes, int backlog)
+explain_listen_or_die(int fildes, int backlog)
 {
-    if (listen(fildes, backlog) < 0)
+    if (explain_listen_on_error(fildes, backlog) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_listen(fildes, backlog));
         exit(EXIT_FAILURE);
     }
 }

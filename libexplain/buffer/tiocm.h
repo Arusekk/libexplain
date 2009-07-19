@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_tiocm function may be used to print the "modem
+  * The explain_buffer_tiocm function may be used to print the "modem
   * bits" arguments if the TIOCMGET, TIOCMSET, TIOCMBIC and TIOCMBIS
   * ioctl requests.
   *
@@ -31,10 +31,10 @@
   * @param value
   *     The value of the bit-wise-or of the modem bits.
   */
-void libexplain_buffer_tiocm(libexplain_string_buffer_t *sb, int value);
+void explain_buffer_tiocm(explain_string_buffer_t *sb, int value);
 
 /**
-  * The libexplain_buffer_tiocm_star function may be used to print the "modem
+  * The explain_buffer_tiocm_star function may be used to print the "modem
   * bits" arguments if the TIOCMGET, TIOCMSET, TIOCMBIC and TIOCMBIS
   * ioctl requests.
   *
@@ -43,7 +43,7 @@ void libexplain_buffer_tiocm(libexplain_string_buffer_t *sb, int value);
   * @param value
   *     A pointer to the value of the bit-wise-or of the modem bits.
   */
-void libexplain_buffer_tiocm_star(libexplain_string_buffer_t *sb,
+void explain_buffer_tiocm_star(explain_string_buffer_t *sb,
     const int *value);
 
 #endif /* LIBEXPLAIN_BUFFER_TIOCM_H */

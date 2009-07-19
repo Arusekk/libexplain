@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_SOCKET_PROTOCOL_H
 #define LIBEXPLAIN_BUFFER_SOCKET_PROTOCOL_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_socket_protocol function may be used to print a
+  * The explain_buffer_socket_protocol function may be used to print a
   * symbolic value of a socket protocol value to the given string buffer.
   *
   * @param sb
@@ -31,11 +31,11 @@ struct libexplain_string_buffer_t; /* forward */
   * @param protocol
   *     The socket protocol value to interpret.
   */
-void libexplain_buffer_socket_protocol(struct libexplain_string_buffer_t *sb,
+void explain_buffer_socket_protocol(struct explain_string_buffer_t *sb,
     int protocol);
 
 /**
-  * The libexplain_parse_socket_protocol function is used to parse a
+  * The explain_parse_socket_protocol function is used to parse a
   * string into a socket protocol value.  On error, prints a diagnostic
   * and exits EXIT_FAILURE.
   *
@@ -46,6 +46,6 @@ void libexplain_buffer_socket_protocol(struct libexplain_string_buffer_t *sb,
   * @returns
   *     the socket value, or -1 on error
   */
-int libexplain_parse_socket_protocol_or_die(const char *text, const char *cptn);
+int explain_parse_socket_protocol_or_die(const char *text, const char *cptn);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKET_PROTOCOL_H */

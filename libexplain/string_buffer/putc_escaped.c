@@ -23,43 +23,43 @@
 
 
 void
-libexplain_string_buffer_putc_escaped(libexplain_string_buffer_t *sb, int c,
+explain_string_buffer_putc_escaped(explain_string_buffer_t *sb, int c,
     int delimiter)
 {
     if (c == delimiter || c == '\\')
     {
-        libexplain_string_buffer_putc(sb, '\\');
-        libexplain_string_buffer_putc(sb, c);
+        explain_string_buffer_putc(sb, '\\');
+        explain_string_buffer_putc(sb, c);
         return;
     }
     switch (c)
     {
     case '\a':
-        libexplain_string_buffer_puts(sb, "\\a");
+        explain_string_buffer_puts(sb, "\\a");
         break;
 
     case '\b':
-        libexplain_string_buffer_puts(sb, "\\b");
+        explain_string_buffer_puts(sb, "\\b");
         break;
 
     case '\f':
-        libexplain_string_buffer_puts(sb, "\\f");
+        explain_string_buffer_puts(sb, "\\f");
         break;
 
     case '\n':
-        libexplain_string_buffer_puts(sb, "\\n");
+        explain_string_buffer_puts(sb, "\\n");
         break;
 
     case '\r':
-        libexplain_string_buffer_puts(sb, "\\r");
+        explain_string_buffer_puts(sb, "\\r");
         break;
 
     case '\t':
-        libexplain_string_buffer_puts(sb, "\\t");
+        explain_string_buffer_puts(sb, "\\t");
         break;
 
     case '\v':
-        libexplain_string_buffer_puts(sb, "\\v");
+        explain_string_buffer_puts(sb, "\\v");
         break;
 
     case ' ':
@@ -158,14 +158,14 @@ libexplain_string_buffer_putc_escaped(libexplain_string_buffer_t *sb, int c,
     case '}':
     case '~':
         printable:
-        libexplain_string_buffer_putc(sb, c);
+        explain_string_buffer_putc(sb, c);
         break;
 
     default:
         /* this test will be locale specific */
         if (isprint((unsigned char)c))
             goto printable;
-        libexplain_string_buffer_printf(sb, "\\%03o", (unsigned char)c);
+        explain_string_buffer_printf(sb, "\\%03o", (unsigned char)c);
         break;
     }
 }

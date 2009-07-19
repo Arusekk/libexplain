@@ -35,26 +35,26 @@
 typedef struct adapter adapter;
 struct adapter
 {
-    libexplain_lsof_t inherited;
-    libexplain_string_buffer_t *sb;
+    explain_lsof_t inherited;
+    explain_string_buffer_t *sb;
 };
 
 
 static void
-n_callback(libexplain_lsof_t *context, const char *name)
+n_callback(explain_lsof_t *context, const char *name)
 {
     adapter         *a;
 
     a = (adapter *)context;
-    libexplain_string_buffer_putc(a->sb, ' ');
-    libexplain_string_buffer_puts_quoted(a->sb, name);
+    explain_string_buffer_putc(a->sb, ' ');
+    explain_string_buffer_puts_quoted(a->sb, name);
 }
 
 #endif
 
 
 static void
-libexplain_buffer_fildes_to_path(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_fildes_to_path(explain_string_buffer_t *sb, int fildes)
 {
 #ifdef PROC_FS_USEFUL
     int             n;
@@ -66,8 +66,8 @@ libexplain_buffer_fildes_to_path(libexplain_string_buffer_t *sb, int fildes)
     if (n > 0)
     {
         symlink_data[n] = 0;
-        libexplain_string_buffer_putc(sb, ' ');
-        libexplain_string_buffer_puts_quoted(sb, symlink_data);
+        explain_string_buffer_putc(sb, ' ');
+        explain_string_buffer_puts_quoted(sb, symlink_data);
     }
 #else
     adapter         obj;
@@ -76,13 +76,13 @@ libexplain_buffer_fildes_to_path(libexplain_string_buffer_t *sb, int fildes)
     obj.inherited.n_callback = n_callback;
     obj.sb = sb;
     snprintf(options, sizeof(options), "-p %d -d %d", getpid(), fildes);
-    libexplain_lsof(options, &obj.inherited);
+    explain_lsof(options, &obj.inherited);
 #endif
 }
 
 
 static int
-libexplain_buffer_fildes_to_sockaddr(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_fildes_to_sockaddr(explain_string_buffer_t *sb, int fildes)
 {
     struct sockaddr_storage sa;
     socklen_t       sas;
@@ -93,8 +93,8 @@ libexplain_buffer_fildes_to_sockaddr(libexplain_string_buffer_t *sb, int fildes)
     sas = sizeof(sa);
     if (getsockname(fildes, (struct sockaddr *)&sa, &sas) < 0)
         return -1;
-    libexplain_string_buffer_putc(sb, ' ');
-    libexplain_buffer_sockaddr(sb, (struct sockaddr *)&sa, sas);
+    explain_string_buffer_putc(sb, ' ');
+    explain_buffer_sockaddr(sb, (struct sockaddr *)&sa, sas);
 
     /*
      * If available, also
@@ -103,14 +103,14 @@ libexplain_buffer_fildes_to_sockaddr(libexplain_string_buffer_t *sb, int fildes)
     sas = sizeof(sa);
     if (getpeername(fildes, (struct sockaddr *)&sa, &sas) < 0)
         return 0;
-    libexplain_string_buffer_puts(sb, " => ");
-    libexplain_buffer_sockaddr(sb, (struct sockaddr *)&sa, sas);
+    explain_string_buffer_puts(sb, " => ");
+    explain_buffer_sockaddr(sb, (struct sockaddr *)&sa, sas);
     return 0;
 }
 
 
 void
-libexplain_buffer_fildes_to_pathname(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_fildes_to_pathname(explain_string_buffer_t *sb, int fildes)
 {
     struct stat st;
 
@@ -119,13 +119,13 @@ libexplain_buffer_fildes_to_pathname(libexplain_string_buffer_t *sb, int fildes)
     switch (st.st_mode & S_IFMT)
     {
     case S_IFSOCK:
-        if (libexplain_buffer_fildes_to_sockaddr(sb, fildes))
+        if (explain_buffer_fildes_to_sockaddr(sb, fildes))
             goto oops;
         break;
 
     default:
         oops:
-        libexplain_buffer_fildes_to_path(sb, fildes);
+        explain_buffer_fildes_to_path(sb, fildes);
         break;
     }
 }

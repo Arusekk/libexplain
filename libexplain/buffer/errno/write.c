@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -45,15 +45,15 @@
 
 
 static void
-libexplain_buffer_errno_write_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_write_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "write(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", data = ");
-    libexplain_buffer_pointer(sb, data);
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf(sb, "write(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_buffer_pointer(sb, data);
+    explain_string_buffer_printf
     (
         sb,
         ", data_size = %lld)",
@@ -63,13 +63,13 @@ libexplain_buffer_errno_write_system_call(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size)
 {
     switch (errnum)
     {
     case EAGAIN:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the file descriptor has been marked non-blocking "
@@ -78,12 +78,12 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EBADF:
-        if (libexplain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
-            libexplain_buffer_ebadf(sb, fildes, "fildes");
+        if (explain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
+            explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "data");
+        explain_buffer_efault(sb, "data");
         break;
 
     case EFBIG:
@@ -94,10 +94,10 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             pos = lseek(fildes, 0, SEEK_CUR);
             if (pos == (off_t)-1)
                 pos = 0;
-            max_file_size = libexplain_get_max_file_size_by_fildes(fildes);
+            max_file_size = explain_get_max_file_size_by_fildes(fildes);
             if (pos >= 0 && pos + data_size > max_file_size)
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     "an attempt was made to write a file that "
@@ -106,24 +106,24 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     "an attempt was made to write at a position past the "
                     "process's file size limit"
                 );
             }
-            if (libexplain_option_dialect_specific())
+            if (explain_option_dialect_specific())
             {
-                libexplain_string_buffer_puts(sb, " (");
-                libexplain_buffer_pretty_size(sb, max_file_size);
-                libexplain_string_buffer_putc(sb, ')');
+                explain_string_buffer_puts(sb, " (");
+                explain_buffer_pretty_size(sb, max_file_size);
+                explain_string_buffer_putc(sb, ')');
             }
         }
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "write");
+        explain_buffer_eintr(sb, "write");
         break;
 
     case EINVAL:
@@ -133,21 +133,21 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             {
                 if ((flags & O_ACCMODE) == O_RDONLY)
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "the file descriptor is attached to an object "
                         "which is unsuitable for writing ("
                     );
-                    libexplain_buffer_open_flags(sb, flags);
-                    libexplain_string_buffer_putc(sb, ')');
+                    explain_buffer_open_flags(sb, flags);
+                    explain_string_buffer_putc(sb, ')');
                 }
                 else
                 {
                     long            alignment;
                     off_t           pos;
 
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "the file was opened with the O_DIRECT flag, "
@@ -164,7 +164,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
                     alignment &= -alignment;
                     if (alignment != 0)
                     {
-                        libexplain_string_buffer_printf
+                        explain_string_buffer_printf
                         (
                             sb,
                             " (0x%lX)",
@@ -175,7 +175,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     "the file descriptor is attached to an object which "
@@ -190,7 +190,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EIO:
-        libexplain_buffer_eio_fildes(sb, fildes);
+        explain_buffer_eio_fildes(sb, fildes);
         break;
 
     case ENOSPC:
@@ -200,7 +200,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             {
                 if (S_ISBLK(st.st_mode) || S_ISCHR(st.st_mode))
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "the device has no room for the data"
@@ -208,13 +208,13 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
                 }
                 else
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "the file system containing the file"
                     );
-                    libexplain_buffer_mount_point_stat(sb, &st);
-                    libexplain_string_buffer_puts
+                    explain_buffer_mount_point_stat(sb, &st);
+                    explain_string_buffer_puts
                     (
                         sb,
                         " has no room for the data"
@@ -223,7 +223,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     "the device containing the file referred "
@@ -240,7 +240,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             sigset_t mask;
             struct sigaction sa;
 
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "the file descriptor is connected to a pipe or "
@@ -258,7 +258,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
                  * FIXME: The use of sigprocmask() is undefined in a
                  * multithreaded process; see pthread_sigmask(3).
                  */
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     "; this process is blocking the SIGPIPE signal"
@@ -274,7 +274,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
             {
                 if (sa.sa_handler == SIG_IGN)
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "; this process is ignoring the SIGPIPE signal"
@@ -283,7 +283,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
                 }
                 if (sa.sa_handler != SIG_DFL)
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "; this process is catching the SIGPIPE signal"
@@ -291,7 +291,7 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
                     break;
                 }
             }
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "; this process catches, blocks or ignores the SIGPIPE signal"
@@ -300,13 +300,13 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the file is on a file system"
         );
-        libexplain_buffer_mount_point_fd(sb, fildes);
-        libexplain_string_buffer_puts
+        explain_buffer_mount_point_fd(sb, fildes);
+        explain_string_buffer_puts
         (
             sb,
             " which does not support Unix open file semantics, and the "
@@ -315,20 +315,20 @@ libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_write(explain_string_buffer_t *sb, int errnum,
     int fildes, const void *data, size_t data_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_write_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_write_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -336,7 +336,7 @@ libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_buffer_errno_write_explanation
+    explain_buffer_errno_write_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -344,5 +344,5 @@ libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

@@ -21,16 +21,16 @@
 
 
 const char *
-libexplain_errno_pipe(int errnum, int *pipefd)
+explain_errno_pipe(int errnum, int *pipefd)
 {
-    libexplain_message_errno_pipe
+    explain_message_errno_pipe
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         pipefd
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }
 
 /* vim:ts=8:sw=4:et */

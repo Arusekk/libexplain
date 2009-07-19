@@ -35,20 +35,20 @@
 
 
 static void
-libexplain_buffer_errno_waitpid_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_waitpid_system_call(explain_string_buffer_t *sb,
     int errnum, int pid, int *status, int options)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "waitpid(pid = %d", pid);
+    explain_string_buffer_printf(sb, "waitpid(pid = %d", pid);
     if (pid == 0)
-        libexplain_string_buffer_printf(sb, " = process group %d", getpgrp());
+        explain_string_buffer_printf(sb, " = process group %d", getpgrp());
     else if (pid < -1)
-        libexplain_string_buffer_printf(sb, " = process group %d", -pid);
-    libexplain_string_buffer_puts(sb, ", status = ");
-    libexplain_buffer_pointer(sb, status);
-    libexplain_string_buffer_puts(sb, ", options = ");
-    libexplain_buffer_waitpid_options(sb, options);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_printf(sb, " = process group %d", -pid);
+    explain_string_buffer_puts(sb, ", status = ");
+    explain_buffer_pointer(sb, status);
+    explain_string_buffer_puts(sb, ", options = ");
+    explain_buffer_waitpid_options(sb, options);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
@@ -60,7 +60,7 @@ process_exists(int pid)
 
 
 void
-libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
     int errnum, int pid, int *status, int options)
 {
     /*
@@ -74,7 +74,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
         {
             if (process_exists(pid))
             {
-                libexplain_string_buffer_printf_gettext
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -91,7 +91,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_string_buffer_printf_gettext
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -108,7 +108,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
         }
         else if (pid == -1)
         {
-            libexplain_buffer_no_outstanding_children(sb);
+            explain_buffer_no_outstanding_children(sb);
         }
         else
         {
@@ -117,7 +117,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
             pgid = pid ? -pid : getpgrp();
             if (process_exists(pid))
             {
-                libexplain_string_buffer_printf_gettext
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -135,7 +135,7 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_string_buffer_printf_gettext
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -150,11 +150,11 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
                 );
             }
         }
-        libexplain_buffer_note_sigchld(sb);
+        explain_buffer_note_sigchld(sb);
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "status");
+        explain_buffer_efault(sb, "status");
         break;
 
     case EINTR:
@@ -162,12 +162,12 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
          * WNOHANG was not set and an unblocked signal or a SIGCHLD was
          * caught.
          */
-        libexplain_buffer_eintr(sb, "waitpid");
+        explain_buffer_eintr(sb, "waitpid");
         break;
 
     case EINVAL:
-        libexplain_buffer_einval_bits(sb, "options");
-        libexplain_string_buffer_printf
+        explain_buffer_einval_bits(sb, "options");
+        explain_string_buffer_printf
         (
             sb,
             " (%#x)",
@@ -176,20 +176,20 @@ libexplain_buffer_errno_waitpid_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_waitpid(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_waitpid(explain_string_buffer_t *sb, int errnum,
     int pid, int *status, int options)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_waitpid_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_waitpid_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -197,7 +197,7 @@ libexplain_buffer_errno_waitpid(libexplain_string_buffer_t *sb, int errnum,
         status,
         options
     );
-    libexplain_buffer_errno_waitpid_explanation
+    explain_buffer_errno_waitpid_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -205,5 +205,5 @@ libexplain_buffer_errno_waitpid(libexplain_string_buffer_t *sb, int errnum,
         status,
         options
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

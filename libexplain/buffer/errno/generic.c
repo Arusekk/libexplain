@@ -24,26 +24,36 @@
 #include <libexplain/buffer/enfile.h>
 #include <libexplain/buffer/enobufs.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/eoverflow.h>
+#include <libexplain/buffer/erange.h>
 #include <libexplain/buffer/errno/generic.h>
+#include <libexplain/buffer/ewouldblock.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/option.h>
 
 
 void
-libexplain_buffer_errno_generic(libexplain_string_buffer_t *sb, int errnum)
+explain_buffer_errno_generic(explain_string_buffer_t *sb, int errnum)
 {
     switch (errnum)
     {
+    case EAGAIN:
+#if defined(EWOULDBLOCK) && EWOULDBLOCK != EAGAIN
+    case EWOULDBLOCK:
+#endif
+        explain_buffer_ewouldblock(sb, "operation");
+        break;
+
     case EMFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
         break;
 
     case ENFILE:
-        libexplain_buffer_enfile(sb);
+        explain_buffer_enfile(sb);
         break;
 
     case EPERM:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -57,24 +67,32 @@ libexplain_buffer_errno_generic(libexplain_string_buffer_t *sb, int errnum)
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "operation");
+        explain_buffer_eintr(sb, "operation");
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOBUFS:
-        libexplain_buffer_enobufs(sb);
+        explain_buffer_enobufs(sb);
+        break;
+
+    case ERANGE:
+        explain_buffer_erange(sb);
+        break;
+
+    case EOVERFLOW:
+        explain_buffer_eoverflow(sb);
         break;
 
     default:
         /*
          * no additional information for other errno values
          */
-        if (libexplain_option_debug())
+        if (explain_option_debug())
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "(this error is unknown for this system call, you could "

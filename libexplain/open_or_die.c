@@ -27,20 +27,14 @@
 
 
 int
-libexplain_open_or_die(const char *pathname, int flags, int mode)
+explain_open_or_die(const char *pathname, int flags, int mode)
 {
-    int fd;
+    int             result;
 
-    fd = open(pathname, flags, mode);
-    if (fd < 0)
+    result = explain_open_on_error(pathname, flags, mode);
+    if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_open(pathname, flags, mode)
-        );
         exit(EXIT_FAILURE);
     }
-    return fd;
+    return result;
 }

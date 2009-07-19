@@ -24,7 +24,7 @@
 struct enoprotoopt; /* forward */
 
 /**
-  * The libexplain_buffer_enoprotoopt function may be used to print
+  * The explain_buffer_enoprotoopt function may be used to print
   * an explanation for an ENOPROTOOPT error, reported by some socket
   * functions.
   *
@@ -33,7 +33,7 @@ struct enoprotoopt; /* forward */
   * @param caption
   *     The name of the offending system call argument.
   */
-void libexplain_buffer_enoprotoopt(libexplain_string_buffer_t *sb,
+void explain_buffer_enoprotoopt(explain_string_buffer_t *sb,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOPROTOOPT_H */

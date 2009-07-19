@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_get_max_file_size_by_pathname function si sued to
+  * The explain_get_max_file_size_by_pathname function si sued to
   * get the maximum file size, for the file system on which the file
   * resides.
   *
@@ -32,10 +32,10 @@
   * @returns
   *     maximum file size
   */
-unsigned long long libexplain_get_max_file_size_by_pathname(const char *path);
+unsigned long long explain_get_max_file_size_by_pathname(const char *path);
 
 /**
-  * The libexplain_buffer_efbig function may be used to insert the
+  * The explain_buffer_efbig function may be used to insert the
   * maximum file size into the giben string buffer.
   *
   * @param sb
@@ -47,12 +47,12 @@ unsigned long long libexplain_get_max_file_size_by_pathname(const char *path);
   * @param length_caption
   *    The name of the parameter of the length of offending file
   */
-void libexplain_buffer_efbig(libexplain_string_buffer_t *sb,
+void explain_buffer_efbig(explain_string_buffer_t *sb,
     const char *pathname, unsigned long long length,
     const char *length_caption);
 
 /**
-  * The libexplain_get_max_file_size_by_fildes function is used to
+  * The explain_get_max_file_size_by_fildes function is used to
   * get the maximum file size, for the file system on which the file
   * resides.
   *
@@ -61,10 +61,10 @@ void libexplain_buffer_efbig(libexplain_string_buffer_t *sb,
   * @returns
   *     maximum file size
   */
-unsigned long long libexplain_get_max_file_size_by_fildes(int fildes);
+unsigned long long explain_get_max_file_size_by_fildes(int fildes);
 
 /**
-  * The libexplain_buffer_efbig_fildes function may be used to insert the
+  * The explain_buffer_efbig_fildes function may be used to insert the
   * maximum file size into the given string buffer.
   *
   * @param sb
@@ -76,7 +76,7 @@ unsigned long long libexplain_get_max_file_size_by_fildes(int fildes);
   * @param length_caption
   *    The name of the parameter of the length of offending file
   */
-void libexplain_buffer_efbig_fildes(libexplain_string_buffer_t *sb, int fildes,
+void explain_buffer_efbig_fildes(explain_string_buffer_t *sb, int fildes,
     unsigned long long length, const char *length_caption);
 
 #endif /* LIBEXPLAIN_BUFFER_EFBIG_H */

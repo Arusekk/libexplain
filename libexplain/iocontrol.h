@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_IOCONTROL_H
 #define LIBEXPLAIN_IOCONTROL_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_iocontrol_t type is used to represent an ioctl(2) call,
+  * The explain_iocontrol_t type is used to represent an ioctl(2) call,
   * providing name and number.
   *
   * @note
@@ -32,8 +32,8 @@ struct libexplain_string_buffer_t; /* forward */
   *     are ambiguous, and (b) the includes files have bugs making it
   *     impossible to include all of them in the same combilation unit.
   */
-typedef struct libexplain_iocontrol_t libexplain_iocontrol_t;
-struct libexplain_iocontrol_t
+typedef struct explain_iocontrol_t explain_iocontrol_t;
+struct explain_iocontrol_t
 {
     /**
       * The name of the ioctl(2) request.
@@ -64,7 +64,7 @@ struct libexplain_iocontrol_t
       * argument passed to an ioctl(2) system call.
       *
       * @param p
-      *     Pointer to the libexplain_iocontrol_t instance,
+      *     Pointer to the explain_iocontrol_t instance,
       *     rather like "this" in C++ code.
       * @param sb
       *     The string buffer to print into.
@@ -78,8 +78,8 @@ struct libexplain_iocontrol_t
       * @param data
       *     The original data, exactly as passed to the ioctl(2) system call.
       */
-    void (*print_name)(const libexplain_iocontrol_t *p,
-        struct libexplain_string_buffer_t *sb, int errnum, int fildes,
+    void (*print_name)(const explain_iocontrol_t *p,
+        struct explain_string_buffer_t *sb, int errnum, int fildes,
         int request, const void *data);
 
     /**
@@ -87,7 +87,7 @@ struct libexplain_iocontrol_t
       * argument passed to an ioctl(2) system call.
       *
       * @param p
-      *     Pointer to the libexplain_iocontrol_t instance,
+      *     Pointer to the explain_iocontrol_t instance,
       *     rather like "this" in C++ code.
       * @param sb
       *     The string buffer to print into.
@@ -101,8 +101,8 @@ struct libexplain_iocontrol_t
       * @param data
       *     The original data, exactly as passed to the ioctl(2) system call.
       */
-    void (*print_data)(const libexplain_iocontrol_t *p,
-        struct libexplain_string_buffer_t *sb, int errnum, int fildes,
+    void (*print_data)(const explain_iocontrol_t *p,
+        struct explain_string_buffer_t *sb, int errnum, int fildes,
         int request, const void *data);
 
     /**
@@ -110,7 +110,7 @@ struct libexplain_iocontrol_t
       * an error reported by an ioctl(2) system call.
       *
       * @param p
-      *     Pointer to the libexplain_iocontrol_t instance,
+      *     Pointer to the explain_iocontrol_t instance,
       *     rather like "this" in C++ code.
       * @param sb
       *     The string buffer to print into.
@@ -124,13 +124,13 @@ struct libexplain_iocontrol_t
       * @param data
       *     The original data, exactly as passed to the ioctl(2) system call.
       */
-    void (*print_explanation)(const libexplain_iocontrol_t *p,
-        struct libexplain_string_buffer_t *sb, int errnum, int fildes,
+    void (*print_explanation)(const explain_iocontrol_t *p,
+        struct explain_string_buffer_t *sb, int errnum, int fildes,
         int request, const void *data);
 };
 
 /**
-  * The libexplain_iocontrol_find_by_number function may be used to
+  * The explain_iocontrol_find_by_number function may be used to
   * locate an ioctl by number.  A few ioctl(2) calls are ambiguous, so
   * the more information you can give the better.
   *
@@ -144,15 +144,15 @@ struct libexplain_iocontrol_t
   *     a pointer to an iocontrol object, that may be used to describe
   *     the call the ioctl(2) system call.
   */
-const libexplain_iocontrol_t *libexplain_iocontrol_find_by_number(int fildes,
+const explain_iocontrol_t *explain_iocontrol_find_by_number(int fildes,
     int request, const void *data);
 
 /**
-  * The libexplain_iocontrol_print_name function is used to print the
+  * The explain_iocontrol_print_name function is used to print the
   * name of a request argument passed to an ioctl(2) system call.
   *
   * @param p
-  *     Pointer to the libexplain_iocontrol_t instance,
+  *     Pointer to the explain_iocontrol_t instance,
   *     rather like "this" in C++ code.
   * @param sb
   *     The string buffer to print into.
@@ -166,17 +166,17 @@ const libexplain_iocontrol_t *libexplain_iocontrol_find_by_number(int fildes,
   * @param data
   *     The original data, exactly as passed to the ioctl(2) system call.
   */
-void libexplain_iocontrol_print_name(const libexplain_iocontrol_t *p,
-    struct libexplain_string_buffer_t *sb, int errnum, int fildes,
+void explain_iocontrol_print_name(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes,
     int request, const void *data);
 
 /**
-  * The libexplain_iocontrol_print_data function is used to print a
+  * The explain_iocontrol_print_data function is used to print a
   * representation of the data argument passed to an ioctl(2) system
   * call.
   *
   * @param p
-  *     Pointer to the libexplain_iocontrol_t instance,
+  *     Pointer to the explain_iocontrol_t instance,
   *     rather like "this" in C++ code.
   * @param sb
   *     The string buffer to print into.
@@ -190,16 +190,16 @@ void libexplain_iocontrol_print_name(const libexplain_iocontrol_t *p,
   * @param data
   *     The original data, exactly as passed to the ioctl(2) system call.
   */
-void libexplain_iocontrol_print_data(const libexplain_iocontrol_t *p,
-    struct libexplain_string_buffer_t *sb, int errnum, int fildes,
+void explain_iocontrol_print_data(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes,
     int request, const void *data);
 
 /**
-  * The libexplain_iocontrol_print_explanation function is used to print
+  * The explain_iocontrol_print_explanation function is used to print
   * an explanation for an error reported by an ioctl(2) system call.
   *
   * @param p
-  *     Pointer to the libexplain_iocontrol_t instance,
+  *     Pointer to the explain_iocontrol_t instance,
   *     rather like "this" in C++ code.
   * @param sb
   *     The string buffer to print into.
@@ -213,12 +213,12 @@ void libexplain_iocontrol_print_data(const libexplain_iocontrol_t *p,
   * @param data
   *     The original data, exactly as passed to the ioctl(2) system call.
   */
-void libexplain_iocontrol_print_explanation(const libexplain_iocontrol_t *p,
-    struct libexplain_string_buffer_t *sb, int errnum, int fildes,
+void explain_iocontrol_print_explanation(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes,
     int request, const void *data);
 
 /**
-  * The libexplain_parse_ioctl_request_or_die function is used to parse
+  * The explain_parse_ioctl_request_or_die function is used to parse
   * a text string to produce an ioctl(2) request value.
   *
   * @param text
@@ -228,6 +228,6 @@ void libexplain_iocontrol_print_explanation(const libexplain_iocontrol_t *p,
   *     function does not return, but instead prints an error message
   *     and terminates via exit(2).
   */
-int libexplain_parse_ioctl_request_or_die(const char *text);
+int explain_parse_ioctl_request_or_die(const char *text);
 
 #endif /* LIBEXPLAIN_IOCONTROL_H */

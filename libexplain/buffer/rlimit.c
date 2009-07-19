@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,20 +24,20 @@
 
 
 void
-libexplain_buffer_rlimit(libexplain_string_buffer_t *sb, const struct rlimit *p)
+explain_buffer_rlimit(explain_string_buffer_t *sb, const struct rlimit *p)
 {
-    libexplain_string_buffer_puts(sb, "{ rlim_cur = ");
+    explain_string_buffer_puts(sb, "{ rlim_cur = ");
     if (p->rlim_cur == RLIM_INFINITY)
-        libexplain_string_buffer_puts(sb, "RLIM_INFINITY");
+        explain_string_buffer_puts(sb, "RLIM_INFINITY");
     else
-        libexplain_string_buffer_printf(sb, "%lld", (long long)p->rlim_cur);
+        explain_string_buffer_printf(sb, "%lld", (long long)p->rlim_cur);
     if (p->rlim_cur != p->rlim_max)
     {
-        libexplain_string_buffer_puts(sb, ", rlim_max = ");
+        explain_string_buffer_puts(sb, ", rlim_max = ");
         if (p->rlim_max == RLIM_INFINITY)
-            libexplain_string_buffer_puts(sb, "RLIM_INFINITY");
+            explain_string_buffer_puts(sb, "RLIM_INFINITY");
         else
-            libexplain_string_buffer_printf(sb, "%lld", (long long)p->rlim_max);
+            explain_string_buffer_printf(sb, "%lld", (long long)p->rlim_max);
     }
-    libexplain_string_buffer_puts(sb, " }");
+    explain_string_buffer_puts(sb, " }");
 }

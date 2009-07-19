@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocgptn.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocgptn =
+const explain_iocontrol_t explain_iocontrol_tiocgptn =
 {
     "TIOCGPTN", /* name */
     TIOCGPTN, /* value */

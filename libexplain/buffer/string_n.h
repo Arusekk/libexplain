@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_string_n function may be used to
+  * The explain_buffer_string_n function may be used to
   * print a string, with a fixed upper limit.
   *
   * @param sb
@@ -32,7 +32,7 @@
   * @param data_size
   *     The maximum length of the string to be printed.
   */
-void libexplain_buffer_string_n(libexplain_string_buffer_t *sb,
+void explain_buffer_string_n(explain_string_buffer_t *sb,
     const char *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_STRING_N_H */

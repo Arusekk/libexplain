@@ -26,19 +26,13 @@
 
 
 int
-libexplain_fcntl_or_die(int fildes, int command, long arg)
+explain_fcntl_or_die(int fildes, int command, long arg)
 {
     int             result;
 
-    result = fcntl(fildes, command, arg);
+    result = explain_fcntl_on_error(fildes, command, arg);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_fcntl(fildes, command, arg)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

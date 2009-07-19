@@ -41,12 +41,12 @@
 
 
 static void
-libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
+explain_buffer_sockopt(explain_string_buffer_t *sb, int level, int name,
     const void *data, socklen_t data_size)
 {
-    if (libexplain_pointer_is_efault(data, data_size))
+    if (explain_pointer_is_efault(data, data_size))
     {
-        libexplain_buffer_pointer(sb, data);
+        explain_buffer_pointer(sb, data);
         return;
     }
     switch (level)
@@ -78,7 +78,7 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
         case IP_MULTICAST_LOOP:
             if (data_size >= sizeof(int))
             {
-                libexplain_buffer_int_star(sb, data);
+                explain_buffer_int_star(sb, data);
                 break;
             }
             goto dunno;
@@ -90,11 +90,11 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct ip_opts *p;
 
                 p = data;
-                libexplain_string_buffer_puts(sb, "{ ip_dst = ");
-                libexplain_buffer_in_addr(sb, &p->ip_dst);
-                libexplain_string_buffer_puts(sb, ", ip_opts = ");
-                libexplain_buffer_char_data(sb, p->ip_opts, sizeof(p->ip_opts));
-                libexplain_string_buffer_putc(sb, '}');
+                explain_string_buffer_puts(sb, "{ ip_dst = ");
+                explain_buffer_in_addr(sb, &p->ip_dst);
+                explain_string_buffer_puts(sb, ", ip_opts = ");
+                explain_buffer_char_data(sb, p->ip_opts, sizeof(p->ip_opts));
+                explain_string_buffer_putc(sb, '}');
                 break;
             }
             goto dunno;
@@ -110,11 +110,11 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 size_t          j;
 
                 p = data;
-                libexplain_string_buffer_puts(sb, "{ imsf_multiaddr = ");
-                libexplain_buffer_in_addr(sb, &p->imsf_multiaddr);
-                libexplain_string_buffer_puts(sb, ", imsf_interface = ");
-                libexplain_buffer_in_addr(sb, &p->imsf_interface);
-                libexplain_string_buffer_printf
+                explain_string_buffer_puts(sb, "{ imsf_multiaddr = ");
+                explain_buffer_in_addr(sb, &p->imsf_multiaddr);
+                explain_string_buffer_puts(sb, ", imsf_interface = ");
+                explain_buffer_in_addr(sb, &p->imsf_interface);
+                explain_string_buffer_printf
                 (
                     sb,
                     ", imsf_fmode = 0x%08lX, imsf_numsrc = 0x%08lX, "
@@ -132,10 +132,10 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                     if ((socklen_t)(end - (const char *)data) > data_size)
                         break;
                     if (j)
-                        libexplain_string_buffer_puts(sb, ", ");
-                    libexplain_buffer_in_addr(sb, q);
+                        explain_string_buffer_puts(sb, ", ");
+                    explain_buffer_in_addr(sb, q);
                 }
-                libexplain_string_buffer_puts(sb, " }}");
+                explain_string_buffer_puts(sb, " }}");
                 break;
             }
             goto dunno;
@@ -146,9 +146,9 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct in_addr *p;
 
                 p = data;
-                libexplain_string_buffer_puts(sb, "{ ");
-                libexplain_buffer_in_addr(sb, p);
-                libexplain_string_buffer_puts(sb, " }");
+                explain_string_buffer_puts(sb, "{ ");
+                explain_buffer_in_addr(sb, p);
+                explain_string_buffer_puts(sb, " }");
                 break;
             }
             goto dunno;
@@ -160,11 +160,11 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct ip_mreq *p;
 
                 p = data;
-                libexplain_string_buffer_puts(sb, "{ imr_multiaddr = ");
-                libexplain_buffer_in_addr(sb, &p->imr_multiaddr);
-                libexplain_string_buffer_puts(sb, ", imr_interface = ");
-                libexplain_buffer_in_addr(sb, &p->imr_interface);
-                libexplain_string_buffer_puts(sb, " }");
+                explain_string_buffer_puts(sb, "{ imr_multiaddr = ");
+                explain_buffer_in_addr(sb, &p->imr_multiaddr);
+                explain_string_buffer_puts(sb, ", imr_interface = ");
+                explain_buffer_in_addr(sb, &p->imr_interface);
+                explain_string_buffer_puts(sb, " }");
                 break;
             }
             if (data_size >= sizeof(struct ip_mreqn))
@@ -172,11 +172,11 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct ip_mreqn *p;
 
                 p = data;
-                libexplain_string_buffer_puts(sb, "{ imr_multiaddr = ");
-                libexplain_buffer_in_addr(sb, &p->imr_multiaddr);
-                libexplain_string_buffer_puts(sb, ", imr_address = ");
-                libexplain_buffer_in_addr(sb, &p->imr_address);
-                libexplain_string_buffer_printf
+                explain_string_buffer_puts(sb, "{ imr_multiaddr = ");
+                explain_buffer_in_addr(sb, &p->imr_multiaddr);
+                explain_string_buffer_puts(sb, ", imr_address = ");
+                explain_buffer_in_addr(sb, &p->imr_address);
+                explain_string_buffer_printf
                 (
                     sb,
                     ", imr_ifindex = %d }",
@@ -195,13 +195,13 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct ip_mreq_source *p;
 
                 p = data;
-                libexplain_string_buffer_puts(sb, "{ imr_multiaddr = ");
-                libexplain_buffer_in_addr(sb, &p->imr_multiaddr);
-                libexplain_string_buffer_puts(sb, ", imr_interface = ");
-                libexplain_buffer_in_addr(sb, &p->imr_interface);
-                libexplain_string_buffer_puts(sb, ", imr_sourceaddr = ");
-                libexplain_buffer_in_addr(sb, &p->imr_sourceaddr);
-                libexplain_string_buffer_puts(sb, " }");
+                explain_string_buffer_puts(sb, "{ imr_multiaddr = ");
+                explain_buffer_in_addr(sb, &p->imr_multiaddr);
+                explain_string_buffer_puts(sb, ", imr_interface = ");
+                explain_buffer_in_addr(sb, &p->imr_interface);
+                explain_string_buffer_puts(sb, ", imr_sourceaddr = ");
+                explain_buffer_in_addr(sb, &p->imr_sourceaddr);
+                explain_string_buffer_puts(sb, " }");
                 break;
             }
             goto dunno;
@@ -213,19 +213,19 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct group_req *p;
 
                 p = data;
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     "{ gr_interface = %lu, gr_group = ",
                     (long)p->gr_interface
                 );
-                libexplain_buffer_sockaddr
+                explain_buffer_sockaddr
                 (
                     sb,
                     (const struct sockaddr *)&p->gr_group,
                     sizeof(p->gr_group)
                 );
-                libexplain_string_buffer_puts(sb, " }");
+                explain_string_buffer_puts(sb, " }");
                 break;
             }
             goto dunno;
@@ -239,26 +239,26 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct group_source_req *p;
 
                 p = data;
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     "{ gsr_interface = %lu, gsr_group = ",
                     (unsigned long)p->gsr_interface
                 );
-                libexplain_buffer_sockaddr
+                explain_buffer_sockaddr
                 (
                     sb,
                     (const struct sockaddr *)&p->gsr_group,
                     sizeof(p->gsr_group)
                 );
-                libexplain_string_buffer_puts(sb, ", gsr_source = ");
-                libexplain_buffer_sockaddr
+                explain_string_buffer_puts(sb, ", gsr_source = ");
+                explain_buffer_sockaddr
                 (
                     sb,
                     (const struct sockaddr *)&p->gsr_source,
                     sizeof(p->gsr_source)
                 );
-                libexplain_string_buffer_puts(sb, " }");
+                explain_string_buffer_puts(sb, " }");
                 break;
             }
             goto dunno;
@@ -286,7 +286,7 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
         switch (name)
         {
         case SO_BINDTODEVICE:
-            libexplain_string_buffer_puts_quoted_n(sb, data, data_size);
+            explain_string_buffer_puts_quoted_n(sb, data, data_size);
             break;
 
         case SO_LINGER:
@@ -295,7 +295,7 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
                 const struct linger *p;
 
                 p = data;
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     "{ l_onoff = %d, l_linger = %d }",
@@ -310,7 +310,7 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
         case SO_SNDTIMEO:
             if (data_size >= sizeof(struct timeval))
             {
-                libexplain_buffer_timeval(sb, data);
+                explain_buffer_timeval(sb, data);
                 break;
             }
             goto dunno;
@@ -329,36 +329,36 @@ libexplain_buffer_sockopt(libexplain_string_buffer_t *sb, int level, int name,
     default:
         dunno:
         if (data_size == sizeof(int))
-            libexplain_buffer_int_star(sb, data);
+            explain_buffer_int_star(sb, data);
         else
-            libexplain_buffer_char_data(sb, data, data_size);
+            explain_buffer_char_data(sb, data, data_size);
         break;
     }
 }
 
 
 static void
-libexplain_buffer_errno_setsockopt_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_setsockopt_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, int level, int name, void *data,
     socklen_t data_size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "setsockopt(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", level = ");
-    libexplain_buffer_sockopt_level(sb, level);
-    libexplain_string_buffer_puts(sb, ", name = ");
-    libexplain_buffer_sockopt_name(sb, level, name);
-    libexplain_string_buffer_puts(sb, ", data = ");
-    libexplain_buffer_sockopt(sb, level, name, data, data_size);
-    libexplain_string_buffer_puts(sb, ", data_size = ");
-    libexplain_buffer_socklen(sb, data_size);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "setsockopt(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", level = ");
+    explain_buffer_sockopt_level(sb, level);
+    explain_string_buffer_puts(sb, ", name = ");
+    explain_buffer_sockopt_name(sb, level, name);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_buffer_sockopt(sb, level, name, data, data_size);
+    explain_string_buffer_puts(sb, ", data_size = ");
+    explain_buffer_socklen(sb, data_size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_setsockopt_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_setsockopt_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, int level, int name, void *data,
     socklen_t data_size)
 {
@@ -371,40 +371,40 @@ libexplain_buffer_errno_setsockopt_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "data");
+        explain_buffer_efault(sb, "data");
         break;
 
     case EINVAL:
-        libexplain_buffer_einval_too_small(sb, "data_size", data_size);
+        explain_buffer_einval_too_small(sb, "data_size", data_size);
         break;
 
     case ENOPROTOOPT:
-        libexplain_buffer_enoprotoopt(sb, "name");
+        explain_buffer_enoprotoopt(sb, "name");
         break;
 
     case ENOTSOCK:
-        libexplain_buffer_enotsock(sb, fildes, "fildes");
+        explain_buffer_enotsock(sb, fildes, "fildes");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_setsockopt(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_setsockopt(explain_string_buffer_t *sb, int errnum,
     int fildes, int level, int name, void *data, socklen_t data_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_setsockopt_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_setsockopt_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -414,7 +414,7 @@ libexplain_buffer_errno_setsockopt(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_buffer_errno_setsockopt_explanation
+    explain_buffer_errno_setsockopt_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -424,7 +424,7 @@ libexplain_buffer_errno_setsockopt(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim: set ts=8 sw=4 et */

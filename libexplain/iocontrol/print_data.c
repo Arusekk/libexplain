@@ -24,13 +24,13 @@
 
 
 void
-libexplain_iocontrol_print_data(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+explain_iocontrol_print_data(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
     /*
      * It is tempting to check that data is a valid pointer, using
-     * !libexplain_pointer_is_efault(data), at this point.  This is
+     * !explain_pointer_is_efault(data), at this point.  This is
      * undesiable in the general case because there are some ioctl
      * requests that actually pass an integer value as data, rather than
      * a pointer value.  Yes, it stinks; no, it can't be changed.
@@ -38,5 +38,5 @@ libexplain_iocontrol_print_data(const libexplain_iocontrol_t *p,
     if (p && p->print_data)
         p->print_data(p, sb, errnum, fildes, request, data);
     else
-        libexplain_buffer_pointer(sb, data);
+        explain_buffer_pointer(sb, data);
 }

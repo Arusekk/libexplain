@@ -16,29 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/unistd.h>
 
-#include <libexplain/option.h>
 #include <libexplain/readlink.h>
-#include <libexplain/wrap_and_print.h>
 
 
-int
-libexplain_readlink_or_die(const char *pathname, char *data, int data_size)
+ssize_t
+explain_readlink_or_die(const char *pathname, char *data, size_t data_size)
 {
-    int             result;
+    ssize_t         result;
 
-    result = readlink(pathname, data, data_size);
+    result = explain_readlink_on_error(pathname, data, data_size);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_readlink(pathname, data, data_size)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

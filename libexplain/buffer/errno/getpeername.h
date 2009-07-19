@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_getpeername function
+  * The explain_buffer_errno_getpeername function
   * is used to obtain an explanation of an error returned
   * by the getpeername(2) system call.
   * The least the message will contain is the value of
@@ -51,7 +51,7 @@
   *     The original sock_addr_size, exactly as passed to the
   *     getpeername(2) system call.
   */
-void libexplain_buffer_errno_getpeername(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_getpeername(explain_string_buffer_t *sb,
     int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size);
 

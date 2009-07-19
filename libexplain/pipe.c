@@ -22,9 +22,9 @@
 
 
 const char *
-libexplain_pipe(int *pipefd)
+explain_pipe(int *pipefd)
 {
-    return libexplain_errno_pipe(errno, pipefd);
+    return explain_errno_pipe(errno, pipefd);
 }
 
 /* vim:ts=8:sw=4:et */

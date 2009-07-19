@@ -25,16 +25,16 @@
 
 
 static void
-libexplain_buffer_errno_malloc_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_malloc_system_call(explain_string_buffer_t *sb,
     int errnum, size_t size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "malloc(size = %ld)", (long)size);
+    explain_string_buffer_printf(sb, "malloc(size = %ld)", (long)size);
 }
 
 
-static void
-libexplain_buffer_errno_malloc_explanation(libexplain_string_buffer_t *sb,
+void
+explain_buffer_errno_malloc_explanation(explain_string_buffer_t *sb,
     int errnum, size_t size)
 {
     /*
@@ -44,36 +44,36 @@ libexplain_buffer_errno_malloc_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case ENOMEM:
-        libexplain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_malloc(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_malloc(explain_string_buffer_t *sb, int errnum,
     size_t size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_malloc_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_malloc_system_call
     (
         &exp.system_call_sb,
         errnum,
         size
     );
-    libexplain_buffer_errno_malloc_explanation
+    explain_buffer_errno_malloc_explanation
     (
         &exp.explanation_sb,
         errnum,
         size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

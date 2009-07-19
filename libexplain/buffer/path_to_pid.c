@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ snoop_symlink(const char *path, const struct stat *st1)
         (
             lstat(link_content, &st4) == 0
         &&
-            libexplain_is_same_inode(st1, &st4)
+            explain_is_same_inode(st1, &st4)
         )
             return 1;
     }
@@ -108,8 +108,8 @@ snoop_process(int pid, const struct stat *st)
 typedef struct adapter adapter;
 struct adapter
 {
-    libexplain_lsof_t inherited;
-    libexplain_string_buffer_t *sb;
+    explain_lsof_t inherited;
+    explain_string_buffer_t *sb;
     const struct stat *st;
     int             count;
     const char      *caption;
@@ -117,27 +117,27 @@ struct adapter
 
 
 static void
-n_callback(libexplain_lsof_t *context, const char *name)
+n_callback(explain_lsof_t *context, const char *name)
 {
     adapter         *a;
     struct stat     st;
 
     a = (adapter *)context;
-    if (lstat(name, &st) >= 0 && libexplain_is_same_inode(a->st, &st))
+    if (lstat(name, &st) >= 0 && explain_is_same_inode(a->st, &st))
     {
         if (a->count == 0)
         {
             if (a->caption)
             {
-                libexplain_string_buffer_putc(a->sb, ' ');
-                libexplain_string_buffer_puts(a->sb, a->caption);
-                libexplain_string_buffer_puts(a->sb, " is in use");
+                explain_string_buffer_putc(a->sb, ' ');
+                explain_string_buffer_puts(a->sb, a->caption);
+                explain_string_buffer_puts(a->sb, " is in use");
             }
-            libexplain_string_buffer_puts(a->sb, " (pid");
+            explain_string_buffer_puts(a->sb, " (pid");
         }
         else
-            libexplain_string_buffer_putc(a->sb, ',');
-        libexplain_string_buffer_printf(a->sb, " %d", context->pid);
+            explain_string_buffer_putc(a->sb, ',');
+        explain_string_buffer_printf(a->sb, " %d", context->pid);
         a->count++;
     }
 }
@@ -146,7 +146,7 @@ n_callback(libexplain_lsof_t *context, const char *name)
 
 
 static int
-stat_to_pid(libexplain_string_buffer_t *sb, const struct stat *st)
+stat_to_pid(explain_string_buffer_t *sb, const struct stat *st)
 {
 #ifdef PROC_FS_USEFUL
     int             count;
@@ -172,16 +172,16 @@ stat_to_pid(libexplain_string_buffer_t *sb, const struct stat *st)
         if (snoop_process(pid, st))
         {
             if (count == 0)
-                libexplain_string_buffer_puts(sb, " (pid");
+                explain_string_buffer_puts(sb, " (pid");
             else
-                libexplain_string_buffer_putc(sb, ',');
-            libexplain_string_buffer_printf(sb, " %d", pid);
+                explain_string_buffer_putc(sb, ',');
+            explain_string_buffer_printf(sb, " %d", pid);
             ++count;
         }
     }
     closedir(dp);
     if (count > 0)
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_putc(sb, ')');
     return count;
 #else
     adapter         obj;
@@ -191,16 +191,16 @@ stat_to_pid(libexplain_string_buffer_t *sb, const struct stat *st)
     obj.sb = sb;
     obj.count = 0;
     obj.caption = 0;
-    libexplain_lsof("", &obj.inherited);
+    explain_lsof("", &obj.inherited);
     if (obj.count > 0)
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_putc(sb, ')');
     return obj.count;
 #endif
 }
 
 
 int
-libexplain_buffer_path_to_pid(libexplain_string_buffer_t *sb, const char *path)
+explain_buffer_path_to_pid(explain_string_buffer_t *sb, const char *path)
 {
     struct stat     st;
 
@@ -211,7 +211,7 @@ libexplain_buffer_path_to_pid(libexplain_string_buffer_t *sb, const char *path)
 
 
 int
-libexplain_buffer_fildes_to_pid(libexplain_string_buffer_t *sb, int fildes)
+explain_buffer_fildes_to_pid(explain_string_buffer_t *sb, int fildes)
 {
     struct stat     st;
 
@@ -222,7 +222,7 @@ libexplain_buffer_fildes_to_pid(libexplain_string_buffer_t *sb, int fildes)
 
 
 int
-libexplain_buffer_path_users(libexplain_string_buffer_t *sb, const char *path,
+explain_buffer_path_users(explain_string_buffer_t *sb, const char *path,
     const char *caption)
 {
 #ifdef PROC_FS_USEFUL
@@ -253,20 +253,20 @@ libexplain_buffer_path_users(libexplain_string_buffer_t *sb, const char *path,
         {
             if (count == 0)
             {
-                libexplain_string_buffer_putc(sb, ' ');
-                libexplain_string_buffer_puts(sb, caption);
-                libexplain_string_buffer_puts(sb, " is in use");
-                libexplain_string_buffer_puts(sb, " (pid");
+                explain_string_buffer_putc(sb, ' ');
+                explain_string_buffer_puts(sb, caption);
+                explain_string_buffer_puts(sb, " is in use");
+                explain_string_buffer_puts(sb, " (pid");
             }
             else
-                libexplain_string_buffer_putc(sb, ',');
-            libexplain_string_buffer_printf(sb, " %d", pid);
+                explain_string_buffer_putc(sb, ',');
+            explain_string_buffer_printf(sb, " %d", pid);
             ++count;
         }
     }
     closedir(dp);
     if (count > 0)
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_putc(sb, ')');
     return count;
 #else
     adapter         obj;
@@ -279,9 +279,9 @@ libexplain_buffer_path_users(libexplain_string_buffer_t *sb, const char *path,
     obj.sb = sb;
     obj.count = 0;
     obj.caption = caption;
-    libexplain_lsof("", &obj.inherited);
+    explain_lsof("", &obj.inherited);
     if (obj.count > 0)
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_putc(sb, ')');
     return obj.count;
 #endif
 }

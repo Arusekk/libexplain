@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/sizeof.h>
 
 
-const libexplain_errno_info_t libexplain_errno_info[] =
+const explain_errno_info_t explain_errno_info[] =
 {
 #ifdef EPERM
     { EPERM, "EPERM" },
@@ -420,4 +420,4 @@ const libexplain_errno_info_t libexplain_errno_info[] =
 #endif
 };
 
-const size_t libexplain_errno_info_size = SIZEOF(libexplain_errno_info);
+const size_t explain_errno_info_size = SIZEOF(explain_errno_info);

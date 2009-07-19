@@ -48,8 +48,21 @@ The functions understood include:
 accept \f[I]fildes\fP \f[I]addr\fP \f[I]addrlen\fP
 The \f[I]accept\fP(2) system call.
 .TP 8n
+accept4 \f[I]fildes\fP [[ \f[I]sock_addr\fP \f[I]sock_addr_size\fP ] \
+\f[I]flags\fP ]
+The \f[I]accept4\fP(2) system call.
+.TP 8n
 access \f[I]pathname\fP
 The \f[I]access\fP(2) system call.
+.TP 8n
+acct \f[I]pathname\fP
+The \f[I]acct\fP(2) system call.
+.TP 8n
+adjtime \f[I]delta\fP \f[I]olddelta\fP
+The \f[I]adjtime\fP(2) system call.
+.TP 8n
+adjtimex \f[I]data\fP
+The \f[I]adjtimex\fP(2) system call.
 .\" ----------  B  ---------------------------------------------------------
 .TP 8n
 bind \f[I]fildes\fP \f[I]addr\fP \f[I]sockaddr_size\fP
@@ -65,6 +78,9 @@ The \f[I]chmod\fP(2) system call.
 chown \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP
 The \f[I]chown\fP(2) system call.
 .TP 8n
+chroot \f[I]pathname\fP
+The \f[I]chroot\fP(2) system call.
+.TP 8n
 close \f[I]fildes\fP
 The \f[I]close\fP(2) system call.
 .TP 8n
@@ -78,12 +94,18 @@ creat \f[I]pathname\fP [ \f[I]permission-mode\fP
 The \f[I]creat\fP(2) system call.
 .\" ----------  D  ---------------------------------------------------------
 .TP 8n
+dirfd \f[I]dir\fP
+The \f[I]dirfd\fP(3) system call.
+.TP 8n
 dup \f[I]fildes\fP
 The \f[I]dup\fP(2) system call.
 .TP 8n
 dup2 \f[I]oldfd\fP \f[I]newfd\fP
 The \f[I]dup2\fP(2) system call.
 .\" ----------  E  ---------------------------------------------------------
+.TP 8n
+eventfd \f[I]initval\fP \f[I]flags\fP
+The \f[I]eventfd\fP(2) system call.
 .TP 8n
 execve \f[I]pathname\fP \f[I]arg\fP...
 The \f[I]execve\fP(2) system call.
@@ -107,11 +129,20 @@ The \f[I]fdopen\fP(3) system call.
 ferror \f[I]fp\fP
 The \f[I]ferror\fP(3) system call.
 .TP 8n
+fflush \f[I]fp\fP
+The \f[I]fflush\fP(3) system call.
+.TP 8n
 fgetc \f[I]fp\fP
 The \f[I]fgetc\fP(3) system call.
 .TP 8n
 fgets \f[I]data\fP \f[I]data_size\fP \f[I]fp\fP
 The \f[I]fgets\fP(3) system call.
+.TP 8n
+fileno \f[I]fp\fP
+The \f[I]fileno\fP(3) system call.
+.TP 8n
+flock \f[I]fildes\fP \f[I]command\fP
+The \f[I]flock\fP(2) system call.
 .TP 8n
 fork
 The \f[I]fork\fP(2) system call.
@@ -136,6 +167,12 @@ The \f[I]fputc\fP(3) system call.
 fstat \f[I]pathname\fP
 The \f[I]fstat\fP(2) system call.
 .TP 8n
+fstatfs \f[I]fildes\fP \f[I]data\fP
+The \f[I]fstatfs\fP(2) system call.
+.TP 8n
+ftime \f[I]tp\fP
+The \f[I]ftime\fP(3) system call.
+.TP 8n
 ftruncate \f[I]fildes\fP \f[I]length\fP
 The \f[I]ftruncate\fP(2) system call.
 .TP 8n
@@ -152,8 +189,14 @@ The \f[I]getchar\fP(3) system call.
 getcwd \f[I]buf\fP \f[I]size\fP
 The \f[I]getcwd\fP(2) system call.
 .TP 8n
+getgroups \f[I]data_size\fP \f[I]data\fP
+The \f[I]getgroups\fP(2) system call.
+.TP 8n
 getpeername \f[I]fildes\fP \f[I]sock_addr\fP \f[I]sock_addr_size\fP
 The \f[I]getpeername\fP(2) system call.
+.TP 8n
+gethostname [ \f[I]data\fP \f[I]data_size\fP ]
+The \f[I]gethostname\fP(2) system call.
 .TP 8n
 setsockopt \f[I]fildes\fP \f[I]level\fP \f[I]name\fP \f[I]data\fP \
 \f[I]data_size\fP
@@ -178,6 +221,9 @@ ioctl \f[I]fildes\fP \f[I]request\fP \f[I]data\fP
 The \f[I]ioctl\fP(2) system call.
 .\" ----------  J  ---------------------------------------------------------
 .\" ----------  K  ---------------------------------------------------------
+.TP 8n
+kill \f[I]pid\fP \f[I]sig\fP
+The \f[I]kill\fP(2) system call.
 .\" ----------  L  ---------------------------------------------------------
 .TP 8n
 lchown \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP
@@ -202,6 +248,9 @@ The \f[I]malloc\fP(3) system call.
 mkdir \f[I]pathname\fP [ \f[I]mode\fP ]
 The \f[I]mkdir\fP(2) system call.
 .\" ----------  N  ---------------------------------------------------------
+.TP 8n
+nice \f[I]inc\fP
+The \f[I]nice\fP(2) system call.
 .\" ----------  O  ---------------------------------------------------------
 .TP 8n
 open \f[I]pathname\fP \f[I]flags\fP [ \f[I]mode\fP ]
@@ -227,11 +276,17 @@ The \f[I]pipe\fP(2) system call.
 popen \f[I]command\fP \f[I]flags\fP
 The \f[I]popen\fP(3) system call.
 .TP 8n
+pread \f[I]fildes\fP \f[I]data\fP \f[I]data_size\fP \f[I]offset\fP
+The \f[I]pread\fP(2) system call.
+.TP 8n
 putc \f[I]c\fP \f[I]fp\fP
 The \f[I]putc\fP(3) system call.
 .TP 8n
 putchar \f[I]c\fP
 The \f[I]putchar\fP(3) system call.
+.TP 8n
+pwrite \f[I]fildes\fP \f[I]data\fP \f[I]data_size\fP \f[I]offset\fP
+The \f[I]pwrite\fP(2) system call.
 .\" ----------  Q  ---------------------------------------------------------
 .\" ----------  R  ---------------------------------------------------------
 .TP 8n
@@ -249,14 +304,53 @@ select \f[I]nfds\fP \f[I]readfds\fP \f[I]writefds\fP \f[I]exceptfds\fP \
 \f[I]timeout\fP
 The \f[I]select\fP(2) system call.
 .TP 8n
+setgroups \f[I]data_size\fP \f[I]data\fP
+The \f[I]setgroups\fP(2) system call.
+.TP 8n
+sethostname \f[I]name\fP [ \f[I]name_size\fP ]
+The \f[I]sethostname\fP(2) system call.
+.TP 8n
+signalfd \f[I]fildes\fP \f[I]mask\fP \f[I]flags\fP
+The \f[I]signalfd\fP(2) system call.
+.TP 8n
 socket \f[I]domain\fP \f[I]type\fP \f[I]protocol\fP
 The \f[I]socket\fP(2) system call.
 .TP 8n
 stat \f[I]pathname\fP
 The \f[I]stat\fP(2) system call.
 .TP 8n
+statfs \f[I]pathname\fP \f[I]data\fP
+The \f[I]statfs\fP(2) system call.
+.TP 8n
+strdup \f[I]data\fP
+The \f[I]strdup\fP(3) system call.
+.TP 8n
 strerror
 The error given will be printed out with all known detail.
+.TP 8n
+strndup \f[I]data\fP \f[I]data_size\fP
+The \f[I]strndup\fP(3) system call.
+.TP 8n
+strtod \f[I]nptr\fP \f[I]endptr\fP
+The \f[I]strtod\fP(3) system call.
+.TP 8n
+strtof \f[I]nptr\fP \f[I]endptr\fP
+The \f[I]strtof\fP(3) system call.
+.TP 8n
+strtol \f[I]nptr\fP \f[I]endptr\fP \f[I]base\fP
+The \f[I]strtol\fP(3) system call.
+.TP 8n
+strtold \f[I]nptr\fP \f[I]endptr\fP
+The \f[I]strtold\fP(3) system call.
+.TP 8n
+strtoll \f[I]nptr\fP \f[I]endptr\fP \f[I]base\fP
+The \f[I]strtoll\fP(3) system call.
+.TP 8n
+strtoul \f[I]nptr\fP \f[I]endptr\fP \f[I]base\fP
+The \f[I]strtoul\fP(3) system call.
+.TP 8n
+strtoull \f[I]nptr\fP \f[I]endptr\fP \f[I]base\fP
+The \f[I]strtoull\fP(3) system call.
 .TP 8n
 symlink \f[I]oldpath\fP \f[I]newpath\fP
 The \f[I]symlink\fP(2) system call.
@@ -264,6 +358,15 @@ The \f[I]symlink\fP(2) system call.
 system \f[I]command\fP
 The \f[I]system\fP(3) system call.
 .\" ----------  T  ---------------------------------------------------------
+.TP 8n
+time \f[I]t\fP
+The \f[I]time\fP(2) system call.
+.TP 8n
+timerfd_create \f[I]clockid\fP \f[I]flags\fP
+The \f[I]timerfd_create\fP(2) system call.
+.TP 8n
+truncate \f[I]pathname\fP \f[I]size\fP
+The \f[I]truncate\fP(2) system call.
 .\" ----------  U  ---------------------------------------------------------
 .TP 8n
 unlink \f[I]pathname\fP

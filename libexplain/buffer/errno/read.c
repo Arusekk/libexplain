@@ -29,10 +29,11 @@
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/read.h>
-#include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/size_t.h>
 #include <libexplain/explanation.h>
 #include <libexplain/is_same_inode.h>
 #include <libexplain/open_flags.h>
@@ -40,20 +41,17 @@
 
 
 static void
-libexplain_buffer_errno_read_system_call(libexplain_string_buffer_t *sb,
-    int errnum, int fildes, const void *data, size_t data_size)
+explain_buffer_errno_read_system_call(explain_string_buffer_t *sb, int errnum,
+    int fildes, const void *data, size_t data_size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "read(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", data = ");
-    libexplain_buffer_pointer(sb, data);
-    libexplain_string_buffer_printf
-    (
-        sb,
-        ", data_size = %lld)",
-        (long long)data_size
-    );
+    explain_string_buffer_puts(sb, "read(fildes = ");
+    explain_buffer_fildes(sb, fildes);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_buffer_pointer(sb, data);
+    explain_string_buffer_puts(sb, ", data_size = ");
+    explain_buffer_size_t(sb, data_size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
@@ -69,15 +67,15 @@ is_a_tape(int fildes)
 
 
 void
-libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
-    int errnum, int fildes, const void *data, size_t data_size)
+explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
+    int fildes, const void *data, size_t data_size)
 {
     (void)data;
     (void)data_size;
     switch (errnum)
     {
     case EAGAIN:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
@@ -94,7 +92,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
             flags = fcntl(fildes, F_GETFL);
             if (flags >= 0)
             {
-                libexplain_buffer_gettext
+                explain_buffer_gettext
                 (
                     sb,
                     /*
@@ -105,23 +103,23 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                      */
                     i18n("the file descriptor is not open for reading")
                 );
-                libexplain_string_buffer_puts(sb, " (");
-                libexplain_buffer_open_flags(sb, flags);
-                libexplain_string_buffer_putc(sb, ')');
+                explain_string_buffer_puts(sb, " (");
+                explain_buffer_open_flags(sb, flags);
+                explain_string_buffer_putc(sb, ')');
             }
             else
             {
-                libexplain_buffer_ebadf(sb, fildes, "fildes");
+                explain_buffer_ebadf(sb, fildes, "fildes");
             }
         }
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "data");
+        explain_buffer_efault(sb, "data");
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "read");
+        explain_buffer_eintr(sb, "read");
         break;
 
     case EINVAL:
@@ -133,20 +131,20 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
             {
                 if ((flags & O_ACCMODE) == O_WRONLY)
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         /* FIXME: i18n */
                         "the file descriptor is attached to an object "
                         "which is unsuitable for reading ("
                     );
-                    libexplain_buffer_open_flags(sb, flags);
-                    libexplain_string_buffer_putc(sb, ')');
+                    explain_buffer_open_flags(sb, flags);
+                    explain_string_buffer_putc(sb, ')');
                 }
 #ifdef O_DIRECT
                 else if (flags & O_DIRECT)
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         /* FIXME: i18n */
@@ -160,7 +158,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
 #endif
                 else
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         /* FIXME: i18n */
@@ -172,7 +170,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     /* FIXME: i18n */
@@ -214,10 +212,10 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
                 &&
                     fstat(controlling_tty_fd, &st2) == 0
                 &&
-                    libexplain_is_same_inode(&st1, &st2)
+                    explain_is_same_inode(&st1, &st2)
                 )
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         /* FIXME: i18n */
@@ -232,7 +230,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
             }
             if (controlling_tty_fd < 0)
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     /* FIXME: i18n */
@@ -243,12 +241,12 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
             }
             close(controlling_tty_fd);
 
-            libexplain_buffer_eio_fildes(sb, fildes);
+            explain_buffer_eio_fildes(sb, fildes);
         }
         break;
 
     case EISDIR:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
@@ -259,14 +257,14 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
             "the file is on a file system"
         );
-        libexplain_buffer_mount_point_fd(sb, fildes);
-        libexplain_string_buffer_puts
+        explain_buffer_mount_point_fd(sb, fildes);
+        explain_string_buffer_puts
         (
             sb,
             " that does not support Unix open file semantics, and the "
@@ -277,7 +275,7 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
     case EOVERFLOW:
         if (data_size > ((size_t)1 << 16) && is_a_tape(fildes))
         {
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 /* FIXME: i18n */
@@ -292,20 +290,20 @@ libexplain_buffer_errno_read_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_read(explain_string_buffer_t *sb, int errnum,
     int fildes, const void *data, size_t data_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_read_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_read_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -313,7 +311,7 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_buffer_errno_read_explanation
+    explain_buffer_errno_read_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -321,5 +319,5 @@ libexplain_buffer_errno_read(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

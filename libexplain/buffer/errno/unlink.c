@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,35 +43,35 @@
 
 
 static void
-libexplain_buffer_errno_unlink_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_unlink_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
-    libexplain_string_buffer_printf(sb, "unlink(pathname = ");
+    explain_string_buffer_printf(sb, "unlink(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 void
-libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_unlink_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_unlink = 1;
 
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EBUSY:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /*
@@ -84,19 +84,19 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
             i18n("the pathname is being used by the system or another "
             "process and the implementation considers this an error")
         );
-        libexplain_buffer_path_to_pid(sb, pathname);
+        explain_buffer_path_to_pid(sb, pathname);
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case EISDIR:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /*
@@ -111,11 +111,11 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -125,15 +125,15 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EPERM:
@@ -142,9 +142,9 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
          * This code branch is for systems OTHER THAN Linux,
          * because Linux says "EISDIR" in this case.
          */
-        if (libexplain_pathname_is_a_directory(pathname))
+        if (explain_pathname_is_a_directory(pathname))
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /*
@@ -164,7 +164,7 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
         /* Linux usually says EACCES in this case */
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -174,7 +174,7 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /*
@@ -192,41 +192,41 @@ libexplain_buffer_errno_unlink_explanation(libexplain_string_buffer_t *sb,
                 "the UID of the file to be deleted nor that of the directory "
                 "containing it")
             );
-            libexplain_buffer_dac_fowner(sb);
+            explain_buffer_dac_fowner(sb);
         }
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 
-    libexplain_buffer_note_if_still_exists(sb, pathname, "pathname");
+    explain_buffer_note_if_still_exists(sb, pathname, "pathname");
 }
 
 
 void
-libexplain_buffer_errno_unlink(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_unlink(explain_string_buffer_t *sb, int errnum,
     const char *pathname)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_unlink_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_unlink_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname
     );
-    libexplain_buffer_errno_unlink_explanation
+    explain_buffer_errno_unlink_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

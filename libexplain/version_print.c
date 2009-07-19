@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,8 +24,8 @@
 
 
 void
-libexplain_version_print(void)
+explain_version_print(void)
 {
-    printf("libexplain version %s\n", libexplain_version());
-    printf("Copyright (C) %s Peter Miller\n", libexplain_copyright_years());
+    printf("libexplain version %s\n", explain_version());
+    printf("Copyright (C) %s Peter Miller\n", explain_copyright_years());
 }

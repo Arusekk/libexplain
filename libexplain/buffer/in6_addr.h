@@ -24,7 +24,7 @@
 struct in6_addr; /* forward */
 
 /**
-  * The libexplain_buffer_in6_addr function may be used to
+  * The explain_buffer_in6_addr function may be used to
   * print a representation of an in6_addr structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct in6_addr; /* forward */
   * @param data
   *    The in6_addr structure to be printed.
   */
-void libexplain_buffer_in6_addr(libexplain_string_buffer_t *sb,
+void explain_buffer_in6_addr(explain_string_buffer_t *sb,
     const struct in6_addr *data);
 
 #endif /* LIBEXPLAIN_BUFFER_IN6_ADDR_H */

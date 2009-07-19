@@ -138,10 +138,10 @@ cascade etc/readme.man = etc/new.so ;
         > [target];
 }
 
-LICENSE: man/man3/libexplain_license.3
+LICENSE: man/man3/explain_license.3
 {
     sh [resolve etc/groff.sh] -Tascii -t -P-bcu -man
         [addprefix "-I" [search_list]]
-        [resolve man/man3/libexplain_license.3]
+        [resolve man/man3/explain_license.3]
         > [target];
 }

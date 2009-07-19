@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_ebadf function may be used to print a generic
+  * The explain_buffer_ebadf function may be used to print a generic
   * EBADF explanation into the string buffer.
   *
   * @param sb
@@ -33,7 +33,32 @@
   * @param caption
   *    the argument name to whinge about
   */
-void libexplain_buffer_ebadf(libexplain_string_buffer_t *sb, int fildes,
+void explain_buffer_ebadf(explain_string_buffer_t *sb, int fildes,
+    const char *caption);
+
+/**
+  * The explain_buffer_ebadf_stream function may be used to print a
+  * generic EBADF explanation into the string buffer.
+  *
+  * @param sb
+  *    The string buffer to print into
+  * @param caption
+  *    the argument name to whinge about
+  */
+void explain_buffer_ebadf_stream(explain_string_buffer_t *sb,
+    const char *caption);
+
+/**
+  * The explain_buffer_ebadf_dir function may be used to print a generic
+  * EBADF or EINVAL explanation into the string buffer, where a DIR*
+  * argument does not refer to a valid directory stream.
+  *
+  * @param sb
+  *    The string buffer to print into
+  * @param caption
+  *    the argument name to whinge about
+  */
+void explain_buffer_ebadf_dir(explain_string_buffer_t *sb,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_EBADF_H */

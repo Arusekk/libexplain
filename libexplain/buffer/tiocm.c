@@ -25,7 +25,7 @@
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "TIOCM_LE", TIOCM_LE },
     { "TIOCM_DTR", TIOCM_DTR },
@@ -42,21 +42,21 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_tiocm(libexplain_string_buffer_t *sb, int value)
+explain_buffer_tiocm(explain_string_buffer_t *sb, int value)
 {
-    libexplain_parse_bits_print(sb, value, table, SIZEOF(table));
+    explain_parse_bits_print(sb, value, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_tiocm_star(libexplain_string_buffer_t *sb, const int *value)
+explain_buffer_tiocm_star(explain_string_buffer_t *sb, const int *value)
 {
-    if (libexplain_pointer_is_efault(value, sizeof(*value)))
-        libexplain_buffer_pointer(sb, value);
+    if (explain_pointer_is_efault(value, sizeof(*value)))
+        explain_buffer_pointer(sb, value);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ ");
-        libexplain_buffer_tiocm(sb, *value);
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, "{ ");
+        explain_buffer_tiocm(sb, *value);
+        explain_string_buffer_puts(sb, " }");
     }
 }

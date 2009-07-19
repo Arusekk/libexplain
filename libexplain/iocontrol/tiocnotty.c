@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocnotty.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocnotty =
+const explain_iocontrol_t explain_iocontrol_tiocnotty =
 {
     "TIOCNOTTY", /* name */
     TIOCNOTTY, /* value */

@@ -25,20 +25,14 @@
 
 
 int
-libexplain_accept_or_die(int fildes, struct sockaddr *sock_addr,
+explain_accept_or_die(int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
     int             result;
 
-    result = accept(fildes, sock_addr, sock_addr_size);
+    result = explain_accept_on_error(fildes, sock_addr, sock_addr_size);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_accept(fildes, sock_addr, sock_addr_size)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

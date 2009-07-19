@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 
 void
-libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status)
+explain_buffer_wait_status(explain_string_buffer_t *sb, int status)
 {
     if (WIFEXITED(status))
     {
@@ -41,7 +41,7 @@ libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status)
             snprintf(name, sizeof(name), "EXIT_FAILURE (%d)", es);
         else
             snprintf(name, sizeof(name), "%d", es);
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -55,13 +55,13 @@ libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status)
     else if (WIFSIGNALED(status))
     {
         char            name[100];
-        libexplain_string_buffer_t name_sb;
+        explain_string_buffer_t name_sb;
 
-        libexplain_string_buffer_init(&name_sb, name, sizeof(name));
-        libexplain_buffer_strsignal(&name_sb, WTERMSIG(status));
+        explain_string_buffer_init(&name_sb, name, sizeof(name));
+        explain_buffer_strsignal(&name_sb, WTERMSIG(status));
         if (WCOREDUMP(status))
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -76,7 +76,7 @@ libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status)
         }
         else
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -91,11 +91,11 @@ libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status)
     else if (WIFSTOPPED(status))
     {
         char            name[100];
-        libexplain_string_buffer_t name_sb;
+        explain_string_buffer_t name_sb;
 
-        libexplain_string_buffer_init(&name_sb, name, sizeof(name));
-        libexplain_buffer_strsignal(&name_sb, WSTOPSIG(status));
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_init(&name_sb, name, sizeof(name));
+        explain_buffer_strsignal(&name_sb, WSTOPSIG(status));
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -110,11 +110,11 @@ libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status)
     else if (WIFCONTINUED(status))
     {
         char            name[100];
-        libexplain_string_buffer_t name_sb;
+        explain_string_buffer_t name_sb;
 
-        libexplain_string_buffer_init(&name_sb, name, sizeof(name));
-        libexplain_buffer_strsignal(&name_sb, SIGCONT);
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_init(&name_sb, name, sizeof(name));
+        explain_buffer_strsignal(&name_sb, SIGCONT);
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -127,7 +127,7 @@ libexplain_buffer_wait_status(libexplain_string_buffer_t *sb, int status)
     }
     else
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             /* This is supposed to be impossible, not xgettext msg needed. */

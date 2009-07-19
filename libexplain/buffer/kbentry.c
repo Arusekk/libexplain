@@ -26,10 +26,10 @@
 #ifdef HAVE_LINUX_KD_H
 
 void
-libexplain_buffer_kbentry(libexplain_string_buffer_t *sb,
+explain_buffer_kbentry(explain_string_buffer_t *sb,
     const struct kbentry *value)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "K_NORMTAB", K_NORMTAB },
         { "K_SHIFTTAB", K_SHIFTTAB },
@@ -37,15 +37,15 @@ libexplain_buffer_kbentry(libexplain_string_buffer_t *sb,
         { "K_ALTSHIFTTAB", K_ALTSHIFTTAB },
     };
 
-    libexplain_string_buffer_puts(sb, "{ kb_table = ");
-    libexplain_parse_bits_print_single
+    explain_string_buffer_puts(sb, "{ kb_table = ");
+    explain_parse_bits_print_single
     (
         sb,
         value->kb_table,
         table,
         SIZEOF(table)
     );
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         ", kb_index = %#x, kb_value = %#x }",

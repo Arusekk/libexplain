@@ -23,16 +23,16 @@
 
 
 const char *
-libexplain_errno_pclose(int errnum, FILE *fp)
+explain_errno_pclose(int errnum, FILE *fp)
 {
-    libexplain_message_errno_pclose
+    explain_message_errno_pclose
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         fp
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }
 
 /* vim:ts=8:sw=4:et */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_PATH_TO_PID_H
 #define LIBEXPLAIN_BUFFER_PATH_TO_PID_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_path_to_pid function may be used to inject the
+  * The explain_buffer_path_to_pid function may be used to inject the
   * PIDs of processes that have the given file open.
   *
   * @param sb
@@ -33,11 +33,11 @@ struct libexplain_string_buffer_t; /* forward */
   * @returns
   *    number of uses
   */
-int libexplain_buffer_path_to_pid(struct libexplain_string_buffer_t *sb,
+int explain_buffer_path_to_pid(struct explain_string_buffer_t *sb,
     const char *path);
 
 /**
-  * The libexplain_buffer_fildes_to_pid function may be used to inject the
+  * The explain_buffer_fildes_to_pid function may be used to inject the
   * PIDs of processes that have the given file open.
   *
   * @param sb
@@ -47,11 +47,11 @@ int libexplain_buffer_path_to_pid(struct libexplain_string_buffer_t *sb,
   * @returns
   *    number of uses
   */
-int libexplain_buffer_fildes_to_pid(struct libexplain_string_buffer_t *sb,
+int explain_buffer_fildes_to_pid(struct explain_string_buffer_t *sb,
     int fildes);
 
 /**
-  * The libexplain_buffer_path_users function may be used to inject the
+  * The explain_buffer_path_users function may be used to inject the
   * PIDs of processes that have the given file open.  The caption is
   * inserted, too.
   *
@@ -65,7 +65,7 @@ int libexplain_buffer_fildes_to_pid(struct libexplain_string_buffer_t *sb,
   * @returns
   *    number of uses
   */
-int libexplain_buffer_path_users(struct libexplain_string_buffer_t *sb,
+int explain_buffer_path_users(struct explain_string_buffer_t *sb,
     const char *path, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_PATH_TO_PID_H */

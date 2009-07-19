@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_chown function
+  * The explain_buffer_errno_chown function
   * is used to obtain an explanation of an error returned
   * by the chown(2) system call.
   * The least the message will contain is the value of
@@ -47,15 +47,15 @@
   * @param group
   *     The original group, exactly as passed to the chown(2) system call.
   */
-void libexplain_buffer_errno_chown(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_chown(explain_string_buffer_t *sb, int errnum,
     const char *path, int owner, int group);
 
-struct libexplain_final_t; /* forward */
+struct explain_final_t; /* forward */
 
 /**
-  * The libexplain_buffer_errno_chown_explanation_fc function factors out
-  * code common to both the libexplain_buffer_errno_chown_explanation and
-  * libexplain_buffer_errno_lchown_explanation functions.
+  * The explain_buffer_errno_chown_explanation_fc function factors out
+  * code common to both the explain_buffer_errno_chown_explanation and
+  * explain_buffer_errno_lchown_explanation functions.
   *
   * @param sb
   *     The string buffer to print the message into.
@@ -70,14 +70,14 @@ struct libexplain_final_t; /* forward */
   * @param final_component
   *     The designed properties of the final component.
   */
-void libexplain_buffer_errno_chown_explanation_fc(
-    libexplain_string_buffer_t *sb, int errnum, const char *path, int owner,
-    int group, struct libexplain_final_t *final_component);
+void explain_buffer_errno_chown_explanation_fc(
+    explain_string_buffer_t *sb, int errnum, const char *path, int owner,
+    int group, struct explain_final_t *final_component);
 
 /**
-  * The libexplain_buffer_errno_fchown_explanation
+  * The explain_buffer_errno_fchown_explanation
   * function factors out code common to both it and the
-  * libexplain_buffer_errno_chown_explanation function.
+  * explain_buffer_errno_chown_explanation function.
   *
   * @param sb
   *     The string buffer to print the message into.
@@ -90,7 +90,7 @@ void libexplain_buffer_errno_chown_explanation_fc(
   * @param group
   *     The original group, exactly as passed to the fchown(2) system call.
   */
-void libexplain_buffer_errno_fchown_explanation(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, int owner, int group);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CHOWN_H */

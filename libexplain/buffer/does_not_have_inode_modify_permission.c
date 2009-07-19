@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,24 +31,24 @@
 
 
 void
-libexplain_buffer_does_not_have_inode_modify_permission1(
-    libexplain_string_buffer_t *sb, const char *pathname,
+explain_buffer_does_not_have_inode_modify_permission1(
+    explain_string_buffer_t *sb, const char *pathname,
     const struct stat *pathname_st, const char *caption,
-    const libexplain_have_identity_t *hip)
+    const explain_have_identity_t *hip)
 {
     struct stat     dirname_st;
     char            filename[NAME_MAX + 1];
     char            dirname[PATH_MAX + 1];
 
-    libexplain_dirname(dirname, pathname, sizeof(dirname));
+    explain_dirname(dirname, pathname, sizeof(dirname));
     if (stat(dirname, &dirname_st) < 0)
     {
         memset(&dirname_st, 0, sizeof(dirname_st));
         dirname_st.st_mode = S_IFDIR;
     }
-    libexplain_basename(filename, pathname, sizeof(filename));
+    explain_basename(filename, pathname, sizeof(filename));
 
-    libexplain_buffer_does_not_have_inode_modify_permission
+    explain_buffer_does_not_have_inode_modify_permission
     (
         sb,
         filename,
@@ -62,17 +62,17 @@ libexplain_buffer_does_not_have_inode_modify_permission1(
 
 
 static void
-process_does_not_match_the_owner_uid(libexplain_string_buffer_t *sb,
+process_does_not_match_the_owner_uid(explain_string_buffer_t *sb,
     const char *kind_of_uid, const char *puid, const char *caption,
     int st_uid)
 {
     char            fuid[40];
-    libexplain_string_buffer_t fuid_sb;
+    explain_string_buffer_t fuid_sb;
 
-    libexplain_string_buffer_init(&fuid_sb, fuid, sizeof(fuid));
-    libexplain_buffer_uid(&fuid_sb, st_uid);
+    explain_string_buffer_init(&fuid_sb, fuid, sizeof(fuid));
+    explain_buffer_uid(&fuid_sb, st_uid);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -96,23 +96,23 @@ process_does_not_match_the_owner_uid(libexplain_string_buffer_t *sb,
         caption,
         fuid
     );
-    libexplain_buffer_dac_fowner(sb);
+    explain_buffer_dac_fowner(sb);
 }
 
 
 void
-libexplain_buffer_does_not_have_inode_modify_permission_fd(
-    libexplain_string_buffer_t *sb, int fildes, const char *fildes_caption)
+explain_buffer_does_not_have_inode_modify_permission_fd(
+    explain_string_buffer_t *sb, int fildes, const char *fildes_caption)
 {
     struct stat     st;
     struct stat     *st_p;
-    libexplain_have_identity_t id;
+    explain_have_identity_t id;
 
-    libexplain_have_identity_init(&id);
+    explain_have_identity_init(&id);
     st_p = &st;
     if (fstat(fildes, st_p) < 0)
         st_p = 0;
-    libexplain_buffer_does_not_have_inode_modify_permission_fd_st
+    explain_buffer_does_not_have_inode_modify_permission_fd_st
     (
         sb,
         st_p,
@@ -123,17 +123,17 @@ libexplain_buffer_does_not_have_inode_modify_permission_fd(
 
 
 void
-libexplain_buffer_does_not_have_inode_modify_permission_fd_st(
-    libexplain_string_buffer_t *sb, const struct stat *fildes_st,
-    const char *fildes_caption, const libexplain_have_identity_t *hip)
+explain_buffer_does_not_have_inode_modify_permission_fd_st(
+    explain_string_buffer_t *sb, const struct stat *fildes_st,
+    const char *fildes_caption, const explain_have_identity_t *hip)
 {
-    libexplain_string_buffer_t puid_sb;
-    libexplain_string_buffer_t caption_sb;
+    explain_string_buffer_t puid_sb;
+    explain_string_buffer_t caption_sb;
     const char      *kind_of_uid;
     char            puid[40];
     char            caption[100];
 
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -145,21 +145,21 @@ libexplain_buffer_does_not_have_inode_modify_permission_fd_st(
     );
     if (!fildes_st)
     {
-        libexplain_buffer_dac_fowner(sb);
+        explain_buffer_dac_fowner(sb);
         return;
     }
 
-    kind_of_uid = libexplain_have_identity_kind_of_uid(hip);
+    kind_of_uid = explain_have_identity_kind_of_uid(hip);
 
     /*
      * Give more information: tell them who they are (this can be a
      * surprise to users of set-UID programs) and who owns the file.
      */
-    libexplain_string_buffer_init(&puid_sb, puid, sizeof(puid));
-    libexplain_buffer_uid(&puid_sb, hip->uid);
+    explain_string_buffer_init(&puid_sb, puid, sizeof(puid));
+    explain_buffer_uid(&puid_sb, hip->uid);
 
-    libexplain_string_buffer_init(&caption_sb, caption, sizeof(caption));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&caption_sb, caption, sizeof(caption));
+    explain_buffer_caption_name_type
     (
         &caption_sb,
         fildes_caption,
@@ -167,7 +167,7 @@ libexplain_buffer_does_not_have_inode_modify_permission_fd_st(
         fildes_st->st_mode
     );
 
-    libexplain_string_buffer_puts(sb, ", ");
+    explain_string_buffer_puts(sb, ", ");
     process_does_not_match_the_owner_uid
     (
         sb,
@@ -180,34 +180,34 @@ libexplain_buffer_does_not_have_inode_modify_permission_fd_st(
 
 
 void
-libexplain_buffer_does_not_have_inode_modify_permission(
-    libexplain_string_buffer_t *sb, const char *comp,
+explain_buffer_does_not_have_inode_modify_permission(
+    explain_string_buffer_t *sb, const char *comp,
     const struct stat *comp_st, const char *caption, const char *dir,
-    const struct stat *dir_st, const libexplain_have_identity_t *hip)
+    const struct stat *dir_st, const explain_have_identity_t *hip)
 {
     char            final_part[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t final_part_sb;
+    explain_string_buffer_t final_part_sb;
     char            dir_part[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t dir_part_sb;
     const char      *kind_of_uid;
     char            puid[40];
-    libexplain_string_buffer_t puid_sb;
+    explain_string_buffer_t puid_sb;
 
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &final_part_sb,
         final_part,
         sizeof(final_part)
     );
-    libexplain_buffer_caption_name_type
+    explain_buffer_caption_name_type
     (
         &final_part_sb,
         0,
         comp,
         comp_st->st_mode
     );
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         caption,
@@ -215,7 +215,7 @@ libexplain_buffer_does_not_have_inode_modify_permission(
         dir_st->st_mode
     );
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -240,24 +240,24 @@ libexplain_buffer_does_not_have_inode_modify_permission(
         dir_part
     );
 
-    kind_of_uid = libexplain_have_identity_kind_of_uid(hip);
+    kind_of_uid = explain_have_identity_kind_of_uid(hip);
 
     /*
      * Give more information: tell them who they are (this can be a
      * surprise to users of set-UID programs) and who owns the file.
      */
-    libexplain_string_buffer_init(&puid_sb, puid, sizeof(puid));
-    libexplain_buffer_uid(&puid_sb, hip->uid);
+    explain_string_buffer_init(&puid_sb, puid, sizeof(puid));
+    explain_buffer_uid(&puid_sb, hip->uid);
 
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &final_part_sb,
         final_part,
         sizeof(final_part)
     );
-    libexplain_buffer_file_type(&final_part_sb, comp_st->st_mode);
+    explain_buffer_file_type(&final_part_sb, comp_st->st_mode);
 
-    libexplain_string_buffer_puts(sb, ", ");
+    explain_string_buffer_puts(sb, ", ");
     process_does_not_match_the_owner_uid
     (
         sb,

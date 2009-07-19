@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return EXIT_SUCCESS;
 
         default:
@@ -58,8 +58,8 @@ main(int argc, char **argv)
     if (optind + 2 != argc)
         usage();
     pathname = argv[optind];
-    name = libexplain_parse_pathconf_name_or_die(argv[optind + 1]);
+    name = explain_parse_pathconf_name_or_die(argv[optind + 1]);
 
-    printf("%ld\n", libexplain_pathconf_or_die(pathname, name));
+    printf("%ld\n", explain_pathconf_or_die(pathname, name));
     return EXIT_SUCCESS;
 }

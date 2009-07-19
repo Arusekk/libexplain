@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,9 @@
 
 
 void
-libexplain_buffer_gid(libexplain_string_buffer_t *sb, int gid)
+explain_buffer_gid(explain_string_buffer_t *sb, int gid)
 {
-    libexplain_string_buffer_printf(sb, "%d", gid);
+    explain_string_buffer_printf(sb, "%d", gid);
     if (gid >= 0)
     {
         struct group    *gr;
@@ -35,15 +35,15 @@ libexplain_buffer_gid(libexplain_string_buffer_t *sb, int gid)
         gr = getgrgid(gid);
         if (gr)
         {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, gr->gr_name);
+            explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts_quoted(sb, gr->gr_name);
         }
     }
 }
 
 
 void
-libexplain_buffer_gid_supplementary(libexplain_string_buffer_t *sb)
+explain_buffer_gid_supplementary(explain_string_buffer_t *sb)
 {
     gid_t           groups[NGROUPS_MAX];
     int             n;
@@ -53,8 +53,8 @@ libexplain_buffer_gid_supplementary(libexplain_string_buffer_t *sb)
     for (j = 0; j < n; ++j)
     {
         if (j)
-            libexplain_string_buffer_putc(sb, ',');
-        libexplain_string_buffer_putc(sb, ' ');
-        libexplain_buffer_gid(sb, groups[j]);
+            explain_string_buffer_putc(sb, ',');
+        explain_string_buffer_putc(sb, ' ');
+        explain_buffer_gid(sb, groups[j]);
     }
 }

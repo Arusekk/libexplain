@@ -21,13 +21,13 @@
 
 
 const char *
-libexplain_errno_getsockopt(int errnum, int fildes, int level, int name,
+explain_errno_getsockopt(int errnum, int fildes, int level, int name,
     void *data, socklen_t *data_size)
 {
-    libexplain_message_errno_getsockopt
+    explain_message_errno_getsockopt
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         fildes,
         level,
@@ -35,7 +35,7 @@ libexplain_errno_getsockopt(int errnum, int fildes, int level, int name,
         data,
         data_size
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }
 
 /* vim:ts=8:sw=4:et */

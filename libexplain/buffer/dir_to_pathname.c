@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,10 +23,10 @@
 
 
 void
-libexplain_buffer_dir_to_pathname(libexplain_string_buffer_t *sb, DIR *dir)
+explain_buffer_dir_to_pathname(explain_string_buffer_t *sb, DIR *dir)
 {
     int             fildes;
 
-    fildes = libexplain_dir_to_fildes(dir);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
+    fildes = explain_dir_to_fildes(dir);
+    explain_buffer_fildes_to_pathname(sb, fildes);
 }

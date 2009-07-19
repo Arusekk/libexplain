@@ -26,18 +26,18 @@
 #ifdef SIOCBRADDIF
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_ifreq_ifindex(sb, data);
+    explain_buffer_ifreq_ifindex(sb, data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocbraddif =
+const explain_iocontrol_t explain_iocontrol_siocbraddif =
 {
     "SIOCBRADDIF", /* name */
     SIOCBRADDIF, /* value */
@@ -49,7 +49,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_siocbraddif =
 
 #else /* ndef SIOCBRADDIF */
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocbraddif =
+const explain_iocontrol_t explain_iocontrol_siocbraddif =
 {
     0, /* name */
     0, /* value */

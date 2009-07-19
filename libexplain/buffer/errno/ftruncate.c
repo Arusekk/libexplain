@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -38,41 +38,41 @@
 
 
 static void
-libexplain_buffer_errno_ftruncate_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_ftruncate_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, long long length)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "ftruncate(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_printf(sb, ", length = %lld)", length);
+    explain_string_buffer_printf(sb, "ftruncate(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_printf(sb, ", length = %lld)", length);
 }
 
 
 static void
-libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_ftruncate_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, long long length)
 {
     switch (errnum)
     {
     case EACCES:
     case EBADF:
-        if (libexplain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
-            libexplain_buffer_ebadf(sb, fildes, "fildes");
+        if (explain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
+            explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFBIG:
-        libexplain_buffer_efbig_fildes(sb, fildes, length, "length");
+        explain_buffer_efbig_fildes(sb, fildes, length, "length");
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "ftruncate");
+        explain_buffer_eintr(sb, "ftruncate");
         break;
 
     case EINVAL:
         if (length < 0)
         {
             /* FIXME: i18n */
-            libexplain_string_buffer_puts(sb, "'length' is negative");
+            explain_string_buffer_puts(sb, "'length' is negative");
         }
         else
         {
@@ -101,7 +101,7 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
                 length > (1LL << file_size_bits)
             )
             {
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     /* FIXME: i18n */
@@ -118,13 +118,13 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
                 flags = fcntl(fildes, F_GETFL);
                 if (flags >= 0 && (flags & O_ACCMODE) == O_RDONLY)
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "the file is not open for writing ("
                     );
-                    libexplain_buffer_open_flags(sb, flags);
-                    libexplain_string_buffer_putc(sb, ')');
+                    explain_buffer_open_flags(sb, flags);
+                    explain_string_buffer_putc(sb, ')');
                 }
                 else
                 {
@@ -132,28 +132,28 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
 
                     if (fstat(fildes, &st) >= 0 && !S_ISREG(st.st_mode))
                     {
-                        libexplain_string_buffer_puts
+                        explain_string_buffer_puts
                         (
                             sb,
                             "fildes refers to a "
                         );
-                        libexplain_buffer_file_type(sb, st.st_mode);
-                        libexplain_string_buffer_puts
+                        explain_buffer_file_type(sb, st.st_mode);
+                        explain_string_buffer_puts
                         (
                             sb,
                             ", it is only possible to truncate a "
                         );
-                        libexplain_buffer_file_type(sb, S_IFREG);
+                        explain_buffer_file_type(sb, S_IFREG);
                     }
                     else
                     {
-                        libexplain_string_buffer_puts
+                        explain_string_buffer_puts
                         (
                             sb,
                             "the file is not open for writing; or, the file is "
                             "not a "
                         );
-                        libexplain_buffer_file_type(sb, S_IFREG);
+                        explain_buffer_file_type(sb, S_IFREG);
                     }
                 }
             }
@@ -161,71 +161,71 @@ libexplain_buffer_errno_ftruncate_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EIO:
-        libexplain_buffer_eio_fildes(sb, fildes);
+        explain_buffer_eio_fildes(sb, fildes);
         break;
 
     case EISDIR:
         /* FIXME: i18n */
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "fildes refers to a "
         );
-        libexplain_buffer_file_type(sb, S_IFDIR);
-        libexplain_string_buffer_puts
+        explain_buffer_file_type(sb, S_IFDIR);
+        explain_string_buffer_puts
         (
             sb,
             ", it is only possible to truncate a "
         );
-        libexplain_buffer_file_type(sb, S_IFREG);
+        explain_buffer_file_type(sb, S_IFREG);
         break;
 
     case EPERM:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
             "the underlying file system does not support extending a "
             "file beyond its current size"
         );
-        libexplain_buffer_mount_point_fd(sb, fildes);
+        explain_buffer_mount_point_fd(sb, fildes);
         break;
 
     case EROFS:
-        libexplain_buffer_erofs_fildes(sb, fildes, "fildes");
+        explain_buffer_erofs_fildes(sb, fildes, "fildes");
         break;
 
     case ETXTBSY:
-        libexplain_buffer_etxtbsy_fildes(sb, fildes);
+        explain_buffer_etxtbsy_fildes(sb, fildes);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_ftruncate(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_ftruncate(explain_string_buffer_t *sb, int errnum,
     int fildes, long long length)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_ftruncate_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_ftruncate_system_call
     (
         &exp.system_call_sb,
         errnum,
         fildes,
         length
     );
-    libexplain_buffer_errno_ftruncate_explanation
+    explain_buffer_errno_ftruncate_explanation
     (
         &exp.explanation_sb,
         errnum,
         fildes,
         length
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

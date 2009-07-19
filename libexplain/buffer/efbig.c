@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,7 @@ get_max_file_size(int file_size_bits)
 
 
 unsigned long long
-libexplain_get_max_file_size_by_pathname(const char *pathname)
+explain_get_max_file_size_by_pathname(const char *pathname)
 {
     long            nbits;
 
@@ -65,10 +65,10 @@ libexplain_get_max_file_size_by_pathname(const char *pathname)
 
 
 static void
-report_error(libexplain_string_buffer_t *sb, const char *caption,
+report_error(explain_string_buffer_t *sb, const char *caption,
     unsigned long long actual, unsigned long long maximum)
 {
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -81,30 +81,30 @@ report_error(libexplain_string_buffer_t *sb, const char *caption,
         caption
     );
 
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
-        libexplain_string_buffer_puts(sb, " (");
-        libexplain_buffer_pretty_size(sb, actual);
-        libexplain_string_buffer_puts(sb, " > ");
-        libexplain_buffer_pretty_size(sb, maximum);
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts(sb, " (");
+        explain_buffer_pretty_size(sb, actual);
+        explain_string_buffer_puts(sb, " > ");
+        explain_buffer_pretty_size(sb, maximum);
+        explain_string_buffer_putc(sb, ')');
     }
 }
 
 
 void
-libexplain_buffer_efbig(libexplain_string_buffer_t *sb, const char *pathname,
+explain_buffer_efbig(explain_string_buffer_t *sb, const char *pathname,
     unsigned long long length, const char *length_caption)
 {
     unsigned long long maximum;
 
-    maximum = libexplain_get_max_file_size_by_pathname(pathname);
+    maximum = explain_get_max_file_size_by_pathname(pathname);
     report_error(sb, length_caption, length, maximum);
 }
 
 
 unsigned long long
-libexplain_get_max_file_size_by_fildes(int fildes)
+explain_get_max_file_size_by_fildes(int fildes)
 {
     long            nbits;
 
@@ -119,11 +119,11 @@ libexplain_get_max_file_size_by_fildes(int fildes)
 
 
 void
-libexplain_buffer_efbig_fildes(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_efbig_fildes(explain_string_buffer_t *sb, int fildes,
     unsigned long long length, const char *length_caption)
 {
     unsigned long long maximum;
 
-    maximum = libexplain_get_max_file_size_by_fildes(fildes);
+    maximum = explain_get_max_file_size_by_fildes(fildes);
     report_error(sb, length_caption, length, maximum);
 }

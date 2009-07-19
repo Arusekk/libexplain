@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,19 +21,25 @@
 
 
 void
-libexplain_buffer_pointer(libexplain_string_buffer_t *sb, const void *ptr)
+explain_buffer_pointer(explain_string_buffer_t *sb, const void *ptr)
 {
     if (ptr == NULL)
     {
-        libexplain_string_buffer_puts(sb, "NULL");
+        explain_string_buffer_puts(sb, "NULL");
     }
     else
     {
         /*
          * Some old systems don't have %p, and some new systems format
-         * %p differently than glibc.  If this is an issue, we will
-         * look at some ./configure magic to cope.
+         * %p differently than glibc.  Use consistent formatting, it
+         * makes the automated tests easier to write.
          */
-        libexplain_string_buffer_printf(sb, "0x%08lX", (unsigned long)ptr);
+#if SIZEOF_VOID_P > SIZEOF_LONG
+        explain_string_buffer_printf(sb, "0x%08llX", (unsigned long long)ptr);
+#elif SIZEOF_VOID_P > SIZEOF_INT
+        explain_string_buffer_printf(sb, "0x%08lX", (unsigned long)ptr);
+#else
+        explain_string_buffer_printf(sb, "0x%08X", (unsigned)ptr);
+#endif
     }
 }

@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_ioctl function
+  * The explain_buffer_errno_ioctl function
   * is used to obtain an explanation of an error returned
   * by the ioctl(2) system call.
   * The least the message will contain is the value of
@@ -47,7 +47,7 @@
   * @param data
   *     The original data, exactly as passed to the ioctl(2) system call.
   */
-void libexplain_buffer_errno_ioctl(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_ioctl(explain_string_buffer_t *sb, int errnum,
     int fildes, int request, void *data);
 
 /* vim:ts=8:sw=4:et */

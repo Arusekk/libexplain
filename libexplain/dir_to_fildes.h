@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/ac/dirent.h>
 
 /**
-  * The libexplain_dir_to_fildes function may be used to extract the
+  * The explain_dir_to_fildes function may be used to extract the
   * file descriptor from a DIR pointer, but carefully.
   *
   * @param dir
@@ -31,6 +31,6 @@
   * @returns
   *    file descriptor, or -1 on error
   */
-int libexplain_dir_to_fildes(DIR *dir);
+int explain_dir_to_fildes(DIR *dir);
 
 #endif /* LIBEXPLAIN_DIR_TO_FILDES_H */

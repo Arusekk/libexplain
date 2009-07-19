@@ -24,7 +24,7 @@
 struct mtget; /* forward */
 
 /**
-  * The libexplain_buffer_mtget function may be used to
+  * The explain_buffer_mtget function may be used to
   * print a representation of a mtget structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct mtget; /* forward */
   * @param data
   *     The mtget structure to be printed.
   */
-void libexplain_buffer_mtget(libexplain_string_buffer_t *sb,
+void explain_buffer_mtget(explain_string_buffer_t *sb,
     const struct mtget *data);
 
 #endif /* LIBEXPLAIN_BUFFER_MTGET_H */

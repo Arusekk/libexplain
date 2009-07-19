@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,9 +27,9 @@
 
 
 void
-libexplain_buffer_strerror(libexplain_string_buffer_t *sb, int errnum)
+explain_buffer_strerror(explain_string_buffer_t *sb, int errnum)
 {
-    const libexplain_errno_info_t *eip;
+    const explain_errno_info_t *eip;
     int             first;
     const char      *s;
 #ifdef HAVE_STRERROR_R
@@ -51,7 +51,7 @@ libexplain_buffer_strerror(libexplain_string_buffer_t *sb, int errnum)
     if (!s)
     {
         s =
-            libexplain_gettext
+            explain_gettext
             (
                 /*
                  * xgettext: This message is used when streror (or strerror_r)
@@ -62,23 +62,23 @@ libexplain_buffer_strerror(libexplain_string_buffer_t *sb, int errnum)
                 i18n("unknown system error")
             );
     }
-    libexplain_string_buffer_puts(sb, s);
+    explain_string_buffer_puts(sb, s);
     first = 1;
-    if (libexplain_option_numeric_errno())
+    if (explain_option_numeric_errno())
     {
-        libexplain_string_buffer_printf(sb, " (%d", errnum);
+        explain_string_buffer_printf(sb, " (%d", errnum);
         first = 0;
     }
-    eip = libexplain_errno_info_by_number(errnum);
+    eip = explain_errno_info_by_number(errnum);
     if (eip)
     {
         if (first)
-            libexplain_string_buffer_puts(sb, " (");
+            explain_string_buffer_puts(sb, " (");
         else
-            libexplain_string_buffer_puts(sb, ", ");
-        libexplain_string_buffer_puts(sb, eip->name);
+            explain_string_buffer_puts(sb, ", ");
+        explain_string_buffer_puts(sb, eip->name);
         first = 0;
     }
     if (!first)
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_putc(sb, ')');
 }

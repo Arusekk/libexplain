@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
@@ -31,96 +32,119 @@
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/readlink.h>
 #include <libexplain/buffer/file_type.h>
+#include <libexplain/buffer/off_t.h>
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/size_t.h>
 #include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
 
 
 static void
-libexplain_buffer_errno_readlink_system_call(libexplain_string_buffer_t *sb,
-    int errnum, const char *pathname, char *data, int data_size)
+explain_buffer_errno_readlink_system_call(explain_string_buffer_t *sb,
+    int errnum, const char *pathname, char *data, size_t data_size)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "readlink(pathname = ");
-    libexplain_buffer_pathname(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", data = ");
-    libexplain_buffer_pointer(sb, data);
-    libexplain_string_buffer_printf(sb, ", data_size = %d)", data_size);
+    explain_string_buffer_puts(sb, "readlink(pathname = ");
+    explain_buffer_pathname(sb, pathname);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_buffer_pointer(sb, data);
+    explain_string_buffer_puts(sb, ", data_size = ");
+    explain_buffer_size_t(sb, data_size);
+    explain_string_buffer_putc(sb, ')');
+}
+
+
+static off_t
+get_actual_size(const char *pathname)
+{
+    struct stat     st;
+
+    /*
+     * According to coreutils...
+     * some systems fail to set st_size for symlinks.
+     */
+    st.st_size = 0;
+
+    if (lstat(pathname, &st) < 0)
+        return -1;
+    if (!S_ISLNK(st.st_mode))
+        return -1;
+    return st.st_size;
 }
 
 
 static void
-libexplain_buffer_errno_readlink_explanation(libexplain_string_buffer_t *sb,
-    int errnum, const char *pathname, char *data, int data_size)
+explain_buffer_errno_readlink_explanation(explain_string_buffer_t *sb,
+    int errnum, const char *pathname, char *data, size_t data_size)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     (void)data;
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_read = 1;
     final_component.follow_symlink = 0;
 
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
-        if (libexplain_path_is_efault(pathname))
+        if (explain_path_is_efault(pathname))
         {
-            libexplain_buffer_efault(sb, "pathname");
+            explain_buffer_efault(sb, "pathname");
             break;
         }
-        if (libexplain_path_is_efault(data))
+        if (explain_path_is_efault(data))
         {
-            libexplain_buffer_efault(sb, "data");
+            explain_buffer_efault(sb, "data");
             break;
         }
         break;
 
     case EINVAL:
-        if (data_size <= 0)
+        if ((ssize_t)data_size <= 0)
         {
-            libexplain_string_buffer_puts
+            explain_buffer_einval_too_small
             (
                 sb,
-                /* FIXME: i18n */
-                "data_size is not positive"
+                "data_size",
+                (ssize_t)data_size
             );
         }
         else
         {
             struct stat     st;
 
-            /* FIXME: libexplain_buffer_wrong_file_type */
+            /* FIXME: explain_buffer_wrong_file_type */
             if (lstat(pathname, &st) >= 0)
             {
-                libexplain_string_buffer_puts(sb, "pathname is a ");
-                libexplain_buffer_file_type(sb, st.st_mode);
-                libexplain_string_buffer_puts(sb, ", not a ");
-                libexplain_buffer_file_type(sb, S_IFLNK);
+                explain_string_buffer_puts(sb, "pathname is a ");
+                explain_buffer_file_type(sb, st.st_mode);
+                explain_string_buffer_puts(sb, ", not a ");
+                explain_buffer_file_type(sb, S_IFLNK);
             }
             else
             {
-                libexplain_string_buffer_puts(sb, "pathname is not a ");
-                libexplain_buffer_file_type(sb, S_IFLNK);
+                explain_string_buffer_puts(sb, "pathname is not a ");
+                explain_buffer_file_type(sb, S_IFLNK);
             }
         }
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -130,32 +154,56 @@ libexplain_buffer_errno_readlink_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        break;
+
+    case ERANGE:
+        {
+            off_t           actual_size;
+
+            /*
+             * According to coreutils...
+             * On AIX 5L v5.3 and HP-UX 11i v2 04/09, readlink returns -1
+             * with errno == ERANGE if the buffer is too small.
+             */
+            explain_buffer_einval_too_small(sb, "data_size", data_size);
+
+            /*
+             * Provide the actual size, if available.
+             */
+            actual_size = get_actual_size(pathname);
+            if (actual_size > 0 && data_size < actual_size)
+            {
+                explain_string_buffer_puts(sb, " (");
+                explain_buffer_off_t(sb, actual_size);
+                explain_string_buffer_putc(sb, ')');
+            }
+        }
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_readlink(libexplain_string_buffer_t *sb, int errnum,
-    const char *pathname, char *data, int data_size)
+explain_buffer_errno_readlink(explain_string_buffer_t *sb, int errnum,
+    const char *pathname, char *data, size_t data_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_readlink_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_readlink_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -163,7 +211,7 @@ libexplain_buffer_errno_readlink(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_buffer_errno_readlink_explanation
+    explain_buffer_errno_readlink_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -171,5 +219,5 @@ libexplain_buffer_errno_readlink(libexplain_string_buffer_t *sb, int errnum,
         data,
         data_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

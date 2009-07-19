@@ -24,7 +24,7 @@
 struct stat; /* forward */
 
 /**
-  * The libexplain_buffer_wrong_file_type function may be used to
+  * The explain_buffer_wrong_file_type function may be used to
   * explain that a file descriptor system call argument refers to a file
   * of the wrong file type.
   *
@@ -38,11 +38,11 @@ struct stat; /* forward */
   * @param required_file_type
   *    The required file type, that the file descriptor does not match.
   */
-void libexplain_buffer_wrong_file_type(libexplain_string_buffer_t *sb,
+void explain_buffer_wrong_file_type(explain_string_buffer_t *sb,
     int fildes, const char *caption, int required_file_type);
 
 /**
-  * The libexplain_buffer_wrong_file_type function may be used to
+  * The explain_buffer_wrong_file_type function may be used to
   * explain that a file descriptor system call argument refers to a file
   * of the wrong file type.
   *
@@ -56,7 +56,7 @@ void libexplain_buffer_wrong_file_type(libexplain_string_buffer_t *sb,
   * @param required_file_type
   *    The required file type, that the file descriptor does not match.
   */
-void libexplain_buffer_wrong_file_type_st(libexplain_string_buffer_t *sb,
+void explain_buffer_wrong_file_type_st(explain_string_buffer_t *sb,
     const struct stat *st, const char *caption, int required_file_type);
 
 #endif /* LIBEXPLAIN_BUFFER_WRONG_FILE_TYPE_H */

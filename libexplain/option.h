@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_OPTION_H
 
 /**
-  * The libexplain_option_numeric_errno function may be used to obtain
+  * The explain_option_numeric_errno function may be used to obtain
   * the LIBEXPLAIN_OPTIONS (no-)numeric-errno flag, used to control
   * whether or not the numeric value of errno is displayed.  This is
   * commonly turned off for the test suite, to cope with capricious
@@ -32,10 +32,10 @@
   *    (this is the default), false (zero) if they are not to be
   *    dislayed.
   */
-int libexplain_option_numeric_errno(void);
+int explain_option_numeric_errno(void);
 
 /**
-  * The libexplain_option_dialect_specific function may be used to
+  * The explain_option_dialect_specific function may be used to
   * obtain the LIBEXPLAIN_OPTIONS (no-)dialect-specific flag, used to
   * control whether or not informative text that is specific to a given
   * UNIX dialect is to be displayed.  This is commonly turned off for
@@ -46,10 +46,10 @@ int libexplain_option_numeric_errno(void);
   *    displayed (this is the default), false (zero) if it is not to be
   *    dislayed.
   */
-int libexplain_option_dialect_specific(void);
+int explain_option_dialect_specific(void);
 
 /**
-  * The libexplain_option_debug function may be used to obtain the
+  * The explain_option_debug function may be used to obtain the
   * LIBEXPLAIN_OPTIONS (no-)debug flag, used to control whether or not
   * debug behaviour is enabled.  Defaults to off.
   *
@@ -58,31 +58,31 @@ int libexplain_option_dialect_specific(void);
   *    displayed (this is the default), false (zero) if it is not to be
   *    dislayed.
   */
-int libexplain_option_debug(void);
+int explain_option_debug(void);
 
 /**
-  * The libexplain_option_assemble_program_name option is used to
-  * determine whether or not the libexplain_assemble function should
+  * The explain_option_assemble_program_name option is used to
+  * determine whether or not the explain_assemble function should
   * include the program name in the assembled messages.
   *
   * @returns
   *     int; true (non-zero) is shall include program name, zero (false)
   *     if shall not include program name.
   */
-int libexplain_option_assemble_program_name(void);
+int explain_option_assemble_program_name(void);
 
 /**
-  * The libexplain_program_name_assemble_internal function is used
+  * The explain_program_name_assemble_internal function is used
   * to control whether or not the name of the calling process is to
-  * be included in error messages issued by the libexplain_*_or_die
+  * be included in error messages issued by the explain_*_or_die
   * functions.  This will have a precedence below the LIBEXPLAIN_OPTIONS
   * environment variable, but higher than default.  It is intended for
-  * use bu the libexplain_*_or_die functions.
+  * use bu the explain_*_or_die functions.
   *
   * @param yesno
   *     non-zero (true) to have program name included,
   *     zero (false) to have program name excluded.
   */
-void libexplain_program_name_assemble_internal(int yesno);
+void explain_program_name_assemble_internal(int yesno);
 
 #endif /* LIBEXPLAIN_OPTION_H */

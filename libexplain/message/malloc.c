@@ -22,9 +22,9 @@
 
 
 void
-libexplain_message_malloc(char *message, int message_size, size_t size)
+explain_message_malloc(char *message, int message_size, size_t size)
 {
-    libexplain_message_errno_malloc
+    explain_message_errno_malloc
     (
         message,
         message_size,

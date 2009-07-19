@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -49,7 +49,7 @@ int strncasecmp(const char *, const char *, size_t);
 const char *strsignal(int);
 #endif
 
-const char *libexplain_strsignal(int);
+const char *explain_strsignal(int);
 
 #if !HAVE_DECL_STRVERSCMP
 int strverscmp(const char *, const char *);

@@ -25,15 +25,15 @@
 
 
 void
-libexplain_buffer_serial_struct(libexplain_string_buffer_t *sb,
+explain_buffer_serial_struct(explain_string_buffer_t *sb,
     const struct serial_struct *value)
 {
 #ifdef TIOCSSERIAL
-    if (libexplain_pointer_is_efault(value, sizeof(*data)))
-        libexplain_buffer_pointer(sb, value);
+    if (explain_pointer_is_efault(value, sizeof(*data)))
+        explain_buffer_pointer(sb, value);
     else
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ "
@@ -77,6 +77,6 @@ libexplain_buffer_serial_struct(libexplain_string_buffer_t *sb,
         );
     }
 #else
-    libexplain_buffer_pointer(sb, value);
+    explain_buffer_pointer(sb, value);
 #endif
 }

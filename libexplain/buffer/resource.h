@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_resource function may be used to print the
+  * The explain_buffer_resource function may be used to print the
   * value of a getrlimit or setrlimit "resource" arument.
   *
   * @param sb
@@ -30,10 +30,10 @@
   * @param value
   *    The value to be printed
   */
-void libexplain_buffer_resource(libexplain_string_buffer_t *sb, int value);
+void explain_buffer_resource(explain_string_buffer_t *sb, int value);
 
 /**
-  * The libexplain_parse_resource_or_die function s isused to parse a
+  * The explain_parse_resource_or_die function s isused to parse a
   * text string into a getrlimit or setrlimit resource value.  On error,
   * printed a diagnostics and exits EXIT_FAILURE.
   *
@@ -44,6 +44,6 @@ void libexplain_buffer_resource(libexplain_string_buffer_t *sb, int value);
   * @returns
   *     the resource value
   */
-int libexplain_parse_resource_or_die(const char *text, const char *caption);
+int explain_parse_resource_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_RESOURCE_H */

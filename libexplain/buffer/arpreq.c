@@ -27,9 +27,9 @@
 
 
 static void
-libexplain_buffer_arpreq_flags(libexplain_string_buffer_t *sb, int data)
+explain_buffer_arpreq_flags(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "ATF_COM", ATF_COM },
         { "ATF_PERM", ATF_PERM },
@@ -40,31 +40,31 @@ libexplain_buffer_arpreq_flags(libexplain_string_buffer_t *sb, int data)
         { "ATF_MAGIC", ATF_MAGIC },
     };
 
-    libexplain_parse_bits_print(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print(sb, data, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_arpreq(libexplain_string_buffer_t *sb,
+explain_buffer_arpreq(explain_string_buffer_t *sb,
     const struct arpreq *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ arp_pa = ");
-        libexplain_buffer_sockaddr(sb, &data->arp_pa, sizeof(data->arp_pa));
-        libexplain_string_buffer_puts(sb, ", arp_ha = ");
-        libexplain_buffer_sockaddr(sb, &data->arp_ha, sizeof(data->arp_ha));
-        libexplain_string_buffer_puts(sb, ", arp_flags = ");
-        libexplain_buffer_arpreq_flags(sb, data->arp_flags);
-        libexplain_string_buffer_puts(sb, ", arp_netmask = ");
-        libexplain_buffer_sockaddr
+        explain_string_buffer_puts(sb, "{ arp_pa = ");
+        explain_buffer_sockaddr(sb, &data->arp_pa, sizeof(data->arp_pa));
+        explain_string_buffer_puts(sb, ", arp_ha = ");
+        explain_buffer_sockaddr(sb, &data->arp_ha, sizeof(data->arp_ha));
+        explain_string_buffer_puts(sb, ", arp_flags = ");
+        explain_buffer_arpreq_flags(sb, data->arp_flags);
+        explain_string_buffer_puts(sb, ", arp_netmask = ");
+        explain_buffer_sockaddr
         (
             sb,
             &data->arp_netmask,
             sizeof(data->arp_netmask)
         );
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }

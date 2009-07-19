@@ -23,31 +23,31 @@
 
 
 static void
-system_call(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+system_call(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "ioctl(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", request = ");
-    libexplain_iocontrol_print_name(p, sb, errnum, fildes, request, data);
-    libexplain_string_buffer_puts(sb, ", data = ");
-    libexplain_iocontrol_print_data(p, sb, errnum, fildes, request, data);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "ioctl(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", request = ");
+    explain_iocontrol_print_name(p, sb, errnum, fildes, request, data);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_iocontrol_print_data(p, sb, errnum, fildes, request, data);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 void
-libexplain_buffer_errno_ioctl(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_ioctl(explain_string_buffer_t *sb, int errnum,
     int fildes, int request, void *data)
 {
-    const libexplain_iocontrol_t *p;
-    libexplain_explanation_t exp;
+    const explain_iocontrol_t *p;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    p = libexplain_iocontrol_find_by_number(fildes, request, data);
+    explain_explanation_init(&exp, errnum);
+    p = explain_iocontrol_find_by_number(fildes, request, data);
     system_call(p, &exp.system_call_sb, errnum, fildes, request, data);
-    libexplain_iocontrol_print_explanation
+    explain_iocontrol_print_explanation
     (
         p,
         &exp.explanation_sb,
@@ -56,7 +56,7 @@ libexplain_buffer_errno_ioctl(libexplain_string_buffer_t *sb, int errnum,
         request,
         data
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

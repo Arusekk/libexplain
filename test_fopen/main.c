@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -64,7 +64,7 @@ main(int argc, char **argv)
             break;
 
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return 0;
 
         default:
@@ -75,24 +75,24 @@ main(int argc, char **argv)
         usage();
     pathname = argv[optind];
 
-    fp = libexplain_fopen_or_die(pathname, flags);
-    libexplain_fflush_or_die(fp);
-    fd_flags = libexplain_fcntl_or_die(fileno(fp), F_GETFL, 0);
+    fp = explain_fopen_or_die(pathname, flags);
+    explain_fflush_or_die(fp);
+    fd_flags = explain_fcntl_or_die(fileno(fp), F_GETFL, 0);
     if ((fd_flags & O_ACCMODE) != O_RDONLY)
     {
         const char      *data;
 
-        libexplain_putc_or_die('T', fp);
-        libexplain_fputc_or_die('h', fp);
+        explain_putc_or_die('T', fp);
+        explain_fputc_or_die('h', fp);
         data = "is is a test.\n";
-        libexplain_fwrite_or_die(data, 1, strlen(data), fp);
+        explain_fwrite_or_die(data, 1, strlen(data), fp);
     }
     if ((fd_flags & O_ACCMODE) != O_WRONLY)
     {
         char            data[100];
 
-        libexplain_fread_or_die(data, 1, sizeof(data), fp);
+        explain_fread_or_die(data, 1, sizeof(data), fp);
     }
-    libexplain_fclose_or_die(fp);
+    explain_fclose_or_die(fp);
     return 0;
 }

@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_ioctl(char *message, int message_size, int fildes,
+explain_message_ioctl(char *message, int message_size, int fildes,
     int request, void *data)
 {
-    libexplain_message_errno_ioctl
+    explain_message_errno_ioctl
     (
         message,
         message_size,

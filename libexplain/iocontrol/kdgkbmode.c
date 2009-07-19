@@ -26,7 +26,7 @@
 #define KDGKBMODE -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_kdgkbmode =
+const explain_iocontrol_t explain_iocontrol_kdgkbmode =
 {
     "KDGKBMODE", /* name */
     KDGKBMODE, /* value */

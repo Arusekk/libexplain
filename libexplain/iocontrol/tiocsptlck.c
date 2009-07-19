@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocsptlck.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocsptlck =
+const explain_iocontrol_t explain_iocontrol_tiocsptlck =
 {
     "TIOCSPTLCK", /* name */
     TIOCSPTLCK, /* value */

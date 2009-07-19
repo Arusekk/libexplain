@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 void
-libexplain_buffer_pretty_size(libexplain_string_buffer_t *sb,
+explain_buffer_pretty_size(explain_string_buffer_t *sb,
     unsigned long long size)
 {
     const char      unit[] = "kMGTPEZY";
@@ -30,7 +30,7 @@ libexplain_buffer_pretty_size(libexplain_string_buffer_t *sb,
 
     if (size < 1024)
     {
-        libexplain_string_buffer_printf(sb, "%d bytes", (int)size);
+        explain_string_buffer_printf(sb, "%d bytes", (int)size);
         return;
     }
     value = size / 1024.;
@@ -39,17 +39,17 @@ libexplain_buffer_pretty_size(libexplain_string_buffer_t *sb,
     {
         if (value < 9.995)
         {
-            libexplain_string_buffer_printf(sb, "%4.2f%cB", value, *up);
+            explain_string_buffer_printf(sb, "%4.2f%cB", value, *up);
             return;
         }
         if (value < 99.95)
         {
-            libexplain_string_buffer_printf(sb, "%4.1f%cB", value, *up);
+            explain_string_buffer_printf(sb, "%4.1f%cB", value, *up);
             return;
         }
         if (value < 1023.5)
         {
-            libexplain_string_buffer_printf(sb, "%4.0f%cB", value, *up);
+            explain_string_buffer_printf(sb, "%4.0f%cB", value, *up);
             return;
         }
         value /= 1024.;

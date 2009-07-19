@@ -16,29 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/sys/wait.h>
 
-#include <libexplain/option.h>
 #include <libexplain/waitpid.h>
-#include <libexplain/wrap_and_print.h>
 
 
 int
-libexplain_waitpid_or_die(int pid, int *status, int options)
+explain_waitpid_or_die(int pid, int *status, int options)
 {
     int             result;
 
-    result = waitpid(pid, status, options);
+    result = explain_waitpid_on_error(pid, status, options);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_waitpid(pid, status, options)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

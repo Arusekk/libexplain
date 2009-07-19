@@ -24,7 +24,7 @@
 struct kbsentry; /* forward */
 
 /**
-  * The libexplain_buffer_kbsentry function may be used to
+  * The explain_buffer_kbsentry function may be used to
   * print a representation of a kbsentry structure value.
   *
   * @param sb
@@ -34,7 +34,7 @@ struct kbsentry; /* forward */
   * @param extra
   *    if print string as well
   */
-void libexplain_buffer_kbsentry(libexplain_string_buffer_t *sb,
+void explain_buffer_kbsentry(explain_string_buffer_t *sb,
     const struct kbsentry *data, int extra);
 
 #endif /* LIBEXPLAIN_BUFFER_KBSENTRY_H */

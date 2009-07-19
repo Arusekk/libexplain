@@ -26,14 +26,14 @@
 
 
 static void
-print_explanation(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+print_explanation(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
     switch (errnum)
     {
     case ENOTTY:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -46,7 +46,7 @@ print_explanation(const libexplain_iocontrol_t *p,
         break;
 
     default:
-        libexplain_iocontrol_generic.print_explanation
+        explain_iocontrol_generic.print_explanation
         (
             p,
             sb,
@@ -60,7 +60,7 @@ print_explanation(const libexplain_iocontrol_t *p,
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocgsid =
+const explain_iocontrol_t explain_iocontrol_tiocgsid =
 {
     "TIOCGSID", /* name */
     TIOCGSID, /* value */

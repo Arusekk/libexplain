@@ -26,14 +26,14 @@
 #ifdef HAVE_LINUX_KD_H
 
 void
-libexplain_buffer_kbd_repeat(libexplain_string_buffer_t *sb,
+explain_buffer_kbd_repeat(explain_string_buffer_t *sb,
     const struct kbd_repeat *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ delay = %d, period = %d }",

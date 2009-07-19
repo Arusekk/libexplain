@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -42,76 +42,76 @@
 
 
 static void
-libexplain_buffer_errno_truncate_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_truncate_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, long long length)
 {
-    libexplain_string_buffer_puts(sb, "truncate(pathname = ");
+    explain_string_buffer_puts(sb, "truncate(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_printf(sb, ", length = %lld)", length);
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_printf(sb, ", length = %lld)", length);
 }
 
 
 static void
-libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_truncate_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, long long length)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_write = 1;
 
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EFBIG:
-        libexplain_buffer_efbig(sb, pathname, length, "length");
+        explain_buffer_efbig(sb, pathname, length, "length");
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "truncate");
+        explain_buffer_eintr(sb, "truncate");
         break;
 
     case EINVAL:
         if (length < 0)
         {
             /* FIXME: i18n */
-            libexplain_string_buffer_puts(sb, "length is negative");
+            explain_string_buffer_puts(sb, "length is negative");
             break;
         }
 
         {
             struct stat     st;
 
-            /* FIXME: libexplain_buffer_wrong_file_type */
+            /* FIXME: explain_buffer_wrong_file_type */
             if (stat(pathname, &st) >= 0 && !S_ISREG(st.st_mode))
             {
-                libexplain_string_buffer_puts(sb, "pathname is a ");
-                libexplain_buffer_file_type(sb, st.st_mode);
-                libexplain_string_buffer_puts(sb, ", not a ");
-                libexplain_buffer_file_type(sb, S_IFREG);
+                explain_string_buffer_puts(sb, "pathname is a ");
+                explain_buffer_file_type(sb, st.st_mode);
+                explain_string_buffer_puts(sb, ", not a ");
+                explain_buffer_file_type(sb, S_IFREG);
                 break;
             }
         }
 
-        libexplain_buffer_efbig(sb, pathname, length, "length");
+        explain_buffer_efbig(sb, pathname, length, "length");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case EISDIR:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /*
@@ -126,11 +126,11 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -140,59 +140,59 @@ libexplain_buffer_errno_truncate_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EPERM:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
             "the underlying file system does not support extending a "
             "file beyond its current size"
         );
-        libexplain_buffer_mount_point(sb, pathname);
+        explain_buffer_mount_point(sb, pathname);
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     case ETXTBSY:
-        libexplain_buffer_etxtbsy(sb, pathname);
+        explain_buffer_etxtbsy(sb, pathname);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_truncate(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_truncate(explain_string_buffer_t *sb, int errnum,
     const char *pathname, long long length)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_truncate_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_truncate_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         length
     );
-    libexplain_buffer_errno_truncate_explanation
+    explain_buffer_errno_truncate_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         length
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

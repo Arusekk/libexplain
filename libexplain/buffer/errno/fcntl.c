@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/flock.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/buffer/strsignal.h>
+#include <libexplain/buffer/signal.h>
 #include <libexplain/explanation.h>
 #include <libexplain/fcntl.h>
 #include <libexplain/open_flags.h>
@@ -40,7 +40,7 @@
 #include <libexplain/string_buffer.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "F_DUPFD",         F_DUPFD,         },
 #ifdef F_DUPFD_CLOEXEC
@@ -84,26 +84,26 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 int
-libexplain_fcntl_command_parse_or_die(const char *text, const char *caption)
+explain_fcntl_command_parse_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, sizeof(table), caption);
+    return explain_parse_bits_or_die(text, table, sizeof(table), caption);
 }
 
 
 static void
-libexplain_buffer_errno_fcntl_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fcntl_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, int command, long arg)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
 
-    libexplain_string_buffer_printf(sb, "fcntl(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", command = ");
-    tp = libexplain_parse_bits_find_by_value(command, table, SIZEOF(table));
+    explain_string_buffer_printf(sb, "fcntl(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", command = ");
+    tp = explain_parse_bits_find_by_value(command, table, SIZEOF(table));
     if (tp)
-        libexplain_string_buffer_puts(sb, tp->name);
+        explain_string_buffer_puts(sb, tp->name);
     else
-        libexplain_string_buffer_printf(sb, "%d", command);
+        explain_string_buffer_printf(sb, "%d", command);
     switch (command)
     {
     default:
@@ -115,33 +115,33 @@ libexplain_buffer_errno_fcntl_system_call(libexplain_string_buffer_t *sb,
 #endif
     case F_SETFD:
     case F_SETOWN:
-        libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
+        explain_string_buffer_printf(sb, ", arg = %ld", arg);
         break;
 
 #ifdef F_SETSIG
     case F_SETSIG:
-        libexplain_string_buffer_puts(sb, ", arg = ");
-        libexplain_buffer_strsignal(sb, arg);
+        explain_string_buffer_puts(sb, ", arg = ");
+        explain_buffer_signal(sb, arg);
         break;
 #endif
 
 #ifdef F_SETLEASE
     case F_SETLEASE:
         /* FIXME: decode lease flag */
-        libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
+        explain_string_buffer_printf(sb, ", arg = %ld", arg);
         break;
 #endif
 
 #ifdef F_NOTIFY
     case F_NOTIFY:
         /* FIXME: decode notify bits */
-        libexplain_string_buffer_printf(sb, ", arg = %ld", arg);
+        explain_string_buffer_printf(sb, ", arg = %ld", arg);
         break;
 #endif
 
     case F_SETFL:
-        libexplain_string_buffer_puts(sb, ", arg = ");
-        libexplain_buffer_open_flags(sb, arg);
+        explain_string_buffer_puts(sb, ", arg = ");
+        explain_buffer_open_flags(sb, arg);
         break;
 
     case F_GETLK:
@@ -151,11 +151,11 @@ libexplain_buffer_errno_fcntl_system_call(libexplain_string_buffer_t *sb,
             const struct flock *p;
 
             p = (const struct flock *)arg;
-            libexplain_string_buffer_puts(sb, ", arg = ");
+            explain_string_buffer_puts(sb, ", arg = ");
             if (errnum == EFAULT)
-                libexplain_buffer_pointer(sb, p);
+                explain_buffer_pointer(sb, p);
             else
-                libexplain_buffer_flock(sb, p);
+                explain_buffer_flock(sb, p);
         }
         break;
 
@@ -168,29 +168,29 @@ libexplain_buffer_errno_fcntl_system_call(libexplain_string_buffer_t *sb,
             const struct flock64 *p;
 
             p = (const struct flock64 *)arg;
-            libexplain_string_buffer_puts(sb, ", arg = ");
+            explain_string_buffer_puts(sb, ", arg = ");
             if (errnum == EFAULT)
-                libexplain_buffer_pointer(sb, p);
+                explain_buffer_pointer(sb, p);
             else
-                libexplain_buffer_flock64(sb, p);
+                explain_buffer_flock64(sb, p);
         }
         break;
 #endif
 #endif
     }
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, int command, long arg)
 {
     switch (errnum)
     {
     case EACCES:
         /* FIXME: what other processes? */
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the operation is prohibited by locks held by other processes"
@@ -199,7 +199,7 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
 
     case EAGAIN:
         /* FIXME: what other processes? */
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the operation is prohibited by locks held by other "
@@ -211,14 +211,14 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
     case EBADF:
         if (fcntl(fildes, F_GETFL) < 0)
         {
-            libexplain_buffer_ebadf(sb, fildes, "fildes");
+            explain_buffer_ebadf(sb, fildes, "fildes");
             break;
         }
         switch (command)
         {
         case F_SETLK:
         case F_SETLKW:
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "the file descriptor open flags"
@@ -230,12 +230,12 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
                 int n = fcntl(fildes, F_GETFL);
                 if (n >= 0)
                 {
-                    libexplain_string_buffer_puts(sb, " (");
-                    libexplain_buffer_open_flags(sb, n);
-                    libexplain_string_buffer_putc(sb, ')');
+                    explain_string_buffer_puts(sb, " (");
+                    explain_buffer_open_flags(sb, n);
+                    explain_string_buffer_putc(sb, ')');
                 }
             }
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 " do not match the type of lock requested"
@@ -249,7 +249,7 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
 
     case EDEADLK:
         /* FIXME: which other process? */
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "it was detected that the specified F_SETLKW "
@@ -258,19 +258,19 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "arg");
+        explain_buffer_efault(sb, "arg");
         break;
 
     case EINTR:
         switch (command)
         {
         default:
-            libexplain_buffer_eintr(sb, "command");
+            explain_buffer_eintr(sb, "command");
             break;
 
         case F_SETLK:
         case F_GETLK:
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "the command was interrupted by a signal "
@@ -289,12 +289,12 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
 #ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
 #endif
-            libexplain_buffer_check_fildes_range(sb, arg, "arg");
+            explain_buffer_check_fildes_range(sb, arg, "arg");
             break;
 
 #ifdef F_SETSIG
         case F_SETSIG:
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "the arg is not an allowable signal number"
@@ -314,7 +314,7 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
 #ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
 #endif
-            libexplain_buffer_emfile(sb);
+            explain_buffer_emfile(sb);
             break;
 
         default:
@@ -323,7 +323,7 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOLCK:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "too many segment locks are open, or the lock table is full, "
@@ -333,7 +333,7 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EPERM:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "it was attempted to clear the O_APPEND flag on a file "
@@ -342,20 +342,20 @@ libexplain_buffer_errno_fcntl_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_fcntl(explain_string_buffer_t *sb, int errnum,
     int fildes, int command, long arg)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_fcntl_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_fcntl_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -363,7 +363,7 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         command,
         arg
     );
-    libexplain_buffer_errno_fcntl_explanation
+    explain_buffer_errno_fcntl_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -371,5 +371,5 @@ libexplain_buffer_errno_fcntl(libexplain_string_buffer_t *sb, int errnum,
         command,
         arg
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

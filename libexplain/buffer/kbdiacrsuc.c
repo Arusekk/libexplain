@@ -25,18 +25,17 @@
 #include <libexplain/sizeof.h>
 
 
-#ifdef HAVE_LINUX_KD_H
-
 void
-libexplain_buffer_kbdiacrsuc(libexplain_string_buffer_t *sb,
+explain_buffer_kbdiacrsuc(explain_string_buffer_t *sb,
     const struct kbdiacrsuc *value, int extra)
 {
-    if (libexplain_pointer_is_efault(value, sizeof(*value)))
-        libexplain_buffer_pointer(sb, value);
+#if defined(HAVE_LINUX_KD_H) && defined(KBDIACRSUC)
+    if (explain_pointer_is_efault(value, sizeof(*value)))
+        explain_buffer_pointer(sb, value);
     else
     {
-        libexplain_string_buffer_printf(sb, "{ kb_cnt = %u", value->kb_cnt);
-        if (extra && libexplain_option_debug())
+        explain_string_buffer_printf(sb, "{ kb_cnt = %u", value->kb_cnt);
+        if (extra && explain_option_debug())
         {
             size_t          max;
             const struct kbdiacruc *ep;
@@ -47,10 +46,10 @@ libexplain_buffer_kbdiacrsuc(libexplain_string_buffer_t *sb,
                 max = SIZEOF(value->kbdiacruc);
             ep = value->kbdiacruc;
             end = ep + max;
-            libexplain_string_buffer_puts(sb, ", kbdiacruc = {");
+            explain_string_buffer_puts(sb, ", kbdiacruc = {");
             for (; ep < end; ++ep)
             {
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     " { diacr = %#x, base = %#x, result = %#x },",
@@ -59,10 +58,12 @@ libexplain_buffer_kbdiacrsuc(libexplain_string_buffer_t *sb,
                     ep->result
                 );
             }
-            libexplain_string_buffer_puts(sb, " }");
+            explain_string_buffer_puts(sb, " }");
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
+#else
+    (void)extra;
+    explain_buffer_pointer(sb, value);
+#endif
 }
-
-#endif /* HAVE_LINUX_KD_H */

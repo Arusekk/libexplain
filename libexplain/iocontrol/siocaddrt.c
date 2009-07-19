@@ -26,18 +26,18 @@
 #ifdef SIOCADDRT
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_rtentry(sb, data);
+    explain_buffer_rtentry(sb, data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocaddrt =
+const explain_iocontrol_t explain_iocontrol_siocaddrt =
 {
     "SIOCADDRT", /* name */
     SIOCADDRT, /* value */
@@ -49,7 +49,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_siocaddrt =
 
 #else /* ndef SIOCADDRT */
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocaddrt =
+const explain_iocontrol_t explain_iocontrol_siocaddrt =
 {
     0, /* name */
     0, /* value */

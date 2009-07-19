@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -33,15 +33,15 @@ extern "C" {
 struct addrinfo; /* forward */
 
 /**
-  * The libexplain_getaddrinfo_or_die function is used to call the
+  * The explain_getaddrinfo_or_die function is used to call the
   * getaddrinfo(3) system call.  On failure an explanation will be
-  * printed to stderr, obtained from libexplain_errcode_getaddrinfo(3),
+  * printed to stderr, obtained from explain_errcode_getaddrinfo(3),
   * and then the process terminates by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion similar to the
   * following example:
   * @code
-  * libexplain_getaddrinfo_or_die(node, service, hints, res);
+  * explain_getaddrinfo_or_die(node, service, hints, res);
   * @endcode
   *
   * @param node
@@ -60,11 +60,45 @@ struct addrinfo; /* forward */
   *     This function only returns on success.  On failure, prints an
   *     explanation and exits, it does not return.
   */
-void libexplain_getaddrinfo_or_die(const char *node, const char *service,
+void explain_getaddrinfo_or_die(const char *node, const char *service,
     const struct addrinfo *hints, struct addrinfo **res);
 
 /**
-  * The libexplain_errcode_getaddrinfo function is used to obtain an
+  * The explain_getaddrinfo_on_error function is used to call the
+  * getaddrinfo(3) system call.  On failure an explanation will be
+  * printed to stderr, but it still returns.
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * if (explain_getaddrinfo_on_error(node, service, hints, res))
+  * {
+  *     ...handle error
+  *     ...error message already printed
+  * }
+  * @endcode
+  *
+  * @param node
+  *     The node, exactly as to be passed to the getaddrinfo(3) system
+  *     call.
+  * @param service
+  *     The service, exactly as to be passed to the getaddrinfo(3)
+  *     system call.
+  * @param hints
+  *     The hints, exactly as to be passed to the getaddrinfo(3) system
+  *     call.
+  * @param res
+  *     The res, exactly as to be passed to the getaddrinfo(3) system
+  *     call.
+  * @returns
+  *     This function only returns on success.  On failure, prints an
+  *     explanation and exits, it does not return.
+  */
+int explain_getaddrinfo_on_error(const char *node, const char *service,
+    const struct addrinfo *hints, struct addrinfo **res);
+
+/**
+  * The explain_errcode_getaddrinfo function is used to obtain an
   * explanation of an error returned by the getaddrinfo(3) system
   * call.  The least the message will contain is the value of
   * gai_strerror(errcode), but usually it will do much better, and
@@ -78,7 +112,7 @@ void libexplain_getaddrinfo_or_die(const char *node, const char *service,
   *     errcode = errno;
   * if (errcode)
   * {
-  *     fprintf(stderr, "%s\n", libexplain_errcode_getaddrinfo(errcode,
+  *     fprintf(stderr, "%s\n", explain_errcode_getaddrinfo(errcode,
   *         node, service, hints, res));
   *     exit(EXIT_FAILURE);
   * }
@@ -110,12 +144,12 @@ void libexplain_getaddrinfo_or_die(const char *node, const char *service,
   *     return buffer across all threads, and many other functions in
   *     this library.
   */
-const char *libexplain_errcode_getaddrinfo(int errnum, const char *node,
+const char *explain_errcode_getaddrinfo(int errnum, const char *node,
     const char *service, const struct addrinfo *hints, struct addrinfo **res)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
-  * The libexplain_message_errcode_getaddrinfo function is used to
+  * The explain_message_errcode_getaddrinfo function is used to
   * obtain an explanation of an error returned by the getaddrinfo(3)
   * system call.  The least the message will contain is the value of
   * gai_strerror(errcode), but usually it will do much better, and
@@ -130,7 +164,7 @@ const char *libexplain_errcode_getaddrinfo(int errnum, const char *node,
   * if (errcode)
   * {
   *     char message[3000];
-  *     libexplain_message_errcode_getaddrinfo(message, sizeof(message),
+  *     explain_message_errcode_getaddrinfo(message, sizeof(message),
   *         errcode, node, service, hints, res);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
@@ -160,7 +194,7 @@ const char *libexplain_errcode_getaddrinfo(int errnum, const char *node,
   *     The original res, exactly as passed to the getaddrinfo(3) system
   *     call.
   */
-void libexplain_message_errcode_getaddrinfo(char *message, int message_size,
+void explain_message_errcode_getaddrinfo(char *message, int message_size,
     int errcode, const char *node, const char *service,
     const struct addrinfo *hints, struct addrinfo **res);
 

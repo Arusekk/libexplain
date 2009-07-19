@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,22 +24,22 @@
 
 
 void
-libexplain_buffer_eafnosupport(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_eafnosupport(explain_string_buffer_t *sb, int fildes,
     const char *fildes_caption, const struct sockaddr *sock_addr,
     const char *sock_addr_caption)
 {
     int             fildes_af;
 
     (void)sock_addr;
-    fildes_af = libexplain_fildes_to_address_family(fildes);
+    fildes_af = explain_fildes_to_address_family(fildes);
     if (fildes_af >= 0)
     {
         char            aftxt[30];
-        libexplain_string_buffer_t aftxt_sb;
+        explain_string_buffer_t aftxt_sb;
 
-        libexplain_string_buffer_init(&aftxt_sb, aftxt, sizeof(aftxt));
-        libexplain_buffer_address_family(&aftxt_sb, fildes_af);
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_init(&aftxt_sb, aftxt, sizeof(aftxt));
+        explain_buffer_address_family(&aftxt_sb, fildes_af);
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -64,7 +64,7 @@ libexplain_buffer_eafnosupport(libexplain_string_buffer_t *sb, int fildes,
     }
     else
     {
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*

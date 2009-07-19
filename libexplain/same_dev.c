@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 
 
 int
-libexplain_same_dev(const char *oldpath, const char *newpath)
+explain_same_dev(const char *oldpath, const char *newpath)
 {
     struct stat     oldpath_st;
     struct stat     newdir_st;
@@ -33,7 +33,7 @@ libexplain_same_dev(const char *oldpath, const char *newpath)
 
     if (stat(oldpath, &oldpath_st) < 0)
         return 0;
-    libexplain_dirname(newdir, newpath, sizeof(newdir));
+    explain_dirname(newdir, newpath, sizeof(newdir));
     if (stat(newdir, &newdir_st) < 0)
         return 0;
     return (oldpath_st.st_dev == newdir_st.st_dev);

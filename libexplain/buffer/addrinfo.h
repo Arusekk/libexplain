@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@
 struct addrinfo; /* forward */
 
 /**
-  * The libexplain_buffer_addrinfo function may be used to
+  * The explain_buffer_addrinfo function may be used to
   * print a representation of a struct addrinfo.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct addrinfo; /* forward */
   * @param ai
   *    The struct addrinfo to print.
   */
-void libexplain_buffer_addrinfo(libexplain_string_buffer_t *sb,
+void explain_buffer_addrinfo(explain_string_buffer_t *sb,
     const struct addrinfo *ai);
 
 #endif /* LIBEXPLAIN_BUFFER_ADDRINFO_H */

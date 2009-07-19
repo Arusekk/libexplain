@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_uid function may be used to printf information
+  * The explain_buffer_uid function may be used to printf information
   * about a UID.  It will include the number, and the name of getpwuid
   * is successful.
   *
@@ -32,6 +32,6 @@
   * @param uid
   *    The user id of interest.
   */
-void libexplain_buffer_uid(libexplain_string_buffer_t *sb, int uid);
+void explain_buffer_uid(explain_string_buffer_t *sb, int uid);
 
 #endif /* LIBEXPLAIN_BUFFER_UID_H */

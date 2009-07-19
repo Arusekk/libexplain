@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,32 +31,32 @@
 
 
 static void
-libexplain_buffer_errno_fchdir_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fchdir_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "fchdir(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "fchdir(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_fchdir_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fchdir_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes)
 {
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir_fd(sb, fildes, "fildes");
+        explain_buffer_enotdir_fd(sb, fildes, "fildes");
         break;
 
     case EACCES:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "search permission was denied on the directory"
@@ -64,30 +64,30 @@ libexplain_buffer_errno_fchdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_fchdir(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_fchdir(explain_string_buffer_t *sb, int errnum,
     int fildes)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_fchdir_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_fchdir_system_call
     (
         &exp.system_call_sb,
         errnum,
         fildes
     );
-    libexplain_buffer_errno_fchdir_explanation
+    explain_buffer_errno_fchdir_explanation
     (
         &exp.explanation_sb,
         errnum,
         fildes
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

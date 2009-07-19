@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,12 +21,12 @@
 #define LIBEXPLAIN_SYMLOOPMAX_H
 
 /**
-  * The libexplain_symloopmax function may be used to
+  * The explain_symloopmax function may be used to
   *
   * @returns
   *    The systm's idea of the maximum of symbolic links that may be
   *    traversed in resolving a path.  Always positive.
   */
-int libexplain_symloopmax(void);
+int explain_symloopmax(void);
 
 #endif /* LIBEXPLAIN_SYMLOOPMAX_H */

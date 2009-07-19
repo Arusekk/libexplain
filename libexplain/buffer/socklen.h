@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_socklen function may be used to
+  * The explain_buffer_socklen function may be used to
   * print a representation of a socklen_t value.
   *
   * @param sb
@@ -31,11 +31,11 @@
   * @param data
   *     The socklen structure to be printed.
   */
-void libexplain_buffer_socklen(libexplain_string_buffer_t *sb,
+void explain_buffer_socklen(explain_string_buffer_t *sb,
     const socklen_t data);
 
 /**
-  * The libexplain_buffer_socklen_star function may be used to
+  * The explain_buffer_socklen_star function may be used to
   * print a representation of a socklen_t* value.
   *
   * @param sb
@@ -43,7 +43,7 @@ void libexplain_buffer_socklen(libexplain_string_buffer_t *sb,
   * @param data
   *     The socklen structure to be printed.
   */
-void libexplain_buffer_socklen_star(libexplain_string_buffer_t *sb,
+void explain_buffer_socklen_star(explain_string_buffer_t *sb,
     const socklen_t *data);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKLEN_H */

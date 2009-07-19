@@ -18,15 +18,33 @@
 
 #include <libexplain/ac/errno.h>
 
+#include <libexplain/buffer/eagain.h>
 #include <libexplain/buffer/ebadf.h>
+#include <libexplain/buffer/econnaborted.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/ehostdown.h>
+#include <libexplain/buffer/ehostunreach.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/emfile.h>
+#include <libexplain/buffer/enetdown.h>
+#include <libexplain/buffer/enetunreach.h>
 #include <libexplain/buffer/enfile.h>
+#include <libexplain/buffer/enobufs.h>
+#include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enonet.h>
+#include <libexplain/buffer/enoprotoopt.h>
+#include <libexplain/buffer/enosr.h>
+#include <libexplain/buffer/enosys.h>
 #include <libexplain/buffer/enotsock.h>
+#include <libexplain/buffer/eperm.h>
+#include <libexplain/buffer/eproto.h>
+#include <libexplain/buffer/eprotonosupport.h>
+#include <libexplain/buffer/erestart.h>
 #include <libexplain/buffer/errno/accept.h>
 #include <libexplain/buffer/errno/generic.h>
+#include <libexplain/buffer/esocktnosupport.h>
+#include <libexplain/buffer/etimedout.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/pointer.h>
@@ -37,84 +55,75 @@
 
 
 static void
-libexplain_buffer_errno_accept_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_accept_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "accept(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", sock_addr = ");
-    libexplain_buffer_pointer(sb, sock_addr);
-    libexplain_string_buffer_printf(sb, ", sock_addr_size = ");
-    libexplain_buffer_socklen_star(sb, sock_addr_size);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "accept(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", sock_addr = ");
+    explain_buffer_pointer(sb, sock_addr);
+    explain_string_buffer_printf(sb, ", sock_addr_size = ");
+    explain_buffer_socklen_star(sb, sock_addr_size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_accept_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_accept_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/accept.html
      */
+    (void)sock_addr;
     switch (errnum)
     {
     case EAGAIN:
 #if defined(EWOULDBLOCK) && EWOULDBLOCK != EAGAIN
     case EWOULDBLOCK:
 #endif
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext:  This message is used to explain an EAGAIN
-             * error reprted by an accept(2) system call, in the case
-             * where the socket is marked non-blocking (O_NONBLOCK) and
-             * no connections are waiting to be accepted.
-             */
-            i18n("the socket is marked non-blocking and no connections "
-            "are present to be accepted")
-        );
+        explain_buffer_eagain_accept(sb);
         break;
 
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case ECONNABORTED:
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext:  This message is used to explan an ECONNABORTED
-             * error reported by the accept(2) system call, in the case
-             * where an incoming connection has been aborted by the
-             * remote host.
-             */
-            i18n("an incoming connection has been aborted by the remote host")
-        );
+        explain_buffer_econnaborted(sb);
+        break;
+
+    case EFAULT:
+        if (explain_pointer_is_efault(sock_addr_size, sizeof(*sock_addr_size)))
+            explain_buffer_efault(sb, "sock_addr_size");
+        else
+            explain_buffer_efault(sb, "sock_addr");
+        break;
+
+    case EHOSTDOWN:
+        explain_buffer_ehostdown(sb);
+        break;
+
+    case EHOSTUNREACH:
+        explain_buffer_ehostunreach(sb);
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "accept");
+        explain_buffer_eintr(sb, "accept");
         break;
 
     case EINVAL:
         if
         (
-            !libexplain_pointer_is_efault
-            (
-                sock_addr_size,
-                sizeof(*sock_addr_size)
-            )
+            !explain_pointer_is_efault(sock_addr_size, sizeof(*sock_addr_size))
         &&
             *sock_addr_size <= 0
         )
         {
-            libexplain_buffer_einval_too_small
+            explain_buffer_einval_too_small
             (
                 sb,
                 "sock_addr_size",
@@ -122,117 +131,95 @@ libexplain_buffer_errno_accept_explanation(libexplain_string_buffer_t *sb,
             );
             break;
         }
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used to explain an EINVAL error
-             * reported by the accept(2) system call, in the case where
-             * the file descriptor is actually a socket, but is not in a
-             * state that permits the use of the accept(2) system call.
-             */
-            i18n("the socket is not listening for connections")
-        );
+        explain_buffer_einval_not_listening(sb);
         break;
 
     case EMFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
+        break;
+
+    case ENETDOWN:
+        explain_buffer_enetdown(sb);
+        break;
+
+    case ENETUNREACH:
+        explain_buffer_enetunreach(sb);
         break;
 
     case ENFILE:
-        libexplain_buffer_enfile(sb);
+        explain_buffer_enfile(sb);
+        break;
+
+    case ENOBUFS:
+        explain_buffer_enobufs(sb);
+        break;
+
+    case ENOMEM:
+        explain_buffer_enomem_kernel(sb);
+        break;
+
+    case ENONET:
+        explain_buffer_enonet(sb);
+        break;
+
+    case ENOPROTOOPT:
+        explain_buffer_enoprotoopt(sb, "fildes");
         break;
 
     case ENOTSOCK:
-        libexplain_buffer_enotsock(sb, fildes, "fildes");
+        explain_buffer_enotsock(sb, fildes, "fildes");
         break;
 
+    case ENOSYS:
+#if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
     case EOPNOTSUPP:
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used to explain an EOPNOTSUPP
-             * error returned by a listen(2) system call.
-             */
-            i18n("the socket is not of a type that supports the "
-            "accept(2) system call")
-        );
-        libexplain_buffer_socket_type_from_fildes(sb, fildes);
+#endif
+        explain_buffer_enosys_socket(sb, "accept", fildes);
         break;
 
-    case EFAULT:
-        if
-        (
-            libexplain_pointer_is_efault
-            (
-                sock_addr_size,
-                sizeof(*sock_addr_size)
-            )
-        )
-        {
-            libexplain_buffer_efault(sb, "sock_addr_size");
-            break;
-        }
-        if (libexplain_pointer_is_efault(sock_addr, *sock_addr_size))
-        {
-            libexplain_buffer_efault(sb, "sock_addr");
-            break;
-        }
+    case ENOSR:
+        explain_buffer_enosr(sb);
         break;
 
     case EPERM:
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used to explain an EPERM error
-             * reported by an accept(2) system call, in the case where
-             * firewall rules forbid connection.
-             */
-            i18n("firewall rules forbid connection")
-        );
+        explain_buffer_eperm_accept(sb);
         break;
 
     case EPROTO:
-        libexplain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used to explain and EPROTO
-             * error reported by an accept(2) system call, in the case
-             * where a protocol error has occurred.
-             */
-            i18n("a protocol error has occurred; for example, the "
-            "STREAMS protocol stack has not been initialized")
-        );
+        explain_buffer_eproto_accept(sb, fildes);
         break;
 
-    /*
-     * Linux accept(2) says
-     *
-     * "In addition, network errors for the new socket and as defined
-     * for the protocol may be returned.  Various Linux kernels
-     * can return other errors such as ENOSR, ESOCKTNOSUPPORT,
-     * EPROTONOSUPPORT, ETIMEDOUT.  The value ERESTARTSYS may be seen
-     * during a trace."
-     */
+    case EPROTONOSUPPORT:
+        explain_buffer_eprotonosupport(sb);
+        break;
+
+    case ERESTART:
+        explain_buffer_erestart(sb, "accept");
+        break;
+
+    case ESOCKTNOSUPPORT:
+        explain_buffer_esocktnosupport(sb, "accept", fildes);
+        break;
+
+    case ETIMEDOUT:
+        explain_buffer_etimedout(sb, "accept");
+        break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_accept(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_accept(explain_string_buffer_t *sb, int errnum,
     int fildes, struct sockaddr *sock_addr, socklen_t *sock_addr_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_accept_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_accept_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -240,7 +227,7 @@ libexplain_buffer_errno_accept(libexplain_string_buffer_t *sb, int errnum,
         sock_addr,
         sock_addr_size
     );
-    libexplain_buffer_errno_accept_explanation
+    explain_buffer_errno_accept_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -248,5 +235,5 @@ libexplain_buffer_errno_accept(libexplain_string_buffer_t *sb, int errnum,
         sock_addr,
         sock_addr_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

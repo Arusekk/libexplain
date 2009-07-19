@@ -25,19 +25,13 @@
 
 
 char *
-libexplain_fgets_or_die(char *data, int data_size, FILE *fp)
+explain_fgets_or_die(char *data, int data_size, FILE *fp)
 {
     char            *result;
 
-    result = fgets(data, data_size, fp);
+    result = explain_fgets_on_error(data, data_size, fp);
     if (!result && ferror(fp))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_fgets(data, data_size, fp)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

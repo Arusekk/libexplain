@@ -24,7 +24,7 @@
 struct ifconf; /* forward */
 
 /**
-  * The libexplain_buffer_ifconf function may be used to
+  * The explain_buffer_ifconf function may be used to
   * print a representation of an ifconf structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct ifconf; /* forward */
   * @param data
   *    The ifconf structure to be printed.
   */
-void libexplain_buffer_ifconf(libexplain_string_buffer_t *sb,
+void explain_buffer_ifconf(explain_string_buffer_t *sb,
     const struct ifconf *data);
 
 #endif /* LIBEXPLAIN_BUFFER_IFCONF_H */

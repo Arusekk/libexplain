@@ -24,8 +24,7 @@ TEST_SUBJECT="ioctl ENOTTY"
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = TCGETS, data = 0x00012345) failed,
 Inappropriate ioctl for device (ENOTTY) because fildes is not associated
-with a character special device; or, fildes is not associated with an
-object to which request can be applied
+with an object to which ioctl TCGETS can be applied
 fubar
 test $? -eq 0 || no_result
 

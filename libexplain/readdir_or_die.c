@@ -27,16 +27,14 @@
 
 
 struct dirent *
-libexplain_readdir_or_die(DIR *dir)
+explain_readdir_or_die(DIR *dir)
 {
     struct dirent   *result;
 
     errno = 0;
-    result = readdir(dir);
+    result = explain_readdir_on_error(dir);
     if (!result && errno)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_readdir(dir));
         exit(EXIT_FAILURE);
     }
     return result;

@@ -25,46 +25,46 @@
 
 
 static void
-libexplain_buffer_errno_pclose_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_pclose_system_call(explain_string_buffer_t *sb,
     int errnum, FILE *fp)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "pclose(fp = ");
-    libexplain_buffer_stream(sb, fp);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "pclose(fp = ");
+    explain_buffer_stream(sb, fp);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_pclose_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_pclose_explanation(explain_string_buffer_t *sb,
     int errnum, FILE *fp)
 {
     /* punt everything to waitpid */
     (void)fp;
-    libexplain_buffer_errno_waitpid_explanation(sb, errnum, 0, 0, 0);
+    explain_buffer_errno_waitpid_explanation(sb, errnum, 0, 0, 0);
 }
 
 
 void
-libexplain_buffer_errno_pclose(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_pclose(explain_string_buffer_t *sb, int errnum,
     FILE *fp)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_pclose_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_pclose_system_call
     (
         &exp.system_call_sb,
         errnum,
         fp
     );
-    libexplain_buffer_errno_pclose_explanation
+    explain_buffer_errno_pclose_explanation
     (
         &exp.explanation_sb,
         errnum,
         fp
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

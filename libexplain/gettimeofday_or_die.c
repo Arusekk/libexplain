@@ -26,12 +26,10 @@
 
 
 void
-libexplain_gettimeofday_or_die(struct timeval *tv, struct timezone *tz)
+explain_gettimeofday_or_die(struct timeval *tv, struct timezone *tz)
 {
-    if (gettimeofday(tv, tz) < 0)
+    if (explain_gettimeofday_on_error(tv, tz) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_gettimeofday(tv, tz));
         exit(EXIT_FAILURE);
     }
 }

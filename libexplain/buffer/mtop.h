@@ -24,7 +24,7 @@
 struct mtop; /* forward */
 
 /**
-  * The libexplain_buffer_mtop function may be used to
+  * The explain_buffer_mtop function may be used to
   * print a representation of a mtop structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct mtop; /* forward */
   * @param data
   *     The mtop structure to be printed.
   */
-void libexplain_buffer_mtop(libexplain_string_buffer_t *sb,
+void explain_buffer_mtop(explain_string_buffer_t *sb,
     const struct mtop *data);
 
 #endif /* LIBEXPLAIN_BUFFER_MTOP_H */

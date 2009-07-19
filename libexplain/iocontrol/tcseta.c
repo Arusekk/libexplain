@@ -25,18 +25,18 @@
 
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_termio(sb, data);
+    explain_buffer_termio(sb, data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tcseta =
+const explain_iocontrol_t explain_iocontrol_tcseta =
 {
     "TCSETA", /* name */
     TCSETA, /* value */
@@ -47,7 +47,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_tcseta =
 };
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tcsetaf =
+const explain_iocontrol_t explain_iocontrol_tcsetaf =
 {
     "TCSETAF", /* name */
     TCSETAF, /* value */
@@ -58,7 +58,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_tcsetaf =
 };
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tcsetaw =
+const explain_iocontrol_t explain_iocontrol_tcsetaw =
 {
     "TCSETAW", /* name */
     TCSETAW, /* value */

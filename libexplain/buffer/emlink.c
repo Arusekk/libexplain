@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@
 
 
 void
-libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
+explain_buffer_emlink(explain_string_buffer_t *sb, const char *oldpath,
     const char *newpath)
 {
     struct stat     oldpath_st;
@@ -39,20 +39,20 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
     {
         if (S_ISDIR(oldpath_st.st_mode))
         {
-            libexplain_string_buffer_t qnpdir_sb;
+            explain_string_buffer_t qnpdir_sb;
             char            npdir[PATH_MAX + 1];
             char            qnpdir[PATH_MAX + 1];
 
-            libexplain_dirname(npdir, newpath, sizeof(npdir));
-            libexplain_string_buffer_init(&qnpdir_sb, qnpdir, sizeof(qnpdir));
-            libexplain_buffer_caption_name_type
+            explain_dirname(npdir, newpath, sizeof(npdir));
+            explain_string_buffer_init(&qnpdir_sb, qnpdir, sizeof(qnpdir));
+            explain_buffer_caption_name_type
             (
                 &qnpdir_sb,
                 "newpath",
                 npdir,
                 S_IFDIR
             );
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -76,12 +76,12 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
         }
         else
         {
-            libexplain_string_buffer_t ftype_sb;
+            explain_string_buffer_t ftype_sb;
             char ftype[100];
 
-            libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-            libexplain_buffer_file_type(&ftype_sb, oldpath_st.st_mode);
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+            explain_buffer_file_type(&ftype_sb, oldpath_st.st_mode);
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -104,7 +104,7 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
     }
     else
     {
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -117,7 +117,7 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
             "containing newpath has the maximum number of links")
         );
     }
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
         long            link_max;
 
@@ -129,6 +129,6 @@ libexplain_buffer_emlink(libexplain_string_buffer_t *sb, const char *oldpath,
         link_max = pathconf(oldpath, _PC_LINK_MAX);
 
         if (link_max > 0)
-            libexplain_string_buffer_printf(sb, " (%ld)", link_max);
+            explain_string_buffer_printf(sb, " (%ld)", link_max);
     }
 }

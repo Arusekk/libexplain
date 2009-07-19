@@ -27,12 +27,10 @@
 
 
 void
-libexplain_chmod_or_die(const char *pathname, int mode)
+explain_chmod_or_die(const char *pathname, int mode)
 {
-    if (chmod(pathname, mode))
+    if (explain_chmod_on_error(pathname, mode))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_chmod(pathname, mode));
         exit(EXIT_FAILURE);
     }
 }

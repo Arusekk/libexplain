@@ -21,19 +21,19 @@
 .if t \(bu
 .\" Change 11, 23, 24, 25, 26, 27, 28
 Coverage has been extended to include
-execvp(3),
-ioctl(2),
-malloc(3),
-pclose(3),
-pipe(2),
-popen(3) and
-realloc(3)
+\f[I]execvp\fP(3),
+\f[I]ioctl\fP(2),
+\f[I]malloc\fP(3),
+\f[I]pclose\fP(3),
+\f[I]pipe\fP(2),
+\f[I]popen\fP(3) and
+\f[I]realloc\fP(3)
 system calls.
 .PP
 .if n *
 .if t \(bu
 .\" Change 13, 14, 20, 22
-The coverage for ioctl(2) includes
+The coverage for \f[I]ioctl\fP(2) includes
 linux console controls,
 magnetic tape controls,
 socket controls, and

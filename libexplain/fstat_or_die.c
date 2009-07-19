@@ -26,12 +26,10 @@
 
 
 void
-libexplain_fstat_or_die(int fildes, struct stat *buf)
+explain_fstat_or_die(int fildes, struct stat *buf)
 {
-    if (fstat(fildes, buf) < 0)
+    if (explain_fstat_on_error(fildes, buf) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fstat(fildes, buf));
         exit(EXIT_FAILURE);
     }
 }

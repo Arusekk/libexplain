@@ -16,31 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/unistd.h>
 
 #include <libexplain/execve.h>
-#include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
 
 
 void
-libexplain_execve_or_die(const char *pathname, char *const *argv,
+explain_execve_or_die(const char *pathname, char *const *argv,
     char *const *envp)
 {
-    /*
-     * The casts are because different systems declare execve
-     * differently, but all will accept const-less arguments.
-     */
-    execve(pathname, argv, envp);
-
-    /*
-     * If it returned, it failed.
-     * There is no need to rest the result.
-     */
-    libexplain_program_name_assemble_internal(1);
-    libexplain_wrap_and_print(stderr, libexplain_execve(pathname, argv, envp));
-    exit(EXIT_FAILURE);
+    if (explain_execve_on_error(pathname, argv, envp) < 0)
+    {
+        exit(EXIT_FAILURE);
+    }
 }

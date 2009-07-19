@@ -16,24 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
-#include <libexplain/option.h>
 #include <libexplain/system.h>
-#include <libexplain/wrap_and_print.h>
 
 
 int
-libexplain_system_or_die(const char *command)
+explain_system_or_die(const char *command)
 {
     int             result;
 
-    result = system(command);
+    result = explain_system_on_error(command);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_system(command));
         exit(EXIT_FAILURE);
     }
     return result;

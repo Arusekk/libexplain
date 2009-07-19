@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_char function may be used to
+  * The explain_buffer_char function may be used to
   * print a representation of a character into a string buffer.
   *
   * @param sb
@@ -31,6 +31,6 @@
   * @param c
   *    The character to represent
   */
-void libexplain_buffer_char(libexplain_string_buffer_t *sb, int c);
+void explain_buffer_char(explain_string_buffer_t *sb, int c);
 
 #endif /* LIBEXPLAIN_BUFFER_CHAR_H */

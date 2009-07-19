@@ -27,16 +27,14 @@
 
 
 long
-libexplain_fpathconf_or_die(int fildes, int name)
+explain_fpathconf_or_die(int fildes, int name)
 {
     long            result;
 
     errno = 0;
-    result = fpathconf(fildes, name);
+    result = explain_fpathconf_on_error(fildes, name);
     if (result == -1 && errno != 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fpathconf(fildes, name));
         exit(EXIT_FAILURE);
     }
     return result;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,9 @@
 
 
 void
-libexplain_buffer_emfile(libexplain_string_buffer_t *sb)
+explain_buffer_emfile(explain_string_buffer_t *sb)
 {
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -39,14 +39,14 @@ libexplain_buffer_emfile(libexplain_string_buffer_t *sb)
             "descriptors open")
     );
 
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
         long            open_max;
 
         open_max = sysconf(_SC_OPEN_MAX);
         if (open_max > 0)
         {
-            libexplain_string_buffer_printf(sb, " (%ld)", open_max);
+            explain_string_buffer_printf(sb, " (%ld)", open_max);
         }
     }
 }

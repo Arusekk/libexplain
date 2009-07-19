@@ -33,23 +33,23 @@
 
 
 static void
-libexplain_buffer_errno_getsockname_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_getsockname_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "getsockname(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", sock_addr = ");
-    libexplain_buffer_pointer(sb, sock_addr);
-    libexplain_string_buffer_puts(sb, ", sock_addr_size = ");
-    libexplain_buffer_socklen_star(sb, sock_addr_size);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "getsockname(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", sock_addr = ");
+    explain_buffer_pointer(sb, sock_addr);
+    explain_string_buffer_puts(sb, ", sock_addr_size = ");
+    explain_buffer_socklen_star(sb, sock_addr_size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_getsockname_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_getsockname_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
@@ -59,30 +59,30 @@ libexplain_buffer_errno_getsockname_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFAULT:
         if
         (
-            libexplain_pointer_is_efault
+            explain_pointer_is_efault
             (
                 sock_addr_size,
                 sizeof(*sock_addr_size)
             )
         )
         {
-            libexplain_buffer_efault(sb, "sock_addr_size");
+            explain_buffer_efault(sb, "sock_addr_size");
             break;
         }
         if
         (
             *sock_addr_size > 0
         &&
-            libexplain_pointer_is_efault(sock_addr, *sock_addr_size)
+            explain_pointer_is_efault(sock_addr, *sock_addr_size)
         )
         {
-            libexplain_buffer_efault(sb, "sock_addr");
+            explain_buffer_efault(sb, "sock_addr");
             break;
         }
         goto dunno;
@@ -90,14 +90,14 @@ libexplain_buffer_errno_getsockname_explanation(libexplain_string_buffer_t *sb,
     case EINVAL:
         if
         (
-            libexplain_pointer_is_efault
+            explain_pointer_is_efault
             (
                 sock_addr_size,
                 sizeof(*sock_addr_size)
             )
         )
             goto dunno;
-        libexplain_buffer_einval_too_small
+        explain_buffer_einval_too_small
         (
             sb,
             "sock_addr_size",
@@ -106,29 +106,29 @@ libexplain_buffer_errno_getsockname_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOBUFS:
-        libexplain_buffer_enobufs(sb);
+        explain_buffer_enobufs(sb);
         break;
 
     case ENOTSOCK:
-        libexplain_buffer_enotsock(sb, fildes, "fildes");
+        explain_buffer_enotsock(sb, fildes, "fildes");
         break;
 
     default:
         dunno:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_getsockname(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_getsockname(explain_string_buffer_t *sb, int errnum,
     int fildes, struct sockaddr *sock_addr, socklen_t *sock_addr_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_getsockname_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_getsockname_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -136,7 +136,7 @@ libexplain_buffer_errno_getsockname(libexplain_string_buffer_t *sb, int errnum,
         sock_addr,
         sock_addr_size
     );
-    libexplain_buffer_errno_getsockname_explanation
+    explain_buffer_errno_getsockname_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -144,7 +144,7 @@ libexplain_buffer_errno_getsockname(libexplain_string_buffer_t *sb, int errnum,
         sock_addr,
         sock_addr_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

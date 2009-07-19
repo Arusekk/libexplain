@@ -19,6 +19,7 @@
 #include <libexplain/ac/bluetooth/bluetooth.h>
 #include <libexplain/ac/netinet/in.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/socket.h>
 
 #include <libexplain/buffer/sockopt_name.h>
@@ -26,7 +27,7 @@
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t sol_socket_table[] =
+static const explain_parse_bits_table_t sol_socket_table[] =
 {
     { "SO_DEBUG", SO_DEBUG },
     { "SO_REUSEADDR", SO_REUSEADDR },
@@ -36,8 +37,12 @@ static const libexplain_parse_bits_table_t sol_socket_table[] =
     { "SO_BROADCAST", SO_BROADCAST },
     { "SO_SNDBUF", SO_SNDBUF },
     { "SO_RCVBUF", SO_RCVBUF },
+#ifdef SO_SNDBUFFORCE
     { "SO_SNDBUFFORCE", SO_SNDBUFFORCE },
+#endif
+#ifdef SO_RCVBUFFORCE
     { "SO_RCVBUFFORCE", SO_RCVBUFFORCE },
+#endif
     { "SO_KEEPALIVE", SO_KEEPALIVE },
     { "SO_OOBINLINE", SO_OOBINLINE },
     { "SO_NO_CHECK", SO_NO_CHECK },
@@ -60,10 +65,18 @@ static const libexplain_parse_bits_table_t sol_socket_table[] =
     { "SO_TIMESTAMP", SO_TIMESTAMP },
     { "SO_ACCEPTCONN", SO_ACCEPTCONN },
     { "SO_PEERSEC", SO_PEERSEC },
+#ifdef SO_PASSSEC
     { "SO_PASSSEC", SO_PASSSEC },
+#endif
+#ifdef SO_TIMESTAMPNS
     { "SO_TIMESTAMPNS", SO_TIMESTAMPNS },
+#endif
+#ifdef SCM_TIMESTAMPNS
     { "SCM_TIMESTAMPNS", SCM_TIMESTAMPNS },
+#endif
+#ifdef SO_MARK
     { "SO_MARK", SO_MARK },
+#endif
 
     /* <linux/atm.h> */
 #ifdef SO_SETCLP
@@ -86,7 +99,7 @@ static const libexplain_parse_bits_table_t sol_socket_table[] =
 #endif
 };
 
-static const libexplain_parse_bits_table_t sol_ip_table[] =
+static const explain_parse_bits_table_t sol_ip_table[] =
 {
     { "IP_TOS", IP_TOS },
     { "IP_TTL", IP_TTL },
@@ -137,7 +150,7 @@ static const libexplain_parse_bits_table_t sol_ip_table[] =
 
 
 void
-libexplain_buffer_sockopt_name(libexplain_string_buffer_t *sb, int level,
+explain_buffer_sockopt_name(explain_string_buffer_t *sb, int level,
     int name)
 {
     switch (level)
@@ -153,7 +166,7 @@ libexplain_buffer_sockopt_name(libexplain_string_buffer_t *sb, int level,
     /* FIXME: add support for SOL_ICMPV6 */
 
     case SOL_IP:
-        libexplain_parse_bits_print_single
+        explain_parse_bits_print_single
         (
             sb,
             name,
@@ -177,7 +190,7 @@ libexplain_buffer_sockopt_name(libexplain_string_buffer_t *sb, int level,
     /* FIXME: add support for SOL_SCTP */
 
     case SOL_SOCKET:
-        libexplain_parse_bits_print_single
+        explain_parse_bits_print_single
         (
             sb,
             name,
@@ -193,7 +206,7 @@ libexplain_buffer_sockopt_name(libexplain_string_buffer_t *sb, int level,
     /* FIXME: add support for SOL_X25 */
 
     default:
-        libexplain_string_buffer_printf(sb, "%d", name);
+        explain_string_buffer_printf(sb, "%d", name);
         break;
     }
 }
@@ -202,7 +215,7 @@ libexplain_buffer_sockopt_name(libexplain_string_buffer_t *sb, int level,
 typedef struct list_t list_t;
 struct list_t
 {
-    libexplain_parse_bits_table_t *item;
+    explain_parse_bits_table_t *item;
     size_t          size;
     size_t          max;
 };
@@ -218,12 +231,12 @@ list_constructor(list_t *lp)
 
 
 static void
-list_append(list_t *lp, const libexplain_parse_bits_table_t *table, size_t size)
+list_append(list_t *lp, const explain_parse_bits_table_t *table, size_t size)
 {
     if (lp->size + size > lp->max)
     {
         size_t          new_max;
-        libexplain_parse_bits_table_t *new_item;
+        explain_parse_bits_table_t *new_item;
 
         new_max = lp->max * 2 + 4;
         while (lp->size + size > new_max)
@@ -254,7 +267,7 @@ list_destructor(list_t *lp)
 
 
 int
-libexplain_parse_sockopt_name_or_die(const char *text, const char *caption)
+explain_parse_sockopt_name_or_die(const char *text, const char *caption)
 {
     list_t          list;
     int             result;
@@ -265,7 +278,7 @@ libexplain_parse_sockopt_name_or_die(const char *text, const char *caption)
     if (!list.item)
     {
         return
-            libexplain_parse_bits_or_die
+            explain_parse_bits_or_die
             (
                 text,
                 sol_socket_table,
@@ -273,7 +286,7 @@ libexplain_parse_sockopt_name_or_die(const char *text, const char *caption)
                 caption
             );
     }
-    result = libexplain_parse_bits_or_die(text, list.item, list.size, caption);
+    result = explain_parse_bits_or_die(text, list.item, list.size, caption);
     list_destructor(&list);
     return result;
 }

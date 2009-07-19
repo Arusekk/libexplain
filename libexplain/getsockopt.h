@@ -33,246 +33,292 @@ extern "C" {
 #endif
 
 /**
-  * The libexplain_getsockopt_or_die function is
-  * used to call the getsockopt(2) system call.  On
-  * failure an explanation will be printed to stderr,
-  * obtained from libexplain_getsockopt(3), and
-  * then the process terminates by calling
-  * exit(EXIT_FAILURE).
+  * The explain_getsockopt_or_die function is used to call the
+  * <i>getsockopt</i>(2) system call. On failure an explanation will be
+  * printed to stderr, obtained from the explain_getsockopt(3) function,
+  * and then the process terminates by calling exit(EXIT_FAILURE).
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
-  * libexplain_getsockopt_or_die(fildes, level, name, data, data_size);
+  * explain_getsockopt_or_die(fildes, level, name, data, data_size);
   * @endcode
   *
   * @param fildes
-  *     The fildes, exactly as to be passed to the getsockopt(2) system call.
+  *     The fildes, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
   * @param level
-  *     The level, exactly as to be passed to the getsockopt(2) system call.
+  *     The level, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
   * @param name
-  *     The name, exactly as to be passed to the getsockopt(2) system call.
+  *     The name, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
   * @param data
-  *     The data, exactly as to be passed to the getsockopt(2) system call.
+  *     The data, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
   * @param data_size
-  *     The data_size, exactly as to be passed to the getsockopt(2) system call.
+  *     The data_size, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
   * @returns
-  *     This function only returns on success.
-  *     On failure, prints an explanation and exits,
-  *     it does not return.
+  *     This function only returns on success. On failure, prints an
+  *     explanation and exits, it does not return.
   */
-void libexplain_getsockopt_or_die(int fildes, int level, int name, void *data,
+void explain_getsockopt_or_die(int fildes, int level, int name, void *data,
     socklen_t *data_size);
 
 /**
-  * The libexplain_getsockopt function is used to
-  * obtain an explanation of an error returned by the
-  * getsockopt(2) system call.
-  * The least the message will contain is the value of
-  * strerror(errno), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_getsockopt_on_error function is used to call the
+  * <i>getsockopt</i>(2) system call. On failure an explanation will be
+  * printed to stderr, obtained from the explain_getsockopt(3) function.
   *
-  * The errno global variable will be used to obtain the
-  * error value to be decoded.
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * if (explain_getsockopt_on_error(fildes, level, name, data, data_size) < 0)
+  * {
+  *     ...cope with error
+  *     ...no need to print error message
+  * }
+  * @endcode
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * @param fildes
+  *     The fildes, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param level
+  *     The level, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param name
+  *     The name, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data
+  *     The data, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data_size
+  *     The data_size, exactly as to be passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @returns
+  *     The value returned by the wrapped <i>getsockopt</i>(2) system call.
+  */
+int explain_getsockopt_on_error(int fildes, int level, int name, void *data,
+    socklen_t *data_size)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+
+/**
+  * The explain_getsockopt function is used to obtain an explanation of an
+  * error returned by the <i>getsockopt</i>(2) system call. The least the
+  * message will contain is the value of <tt>strerror(errno)</tt>, but
+  * usually it will do much better, and indicate the underlying cause in
+  * more detail.
+  *
+  * The errno global variable will be used to obtain the error value to be
+  * decoded.
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (getsockopt(fildes, level, name, data, data_size) < 0)
   * {
-  *     fprintf(stderr, "%s\n", libexplain_getsockopt(fildes,
-  *         level, name, data, data_size));
+  *     fprintf(stderr, "%s\n", explain_getsockopt(fildes, level, name, data,
+  *         data_size));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_getsockopt_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_getsockopt_or_die function.
   *
   * @param fildes
-  *     The original fildes, exactly as passed to the getsockopt(2) system call.
-  * @param level
-  *     The original level, exactly as passed to the getsockopt(2) system call.
-  * @param name
-  *     The original name, exactly as passed to the getsockopt(2) system call.
-  * @param data
-  *     The original data, exactly as passed to the getsockopt(2) system call.
-  * @param data_size
-  *     The original data_size, exactly as passed to the getsockopt(2)
+  *     The original fildes, exactly as passed to the <i>getsockopt</i>(2)
   *     system call.
+  * @param level
+  *     The original level, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param name
+  *     The original name, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data
+  *     The original data, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data_size
+  *     The original data_size, exactly as passed to the
+  *     <i>getsockopt</i>(2) system call.
   * @returns
-  *     The message explaining the error.  This
-  *     message buffer is shared by all libexplain
-  *     functions which do not supply a buffer in their
-  *     argument list.  This will be overwritten by the
-  *     next call to any libexplain function which shares
-  *     this buffer, including other threads.
+  *     The message explaining the error. This message buffer is shared by
+  *     all libexplain functions which do not supply a buffer in their
+  *     argument list. This will be overwritten by the next call to any
+  *     libexplain function which shares this buffer, including other
+  *     threads.
   * @note
-  *     This function is <b>not</b> thread safe, because
-  *     it shares a return buffer across all threads, and
-  *     many other functions in this library.
+  *     This function is <b>not</b> thread safe, because it shares a return
+  *     buffer across all threads, and many other functions in this
+  *     library.
   */
-const char *libexplain_getsockopt(int fildes, int level, int name, void *data,
+const char *explain_getsockopt(int fildes, int level, int name, void *data,
     socklen_t *data_size)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
+
 /**
-  * The libexplain_errno_getsockopt function is
-  * used to obtain an explanation of an error returned by
-  * the getsockopt(2) system call.
-  * The least the message will contain is the value of
-  * strerror(errnum), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_errno_getsockopt function is used to obtain an explanation
+  * of an error returned by the <i>getsockopt</i>(2) system call. The least
+  * the message will contain is the value of <tt>strerror(errnum)</tt>, but
+  * usually it will do much better, and indicate the underlying cause in
+  * more detail.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (getsockopt(fildes, level, name, data, data_size) < 0)
   * {
   *     int err = errno;
-  *     fprintf(stderr, "%s\n", libexplain_getsockopt(err,
-  *         fildes, level, name, data, data_size));
+  *     fprintf(stderr, "%s\n", explain_errno_getsockopt(err, fildes, level,
+  *         name, data, data_size));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_getsockopt_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_getsockopt_or_die function.
   *
   * @param errnum
-  *     The error value to be decoded, usually obtained
-  *     from the errno global variable just before this
-  *     function is called.  This is necessary if you need
-  *     to call <b>any</b> code between the system call to
-  *     be explained and this function, because many libc
-  *     functions will alter the value of errno.
+  *     The error value to be decoded, usually obtained from the errno
+  *     global variable just before this function is called. This is
+  *     necessary if you need to call <b>any</b> code between the system
+  *     call to be explained and this function, because many libc functions
+  *     will alter the value of errno.
   * @param fildes
-  *     The original fildes, exactly as passed to the getsockopt(2) system call.
-  * @param level
-  *     The original level, exactly as passed to the getsockopt(2) system call.
-  * @param name
-  *     The original name, exactly as passed to the getsockopt(2) system call.
-  * @param data
-  *     The original data, exactly as passed to the getsockopt(2) system call.
-  * @param data_size
-  *     The original data_size, exactly as passed to the getsockopt(2)
+  *     The original fildes, exactly as passed to the <i>getsockopt</i>(2)
   *     system call.
+  * @param level
+  *     The original level, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param name
+  *     The original name, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data
+  *     The original data, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data_size
+  *     The original data_size, exactly as passed to the
+  *     <i>getsockopt</i>(2) system call.
   * @returns
-  *     The message explaining the error.  This
-  *     message buffer is shared by all libexplain
-  *     functions which do not supply a buffer in their
-  *     argument list.  This will be overwritten by the
-  *     next call to any libexplain function which shares
-  *     this buffer, including other threads.
+  *     The message explaining the error. This message buffer is shared by
+  *     all libexplain functions which do not supply a buffer in their
+  *     argument list. This will be overwritten by the next call to any
+  *     libexplain function which shares this buffer, including other
+  *     threads.
   * @note
-  *     This function is <b>not</b> thread safe, because
-  *     it shares a return buffer across all threads, and
-  *     many other functions in this library.
+  *     This function is <b>not</b> thread safe, because it shares a return
+  *     buffer across all threads, and many other functions in this
+  *     library.
   */
-const char *libexplain_errno_getsockopt(int errnum, int fildes, int level,
+const char *explain_errno_getsockopt(int errnum, int fildes, int level,
     int name, void *data, socklen_t *data_size)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
+
 /**
-  * The libexplain_message_getsockopt function is
-  * used to obtain an explanation of an error returned by
-  * the getsockopt(2) system call.
-  * The least the message will contain is the value of
-  * strerror(errno), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_message_getsockopt function is used to obtain an
+  * explanation of an error returned by the <i>getsockopt</i>(2) system
+  * call. The least the message will contain is the value of
+  * <tt>strerror(errnum)</tt>, but usually it will do much better, and
+  * indicate the underlying cause in more detail.
   *
-  * The errno global variable will be used to obtain the
-  * error value to be decoded.
+  * The errno global variable will be used to obtain the error value to be
+  * decoded.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (getsockopt(fildes, level, name, data, data_size) < 0)
   * {
   *     char message[3000];
-  *     libexplain_message_getsockopt(message, sizeof(message),
-  *         fildes, level, name, data, data_size);
+  *     explain_message_getsockopt(message, sizeof(message), fildes, level,
+  *         name, data, data_size);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_getsockopt_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_getsockopt_or_die function.
   *
   * @param message
-  *     The location in which to store the returned
-  *     message.  If a suitable message return buffer is
-  *     supplied, this function is thread safe.
+  *     The location in which to store the returned message. If a suitable
+  *     message return buffer is supplied, this function is thread safe.
   * @param message_size
-  *     The size in bytes of the location in which to
-  *     store the returned message.
+  *     The size in bytes of the location in which to store the returned
+  *     message.
   * @param fildes
-  *     The original fildes, exactly as passed to the getsockopt(2) system call.
-  * @param level
-  *     The original level, exactly as passed to the getsockopt(2) system call.
-  * @param name
-  *     The original name, exactly as passed to the getsockopt(2) system call.
-  * @param data
-  *     The original data, exactly as passed to the getsockopt(2) system call.
-  * @param data_size
-  *     The original data_size, exactly as passed to the getsockopt(2)
+  *     The original fildes, exactly as passed to the <i>getsockopt</i>(2)
   *     system call.
+  * @param level
+  *     The original level, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param name
+  *     The original name, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data
+  *     The original data, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data_size
+  *     The original data_size, exactly as passed to the
+  *     <i>getsockopt</i>(2) system call.
   */
-void libexplain_message_getsockopt(char *message, int message_size, int fildes,
+void explain_message_getsockopt(char *message, int message_size, int fildes,
     int level, int name, void *data, socklen_t *data_size);
 
 /**
-  * The libexplain_message_errno_getsockopt
-  * function is used to obtain an explanation of an error
-  * returned by the
-  * getsockopt(2) system call.
-  * The least the message will contain is the value of
-  * strerror(errnum), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_message_errno_getsockopt function is used to obtain an
+  * explanation of an error returned by the <i>getsockopt</i>(2) system
+  * call. The least the message will contain is the value of
+  * <tt>strerror(errnum)</tt>, but usually it will do much better, and
+  * indicate the underlying cause in more detail.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (getsockopt(fildes, level, name, data, data_size) < 0)
   * {
   *     int err = errno;
   *     char message[3000];
-  *     libexplain_message_errno_getsockopt(message, sizeof(message),
-  *         err, fildes, level, name, data, data_size);
+  *     explain_message_errno_getsockopt(message, sizeof(message), err, fildes,
+  *         level, name, data, data_size);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
-  * The above code example is available pre-packaged as
-  * the #libexplain_getsockopt_or_die function.
+  * The above code example is available pre-packaged as the
+  * #explain_getsockopt_or_die function.
   *
   * @param message
-  *     The location in which to store the returned
-  *     message.  If a suitable message return buffer is
-  *     supplied, this function is thread safe.
+  *     The location in which to store the returned message. If a suitable
+  *     message return buffer is supplied, this function is thread safe.
   * @param message_size
-  *     The size in bytes of the location in which to
-  *     store the returned message.
+  *     The size in bytes of the location in which to store the returned
+  *     message.
   * @param errnum
-  *     The error value to be decoded, usually obtained
-  *     from the errno global variable just before this
-  *     function is called.  This is necessary if you need
-  *     to call <b>any</b> code between the system call to
-  *     be explained and this function, because many libc
-  *     functions will alter the value of errno.
+  *     The error value to be decoded, usually obtained from the errno
+  *     global variable just before this function is called. This is
+  *     necessary if you need to call <b>any</b> code between the system
+  *     call to be explained and this function, because many libc functions
+  *     will alter the value of errno.
   * @param fildes
-  *     The original fildes, exactly as passed to the getsockopt(2) system call.
-  * @param level
-  *     The original level, exactly as passed to the getsockopt(2) system call.
-  * @param name
-  *     The original name, exactly as passed to the getsockopt(2) system call.
-  * @param data
-  *     The original data, exactly as passed to the getsockopt(2) system call.
-  * @param data_size
-  *     The original data_size, exactly as passed to the getsockopt(2)
+  *     The original fildes, exactly as passed to the <i>getsockopt</i>(2)
   *     system call.
+  * @param level
+  *     The original level, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param name
+  *     The original name, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data
+  *     The original data, exactly as passed to the <i>getsockopt</i>(2)
+  *     system call.
+  * @param data_size
+  *     The original data_size, exactly as passed to the
+  *     <i>getsockopt</i>(2) system call.
   */
-void libexplain_message_errno_getsockopt(char *message, int message_size,
+void explain_message_errno_getsockopt(char *message, int message_size,
     int errnum, int fildes, int level, int name, void *data,
     socklen_t *data_size);
 
@@ -280,5 +326,5 @@ void libexplain_message_errno_getsockopt(char *message, int message_size,
 }
 #endif
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et */
 #endif /* LIBEXPLAIN_GETSOCKOPT_H */

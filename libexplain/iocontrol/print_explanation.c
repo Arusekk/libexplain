@@ -22,15 +22,15 @@
 
 
 void
-libexplain_iocontrol_print_explanation(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+explain_iocontrol_print_explanation(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
-    void (*func)(const libexplain_iocontrol_t *p,
-        libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+    void (*func)(const explain_iocontrol_t *p,
+        explain_string_buffer_t *sb, int errnum, int fildes, int request,
         const void *data);
 
-    func = libexplain_iocontrol_generic.print_explanation;
+    func = explain_iocontrol_generic.print_explanation;
     if (p && p->print_explanation)
         func = p->print_explanation;
     if (func)

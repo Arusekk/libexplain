@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,10 +19,10 @@
 #ifndef LIBEXPLAIN_GROUP_IN_GROUPS_H
 #define LIBEXPLAIN_GROUP_IN_GROUPS_H
 
-struct libexplain_have_identity_t; /* forward */
+struct explain_have_identity_t; /* forward */
 
 /**
-  * The libexplain_group_in_groups function may be used to determine
+  * The explain_group_in_groups function may be used to determine
   * whether or not the given geoup matches the process' effective GID,
   * or is in the process' groups list.
   *
@@ -33,7 +33,7 @@ struct libexplain_have_identity_t; /* forward */
   * @returns
   *    int; non-zero (true) if in groups, zero (false) if not
   */
-int libexplain_group_in_groups(int gid,
-    const struct libexplain_have_identity_t *hip);
+int explain_group_in_groups(int gid,
+    const struct explain_have_identity_t *hip);
 
 #endif /* LIBEXPLAIN_GROUP_IN_GROUPS_H */

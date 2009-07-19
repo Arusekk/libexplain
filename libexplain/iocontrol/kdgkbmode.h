@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol.h>
 
 /**
-  * The libexplain_iocontrol_kdgkbmode global variable is
+  * The explain_iocontrol_kdgkbmode global variable is
   * used to store information about the KDGKBMODE
   * I/O control.
   *
@@ -32,6 +32,6 @@
   *     are ambiguous, and (b) the includes files have bugs making it
   *     impossible to include all of them in the same combilation unit.
   */
-extern const libexplain_iocontrol_t libexplain_iocontrol_kdgkbmode;
+extern const explain_iocontrol_t explain_iocontrol_kdgkbmode;
 
 #endif /* LIBEXPLAIN_IOCONTROL_KDGKBMODE_H */

@@ -24,7 +24,7 @@
 struct sockopt_level; /* forward */
 
 /**
-  * The libexplain_buffer_sockopt_level function may be used to
+  * The explain_buffer_sockopt_level function may be used to
   * print a representation of a sockopt_level structure.
   *
   * @param sb
@@ -32,10 +32,10 @@ struct sockopt_level; /* forward */
   * @param data
   *     The sockopt level value to be printed.
   */
-void libexplain_buffer_sockopt_level(libexplain_string_buffer_t *sb, int data);
+void explain_buffer_sockopt_level(explain_string_buffer_t *sb, int data);
 
 /**
-  * The libexplain_parse_sockopt_level_or_die functions is used to parse
+  * The explain_parse_sockopt_level_or_die functions is used to parse
   * a text string into a sockopt level value.
   *
   * @param text
@@ -46,7 +46,7 @@ void libexplain_buffer_sockopt_level(libexplain_string_buffer_t *sb, int data);
   *     The sokopt level value.  On error it prints a fatal error
   *     message and exits.
   */
-int libexplain_parse_sockopt_level_or_die(const char *text,
+int explain_parse_sockopt_level_or_die(const char *text,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKOPT_LEVEL_H */

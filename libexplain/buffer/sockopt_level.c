@@ -17,16 +17,18 @@
  */
 
 #include <libexplain/ac/bluetooth/bluetooth.h>
-#include <libexplain/ac/linux/irda.h>
 #include <libexplain/ac/netinet/in.h>
 #include <libexplain/ac/sys/socket.h>
+
+/* This one doesn't play nice with others on 64-bit machines?!? */
+#include <libexplain/ac/linux/irda.h>
 
 #include <libexplain/buffer/sockopt_level.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     /* <sys/socket.h> */
 #ifdef SOL_RAW
@@ -160,14 +162,14 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_sockopt_level(libexplain_string_buffer_t *sb, int data)
+explain_buffer_sockopt_level(explain_string_buffer_t *sb, int data)
 {
-    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
 
 
 int
-libexplain_parse_sockopt_level_or_die(const char *text, const char *caption)
+explain_parse_sockopt_level_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

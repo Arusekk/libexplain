@@ -24,7 +24,7 @@
 struct kbentry; /* forward */
 
 /**
-  * The libexplain_buffer_kbentry function may be used to
+  * The explain_buffer_kbentry function may be used to
   * print a representation of a kbentry structure value.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct kbentry; /* forward */
   * @param value
   *    The kbentry structure value to be printed.
   */
-void libexplain_buffer_kbentry(libexplain_string_buffer_t *sb,
+void explain_buffer_kbentry(explain_string_buffer_t *sb,
     const struct kbentry *value);
 
 #endif /* LIBEXPLAIN_BUFFER_KBENTRY_H */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,12 +20,12 @@
 #ifndef LIBEXPLAIN_BUFFER_FLOCK_H
 #define LIBEXPLAIN_BUFFER_FLOCK_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 struct flock; /* forward */
 struct flock64; /* forward */
 
 /**
-  * The libexplain_buffer_flock function may be used to form a human
+  * The explain_buffer_flock function may be used to form a human
   * readable representation of an flock structure.
   *
   * @param sb
@@ -34,11 +34,11 @@ struct flock64; /* forward */
   * @param flp
   *    pointer to the flock structure to be decoded
   */
-void libexplain_buffer_flock(struct libexplain_string_buffer_t *sb,
+void explain_buffer_flock(struct explain_string_buffer_t *sb,
     const struct flock *flp);
 
 /**
-  * The libexplain_buffer_flock64 function may be used to form a human
+  * The explain_buffer_flock64 function may be used to form a human
   * readable representation of an flock64 structure.
   *
   * @param sb
@@ -47,7 +47,7 @@ void libexplain_buffer_flock(struct libexplain_string_buffer_t *sb,
   * @param flp
   *    pointer to the flock64 structure to be decoded
   */
-void libexplain_buffer_flock64(struct libexplain_string_buffer_t *sb,
+void explain_buffer_flock64(struct explain_string_buffer_t *sb,
     const struct flock64 *flp);
 
 #endif /* LIBEXPLAIN_BUFFER_FLOCK_H */

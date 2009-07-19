@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
 struct sockaddr; /* forward */
 
 /**
-  * The libexplain_buffer_errno_connect function
+  * The explain_buffer_errno_connect function
   * is used to obtain an explanation of an error returned
   * by the connect(2) system call.
   * The least the message will contain is the value of
@@ -50,7 +50,7 @@ struct sockaddr; /* forward */
   *     The original serv_addr_size, exactly as passed to the connect(2)
   *     system call.
   */
-void libexplain_buffer_errno_connect(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_connect(explain_string_buffer_t *sb, int errnum,
     int fildes, const struct sockaddr *serv_addr, int serv_addr_size);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CONNECT_H */

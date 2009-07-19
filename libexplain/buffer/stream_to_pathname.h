@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_stream_to_pathname function may be used to
+  * The explain_buffer_stream_to_pathname function may be used to
   * insert the name of an open file stream.
   *
   * @param sb
@@ -33,7 +33,7 @@
   * @param fp
   *    The stream pointer of the file of interest
   */
-void libexplain_buffer_stream_to_pathname(libexplain_string_buffer_t *sb,
+void explain_buffer_stream_to_pathname(explain_string_buffer_t *sb,
     FILE *fp);
 
 #endif /* LIBEXPLAIN_BUFFER_STREAM_TO_PATHNAME_H */

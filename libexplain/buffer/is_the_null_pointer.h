@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_is_the_null_pointer function may be used to
+  * The explain_buffer_is_the_null_pointer function may be used to
   * explain that a system call argument is a NULL pointer, when it
   * should not be.
   *
@@ -31,7 +31,7 @@
   * @param caption
   *    the name of the system call's argument
   */
-void libexplain_buffer_is_the_null_pointer(libexplain_string_buffer_t *sb,
+void explain_buffer_is_the_null_pointer(explain_string_buffer_t *sb,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_IS_THE_NULL_POINTER_H */

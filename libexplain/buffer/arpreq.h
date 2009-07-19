@@ -24,7 +24,7 @@
 struct arpreq; /* forward */
 
 /**
-  * The libexplain_buffer_arpreq function may be used to
+  * The explain_buffer_arpreq function may be used to
   * print a representation of an arpreq structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct arpreq; /* forward */
   * @param data
   *    The arpreq structure to be printed.
   */
-void libexplain_buffer_arpreq(libexplain_string_buffer_t *sb,
+void explain_buffer_arpreq(explain_string_buffer_t *sb,
     const struct arpreq *data);
 
 #endif /* LIBEXPLAIN_BUFFER_ARPREQ_H */

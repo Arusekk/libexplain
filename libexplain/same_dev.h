@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_SAME_DEV_H
 
 /**
-  * The libexplain_same_dev function may be used to
+  * The explain_same_dev function may be used to
   *
   * @param oldpath
   *     pathname of a file on a file system
@@ -31,6 +31,6 @@
   *     int; non-zero (true) if both paths refer to a file system from
   *     the same block special device, zero (false) if different.
   */
-int libexplain_same_dev(const char *oldpath, const char *newpath);
+int explain_same_dev(const char *oldpath, const char *newpath);
 
 #endif /* LIBEXPLAIN_SAME_DEV_H */

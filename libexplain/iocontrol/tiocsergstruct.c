@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocsergstruct.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocsergstruct =
+const explain_iocontrol_t explain_iocontrol_tiocsergstruct =
 {
     "TIOCSERGSTRUCT", /* name */
     TIOCSERGSTRUCT, /* value */

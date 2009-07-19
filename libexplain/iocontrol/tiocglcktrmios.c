@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocglcktrmios.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocglcktrmios =
+const explain_iocontrol_t explain_iocontrol_tiocglcktrmios =
 {
     "TIOCGLCKTRMIOS", /* name */
     TIOCGLCKTRMIOS, /* value */

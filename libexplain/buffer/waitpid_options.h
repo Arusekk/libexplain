@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_WAITPID_OPTIONS_H
 #define LIBEXPLAIN_BUFFER_WAITPID_OPTIONS_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_waitpid_options function may be used to
+  * The explain_buffer_waitpid_options function may be used to
   * decode and print waitpid(2) options.
   *
   * @param sb
@@ -31,11 +31,11 @@ struct libexplain_string_buffer_t; /* forward */
   * @param options
   *     The options to be decoded
   */
-void libexplain_buffer_waitpid_options(struct libexplain_string_buffer_t *sb,
+void explain_buffer_waitpid_options(struct explain_string_buffer_t *sb,
     int options);
 
 /**
-  * The libexplain_parse_waitpid_options function is used to parse text
+  * The explain_parse_waitpid_options function is used to parse text
   * containing waitpid options into a numeric value.
   *
   * @param text
@@ -45,7 +45,7 @@ void libexplain_buffer_waitpid_options(struct libexplain_string_buffer_t *sb,
   * @returns
   *     the flags value
   */
-int libexplain_parse_waitpid_options_or_die(const char *text,
+int explain_parse_waitpid_options_or_die(const char *text,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_WAITPID_OPTIONS_H */

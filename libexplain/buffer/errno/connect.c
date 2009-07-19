@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -43,16 +43,16 @@
 
 
 static void
-libexplain_buffer_errno_connect_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_connect_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, const struct sockaddr *serv_addr,
     int serv_addr_size)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "connect(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", serv_addr = ");
-    libexplain_buffer_sockaddr(sb, serv_addr, serv_addr_size);
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf(sb, "connect(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", serv_addr = ");
+    explain_buffer_sockaddr(sb, serv_addr, serv_addr_size);
+    explain_string_buffer_printf
     (
         sb,
         ", serv_addr_size = %d)",
@@ -62,7 +62,7 @@ libexplain_buffer_errno_connect_system_call(libexplain_string_buffer_t *sb,
 
 
 static void
-libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_connect_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, const struct sockaddr *serv_addr,
     int serv_addr_size)
 {
@@ -76,15 +76,15 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         if (serv_addr->sa_family == AF_UNIX)
         {
             const struct sockaddr_un *sun;
-            libexplain_final_t final_component;
+            explain_final_t final_component;
 
             sun = (const struct sockaddr_un *)serv_addr;
-            libexplain_final_init(&final_component);
+            explain_final_init(&final_component);
             final_component.want_to_write = 1;
             final_component.must_be_a_st_mode = 1;
             final_component.st_mode = S_IFSOCK;
             final_component.path_max = sizeof(sun->sun_path) - 1;
-            libexplain_buffer_eacces
+            explain_buffer_eacces
             (
                 sb,
                 sun->sun_path,
@@ -96,7 +96,7 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         /* fall through... */
 
     case EPERM:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -115,11 +115,11 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EADDRINUSE:
-        libexplain_buffer_eaddrinuse(sb, fildes);
+        explain_buffer_eaddrinuse(sb, fildes);
         break;
 
     case EAFNOSUPPORT:
-        libexplain_buffer_eafnosupport
+        explain_buffer_eafnosupport
         (
             sb,
             fildes,
@@ -130,7 +130,7 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EAGAIN:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -147,11 +147,11 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         (
             serv_addr->sa_family == PF_INET
         &&
-            libexplain_option_dialect_specific()
+            explain_option_dialect_specific()
         )
         {
-            libexplain_string_buffer_puts(sb, "; ");
-            libexplain_buffer_gettext
+            explain_string_buffer_puts(sb, "; ");
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -167,7 +167,7 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EALREADY:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -179,15 +179,15 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
             i18n("the socket is non-blocking and a previous connection "
             "attempt has not yet been completed")
         );
-        libexplain_buffer_software_error(sb);
+        explain_buffer_software_error(sb);
         break;
 
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case ECONNREFUSED:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -204,11 +204,11 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "sock_addr");
+        explain_buffer_efault(sb, "sock_addr");
         break;
 
     case EINPROGRESS:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -220,11 +220,11 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
             i18n("the socket is non-blocking and the connection cannot "
             "be completed immediately")
         );
-        libexplain_buffer_software_error(sb);
+        explain_buffer_software_error(sb);
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "connect");
+        explain_buffer_eintr(sb, "connect");
         break;
 
     case EISCONN:
@@ -238,11 +238,11 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
             if (getsockname(fildes, sa, &siz) >= 0)
             {
                 char            addr[500];
-                libexplain_string_buffer_t addr_sb;
+                explain_string_buffer_t addr_sb;
 
-                libexplain_string_buffer_init(&addr_sb, addr, sizeof(addr));
-                libexplain_buffer_sockaddr(&addr_sb, sa, siz);
-                libexplain_string_buffer_printf_gettext
+                explain_string_buffer_init(&addr_sb, addr, sizeof(addr));
+                explain_buffer_sockaddr(&addr_sb, sa, siz);
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -258,7 +258,7 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
             }
             else
             {
-                libexplain_buffer_gettext
+                explain_buffer_gettext
                 (
                     sb,
                     /*
@@ -270,13 +270,13 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
                     i18n("the socket is already connected to a network address")
                 );
             }
-            libexplain_buffer_software_error(sb);
+            explain_buffer_software_error(sb);
         }
         break;
 
     case ENETUNREACH:
         /* FIXME: diagnose more routing table cases */
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -293,11 +293,11 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOTSOCK:
-        libexplain_buffer_enotsock(sb, fildes, "fildes");
+        explain_buffer_enotsock(sb, fildes, "fildes");
         break;
 
     case ETIMEDOUT:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -312,20 +312,20 @@ libexplain_buffer_errno_connect_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_connect(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_connect(explain_string_buffer_t *sb, int errnum,
     int fildes, const struct sockaddr *serv_addr, int serv_addr_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_connect_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_connect_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -333,7 +333,7 @@ libexplain_buffer_errno_connect(libexplain_string_buffer_t *sb, int errnum,
         serv_addr,
         serv_addr_size
     );
-    libexplain_buffer_errno_connect_explanation
+    explain_buffer_errno_connect_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -341,5 +341,5 @@ libexplain_buffer_errno_connect(libexplain_string_buffer_t *sb, int errnum,
         serv_addr,
         serv_addr_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

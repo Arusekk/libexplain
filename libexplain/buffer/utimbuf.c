@@ -24,15 +24,15 @@
 
 
 void
-libexplain_buffer_utimbuf(libexplain_string_buffer_t *sb,
+explain_buffer_utimbuf(explain_string_buffer_t *sb,
     const struct utimbuf *buf)
 {
-    if (libexplain_pointer_is_efault(buf, sizeof(*buf)))
+    if (explain_pointer_is_efault(buf, sizeof(*buf)))
     {
-        libexplain_buffer_pointer(sb, buf);
+        explain_buffer_pointer(sb, buf);
         return;
     }
-    libexplain_string_buffer_printf(sb, "{ actime = %ld", (long)buf->actime);
-    libexplain_string_buffer_printf(sb, ", modtime = %ld", (long)buf->modtime);
-    libexplain_string_buffer_puts(sb, " }");
+    explain_string_buffer_printf(sb, "{ actime = %ld", (long)buf->actime);
+    explain_string_buffer_printf(sb, ", modtime = %ld", (long)buf->modtime);
+    explain_string_buffer_puts(sb, " }");
 }

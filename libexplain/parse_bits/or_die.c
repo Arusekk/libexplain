@@ -28,41 +28,41 @@
 
 
 int
-libexplain_parse_bits_or_die(const char *text,
-    const libexplain_parse_bits_table_t *table, size_t table_size,
+explain_parse_bits_or_die(const char *text,
+    const explain_parse_bits_table_t *table, size_t table_size,
     const char *caption)
 {
     int             result;
 
     result = -1;
-    if (libexplain_parse_bits(text, table, table_size, &result) < 0)
+    if (explain_parse_bits(text, table, table_size, &result) < 0)
     {
-        libexplain_string_buffer_t sb;
+        explain_string_buffer_t sb;
 
-        libexplain_string_buffer_init
+        explain_string_buffer_init
         (
             &sb,
-            libexplain_common_message_buffer,
-            libexplain_common_message_buffer_size
+            explain_common_message_buffer,
+            explain_common_message_buffer_size
         );
-        if (libexplain_option_assemble_program_name())
+        if (explain_option_assemble_program_name())
         {
             const char      *prog;
 
-            prog = libexplain_program_name_get();
+            prog = explain_program_name_get();
             if (prog && *prog)
             {
-                libexplain_string_buffer_puts(&sb, prog);
-                libexplain_string_buffer_puts(&sb, ": ");
+                explain_string_buffer_puts(&sb, prog);
+                explain_string_buffer_puts(&sb, ": ");
             }
         }
         if (caption)
         {
-            libexplain_string_buffer_puts(&sb, caption);
-            libexplain_string_buffer_puts(&sb, ": ");
+            explain_string_buffer_puts(&sb, caption);
+            explain_string_buffer_puts(&sb, ": ");
         }
-        libexplain_string_buffer_puts(&sb, libexplain_parse_bits_get_error());
-        libexplain_wrap_and_print(stderr, libexplain_common_message_buffer);
+        explain_string_buffer_puts(&sb, explain_parse_bits_get_error());
+        explain_wrap_and_print(stderr, explain_common_message_buffer);
         exit(EXIT_FAILURE);
     }
     return result;

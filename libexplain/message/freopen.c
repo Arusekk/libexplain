@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,10 +24,10 @@
 
 
 void
-libexplain_message_freopen(char *message, int message_size,
+explain_message_freopen(char *message, int message_size,
     const char *pathname, const char *flags, FILE *fp)
 {
-    libexplain_message_errno_freopen
+    explain_message_errno_freopen
     (
         message,
         message_size,

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -54,27 +54,27 @@ get_mode(const char *pathname)
 
 
 static void
-libexplain_buffer_errno_link_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_link_system_call(explain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "link(oldpath = ");
-    libexplain_buffer_pathname(sb, oldpath);
-    libexplain_string_buffer_puts(sb, ", newpath = ");
-    libexplain_buffer_pathname(sb, newpath);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "link(oldpath = ");
+    explain_buffer_pathname(sb, oldpath);
+    explain_string_buffer_puts(sb, ", newpath = ");
+    explain_buffer_pathname(sb, newpath);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_link_explanation(explain_string_buffer_t *sb,
     int errnum, const char *oldpath, const char *newpath)
 {
-    libexplain_final_t oldpath_final_component;
-    libexplain_final_t newpath_final_component;
+    explain_final_t oldpath_final_component;
+    explain_final_t newpath_final_component;
 
-    libexplain_final_init(&oldpath_final_component);
-    libexplain_final_init(&newpath_final_component);
+    explain_final_init(&oldpath_final_component);
+    explain_final_init(&newpath_final_component);
     newpath_final_component.must_exist = 0;
     newpath_final_component.want_to_create = 1;
     newpath_final_component.st_mode = get_mode(oldpath);
@@ -84,7 +84,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
     case EACCES:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -93,7 +93,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
                 &oldpath_final_component
             )
         &&
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -107,7 +107,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
              * Unable to pin point an exact cause, go with the generic
              * explanation.
              */
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "write access to the directory containing newpath is "
@@ -118,7 +118,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EEXIST:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "newpath already exists"
@@ -126,25 +126,25 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (libexplain_path_is_efault(oldpath))
+        if (explain_path_is_efault(oldpath))
         {
-            libexplain_buffer_efault(sb, "oldpath");
+            explain_buffer_efault(sb, "oldpath");
             break;
         }
-        if (libexplain_path_is_efault(newpath))
+        if (explain_path_is_efault(newpath))
         {
-            libexplain_buffer_efault(sb, "newpath");
+            explain_buffer_efault(sb, "newpath");
             break;
         }
-        libexplain_buffer_efault(sb, "oldpath or newpath");
+        explain_buffer_efault(sb, "oldpath or newpath");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, oldpath);
+        explain_buffer_eio_path(sb, oldpath);
         break;
 
     case ELOOP:
-        libexplain_buffer_eloop2
+        explain_buffer_eloop2
         (
             sb,
             oldpath,
@@ -157,11 +157,11 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EMLINK:
-        libexplain_buffer_emlink(sb, oldpath, newpath);
+        explain_buffer_emlink(sb, oldpath, newpath);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong2
+        explain_buffer_enametoolong2
         (
             sb,
             oldpath,
@@ -174,7 +174,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent2
+        explain_buffer_enoent2
         (
             sb,
             oldpath,
@@ -187,17 +187,17 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOSPC:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the file system containing newpath"
         );
-        libexplain_buffer_mount_point_dirname(sb, newpath);
-        libexplain_string_buffer_puts
+        explain_buffer_mount_point_dirname(sb, newpath);
+        explain_string_buffer_puts
         (
             sb,
             " has no room for the new directory entry"
@@ -205,7 +205,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir2
+        explain_buffer_enotdir2
         (
             sb,
             oldpath,
@@ -225,7 +225,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
             {
                 if (S_ISDIR(oldpath_st.st_mode))
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "oldpath is a directory and it is not possible "
@@ -235,7 +235,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
                 }
                 else
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
                         "the file system containing oldpath and newpath "
@@ -249,7 +249,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
                  * Unable to pin point a specific cause,
                  * issue the generic explanation.
                  */
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     "oldpath is a directory; or, the file system "
@@ -261,15 +261,15 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, oldpath, "oldpath");
+        explain_buffer_erofs(sb, oldpath, "oldpath");
         break;
 
     case EXDEV:
-        libexplain_buffer_exdev(sb, oldpath, newpath, "link");
+        explain_buffer_exdev(sb, oldpath, newpath, "link");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 
@@ -280,7 +280,7 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
         struct stat st;
         if (lstat(newpath, &st) == 0)
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "; note that newpath exists"
@@ -292,25 +292,25 @@ libexplain_buffer_errno_link_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_link(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_link(explain_string_buffer_t *sb, int errnum,
     const char *oldpath, const char *newpath)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_link_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_link_system_call
     (
         &exp.system_call_sb,
         errnum,
         oldpath,
         newpath
     );
-    libexplain_buffer_errno_link_explanation
+    explain_buffer_errno_link_explanation
     (
         &exp.explanation_sb,
         errnum,
         oldpath,
         newpath
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

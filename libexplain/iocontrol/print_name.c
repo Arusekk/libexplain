@@ -22,14 +22,14 @@
 
 
 void
-libexplain_iocontrol_print_name(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+explain_iocontrol_print_name(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
     if (p->print_name)
         p->print_name(p, sb, errnum, fildes, request, data);
     else if (p->name)
-        libexplain_string_buffer_puts(sb, p->name);
+        explain_string_buffer_puts(sb, p->name);
     else
-        libexplain_string_buffer_printf(sb, "%#x", request);
+        explain_string_buffer_printf(sb, "%#x", request);
 }

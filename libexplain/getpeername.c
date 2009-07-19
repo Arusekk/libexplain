@@ -22,11 +22,11 @@
 
 
 const char *
-libexplain_getpeername(int fildes, struct sockaddr *sock_addr,
+explain_getpeername(int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
     return
-        libexplain_errno_getpeername(errno, fildes, sock_addr, sock_addr_size);
+        explain_errno_getpeername(errno, fildes, sock_addr, sock_addr_size);
 }
 
 /* vim:ts=8:sw=4:et */

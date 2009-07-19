@@ -50,15 +50,15 @@ count(char *const *p)
 
 
 static void
-libexplain_buffer_errno_execvp_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_execvp_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, char *const *argv)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "execvp(pathname = ");
-    libexplain_buffer_pathname(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", argv = ");
-    if (libexplain_pointer_is_efault(argv, sizeof(argv[0])))
-        libexplain_buffer_pointer(sb, argv);
+    explain_string_buffer_puts(sb, "execvp(pathname = ");
+    explain_buffer_pathname(sb, pathname);
+    explain_string_buffer_puts(sb, ", argv = ");
+    if (explain_pointer_is_efault(argv, sizeof(argv[0])))
+        explain_buffer_pointer(sb, argv);
     else
     {
         size_t          n;
@@ -67,7 +67,7 @@ libexplain_buffer_errno_execvp_system_call(libexplain_string_buffer_t *sb,
         /*
          * produce output similar to execve
          */
-        libexplain_string_buffer_putc(sb, '[');
+        explain_string_buffer_putc(sb, '[');
         argsize = 0;
         for (n = 0; ; ++n)
         {
@@ -79,10 +79,10 @@ libexplain_buffer_errno_execvp_system_call(libexplain_string_buffer_t *sb,
             argsize += strlen(s);
             if (n)
             {
-                libexplain_string_buffer_puts(sb, ", ");
+                explain_string_buffer_puts(sb, ", ");
                 if (argsize >= 1000)
                 {
-                    libexplain_string_buffer_printf
+                    explain_string_buffer_printf
                     (
                         sb,
                         /* FIXME: i18n */
@@ -92,11 +92,11 @@ libexplain_buffer_errno_execvp_system_call(libexplain_string_buffer_t *sb,
                     break;
                 }
             }
-            libexplain_string_buffer_puts_quoted(sb, s);
+            explain_string_buffer_puts_quoted(sb, s);
         }
-        libexplain_string_buffer_putc(sb, ']');
+        explain_string_buffer_putc(sb, ']');
     }
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_putc(sb, ')');
 }
 
 
@@ -104,18 +104,18 @@ static int
 can_execute(const char *pathname)
 {
     struct stat     st;
-    libexplain_have_identity_t hid;
+    explain_have_identity_t hid;
 
     if (stat(pathname, &st) < 0)
         return 0;
-    libexplain_have_identity_init(&hid);
+    explain_have_identity_init(&hid);
     errno = EACCES;
-    return libexplain_have_execute_permission(&st, &hid);
+    return explain_have_execute_permission(&st, &hid);
 }
 
 
 static void
-libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_execvp_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, char *const *argv)
 {
     const char      *p;
@@ -127,9 +127,9 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
     char            *full_pathname;
     char            *start_of_name;
 
-    if (libexplain_path_is_efault(pathname))
+    if (explain_path_is_efault(pathname))
     {
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         return;
     }
 
@@ -145,14 +145,14 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
     if (errnum == ENOENT)
     {
         char qcmd[NAME_MAX];
-        libexplain_string_buffer_t qcmd_sb;
+        explain_string_buffer_t qcmd_sb;
         char qpath[1000]; /* deliberately short */
-        libexplain_string_buffer_t qpath_sb;
+        explain_string_buffer_t qpath_sb;
 
-        libexplain_string_buffer_init(&qcmd_sb, qcmd, sizeof(qcmd));
-        libexplain_buffer_caption_name_type(&qcmd_sb, 0, pathname, S_IFREG);
+        explain_string_buffer_init(&qcmd_sb, qcmd, sizeof(qcmd));
+        explain_buffer_caption_name_type(&qcmd_sb, 0, pathname, S_IFREG);
 
-        libexplain_string_buffer_init(&qpath_sb, qpath, sizeof(qpath));
+        explain_string_buffer_init(&qpath_sb, qpath, sizeof(qpath));
 
         p = path;
         for (;;)
@@ -165,10 +165,10 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
                 p = path + strlen(path);
 
             if (qpath_sb.position != 0)
-                libexplain_string_buffer_puts(&qpath_sb, ", ");
+                explain_string_buffer_puts(&qpath_sb, ", ");
             if (p == begin)
             {
-                libexplain_string_buffer_puts_quoted(&qpath_sb, ".");
+                explain_string_buffer_puts_quoted(&qpath_sb, ".");
             }
             else
             {
@@ -182,10 +182,10 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
                     qpath_sb.position + len + 5 > qpath_sb.maximum
                 )
                 {
-                    libexplain_string_buffer_puts(&qpath_sb, "...");
+                    explain_string_buffer_puts(&qpath_sb, "...");
                     break;
                 }
-                libexplain_string_buffer_puts_quoted_n(&qpath_sb, begin, len);
+                explain_string_buffer_puts_quoted_n(&qpath_sb, begin, len);
             }
 
             if (*p == '\0')
@@ -193,7 +193,7 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
             ++p;
         }
 
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             /*
@@ -281,7 +281,7 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
         if (errno == errnum)
         {
             found_it:
-            libexplain_buffer_errno_execve_explanation
+            explain_buffer_errno_execve_explanation
             (
                 sb,
                 errnum,
@@ -333,7 +333,7 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
      * Nothing happened, give the default explanation.
      */
     give_default_explanation:
-    libexplain_buffer_errno_execve_explanation
+    explain_buffer_errno_execve_explanation
     (
         sb,
         errnum,
@@ -345,27 +345,27 @@ libexplain_buffer_errno_execvp_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_execvp(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_execvp(explain_string_buffer_t *sb, int errnum,
     const char *pathname, char *const *argv)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_execvp_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_execvp_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         argv
     );
-    libexplain_buffer_errno_execvp_explanation
+    explain_buffer_errno_execvp_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         argv
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

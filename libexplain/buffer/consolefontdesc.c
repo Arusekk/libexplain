@@ -28,15 +28,15 @@
 #ifdef HAVE_LINUX_KD_H
 
 void
-libexplain_buffer_consolefontdesc(libexplain_string_buffer_t *sb,
+explain_buffer_consolefontdesc(explain_string_buffer_t *sb,
     const struct consolefontdesc *value, int extra)
 {
-    if (libexplain_pointer_is_efault(value, sizeof(*value)))
+    if (explain_pointer_is_efault(value, sizeof(*value)))
     {
-        libexplain_buffer_pointer(sb, value);
+        explain_buffer_pointer(sb, value);
         return;
     }
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "{ charcount = %d, charheight = %d, chardata = ",
@@ -53,22 +53,22 @@ libexplain_buffer_consolefontdesc(libexplain_string_buffer_t *sb,
     &&
         value->charheight <= 32
     &&
-        libexplain_option_debug()
+        explain_option_debug()
     )
     {
         size_t          size;
 
         size = value->charcount * value->charheight;
-        if (!libexplain_pointer_is_efault(value->chardata, size))
+        if (!explain_pointer_is_efault(value->chardata, size))
         {
-            libexplain_string_buffer_putc(sb, '{');
-            libexplain_buffer_hexdump(sb, value->chardata, size);
-            libexplain_string_buffer_puts(sb, " } }");
+            explain_string_buffer_putc(sb, '{');
+            explain_buffer_hexdump(sb, value->chardata, size);
+            explain_string_buffer_puts(sb, " } }");
             return;
         }
     }
-    libexplain_buffer_pointer(sb, value->chardata);
-    libexplain_string_buffer_puts(sb, " }");
+    explain_buffer_pointer(sb, value->chardata);
+    explain_string_buffer_puts(sb, " }");
 }
 
 #endif /* HAVE_LINUX_KD_H */

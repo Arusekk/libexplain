@@ -25,15 +25,13 @@
 
 
 int
-libexplain_pclose_or_die(FILE *fp)
+explain_pclose_or_die(FILE *fp)
 {
     int             result;
 
-    result = pclose(fp);
+    result = explain_pclose_on_error(fp);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_pclose(fp));
         exit(EXIT_FAILURE);
     }
     return result;

@@ -24,7 +24,7 @@
 struct ifreq; /* forward */
 
 /**
-  * The libexplain_buffer_siocethtool function may be used to
+  * The explain_buffer_siocethtool function may be used to
   * print a representation of a siocethtool structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct ifreq; /* forward */
   * @param data
   *    The siocethtool structure to be printed.
   */
-void libexplain_buffer_siocethtool(libexplain_string_buffer_t *sb,
+void explain_buffer_siocethtool(explain_string_buffer_t *sb,
     const struct ifreq *data);
 
 #endif /* LIBEXPLAIN_BUFFER_SIOCETHTOOL_H */

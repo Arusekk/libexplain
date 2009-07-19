@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/siocsifmem.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocsifmem =
+const explain_iocontrol_t explain_iocontrol_siocsifmem =
 {
     "SIOCSIFMEM", /* name */
     SIOCSIFMEM, /* value */

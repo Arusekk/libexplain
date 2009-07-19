@@ -24,7 +24,7 @@
 struct ifreq; /* forward */
 
 /**
-  * The libexplain_buffer_ifreq_ifbond function may be used to print a
+  * The explain_buffer_ifreq_ifbond function may be used to print a
   * representation if an ifreq structure, when the data represents an
   * ifbond.
   *
@@ -33,7 +33,7 @@ struct ifreq; /* forward */
   * @param data
   *    The ifreq structure to be printed.
   */
-void libexplain_buffer_ifreq_ifbond(libexplain_string_buffer_t *sb,
+void explain_buffer_ifreq_ifbond(explain_string_buffer_t *sb,
     const struct ifreq *data);
 
 #endif /* LIBEXPLAIN_BUFFER_IFREQ_IFBOND_H */

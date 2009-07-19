@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,13 +23,13 @@
 
 
 const char *
-libexplain_errno_select(int errnum, int nfds, fd_set *readfds, fd_set *writefds,
+explain_errno_select(int errnum, int nfds, fd_set *readfds, fd_set *writefds,
     fd_set *exceptfds, struct timeval *timeout)
 {
-    libexplain_message_errno_select
+    explain_message_errno_select
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         nfds,
         readfds,
@@ -37,5 +37,5 @@ libexplain_errno_select(int errnum, int nfds, fd_set *readfds, fd_set *writefds,
         exceptfds,
         timeout
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }

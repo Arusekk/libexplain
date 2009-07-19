@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,22 +24,22 @@
 
 
 void
-libexplain_buffer_wrong_file_type_st(libexplain_string_buffer_t *sb,
+explain_buffer_wrong_file_type_st(explain_string_buffer_t *sb,
     const struct stat *st, const char *caption, int required_file_type)
 {
     if (st)
     {
-        libexplain_string_buffer_t wrong_sb;
-        libexplain_string_buffer_t right_sb;
+        explain_string_buffer_t wrong_sb;
+        explain_string_buffer_t right_sb;
         char wrong[100];
         char right[100];
 
-        libexplain_string_buffer_init(&wrong_sb, wrong, sizeof(wrong));
-        libexplain_buffer_file_type(&wrong_sb, st->st_mode);
-        libexplain_string_buffer_init(&right_sb, right, sizeof(right));
-        libexplain_buffer_file_type(&right_sb, required_file_type);
+        explain_string_buffer_init(&wrong_sb, wrong, sizeof(wrong));
+        explain_buffer_file_type(&wrong_sb, st->st_mode);
+        explain_string_buffer_init(&right_sb, right, sizeof(right));
+        explain_buffer_file_type(&right_sb, required_file_type);
 
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -58,13 +58,13 @@ libexplain_buffer_wrong_file_type_st(libexplain_string_buffer_t *sb,
     }
     else
     {
-        libexplain_string_buffer_t right_sb;
+        explain_string_buffer_t right_sb;
         char right[100];
 
-        libexplain_string_buffer_init(&right_sb, right, sizeof(right));
-        libexplain_buffer_file_type(&right_sb, required_file_type);
+        explain_string_buffer_init(&right_sb, right, sizeof(right));
+        explain_buffer_file_type(&right_sb, required_file_type);
 
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -84,13 +84,13 @@ libexplain_buffer_wrong_file_type_st(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_wrong_file_type(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_wrong_file_type(explain_string_buffer_t *sb, int fildes,
     const char *caption, int want_file_type)
 {
     struct stat     st;
 
     if (fstat(fildes, &st) >= 0)
-        libexplain_buffer_wrong_file_type_st(sb, &st, caption, want_file_type);
+        explain_buffer_wrong_file_type_st(sb, &st, caption, want_file_type);
     else
-        libexplain_buffer_wrong_file_type_st(sb, 0, caption, want_file_type);
+        explain_buffer_wrong_file_type_st(sb, 0, caption, want_file_type);
 }

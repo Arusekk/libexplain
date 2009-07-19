@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_popen function
+  * The explain_buffer_errno_popen function
   * is used to obtain an explanation of an error returned
   * by the popen(3) system call.
   * The least the message will contain is the value of
@@ -45,7 +45,7 @@
   * @param flags
   *     The original flags, exactly as passed to the popen(3) system call.
   */
-void libexplain_buffer_errno_popen(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_popen(explain_string_buffer_t *sb, int errnum,
     const char *command, const char *flags);
 
 /* vim:ts=8:sw=4:et */

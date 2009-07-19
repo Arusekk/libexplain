@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "WNOHANG", WNOHANG },
     { "WUNTRACED", WUNTRACED },
@@ -34,14 +34,14 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_waitpid_options(libexplain_string_buffer_t *sb, int options)
+explain_buffer_waitpid_options(explain_string_buffer_t *sb, int options)
 {
-    libexplain_parse_bits_print(sb, options, table, SIZEOF(table));
+    explain_parse_bits_print(sb, options, table, SIZEOF(table));
 }
 
 
 int
-libexplain_parse_waitpid_options_or_die(const char *text, const char *caption)
+explain_parse_waitpid_options_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

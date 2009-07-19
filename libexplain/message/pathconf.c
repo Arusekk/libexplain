@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_pathconf(char *message, int message_size,
+explain_message_pathconf(char *message, int message_size,
     const char *pathname, int name)
 {
-    libexplain_message_errno_pathconf
+    explain_message_errno_pathconf
     (
         message,
         message_size,

@@ -27,7 +27,7 @@
 #endif
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocttygstruct =
+const explain_iocontrol_t explain_iocontrol_tiocttygstruct =
 {
     "TIOCTTYGSTRUCT", /* name */
     TIOCTTYGSTRUCT, /* value */

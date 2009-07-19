@@ -16,12 +16,22 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 8 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
+.PP
+.if n *
+.if t \(bu
+.\" Change 15
+Two false negatives in the tests have been fixed.
+.PP
+.if n *
+.if t \(bu
+.\" Change 14
+The ./configure script now explicitly looks for \f[I]bison\fP(1), and
+complains if it cannot be found.
+.PP
+.if n *
+.if t \(bu
+.\" Change 12
+The \f[I]socket\fP(7) address family is now decoded.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

@@ -26,7 +26,7 @@
 #define MTIOCGET -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_mtiocget =
+const explain_iocontrol_t explain_iocontrol_mtiocget =
 {
     "MTIOCGET", /* name */
     MTIOCGET, /* value */

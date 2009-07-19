@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocgpgrp.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocgpgrp =
+const explain_iocontrol_t explain_iocontrol_tiocgpgrp =
 {
     "TIOCGPGRP", /* name */
     TIOCGPGRP, /* value */

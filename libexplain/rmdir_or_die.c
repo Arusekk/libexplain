@@ -16,22 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/unistd.h>
 
-#include <libexplain/option.h>
 #include <libexplain/rmdir.h>
-#include <libexplain/wrap_and_print.h>
 
 
 void
-libexplain_rmdir_or_die(const char *pathname)
+explain_rmdir_or_die(const char *pathname)
 {
-    if (rmdir(pathname) < 0)
+    if (explain_rmdir_on_error(pathname) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_rmdir(pathname));
         exit(EXIT_FAILURE);
     }
 }

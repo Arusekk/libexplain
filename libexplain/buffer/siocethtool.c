@@ -27,35 +27,35 @@
 
 
 void
-libexplain_buffer_siocethtool(libexplain_string_buffer_t *sb,
+explain_buffer_siocethtool(explain_string_buffer_t *sb,
     const struct ifreq *ifr)
 {
-    if (libexplain_pointer_is_efault(ifr, sizeof(*ifr)))
-        libexplain_buffer_pointer(sb, ifr);
+    if (explain_pointer_is_efault(ifr, sizeof(*ifr)))
+        explain_buffer_pointer(sb, ifr);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ ifr_name = ");
-        libexplain_string_buffer_puts_quoted_n
+        explain_string_buffer_puts(sb, "{ ifr_name = ");
+        explain_string_buffer_puts_quoted_n
         (
             sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
-        libexplain_string_buffer_puts(sb, ", ifr_data = ");
+        explain_string_buffer_puts(sb, ", ifr_data = ");
         if
         (
-            libexplain_pointer_is_efault
+            explain_pointer_is_efault
             (
                 ifr->ifr_data,
                 sizeof(struct ethtool_cmd)
             )
         )
         {
-            libexplain_buffer_pointer(sb, ifr->ifr_data);
+            explain_buffer_pointer(sb, ifr->ifr_data);
         }
         else
         {
-            static const libexplain_parse_bits_table_t table[] =
+            static const explain_parse_bits_table_t table[] =
             {
                 { "ETHTOOL_GDRVINFO", ETHTOOL_GDRVINFO },
                 { "ETHTOOL_GMSGLVL", ETHTOOL_GMSGLVL },
@@ -67,11 +67,21 @@ libexplain_buffer_siocethtool(libexplain_string_buffer_t *sb,
                 { "ETHTOOL_GSG", ETHTOOL_GSG },
                 { "ETHTOOL_GSTRINGS", ETHTOOL_GSTRINGS },
                 { "ETHTOOL_GTSO", ETHTOOL_GTSO },
+#ifdef ETHTOOL_GPERMADDR
                 { "ETHTOOL_GPERMADDR", ETHTOOL_GPERMADDR },
+#endif
+#ifdef ETHTOOL_GUFO
                 { "ETHTOOL_GUFO", ETHTOOL_GUFO },
+#endif
+#ifdef ETHTOOL_GGSO
                 { "ETHTOOL_GGSO", ETHTOOL_GGSO },
+#endif
+#ifdef ETHTOOL_GFLAGS
                 { "ETHTOOL_GFLAGS", ETHTOOL_GFLAGS },
+#endif
+#ifdef ETHTOOL_GPFLAGS
                 { "ETHTOOL_GPFLAGS", ETHTOOL_GPFLAGS },
+#endif
 #ifdef ETHTOOL_GRXFH
                 { "ETHTOOL_GRXFH", ETHTOOL_GRXFH },
 #endif
@@ -79,16 +89,16 @@ libexplain_buffer_siocethtool(libexplain_string_buffer_t *sb,
             const struct ethtool_cmd *etp;
 
             etp = (const struct ethtool_cmd *)ifr->ifr_data;
-            libexplain_string_buffer_puts(sb, "{ cmd = ");
-            libexplain_parse_bits_print_single
+            explain_string_buffer_puts(sb, "{ cmd = ");
+            explain_parse_bits_print_single
             (
                 sb,
                 etp->cmd,
                 table,
                 SIZEOF(table)
             );
-            libexplain_string_buffer_puts(sb, " }");
+            explain_string_buffer_puts(sb, " }");
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }

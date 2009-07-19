@@ -39,8 +39,8 @@ acceptable.
 No savings for shared libraries, of course.
 .PP
 Functions that write their output into a
-\f[I]libexplain_string_buffer_t\fP via the
-\f[CR]libexplain_string_buffer_*\fP functions, all have a filename of
+\f[I]explain_string_buffer_t\fP via the
+\f[CR]explain_string_buffer_*\fP functions, all have a filename of
 \f[CR]libexplain/buffer/\fP\f[I]something\fP.
 .PP
 Functions that write their output to a \f[I]message\fP,
@@ -92,8 +92,8 @@ Add a description of the new system call.
 .\"
 .SS man/man3/libexplain.3
 Add your new man pages,
-man/man3/libexplain_\f[I]example\fP.3 and
-man/man3/libexplain_\f[I]example\fP_or_die.3,
+man/man3/explain_\f[I]example\fP.3 and
+man/man3/explain_\f[I]example\fP_or_die.3,
 to the list.
 Keep the list sorted.
 .\" ------------------------------------------------------------------------
@@ -107,8 +107,8 @@ The central file for adding a new example
 is \f[CR]libexplain/buffer/errno/\fP\f[I]explain\fP\f[CR].c\fP
 Which defines a function
 .RS
-\f[CR]void libexplain_buffer_errno_\fP\f[I]example\fP\f[CR](
-libexplain_string_buffer_t *buffer, int errnum, \fP\fIconst char *pathname,
+\f[CR]void explain_buffer_errno_\fP\f[I]example\fP\f[CR](
+explain_string_buffer_t *buffer, int errnum, \fP\fIconst char *pathname,
 int flags\fP\f[CR]);\fP
 .RE
 The \f[CR]errnum\fP argument holds the \f[I]errno\fP value.
@@ -118,17 +118,17 @@ and because there are times you want access to the global \f[I]errno\fP,
 and having it shadowed by the argument is a nuisance.
 .PP
 This function writes its output into the buffer via the
-\f[CR]libexplain_string_buffer_printf\fP, \f[I]etc\fP, functions.
+\f[CR]explain_string_buffer_printf\fP, \f[I]etc\fP, functions.
 First the argument list is reprinted.
 .PP
-The \f[CR]libexplain_string_buffer_puts_quoted\fP
+The \f[CR]explain_string_buffer_puts_quoted\fP
 function should be used to print pathnames,
 because it uses full C quoting and escape sequences.
 .PP
 If an argument is a file descriptor, it should be called \f[I]fildes\fP,
 short for file descriptor.
 On systems capable of it, the file descriptor can be mapped to a pathname
-using the \f[CR]libexplain_buffer_fildes_to_pathname\fP function.  This
+using the \f[CR]explain_buffer_fildes_to_pathname\fP function.  This
 make explanations for system calls like \f[I]read\fP and \f[I]write\fP
 much more informative.
 .PP
@@ -146,29 +146,29 @@ Some pre-canned explanations include
 .TS
 tab(;);
 l l.
-EACCES;libexplain_buffer_eacces
-EADDRINUSE;libexplain_buffer_eaddrinuse
-EAFNOSUPPORT;libexplain_buffer_eafnosupport
-EBADF;libexplain_buffer_ebadf
-EFAULT;libexplain_buffer_efault
-EFBIG;libexplain_buffer_efbig
-EINTR;libexplain_buffer_eintr
-EINVAL;libexplain_buffer_einval_vague, \f[I]etc\fP
-EIO;libexplain_buffer_eio
-ELOOP;libexplain_buffer_eloop
-EMFILE;libexplain_buffer_emfile
-EMLINK;libexplain_buffer_emlink
-ENAMETOOLONG;libexplain_buffer_enametoolong
-ENFILE;libexplain_buffer_enfile
-ENOBUFS;libexplain_buffer_enobufs
-ENOENT;libexplain_buffer_enoent
-ENOMEM;libexplain_buffer_enomem
-ENOTCONN;libexplain_buffer_enotconn
-ENOTDIR;libexplain_buffer_enotdir
-ENOTSOCK;libexplain_buffer_enotsock
-EROFS;libexplain_buffer_erofs
-ETXTBSY;libexplain_buffer_etxtbsy
-EXDEV;libexplain_buffer_exdev
+EACCES;explain_buffer_eacces
+EADDRINUSE;explain_buffer_eaddrinuse
+EAFNOSUPPORT;explain_buffer_eafnosupport
+EBADF;explain_buffer_ebadf
+EFAULT;explain_buffer_efault
+EFBIG;explain_buffer_efbig
+EINTR;explain_buffer_eintr
+EINVAL;explain_buffer_einval_vague, \f[I]etc\fP
+EIO;explain_buffer_eio
+ELOOP;explain_buffer_eloop
+EMFILE;explain_buffer_emfile
+EMLINK;explain_buffer_emlink
+ENAMETOOLONG;explain_buffer_enametoolong
+ENFILE;explain_buffer_enfile
+ENOBUFS;explain_buffer_enobufs
+ENOENT;explain_buffer_enoent
+ENOMEM;explain_buffer_enomem
+ENOTCONN;explain_buffer_enotconn
+ENOTDIR;explain_buffer_enotdir
+ENOTSOCK;explain_buffer_enotsock
+EROFS;explain_buffer_erofs
+ETXTBSY;explain_buffer_etxtbsy
+EXDEV;explain_buffer_exdev
 .TE
 .\"
 .SS libexplain/buffer/errno/example.h
@@ -179,20 +179,20 @@ for the above function definition.
 The file contains the user visable API for the \f[I]example\fP system call.
 There are five function prototypes declared in this file:
 .RS
-\f[CR]void libexplain_\fP\f[I]example\fP\f[CR]_or_die(
+\f[CR]void explain_\fP\f[I]example\fP\f[CR]_or_die(
 \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
-\f[CR]void libexplain_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_\fP\f[I]example\fP\f[CR](
 \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
-\f[CR]void libexplain_errno_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_errno_\fP\f[I]example\fP\f[CR](
 int errnum, \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
-\f[CR]void libexplain_message_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_message_\fP\f[I]example\fP\f[CR](
 const char *message, int message_size,
 \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
-\f[CR]void libexplain_message_errno_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_message_errno_\fP\f[I]example\fP\f[CR](
 const char *message, int message_size,
 int errnum, \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .RE
@@ -206,55 +206,55 @@ The buffer functions are \f[B]never\fP part of the user visable API.
 .\"
 .SS libexplain/example_or_die.c
 One function per file,
-\f[CR]libexplain_\fP\f[I]example\fP\f[CR]_or_die\fP in this case.
+\f[CR]explain_\fP\f[I]example\fP\f[CR]_or_die\fP in this case.
 It simply calls \f[I]example\fP and then, if fails,
-\f[CR]libexplain_\fP\f[I]example\fP to print why, and then exit(EXIT_FAILURE).
+\f[CR]explain_\fP\f[I]example\fP to print why, and then exit(EXIT_FAILURE).
 .\"
 .SS libexplain/example.c
 One function per file,
-\f[CR]libexplain_\fP\f[I]example\fP in this case.
-It simply calls \f[CR]libexplain_errno_\fP\f[I]example\fP to pass in the
+\f[CR]explain_\fP\f[I]example\fP in this case.
+It simply calls \f[CR]explain_errno_\fP\f[I]example\fP to pass in the
 global \f[I]errno\fP value.
 .\"
 .SS libexplain/errno/example.c
 One function per file,
-\f[CR]libexplain_errno_\fP\f[I]example\fP in this case.
-It calls \f[CR]libexplain_message_errno_\fP\f[I]example\fP,
+\f[CR]explain_errno_\fP\f[I]example\fP in this case.
+It calls \f[CR]explain_message_errno_\fP\f[I]example\fP,
 using the
 \f[CR]<libexplain/global_message_buffer.h>\fP to hold the string.
 .\"
 .SS libexplain/message/example.c
 One function per file,
-\f[CR]libexplain_message_\fP\f[I]example\fP in this case.
-It simply calls \f[CR]libexplain_message_errno_\fP\f[I]example\fP to
+\f[CR]explain_message_\fP\f[I]example\fP in this case.
+It simply calls \f[CR]explain_message_errno_\fP\f[I]example\fP to
 pass in the global \f[I]errno\fP value.
 .\"
 .SS libexplain/message/errno/example.c
 One function per file,
-\f[CR]libexplain_message_errno_\fP\f[I]example\fP in this case.
-It declares and initialises a \f[CR]libexplain_string_buffer_t\fP instance,
+\f[CR]explain_message_errno_\fP\f[I]example\fP in this case.
+It declares and initialises a \f[CR]explain_string_buffer_t\fP instance,
 which ensures that the message buffer will not be exceeded,
 and passes that buffer to the
-\f[CR]libexplain_buffer_errno_\fP\f[I]example\fP fucntion.
+\f[CR]explain_buffer_errno_\fP\f[I]example\fP fucntion.
 .\"
-.SS man/man3/libexplain_example.3
+.SS man/man3/explain_example.3
 This file also documents the error explanations functions,
-except \f[CR]libexplain_\fP\f[I]example\fP\f[CW]_or_dir\fP.
+except \f[CR]explain_\fP\f[I]example\fP\f[CW]_or_dir\fP.
 Use the same text as you did in \f[CR]libexplain/\fP\f[I]example\fP\f[CR].h\fP
 .\"
-.SS man/man3/libexplain_example_or_die.3
+.SS man/man3/explain_example_or_die.3
 This file also documents the helper function.
 Use the same text as you did in \f[CR]libexplain/\fP\f[I]example\fP\f[CR].h\fP
 .\"
 .SS explain/example.c
 Glue to turn the command line into arguments to a call to
-\f[CR]libexplain_\fP\f[I]example\fP
+\f[CR]explain_\fP\f[I]example\fP
 .\"
 .SS explain/example.h
 Function prototype for the above.
 .\"
 .SS test_example/main.c
-This program should call \f[CR]libexplain_\fP\f[I]explain\fP\f[CW]_or_die\fP.
+This program should call \f[CR]explain_\fP\f[I]explain\fP\f[CW]_or_die\fP.
 .\" ------------------------------------------------------------------------
 .SH NEW IOCTL REQUESTS
 Each different \f[I]ioctl\fP(2) request is, in effect, yet another
@@ -264,7 +264,7 @@ have seen fugly C++ classes with less overloading than \f[I]ioctl\fP(2).
 libexplain/iocontrol/request_by_number.c
 This file as one include line for each \f[I]ioctl\fP(2) request.
 There is a \f[CW]table\fP array that contaisn a pointer to the
-libexplain_iocontrol_t variable declared in the above include.
+explain_iocontrol_t variable declared in the above include.
 Keep both sets of lines sorted alphabetically,
 it makes it easier to detect duplicates.
 .TP

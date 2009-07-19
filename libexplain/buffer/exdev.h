@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_exdev function may be used to
+  * The explain_buffer_exdev function may be used to
   * explain an EXDEV error.
   *
   * @param sb
@@ -35,7 +35,7 @@
   * @param sys_call_name
   *    The nam eof the system call experiencing the error
   */
-void libexplain_buffer_exdev(libexplain_string_buffer_t *sb,
+void explain_buffer_exdev(explain_string_buffer_t *sb,
     const char *oldpath, const char *newpath, const char *sys_call_name);
 
 #endif /* LIBEXPLAIN_BUFFER_EXDEV_H */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 void
-libexplain_string_buffer_truncate(libexplain_string_buffer_t *sb,
+explain_string_buffer_truncate(explain_string_buffer_t *sb,
     long new_position)
 {
     size_t          new_size;

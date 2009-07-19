@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_lseek function may be used to obtain
+  * The explain_buffer_errno_lseek function may be used to obtain
   * a human readable explanation of what went wrong in an lseek(2)
   * system call.  The least the message will contain is the value of
   * strerror(errnum), but usually it will do much better, and indicate
@@ -48,7 +48,30 @@
   * @note
   *    Given a suitably thread safe buffer, this function is thread safe.
   */
-void libexplain_buffer_errno_lseek(struct libexplain_string_buffer_t *sb,
+void explain_buffer_errno_lseek(struct explain_string_buffer_t *sb,
+    int errnum, int fildes, off_t offset, int whence);
+
+
+/**
+  * The explain_buffer_errno_lseek_explanation function is called by the
+  * explain_buffer_errno_lseek function (and others) to print the
+  * explanation, the part after "because..."
+  *
+  * @param sb
+  *    The string buffer into which the message is to be written.
+  * @param errnum
+  *    The error value to be decoded.
+  * @param fildes
+  *    The file descriptor to seek on,
+  *    exactly as passed to the lseek(2) system call.
+  * @param offset
+  *    exactly as passed to the lseek(2) system call.
+  * @param whence
+  *    exactly as passed to the lseek(2) system call.
+  * @note
+  *    Given a suitably thread safe buffer, this function is thread safe.
+  */
+void explain_buffer_errno_lseek_explanation(struct explain_string_buffer_t *sb,
     int errnum, int fildes, off_t offset, int whence);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_LSEEK_H */

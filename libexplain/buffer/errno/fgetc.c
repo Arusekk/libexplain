@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -28,47 +28,47 @@
 
 
 static void
-libexplain_buffer_errno_fgetc_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fgetc_system_call(explain_string_buffer_t *sb,
     int errnum, FILE *fp)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "fgetc(fp = ");
-    libexplain_buffer_stream(sb, fp);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "fgetc(fp = ");
+    explain_buffer_stream(sb, fp);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_fgetc_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fgetc_explanation(explain_string_buffer_t *sb,
     int errnum, FILE *fp)
 {
     int             fildes;
 
     if (fp == NULL)
     {
-        libexplain_buffer_is_the_null_pointer(sb, "fp");
+        explain_buffer_is_the_null_pointer(sb, "fp");
         return;
     }
 
-    fildes = libexplain_stream_to_fildes(fp);
+    fildes = explain_stream_to_fildes(fp);
     if (errnum == EBADF)
     {
-        libexplain_buffer_ebadf(sb, fildes, "fp");
+        explain_buffer_ebadf(sb, fildes, "fp");
         return;
     }
 
-    libexplain_buffer_errno_read_explanation(sb, errnum, fildes, NULL, 0);
+    explain_buffer_errno_read_explanation(sb, errnum, fildes, NULL, 0);
 }
 
 
 void
-libexplain_buffer_errno_fgetc(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_fgetc(explain_string_buffer_t *sb, int errnum,
     FILE *fp)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_fgetc_system_call(&exp.system_call_sb, errnum, fp);
-    libexplain_buffer_errno_fgetc_explanation(&exp.explanation_sb, errnum, fp);
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_fgetc_system_call(&exp.system_call_sb, errnum, fp);
+    explain_buffer_errno_fgetc_explanation(&exp.explanation_sb, errnum, fp);
+    explain_explanation_assemble(&exp, sb);
 }

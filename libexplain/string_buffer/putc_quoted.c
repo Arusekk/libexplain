@@ -20,9 +20,9 @@
 
 
 void
-libexplain_string_buffer_putc_quoted(libexplain_string_buffer_t *sb, int c)
+explain_string_buffer_putc_quoted(explain_string_buffer_t *sb, int c)
 {
-    libexplain_string_buffer_putc(sb, '\'');
-    libexplain_string_buffer_putc_escaped(sb, c, '\'');
-    libexplain_string_buffer_putc(sb, '\'');
+    explain_string_buffer_putc(sb, '\'');
+    explain_string_buffer_putc_escaped(sb, c, '\'');
+    explain_string_buffer_putc(sb, '\'');
 }

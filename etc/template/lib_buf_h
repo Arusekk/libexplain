@@ -24,15 +24,16 @@
 struct ${basename $filename .h}; /* forward */
 
 /**
-  * The ${ident ${trim_ext $filename}} function may be used to
-  * print a representation of a ${basename $filename .h} structure.
+  * The explain_${ident ${trim_ext ${trim_dir $filename}}} function may be used
+  * to print a representation of a ${basename $filename .h} structure.
   *
   * @param sb
   *     The string buffer to print into.
   * @param data
   *     The ${basename $filename .h} structure to be printed.
   */
-void ${ident ${trim_ext $filename}}(libexplain_string_buffer_t *sb,
+void explain_${ident ${trim_ext ${trim_dir
+$filename}}}(explain_string_buffer_t *sb,
     const struct ${basename $filename .h} *data);
 
 #endif /* ${ident ${upcase $filename}} */

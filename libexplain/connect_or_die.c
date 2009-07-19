@@ -26,17 +26,11 @@
 
 
 void
-libexplain_connect_or_die(int fildes, const struct sockaddr *serv_addr,
+explain_connect_or_die(int fildes, const struct sockaddr *serv_addr,
     int serv_addr_size)
 {
-    if (connect(fildes, serv_addr, serv_addr_size) < 0)
+    if (explain_connect_on_error(fildes, serv_addr, serv_addr_size) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_connect(fildes, serv_addr, serv_addr_size)
-        );
         exit(EXIT_FAILURE);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_address_family function may be used to print a
+  * The explain_buffer_address_family function may be used to print a
   * symbolic value of a socket address family value to the given string
   * buffer.
   *
@@ -31,11 +31,11 @@
   * @param domain
   *     The socket address family value to interpret.
   */
-void libexplain_buffer_address_family(libexplain_string_buffer_t *sb,
+void explain_buffer_address_family(explain_string_buffer_t *sb,
     int domain);
 
 /**
-  * The libexplain_parse_address_family_or_die function is used to parse
+  * The explain_parse_address_family_or_die function is used to parse
   * a string into a socket address family value.  On error, whill prind
   * diagnostic and exit EXIT_FAILURE.
   *
@@ -46,6 +46,6 @@ void libexplain_buffer_address_family(libexplain_string_buffer_t *sb,
   * @returns
   *     the socket address family
   */
-int libexplain_parse_address_family_or_die(const char *text, const char *captn);
+int explain_parse_address_family_or_die(const char *text, const char *captn);
 
 #endif /* LIBEXPLAIN_BUFFER_ADDRESS_FAMILY_H */

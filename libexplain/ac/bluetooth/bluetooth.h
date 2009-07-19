@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_AC_BLUETOOTH_BLUETOOTH_H
 #define LIBEXPLAIN_AC_BLUETOOTH_BLUETOOTH_H
 
-#include <libexplain/config.h>
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_BLUETOOTH_BLUETOOTH_H
 #include <bluetooth/bluetooth.h>

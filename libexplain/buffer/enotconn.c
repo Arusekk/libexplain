@@ -20,9 +20,9 @@
 
 
 void
-libexplain_buffer_enotconn(libexplain_string_buffer_t *sb, const char *caption)
+explain_buffer_enotconn(explain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*

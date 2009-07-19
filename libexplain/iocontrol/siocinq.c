@@ -40,7 +40,7 @@ disambiguate(int fildes, int request, const void *data)
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocinq =
+const explain_iocontrol_t explain_iocontrol_siocinq =
 {
     "SIOCINQ", /* name */
     SIOCINQ, /* value */

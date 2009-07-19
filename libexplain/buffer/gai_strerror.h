@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_gai_strerror function may be used to
+  * The explain_buffer_gai_strerror function may be used to
   * print gai_strerror explanation into the buffer.
   *
   * @param sb
@@ -30,7 +30,7 @@
   * @param errcode
   *    the error reported by getaddrinfo
   */
-void libexplain_buffer_gai_strerror(libexplain_string_buffer_t *sb,
+void explain_buffer_gai_strerror(explain_string_buffer_t *sb,
     int errcode);
 
 #endif /* LIBEXPLAIN_BUFFER_GAI_STRERROR_H */

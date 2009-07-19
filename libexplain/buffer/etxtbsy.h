@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_etxtbsy function may be used to provide a
+  * The explain_buffer_etxtbsy function may be used to provide a
   * common explanation for all cases of ETXTBSY.
   *
   * @param sb
@@ -32,11 +32,11 @@
   *    The name of the file having the problem (it is not printed, it is
   *    used to look for the process using it)
   */
-void libexplain_buffer_etxtbsy(libexplain_string_buffer_t *sb,
+void explain_buffer_etxtbsy(explain_string_buffer_t *sb,
     const char *pathname);
 
 /**
-  * The libexplain_buffer_etxtbsy_fildes function may be used to
+  * The explain_buffer_etxtbsy_fildes function may be used to
   * provide a common explanation for all cases of ETXTBSY, where a file
   * descriptor is available, rather than a pathname.
   *
@@ -46,7 +46,7 @@ void libexplain_buffer_etxtbsy(libexplain_string_buffer_t *sb,
   *    The file descriptor having the problem (it is not printed, it is
   *    used to look for the process using it)
   */
-void libexplain_buffer_etxtbsy_fildes(libexplain_string_buffer_t *sb,
+void explain_buffer_etxtbsy_fildes(explain_string_buffer_t *sb,
     int fildes);
 
 #endif /* LIBEXPLAIN_BUFFER_ETXTBSY_H */

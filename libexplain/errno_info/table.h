@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,15 +25,15 @@
 #include <libexplain/errno_info.h>
 
 /**
-  * The libexplain_errno_info global variable is used to record error
+  * The explain_errno_info global variable is used to record error
   * numbers and their names.
   */
-extern const libexplain_errno_info_t libexplain_errno_info[];
+extern const explain_errno_info_t explain_errno_info[];
 
 /**
-  * The libexplain_errno_info_size global variable is used to record
-  * the size, in elements, of the libexplain_errno_info array.
+  * The explain_errno_info_size global variable is used to record
+  * the size, in elements, of the explain_errno_info array.
   */
-extern const size_t libexplain_errno_info_size;
+extern const size_t explain_errno_info_size;
 
 #endif /* LIBEXPLAIN_ERRNO_INFO_TABLE_H */

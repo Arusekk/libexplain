@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,7 @@
 
 
 int
-libexplain_buffer_fildes_not_open_for_writing(libexplain_string_buffer_t *sb,
+explain_buffer_fildes_not_open_for_writing(explain_string_buffer_t *sb,
     int fildes, const char *fildes_caption)
 {
     int             flags;
@@ -41,7 +41,7 @@ libexplain_buffer_fildes_not_open_for_writing(libexplain_string_buffer_t *sb,
         break;
     }
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -54,8 +54,8 @@ libexplain_buffer_fildes_not_open_for_writing(libexplain_string_buffer_t *sb,
         i18n("%s is not open for writing"),
         fildes_caption
     );
-    libexplain_string_buffer_puts(sb, " (");
-    libexplain_buffer_open_flags(sb, flags);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, " (");
+    explain_buffer_open_flags(sb, flags);
+    explain_string_buffer_putc(sb, ')');
     return 0;
 }

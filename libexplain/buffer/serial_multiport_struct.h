@@ -24,7 +24,7 @@
 struct serial_multiport_struct; /* forward */
 
 /**
-  * The libexplain_buffer_serial_multiport_struct function may be used to
+  * The explain_buffer_serial_multiport_struct function may be used to
   * print a representation of a serial_multiport_struct structure value.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct serial_multiport_struct; /* forward */
   * @param value
   *    The serial_multiport_struct value to be printed.
   */
-void libexplain_buffer_serial_multiport_struct(libexplain_string_buffer_t *sb,
+void explain_buffer_serial_multiport_struct(explain_string_buffer_t *sb,
     const struct serial_multiport_struct *value);
 
 #endif /* LIBEXPLAIN_BUFFER_SERIAL_MULTIPORT_STRUCT_H */

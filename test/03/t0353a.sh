@@ -24,8 +24,7 @@ TEST_SUBJECT="ioctl MTIOCPOS"
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = MTIOCPOS, data = 0x00001000) failed,
 Inappropriate ioctl for device (ENOTTY) because fildes is not associated
-with a character special device; or, fildes is not associated with an
-object to which request can be applied
+with an object to which ioctl MTIOCPOS can be applied
 fubar
 test $? -eq 0 || no_result
 

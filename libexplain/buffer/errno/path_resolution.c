@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,6 +39,7 @@
 #include <libexplain/buffer/wrong_file_type.h>
 #include <libexplain/capability.h>
 #include <libexplain/fstrcmp.h>
+#include <libexplain/getppcwd.h>
 #include <libexplain/have_permission.h>
 #include <libexplain/option.h>
 #include <libexplain/symloopmax.h>
@@ -54,7 +55,7 @@ all_slash(const char *s)
 
 
 static void
-look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
+look_for_similar(explain_string_buffer_t *sb, const char *lookup_directory,
     const char *component)
 {
     DIR             *dp;
@@ -62,7 +63,7 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
     double          best_weight;
     int             st_mode;
     char            subject[NAME_MAX * 4 + 3];
-    libexplain_string_buffer_t subject_sb;
+    explain_string_buffer_t subject_sb;
 
     dp = opendir(lookup_directory);
     if (!dp)
@@ -82,7 +83,7 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
             continue;
         if (0 == strcmp(dep->d_name, ".."))
             continue;
-        weight = libexplain_fstrcasecmp(component, dep->d_name);
+        weight = explain_fstrcasecmp(component, dep->d_name);
         if (best_weight < weight)
         {
             best_weight = weight;
@@ -113,11 +114,11 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
             st_mode = st.st_mode;
     }
 
-    libexplain_string_buffer_init(&subject_sb, subject, sizeof(subject));
-    libexplain_buffer_caption_name_type(&subject_sb, 0, best_name, st_mode);
+    explain_string_buffer_init(&subject_sb, subject, sizeof(subject));
+    explain_buffer_caption_name_type(&subject_sb, 0, best_name, st_mode);
 
-    libexplain_string_buffer_puts(sb, ", ");
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_puts(sb, ", ");
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -136,14 +137,14 @@ look_for_similar(libexplain_string_buffer_t *sb, const char *lookup_directory,
 
 
 static int
-command_interpreter_broken(libexplain_string_buffer_t *sb, const char *pathname)
+command_interpreter_broken(explain_string_buffer_t *sb, const char *pathname)
 {
     char            block[512];
     int             fd;
     ssize_t         n;
     char            *end;
     char            *interpreter_pathname;
-    libexplain_final_t final_component;
+    explain_final_t final_component;
     char            *bp;
 
     fd = open(pathname, O_RDONLY);
@@ -169,11 +170,11 @@ command_interpreter_broken(libexplain_string_buffer_t *sb, const char *pathname)
         ++bp;
     *bp = '\0';
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_execute = 1;
     final_component.follow_interpreter = 0; /* avoid infinite loops */
     return
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             EACCES,
@@ -185,7 +186,7 @@ command_interpreter_broken(libexplain_string_buffer_t *sb, const char *pathname)
 
 
 static int
-hash_bang(libexplain_string_buffer_t *sb, const char *pathname)
+hash_bang(explain_string_buffer_t *sb, const char *pathname)
 {
     int             fd;
     ssize_t         n;
@@ -194,7 +195,7 @@ hash_bang(libexplain_string_buffer_t *sb, const char *pathname)
     char            *bp;
     char            block[512];
     char            qintname[PATH_MAX + 1];
-    libexplain_string_buffer_t qintname_sb;
+    explain_string_buffer_t qintname_sb;
 
     fd = open(pathname, O_RDONLY);
     if (fd < 0)
@@ -219,10 +220,10 @@ hash_bang(libexplain_string_buffer_t *sb, const char *pathname)
         ++bp;
     *bp = '\0';
 
-    libexplain_string_buffer_init(&qintname_sb, qintname, sizeof(qintname));
-    libexplain_string_buffer_puts_quoted(&qintname_sb, interpreter_pathname);
+    explain_string_buffer_init(&qintname_sb, qintname, sizeof(qintname));
+    explain_string_buffer_puts_quoted(&qintname_sb, interpreter_pathname);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -241,15 +242,15 @@ hash_bang(libexplain_string_buffer_t *sb, const char *pathname)
 
 
 static void
-directory_does_not_exist(libexplain_string_buffer_t *sb, const char *caption,
+directory_does_not_exist(explain_string_buffer_t *sb, const char *caption,
     const char *dirname)
 {
     char            subject[PATH_MAX + 50];
-    libexplain_string_buffer_t subject_sb;
+    explain_string_buffer_t subject_sb;
 
-    libexplain_string_buffer_init(&subject_sb, subject, sizeof(subject));
-    libexplain_buffer_caption_name_type(&subject_sb, caption, dirname, S_IFDIR);
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_init(&subject_sb, subject, sizeof(subject));
+    explain_buffer_caption_name_type(&subject_sb, caption, dirname, S_IFDIR);
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -266,31 +267,31 @@ directory_does_not_exist(libexplain_string_buffer_t *sb, const char *caption,
 
 
 static void
-not_a_directory(libexplain_string_buffer_t *sb, const char *caption,
+not_a_directory(explain_string_buffer_t *sb, const char *caption,
     const char *dir, const struct stat *st)
 {
     char            subject[PATH_MAX + 50];
-    libexplain_string_buffer_t subject_sb;
+    explain_string_buffer_t subject_sb;
 
-    libexplain_string_buffer_init(&subject_sb, subject, sizeof(subject));
-    libexplain_buffer_caption_name_type(&subject_sb, caption, dir, -1);
-    libexplain_buffer_wrong_file_type_st(sb, st, subject, S_IFDIR);
+    explain_string_buffer_init(&subject_sb, subject, sizeof(subject));
+    explain_buffer_caption_name_type(&subject_sb, caption, dir, -1);
+    explain_buffer_wrong_file_type_st(sb, st, subject, S_IFDIR);
 }
 
 
 static void
-no_such_directory_entry(libexplain_string_buffer_t *sb, const char *comp,
+no_such_directory_entry(explain_string_buffer_t *sb, const char *comp,
     int comp_st_mode, const char *dir_caption, const char *dir, int dir_st_mode)
 {
     char part1[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t part1_sb;
+    explain_string_buffer_t part1_sb;
     char part2[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t part2_sb;
+    explain_string_buffer_t part2_sb;
 
-    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
-    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    explain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
+    explain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    explain_buffer_caption_name_type
     (
         &part2_sb,
         dir_caption,
@@ -298,7 +299,7 @@ no_such_directory_entry(libexplain_string_buffer_t *sb, const char *comp,
         dir_st_mode
     );
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -322,16 +323,16 @@ no_such_directory_entry(libexplain_string_buffer_t *sb, const char *comp,
 
 
 static void
-not_possible_to_execute(libexplain_string_buffer_t *sb, const char *caption,
+not_possible_to_execute(explain_string_buffer_t *sb, const char *caption,
     const char *name, int st_mode)
 {
     char            ftype[NAME_MAX * 4 + 50];
-    libexplain_string_buffer_t ftype_sb;
+    explain_string_buffer_t ftype_sb;
 
-    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-    libexplain_buffer_caption_name_type(&ftype_sb, caption, name, st_mode);
+    explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    explain_buffer_caption_name_type(&ftype_sb, caption, name, st_mode);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -350,20 +351,20 @@ not_possible_to_execute(libexplain_string_buffer_t *sb, const char *caption,
 
 
 static void
-does_not_have_search_permission(libexplain_string_buffer_t *sb,
+does_not_have_search_permission(explain_string_buffer_t *sb,
     const char *comp, const struct stat *comp_st, const char *caption,
     const char *dir, const struct stat *dir_st,
-    const libexplain_have_identity_t *hip)
+    const explain_have_identity_t *hip)
 {
     char part1[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t part1_sb;
+    explain_string_buffer_t part1_sb;
     char part2[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t part2_sb;
+    explain_string_buffer_t part2_sb;
 
-    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st->st_mode);
-    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    explain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st->st_mode);
+    explain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    explain_buffer_caption_name_type
     (
         &part2_sb,
         caption,
@@ -371,7 +372,7 @@ does_not_have_search_permission(libexplain_string_buffer_t *sb,
         dir_st->st_mode
     );
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -392,20 +393,20 @@ does_not_have_search_permission(libexplain_string_buffer_t *sb,
         part1,
         part2
     );
-    libexplain_explain_search_permission(sb, comp_st, hip);
+    explain_explain_search_permission(sb, comp_st, hip);
 }
 
 
 static void
-does_not_have_search_permission1(libexplain_string_buffer_t *sb,
+does_not_have_search_permission1(explain_string_buffer_t *sb,
     const char *caption, const char *dir, const struct stat *dir_st,
-    const libexplain_have_identity_t *hip)
+    const explain_have_identity_t *hip)
 {
     char            dir_part[PATH_MAX + 100];
-    libexplain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t dir_part_sb;
 
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         caption,
@@ -413,7 +414,7 @@ does_not_have_search_permission1(libexplain_string_buffer_t *sb,
         dir_st->st_mode
     );
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -429,36 +430,36 @@ does_not_have_search_permission1(libexplain_string_buffer_t *sb,
         i18n("the process does not have search permission to the %s"),
         dir_part
     );
-    libexplain_explain_search_permission(sb, dir_st, hip);
+    explain_explain_search_permission(sb, dir_st, hip);
 }
 
 
 static void
-does_not_have_execute_permission(libexplain_string_buffer_t *sb,
+does_not_have_execute_permission(explain_string_buffer_t *sb,
     const char *comp, const struct stat *comp_st, const char *caption,
     const char *dir, const struct stat *dir_st,
-    const libexplain_have_identity_t *hip)
+    const explain_have_identity_t *hip)
 {
     char            final_part[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t final_part_sb;
+    explain_string_buffer_t final_part_sb;
     char            dir_part[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t dir_part_sb;
 
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &final_part_sb,
         final_part,
         sizeof(final_part)
     );
-    libexplain_buffer_caption_name_type
+    explain_buffer_caption_name_type
     (
         &final_part_sb,
         0,
         comp,
         comp_st->st_mode
     );
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         caption,
@@ -466,7 +467,7 @@ does_not_have_execute_permission(libexplain_string_buffer_t *sb,
         dir_st->st_mode
     );
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -490,35 +491,35 @@ does_not_have_execute_permission(libexplain_string_buffer_t *sb,
         final_part,
         dir_part
     );
-    libexplain_explain_execute_permission(sb, comp_st, hip);
+    explain_explain_execute_permission(sb, comp_st, hip);
 }
 
 
 static void
-does_not_have_read_permission(libexplain_string_buffer_t *sb, const char *comp,
+does_not_have_read_permission(explain_string_buffer_t *sb, const char *comp,
     const struct stat *comp_st, const char *caption, const char *dir,
-    const struct stat *dir_st, const libexplain_have_identity_t *hip)
+    const struct stat *dir_st, const explain_have_identity_t *hip)
 {
     char            final_part[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t final_part_sb;
+    explain_string_buffer_t final_part_sb;
     char            dir_part[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t dir_part_sb;
 
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &final_part_sb,
         final_part,
         sizeof(final_part)
     );
-    libexplain_buffer_caption_name_type
+    explain_buffer_caption_name_type
     (
         &final_part_sb,
         0,
         comp,
         comp_st->st_mode
     );
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         caption,
@@ -526,7 +527,7 @@ does_not_have_read_permission(libexplain_string_buffer_t *sb, const char *comp,
         dir_st->st_mode
     );
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -549,35 +550,35 @@ does_not_have_read_permission(libexplain_string_buffer_t *sb, const char *comp,
         final_part,
         dir_part
     );
-    libexplain_explain_read_permission(sb, comp_st, hip);
+    explain_explain_read_permission(sb, comp_st, hip);
 }
 
 
 static void
-does_not_have_write_permission(libexplain_string_buffer_t *sb, const char *comp,
+does_not_have_write_permission(explain_string_buffer_t *sb, const char *comp,
     const struct stat *comp_st, const char *caption, const char *dir,
-    const struct stat *dir_st, const libexplain_have_identity_t *hip)
+    const struct stat *dir_st, const explain_have_identity_t *hip)
 {
     char            final_part[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t final_part_sb;
+    explain_string_buffer_t final_part_sb;
     char            dir_part[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t dir_part_sb;
 
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &final_part_sb,
         final_part,
         sizeof(final_part)
     );
-    libexplain_buffer_caption_name_type
+    explain_buffer_caption_name_type
     (
         &final_part_sb,
         0,
         comp,
         comp_st->st_mode
     );
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         caption,
@@ -585,7 +586,7 @@ does_not_have_write_permission(libexplain_string_buffer_t *sb, const char *comp,
         dir_st->st_mode
     );
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -608,37 +609,37 @@ does_not_have_write_permission(libexplain_string_buffer_t *sb, const char *comp,
         final_part,
         dir_part
     );
-    libexplain_explain_write_permission(sb, comp_st, hip);
+    explain_explain_write_permission(sb, comp_st, hip);
 }
 
 
 static void
-does_not_have_new_directory_entry_permission(libexplain_string_buffer_t *sb,
+does_not_have_new_directory_entry_permission(explain_string_buffer_t *sb,
     const char *caption, const char *dir, const struct stat *dir_st,
-    const char *comp, int comp_st_mode, const libexplain_have_identity_t *hip)
+    const char *comp, int comp_st_mode, const explain_have_identity_t *hip)
 {
     char            dir_part[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t dir_part_sb;
     char            final_part[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t final_part_sb;
+    explain_string_buffer_t final_part_sb;
 
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         caption,
         dir,
         dir_st->st_mode
     );
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &final_part_sb,
         final_part,
         sizeof(final_part)
     );
-    libexplain_buffer_caption_name_type(&final_part_sb, 0, comp, comp_st_mode);
+    explain_buffer_caption_name_type(&final_part_sb, 0, comp, comp_st_mode);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -660,46 +661,46 @@ does_not_have_new_directory_entry_permission(libexplain_string_buffer_t *sb,
         dir_part,
         final_part
     );
-    libexplain_explain_write_permission(sb, dir_st, hip);
+    explain_explain_write_permission(sb, dir_st, hip);
 }
 
 
 static void
-dangling_symbolic_link(libexplain_string_buffer_t *sb, const char *comp,
+dangling_symbolic_link(explain_string_buffer_t *sb, const char *comp,
     int comp_st_mode, const char *caption, const char *dir, int dir_st_mode,
     const char *garbage)
 {
     char            final_part[NAME_MAX * 2 + 100];
-    libexplain_string_buffer_t final_part_sb;
+    explain_string_buffer_t final_part_sb;
     char            dir_part[PATH_MAX * 2 + 100];
-    libexplain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t dir_part_sb;
     char            dangling_part[PATH_MAX * 2 + 100];
-    libexplain_string_buffer_t dangling_part_sb;
+    explain_string_buffer_t dangling_part_sb;
 
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &final_part_sb,
         final_part,
         sizeof(final_part)
     );
-    libexplain_buffer_caption_name_type(&final_part_sb, 0, comp, comp_st_mode);
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_buffer_caption_name_type(&final_part_sb, 0, comp, comp_st_mode);
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         caption,
         dir,
         dir_st_mode
     );
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &dangling_part_sb,
         dangling_part,
         sizeof(dangling_part)
     );
-    libexplain_string_buffer_puts_quoted(&dangling_part_sb, garbage);
+    explain_string_buffer_puts_quoted(&dangling_part_sb, garbage);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -726,18 +727,18 @@ dangling_symbolic_link(libexplain_string_buffer_t *sb, const char *comp,
 
 
 static void
-name_too_long(libexplain_string_buffer_t *sb, const char *caption,
+name_too_long(explain_string_buffer_t *sb, const char *caption,
     const char *component, long comp_length, long name_max)
 {
     char            part1[PATH_MAX * 2];
-    libexplain_string_buffer_t part1_sb;
+    explain_string_buffer_t part1_sb;
 
-    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    libexplain_string_buffer_puts(&part1_sb, caption);
-    libexplain_string_buffer_putc(&part1_sb, ' ');
-    libexplain_string_buffer_puts_quoted(&part1_sb, component);
+    explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    explain_string_buffer_puts(&part1_sb, caption);
+    explain_string_buffer_putc(&part1_sb, ' ');
+    explain_string_buffer_puts_quoted(&part1_sb, component);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -750,25 +751,25 @@ name_too_long(libexplain_string_buffer_t *sb, const char *caption,
         i18n("%s component is longer than the system limit"),
         part1
     );
-    libexplain_string_buffer_printf(sb, " (%ld > %ld)", comp_length, name_max);
+    explain_string_buffer_printf(sb, " (%ld > %ld)", comp_length, name_max);
 }
 
 
 static void
-not_a_subdirectory(libexplain_string_buffer_t *sb, const char *comp,
+not_a_subdirectory(explain_string_buffer_t *sb, const char *comp,
     int comp_st_mode, const char *caption, const char *dir, int dir_st_mode)
 {
     char part1[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t part1_sb;
+    explain_string_buffer_t part1_sb;
     char part2[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t part2_sb;
+    explain_string_buffer_t part2_sb;
 
-    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
-    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
-    libexplain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
+    explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    explain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
+    explain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    explain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -793,20 +794,20 @@ not_a_subdirectory(libexplain_string_buffer_t *sb, const char *comp,
 
 
 static void
-must_not_exist(libexplain_string_buffer_t *sb, const char *comp,
+must_not_exist(explain_string_buffer_t *sb, const char *comp,
     int comp_st_mode, const char *caption, const char *dir, int dir_st_mode)
 {
     char part1[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t part1_sb;
+    explain_string_buffer_t part1_sb;
     char part2[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t part2_sb;
+    explain_string_buffer_t part2_sb;
 
-    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    libexplain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
-    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
-    libexplain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
+    explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    explain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
+    explain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    explain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -831,25 +832,25 @@ must_not_exist(libexplain_string_buffer_t *sb, const char *comp,
 
 
 static void
-wrong_file_type(libexplain_string_buffer_t *sb, const char *caption,
+wrong_file_type(explain_string_buffer_t *sb, const char *caption,
     const char *dir, int dir_st_mode, const char *comp, int comp_st_mode,
     int wanted_st_mode)
 {
     char part1[PATH_MAX * 4 + 100];
-    libexplain_string_buffer_t part1_sb;
+    explain_string_buffer_t part1_sb;
     char part2[NAME_MAX * 4 + 100];
-    libexplain_string_buffer_t part2_sb;
+    explain_string_buffer_t part2_sb;
     char part3[100];
-    libexplain_string_buffer_t part3_sb;
+    explain_string_buffer_t part3_sb;
 
-    libexplain_string_buffer_init(&part2_sb, part2, sizeof(part2));
-    libexplain_buffer_caption_name_type(&part2_sb, 0, comp, comp_st_mode);
-    libexplain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    libexplain_buffer_caption_name_type(&part1_sb, caption, dir, dir_st_mode);
-    libexplain_string_buffer_init(&part3_sb, part3, sizeof(part3));
-    libexplain_buffer_file_type(&part3_sb, wanted_st_mode);
+    explain_string_buffer_init(&part2_sb, part2, sizeof(part2));
+    explain_buffer_caption_name_type(&part2_sb, 0, comp, comp_st_mode);
+    explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
+    explain_buffer_caption_name_type(&part1_sb, caption, dir, dir_st_mode);
+    explain_string_buffer_init(&part3_sb, part3, sizeof(part3));
+    explain_buffer_file_type(&part3_sb, wanted_st_mode);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -877,27 +878,27 @@ wrong_file_type(libexplain_string_buffer_t *sb, const char *caption,
 
 
 static void
-need_dir_write_for_remove_dir_entry(libexplain_string_buffer_t *sb,
+need_dir_write_for_remove_dir_entry(explain_string_buffer_t *sb,
     const char *dir_caption, const char *dir_name, int dir_type,
     const char *comp_name, int comp_type)
 {
-    libexplain_string_buffer_t dir_part_sb;
-    libexplain_string_buffer_t comp_part_sb;
+    explain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t comp_part_sb;
     char dir_part[PATH_MAX * 4 + 100];
     char comp_part[PATH_MAX * 4 + 100];
 
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_buffer_caption_name_type
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_buffer_caption_name_type
     (
         &dir_part_sb,
         dir_caption,
         dir_name,
         dir_type
     );
-    libexplain_string_buffer_init(&comp_part_sb, comp_part, sizeof(comp_part));
-    libexplain_buffer_caption_name_type(&comp_part_sb, 0, comp_name, comp_type);
+    explain_string_buffer_init(&comp_part_sb, comp_part, sizeof(comp_part));
+    explain_buffer_caption_name_type(&comp_part_sb, 0, comp_name, comp_type);
 
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -920,31 +921,31 @@ need_dir_write_for_remove_dir_entry(libexplain_string_buffer_t *sb,
 
 
 static void
-explain_sticky_bit_vs_unlink(libexplain_string_buffer_t *sb,
-    const libexplain_have_identity_t *hip, const struct stat *dir_st,
+explain_sticky_bit_vs_unlink(explain_string_buffer_t *sb,
+    const explain_have_identity_t *hip, const struct stat *dir_st,
     const struct stat *file_st)
 {
-    libexplain_string_buffer_t proc_part_sb;
-    libexplain_string_buffer_t dir_part_sb;
-    libexplain_string_buffer_t file_part_sb;
-    libexplain_string_buffer_t ftype_sb;
+    explain_string_buffer_t proc_part_sb;
+    explain_string_buffer_t dir_part_sb;
+    explain_string_buffer_t file_part_sb;
+    explain_string_buffer_t ftype_sb;
     char            proc_part[100];
     char            dir_part[100];
     char            file_part[100];
     char            ftype[100];
 
-    libexplain_string_buffer_init(&proc_part_sb, proc_part, sizeof(proc_part));
-    libexplain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    libexplain_string_buffer_init(&file_part_sb, file_part, sizeof(file_part));
-    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    explain_string_buffer_init(&proc_part_sb, proc_part, sizeof(proc_part));
+    explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
+    explain_string_buffer_init(&file_part_sb, file_part, sizeof(file_part));
+    explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
 
-    libexplain_buffer_uid(&proc_part_sb, hip->uid);
-    libexplain_buffer_uid(&dir_part_sb, dir_st->st_uid);
-    libexplain_buffer_uid(&file_part_sb, file_st->st_uid);
-    libexplain_buffer_file_type(&ftype_sb, file_st->st_mode);
+    explain_buffer_uid(&proc_part_sb, hip->uid);
+    explain_buffer_uid(&dir_part_sb, dir_st->st_uid);
+    explain_buffer_uid(&file_part_sb, file_st->st_uid);
+    explain_buffer_file_type(&ftype_sb, file_st->st_mode);
 
-    libexplain_string_buffer_puts(sb, "; ");
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_puts(sb, "; ");
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -963,34 +964,54 @@ explain_sticky_bit_vs_unlink(libexplain_string_buffer_t *sb,
             "process's %s %s is neither the owner UID %s of the %s "
             "to be removed, nor the owner UID %s of the directory "
             "containing it"),
-        libexplain_have_identity_kind_of_uid(hip),
+        explain_have_identity_kind_of_uid(hip),
         proc_part,
         file_part,
         ftype,
         dir_part
     );
-    libexplain_buffer_dac_fowner(sb);
+    explain_buffer_dac_fowner(sb);
+}
+
+
+static int
+current_directory_confusing(void)
+{
+    char parent_dir[PATH_MAX + 1];
+    char child_dir[PATH_MAX + 1];
+
+    /*
+     * If this process' current directory differs from that of the
+     * parent process' current directory, it means that the user may
+     * well have a different idea of "the current directory" than this
+     * process does.
+     */
+    if (!explain_getppcwd(parent_dir, sizeof(parent_dir)))
+        return 1;
+    if (!getcwd(child_dir, sizeof(child_dir)))
+        return 1;
+    return (0 != strcmp(parent_dir, child_dir));
 }
 
 
 int
-libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
+explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
     int expected_errno, const char *initial_pathname, const char *caption,
-    const libexplain_final_t *final_component)
+    const explain_final_t *final_component)
 {
-    char            pathname[PATH_MAX + 1];
-    libexplain_string_buffer_t pathname_buf;
+    char            pathname[PATH_MAX * 2 + 1];
+    explain_string_buffer_t pathname_buf;
     int             number_of_symlinks_followed;
     const char      *pp;
     char            lookup_directory[PATH_MAX + 1];
-    libexplain_string_buffer_t lookup_directory_buf;
+    explain_string_buffer_t lookup_directory_buf;
     char            **symlinks_so_far;
     int             symloop_max;
     long            path_max;
 
     /*
-     * It's easy to pass pathname twice, rather then pathname and
-     * "pathname", so we do a little checking.  Add to this list of
+     * It's easy to pass pathname twice, rather than pathname and
+     * "pathname", so we do a little checking.  Add to this list if
      * something else turns up, but I don't expect any more.
      *
      * RESIST the temptation to add more, because it actually makes the
@@ -1000,8 +1021,8 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
     assert(0 == strcmp(caption, "pathname") || 0 == strcmp(caption, "oldpath")
         || 0 == strcmp(caption, "newpath"));
 
-    if (errno == EMLINK)
-        errno = ELOOP;
+    if (expected_errno == EMLINK)
+        expected_errno = ELOOP;
     symlinks_so_far = 0;
     number_of_symlinks_followed = 0;
 
@@ -1013,7 +1034,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
      */
     if (!initial_pathname || !*initial_pathname)
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             /*
@@ -1051,7 +1072,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         len = strlen(initial_pathname);
         if (len > (size_t)path_max)
         {
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -1064,7 +1085,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 i18n("%s exceeds the system maximum path length"),
                 caption
             );
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 " (%ld > %ld)",
@@ -1075,8 +1096,16 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         }
     }
 
-    libexplain_string_buffer_init(&pathname_buf, pathname, sizeof(pathname));
-    libexplain_string_buffer_puts(&pathname_buf, initial_pathname);
+    explain_string_buffer_init(&pathname_buf, pathname, sizeof(pathname));
+    if (initial_pathname[0] != '/' && current_directory_confusing())
+    {
+        if (getcwd(pathname, sizeof(pathname) - 1))
+        {
+            pathname_buf.position = strlen(pathname);
+            explain_string_buffer_putc(&pathname_buf, '/');
+        }
+    }
+    explain_string_buffer_puts(&pathname_buf, initial_pathname);
 
     /*
      * Trailing slashes
@@ -1087,12 +1116,12 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
      * pathname obtained by appending '.' to it.)
      */
     if (pathname[pathname_buf.position - 1] == '/')
-        libexplain_string_buffer_putc(&pathname_buf, '.');
+        explain_string_buffer_putc(&pathname_buf, '.');
 
     /*
      * Try to get the system's idea of the loop maximum.
      */
-    symloop_max = libexplain_symloopmax();
+    symloop_max = explain_symloopmax();
 
     symlinks_so_far = malloc(2 * symloop_max * sizeof(char *));
     if
@@ -1108,13 +1137,13 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
     /*
      * Set the current lookup directory to the starting lookup directory.
      */
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &lookup_directory_buf,
         lookup_directory,
         sizeof(lookup_directory)
     );
-    libexplain_string_buffer_puts
+    explain_string_buffer_puts
     (
         &lookup_directory_buf,
         (*pp == '/' ? "/" : ".")
@@ -1128,9 +1157,9 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
     for (;;)
     {
         char            component[PATH_MAX + 1]; /* deliberately not NAME_MAX */
-        libexplain_string_buffer_t component_buf;
+        explain_string_buffer_t component_buf;
         char            intermediate_path[PATH_MAX + 1];
-        libexplain_string_buffer_t intermediate_path_buf;
+        explain_string_buffer_t intermediate_path_buf;
         int             final;
         int             lookup_directory_writable;
         struct stat     lookup_directory_st;
@@ -1186,7 +1215,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
          */
         if
         (
-            !libexplain_have_search_permission
+            !explain_have_search_permission
             (
                 &lookup_directory_st,
                 &final_component->id
@@ -1205,7 +1234,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         }
 
         lookup_directory_writable =
-            libexplain_have_write_permission
+            explain_have_write_permission
             (
                 &lookup_directory_st,
                 &final_component->id
@@ -1215,7 +1244,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
          * Extract the next path component.
          * A path component is a substring delimited by '/' characters.
          */
-        libexplain_string_buffer_init
+        explain_string_buffer_init
         (
             &component_buf,
             component,
@@ -1227,7 +1256,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             switch (c)
             {
             default:
-                libexplain_string_buffer_putc(&component_buf, c);
+                explain_string_buffer_putc(&component_buf, c);
                 continue;
 
             case '\0':
@@ -1277,7 +1306,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             }
             if (component_buf.position > (size_t)name_max)
             {
-                libexplain_string_buffer_truncate(&component_buf, name_max);
+                explain_string_buffer_truncate(&component_buf, name_max);
             }
         }
         else
@@ -1290,7 +1319,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 name_max = NAME_MAX;
             if (component_buf.position > (size_t)name_max)
             {
-                libexplain_string_buffer_truncate(&component_buf, name_max);
+                explain_string_buffer_truncate(&component_buf, name_max);
             }
         }
 
@@ -1298,14 +1327,14 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
          * Build the intermediate path by joining the lookup_directory
          * and the component.
          */
-        libexplain_string_buffer_init
+        explain_string_buffer_init
         (
             &intermediate_path_buf,
             intermediate_path,
             sizeof(intermediate_path)
         );
-        libexplain_string_buffer_puts(&intermediate_path_buf, lookup_directory);
-        libexplain_string_buffer_path_join(&intermediate_path_buf, component);
+        explain_string_buffer_puts(&intermediate_path_buf, lookup_directory);
+        explain_string_buffer_path_join(&intermediate_path_buf, component);
 
         if (lstat(intermediate_path, &intermediate_path_st) < 0)
         {
@@ -1475,15 +1504,15 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     if (0 == strcmp(symlinks_so_far[j], intermediate_path))
                     {
                         char            qs[PATH_MAX * 2 + 1];
-                        libexplain_string_buffer_t qs_sb;
+                        explain_string_buffer_t qs_sb;
 
-                        libexplain_string_buffer_init(&qs_sb, qs, sizeof(qs));
-                        libexplain_string_buffer_puts_quoted
+                        explain_string_buffer_init(&qs_sb, qs, sizeof(qs));
+                        explain_string_buffer_puts_quoted
                         (
                             &qs_sb,
                             intermediate_path
                         );
-                        libexplain_string_buffer_printf_gettext
+                        explain_string_buffer_printf_gettext
                         (
                             sb,
                             /*
@@ -1514,7 +1543,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             if (n >= 0)
             {
                 char            new_pathname[PATH_MAX + 1];
-                libexplain_string_buffer_t new_pathname_buf;
+                explain_string_buffer_t new_pathname_buf;
 
                 if (symlinks_so_far)
                 {
@@ -1548,36 +1577,36 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 }
                 rlb[n] = '\0';
 
-                libexplain_string_buffer_init
+                explain_string_buffer_init
                 (
                     &new_pathname_buf,
                     new_pathname,
                     sizeof(new_pathname)
                 );
-                libexplain_string_buffer_puts(&new_pathname_buf, rlb);
-                libexplain_string_buffer_path_join(&new_pathname_buf, pp);
+                explain_string_buffer_puts(&new_pathname_buf, rlb);
+                explain_string_buffer_path_join(&new_pathname_buf, pp);
 
-                libexplain_string_buffer_copy(&pathname_buf, &new_pathname_buf);
+                explain_string_buffer_copy(&pathname_buf, &new_pathname_buf);
 
                 /*
                  * Check for dangling symbolic links
                  */
-                libexplain_string_buffer_init
+                explain_string_buffer_init
                 (
                     &intermediate_path_buf,
                     intermediate_path,
                     sizeof(intermediate_path)
                 );
                 if (rlb[0] == '/')
-                    libexplain_string_buffer_puts(&intermediate_path_buf, rlb);
+                    explain_string_buffer_puts(&intermediate_path_buf, rlb);
                 else
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         &intermediate_path_buf,
                         lookup_directory
                     );
-                    libexplain_string_buffer_path_join
+                    explain_string_buffer_path_join
                     (
                         &intermediate_path_buf,
                         rlb
@@ -1611,7 +1640,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 ++number_of_symlinks_followed;
                 if (number_of_symlinks_followed >= symloop_max)
                 {
-                    libexplain_string_buffer_printf_gettext
+                    explain_string_buffer_printf_gettext
                     (
                         sb,
                         /*
@@ -1629,9 +1658,9 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                         i18n("too many symbolic links were encountered in %s"),
                         caption
                     );
-                    if (libexplain_option_dialect_specific())
+                    if (explain_option_dialect_specific())
                     {
-                        libexplain_string_buffer_printf
+                        explain_string_buffer_printf
                         (
                             sb,
                             " (%d)",
@@ -1667,7 +1696,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 return 0;
             }
 
-            libexplain_string_buffer_copy
+            explain_string_buffer_copy
             (
                 &lookup_directory_buf,
                 &intermediate_path_buf
@@ -1719,14 +1748,14 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
         &&
             final_component->want_to_modify_inode
         &&
-            !libexplain_have_inode_permission
+            !explain_have_inode_permission
             (
                 &intermediate_path_st,
                 &final_component->id
             )
         )
         {
-            libexplain_buffer_does_not_have_inode_modify_permission
+            explain_buffer_does_not_have_inode_modify_permission
             (
                 sb,
                 component,
@@ -1776,7 +1805,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 &&
                     uid != (int)lookup_directory_st.st_uid
                 &&
-                    !libexplain_capability_fowner()
+                    !explain_capability_fowner()
                 )
                 {
                     need_dir_write_for_remove_dir_entry
@@ -1806,7 +1835,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             (
                 final_component->want_to_read
             &&
-                !libexplain_have_read_permission
+                !explain_have_read_permission
                 (
                     &intermediate_path_st,
                     &final_component->id
@@ -1830,7 +1859,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             (
                 final_component->want_to_write
             &&
-                !libexplain_have_write_permission
+                !explain_have_write_permission
                 (
                     &intermediate_path_st,
                     &final_component->id
@@ -1854,7 +1883,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             {
                 if
                 (
-                    libexplain_have_execute_permission
+                    explain_have_execute_permission
                     (
                         &intermediate_path_st,
                         &final_component->id
@@ -1863,12 +1892,12 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                 {
                     if
                     (
-                        libexplain_mount_point_noexec(intermediate_path)
+                        explain_mount_point_noexec(intermediate_path)
                     &&
-                        !libexplain_capability_dac_override()
+                        !explain_capability_dac_override()
                     )
                     {
-                        libexplain_buffer_gettext
+                        explain_buffer_gettext
                         (
                             sb,
                             /*
@@ -1881,7 +1910,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                             i18n("the executable is on a file system that is "
                             "mounted with the \"noexec\" option")
                         );
-                        libexplain_buffer_mount_point(sb, intermediate_path);
+                        explain_buffer_mount_point(sb, intermediate_path);
                         goto return_0;
                     }
 
@@ -1889,12 +1918,12 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                     (
                         (intermediate_path_st.st_mode & (S_ISUID | S_ISGID))
                     &&
-                        libexplain_mount_point_nosuid(intermediate_path)
+                        explain_mount_point_nosuid(intermediate_path)
                     &&
-                        !libexplain_capability_dac_override()
+                        !explain_capability_dac_override()
                     )
                     {
-                        libexplain_buffer_gettext
+                        explain_buffer_gettext
                         (
                             sb,
                             /*
@@ -1908,7 +1937,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
                             i18n("the executable is on a file system that is "
                             "mounted with the \"nosuid\" option")
                         );
-                        libexplain_buffer_mount_point(sb, intermediate_path);
+                        explain_buffer_mount_point(sb, intermediate_path);
                         goto return_0;
                     }
 
@@ -1959,7 +1988,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
             (
                 final_component->want_to_search
             &&
-                !libexplain_have_search_permission
+                !explain_have_search_permission
                 (
                     &intermediate_path_st,
                     &final_component->id
@@ -1999,7 +2028,7 @@ libexplain_buffer_errno_path_resolution(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_final_init(libexplain_final_t *p)
+explain_final_init(explain_final_t *p)
 {
     p->want_to_read = 0;
     p->want_to_write = 0;
@@ -2014,6 +2043,6 @@ libexplain_final_init(libexplain_final_t *p)
     p->follow_symlink = 1;
     p->follow_interpreter = 1;
     p->st_mode = S_IFREG;
-    libexplain_have_identity_init(&p->id);
+    explain_have_identity_init(&p->id);
     p->path_max = -1;
 }

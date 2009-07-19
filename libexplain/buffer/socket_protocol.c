@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 #include <libexplain/string_buffer.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
 #ifdef IPPROTO_IP
     { "IPPROTO_IP", IPPROTO_IP },
@@ -108,36 +108,36 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_socket_protocol(libexplain_string_buffer_t *sb, int protocol)
+explain_buffer_socket_protocol(explain_string_buffer_t *sb, int protocol)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
     struct protoent *pep;
 
-    tp = libexplain_parse_bits_find_by_value(protocol, table, SIZEOF(table));
+    tp = explain_parse_bits_find_by_value(protocol, table, SIZEOF(table));
     if (tp)
     {
-        libexplain_string_buffer_puts(sb, tp->name);
+        explain_string_buffer_puts(sb, tp->name);
         return;
     }
 
-    libexplain_string_buffer_printf(sb, "%d", protocol);
+    explain_string_buffer_printf(sb, "%d", protocol);
 
     pep = getprotobynumber(protocol);
     if (pep)
     {
-        libexplain_string_buffer_putc(sb, ' ');
-        libexplain_string_buffer_puts_quoted(sb, pep->p_name);
+        explain_string_buffer_putc(sb, ' ');
+        explain_string_buffer_puts_quoted(sb, pep->p_name);
     }
 }
 
 
 int
-libexplain_parse_socket_protocol_or_die(const char *text, const char *caption)
+explain_parse_socket_protocol_or_die(const char *text, const char *caption)
 {
     struct protoent *pep;
 
     pep = getprotobyname(text);
     if (pep)
         return pep->p_proto;
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

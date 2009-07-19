@@ -26,12 +26,10 @@
 
 
 void
-libexplain_execvp_or_die(const char *pathname, char *const *argv)
+explain_execvp_or_die(const char *pathname, char *const *argv)
 {
-    if (execvp(pathname, argv) < 0)
+    if (explain_execvp_on_error(pathname, argv) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_execvp(pathname, argv));
         exit(EXIT_FAILURE);
     }
 }

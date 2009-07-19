@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return 0;
 
         default:
@@ -61,6 +61,6 @@ main(int argc, char **argv)
     owner = atoi(argv[optind + 1]);
     group = atoi(argv[optind + 2]);
 
-    libexplain_chown_or_die(path, owner, group);
+    explain_chown_or_die(path, owner, group);
     return 0;
 }

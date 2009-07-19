@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/ac/stdio.h>
 
 /**
-  * The libexplain_wrap_and_print function may be used to take a piece
+  * The explain_wrap_and_print function may be used to take a piece
   * of text and wrap it to 80 columns and print it to the given output
   * stream.
   *
@@ -32,10 +32,10 @@
   * @param text
   *    The text to be wrapped and printed.
   */
-void libexplain_wrap_and_print(FILE *fp, const char *text);
+void explain_wrap_and_print(FILE *fp, const char *text);
 
 /**
-  * The libexplain_wrap_and_print_width function may be used to take a
+  * The explain_wrap_and_print_width function may be used to take a
   * piece of text and wrap it to the specified number of columns and
   * print it to the given output stream.
   *
@@ -46,6 +46,6 @@ void libexplain_wrap_and_print(FILE *fp, const char *text);
   * @param width
   *    The width of the page, counted in fixed-width character columns.
   */
-void libexplain_wrap_and_print_width(FILE *fp, const char *text, int width);
+void explain_wrap_and_print_width(FILE *fp, const char *text, int width);
 
 #endif /* LIBEXPLAIN_WRAP_AND_PRINT_H */

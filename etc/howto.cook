@@ -117,7 +117,7 @@ CFLAGS = -Werror -Wall -Wextra
     -Wnested-externs
     -g
     ;
-LDFLAGS = ;
+LDFLAGS = -Wl,--as-needed;
 LIBS = -lcap;
 
 /* -------------------------------------------------------------------------
@@ -319,7 +319,7 @@ cascade %0%.lo = %0%.o %0.libs/%.lo;
         [CPPFLAGS]
         -c [resolve %0%.c]
         -o [target];
-    date "'+# %%c'" >> [target];
+    md5sum %0%.o %0.libs/%.o | sed "'s|^|# |'" >> [target];
 }
 
 /* force this one to be shallow */
@@ -352,6 +352,22 @@ c_incl_excludes =
 /*
  * the above list has some excpetions for the user API
  */
+
+dirent_exceptions =
+    libexplain/closedir.h
+    libexplain/dirfd.h
+    libexplain/opendir.h
+    libexplain/readdir.h
+    libexplain/rewinddir.h
+    libexplain/scandir.h
+    libexplain/seekdir.h
+    libexplain/telldir.h
+    ;
+
+signal_exceptions =
+    libexplain/signalfd.h
+    ;
+
 stdio_exceptions =
     libexplain/fclose.h
     libexplain/fdopen.h
@@ -360,6 +376,7 @@ stdio_exceptions =
     libexplain/fgetc.h
     libexplain/fgetpos.h
     libexplain/fgets.h
+    libexplain/fileno.h
     libexplain/fopen.h
     libexplain/fprintf.h
     libexplain/fputc.h
@@ -390,35 +407,56 @@ stdio_exceptions =
     libexplain/vscanf.h
     ;
 
-dirent_exceptions =
-    libexplain/closedir.h
-    libexplain/opendir.h
-    libexplain/readdir.h
-    libexplain/rewinddir.h
-    libexplain/scandir.h
-    libexplain/seekdir.h
-    libexplain/telldir.h
+stdlib_exceptions =
+    libexplain/malloc.h
+    libexplain/realloc.h
+    test_mincore/main.c
+    ;
+
+string_exceptions =
+    libexplain/strndup.h
+    test_mincore/main.c
     ;
 
 sys/select_exceptions =
     libexplain/select.h
     ;
 
+sys/mman_exceptions =
+    test_mincore/main.c
+    ;
+
 sys/socket_exceptions =
     libexplain/accept.h
+    libexplain/accept4.h
     libexplain/getpeername.h
     libexplain/getsockname.h
     libexplain/getsockopt.h
     libexplain/setsockopt.h
     ;
 
-unistd_exceptions =
-    libexplain/getcwd.h
+sys/timeb_exceptions =
+    libexplain/ftime.h
     ;
 
-stdlib_exceptions =
-    libexplain/malloc.h
-    libexplain/realloc.h
+sys/types_exceptions =
+    libexplain/kill.h
+    ;
+
+time_exceptions =
+    libexplain/time.h
+    ;
+
+unistd_exceptions =
+    libexplain/getcwd.h
+    libexplain/getgroups.h
+    libexplain/gethostname.h
+    libexplain/pread.h
+    libexplain/pwrite.h
+    libexplain/readlink.h
+    libexplain/setgroups.h
+    libexplain/sethostname.h
+    test_mincore/main.c
     ;
 
 %0%.c.d: %0%.c
@@ -433,12 +471,26 @@ stdlib_exceptions =
     {
         if [not [filter libexplain/ac/%%0%% %0%.c]] then
             ex = [c_incl_excludes];
-        if [in %0%.c [stdio_exceptions]] then
-            ex = [stringset [ex] - "-ex=stdio.h"];
         if [in %0%.c [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
+        if [in %0%.c [signal_exceptions]] then
+            ex = [stringset [ex] - "-ex=signal.h"];
+        if [in %0%.c [stdio_exceptions]] then
+            ex = [stringset [ex] - "-ex=stdio.h"];
+        if [in %0%.c [stdlib_exceptions]] then
+            ex = [stringset [ex] - "-ex=stdlib.h"];
+        if [in %0%.c [string_exceptions]] then
+            ex = [stringset [ex] - "-ex=string.h"];
+        if [in %0%.c [sys/mman_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/mman.h"];
         if [in %0%.c [sys/select_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/select.h"];
+        if [in %0%.c [sys/timeb_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/timeb.h"];
+        if [in %0%.c [sys/types_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/types.h"];
+        if [in %0%.c [time_exceptions]] then
+            ex = [stringset [ex] - "-ex=time.h"];
         if [in %0%.c [unistd_exceptions]] then
             ex = [stringset [ex] - "-ex=unistd.h"];
     }
@@ -468,16 +520,28 @@ stdlib_exceptions =
     {
         if [not [filter libexplain/ac/%%0%% %0%.c]] then
             ex = [c_incl_excludes];
-        if [in %0%.h [stdio_exceptions]] then
-            ex = [stringset [ex] - "-ex=stdio.h"];
         if [in %0%.h [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
+        if [in %0%.h [signal_exceptions]] then
+            ex = [stringset [ex] - "-ex=signal.h"];
+        if [in %0%.h [stdio_exceptions]] then
+            ex = [stringset [ex] - "-ex=stdio.h"];
+        if [in %0%.h [stdlib_exceptions]] then
+            ex = [stringset [ex] - "-ex=stdlib.h"];
+        if [in %0%.h [string_exceptions]] then
+            ex = [stringset [ex] - "-ex=string.h"];
+        if [in %0%.h [sys/mman_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/mman.h"];
         if [in %0%.h [sys/select_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/select.h"];
         if [in %0%.h [sys/socket_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/socket.h"];
-        if [in %0%.h [stdlib_exceptions]] then
-            ex = [stringset [ex] - "-ex=stdlib.h"];
+        if [in %0%.h [sys/timeb_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/timeb.h"];
+        if [in %0%.h [sys/types_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/types.h"];
+        if [in %0%.h [time_exceptions]] then
+            ex = [stringset [ex] - "-ex=time.h"];
         if [in %0%.h [unistd_exceptions]] then
             ex = [stringset [ex] - "-ex=unistd.h"];
     }
@@ -508,6 +572,7 @@ cascade libexplain/ac/stdio.h =  libexplain/config.h;
 cascade libexplain/ac/stdlib.h = libexplain/config.h;
 cascade libexplain/ac/string.h = libexplain/config.h;
 cascade libexplain/ac/fcntl.h =  libexplain/config.h;
+cascade libexplain/bits/sigset_t.h = libexplain/public_config.h;
 
 /* --------------------------------------------------------------------------
  * Section: Using Yacc Source Files

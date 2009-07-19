@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,16 +26,16 @@
 #define LIBEXPLAIN_LSOF_FD_rtd (-'r')
 #define LIBEXPLAIN_LSOF_FD_NOFD (-'N')
 
-typedef struct libexplain_lsof_t libexplain_lsof_t;
-struct libexplain_lsof_t
+typedef struct explain_lsof_t explain_lsof_t;
+struct explain_lsof_t
 {
     int pid;
     int fildes;
-    void (*n_callback)(libexplain_lsof_t *context, const char *name);
+    void (*n_callback)(explain_lsof_t *context, const char *name);
 };
 
 /**
-  * The libexplain_lsof function may be used to
+  * The explain_lsof function may be used to
   *
   * @param options
   *    The options to be passed to the lsof(1) command.
@@ -43,6 +43,6 @@ struct libexplain_lsof_t
   *    The context, used to remember pid and fildes, and call the
   *    appropriate callbacks, as the data is seen.
   */
-void libexplain_lsof(const char *options, libexplain_lsof_t *context);
+void explain_lsof(const char *options, explain_lsof_t *context);
 
 #endif /* LIBEXPLAIN_LSOF_H */

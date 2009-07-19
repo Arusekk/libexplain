@@ -24,7 +24,7 @@
 struct dlci_add; /* forward */
 
 /**
-  * The libexplain_buffer_dlci_add function may be used to
+  * The explain_buffer_dlci_add function may be used to
   * print a representation of a dlci_add structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct dlci_add; /* forward */
   * @param data
   *    The dlci_add structure to be printed.
   */
-void libexplain_buffer_dlci_add(libexplain_string_buffer_t *sb,
+void explain_buffer_dlci_add(explain_string_buffer_t *sb,
     const struct dlci_add *data);
 
 #endif /* LIBEXPLAIN_BUFFER_DLCI_ADD_H */

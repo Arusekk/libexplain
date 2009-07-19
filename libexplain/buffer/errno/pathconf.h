@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_pathconf function
+  * The explain_buffer_errno_pathconf function
   * is used to obtain an explanation of an error returned
   * by the pathconf(3) system call.
   * The least the message will contain is the value of
@@ -45,10 +45,10 @@
   * @param name
   *     The original name, exactly as passed to the pathconf(3) system call.
   */
-void libexplain_buffer_errno_pathconf(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_pathconf(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int name);
 
-void libexplain_buffer_pathconf_einval(libexplain_string_buffer_t *sb,
+void explain_buffer_pathconf_einval(explain_string_buffer_t *sb,
     const char *arg1_caption, int name, const char *name_cpation);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_PATHCONF_H */

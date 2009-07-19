@@ -25,19 +25,13 @@
 
 
 size_t
-libexplain_fwrite_or_die(const void *ptr, size_t size, size_t nmemb, FILE *fp)
+explain_fwrite_or_die(const void *ptr, size_t size, size_t nmemb, FILE *fp)
 {
     size_t          result;
 
-    result = fwrite(ptr, size, nmemb, fp);
+    result = explain_fwrite_on_error(ptr, size, nmemb, fp);
     if (result < nmemb)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_fwrite(ptr, size, nmemb, fp)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

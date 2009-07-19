@@ -70,12 +70,12 @@ extern int yydebug;
 
 %{
 
-static const libexplain_parse_bits_table_t *lex_table;
+static const explain_parse_bits_table_t *lex_table;
 static size_t   lex_table_size;
 static const char *lex_cp;
 static int      result;
 static char     error_message[1000];
-static libexplain_string_buffer_t error_buffer;
+static explain_string_buffer_t error_buffer;
 static int      error_count;
 extern YYSTYPE yylval;
 extern int yyparse(void);
@@ -89,9 +89,9 @@ yyerror(const char *fmt, ...)
     va_list         ap;
 
     if (error_buffer.position > 0)
-        libexplain_string_buffer_puts(&error_buffer, "; ");
+        explain_string_buffer_puts(&error_buffer, "; ");
     va_start(ap, fmt);
-    libexplain_string_buffer_vprintf(&error_buffer, fmt, ap);
+    explain_string_buffer_vprintf(&error_buffer, fmt, ap);
     va_end(ap);
     if
     (
@@ -104,7 +104,7 @@ yyerror(const char *fmt, ...)
 }
 
 
-static libexplain_parse_bits_table_t constants[] =
+static explain_parse_bits_table_t constants[] =
 {
     { "NULL", 0 },
     { "_IOC_NONE", _IOC_NONE },
@@ -118,7 +118,7 @@ static libexplain_parse_bits_table_t constants[] =
 };
 
 
-static libexplain_parse_bits_table_t keywords[] =
+static explain_parse_bits_table_t keywords[] =
 {
     { "_IO", FUNC_IO },
     { "_IOC", FUNC_IOC },
@@ -189,13 +189,13 @@ yylex(void)
         case 'V': case 'W': case 'X': case 'Y': case 'Z':
             {
                 char            name[200];
-                libexplain_string_buffer_t buf;
-                const libexplain_parse_bits_table_t *tp;
+                explain_string_buffer_t buf;
+                const explain_parse_bits_table_t *tp;
 
-                libexplain_string_buffer_init(&buf, name, sizeof(name));
+                explain_string_buffer_init(&buf, name, sizeof(name));
                 for (;;)
                 {
-                    libexplain_string_buffer_putc(&buf, c);
+                    explain_string_buffer_putc(&buf, c);
                     c = *lex_cp;
                     switch (c)
                     {
@@ -221,7 +221,7 @@ yylex(void)
                     break;
                 }
                 tp =
-                    libexplain_parse_bits_find_by_name
+                    explain_parse_bits_find_by_name
                     (
                         name,
                         lex_table,
@@ -233,7 +233,7 @@ yylex(void)
                     return NUMBER;
                 }
                 tp =
-                    libexplain_parse_bits_find_by_name
+                    explain_parse_bits_find_by_name
                     (
                         name,
                         constants,
@@ -245,7 +245,7 @@ yylex(void)
                     return NUMBER;
                 }
                 tp =
-                    libexplain_parse_bits_find_by_name
+                    explain_parse_bits_find_by_name
                     (
                         name,
                         keywords,
@@ -254,7 +254,7 @@ yylex(void)
                 if (tp)
                     return tp->value;
                 tp =
-                    libexplain_parse_bits_find_by_name_fuzzy
+                    explain_parse_bits_find_by_name_fuzzy
                     (
                         name,
                         lex_table,
@@ -278,14 +278,14 @@ yylex(void)
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
             {
-                libexplain_string_buffer_t buf;
+                explain_string_buffer_t buf;
                 char            *ep;
                 char            number[200];
 
-                libexplain_string_buffer_init(&buf, number, sizeof(number));
+                explain_string_buffer_init(&buf, number, sizeof(number));
                 for (;;)
                 {
-                    libexplain_string_buffer_putc(&buf, c);
+                    explain_string_buffer_putc(&buf, c);
                     c = *lex_cp;
                     switch (c)
                     {
@@ -318,14 +318,14 @@ yylex(void)
 
 
 int
-libexplain_parse_bits(const char *text,
-    const libexplain_parse_bits_table_t *table, size_t table_size,
+explain_parse_bits(const char *text,
+    const explain_parse_bits_table_t *table, size_t table_size,
     int *result_p)
 {
 #if YYDEBUG
     yydebug = 1;
 #endif
-    libexplain_string_buffer_init
+    explain_string_buffer_init
     (
         &error_buffer,
         error_message,
@@ -346,7 +346,7 @@ libexplain_parse_bits(const char *text,
 
 
 const char *
-libexplain_parse_bits_get_error(void)
+explain_parse_bits_get_error(void)
 {
     return error_message;
 }

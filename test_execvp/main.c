@@ -44,7 +44,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return EXIT_SUCCESS;
 
         default:
@@ -54,7 +54,7 @@ main(int argc, char **argv)
     if (optind + 1 > argc)
         usage();
 
-    libexplain_execvp_or_die(argv[optind], argv + optind);
+    explain_execvp_or_die(argv[optind], argv + optind);
     return EXIT_SUCCESS;
 }
 

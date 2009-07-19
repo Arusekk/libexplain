@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 
 
 static void
-libexplain_buffer_errno_fopen_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fopen_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags_string)
 {
     /*
@@ -40,30 +40,30 @@ libexplain_buffer_errno_fopen_system_call(libexplain_string_buffer_t *sb,
      * it would have raised a SEGFAULT signal from user space.
      */
 
-    libexplain_string_buffer_printf(sb, "fopen(pathname = ");
+    explain_string_buffer_printf(sb, "fopen(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", flags = ");
-    libexplain_string_buffer_puts_quoted(sb, flags_string);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_puts(sb, ", flags = ");
+    explain_string_buffer_puts_quoted(sb, flags_string);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 void
-libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fopen_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const char *flags)
 {
-    libexplain_string_flags_t sf;
+    explain_string_flags_t sf;
     int             permission_mode;
 
-    libexplain_string_flags_init(&sf, flags);
+    explain_string_flags_init(&sf, flags);
     permission_mode = 0666;
     switch (errnum)
     {
     case EINVAL:
-        libexplain_string_flags_einval(&sf, sb, "flags");
+        explain_string_flags_einval(&sf, sb, "flags");
         break;
 
     case ENOMEM:
@@ -80,14 +80,14 @@ libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
             {
                 if (errno == ENOMEM)
                 {
-                    libexplain_buffer_enomem_kernel(sb);
+                    explain_buffer_enomem_kernel(sb);
                     break;
                 }
-                libexplain_buffer_enomem_kernel_or_user(sb);
+                explain_buffer_enomem_kernel_or_user(sb);
                 break;
             }
             close(fd);
-            libexplain_buffer_enomem_user(sb);
+            explain_buffer_enomem_user(sb);
         }
         break;
 
@@ -95,7 +95,7 @@ libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
         /*
          * Punt everything else to open()
          */
-        libexplain_buffer_errno_open_explanation
+        explain_buffer_errno_open_explanation
         (
             sb,
             errnum,
@@ -109,37 +109,37 @@ libexplain_buffer_errno_fopen_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_fopen(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_fopen(explain_string_buffer_t *sb, int errnum,
     const char *pathname, const char *flags_string)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_fopen_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_fopen_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         flags_string
     );
-    libexplain_buffer_errno_fopen_explanation
+    explain_buffer_errno_fopen_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         flags_string
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 
 void
-libexplain_string_flags_einval(const libexplain_string_flags_t *sf,
-    libexplain_string_buffer_t *sb, const char *caption)
+explain_string_flags_einval(const explain_string_flags_t *sf,
+    explain_string_buffer_t *sb, const char *caption)
 {
     size_t          n;
 
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "the %s argument is not valid",
@@ -147,7 +147,7 @@ libexplain_string_flags_einval(const libexplain_string_flags_t *sf,
     );
     if (!sf->rwa_seen)
     {
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             ", you must specify 'r', 'w' or 'a' at the start of the string"
@@ -156,13 +156,13 @@ libexplain_string_flags_einval(const libexplain_string_flags_t *sf,
     n = strlen(sf->invalid);
     if (n > 0)
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             ", flag character%s ",
             (n == 1 ? "" : "s")
         );
-        libexplain_string_buffer_puts_quoted(sb, sf->invalid);
-        libexplain_string_buffer_puts(sb, " unknown");
+        explain_string_buffer_puts_quoted(sb, sf->invalid);
+        explain_string_buffer_puts(sb, " unknown");
     }
 }

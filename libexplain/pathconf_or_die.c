@@ -27,16 +27,14 @@
 
 
 long
-libexplain_pathconf_or_die(const char *pathname, int name)
+explain_pathconf_or_die(const char *pathname, int name)
 {
     long            result;
 
     errno = 0;
-    result = pathconf(pathname, name);
+    result = explain_pathconf_on_error(pathname, name);
     if (result == -1 && errno != 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_pathconf(pathname, name));
         exit(EXIT_FAILURE);
     }
     return result;

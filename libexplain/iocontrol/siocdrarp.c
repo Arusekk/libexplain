@@ -26,7 +26,7 @@
 #define SIOCDRARP -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocdrarp =
+const explain_iocontrol_t explain_iocontrol_siocdrarp =
 {
     "SIOCDRARP", /* name */
     SIOCDRARP, /* value */

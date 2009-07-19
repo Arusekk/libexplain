@@ -35,43 +35,43 @@
 
 
 static void
-libexplain_buffer_errno_futimes_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_futimes_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, const struct timeval *tv)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "futimes(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", tv = ");
-    if (libexplain_pointer_is_efault(tv, sizeof(*tv)))
+    explain_string_buffer_printf(sb, "futimes(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", tv = ");
+    if (explain_pointer_is_efault(tv, sizeof(*tv)))
     {
-        libexplain_buffer_pointer(sb, tv);
+        explain_buffer_pointer(sb, tv);
     }
     else
     {
-        libexplain_string_buffer_putc(sb, '{');
-        libexplain_buffer_timeval(sb, &tv[0]);
-        libexplain_string_buffer_puts(sb, ", ");
-        libexplain_buffer_timeval(sb, &tv[1]);
-        libexplain_string_buffer_putc(sb, '}');
+        explain_string_buffer_putc(sb, '{');
+        explain_buffer_timeval(sb, &tv[0]);
+        explain_string_buffer_puts(sb, ", ");
+        explain_buffer_timeval(sb, &tv[1]);
+        explain_string_buffer_putc(sb, '}');
     }
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_futimes_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_futimes_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, const struct timeval *tv)
 {
     (void)tv;
     switch (errnum)
     {
     case EBADF:
-        if (libexplain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
-            libexplain_buffer_ebadf(sb, fildes, "fildes");
+        if (explain_buffer_fildes_not_open_for_writing(sb, fildes, "fildes"))
+            explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "tv");
+        explain_buffer_efault(sb, "tv");
         break;
 
     case EACCES:
@@ -80,7 +80,7 @@ libexplain_buffer_errno_futimes_explanation(libexplain_string_buffer_t *sb,
          * If tv is not NULL, times are changed as given,
          * but you need inode modify permission
          */
-        libexplain_buffer_does_not_have_inode_modify_permission_fd
+        explain_buffer_does_not_have_inode_modify_permission_fd
         (
             sb,
             fildes,
@@ -89,38 +89,38 @@ libexplain_buffer_errno_futimes_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs_fildes(sb, fildes, "fildes");
+        explain_buffer_erofs_fildes(sb, fildes, "fildes");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_futimes(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_futimes(explain_string_buffer_t *sb, int errnum,
     int fildes, const struct timeval *tv)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_futimes_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_futimes_system_call
     (
         &exp.system_call_sb,
         errnum,
         fildes,
         tv
     );
-    libexplain_buffer_errno_futimes_explanation
+    explain_buffer_errno_futimes_explanation
     (
         &exp.explanation_sb,
         errnum,
         fildes,
         tv
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

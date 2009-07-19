@@ -26,25 +26,10 @@
 
 
 void
-libexplain_lchown_or_die(const char *pathname, int owner, int group)
+explain_lchown_or_die(const char *pathname, int owner, int group)
 {
-#ifdef HAVE_LCHOWN
-    if (lchown(pathname, owner, group) < 0)
+    if (explain_lchown_on_error(pathname, owner, group) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_lchown(pathname, owner, group)
-        );
         exit(EXIT_FAILURE);
     }
-#else
-    libexplain_wrap_and_print
-    (
-        stderr,
-        libexplain_errno_lchown(ENOSYS, pathname, owner, group)
-    );
-    exit(EXIT_FAILURE);
-#endif
 }

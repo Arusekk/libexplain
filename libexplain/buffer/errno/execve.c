@@ -59,17 +59,17 @@ count(char *const *p)
 
 
 static void
-libexplain_buffer_errno_execve_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_execve_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, char *const *argv, char *const *envp)
 {
-    libexplain_string_buffer_puts(sb, "execve(pathname = ");
-    libexplain_buffer_pathname(sb, pathname);
+    explain_string_buffer_puts(sb, "execve(pathname = ");
+    explain_buffer_pathname(sb, pathname);
     if (errnum == EFAULT)
     {
-        libexplain_string_buffer_puts(sb, ", argv = ");
-        libexplain_buffer_pointer(sb, argv);
-        libexplain_string_buffer_puts(sb, ", envp = ");
-        libexplain_buffer_pointer(sb, envp);
+        explain_string_buffer_puts(sb, ", argv = ");
+        explain_buffer_pointer(sb, argv);
+        explain_string_buffer_puts(sb, ", envp = ");
+        explain_buffer_pointer(sb, envp);
     }
     else
     {
@@ -79,7 +79,7 @@ libexplain_buffer_errno_execve_system_call(libexplain_string_buffer_t *sb,
         /*
          * produce output similar to strace
          */
-        libexplain_string_buffer_puts(sb, ", argv = [");
+        explain_string_buffer_puts(sb, ", argv = [");
         argsize = 0;
         for (n = 0; ; ++n)
         {
@@ -91,10 +91,10 @@ libexplain_buffer_errno_execve_system_call(libexplain_string_buffer_t *sb,
             argsize += strlen(s);
             if (n)
             {
-                libexplain_string_buffer_puts(sb, ", ");
+                explain_string_buffer_puts(sb, ", ");
                 if (argsize >= 1000)
                 {
-                    libexplain_string_buffer_printf
+                    explain_string_buffer_printf
                     (
                         sb,
                         /* FIXME: i18n */
@@ -104,37 +104,37 @@ libexplain_buffer_errno_execve_system_call(libexplain_string_buffer_t *sb,
                     break;
                 }
             }
-            libexplain_string_buffer_puts_quoted(sb, s);
+            explain_string_buffer_puts_quoted(sb, s);
         }
-        libexplain_string_buffer_puts(sb, "], envp = [/*");
-        if (libexplain_option_dialect_specific())
-            libexplain_string_buffer_printf(sb, " %d", count(envp));
-        libexplain_string_buffer_puts(sb, " vars */]");
+        explain_string_buffer_puts(sb, "], envp = [/*");
+        if (explain_option_dialect_specific())
+            explain_string_buffer_printf(sb, " %d", count(envp));
+        explain_string_buffer_puts(sb, " vars */]");
     }
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static int
-wonky_pointer(libexplain_string_buffer_t *sb, char *const *array,
+wonky_pointer(explain_string_buffer_t *sb, char *const *array,
     const char *array_caption)
 {
     int             n;
 
     /* This isn't quite right */
-    if (libexplain_pointer_is_efault(array, sizeof(*array)))
+    if (explain_pointer_is_efault(array, sizeof(*array)))
     {
-        libexplain_buffer_efault(sb, array_caption);
+        explain_buffer_efault(sb, array_caption);
         return 0;
     }
     for (n = 0; array[n]; ++n)
     {
-        if (libexplain_path_is_efault(array[n]))
+        if (explain_path_is_efault(array[n]))
         {
             char            temp[20];
 
             snprintf(temp, sizeof(temp), "%s[%d]", array_caption, n);
-            libexplain_buffer_efault(sb, temp);
+            explain_buffer_efault(sb, temp);
             return 0;
         }
     }
@@ -143,7 +143,7 @@ wonky_pointer(libexplain_string_buffer_t *sb, char *const *array,
 
 
 /**
-  * The libexplain_buffer_file1 function is used to run the file(1)
+  * The explain_buffer_file1 function is used to run the file(1)
   * command, if available, and insert its output into the given buffer.
   *
   * @param sb
@@ -155,12 +155,12 @@ wonky_pointer(libexplain_string_buffer_t *sb, char *const *array,
   *     or -1 on failure (nothing printed).
   */
 static void
-libexplain_buffer_file1(libexplain_string_buffer_t *sb, const char *pathname)
+explain_buffer_file1(explain_string_buffer_t *sb, const char *pathname)
 {
     FILE            *fp;
     char            buffer[PATH_MAX + 20];
 
-    if (!libexplain_option_dialect_specific())
+    if (!explain_option_dialect_specific())
         return;
 
     /* FIXME: need shell quoting */
@@ -185,34 +185,34 @@ libexplain_buffer_file1(libexplain_string_buffer_t *sb, const char *pathname)
         *bp = '\0';
         if (buffer[0])
         {
-            libexplain_string_buffer_puts(sb, " (");
-            libexplain_string_buffer_puts(sb, buffer);
-            libexplain_string_buffer_putc(sb, ')');
+            explain_string_buffer_puts(sb, " (");
+            explain_string_buffer_puts(sb, buffer);
+            explain_string_buffer_putc(sb, ')');
         }
     }
 }
 
 
 void
-libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_execve_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, char *const *argv, char *const *envp)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_execute = 1;
 
     switch (errnum)
     {
     case E2BIG:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
             "the total number of bytes in the argument list (argv) plus "
             "the environment (envp) is too large"
         );
-        if (libexplain_option_dialect_specific())
+        if (explain_option_dialect_specific())
         {
             long            total;
             long            arg_max;
@@ -264,17 +264,17 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             /*
              * Print the dialect-specific part of the explanation.
              */
-            libexplain_string_buffer_printf(sb, " (%ld", total);
+            explain_string_buffer_printf(sb, " (%ld", total);
             if (arg_max > 0)
-                libexplain_string_buffer_printf(sb, " > %ld", arg_max);
-            libexplain_string_buffer_putc(sb, ')');
+                explain_string_buffer_printf(sb, " > %ld", arg_max);
+            explain_string_buffer_putc(sb, ')');
         }
         break;
 
     case EACCES:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -284,7 +284,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /* FIXME: i18n */
@@ -304,9 +304,9 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
          * non-conforming.  Only add code to handle that case if anyone
          * ever gripes.
          */
-        if (libexplain_path_is_efault(pathname))
+        if (explain_path_is_efault(pathname))
         {
-            libexplain_buffer_efault(sb, "pathname");
+            explain_buffer_efault(sb, "pathname");
         }
         else if
         (
@@ -315,18 +315,22 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             wonky_pointer(sb, envp, "envp")
         )
         {
-            libexplain_buffer_efault(sb, "pathname or argv or envp");
+            /*
+             * When wonky_pointer finds a problem it prints something and
+             * returns zero.  To get here, nothing has been printed yet.
+             */
+            explain_buffer_efault(sb, "pathname or argv or envp");
         }
         break;
 
     case EINTR:
-        libexplain_buffer_eintr(sb, "exec");
+        explain_buffer_eintr(sb, "exec");
         break;
 
     case EINVAL:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -336,7 +340,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /* FIXME: i18n */
@@ -346,18 +350,18 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
                 "a recognized executable binary format, but the system does "
                 "not support execution of a file with this format"
             );
-            libexplain_buffer_file1(sb, pathname);
+            explain_buffer_file1(sb, pathname);
         }
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case EISDIR:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -367,7 +371,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /*
@@ -382,7 +386,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
 
 #ifdef ELIBBAD
     case ELIBBAD:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
@@ -392,15 +396,15 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
 #endif
 
     case ELOOP:
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case EMFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -410,17 +414,17 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENFILE:
-        libexplain_buffer_enfile(sb);
+        explain_buffer_enfile(sb);
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOEXEC:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -430,7 +434,7 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /* FIXME: i18n */
@@ -438,21 +442,21 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
                 "architecture, or has some other format error that means it "
                 "cannot be executed"
             );
-            libexplain_buffer_file1(sb, pathname);
+            explain_buffer_file1(sb, pathname);
         }
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EPERM:
         /* FIXME: say which one */
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
@@ -463,30 +467,30 @@ libexplain_buffer_errno_execve_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ETXTBSY:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
             "pathname is open for writing by one or more processes"
         );
-        libexplain_buffer_path_to_pid(sb, pathname);
+        explain_buffer_path_to_pid(sb, pathname);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_execve(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_execve(explain_string_buffer_t *sb, int errnum,
     const char *pathname, char *const *argv, char *const *envp)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_execve_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_execve_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -494,7 +498,7 @@ libexplain_buffer_errno_execve(libexplain_string_buffer_t *sb, int errnum,
         argv,
         envp
     );
-    libexplain_buffer_errno_execve_explanation
+    explain_buffer_errno_execve_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -502,5 +506,5 @@ libexplain_buffer_errno_execve(libexplain_string_buffer_t *sb, int errnum,
         argv,
         envp
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

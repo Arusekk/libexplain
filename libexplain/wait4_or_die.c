@@ -16,30 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/sys/wait.h>
 
-#include <libexplain/option.h>
 #include <libexplain/wait4.h>
-#include <libexplain/wrap_and_print.h>
 
 
 int
-libexplain_wait4_or_die(int pid, int *status, int options,
+explain_wait4_or_die(int pid, int *status, int options,
     struct rusage *rusage)
 {
     int             result;
 
-    result = wait4(pid, status, options, rusage);
+    result = explain_wait4_on_error(pid, status, options, rusage);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_wait4(pid, status, options, rusage)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

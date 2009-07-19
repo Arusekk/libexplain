@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,11 +22,11 @@
 
 
 void
-libexplain_buffer_note_still_exists(libexplain_string_buffer_t *sb,
+explain_buffer_note_still_exists(explain_string_buffer_t *sb,
     const char *caption)
 {
-    libexplain_string_buffer_puts(sb, "; ");
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_puts(sb, "; ");
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -43,22 +43,22 @@ libexplain_buffer_note_still_exists(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_note_if_still_exists(libexplain_string_buffer_t *sb,
+explain_buffer_note_if_still_exists(explain_string_buffer_t *sb,
     const char *pathname, const char *caption)
 {
     struct stat     st;
 
     if (lstat(pathname, &st) == 0)
-        libexplain_buffer_note_still_exists(sb, caption);
+        explain_buffer_note_still_exists(sb, caption);
 }
 
 
 void
-libexplain_buffer_note_exists(libexplain_string_buffer_t *sb,
+explain_buffer_note_exists(explain_string_buffer_t *sb,
     const char *caption)
 {
-    libexplain_string_buffer_puts(sb, "; ");
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_puts(sb, "; ");
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -75,11 +75,11 @@ libexplain_buffer_note_exists(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_note_if_exists(libexplain_string_buffer_t *sb,
+explain_buffer_note_if_exists(explain_string_buffer_t *sb,
     const char *pathname, const char *caption)
 {
     struct stat     st;
 
     if (lstat(pathname, &st) == 0)
-        libexplain_buffer_note_exists(sb, caption);
+        explain_buffer_note_exists(sb, caption);
 }

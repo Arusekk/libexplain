@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,51 +29,51 @@
 
 
 static void
-libexplain_buffer_errno_creat_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_creat_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode)
 {
-    libexplain_string_buffer_printf(sb, "creat(pathname = ");
+    explain_string_buffer_printf(sb, "creat(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", mode = ");
-    libexplain_buffer_permission_mode(sb, mode);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_puts(sb, ", mode = ");
+    explain_buffer_permission_mode(sb, mode);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_creat_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_creat_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode)
 {
     int             flags;
 
     flags = O_WRONLY | O_CREAT | O_TRUNC;
-    libexplain_buffer_errno_open_explanation(sb, errnum, pathname, flags, mode);
+    explain_buffer_errno_open_explanation(sb, errnum, pathname, flags, mode);
 }
 
 
 void
-libexplain_buffer_errno_creat(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_creat(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_creat_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_creat_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         mode
     );
-    libexplain_buffer_errno_creat_explanation
+    explain_buffer_errno_creat_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         mode
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

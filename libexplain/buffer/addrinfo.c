@@ -32,28 +32,28 @@
 
 
 void
-libexplain_buffer_addrinfo(libexplain_string_buffer_t *sb,
+explain_buffer_addrinfo(explain_string_buffer_t *sb,
     const struct addrinfo *ai)
 {
-    if (libexplain_pointer_is_efault(ai, sizeof(*ai)))
+    if (explain_pointer_is_efault(ai, sizeof(*ai)))
     {
-        libexplain_buffer_pointer(sb, ai);
+        explain_buffer_pointer(sb, ai);
         return;
     }
-    libexplain_string_buffer_puts(sb, "{ ai_flags = ");
-    libexplain_buffer_addrinfo_flags(sb, ai->ai_flags);
-    libexplain_string_buffer_puts(sb, ", ai_family = ");
-    libexplain_buffer_address_family(sb, ai->ai_family);
-    libexplain_string_buffer_puts(sb, ", ai_socktype = ");
-    libexplain_buffer_socket_type(sb, ai->ai_socktype);
-    libexplain_string_buffer_puts(sb, ", ai_protocol = ");
-    libexplain_buffer_socket_protocol(sb, ai->ai_protocol);
-    libexplain_string_buffer_puts(sb, ", ai_addr = ");
-    libexplain_buffer_sockaddr(sb, ai->ai_addr, ai->ai_addrlen);
+    explain_string_buffer_puts(sb, "{ ai_flags = ");
+    explain_buffer_addrinfo_flags(sb, ai->ai_flags);
+    explain_string_buffer_puts(sb, ", ai_family = ");
+    explain_buffer_address_family(sb, ai->ai_family);
+    explain_string_buffer_puts(sb, ", ai_socktype = ");
+    explain_buffer_socket_type(sb, ai->ai_socktype);
+    explain_string_buffer_puts(sb, ", ai_protocol = ");
+    explain_buffer_socket_protocol(sb, ai->ai_protocol);
+    explain_string_buffer_puts(sb, ", ai_addr = ");
+    explain_buffer_sockaddr(sb, ai->ai_addr, ai->ai_addrlen);
     if (ai->ai_flags & AI_CANONNAME)
     {
-        libexplain_string_buffer_puts(sb, "ai_canonname = ");
-        libexplain_buffer_pathname(sb, ai->ai_canonname);
+        explain_string_buffer_puts(sb, "ai_canonname = ");
+        explain_buffer_pathname(sb, ai->ai_canonname);
     }
-    libexplain_string_buffer_puts(sb, " }");
+    explain_string_buffer_puts(sb, " }");
 }

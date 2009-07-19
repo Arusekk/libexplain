@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 
 
 void
-libexplain_string_buffer_write(libexplain_string_buffer_t *sb, const char *data,
+explain_string_buffer_write(explain_string_buffer_t *sb, const char *data,
     size_t size)
 {
     if (sb->position + 1 < sb->maximum)

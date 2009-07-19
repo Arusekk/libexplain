@@ -27,12 +27,10 @@
 
 
 void
-libexplain_fchdir_or_die(int fildes)
+explain_fchdir_or_die(int fildes)
 {
-    if (fchdir(fildes) < 0)
+    if (explain_fchdir_on_error(fildes) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fchdir(fildes));
         exit(EXIT_FAILURE);
     }
 }

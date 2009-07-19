@@ -27,8 +27,8 @@
 
 
 static void
-print_explanation(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+print_explanation(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
     switch (errnum)
@@ -47,7 +47,7 @@ print_explanation(const libexplain_iocontrol_t *p,
                 !S_ISLNK(st.st_mode)
             )
             {
-                libexplain_buffer_wrong_file_type_st
+                explain_buffer_wrong_file_type_st
                 (
                     sb,
                     &st,
@@ -60,7 +60,7 @@ print_explanation(const libexplain_iocontrol_t *p,
         /* Fall through... */
 
     default:
-        libexplain_iocontrol_generic.print_explanation
+        explain_iocontrol_generic.print_explanation
         (
             p,
             sb,
@@ -74,7 +74,7 @@ print_explanation(const libexplain_iocontrol_t *p,
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_fioqsize =
+const explain_iocontrol_t explain_iocontrol_fioqsize =
 {
     "FIOQSIZE", /* name */
     FIOQSIZE, /* value */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,15 +21,15 @@
 
 
 const char *
-libexplain_errno_truncate(int errnum, const char *pathname, long long length)
+explain_errno_truncate(int errnum, const char *pathname, long long length)
 {
-    libexplain_message_errno_truncate
+    explain_message_errno_truncate
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         pathname,
         length
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }

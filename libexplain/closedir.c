@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 
 
 const char *
-libexplain_closedir(DIR *dir)
+explain_closedir(DIR *dir)
 {
-    return libexplain_errno_closedir(errno, dir);
+    return explain_errno_closedir(errno, dir);
 }

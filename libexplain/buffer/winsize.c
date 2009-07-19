@@ -23,10 +23,10 @@
 
 
 void
-libexplain_buffer_winsize(libexplain_string_buffer_t *sb,
+explain_buffer_winsize(explain_string_buffer_t *sb,
     const struct winsize *value)
 {
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "{ ws_row = %d, ws_col = %d, ws_xpixel = %d, ws_ypixel = %d }",

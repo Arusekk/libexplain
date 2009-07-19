@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ main(int argc, char **argv)
 {
     int             resource;
     struct rlimit   rlim;
-    libexplain_string_buffer_t buf_sb;
+    explain_string_buffer_t buf_sb;
     char            buf[200];
 
     for (;;)
@@ -52,7 +52,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return EXIT_SUCCESS;
 
         default:
@@ -61,13 +61,13 @@ main(int argc, char **argv)
     }
     if (optind + 1 != argc)
         usage();
-    resource = libexplain_parse_resource_or_die(argv[optind], "resource name");
+    resource = explain_parse_resource_or_die(argv[optind], "resource name");
 
-    libexplain_getrlimit_or_die(resource, &rlim);
-    libexplain_string_buffer_init(&buf_sb, buf, sizeof(buf));
-    libexplain_buffer_resource(&buf_sb, resource);
-    libexplain_string_buffer_puts(&buf_sb, " = ");
-    libexplain_buffer_rlimit(&buf_sb, &rlim);
+    explain_getrlimit_or_die(resource, &rlim);
+    explain_string_buffer_init(&buf_sb, buf, sizeof(buf));
+    explain_buffer_resource(&buf_sb, resource);
+    explain_string_buffer_puts(&buf_sb, " = ");
+    explain_buffer_rlimit(&buf_sb, &rlim);
     printf("%s\n", buf);
     return EXIT_SUCCESS;
 }

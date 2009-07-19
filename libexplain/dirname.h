@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/ac/stddef.h>
 
 /**
-  * The libexplain_dirname function may be used to extract the directory
+  * The explain_dirname function may be used to extract the directory
   * part of a path.
   *
   * @param dir
@@ -33,10 +33,10 @@
   * @param dir_size
   *    The size in bytes of the destination dir array.
   */
-void libexplain_dirname(char *dir, const char *path, size_t dir_size);
+void explain_dirname(char *dir, const char *path, size_t dir_size);
 
 /**
-  * The libexplain_basename function may be used to extract the final
+  * The explain_basename function may be used to extract the final
   * component of a path.
   *
   * @param filnam
@@ -46,6 +46,6 @@ void libexplain_dirname(char *dir, const char *path, size_t dir_size);
   * @param filnam_size
   *     The size of the array to receive the file name
   */
-void libexplain_basename(char *filnam, const char *path, size_t filnam_size);
+void explain_basename(char *filnam, const char *path, size_t filnam_size);
 
 #endif /* LIBEXPLAIN_DIRNAME_H */

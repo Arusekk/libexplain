@@ -24,12 +24,12 @@
 struct enobufs; /* forward */
 
 /**
-  * The libexplain_buffer_enobufs function may be used to
+  * The explain_buffer_enobufs function may be used to
   * print a generic explanation for and ENOBUFS error.
   *
   * @param sb
   *     The string buffer to print into.
   */
-void libexplain_buffer_enobufs(libexplain_string_buffer_t *sb);
+void explain_buffer_enobufs(explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOBUFS_H */

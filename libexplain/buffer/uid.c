@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,9 +23,9 @@
 
 
 void
-libexplain_buffer_uid(libexplain_string_buffer_t *sb, int uid)
+explain_buffer_uid(explain_string_buffer_t *sb, int uid)
 {
-    libexplain_string_buffer_printf(sb, "%d", uid);
+    explain_string_buffer_printf(sb, "%d", uid);
     if (uid >= 0)
     {
         struct passwd   *pw;
@@ -33,8 +33,8 @@ libexplain_buffer_uid(libexplain_string_buffer_t *sb, int uid)
         pw = getpwuid(uid);
         if (pw)
         {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_string_buffer_puts_quoted(sb, pw->pw_name);
+            explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts_quoted(sb, pw->pw_name);
         }
     }
 }

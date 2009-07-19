@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/einval.h>
+#include <libexplain/buffer/eisdir.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/enfile.h>
@@ -54,29 +55,29 @@
 
 
 static void
-libexplain_buffer_errno_open_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_open_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int flags, int mode)
 {
-    libexplain_string_buffer_printf(sb, "open(pathname = ");
+    explain_string_buffer_printf(sb, "open(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", flags = ");
-    libexplain_buffer_open_flags(sb, flags);
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_puts(sb, ", flags = ");
+    explain_buffer_open_flags(sb, flags);
     if (flags & O_CREAT)
     {
-        libexplain_string_buffer_puts(sb, ", mode = ");
-        libexplain_buffer_permission_mode(sb, mode);
+        explain_string_buffer_puts(sb, ", mode = ");
+        explain_buffer_permission_mode(sb, mode);
     }
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-you_can_not_open_a_socket(libexplain_string_buffer_t *sb)
+you_can_not_open_a_socket(explain_string_buffer_t *sb)
 {
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -93,25 +94,25 @@ you_can_not_open_a_socket(libexplain_string_buffer_t *sb)
 
 
 static void
-no_corresponding_device(libexplain_string_buffer_t *sb, const struct stat *st)
+no_corresponding_device(explain_string_buffer_t *sb, const struct stat *st)
 {
     char            ftype[100];
     char            numbers[40];
-    libexplain_string_buffer_t ftype_sb;
-    libexplain_string_buffer_t numbers_sb;
+    explain_string_buffer_t ftype_sb;
+    explain_string_buffer_t numbers_sb;
 
-    libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-    libexplain_buffer_file_type(&ftype_sb, st->st_mode);
+    explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+    explain_buffer_file_type(&ftype_sb, st->st_mode);
 
-    libexplain_string_buffer_init(&numbers_sb, numbers, sizeof(numbers));
-    libexplain_string_buffer_printf
+    explain_string_buffer_init(&numbers_sb, numbers, sizeof(numbers));
+    explain_string_buffer_printf
     (
         &numbers_sb,
         "(%d, %d)",
         major(st->st_dev),
         minor(st->st_dev)
     );
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -135,13 +136,13 @@ no_corresponding_device(libexplain_string_buffer_t *sb, const struct stat *st)
 
 
 void
-libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int flags, int mode)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     (void)mode;
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     switch (flags & O_ACCMODE)
     {
     case O_RDONLY:
@@ -181,7 +182,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
     case EACCES:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -191,7 +192,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_buffer_gettext
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -211,13 +212,13 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EINVAL:
-        libexplain_buffer_einval_bits(sb, "flags");
+        explain_buffer_einval_bits(sb, "flags");
         break;
 
     case EEXIST:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -227,7 +228,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_buffer_gettext
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -244,7 +245,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EFBIG:
@@ -256,15 +257,15 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
             if (stat(pathname, &st) >= 0 && S_ISREG(st.st_mode))
             {
                 char            siz[20];
-                libexplain_string_buffer_t siz_sb;
+                explain_string_buffer_t siz_sb;
 
-                libexplain_string_buffer_init(&siz_sb, siz, sizeof(siz));
+                explain_string_buffer_init(&siz_sb, siz, sizeof(siz));
                 {
-                    libexplain_string_buffer_putc(sb, '(');
-                    libexplain_buffer_pretty_size(sb, st.st_size);
-                    libexplain_string_buffer_putc(sb, ')');
+                    explain_string_buffer_putc(sb, '(');
+                    explain_buffer_pretty_size(sb, st.st_size);
+                    explain_string_buffer_putc(sb, ')');
                 }
-                libexplain_string_buffer_printf_gettext
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -286,24 +287,10 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
     case EISDIR:
         if ((flags & O_ACCMODE) != O_RDONLY)
         {
-            struct stat     st;
-
-            if (stat(pathname, &st) >= 0 && S_ISDIR(st.st_mode))
-            {
-                libexplain_buffer_gettext
-                (
-                    sb,
-                    /*
-                     * xgettext: This message is used to explain an EISDIR
-                     * reported by an open(2) system call.  You may not open
-                     * a directory for writing.
-                     */
-                    i18n("pathname refers to a directory and the access "
-                    "requested involved writing")
-                );
-            }
+            if (explain_buffer_eisdir(sb, pathname, "pathname"))
+                break;
         }
-        break;
+        goto generic;
 
     case ELOOP:
     case EMLINK: /* BSD */
@@ -313,7 +300,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
 
             if (lstat(pathname, &st) >= 0 && S_ISLNK(st.st_mode))
             {
-                libexplain_buffer_gettext
+                explain_buffer_gettext
                 (
                     sb,
                     /*
@@ -330,15 +317,15 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
                 break;
             }
         }
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case EMFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -348,25 +335,25 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENFILE:
-        libexplain_buffer_enfile(sb);
+        explain_buffer_enfile(sb);
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOSPC:
         {
             char            mntpt[100];
-            libexplain_string_buffer_t mntpt_sb;
+            explain_string_buffer_t mntpt_sb;
 
-            libexplain_string_buffer_init(&mntpt_sb, mntpt, sizeof(mntpt));
-            libexplain_buffer_mount_point_dirname(&mntpt_sb, pathname);
-            libexplain_string_buffer_printf_gettext
+            explain_string_buffer_init(&mntpt_sb, mntpt, sizeof(mntpt));
+            explain_buffer_mount_point_dirname(&mntpt_sb, pathname);
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -389,7 +376,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case ENXIO:
@@ -399,7 +386,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
             if (stat(pathname, &st) < 0)
             {
                 enxio_generic:
-                libexplain_buffer_gettext
+                explain_buffer_gettext
                 (
                     sb,
                     /*
@@ -418,7 +405,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
             switch (st.st_mode & S_IFMT)
             {
             case S_IFIFO:
-                libexplain_buffer_gettext
+                explain_buffer_gettext
                 (
                     sb,
                     /*
@@ -453,25 +440,25 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
         if (flags & O_NOATIME)
         {
             struct stat     st;
-            libexplain_string_buffer_t puid_sb;
-            libexplain_string_buffer_t ftype_sb;
-            libexplain_string_buffer_t fuid_sb;
+            explain_string_buffer_t puid_sb;
+            explain_string_buffer_t ftype_sb;
+            explain_string_buffer_t fuid_sb;
             char puid[100];
             char ftype[100];
             char fuid[100];
 
-            libexplain_string_buffer_init(&puid_sb, puid, sizeof(puid));
-            libexplain_buffer_uid(&puid_sb, geteuid());
-            libexplain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-            libexplain_string_buffer_init(&fuid_sb, fuid, sizeof(fuid));
+            explain_string_buffer_init(&puid_sb, puid, sizeof(puid));
+            explain_buffer_uid(&puid_sb, geteuid());
+            explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
+            explain_string_buffer_init(&fuid_sb, fuid, sizeof(fuid));
             if (stat(pathname, &st) >= 0)
             {
-                libexplain_buffer_file_type(&ftype_sb, st.st_mode);
-                libexplain_buffer_uid(&fuid_sb, st.st_uid);
+                explain_buffer_file_type(&ftype_sb, st.st_mode);
+                explain_buffer_uid(&fuid_sb, st.st_uid);
             }
             else
-                libexplain_buffer_file_type(&ftype_sb, S_IFREG);
-            libexplain_string_buffer_printf_gettext
+                explain_buffer_file_type(&ftype_sb, S_IFREG);
+            explain_string_buffer_printf_gettext
             (
                 sb,
                 /*
@@ -497,22 +484,22 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
             /*
              * also explain the necessary priviledge
              */
-            libexplain_buffer_dac_fowner(sb);
+            explain_buffer_dac_fowner(sb);
         }
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     case ETXTBSY:
-        libexplain_buffer_etxtbsy(sb, pathname);
+        explain_buffer_etxtbsy(sb, pathname);
         break;
 
     case EWOULDBLOCK:
         if (flags & O_NONBLOCK)
         {
-            libexplain_buffer_gettext
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -529,7 +516,7 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
              * Look for other processes with this file open,
              * and list their PIDs.
              */
-            libexplain_buffer_path_to_pid(sb, pathname);
+            explain_buffer_path_to_pid(sb, pathname);
         }
         break;
 
@@ -549,10 +536,10 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
                 case S_IFCHR:
                     no_corresponding_device(sb, &st);
 #ifdef __linux__
-                    if (libexplain_option_dialect_specific())
+                    if (explain_option_dialect_specific())
                     {
-                        libexplain_string_buffer_puts(sb, "; ");
-                        libexplain_buffer_gettext
+                        explain_string_buffer_puts(sb, "; ");
+                        explain_buffer_gettext
                         (
                             sb,
                             /*
@@ -579,13 +566,14 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        generic:
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
     if ((flags & O_EXCL) && !(flags & O_CREAT))
     {
-        libexplain_string_buffer_puts(sb, "; ");
-        libexplain_buffer_gettext
+        explain_string_buffer_puts(sb, "; ");
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -601,13 +589,13 @@ libexplain_buffer_errno_open_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_open(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int flags, int mode)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_open_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_open_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -615,7 +603,7 @@ libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
         flags,
         mode
     );
-    libexplain_buffer_errno_open_explanation
+    explain_buffer_errno_open_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -623,5 +611,5 @@ libexplain_buffer_errno_open(libexplain_string_buffer_t *sb, int errnum,
         flags,
         mode
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

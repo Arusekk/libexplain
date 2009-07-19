@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocgicount.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocgicount =
+const explain_iocontrol_t explain_iocontrol_tiocgicount =
 {
     "TIOCGICOUNT", /* name */
     TIOCGICOUNT, /* value */

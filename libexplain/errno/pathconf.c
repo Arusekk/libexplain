@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,15 +21,15 @@
 
 
 const char *
-libexplain_errno_pathconf(int errnum, const char *pathname, int name)
+explain_errno_pathconf(int errnum, const char *pathname, int name)
 {
-    libexplain_message_errno_pathconf
+    explain_message_errno_pathconf
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         pathname,
         name
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }

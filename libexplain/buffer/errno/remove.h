@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_remove function
+  * The explain_buffer_errno_remove function
   * may be used to describe errors returned by the
   * remove() system call.  The least the
   * message will contain is the value of strerror(errnum),
@@ -43,7 +43,7 @@
   * @param pathname
   *     The original pathname, exactly as passed to the remove(2) system call.
   */
-void libexplain_buffer_errno_remove(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_remove(explain_string_buffer_t *sb, int errnum,
     const char *pathname);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_REMOVE_H */

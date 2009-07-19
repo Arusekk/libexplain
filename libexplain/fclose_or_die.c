@@ -26,12 +26,10 @@
 
 
 void
-libexplain_fclose_or_die(FILE *fp)
+explain_fclose_or_die(FILE *fp)
 {
-    if (fflush(fp) || fclose(fp))
+    if (explain_fclose_on_error(fp))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fclose(fp));
         exit(EXIT_FAILURE);
     }
 }

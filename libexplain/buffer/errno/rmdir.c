@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -40,15 +40,15 @@
 
 
 static void
-libexplain_buffer_errno_rmdir_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_rmdir_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
-    libexplain_string_buffer_puts(sb, "rmdir(pathname = ");
+    explain_string_buffer_puts(sb, "rmdir(pathname = ");
     if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, pathname);
+        explain_buffer_pointer(sb, pathname);
     else
-        libexplain_string_buffer_puts_quoted(sb, pathname);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
@@ -105,12 +105,12 @@ last_component_is_dot(const char *pathname)
 
 
 void
-libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     final_component.want_to_unlink = 1;
     final_component.must_be_a_st_mode = 1;
     final_component.st_mode = S_IFDIR;
@@ -118,7 +118,7 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EBUSY:
@@ -127,18 +127,18 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
             /* BSD */
             goto case_einval;
         }
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
             "pathname is currently in use by the system or some process "
             "that prevents its removal"
         );
-        libexplain_buffer_path_to_pid(sb, pathname);
+        explain_buffer_path_to_pid(sb, pathname);
 #ifdef __linux__
-        if (libexplain_option_dialect_specific())
+        if (explain_option_dialect_specific())
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "; this means pathname is currently used as a mount point "
@@ -149,12 +149,12 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EINVAL:
         case_einval:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             /* FIXME: i18n */
@@ -164,11 +164,11 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -178,22 +178,22 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EEXIST:
     case ENOTEMPTY:
         if (last_component_is_dotdot(pathname))
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /* FIXME: i18n */
@@ -204,23 +204,23 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
         {
             int             count;
 
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /* FIXME: i18n */
                 "pathname is not an empty directory; that is, it "
                 "contains entries other than \".\" and \"..\""
             );
-            count = libexplain_count_directory_entries(pathname);
+            count = explain_count_directory_entries(pathname);
             if (count > 0)
-                libexplain_string_buffer_printf(sb, " (%d)", count);
+                explain_string_buffer_printf(sb, " (%d)", count);
         }
         break;
 
     case EPERM:
         if
         (
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -230,7 +230,7 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 /* FIXME: i18n */
@@ -240,16 +240,16 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
                 "directory containing it, and the process is not privileged"
             );
 #ifdef HAVE_SYS_CAPABILITY_H
-            if (libexplain_option_dialect_specific())
+            if (explain_option_dialect_specific())
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
                     " (does not have the CAP_FOWNER capability)"
                 );
             }
 #endif
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "; or, the file system containing pathname does not "
@@ -259,36 +259,36 @@ libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 
-    libexplain_buffer_note_if_still_exists(sb, pathname, "pathname");
+    explain_buffer_note_if_still_exists(sb, pathname, "pathname");
 }
 
 
 void
-libexplain_buffer_errno_rmdir(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_rmdir(explain_string_buffer_t *sb, int errnum,
     const char *pathname)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_rmdir_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_rmdir_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname
     );
-    libexplain_buffer_errno_rmdir_explanation
+    explain_buffer_errno_rmdir_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

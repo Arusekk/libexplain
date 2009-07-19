@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_FILDES_TO_PATHNAME_H
 #define LIBEXPLAIN_BUFFER_FILDES_TO_PATHNAME_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_fildes_to_pathname function may be used to
+  * The explain_buffer_fildes_to_pathname function may be used to
   * turn a file descriptor into a pathname, for the improvement of error
   * messages.  If no translation is possible, no text is emitted.
   *
@@ -32,7 +32,7 @@ struct libexplain_string_buffer_t; /* forward */
   * @param fildes
   *    The file descriptor to decipher
   */
-void libexplain_buffer_fildes_to_pathname(struct libexplain_string_buffer_t *sb,
+void explain_buffer_fildes_to_pathname(struct explain_string_buffer_t *sb,
     int fildes);
 
 #endif /* LIBEXPLAIN_BUFFER_FILDES_TO_PATHNAME_H */

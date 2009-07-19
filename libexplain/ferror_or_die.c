@@ -25,12 +25,10 @@
 
 
 void
-libexplain_ferror_or_die(FILE *fp)
+explain_ferror_or_die(FILE *fp)
 {
-    if (ferror(fp))
+    if (explain_ferror_on_error(fp))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_ferror(fp));
         exit(EXIT_FAILURE);
     }
 }

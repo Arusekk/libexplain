@@ -26,12 +26,10 @@
 
 
 void
-libexplain_mkdir_or_die(const char *pathname, int mode)
+explain_mkdir_or_die(const char *pathname, int mode)
 {
-    if (mkdir(pathname, mode) < 0)
+    if (explain_mkdir_on_error(pathname, mode) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_mkdir(pathname, mode));
         exit(EXIT_FAILURE);
     }
 }

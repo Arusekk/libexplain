@@ -24,7 +24,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_getsockopt function
+  * The explain_buffer_errno_getsockopt function
   * is used to obtain an explanation of an error returned
   * by the getsockopt(2) system call.
   * The least the message will contain is the value of
@@ -54,7 +54,7 @@
   *     The original data_size, exactly as passed to the getsockopt(2)
   *     system call.
   */
-void libexplain_buffer_errno_getsockopt(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_getsockopt(explain_string_buffer_t *sb,
     int errnum, int fildes, int level, int name, void *data,
     socklen_t *data_size);
 

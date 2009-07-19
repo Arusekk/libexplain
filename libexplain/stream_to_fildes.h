@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/ac/stdio.h>
 
 /**
-  * The libexplain_stream_to_fildes function may be used to obtain a
+  * The explain_stream_to_fildes function may be used to obtain a
   * file descriptor from a stream pointer.  Care is taken to avoid
   * segfaults, hence this wrapper around fileno(3).
   *
@@ -32,6 +32,6 @@
   * @returns
   *    file descriptor, or -1 if unsuccessful
   */
-int libexplain_stream_to_fildes(FILE *fp);
+int explain_stream_to_fildes(FILE *fp);
 
 #endif /* LIBEXPLAIN_STREAM_TO_FILDES_H */

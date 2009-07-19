@@ -26,19 +26,13 @@
 
 
 long long
-libexplain_lseek_or_die(int fildes, long long offset, int whence)
+explain_lseek_or_die(int fildes, long long offset, int whence)
 {
-    long long       result;
+    off_t           result;
 
-    result = lseek(fildes, offset, whence);
-    if (result < 0)
+    result = explain_lseek_on_error(fildes, offset, whence);
+    if (result == (off_t)-1)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_lseek(fildes, offset, whence)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

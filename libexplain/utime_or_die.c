@@ -16,22 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/utime.h>
 
-#include <libexplain/option.h>
 #include <libexplain/utime.h>
-#include <libexplain/wrap_and_print.h>
 
 
 void
-libexplain_utime_or_die(const char *pathname, const struct utimbuf *times)
+explain_utime_or_die(const char *pathname, const struct utimbuf *times)
 {
-    if (utime(pathname, times) < 0)
+    if (explain_utime_on_error(pathname, times) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_utime(pathname, times));
         exit(EXIT_FAILURE);
     }
 }

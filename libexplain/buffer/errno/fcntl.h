@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_FCNTL_H
 #define LIBEXPLAIN_BUFFER_ERRNO_FCNTL_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_errno_fcntl function is used to obtain an
+  * The explain_buffer_errno_fcntl function is used to obtain an
   * explanation of an error returned by the fcntl(2) system call.  The
   * least the message will contain is the value of strerror(errnum), but
   * usually it will do much better, and indicate the underlying cause in
@@ -47,11 +47,11 @@ struct libexplain_string_buffer_t; /* forward */
   *     (or zero if the original call didn't need a mode argument, or
   *     cast to long if it was a pointer).
   */
-void libexplain_buffer_errno_fcntl(struct libexplain_string_buffer_t *sb,
+void explain_buffer_errno_fcntl(struct explain_string_buffer_t *sb,
     int errnum, int fildes, int command, long arg);
 
 /**
-  * The libexplain_fcntl_command_parse function may be used to parse a text
+  * The explain_fcntl_command_parse function may be used to parse a text
   * representation of a fcntl command argument, and return a numeric value.
   * Prints error message and exits if string cannot be parsed.
   *
@@ -62,6 +62,6 @@ void libexplain_buffer_errno_fcntl(struct libexplain_string_buffer_t *sb,
   * @returns
   *     integer value of command
   */
-int libexplain_fcntl_command_parse_or_die(const char *text, const char *captn);
+int explain_fcntl_command_parse_or_die(const char *text, const char *captn);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FCNTL_H */

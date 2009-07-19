@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
 #ifdef SOCK_STREAM
     { "SOCK_STREAM", SOCK_STREAM },
@@ -49,27 +49,27 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_socket_type(libexplain_string_buffer_t *sb, int type)
+explain_buffer_socket_type(explain_string_buffer_t *sb, int type)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
 
-    tp = libexplain_parse_bits_find_by_value(type, table, SIZEOF(table));
+    tp = explain_parse_bits_find_by_value(type, table, SIZEOF(table));
     if (tp)
-        libexplain_string_buffer_puts(sb, tp->name);
+        explain_string_buffer_puts(sb, tp->name);
     else
-        libexplain_string_buffer_printf(sb, "%d", type);
+        explain_string_buffer_printf(sb, "%d", type);
 }
 
 
 int
-libexplain_parse_socket_type_or_die(const char *text, const char *caption)
+explain_parse_socket_type_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }
 
 
 void
-libexplain_buffer_socket_type_from_fildes(libexplain_string_buffer_t *sb,
+explain_buffer_socket_type_from_fildes(explain_string_buffer_t *sb,
     int fildes)
 {
     int             val;
@@ -78,8 +78,8 @@ libexplain_buffer_socket_type_from_fildes(libexplain_string_buffer_t *sb,
     valsiz = sizeof(val);
     if (getsockopt(fildes, SOL_SOCKET, SO_TYPE, &val, &valsiz) >= 0)
     {
-        libexplain_string_buffer_puts(sb, " (");
-        libexplain_buffer_socket_type(sb, val);
-        libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts(sb, " (");
+        explain_buffer_socket_type(sb, val);
+        explain_string_buffer_putc(sb, ')');
     }
 }

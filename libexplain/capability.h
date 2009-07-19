@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,14 @@
 #define LIBEXPLAIN_CAPABILITY_H
 
 /**
-  * The libexplain_capability function may be used to determine whether
+  * The explain_capability function may be used to determine whether
   * or not the process has the given capability; or, on systems without
   * capabilities, euid == root.
   *
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability(int cap);
+int explain_capability(int cap);
 
 /**
   * In a system with the [_POSIX_CHOWN_RESTRICTED] option defined, this
@@ -38,10 +38,10 @@ int libexplain_capability(int cap);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_chown(void);
+int explain_capability_chown(void);
 
 /**
-  * The libexplain_capability_dac_override function may be used to determine
+  * The explain_capability_dac_override function may be used to determine
   * whether or not the process has the CAP_DAC_OVERRIDE capability
   *
   * Override all DAC access, including ACL execute access if
@@ -51,10 +51,10 @@ int libexplain_capability_chown(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_dac_override(void);
+int explain_capability_dac_override(void);
 
 /**
-  * The libexplain_capability_dac_read_search function may be used to determine
+  * The explain_capability_dac_read_search function may be used to determine
   * whether or not the process has the CAP_DAC_READ_SEARCH capability
   *
   * Overrides all DAC restrictions regarding read and search on files
@@ -64,10 +64,10 @@ int libexplain_capability_dac_override(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_dac_read_search(void);
+int explain_capability_dac_read_search(void);
 
 /**
-  * The libexplain_capability_fowner function may be used to determine
+  * The explain_capability_fowner function may be used to determine
   * whether or not the process has the CAP_FOWNER capability
   *
   * Overrides all restrictions about allowed operations on files, where
@@ -77,10 +77,10 @@ int libexplain_capability_dac_read_search(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_fowner(void);
+int explain_capability_fowner(void);
 
 /**
-  * The libexplain_capability_fsetid function may be used to determine
+  * The explain_capability_fsetid function may be used to determine
   * whether or not the process has the CAP_FSETID capability
   *
   * Overrides the following restrictions that the effective user ID
@@ -93,10 +93,10 @@ int libexplain_capability_fowner(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_fsetid(void);
+int explain_capability_fsetid(void);
 
 /**
-  * The libexplain_capability_kill function may be used to determine
+  * The explain_capability_kill function may be used to determine
   * whether or not the process has the CAP_KILL capability
   *
   * Overrides the restriction that the real or effective user ID of a
@@ -106,10 +106,10 @@ int libexplain_capability_fsetid(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_kill(void);
+int explain_capability_kill(void);
 
 /**
-  * The libexplain_capability_setgid function may be used to determine
+  * The explain_capability_setgid function may be used to determine
   * whether or not the process has the CAP_SETGID capability
   *
   * Allows setgid(2) manipulation
@@ -119,10 +119,10 @@ int libexplain_capability_kill(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_setgid(void);
+int explain_capability_setgid(void);
 
 /**
-  * The libexplain_capability_setuid function may be used to determine
+  * The explain_capability_setuid function may be used to determine
   * whether or not the process has the CAP_SETUID capability
   *
   * Allows set*uid(2) manipulation (including fsuid).
@@ -131,10 +131,10 @@ int libexplain_capability_setgid(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_setuid(void);
+int explain_capability_setuid(void);
 
 /**
-  * The libexplain_capability_setpcap function may be used to determine
+  * The explain_capability_setpcap function may be used to determine
   * whether or not the process has the CAP_SETPCAP capability
   *
   * Transfer any capability in your permitted set to any pid,
@@ -143,10 +143,10 @@ int libexplain_capability_setuid(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_setpcap(void);
+int explain_capability_setpcap(void);
 
 /**
-  * The libexplain_capability_linux_immutable function may be used to determine
+  * The explain_capability_linux_immutable function may be used to determine
   * whether or not the process has the CAP_LINUX_IMMUTABLE capability
   *
   * Allow modification of S_IMMUTABLE and S_APPEND file attributes
@@ -154,10 +154,10 @@ int libexplain_capability_setpcap(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_linux_immutable(void);
+int explain_capability_linux_immutable(void);
 
 /**
-  * The libexplain_capability_net_bind_service function may be used to determine
+  * The explain_capability_net_bind_service function may be used to determine
   * whether or not the process has the CAP_NET_BIND_SERVICE capability
   *
   * Allows binding to TCP/UDP sockets below 1024
@@ -166,10 +166,10 @@ int libexplain_capability_linux_immutable(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_net_bind_service(void);
+int explain_capability_net_bind_service(void);
 
 /**
-  * The libexplain_capability_net_broadcast function may be used to determine
+  * The explain_capability_net_broadcast function may be used to determine
   * whether or not the process has the CAP_NET_BROADCAST capability
   *
   * Allow broadcasting, listen to multicast
@@ -177,10 +177,10 @@ int libexplain_capability_net_bind_service(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_net_broadcast(void);
+int explain_capability_net_broadcast(void);
 
 /**
-  * The libexplain_capability_net_admin function may be used to determine
+  * The explain_capability_net_admin function may be used to determine
   * whether or not the process has the CAP_NET_ADMIN capability
   *
   * Allow interface configuration
@@ -200,10 +200,10 @@ int libexplain_capability_net_broadcast(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_net_admin(void);
+int explain_capability_net_admin(void);
 
 /**
-  * The libexplain_capability_net_raw function may be used to determine
+  * The explain_capability_net_raw function may be used to determine
   * whether or not the process has the CAP_NET_RAW capability
   *
   * Allow use of RAW sockets
@@ -212,10 +212,10 @@ int libexplain_capability_net_admin(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_net_raw(void);
+int explain_capability_net_raw(void);
 
 /**
-  * The libexplain_capability_ipc_lock function may be used to determine
+  * The explain_capability_ipc_lock function may be used to determine
   * whether or not the process has the CAP_IPC_LOCK capability
   *
   * Allow locking of shared memory segments
@@ -225,10 +225,10 @@ int libexplain_capability_net_raw(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_ipc_lock(void);
+int explain_capability_ipc_lock(void);
 
 /**
-  * The libexplain_capability_ipc_owner function may be used to determine
+  * The explain_capability_ipc_owner function may be used to determine
   * whether or not the process has the CAP_IPC_OWNER capability
   *
   * Override IPC ownership checks
@@ -236,10 +236,10 @@ int libexplain_capability_ipc_lock(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_ipc_owner(void);
+int explain_capability_ipc_owner(void);
 
 /**
-  * The libexplain_capability_sys_module function may be used to determine
+  * The explain_capability_sys_module function may be used to determine
   * whether or not the process has the CAP_SYS_MODULE capability
   *
   * Insert and remove kernel modules - modify kernel without limit
@@ -248,10 +248,10 @@ int libexplain_capability_ipc_owner(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_module(void);
+int explain_capability_sys_module(void);
 
 /**
-  * The libexplain_capability_sys_rawio function may be used to determine
+  * The explain_capability_sys_rawio function may be used to determine
   * whether or not the process has the CAP_SYS_RAWIO capability
   *
   * Allow ioperm/iopl access
@@ -260,10 +260,10 @@ int libexplain_capability_sys_module(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_rawio(void);
+int explain_capability_sys_rawio(void);
 
 /**
-  * The libexplain_capability_sys_chroot function may be used to determine
+  * The explain_capability_sys_chroot function may be used to determine
   * whether or not the process has the CAP_SYS_CHROOT capability
   *
   * Allow use of chroot()
@@ -271,10 +271,10 @@ int libexplain_capability_sys_rawio(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_chroot(void);
+int explain_capability_sys_chroot(void);
 
 /**
-  * The libexplain_capability_sys_ptrace function may be used to determine
+  * The explain_capability_sys_ptrace function may be used to determine
   * whether or not the process has the CAP_SYS_PTRACE capability
   *
   * Allow ptrace() of any process
@@ -282,10 +282,10 @@ int libexplain_capability_sys_chroot(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_ptrace(void);
+int explain_capability_sys_ptrace(void);
 
 /**
-  * The libexplain_capability_sys_pacct function may be used to determine
+  * The explain_capability_sys_pacct function may be used to determine
   * whether or not the process has the CAP_SYS_PACCT capability
   *
   * Allow configuration of process accounting
@@ -293,10 +293,10 @@ int libexplain_capability_sys_ptrace(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_pacct(void);
+int explain_capability_sys_pacct(void);
 
 /**
-  * The libexplain_capability_sys_admin function may be used to determine
+  * The explain_capability_sys_admin function may be used to determine
   * whether or not the process has the CAP_SYS_ADMIN capability
   *
   * Allow configuration of the secure attention key
@@ -339,10 +339,10 @@ int libexplain_capability_sys_pacct(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_admin(void);
+int explain_capability_sys_admin(void);
 
 /**
-  * The libexplain_capability_sys_boot function may be used to determine
+  * The explain_capability_sys_boot function may be used to determine
   * whether or not the process has the CAP_SYS_BOOT capability
   *
   * Allow use of reboot()
@@ -350,10 +350,10 @@ int libexplain_capability_sys_admin(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_boot(void);
+int explain_capability_sys_boot(void);
 
 /**
-  * The libexplain_capability_sys_nice function may be used to determine
+  * The explain_capability_sys_nice function may be used to determine
   * whether or not the process has the CAP_SYS_NICE capability
   *
   * Allow raising priority and setting priority on other (different
@@ -365,10 +365,10 @@ int libexplain_capability_sys_boot(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_nice(void);
+int explain_capability_sys_nice(void);
 
 /**
-  * The libexplain_capability_sys_resource function may be used to determine
+  * The explain_capability_sys_resource function may be used to determine
   * whether or not the process has the CAP_SYS_RESOURCE capability
   *
   * Override resource limits. Set resource limits.
@@ -384,10 +384,10 @@ int libexplain_capability_sys_nice(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_resource(void);
+int explain_capability_sys_resource(void);
 
 /**
-  * The libexplain_capability_sys_time function may be used to determine
+  * The explain_capability_sys_time function may be used to determine
   * whether or not the process has the CAP_SYS_TIME capability
   *
   * Allow manipulation of system clock
@@ -397,10 +397,10 @@ int libexplain_capability_sys_resource(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_time(void);
+int explain_capability_sys_time(void);
 
 /**
-  * The libexplain_capability_sys_tty_config function may be used to determine
+  * The explain_capability_sys_tty_config function may be used to determine
   * whether or not the process has the CAP_SYS_TTY_CONFIG capability
   *
   * Allow configuration of tty devices
@@ -409,10 +409,10 @@ int libexplain_capability_sys_time(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_sys_tty_config(void);
+int explain_capability_sys_tty_config(void);
 
 /**
-  * The libexplain_capability_mknod function may be used to determine
+  * The explain_capability_mknod function may be used to determine
   * whether or not the process has the CAP_SYS_MKNOD capability
   *
   * Allow the privileged aspects of mknod()
@@ -420,10 +420,10 @@ int libexplain_capability_sys_tty_config(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_mknod(void);
+int explain_capability_mknod(void);
 
 /**
-  * The libexplain_capability_lease function may be used to determine
+  * The explain_capability_lease function may be used to determine
   * whether or not the process has the CAP_LEASE capability
   *
   * Allow taking of leases on files
@@ -431,7 +431,7 @@ int libexplain_capability_mknod(void);
   * @returns
   *    int; non-zero (true) if have the capability, zero (false) if not
   */
-int libexplain_capability_lease(void);
+int explain_capability_lease(void);
 
 
 #endif /* LIBEXPLAIN_CAPABILITY_H */

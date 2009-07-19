@@ -28,18 +28,18 @@
 #ifdef SIOCADDDLCI
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_dlci_add(sb, data);
+    explain_buffer_dlci_add(sb, data);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocadddlci =
+const explain_iocontrol_t explain_iocontrol_siocadddlci =
 {
     "SIOCADDDLCI", /* name */
     SIOCADDDLCI, /* value */
@@ -51,7 +51,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_siocadddlci =
 
 #else /* ndef SIOCADDDLCI */
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocadddlci =
+const explain_iocontrol_t explain_iocontrol_siocadddlci =
 {
     0, /* name */
     0, /* value */

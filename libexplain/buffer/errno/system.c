@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,22 +27,22 @@
 
 
 static void
-libexplain_buffer_errno_system_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_system_system_call(explain_string_buffer_t *sb,
     int errnum, const char *command)
 {
-    libexplain_string_buffer_puts(sb, "system(command = ");
+    explain_string_buffer_puts(sb, "system(command = ");
     if (!command)
-        libexplain_string_buffer_puts(sb, "NULL");
+        explain_string_buffer_puts(sb, "NULL");
     else if (errnum == EFAULT)
-        libexplain_buffer_pointer(sb, command);
+        explain_buffer_pointer(sb, command);
     else
-        libexplain_string_buffer_puts_quoted(sb, command);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_puts_quoted(sb, command);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_system_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_system_explanation(explain_string_buffer_t *sb,
     int errnum, const char *command)
 {
     int             junk;
@@ -56,40 +56,40 @@ libexplain_buffer_errno_system_explanation(libexplain_string_buffer_t *sb,
     {
     case EAGAIN:
     case ENOMEM:
-        libexplain_buffer_errno_fork_explanation(sb, errnum);
+        explain_buffer_errno_fork_explanation(sb, errnum);
         break;
 
     case ECHILD:
     case EINTR:
     case EINVAL:
-        libexplain_buffer_errno_wait_explanation(sb, errnum, &junk);
+        explain_buffer_errno_wait_explanation(sb, errnum, &junk);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_system(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_system(explain_string_buffer_t *sb, int errnum,
     const char *command)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_system_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_system_system_call
     (
         &exp.system_call_sb,
         errnum,
         command
     );
-    libexplain_buffer_errno_system_explanation
+    explain_buffer_errno_system_explanation
     (
         &exp.explanation_sb,
         errnum,
         command
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

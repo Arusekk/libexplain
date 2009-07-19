@@ -24,7 +24,7 @@
 struct mtpos; /* forward */
 
 /**
-  * The libexplain_buffer_mtpos function may be used to
+  * The explain_buffer_mtpos function may be used to
   * print a representation of a mtpos structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct mtpos; /* forward */
   * @param data
   *     The mtpos structure to be printed.
   */
-void libexplain_buffer_mtpos(libexplain_string_buffer_t *sb,
+void explain_buffer_mtpos(explain_string_buffer_t *sb,
     const struct mtpos *data);
 
 #endif /* LIBEXPLAIN_BUFFER_MTPOS_H */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,12 +28,12 @@
 
 
 void
-libexplain_buffer_enotdir(libexplain_string_buffer_t *sb, const char *pathname,
-    const char *caption, const libexplain_final_t *final_component)
+explain_buffer_enotdir(explain_string_buffer_t *sb, const char *pathname,
+    const char *caption, const explain_final_t *final_component)
 {
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ENOTDIR,
@@ -45,7 +45,7 @@ libexplain_buffer_enotdir(libexplain_string_buffer_t *sb, const char *pathname,
     {
         if (must_be_a_directory(final_component))
         {
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 "%s, or a directory component of %s, is not, in fact, a "
@@ -56,7 +56,7 @@ libexplain_buffer_enotdir(libexplain_string_buffer_t *sb, const char *pathname,
         }
         else
         {
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 "a directory component of %s is not, in fact, a directory",
@@ -68,15 +68,15 @@ libexplain_buffer_enotdir(libexplain_string_buffer_t *sb, const char *pathname,
 
 
 void
-libexplain_buffer_enotdir2(libexplain_string_buffer_t *sb,
+explain_buffer_enotdir2(explain_string_buffer_t *sb,
     const char *oldpath, const char *oldpath_caption,
-    const libexplain_final_t *oldpath_final_component,
+    const explain_final_t *oldpath_final_component,
     const char *newpath, const char *newpath_caption,
-    const libexplain_final_t *newpath_final_component)
+    const explain_final_t *newpath_final_component)
 {
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ENOTDIR,
@@ -85,7 +85,7 @@ libexplain_buffer_enotdir2(libexplain_string_buffer_t *sb,
             oldpath_final_component
         )
     &&
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ENOTDIR,
@@ -113,7 +113,7 @@ libexplain_buffer_enotdir2(libexplain_string_buffer_t *sb,
             must_be_a_directory(newpath_final_component)
         )
         {
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 "%s, or a directory component of %s, is not, in fact, a "
@@ -124,7 +124,7 @@ libexplain_buffer_enotdir2(libexplain_string_buffer_t *sb,
         }
         else
         {
-            libexplain_string_buffer_printf
+            explain_string_buffer_printf
             (
                 sb,
                 "a directory component of %s is not, in fact, a directory",
@@ -136,8 +136,8 @@ libexplain_buffer_enotdir2(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_enotdir_fd(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_enotdir_fd(explain_string_buffer_t *sb, int fildes,
     const char *caption)
 {
-    libexplain_buffer_wrong_file_type(sb, fildes, caption, S_IFDIR);
+    explain_buffer_wrong_file_type(sb, fildes, caption, S_IFDIR);
 }

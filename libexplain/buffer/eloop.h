@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,10 +22,10 @@
 
 #include <libexplain/string_buffer.h>
 
-struct libexplain_final_t; /* forward */
+struct explain_final_t; /* forward */
 
 /**
-  * The libexplain_buffer_eloop function may be used to provide a common
+  * The explain_buffer_eloop function may be used to provide a common
   * explanation for ELOOP for all system calls.
   *
   * @param sb
@@ -37,12 +37,12 @@ struct libexplain_final_t; /* forward */
   * @param pathname_final_component
   *    The desired properties of the last component of pathname
   */
-void libexplain_buffer_eloop(libexplain_string_buffer_t *sb,
+void explain_buffer_eloop(explain_string_buffer_t *sb,
     const char *pathname, const char *pathname_caption,
-    const struct libexplain_final_t *pathname_final_component);
+    const struct explain_final_t *pathname_final_component);
 
 /**
-  * The libexplain_buffer_eloop2 function may be used to provide a common
+  * The explain_buffer_eloop2 function may be used to provide a common
   * explanation for ELOOP for all system calls that take two path names.
   *
   * @param sb
@@ -60,10 +60,10 @@ void libexplain_buffer_eloop(libexplain_string_buffer_t *sb,
   * @param newpath_final_component
   *    The desired properties of the last component of newpath
   */
-void libexplain_buffer_eloop2(libexplain_string_buffer_t *sb,
+void explain_buffer_eloop2(explain_string_buffer_t *sb,
     const char *oldpath, const char *oldpath_caption,
-    const struct libexplain_final_t *oldpath_final_component,
+    const struct explain_final_t *oldpath_final_component,
     const char *newpath, const char *newpath_caption,
-    const struct libexplain_final_t *newpath_final_component);
+    const struct explain_final_t *newpath_final_component);
 
 #endif /* LIBEXPLAIN_BUFFER_ELOOP_H */

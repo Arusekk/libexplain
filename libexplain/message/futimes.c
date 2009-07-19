@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_futimes(char *message, int message_size, int fildes,
+explain_message_futimes(char *message, int message_size, int fildes,
     const struct timeval *tv)
 {
-    libexplain_message_errno_futimes
+    explain_message_errno_futimes
     (
         message,
         message_size,

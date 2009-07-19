@@ -28,9 +28,9 @@
 #ifdef HAVE_LINUX_KD_H
 
 static void
-libexplain_buffer_kd_font_op(libexplain_string_buffer_t *sb, int value)
+explain_buffer_kd_font_op(explain_string_buffer_t *sb, int value)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "KD_FONT_OP_SET", KD_FONT_OP_SET },
         { "KD_FONT_OP_GET", KD_FONT_OP_GET },
@@ -38,36 +38,36 @@ libexplain_buffer_kd_font_op(libexplain_string_buffer_t *sb, int value)
         { "KD_FONT_OP_COPY", KD_FONT_OP_COPY },
     };
 
-    libexplain_parse_bits_print_single(sb, value, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, value, table, SIZEOF(table));
 }
 
 
 static void
-libexplain_buffer_kd_font_flag(libexplain_string_buffer_t *sb, int value)
+explain_buffer_kd_font_flag(explain_string_buffer_t *sb, int value)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "KD_FONT_FLAG_DONT_RECALC", KD_FONT_FLAG_DONT_RECALC },
     };
 
-    libexplain_parse_bits_print(sb, value, table, SIZEOF(table));
+    explain_parse_bits_print(sb, value, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_console_font_op(libexplain_string_buffer_t *sb,
+explain_buffer_console_font_op(explain_string_buffer_t *sb,
     const struct console_font_op *value)
 {
 #ifdef HAVE_LINUX_KD_H
-    if (libexplain_pointer_is_efault(value, sizeof(*value)))
-        libexplain_buffer_pointer(sb, value);
+    if (explain_pointer_is_efault(value, sizeof(*value)))
+        explain_buffer_pointer(sb, value);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ op = ");
-        libexplain_buffer_kd_font_op(sb, value->op);
-        libexplain_string_buffer_puts(sb, ", flags = ");
-        libexplain_buffer_kd_font_flag(sb, value->flags);
-        libexplain_string_buffer_printf
+        explain_string_buffer_puts(sb, "{ op = ");
+        explain_buffer_kd_font_op(sb, value->op);
+        explain_string_buffer_puts(sb, ", flags = ");
+        explain_buffer_kd_font_flag(sb, value->flags);
+        explain_string_buffer_printf
         (
             sb,
             ", width = %u, height = %u, charcount = %u, data = ",
@@ -75,11 +75,11 @@ libexplain_buffer_console_font_op(libexplain_string_buffer_t *sb,
             value->height,
             value->charcount
         );
-        libexplain_buffer_pointer(sb, value->data);
-        libexplain_string_buffer_puts(sb, " }");
+        explain_buffer_pointer(sb, value->data);
+        explain_string_buffer_puts(sb, " }");
     }
 #else
-    libexplain_buffer_pointer(sb, value);
+    explain_buffer_pointer(sb, value);
 #endif
 }
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_CHDIR_H
 #define LIBEXPLAIN_BUFFER_ERRNO_CHDIR_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_errno_chdir function is used to obtain an
+  * The explain_buffer_errno_chdir function is used to obtain an
   * explanation of an error returned by the chdir(2) system call.  The
   * least the message will contain is the value of strerror(errnum), but
   * usually it will do much better, and indicate the underlying cause in
@@ -41,7 +41,7 @@ struct libexplain_string_buffer_t; /* forward */
   * @param path
   *     The original path, exactly has passed to the chdir(2) system call.
   */
-void libexplain_buffer_errno_chdir(struct libexplain_string_buffer_t *sb,
+void explain_buffer_errno_chdir(struct explain_string_buffer_t *sb,
     int errnum, const char *path);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CHDIR_H */

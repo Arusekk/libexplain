@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,18 +30,18 @@
 
 
 static void
-libexplain_buffer_errno_getcwd_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_getcwd_system_call(explain_string_buffer_t *sb,
     int errnum, char *data, size_t data_size)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "getcwd(data = ");
-    libexplain_buffer_pointer(sb, data);
-    libexplain_string_buffer_printf(sb, ", data_size = %ld)", (long)data_size);
+    explain_string_buffer_puts(sb, "getcwd(data = ");
+    explain_buffer_pointer(sb, data);
+    explain_string_buffer_printf(sb, ", data_size = %ld)", (long)data_size);
 }
 
 
 static void
-libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_getcwd_explanation(explain_string_buffer_t *sb,
     int errnum, char *data, size_t data_size)
 {
     char            pathname[PATH_MAX * 2 + 1];
@@ -52,7 +52,7 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the data_size argument is zero and data is not the NULL pointer"
@@ -60,21 +60,21 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ERANGE:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the data_size argument is less than the length of the "
             "working directory name, you need to allocate a bigger "
             "array and try again"
         );
-        if (data && data_size && libexplain_option_dialect_specific())
+        if (data && data_size && explain_option_dialect_specific())
         {
-            libexplain_string_buffer_t nowhere;
+            explain_string_buffer_t nowhere;
 
-            libexplain_string_buffer_init(&nowhere, 0, 0);
+            explain_string_buffer_init(&nowhere, 0, 0);
             if
             (
-                !libexplain_buffer_get_current_directory
+                !explain_buffer_get_current_directory
                 (
                     &nowhere,
                     pathname,
@@ -82,7 +82,7 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
                 )
             )
             {
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     " (%ld < %ld)",
@@ -96,7 +96,7 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
     case EACCES:
         if
         (
-            !libexplain_buffer_get_current_directory
+            !explain_buffer_get_current_directory
             (
                 sb,
                 pathname,
@@ -104,7 +104,7 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "read or search permission was denied for a component "
@@ -114,17 +114,17 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb);
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "data");
+        explain_buffer_efault(sb, "data");
         break;
 
     case ENOENT:
         if
         (
-            !libexplain_buffer_get_current_directory
+            !explain_buffer_get_current_directory
             (
                 sb,
                 pathname,
@@ -132,7 +132,7 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
             )
         )
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "the current working directory has been unlinked"
@@ -141,32 +141,32 @@ libexplain_buffer_errno_getcwd_explanation(libexplain_string_buffer_t *sb,
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_getcwd(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_getcwd(explain_string_buffer_t *sb, int errnum,
     char *data, size_t data_size)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_getcwd_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_getcwd_system_call
     (
         &exp.system_call_sb,
         errnum,
         data,
         data_size
     );
-    libexplain_buffer_errno_getcwd_explanation
+    explain_buffer_errno_getcwd_explanation
     (
         &exp.explanation_sb,
         errnum,
         data,
         data_size
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

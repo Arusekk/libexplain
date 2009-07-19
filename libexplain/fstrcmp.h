@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_FSTRCMP_H
 
 /**
-  * The libexplain_fstrcmp function may be used to compare two strings.
+  * The explain_fstrcmp function may be used to compare two strings.
   * The order of the strings has no effect on the result.
   *
   * @param s1
@@ -39,10 +39,10 @@
   *     May return -1 if malloc fails.
   *     This function is not thread-safe.
   */
-double libexplain_fstrcmp(const char *s1, const char *s2);
+double explain_fstrcmp(const char *s1, const char *s2);
 
 /**
-  * The libexplain_fstrcasecmp function may be used to compare two strings.  The
+  * The explain_fstrcasecmp function may be used to compare two strings.  The
   * comparison is case <b>in</b>sensitive.  The order of the strings has no
   * effect on the result.
   *
@@ -60,6 +60,6 @@ double libexplain_fstrcmp(const char *s1, const char *s2);
   *     This function uses dynamic memory.
   *     May return -1 if malloc fails.
   */
-double libexplain_fstrcasecmp(const char *s1, const char *s2);
+double explain_fstrcasecmp(const char *s1, const char *s2);
 
 #endif /* LIBEXPLAIN_FSTRCMP_H */

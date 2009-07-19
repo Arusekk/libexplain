@@ -31,37 +31,61 @@ extern "C" {
 #endif
 
 /**
-  * The libexplain_system_or_die function is used to call the system(3)
-  * system call.  On failure an explanation will be printed to stderr,
-  * obtained from libexplain_system(3), and then the process terminates
-  * by calling exit(EXIT_FAILURE).
+  * The explain_system_or_die function is used to call the <i>system</i>(3)
+  * system call. On failure an explanation will be printed to stderr,
+  * obtained from the explain_system(3) function, and then the process
+  * terminates by calling exit(EXIT_FAILURE).
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
-  * int result = libexplain_system_or_die(command);
+  * explain_system_or_die(command);
   * @endcode
   *
   * @param command
-  *     The command, exactly as to be passed to the system(3) system call.
+  *     The command, exactly as to be passed to the <i>system</i>(3) system
+  *     call.
   * @returns
-  *     This function only returns on success, and it returns the
-  *     non-negative value returned by system().  On failure, prints an
+  *     This function only returns on success. On failure, prints an
   *     explanation and exits, it does not return.
   */
-int libexplain_system_or_die(const char *command);
+int explain_system_or_die(const char *command);
 
 /**
-  * The libexplain_system_success function is used to call the
+  * The explain_system_on_error function is used to call the
+  * <i>system</i>(3) system call. On failure an explanation will be printed
+  * to stderr, obtained from the explain_system(3) function.
+  *
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * if (explain_system_on_error(command) < 0)
+  * {
+  *     ...cope with error
+  *     ...no need to print error message
+  * }
+  * @endcode
+  *
+  * @param command
+  *     The command, exactly as to be passed to the <i>system</i>(3) system
+  *     call.
+  * @returns
+  *     The value returned by the wrapped <i>system</i>(3) system call.
+  */
+int explain_system_on_error(const char *command)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+
+/**
+  * The explain_system_success function is used to call the
   * system(3) system call.  On failure (including any exit status
   * other than EXIT_SUCCESS) an explanation will be printed to stderr,
-  * obtained from libexplain_system(3).
+  * obtained from explain_system(3).
   * The return value from system(3) is returned.
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
   * @code
-  * int result = libexplain_system_success(command);
+  * int result = explain_system_success(command);
   * @endcode
   *
   * @param command
@@ -69,19 +93,19 @@ int libexplain_system_or_die(const char *command);
   * @returns
   *     the value returned by the system(3) system call.
   */
-int libexplain_system_success(const char *command);
+int explain_system_success(const char *command);
 
 /**
-  * The libexplain_system_success_or_die function is used to call the
+  * The explain_system_success_or_die function is used to call the
   * system(3) system call.  On failure (including any exit status
   * other than EXIT_SUCCESS) an explanation will be printed to stderr,
-  * obtained from libexplain_system(3), and then the process terminates
+  * obtained from explain_system(3), and then the process terminates
   * by calling exit(EXIT_FAILURE).
   *
   * This function is intended to be used in a fashion
   * similar to the following example:
   * @code
-  * libexplain_system_success_or_die(command);
+  * explain_system_success_or_die(command);
   * @endcode
   *
   * @param command
@@ -91,168 +115,175 @@ int libexplain_system_success(const char *command);
   *     (0) by the command).  On failure (including non-zero exit
   *     status), prints an explanation and exits; it does not return.
   */
-void libexplain_system_success_or_die(const char *command);
+void explain_system_success_or_die(const char *command);
 
 /**
-  * The libexplain_system function is used to obtain an explanation
-  * of an error returned by the system(3) system call.  The least the
-  * message will contain is the value of strerror(errno), but usually
-  * it will do much better, and indicate the underlying cause in more
-  * detail.
+  * The explain_system function is used to obtain an explanation of an
+  * error returned by the <i>system</i>(3) system call. The least the
+  * message will contain is the value of <tt>strerror(errno)</tt>, but
+  * usually it will do much better, and indicate the underlying cause in
+  * more detail.
   *
-  * The errno global variable will be used to obtain the
-  * error value to be decoded.
+  * The errno global variable will be used to obtain the error value to be
+  * decoded.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (system(command) < 0)
   * {
-  *     fprintf(stderr, "%s\n", libexplain_system(command));
+  *     fprintf(stderr, "%s\n", explain_system(command));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
+  * The above code example is available pre-packaged as the
+  * #explain_system_or_die function.
+  *
   * @param command
-  *     The original command, exactly as passed to the system(3) system call.
+  *     The original command, exactly as passed to the <i>system</i>(3)
+  *     system call.
   * @returns
-  *     The message explaining the error.  This
-  *     message buffer is shared by all libexplain
-  *     functions which do not supply a buffer in their
-  *     argument list.  This will be overwritten by the
-  *     next call to any libexplain function which shares
-  *     this buffer, including other threads.
+  *     The message explaining the error. This message buffer is shared by
+  *     all libexplain functions which do not supply a buffer in their
+  *     argument list. This will be overwritten by the next call to any
+  *     libexplain function which shares this buffer, including other
+  *     threads.
   * @note
-  *     This function is <b>not</b> thread safe, because
-  *     it shares a return buffer across all threads, and
-  *     many other functions in this library.
+  *     This function is <b>not</b> thread safe, because it shares a return
+  *     buffer across all threads, and many other functions in this
+  *     library.
   */
-const char *libexplain_system(const char *command)
+const char *explain_system(const char *command)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
-  * The libexplain_errno_system function is
-  * used to obtain an explanation of an error returned by
-  * the system(3) system call.
-  * The least the message will contain is the value of
-  * strerror(errnum), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_errno_system function is used to obtain an explanation of
+  * an error returned by the <i>system</i>(3) system call. The least the
+  * message will contain is the value of <tt>strerror(errnum)</tt>, but
+  * usually it will do much better, and indicate the underlying cause in
+  * more detail.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (system(command) < 0)
   * {
   *     int err = errno;
-  *     fprintf(stderr, "%s\n", libexplain_system(err, command));
+  *     fprintf(stderr, "%s\n", explain_errno_system(err, command));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
+  * The above code example is available pre-packaged as the
+  * #explain_system_or_die function.
+  *
   * @param errnum
-  *     The error value to be decoded, usually obtained
-  *     from the errno global variable just before this
-  *     function is called.  This is necessary if you need
-  *     to call <b>any</b> code between the system call to
-  *     be explained and this function, because many libc
-  *     functions will alter the value of errno.
+  *     The error value to be decoded, usually obtained from the errno
+  *     global variable just before this function is called. This is
+  *     necessary if you need to call <b>any</b> code between the system
+  *     call to be explained and this function, because many libc functions
+  *     will alter the value of errno.
   * @param command
-  *     The original command, exactly as passed to the system(3) system call.
+  *     The original command, exactly as passed to the <i>system</i>(3)
+  *     system call.
   * @returns
-  *     The message explaining the error.  This
-  *     message buffer is shared by all libexplain
-  *     functions which do not supply a buffer in their
-  *     argument list.  This will be overwritten by the
-  *     next call to any libexplain function which shares
-  *     this buffer, including other threads.
+  *     The message explaining the error. This message buffer is shared by
+  *     all libexplain functions which do not supply a buffer in their
+  *     argument list. This will be overwritten by the next call to any
+  *     libexplain function which shares this buffer, including other
+  *     threads.
   * @note
-  *     This function is <b>not</b> thread safe, because
-  *     it shares a return buffer across all threads, and
-  *     many other functions in this library.
+  *     This function is <b>not</b> thread safe, because it shares a return
+  *     buffer across all threads, and many other functions in this
+  *     library.
   */
-const char *libexplain_errno_system(int errnum, const char *command)
+const char *explain_errno_system(int errnum, const char *command)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
-  * The libexplain_message_system function is
-  * used to obtain an explanation of an error returned by
-  * the system(3) system call.
-  * The least the message will contain is the value of
-  * strerror(errno), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * The explain_message_system function is used to obtain an explanation of
+  * an error returned by the <i>system</i>(3) system call. The least the
+  * message will contain is the value of <tt>strerror(errnum)</tt>, but
+  * usually it will do much better, and indicate the underlying cause in
+  * more detail.
   *
-  * The errno global variable will be used to obtain the
-  * error value to be decoded.
+  * The errno global variable will be used to obtain the error value to be
+  * decoded.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (system(command) < 0)
   * {
   *     char message[3000];
-  *     libexplain_message_system(message, sizeof(message), command);
+  *     explain_message_system(message, sizeof(message), command);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
+  * The above code example is available pre-packaged as the
+  * #explain_system_or_die function.
+  *
   * @param message
-  *     The location in which to store the returned
-  *     message.  If a suitable message return buffer is
-  *     supplied, this function is thread safe.
+  *     The location in which to store the returned message. If a suitable
+  *     message return buffer is supplied, this function is thread safe.
   * @param message_size
-  *     The size in bytes of the location in which to
-  *     store the returned message.
+  *     The size in bytes of the location in which to store the returned
+  *     message.
   * @param command
-  *     The original command, exactly as passed to the system(3) system call.
+  *     The original command, exactly as passed to the <i>system</i>(3)
+  *     system call.
   */
-void libexplain_message_system(char *message, int message_size,
+void explain_message_system(char *message, int message_size,
     const char *command);
 
 /**
-  * The libexplain_message_errno_system
-  * function is used to obtain an explanation of an error
-  * returned by the
-  * system(3) system call.
+  * The explain_message_errno_system function is used to obtain an
+  * explanation of an error returned by the <i>system</i>(3) system call.
   * The least the message will contain is the value of
-  * strerror(errnum), but usually it will do much better,
-  * and indicate the underlying cause in more detail.
+  * <tt>strerror(errnum)</tt>, but usually it will do much better, and
+  * indicate the underlying cause in more detail.
   *
-  * This function is intended to be used in a fashion
-  * similar to the following example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
   * @code
   * if (system(command) < 0)
   * {
   *     int err = errno;
   *     char message[3000];
-  *     libexplain_message_errno_system(message, sizeof(message), err, command);
+  *     explain_message_errno_system(message, sizeof(message), err, command);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
   *
+  * The above code example is available pre-packaged as the
+  * #explain_system_or_die function.
+  *
   * @param message
-  *     The location in which to store the returned
-  *     message.  If a suitable message return buffer is
-  *     supplied, this function is thread safe.
+  *     The location in which to store the returned message. If a suitable
+  *     message return buffer is supplied, this function is thread safe.
   * @param message_size
-  *     The size in bytes of the location in which to
-  *     store the returned message.
+  *     The size in bytes of the location in which to store the returned
+  *     message.
   * @param errnum
-  *     The error value to be decoded, usually obtained
-  *     from the errno global variable just before this
-  *     function is called.  This is necessary if you need
-  *     to call <b>any</b> code between the system call to
-  *     be explained and this function, because many libc
-  *     functions will alter the value of errno.
+  *     The error value to be decoded, usually obtained from the errno
+  *     global variable just before this function is called. This is
+  *     necessary if you need to call <b>any</b> code between the system
+  *     call to be explained and this function, because many libc functions
+  *     will alter the value of errno.
   * @param command
-  *     The original command, exactly as passed to the system(3) system call.
+  *     The original command, exactly as passed to the <i>system</i>(3)
+  *     system call.
   */
-void libexplain_message_errno_system(char *message, int message_size,
-    int errnum, const char *command);
+void explain_message_errno_system(char *message, int message_size, int errnum,
+    const char *command);
 
 #ifdef __cplusplus
 }
 #endif
 
+/* vim: set ts=8 sw=4 et */
 #endif /* LIBEXPLAIN_SYSTEM_H */

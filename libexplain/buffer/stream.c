@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,15 +23,15 @@
 
 
 void
-libexplain_buffer_stream(libexplain_string_buffer_t *sb, FILE *fp)
+explain_buffer_stream(explain_string_buffer_t *sb, FILE *fp)
 {
     if (fp == stdin)
-        libexplain_string_buffer_puts(sb, "stdin");
+        explain_string_buffer_puts(sb, "stdin");
     else if (fp == stdout)
-        libexplain_string_buffer_puts(sb, "stdout");
+        explain_string_buffer_puts(sb, "stdout");
     else if (fp == stderr)
-        libexplain_string_buffer_puts(sb, "stderr");
+        explain_string_buffer_puts(sb, "stderr");
     else
-        libexplain_buffer_pointer(sb, fp);
-    libexplain_buffer_stream_to_pathname(sb, fp);
+        explain_buffer_pointer(sb, fp);
+    explain_buffer_stream_to_pathname(sb, fp);
 }

@@ -22,6 +22,11 @@
 
 #include <libexplain/config.h>
 
+#ifdef NET_IF_LINUX_IF_PLAY_NICE
+/* must be in this order */
+#include <libexplain/ac/net/if.h>
+#endif
+
 #ifdef HAVE_LINUX_IF_H
 #include <linux/if.h>
 #endif

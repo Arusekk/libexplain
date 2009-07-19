@@ -26,9 +26,9 @@
 
 
 static void
-libexplain_buffer_mtop_op(libexplain_string_buffer_t *sb, int data)
+explain_buffer_mtop_op(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
 #ifdef MTBSF
         { "MTBSF", MTBSF },
@@ -142,29 +142,29 @@ libexplain_buffer_mtop_op(libexplain_string_buffer_t *sb, int data)
 #endif
     };
 
-    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_mtop(libexplain_string_buffer_t *sb,
+explain_buffer_mtop(explain_string_buffer_t *sb,
     const struct mtop *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ mt_top = ");
-        libexplain_buffer_mtop_op(sb, data->mt_op);
-        libexplain_string_buffer_puts(sb, ", mt_count = ");
+        explain_string_buffer_puts(sb, "{ mt_top = ");
+        explain_buffer_mtop_op(sb, data->mt_op);
+        explain_string_buffer_puts(sb, ", mt_count = ");
         switch (data->mt_op)
         {
 #ifdef MTLOAD
 #ifdef MT_ST_HPLOADER_OFFSET
         case MTLOAD:
             if (data->mt_count & MT_ST_HPLOADER_OFFSET)
-                libexplain_string_buffer_puts(sb, "MT_ST_HPLOADER_OFFSET | ");
-            libexplain_string_buffer_printf
+                explain_string_buffer_puts(sb, "MT_ST_HPLOADER_OFFSET | ");
+            explain_string_buffer_printf
             (
                 sb,
                 "%d",
@@ -179,8 +179,8 @@ libexplain_buffer_mtop(libexplain_string_buffer_t *sb,
 #ifdef MT_ST_WRITE_THRESHOLD
             if (data->mt_count & MT_ST_WRITE_THRESHOLD)
             {
-                libexplain_string_buffer_puts(sb, "MT_ST_WRITE_THRESHOLD | ");
-                libexplain_string_buffer_printf
+                explain_string_buffer_puts(sb, "MT_ST_WRITE_THRESHOLD | ");
+                explain_string_buffer_printf
                 (
                     sb,
                     "%d",
@@ -188,14 +188,14 @@ libexplain_buffer_mtop(libexplain_string_buffer_t *sb,
                 );
             }
 #endif
-            libexplain_string_buffer_printf(sb, "%d", data->mt_count);
+            explain_string_buffer_printf(sb, "%d", data->mt_count);
             break;
 #endif
 
         default:
-            libexplain_string_buffer_printf(sb, "%d", data->mt_count);
+            explain_string_buffer_printf(sb, "%d", data->mt_count);
             break;
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }

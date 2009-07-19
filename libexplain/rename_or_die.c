@@ -25,12 +25,10 @@
 
 
 void
-libexplain_rename_or_die(const char *oldpath, const char *newpath)
+explain_rename_or_die(const char *oldpath, const char *newpath)
 {
-    if (rename(oldpath, newpath) < 0)
+    if (explain_rename_on_error(oldpath, newpath) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_rename(oldpath, newpath));
         exit(EXIT_FAILURE);
     }
 }

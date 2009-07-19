@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 
 
 const char *
-libexplain_fchown(int fildes, int owner, int group)
+explain_fchown(int fildes, int owner, int group)
 {
-    return libexplain_errno_fchown(errno, fildes, owner, group);
+    return explain_errno_fchown(errno, fildes, owner, group);
 }

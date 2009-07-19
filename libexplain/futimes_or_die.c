@@ -26,12 +26,10 @@
 
 
 void
-libexplain_futimes_or_die(int fildes, const struct timeval *tv)
+explain_futimes_or_die(int fildes, const struct timeval *tv)
 {
-    if (futimes(fildes, tv) < 0)
+    if (explain_futimes_on_error(fildes, tv) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_futimes(fildes, tv));
         exit(EXIT_FAILURE);
     }
 }

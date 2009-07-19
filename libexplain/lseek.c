@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 
 
 const char *
-libexplain_lseek(int fildes, long long offset, int whence)
+explain_lseek(int fildes, long long offset, int whence)
 {
-    return libexplain_errno_lseek(errno, fildes, offset, whence);
+    return explain_errno_lseek(errno, fildes, offset, whence);
 }

@@ -25,15 +25,13 @@
 
 
 FILE *
-libexplain_popen_or_die(const char *command, const char *flags)
+explain_popen_or_die(const char *command, const char *flags)
 {
     FILE            *fp;
 
-    fp = popen(command, flags);
+    fp = explain_popen_on_error(command, flags);
     if (!fp)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_popen(command, flags));
         exit(EXIT_FAILURE);
     }
     return fp;

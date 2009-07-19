@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_LARGE_FILE_SUPPORT_H
 #define LIBEXPLAIN_LARGE_FILE_SUPPORT_H
 
+#include <libexplain/public_config.h>
+
 /**
   * @page lfs "Large File Support"
   *
@@ -35,17 +37,17 @@
   * A libexplain design decision was to support large files, and this in
   * turn means that clients of libexplain must also enable large file
   * support, so that libexplain and its client programs are using the
-  * same data sizes.
+  * same data sizes.  (Failure to do so leads to hard-to-find memory
+  * scribbles and segfaults.)
   */
 
-#if (defined(__linux__) && (_FILE_OFFSET_BITS != 64)) || \
-    (defined(__aix__) && !defined(_LARGE_FILES))
+#if ((LIBEXPLAIN_FILE_OFFSET_BITS != _FILE_OFFSET_BITS) || \
+     (defined(LIBEXPLAIN_LARGEFILE_SOURCE) && !defined(_LARGEFILE_SOURCE)) || \
+     (defined(LIBEXPLAIN_LARGE_FILES) && !defined(_LARGE_FILES)))
 #error "\
-You must enable large file support to be able to use libexplain.     \
-If your project uses GNU Autoconf, it is simply a matter of adding   \
-the AC_SYS_LARGEFILE macro to your configure.ac file.  If not, you   \
-need to add -D_FILE_OFFSET_BITS=64 to your CFLAGS definition (this   \
-is not completely portable, consider using GNU Autoconf instead).    \
+You must enable large file support to be able to use libexplain.  If \
+your project uses GNU Autoconf, it is simply a matter of adding the \
+AC_SYS_LARGEFILE macro to your configure.ac file.\
 "
 .large/file.support/error.
 #endif

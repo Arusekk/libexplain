@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'm':
-            mode = libexplain_access_mode_parse(optarg);
+            mode = explain_access_mode_parse(optarg);
             if (mode < 0)
             {
                 fprintf
@@ -67,7 +67,7 @@ main(int argc, char **argv)
             break;
 
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return 0;
 
         default:
@@ -78,6 +78,6 @@ main(int argc, char **argv)
         usage();
     pathname = argv[optind];
 
-    libexplain_access_or_die(pathname, mode);
+    explain_access_or_die(pathname, mode);
     return 0;
 }

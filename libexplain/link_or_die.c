@@ -26,12 +26,10 @@
 
 
 void
-libexplain_link_or_die(const char *oldpath, const char *newpath)
+explain_link_or_die(const char *oldpath, const char *newpath)
 {
-    if (link(oldpath, newpath) < 0)
+    if (explain_link_on_error(oldpath, newpath) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_link(oldpath, newpath));
         exit(EXIT_FAILURE);
     }
 }

@@ -24,25 +24,25 @@
 
 
 void
-libexplain_buffer_mtget(libexplain_string_buffer_t *sb,
+explain_buffer_mtget(explain_string_buffer_t *sb,
     const struct mtget *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_printf(sb, "{ mt_type = %ld, ", data->mt_type);
-        libexplain_string_buffer_printf(sb, "mt_resid = %ld, ", data->mt_resid);
-        libexplain_string_buffer_printf(sb, "mt_dsreg = %ld, ", data->mt_dsreg);
-        libexplain_string_buffer_printf(sb, "mt_gstat = %ld, ", data->mt_gstat);
-        libexplain_string_buffer_printf(sb, "mt_erreg = %ld, ", data->mt_erreg);
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf(sb, "{ mt_type = %ld, ", data->mt_type);
+        explain_string_buffer_printf(sb, "mt_resid = %ld, ", data->mt_resid);
+        explain_string_buffer_printf(sb, "mt_dsreg = %ld, ", data->mt_dsreg);
+        explain_string_buffer_printf(sb, "mt_gstat = %ld, ", data->mt_gstat);
+        explain_string_buffer_printf(sb, "mt_erreg = %ld, ", data->mt_erreg);
+        explain_string_buffer_printf
         (
             sb,
             "mt_fileno = %ld, ",
             (long)data->mt_fileno
         );
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "mt_blkno = %ld }",

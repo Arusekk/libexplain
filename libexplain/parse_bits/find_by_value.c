@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,12 +20,12 @@
 #include <libexplain/parse_bits.h>
 
 
-const libexplain_parse_bits_table_t *
-libexplain_parse_bits_find_by_value(int value,
-    const libexplain_parse_bits_table_t *table, size_t table_size)
+const explain_parse_bits_table_t *
+explain_parse_bits_find_by_value(int value,
+    const explain_parse_bits_table_t *table, size_t table_size)
 {
-    const libexplain_parse_bits_table_t *tp;
-    const libexplain_parse_bits_table_t *end;
+    const explain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *end;
 
     end = table + table_size;
     for (tp = table; tp < end; ++tp)

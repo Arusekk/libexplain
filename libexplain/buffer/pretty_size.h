@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,14 +23,14 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_pretty_size function may be used to
+  * The explain_buffer_pretty_size function may be used to
   *
   * @param sb
   *     The string buffer to print into
   * @param size
   *     The size in bytes to be presented in a human readable form.
   */
-void libexplain_buffer_pretty_size(libexplain_string_buffer_t *sb,
+void explain_buffer_pretty_size(explain_string_buffer_t *sb,
     unsigned long long size);
 
 #endif /* LIBEXPLAIN_BUFFER_PRETTY_SIZE_H */

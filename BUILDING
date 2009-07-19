@@ -19,13 +19,17 @@ BEFORE YOU START
 
         lsof    For systems with inadequate or non-existent /proc facilities,
                 the lsof(1) is needed to obtain supplementary information
-                about open file descriptors.
+                about open file descriptors.  However, if lsof(1) does not
+                support your operating system, libexplain will still work, but
+                some useful information (such as translating file descriptors
+                into the name of the open file) will be absent from error
+                messages.
                 http://people.freebsd.org/~abe/
 
         GNU libtool
                 The libtool program is used to build shared libraries.  It
-                understands neccesary weird and wonderful compiler and linker
-                tricks on many weird and wonderful systems.
+                understands the neccesary, weird and wonderful compiler and
+                linker tricks on many weird and wonderful systems.
                 http://www.gnu.org/software/libtool/
 
         bison   The bison program is a general-purpose parser generator that
@@ -218,7 +222,7 @@ GETTING HELP
         When reporting problems, please include the version number given by
         the
                 % explain -version
-                explain version 0.D008
+                explain version 0.D014
                 ...warranty disclaimer...
                 %
         command.  Please do not send this example; run the program for the

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_write function may be used to obtain
+  * The explain_buffer_errno_write function may be used to obtain
   * a human readable explanation of what went wrong in a write(2)
   * system call.  The least the message will contain is the value of
   * strerror(errnum), but usually it will do much better, and indicate
@@ -48,12 +48,12 @@
   * @note
   *    Given a suitably thread safe buffer, this function is thread safe.
   */
-void libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_write(explain_string_buffer_t *sb, int errnum,
     int fildes, const void *data, size_t data_size);
 
 /**
-  * The libexplain_buffer_errno_write_explanation function is called by the
-  * libexplain_buffer_errno_write function (and others) to write the
+  * The explain_buffer_errno_write_explanation function is called by the
+  * explain_buffer_errno_write function (and others) to write the
   * "because" part of the message.
   *
   * @param sb
@@ -67,7 +67,7 @@ void libexplain_buffer_errno_write(libexplain_string_buffer_t *sb, int errnum,
   * @param data_size
   *    The original data_size, exactly as passed to the write(2) system call.
   */
-void libexplain_buffer_errno_write_explanation(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, const void *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WRITE_H */

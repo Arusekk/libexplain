@@ -28,18 +28,18 @@
 
 
 static void
-libexplain_buffer_errno_pipe_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_pipe_system_call(explain_string_buffer_t *sb,
     int errnum, int *pipefds)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "pipe(pipefds = ");
-    libexplain_buffer_pointer(sb, pipefds);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "pipe(pipefds = ");
+    explain_buffer_pointer(sb, pipefds);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_pipe_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_pipe_explanation(explain_string_buffer_t *sb,
     int errnum, int *pipefds)
 {
     /*
@@ -49,44 +49,44 @@ libexplain_buffer_errno_pipe_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EFAULT:
-        libexplain_buffer_efault(sb, "pipefds");
+        explain_buffer_efault(sb, "pipefds");
         break;
 
     case EMFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
         break;
 
     case ENFILE:
-        libexplain_buffer_enfile(sb);
+        explain_buffer_enfile(sb);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_pipe(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_pipe(explain_string_buffer_t *sb, int errnum,
     int *pipefds)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_pipe_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_pipe_system_call
     (
         &exp.system_call_sb,
         errnum,
         pipefds
     );
-    libexplain_buffer_errno_pipe_explanation
+    explain_buffer_errno_pipe_explanation
     (
         &exp.explanation_sb,
         errnum,
         pipefds
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

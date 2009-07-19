@@ -24,14 +24,14 @@
 
 
 void
-libexplain_buffer_mtpos(libexplain_string_buffer_t *sb,
+explain_buffer_mtpos(explain_string_buffer_t *sb,
     const struct mtpos *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ mt_blkno = %ld }",

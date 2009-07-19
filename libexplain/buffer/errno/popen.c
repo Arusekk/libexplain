@@ -29,20 +29,20 @@
 
 
 static void
-libexplain_buffer_errno_popen_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_popen_system_call(explain_string_buffer_t *sb,
     int errnum, const char *command, const char *flags)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "popen(command = ");
-    libexplain_buffer_pathname(sb, command);
-    libexplain_string_buffer_puts(sb, ", flags = ");
-    libexplain_buffer_pathname(sb, flags);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "popen(command = ");
+    explain_buffer_pathname(sb, command);
+    explain_string_buffer_puts(sb, ", flags = ");
+    explain_buffer_pathname(sb, flags);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_popen_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_popen_explanation(explain_string_buffer_t *sb,
     int errnum, const char *command, const char *flags)
 {
     /*
@@ -53,54 +53,54 @@ libexplain_buffer_errno_popen_explanation(libexplain_string_buffer_t *sb,
     {
     case EINVAL:
         {
-            libexplain_string_flags_t sf;
+            explain_string_flags_t sf;
 
-            libexplain_string_flags_init(&sf, flags);
-            libexplain_string_flags_einval(&sf, sb, "flags");
+            explain_string_flags_init(&sf, flags);
+            explain_string_flags_einval(&sf, sb, "flags");
         }
         break;
 
     case EMFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
         break;
 
     case ENFILE:
-        libexplain_buffer_emfile(sb);
+        explain_buffer_emfile(sb);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_popen(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_popen(explain_string_buffer_t *sb, int errnum,
     const char *command, const char *flags)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_popen_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_popen_system_call
     (
         &exp.system_call_sb,
         errnum,
         command,
         flags
     );
-    libexplain_buffer_errno_popen_explanation
+    explain_buffer_errno_popen_explanation
     (
         &exp.explanation_sb,
         errnum,
         command,
         flags
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }
 
 /* vim:ts=8:sw=4:et */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,10 +23,10 @@
 
 
 void
-libexplain_message_read(char *message, int message_size, int fildes,
+explain_message_read(char *message, int message_size, int fildes,
     const void *data, long data_size)
 {
-    libexplain_message_errno_read
+    explain_message_errno_read
     (
         message,
         message_size,

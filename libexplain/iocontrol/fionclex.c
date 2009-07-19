@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/fionclex.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_fionclex =
+const explain_iocontrol_t explain_iocontrol_fionclex =
 {
     "FIONCLEX", /* name */
     FIONCLEX, /* value */

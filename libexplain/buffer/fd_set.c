@@ -23,15 +23,15 @@
 
 
 void
-libexplain_buffer_fd_set(libexplain_string_buffer_t *sb, int nfds,
+explain_buffer_fd_set(explain_string_buffer_t *sb, int nfds,
     const fd_set *fds)
 {
     int             fildes;
     int             first;
 
-    if (libexplain_pointer_is_efault(fds, sizeof(*fds)))
+    if (explain_pointer_is_efault(fds, sizeof(*fds)))
     {
-        libexplain_buffer_pointer(sb, fds);
+        explain_buffer_pointer(sb, fds);
         return;
     }
     first = 1;
@@ -39,11 +39,11 @@ libexplain_buffer_fd_set(libexplain_string_buffer_t *sb, int nfds,
     {
         if (FD_ISSET(fildes, fds))
         {
-            libexplain_string_buffer_putc(sb, (first ? '{' : ','));
-            libexplain_string_buffer_printf(sb, " %d", fildes);
-            libexplain_buffer_fildes_to_pathname(sb, fildes);
+            explain_string_buffer_putc(sb, (first ? '{' : ','));
+            explain_string_buffer_printf(sb, " %d", fildes);
+            explain_buffer_fildes_to_pathname(sb, fildes);
             first = 0;
         }
     }
-    libexplain_string_buffer_puts(sb, (first ? "{}" : " }"));
+    explain_string_buffer_puts(sb, (first ? "{}" : " }"));
 }

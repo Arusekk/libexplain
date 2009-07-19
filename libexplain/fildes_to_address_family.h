@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_FILDES_TO_ADDRESS_FAMILY_H
 
 /**
-  * The libexplain_fildes_to_address_family function may be used to
+  * The explain_fildes_to_address_family function may be used to
   * obtain the address family of a file descriptor that refers to a
   * network socket.
   *
@@ -31,6 +31,6 @@
   *    the address family,
   *    or -1 on error (including not open and not a socket)
   */
-int libexplain_fildes_to_address_family(int fildes);
+int explain_fildes_to_address_family(int fildes);
 
 #endif /* LIBEXPLAIN_FILDES_TO_ADDRESS_FAMILY_H */

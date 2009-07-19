@@ -26,21 +26,21 @@
 #ifdef HAVE_LINUX_KD_H
 
 void
-libexplain_buffer_kbsentry(libexplain_string_buffer_t *sb,
+explain_buffer_kbsentry(explain_string_buffer_t *sb,
     const struct kbsentry *data, int extra)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_pointer_is_efault(data, sizeof(*data)))
     {
-        libexplain_buffer_pointer(sb, data);
+        explain_buffer_pointer(sb, data);
         return;
     }
-    libexplain_string_buffer_printf(sb, "{ kb_func = %u", data->kb_func);
+    explain_string_buffer_printf(sb, "{ kb_func = %u", data->kb_func);
     if (extra)
     {
-        libexplain_string_buffer_puts(sb, ", kb_string = ");
-        libexplain_string_buffer_puts_quoted(sb, (const char *)data->kb_string);
+        explain_string_buffer_puts(sb, ", kb_string = ");
+        explain_string_buffer_puts_quoted(sb, (const char *)data->kb_string);
     }
-    libexplain_string_buffer_puts(sb, " }");
+    explain_string_buffer_puts(sb, " }");
 }
 
 #endif /* HAVE_LINUX_KD_H */

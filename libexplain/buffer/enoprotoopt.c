@@ -20,10 +20,10 @@
 
 
 void
-libexplain_buffer_enoprotoopt(libexplain_string_buffer_t *sb,
+explain_buffer_enoprotoopt(explain_string_buffer_t *sb,
     const char *caption)
 {
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*

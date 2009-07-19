@@ -28,16 +28,16 @@
 
 
 static void
-libexplain_buffer_errno_gettimeofday_system_call(
-    libexplain_string_buffer_t *sb, int errnum, struct timeval *tv,
+explain_buffer_errno_gettimeofday_system_call(
+    explain_string_buffer_t *sb, int errnum, struct timeval *tv,
     struct timezone *tz)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "gettimeofday(tv = ");
-    libexplain_buffer_pointer(sb, tv);
-    libexplain_string_buffer_puts(sb, ", tz = ");
-    libexplain_buffer_pointer(sb, tz);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "gettimeofday(tv = ");
+    explain_buffer_pointer(sb, tv);
+    explain_string_buffer_puts(sb, ", tz = ");
+    explain_buffer_pointer(sb, tz);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
@@ -46,52 +46,52 @@ libexplain_buffer_errno_gettimeofday_system_call(
  */
 
 static void
-libexplain_buffer_errno_gettimeofday_explanation(
-    libexplain_string_buffer_t *sb, int errnum, struct timeval *tv,
+explain_buffer_errno_gettimeofday_explanation(
+    explain_string_buffer_t *sb, int errnum, struct timeval *tv,
     struct timezone *tz)
 {
     switch (errnum)
     {
     case EFAULT:
-        if (tv && libexplain_pointer_is_efault(tv, sizeof(*tv)))
+        if (tv && explain_pointer_is_efault(tv, sizeof(*tv)))
         {
-            libexplain_buffer_efault(sb, "tv");
+            explain_buffer_efault(sb, "tv");
             break;
         }
-        if (tz && libexplain_pointer_is_efault(tz, sizeof(*tz)))
+        if (tz && explain_pointer_is_efault(tz, sizeof(*tz)))
         {
-            libexplain_buffer_efault(sb, "tz");
+            explain_buffer_efault(sb, "tz");
             break;
         }
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_gettimeofday(libexplain_string_buffer_t *sb,
+explain_buffer_errno_gettimeofday(explain_string_buffer_t *sb,
     int errnum, struct timeval *tv, struct timezone *tz)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_gettimeofday_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_gettimeofday_system_call
     (
         &exp.system_call_sb,
         errnum,
         tv,
         tz
     );
-    libexplain_buffer_errno_gettimeofday_explanation
+    explain_buffer_errno_gettimeofday_explanation
     (
         &exp.explanation_sb,
         errnum,
         tv,
         tz
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

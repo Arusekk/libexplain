@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return EXIT_SUCCESS;
 
         default:
@@ -61,11 +61,11 @@ main(int argc, char **argv)
     if (optind + 3 != argc)
         usage();
 
-    domain = libexplain_parse_address_family_or_die(argv[optind], "arg 1");
-    type = libexplain_parse_socket_type_or_die(argv[optind + 1], "arg 2");
+    domain = explain_parse_address_family_or_die(argv[optind], "arg 1");
+    type = explain_parse_socket_type_or_die(argv[optind + 1], "arg 2");
     protocol =
-        libexplain_parse_socket_protocol_or_die(argv[optind + 2], "arg 3");
+        explain_parse_socket_protocol_or_die(argv[optind + 2], "arg 3");
 
-    libexplain_socket_or_die(domain, type, protocol);
+    explain_socket_or_die(domain, type, protocol);
     return EXIT_SUCCESS;
 }

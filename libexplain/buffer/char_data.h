@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_char_data function may be used to
+  * The explain_buffer_char_data function may be used to
   *
   * @param sb
   *    The string buffer to print into.
@@ -31,7 +31,7 @@
   * @param data_size
   *    The size of the array to be printed, int bytes.
   */
-void libexplain_buffer_char_data(libexplain_string_buffer_t *sb,
+void explain_buffer_char_data(explain_string_buffer_t *sb,
     const void *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_CHAR_DATA_H */

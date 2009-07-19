@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_route_struct function may be used to
+  * The explain_buffer_route_struct function may be used to
   * print a representation of a routing data structure.
   *
   * @param sb
@@ -33,7 +33,7 @@
   * @param data
   *    The routing data structure to be printed.
   */
-void libexplain_buffer_route_struct(libexplain_string_buffer_t *sb,
+void explain_buffer_route_struct(explain_string_buffer_t *sb,
     int fildes, const void *data);
 
 #endif /* LIBEXPLAIN_BUFFER_ROUTE_STRUCT_H */

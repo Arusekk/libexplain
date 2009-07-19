@@ -24,17 +24,17 @@
 
 
 void
-libexplain_buffer_timeval(libexplain_string_buffer_t *sb,
+explain_buffer_timeval(explain_string_buffer_t *sb,
     const struct timeval *tvp)
 {
-    if (libexplain_pointer_is_efault(tvp, sizeof(*tvp)))
+    if (explain_pointer_is_efault(tvp, sizeof(*tvp)))
     {
-        libexplain_buffer_pointer(sb, tvp);
+        explain_buffer_pointer(sb, tvp);
         return;
     }
     if (tvp->tv_usec < 0)
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ tv_sec = %ld, tv_usec = %ld }",
@@ -44,7 +44,7 @@ libexplain_buffer_timeval(libexplain_string_buffer_t *sb,
     }
     else
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ %.8g seconds }",

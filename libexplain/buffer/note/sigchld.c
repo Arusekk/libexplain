@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -38,12 +38,12 @@ sigchld_ignored(void)
 
 
 void
-libexplain_buffer_note_sigchld(libexplain_string_buffer_t *sb)
+explain_buffer_note_sigchld(explain_string_buffer_t *sb)
 {
     if (sigchld_ignored())
     {
-        libexplain_string_buffer_puts(sb, "; ");
-        libexplain_buffer_gettext
+        explain_string_buffer_puts(sb, "; ");
+        explain_buffer_gettext
         (
             sb,
             /*

@@ -24,7 +24,7 @@
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t c_iflag_table[] =
+static const explain_parse_bits_table_t c_iflag_table[] =
 {
     { "IGNBRK", IGNBRK },
     { "BRKINT", BRKINT },
@@ -48,8 +48,8 @@ static const libexplain_parse_bits_table_t c_iflag_table[] =
         if (flag & name)                                   \
         {                                                  \
             if (!first)                                    \
-                libexplain_string_buffer_puts(sb, " | ");  \
-            libexplain_string_buffer_puts(sb, #name);      \
+                explain_string_buffer_puts(sb, " | ");  \
+            explain_string_buffer_puts(sb, #name);      \
             flag &= ~name;                                \
             first = 0;                                     \
         }                                                  \
@@ -58,14 +58,14 @@ static const libexplain_parse_bits_table_t c_iflag_table[] =
 #define simple_case(name)                                  \
     do {                                                   \
         if (!first)                                        \
-            libexplain_string_buffer_puts(sb, " | ");      \
-        libexplain_string_buffer_puts(sb, #name);          \
+            explain_string_buffer_puts(sb, " | ");      \
+        explain_string_buffer_puts(sb, #name);          \
         first = 0;                                         \
     } while (0)
 
 
 static void
-libexplain_buffer_termios_oflag(libexplain_string_buffer_t *sb, int flag)
+explain_buffer_termios_oflag(explain_string_buffer_t *sb, int flag)
 {
     int             first;
 
@@ -117,14 +117,14 @@ libexplain_buffer_termios_oflag(libexplain_string_buffer_t *sb, int flag)
     if (flag)
     {
         if (!first)
-            libexplain_string_buffer_puts(sb, " | ");
-        libexplain_string_buffer_printf(sb, "%#x", flag);
+            explain_string_buffer_puts(sb, " | ");
+        explain_string_buffer_printf(sb, "%#x", flag);
     }
 };
 
 
 static void
-libexplain_buffer_termios_cflag(libexplain_string_buffer_t *sb, int flag)
+explain_buffer_termios_cflag(explain_string_buffer_t *sb, int flag)
 {
     int             first;
 
@@ -193,13 +193,13 @@ libexplain_buffer_termios_cflag(libexplain_string_buffer_t *sb, int flag)
     if (flag)
     {
         if (!first)
-            libexplain_string_buffer_puts(sb, " | ");
-        libexplain_string_buffer_printf(sb, "%#x", flag);
+            explain_string_buffer_puts(sb, " | ");
+        explain_string_buffer_printf(sb, "%#x", flag);
     }
 };
 
 
-static const libexplain_parse_bits_table_t c_lflag_table[] =
+static const explain_parse_bits_table_t c_lflag_table[] =
 {
     { "ISIG", ISIG },
     { "ICANON", ICANON },
@@ -219,7 +219,7 @@ static const libexplain_parse_bits_table_t c_lflag_table[] =
 };
 
 
-static const libexplain_parse_bits_table_t cc_table[] =
+static const explain_parse_bits_table_t cc_table[] =
 {
     { "VINTR", VINTR },
     { "VQUIT", VQUIT },
@@ -241,7 +241,7 @@ static const libexplain_parse_bits_table_t cc_table[] =
 };
 
 
-static const libexplain_parse_bits_table_t line_discipline_table[] =
+static const explain_parse_bits_table_t line_discipline_table[] =
 {
     { "N_TTY", N_TTY },
     { "N_SLIP", N_SLIP },
@@ -263,110 +263,110 @@ static const libexplain_parse_bits_table_t line_discipline_table[] =
 
 
 void
-libexplain_buffer_termios(libexplain_string_buffer_t *sb,
+explain_buffer_termios(explain_string_buffer_t *sb,
     const struct termios *value)
 {
     int             j;
 
-    libexplain_string_buffer_puts(sb, "{ c_iflag = ");
-    libexplain_parse_bits_print
+    explain_string_buffer_puts(sb, "{ c_iflag = ");
+    explain_parse_bits_print
     (
         sb,
         value->c_iflag,
         c_iflag_table,
         SIZEOF(c_iflag_table)
     );
-    libexplain_string_buffer_puts(sb, ", c_oflag = ");
-    libexplain_buffer_termios_oflag(sb, value->c_oflag);
-    libexplain_string_buffer_puts(sb, ", c_cflag = ");
-    libexplain_buffer_termios_cflag(sb, value->c_oflag);
-    libexplain_string_buffer_puts(sb, ", c_lflag = ");
-    libexplain_parse_bits_print
+    explain_string_buffer_puts(sb, ", c_oflag = ");
+    explain_buffer_termios_oflag(sb, value->c_oflag);
+    explain_string_buffer_puts(sb, ", c_cflag = ");
+    explain_buffer_termios_cflag(sb, value->c_oflag);
+    explain_string_buffer_puts(sb, ", c_lflag = ");
+    explain_parse_bits_print
     (
         sb,
         value->c_lflag,
         c_lflag_table,
         SIZEOF(c_lflag_table)
     );
-    libexplain_string_buffer_puts(sb, ", c_line = ");
-    libexplain_parse_bits_print
+    explain_string_buffer_puts(sb, ", c_line = ");
+    explain_parse_bits_print
     (
         sb,
         value->c_lflag,
         line_discipline_table,
         SIZEOF(line_discipline_table)
     );
-    libexplain_string_buffer_puts(sb, ", c_cc[] = {");
+    explain_string_buffer_puts(sb, ", c_cc[] = {");
     for (j = 0; j < NCCS; ++j)
     {
-        const libexplain_parse_bits_table_t *tp;
+        const explain_parse_bits_table_t *tp;
 
         if (j)
-            libexplain_string_buffer_putc(sb, ',');
-        libexplain_string_buffer_putc(sb, ' ');
-        tp = libexplain_parse_bits_find_by_value(j, cc_table, SIZEOF(cc_table));
+            explain_string_buffer_putc(sb, ',');
+        explain_string_buffer_putc(sb, ' ');
+        tp = explain_parse_bits_find_by_value(j, cc_table, SIZEOF(cc_table));
         if (tp)
-            libexplain_string_buffer_printf(sb, "%s = ", tp->name);
-        libexplain_string_buffer_putc_quoted
+            explain_string_buffer_printf(sb, "%s = ", tp->name);
+        explain_string_buffer_putc_quoted
         (
             sb,
             (unsigned char)value->c_cc[j]
         );
     }
-    libexplain_string_buffer_puts(sb, " } }");
+    explain_string_buffer_puts(sb, " } }");
 }
 
 
 void
-libexplain_buffer_termio(libexplain_string_buffer_t *sb,
+explain_buffer_termio(explain_string_buffer_t *sb,
     const struct termio *value)
 {
     int             j;
 
-    libexplain_string_buffer_puts(sb, "{ c_iflag = ");
-    libexplain_parse_bits_print
+    explain_string_buffer_puts(sb, "{ c_iflag = ");
+    explain_parse_bits_print
     (
         sb,
         value->c_iflag,
         c_iflag_table,
         SIZEOF(c_iflag_table)
     );
-    libexplain_string_buffer_puts(sb, ", c_oflag = ");
-    libexplain_buffer_termios_oflag(sb, value->c_oflag);
-    libexplain_string_buffer_puts(sb, ", c_cflag = ");
-    libexplain_buffer_termios_cflag(sb, value->c_oflag);
-    libexplain_string_buffer_puts(sb, ", c_lflag = ");
-    libexplain_parse_bits_print
+    explain_string_buffer_puts(sb, ", c_oflag = ");
+    explain_buffer_termios_oflag(sb, value->c_oflag);
+    explain_string_buffer_puts(sb, ", c_cflag = ");
+    explain_buffer_termios_cflag(sb, value->c_oflag);
+    explain_string_buffer_puts(sb, ", c_lflag = ");
+    explain_parse_bits_print
     (
         sb,
         value->c_lflag,
         c_lflag_table,
         SIZEOF(c_lflag_table)
     );
-    libexplain_string_buffer_puts(sb, ", c_line = ");
-    libexplain_parse_bits_print
+    explain_string_buffer_puts(sb, ", c_line = ");
+    explain_parse_bits_print
     (
         sb,
         value->c_lflag,
         line_discipline_table,
         SIZEOF(line_discipline_table)
     );
-    libexplain_string_buffer_puts(sb, ", c_cc[] = {");
+    explain_string_buffer_puts(sb, ", c_cc[] = {");
     for (j = 0; j < NCC; ++j)
     {
-        const libexplain_parse_bits_table_t *tp;
+        const explain_parse_bits_table_t *tp;
 
         if (j)
-            libexplain_string_buffer_putc(sb, ',');
-        libexplain_string_buffer_putc(sb, ' ');
-        tp = libexplain_parse_bits_find_by_value(j, cc_table, SIZEOF(cc_table));
+            explain_string_buffer_putc(sb, ',');
+        explain_string_buffer_putc(sb, ' ');
+        tp = explain_parse_bits_find_by_value(j, cc_table, SIZEOF(cc_table));
         if (tp)
-            libexplain_string_buffer_printf(sb, "%s = ", tp->name);
-        libexplain_string_buffer_putc_quoted
+            explain_string_buffer_printf(sb, "%s = ", tp->name);
+        explain_string_buffer_putc_quoted
         (
             sb,
             (unsigned char)value->c_cc[j]
         );
     }
-    libexplain_string_buffer_puts(sb, " } }");
+    explain_string_buffer_puts(sb, " } }");
 }

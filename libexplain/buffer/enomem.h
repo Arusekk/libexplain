@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,30 +23,30 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_enomem function may be used to
+  * The explain_buffer_enomem function may be used to
   * explain a 'no kernel memory' error.
   *
   * @param sb
   *    The buffer to print the explanation to
   */
-void libexplain_buffer_enomem_kernel(libexplain_string_buffer_t *sb);
+void explain_buffer_enomem_kernel(explain_string_buffer_t *sb);
 
 /**
-  * The libexplain_buffer_enomem function may be used to
+  * The explain_buffer_enomem function may be used to
   * explain a 'no user-space memory' error.
   *
   * @param sb
   *    The buffer to print the explanation to
   */
-void libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb);
+void explain_buffer_enomem_user(explain_string_buffer_t *sb);
 
 /**
-  * The libexplain_buffer_enomem_or_user function may be used to
+  * The explain_buffer_enomem_or_user function may be used to
   * explain a 'no user or kernel memory' error.
   *
   * @param sb
   *    The buffer to print the explanation to
   */
-void libexplain_buffer_enomem_kernel_or_user(libexplain_string_buffer_t *sb);
+void explain_buffer_enomem_kernel_or_user(explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOMEM_H */

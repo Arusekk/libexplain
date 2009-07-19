@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_wait function
+  * The explain_buffer_errno_wait function
   * is used to obtain an explanation of an error returned
   * by the wait(2) system call.
   * The least the message will contain is the value of
@@ -43,12 +43,12 @@
   * @param status
   *     The original status, exactly as passed to the wait(2) system call.
   */
-void libexplain_buffer_errno_wait(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_wait(explain_string_buffer_t *sb, int errnum,
     int *status);
 
 /**
-  * The libexplain_buffer_errno_wait_explanation function is used by the
-  * libexplain_buffer_errno_wait function (and others) to describe the
+  * The explain_buffer_errno_wait_explanation function is used by the
+  * explain_buffer_errno_wait function (and others) to describe the
   * problem in detail.
   *
   * @param sb
@@ -58,7 +58,7 @@ void libexplain_buffer_errno_wait(libexplain_string_buffer_t *sb, int errnum,
   * @param status
   *     The original status, exactly as passed to the wait(2) system call.
   */
-void libexplain_buffer_errno_wait_explanation(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_wait_explanation(explain_string_buffer_t *sb,
     int errnum, int *status);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WAIT_H */

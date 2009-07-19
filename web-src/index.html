@@ -52,11 +52,19 @@ if (fd < 0)
 {
     fprintf(stderr, "%s\en", <a
 href="doc-external/open_8h.html#7c0bfc9a553438096c19b86dab687b2a"
->libexplain_open</a>(path, flags, mode));
+>explain_open</a>(path, flags, mode));
     exit(EXIT_FAILURE);
 }
 .fi
 </pre></blockquote>
+<p>
+<a
+.nf
+href="http://sourceforge.net/community/cca09/nominate/?\
+project_name=libexplain&amp;project_url=http://libexplain.sourceforge.net/"
+.fi
+><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"
+align="right" alt="" /></a>
 If, for example, you were to try to open
 .br
 <tt>no-such-dir/some-file</tt>, you would see a message like
@@ -69,7 +77,7 @@ failed, No such file or directory (2, ENOENT) because there is no
 The good new is that for each of these functions there is a wrapper
 function, in this case <a
 href="doc-external/open_8h.html#ef4b43a41f11f51b07aa6a6162ad5bc1"
-><i>libexplain_open_or_die</i>(3)</a>,
+><i>explain_open_or_die</i>(3)</a>,
 that includes
 the above code fragment.  Adding good error reporting is as simple as
 using a different, but similarly named, function.
@@ -119,6 +127,7 @@ generated from the source code.
     <p>
 
 <dt>ELOOP<dd>
+    <img src="knot1.128.png" alt="" align="right" />
     The path of the first symbolic link in
     the loop will be included in the message.
     Or, if there was too many indirections but no loop,
@@ -140,7 +149,9 @@ generated from the source code.
     The philosophy is to include as much information as is available.
 </dl>
 
-<h2> Documentation </h2>
+<h2>
+<img src="watch2.128.png" align="right" alt="" />
+Documentation </h2>
 <ul>
 <li>
 There is <a href="doc-external/index.html"
@@ -159,7 +170,9 @@ in the source code marked &ldquo;FIXME&rdquo;.
 </ul>
 
 .br
-<h2> Download </h2>
+<h2>
+<img src="orrery1.128.png" align="left" alt="" />
+Download </h2>
 The following files are available for download:
 <p>
 <table align="center">
@@ -185,9 +198,46 @@ The following files are available for download:
 .br
 <tr>
     <td> <a href="debian/" >debian</a> </td>
-    <td> Pre-built debian packages for Ubuntu 8.10 Intrepid i386
+    <td> Pre-built debian packages for Ubuntu 8.04 Jaunty i386
     </td> </tr>
 </table>
+
+.\" ------------------------------------------------------------------------
+<h2> Services provided by SourceForge </h2>
+
+<ul>
+<li>
+    Mailing list is <a
+    href="mailto:libexplain-users@lists.sourceforgeSystem.net"
+    >libexplain-users@lists.sourceforgeSystem.net</a>, and you can subscribe <a
+    href="https://lists.sourceforge.net/lists/listinfo/libexplain-users"
+    >here</a>.
+<li>
+    SourceForge <a href="http://sourceforge.net/projects/libexplain/"
+    >project</a> page.
+<li>
+    SourceForge <a
+    href="http://sourceforge.net/project/platformdownload.php?group_id=241772"
+    >download</a> page.
+<li>
+    SourceForge <a href="https://sourceforge.net/tracker/?group_id=241772"
+    >trackers</a> page: the <a
+.nf
+href="https://sourceforge.net/tracker/?\
+atid=1117296&amp;group_id=241772&amp;func=browse"
+.fi
+    >bug tracker</a>, the <a
+.nf
+href="http://sourceforge.net/tracker/?\
+atid=1117298&amp;group_id=241772&amp;func=browse"
+.fi
+    >patch tracker</a>, and <a
+.nf
+href="http://sourceforge.net/tracker/?\
+atid=1117299&amp;group_id=241772&amp;func=browse"
+.fi
+    >feature requests</a>.
+</ul>
 
 .\" ------------------------------------------------------------------------
 .br

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,11 +22,11 @@
 
 
 const char *
-libexplain_select(int nfds, fd_set *readfds, fd_set *writefds,
+explain_select(int nfds, fd_set *readfds, fd_set *writefds,
     fd_set *exceptfds, struct timeval *timeout)
 {
     return
-        libexplain_errno_select
+        explain_errno_select
         (
             errno,
             nfds,

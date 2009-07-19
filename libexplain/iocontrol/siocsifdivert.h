@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol.h>
 
 /**
-  * The libexplain_iocontrol_siocsifdivert global variable is
+  * The explain_iocontrol_siocsifdivert global variable is
   * used to store information about the SIOCSIFDIVERT
   * I/O control.
   *
@@ -32,6 +32,6 @@
   *     are ambiguous, and (b) the includes files have bugs making it
   *     impossible to include all of them in the same combilation unit.
   */
-extern const libexplain_iocontrol_t libexplain_iocontrol_siocsifdivert;
+extern const explain_iocontrol_t explain_iocontrol_siocsifdivert;
 
 #endif /* LIBEXPLAIN_IOCONTROL_SIOCSIFDIVERT_H */

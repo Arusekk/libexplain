@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,8 +22,8 @@
 
 
 const char *
-libexplain_bind(int fildes, const struct sockaddr *sock_addr,
+explain_bind(int fildes, const struct sockaddr *sock_addr,
     int sock_addr_size)
 {
-    return libexplain_errno_bind(errno, fildes, sock_addr, sock_addr_size);
+    return explain_errno_bind(errno, fildes, sock_addr, sock_addr_size);
 }

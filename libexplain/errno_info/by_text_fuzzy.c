@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,22 +23,22 @@
 #include <libexplain/fstrcmp.h>
 
 
-const libexplain_errno_info_t *
-libexplain_errno_info_by_text_fuzzy(const char *text)
+const explain_errno_info_t *
+explain_errno_info_by_text_fuzzy(const char *text)
 {
-    const libexplain_errno_info_t *tp;
-    const libexplain_errno_info_t *end;
-    const libexplain_errno_info_t *best_tp;
+    const explain_errno_info_t *tp;
+    const explain_errno_info_t *end;
+    const explain_errno_info_t *best_tp;
     double          best_weight;
 
-    end = libexplain_errno_info + libexplain_errno_info_size;
+    end = explain_errno_info + explain_errno_info_size;
     best_tp = 0;
     best_weight = 0.6;
-    for (tp = libexplain_errno_info; tp < end; ++tp)
+    for (tp = explain_errno_info; tp < end; ++tp)
     {
         double          weight;
 
-        weight =  libexplain_fstrcmp(strerror(tp->error_number), text);
+        weight =  explain_fstrcmp(strerror(tp->error_number), text);
         if (best_weight < weight)
         {
             best_weight = weight;

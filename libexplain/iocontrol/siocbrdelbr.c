@@ -27,18 +27,18 @@
 #ifdef SIOCBRDELBR
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_string_n(sb, data, IFNAMSIZ);
+    explain_buffer_string_n(sb, data, IFNAMSIZ);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocbrdelbr =
+const explain_iocontrol_t explain_iocontrol_siocbrdelbr =
 {
     "SIOCBRDELBR", /* name */
     SIOCBRDELBR, /* value */
@@ -50,7 +50,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_siocbrdelbr =
 
 #else /* ndef SIOCBRDELBR */
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocbrdelbr =
+const explain_iocontrol_t explain_iocontrol_siocbrdelbr =
 {
     0, /* name */
     0, /* value */

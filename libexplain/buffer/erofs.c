@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,31 +22,31 @@
 
 
 void
-libexplain_buffer_erofs(libexplain_string_buffer_t *sb, const char *pathname,
+explain_buffer_erofs(explain_string_buffer_t *sb, const char *pathname,
     const char *caption)
 {
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "write access was requested and %s refers to a file on a read-only "
             "file system",
         caption
     );
-    if (libexplain_buffer_mount_point(sb, pathname) < 0)
-        libexplain_buffer_mount_point_dirname(sb, pathname);
+    if (explain_buffer_mount_point(sb, pathname) < 0)
+        explain_buffer_mount_point_dirname(sb, pathname);
 }
 
 
 void
-libexplain_buffer_erofs_fildes(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_erofs_fildes(explain_string_buffer_t *sb, int fildes,
     const char *caption)
 {
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "write access was requested and %s refers to a file on a read-only "
             "file system",
         caption
     );
-    libexplain_buffer_mount_point_fd(sb, fildes);
+    explain_buffer_mount_point_fd(sb, fildes);
 }

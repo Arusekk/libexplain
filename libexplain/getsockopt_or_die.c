@@ -25,17 +25,11 @@
 
 
 void
-libexplain_getsockopt_or_die(int fildes, int level, int name, void *data,
+explain_getsockopt_or_die(int fildes, int level, int name, void *data,
     socklen_t *data_size)
 {
-    if (getsockopt(fildes, level, name, data, data_size) < 0)
+    if (explain_getsockopt_on_error(fildes, level, name, data, data_size) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_getsockopt(fildes, level, name, data, data_size)
-        );
         exit(EXIT_FAILURE);
     }
 }

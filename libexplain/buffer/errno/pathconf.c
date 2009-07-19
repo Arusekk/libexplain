@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -32,25 +32,25 @@
 
 
 static void
-libexplain_buffer_errno_pathconf_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_pathconf_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int name)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "pathconf(pathname = ");
-    libexplain_buffer_pathname(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", name = ");
-    libexplain_buffer_pathconf_name(sb, name);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "pathconf(pathname = ");
+    explain_buffer_pathname(sb, pathname);
+    explain_string_buffer_puts(sb, ", name = ");
+    explain_buffer_pathconf_name(sb, name);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 void
-libexplain_buffer_pathconf_einval(libexplain_string_buffer_t *sb,
+explain_buffer_pathconf_einval(explain_string_buffer_t *sb,
     const char *arg1_caption, int name, const char *name_caption)
 {
-    if (!libexplain_valid_pathconf_name(name))
+    if (!explain_valid_pathconf_name(name))
     {
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -65,7 +65,7 @@ libexplain_buffer_pathconf_einval(libexplain_string_buffer_t *sb,
     }
     else
     {
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -86,32 +86,32 @@ libexplain_buffer_pathconf_einval(libexplain_string_buffer_t *sb,
 
 
 static void
-libexplain_buffer_errno_pathconf_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_pathconf_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int name)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/pathconf.html
      */
     (void)name;
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     switch (errnum)
     {
     case ELOOP:
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EINVAL:
-        libexplain_buffer_pathconf_einval(sb, "pathname", name, "name");
+        explain_buffer_pathconf_einval(sb, "pathname", name, "name");
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -121,40 +121,40 @@ libexplain_buffer_errno_pathconf_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_pathconf(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_pathconf(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int name)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_pathconf_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_pathconf_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         name
     );
-    libexplain_buffer_errno_pathconf_explanation
+    explain_buffer_errno_pathconf_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         name
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

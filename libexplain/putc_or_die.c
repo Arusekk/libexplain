@@ -29,10 +29,9 @@ static
 #endif
 
 void
-libexplain_putc_or_die_failed(int c, FILE *fp)
+explain_putc_or_die_failed(int c, FILE *fp)
 {
-    libexplain_program_name_assemble_internal(1);
-    libexplain_wrap_and_print(stderr, libexplain_putc(c, fp));
+    explain_putc_on_error_failed(c, fp);
     exit(EXIT_FAILURE);
 }
 
@@ -40,10 +39,10 @@ libexplain_putc_or_die_failed(int c, FILE *fp)
 #if __GNUC__ < 3
 
 void
-libexplain_putc_or_die(int c, FILE *fp)
+explain_putc_or_die(int c, FILE *fp)
 {
     if (putc(c, fp) == EOF)
-        libexplain_putc_or_die_failed(c, fp);
+        explain_putc_or_die_failed(c, fp);
 }
 
 #endif

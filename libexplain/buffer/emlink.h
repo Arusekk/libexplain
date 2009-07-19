@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_emlink function may be used to
+  * The explain_buffer_emlink function may be used to
   * print an explanation of an EMLINK error into the given buffer.
   *
   * @param sb
@@ -33,7 +33,7 @@
   * @param newpath
   *    The original newpath, exactly as passed to system call.
   */
-void libexplain_buffer_emlink(libexplain_string_buffer_t *sb,
+void explain_buffer_emlink(explain_string_buffer_t *sb,
     const char *oldpath, const char *newpath);
 
 #endif /* LIBEXPLAIN_BUFFER_EMLINK_H */

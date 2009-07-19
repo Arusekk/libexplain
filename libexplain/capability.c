@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 
 
 int
-libexplain_capability(int cap)
+explain_capability(int cap)
 {
 #ifdef HAVE_CAP_GET_PROC
     cap_t           cap_p;

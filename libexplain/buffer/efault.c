@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,9 +24,9 @@
 
 
 void
-libexplain_buffer_efault(libexplain_string_buffer_t *sb, const char *caption)
+explain_buffer_efault(explain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -41,5 +41,5 @@ libexplain_buffer_efault(libexplain_string_buffer_t *sb, const char *caption)
             "address space"),
         caption
     );
-    libexplain_buffer_software_error(sb);
+    explain_buffer_software_error(sb);
 }

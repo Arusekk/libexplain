@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,12 +24,12 @@
 
 
 void
-libexplain_buffer_ebadf(libexplain_string_buffer_t *sb, int fildes,
+explain_buffer_ebadf(explain_string_buffer_t *sb, int fildes,
     const char *caption)
 {
-    if (libexplain_buffer_check_fildes_range(sb, fildes, caption) >= 0)
-        libexplain_string_buffer_puts(sb, ", ");
-    libexplain_string_buffer_printf_gettext
+    if (explain_buffer_check_fildes_range(sb, fildes, caption) >= 0)
+        explain_string_buffer_puts(sb, ", ");
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -41,5 +41,47 @@ libexplain_buffer_ebadf(libexplain_string_buffer_t *sb, int fildes,
         i18n("%s does not refer to an open file"),
         caption
     );
-    libexplain_buffer_software_error(sb);
+    explain_buffer_software_error(sb);
+}
+
+
+void
+explain_buffer_ebadf_stream(explain_string_buffer_t *sb, const char *caption)
+{
+    /*
+     * Linux man fileno says:
+     * "This function should not fail and thus not set errno.
+     * However, in case fileno() detects that its argument is not a
+     * valid stream, it must return -1 and set errno to EBADF."
+     */
+    explain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This error message is issued when a FILE* pointer
+         * does not refer to a valid file stream.
+         *
+         * %1$s => the name of the offending system call argument
+         */
+        i18n("the %s argument does not refer a valid file stream"),
+        caption
+    );
+}
+
+
+void
+explain_buffer_ebadf_dir(explain_string_buffer_t *sb, const char *caption)
+{
+    explain_string_buffer_printf_gettext
+    (
+        sb,
+        /*
+         * xgettext: This error message is issued when a DIR* pointer
+         * does not refer to a valid directory stream.
+         *
+         * %1$s => the name of the offending system call argument
+         */
+        i18n("the %s argument does not refer a valid directory stream"),
+        caption
+    );
 }

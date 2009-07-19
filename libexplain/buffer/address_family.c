@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,7 @@
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
 #ifdef PF_UNSPEC
     { "PF_UNSPEC", PF_UNSPEC },
@@ -215,20 +215,20 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_address_family(libexplain_string_buffer_t *sb, int domain)
+explain_buffer_address_family(explain_string_buffer_t *sb, int domain)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
 
-    tp = libexplain_parse_bits_find_by_value(domain, table, SIZEOF(table));
+    tp = explain_parse_bits_find_by_value(domain, table, SIZEOF(table));
     if (tp)
-        libexplain_string_buffer_puts(sb, tp->name);
+        explain_string_buffer_puts(sb, tp->name);
     else
-        libexplain_string_buffer_printf(sb, "%d", domain);
+        explain_string_buffer_printf(sb, "%d", domain);
 }
 
 
 int
-libexplain_parse_address_family_or_die(const char *text, const char *caption)
+explain_parse_address_family_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

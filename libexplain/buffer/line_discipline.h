@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_line_discipline function may be used to
+  * The explain_buffer_line_discipline function may be used to
   * print a representation of a line discipline.
   *
   * @param sb
@@ -30,10 +30,10 @@
   * @param arg
   *    the line discipline of interest
   */
-void libexplain_buffer_line_discipline(libexplain_string_buffer_t *sb, int arg);
+void explain_buffer_line_discipline(explain_string_buffer_t *sb, int arg);
 
 /**
-  * The libexplain_buffer_line_discipline_star function may be used to
+  * The explain_buffer_line_discipline_star function may be used to
   * print a representation of a line discipline.
   *
   * @param sb
@@ -41,7 +41,7 @@ void libexplain_buffer_line_discipline(libexplain_string_buffer_t *sb, int arg);
   * @param arg
   *    a pointer to the line discipline of interest
   */
-void libexplain_buffer_line_discipline_star(libexplain_string_buffer_t *sb,
+void explain_buffer_line_discipline_star(explain_string_buffer_t *sb,
     const int *arg);
 
 #endif /* LIBEXPLAIN_BUFFER_LINE_DISCIPLINE_H */

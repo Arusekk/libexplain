@@ -16,29 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/unistd.h>
 
-#include <libexplain/option.h>
 #include <libexplain/write.h>
-#include <libexplain/wrap_and_print.h>
 
 
 long
-libexplain_write_or_die(int fildes, const void *data, long data_size)
+explain_write_or_die(int fildes, const void *data, long data_size)
 {
     long            result;
 
-    result = write(fildes, data, data_size);
+    result = explain_write_on_error(fildes, data, data_size);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_write(fildes, data, data_size)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

@@ -25,12 +25,10 @@
 
 
 void
-libexplain_closedir_or_die(DIR *dir)
+explain_closedir_or_die(DIR *dir)
 {
-    if (closedir(dir) < 0)
+    if (explain_closedir_on_error(dir) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_closedir(dir));
         exit(EXIT_FAILURE);
     }
 }

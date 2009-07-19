@@ -25,17 +25,11 @@
 
 
 void
-libexplain_getpeername_or_die(int fildes, struct sockaddr *sock_addr,
+explain_getpeername_or_die(int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
-    if (getpeername(fildes, sock_addr, sock_addr_size) < 0)
+    if (explain_getpeername_on_error(fildes, sock_addr, sock_addr_size) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_getpeername(fildes, sock_addr, sock_addr_size)
-        );
         exit(EXIT_FAILURE);
     }
 }

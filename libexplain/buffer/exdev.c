@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,39 +24,39 @@
 
 
 void
-libexplain_buffer_exdev(libexplain_string_buffer_t *sb, const char *oldpath,
+explain_buffer_exdev(explain_string_buffer_t *sb, const char *oldpath,
     const char *newpath, const char *sys_call_name)
 {
-    libexplain_string_buffer_puts
+    explain_string_buffer_puts
     (
         sb,
         "oldpath"
     );
-    libexplain_buffer_mount_point(sb, oldpath);
-    libexplain_string_buffer_puts
+    explain_buffer_mount_point(sb, oldpath);
+    explain_string_buffer_puts
     (
         sb,
         " and newpath"
     );
-    libexplain_buffer_mount_point_dirname(sb, newpath);
-    libexplain_string_buffer_puts
+    explain_buffer_mount_point_dirname(sb, newpath);
+    explain_string_buffer_puts
     (
         sb,
         " are not on the same mounted file system"
     );
 #ifdef __linux__
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
-        if (libexplain_same_dev(oldpath, newpath))
+        if (explain_same_dev(oldpath, newpath))
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "; Linux permits a file system to be mounted at "
                 "multiple points, but the "
             );
-            libexplain_string_buffer_puts(sb, sys_call_name);
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts(sb, sys_call_name);
+            explain_string_buffer_puts
             (
                 sb,
                 " system call does not work across different mount points, "

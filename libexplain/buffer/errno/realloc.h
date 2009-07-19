@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_realloc function
+  * The explain_buffer_errno_realloc function
   * is used to obtain an explanation of an error returned
   * by the realloc(3) system call.
   * The least the message will contain is the value of
@@ -45,7 +45,7 @@
   * @param size
   *     The original size, exactly as passed to the realloc(3) system call.
   */
-void libexplain_buffer_errno_realloc(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_realloc(explain_string_buffer_t *sb, int errnum,
     void *ptr, size_t size);
 
 /* vim:ts=8:sw=4:et */

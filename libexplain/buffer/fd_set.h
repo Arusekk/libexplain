@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_fd_set function may be used to
+  * The explain_buffer_fd_set function may be used to
   * print a representation of a file descriptor set.
   *
   * @param sb
@@ -34,7 +34,7 @@
   * @param fds
   *    Pointer to the file descriptor set of interest.
   */
-void libexplain_buffer_fd_set(libexplain_string_buffer_t *sb, int nfds,
+void explain_buffer_fd_set(explain_string_buffer_t *sb, int nfds,
     const fd_set *fds);
 
 #endif /* LIBEXPLAIN_BUFFER_FD_SET_H */

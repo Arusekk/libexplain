@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,18 +21,18 @@
 #define LIBEXPLAIN_COMMON_MESSAGE_BUFFER_H
 
 /**
-  * The libexplain_common_message_buffer global variable is used to
+  * The explain_common_message_buffer global variable is used to
   * store the return message by all functiosn which the user does not
   * supply with an explict return buffer.  This common message buffer is
   * shared amongst all such functions.  This renders all such functions
   * non-thread-safe.
   */
-extern char libexplain_common_message_buffer[];
+extern char explain_common_message_buffer[];
 
 /**
-  * The libexplain_common_message_buffer_size global variable is used to
-  * remember the size of the #libexplain_common_message_buffer array.
+  * The explain_common_message_buffer_size global variable is used to
+  * remember the size of the #explain_common_message_buffer array.
   */
-extern const unsigned libexplain_common_message_buffer_size;
+extern const unsigned explain_common_message_buffer_size;
 
 #endif /* LIBEXPLAIN_COMMON_MESSAGE_BUFFER_H */

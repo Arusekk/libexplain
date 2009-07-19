@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_mount_point function may be used to insert the
+  * The explain_buffer_mount_point function may be used to insert the
   * mount point of the file system the path is within.
   *
   * @param sb
@@ -33,11 +33,11 @@
   * @returns
   *     0 on success, -1 if no mount point inserted
   */
-int libexplain_buffer_mount_point(libexplain_string_buffer_t *sb,
+int explain_buffer_mount_point(explain_string_buffer_t *sb,
     const char *path);
 
 /**
-  * The libexplain_buffer_mount_point function may be used to insert the
+  * The explain_buffer_mount_point function may be used to insert the
   * mount point of the file system the dirname(path) is within.
   *
   * @param sb
@@ -47,11 +47,11 @@ int libexplain_buffer_mount_point(libexplain_string_buffer_t *sb,
   * @returns
   *     0 on success, -1 if no mount point inserted
   */
-int libexplain_buffer_mount_point_dirname(libexplain_string_buffer_t *sb,
+int explain_buffer_mount_point_dirname(explain_string_buffer_t *sb,
     const char *path);
 
 /**
-  * The libexplain_buffer_mount_point_fd function may be used to insert
+  * The explain_buffer_mount_point_fd function may be used to insert
   * the mount point of the file system the file descriptor is within.
   *
   * @param sb
@@ -61,13 +61,13 @@ int libexplain_buffer_mount_point_dirname(libexplain_string_buffer_t *sb,
   * @returns
   *     0 on success, -1 if no mount point inserted
   */
-int libexplain_buffer_mount_point_fd(libexplain_string_buffer_t *sb,
+int explain_buffer_mount_point_fd(explain_string_buffer_t *sb,
     int fildes);
 
 struct stat; /* forward */
 
 /**
-  * The libexplain_buffer_mount_point_stat function may be used to insert
+  * The explain_buffer_mount_point_stat function may be used to insert
   * the mount point of the file system, as described by the stat struct.
   *
   * @param sb
@@ -77,11 +77,11 @@ struct stat; /* forward */
   * @returns
   *     0 on success, -1 if no mount point inserted
   */
-int libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
+int explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
     const struct stat *st);
 
 /**
-  * The libexplain_mount_point_noexec function may be used to test
+  * The explain_mount_point_noexec function may be used to test
   * whether or not a file system has been mounted with a particular
   * option.
   *
@@ -91,10 +91,10 @@ int libexplain_buffer_mount_point_stat(libexplain_string_buffer_t *sb,
   *     int; zon-zero (true) if the "noexec" mount option is used,
   *     zero (false) if not.
   */
-int libexplain_mount_point_noexec(const char *pathname);
+int explain_mount_point_noexec(const char *pathname);
 
 /**
-  * The libexplain_mount_point_nosuid function may be used to test
+  * The explain_mount_point_nosuid function may be used to test
   * whether or not a file system has been mounted with a particular
   * option.
   *
@@ -104,6 +104,6 @@ int libexplain_mount_point_noexec(const char *pathname);
   *     int; zon-zero (true) if the "nosuid" mount option is used,
   *     zero (false) if not.
   */
-int libexplain_mount_point_nosuid(const char *pathname);
+int explain_mount_point_nosuid(const char *pathname);
 
 #endif /* LIBEXPLAIN_BUFFER_MOUNT_POINT_H */

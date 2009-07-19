@@ -34,28 +34,28 @@
 
 
 static void
-libexplain_buffer_errno_utime_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_utime_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const struct utimbuf *times)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "utime(pathname = ");
-    libexplain_buffer_pathname(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", times = ");
-    libexplain_buffer_utimbuf(sb, times);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "utime(pathname = ");
+    explain_buffer_pathname(sb, pathname);
+    explain_string_buffer_puts(sb, ", times = ");
+    explain_buffer_utimbuf(sb, times);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_utime_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_utime_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, const struct utimbuf *times)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/utime.html
      */
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     if (times)
         final_component.want_to_modify_inode = 1;
     else
@@ -67,7 +67,7 @@ libexplain_buffer_errno_utime_explanation(libexplain_string_buffer_t *sb,
          * if time is NULL, change to "now",
          * but need write permission
          */
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EPERM:
@@ -75,57 +75,57 @@ libexplain_buffer_errno_utime_explanation(libexplain_string_buffer_t *sb,
          * if times is not NULL, change as given,
          * but need inode modify permission
          * */
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EFAULT:
-        if (libexplain_path_is_efault(pathname))
+        if (explain_path_is_efault(pathname))
         {
-            libexplain_buffer_efault(sb, "pathname");
+            explain_buffer_efault(sb, "pathname");
             break;
         }
-        if (libexplain_pointer_is_efault(times, sizeof(*times)))
+        if (explain_pointer_is_efault(times, sizeof(*times)))
         {
-            libexplain_buffer_efault(sb, "times");
+            explain_buffer_efault(sb, "times");
             break;
         }
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_utime(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_utime(explain_string_buffer_t *sb, int errnum,
     const char *pathname, const struct utimbuf *times)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_utime_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_utime_system_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         times
     );
-    libexplain_buffer_errno_utime_explanation
+    explain_buffer_errno_utime_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         times
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

@@ -41,14 +41,14 @@
 #if HAVE_MBRTOWC && HAVE_WCWIDTH
 
 void
-libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
+explain_wrap_and_print_width(FILE *fp, const char *text, int width)
 {
     const char      *cp;
     const char      *end;
     char            line_string[MAX_LINE_LENGTH + 1];
-    libexplain_string_buffer_t line_buf;
+    explain_string_buffer_t line_buf;
     char            word_string[MAX_LINE_LENGTH + 1];
-    libexplain_string_buffer_t word_buf;
+    explain_string_buffer_t word_buf;
     static mbstate_t mbz;
     mbstate_t       state;
     int             width_of_line;
@@ -62,8 +62,8 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
     assert(sizeof(word_string) <= sizeof(line_string));
     cp = text;
     end = text + strlen(text);
-    libexplain_string_buffer_init(&line_buf, line_string, sizeof(line_string));
-    libexplain_string_buffer_init(&word_buf, word_string, sizeof(word_string));
+    explain_string_buffer_init(&line_buf, line_string, sizeof(line_string));
+    explain_string_buffer_init(&word_buf, word_string, sizeof(word_string));
     state = mbz;
     width_of_line = 0;
     width_of_word = 0;
@@ -85,7 +85,8 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
         {
             if (line_buf.position)
             {
-                fwrite(line_string, line_buf.position, 1, fp);
+                if (0 == fwrite(line_string, line_buf.position, 1, fp))
+                    return;
                 putc('\n', fp);
             }
             return;
@@ -109,9 +110,9 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
         {
             mbstate_t       hold;
 
-            libexplain_string_buffer_write(&word_buf, starts_here, n);
+            explain_string_buffer_write(&word_buf, starts_here, n);
             width_of_word += wcwidth(wc);
-            if (libexplain_string_buffer_full(&word_buf))
+            if (explain_string_buffer_full(&word_buf))
                 break;
 
             hold = state;
@@ -142,17 +143,18 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
         }
         else if (width_of_line + 1 + width_of_word <= width)
         {
-            libexplain_string_buffer_putc(&line_buf, ' ');
+            explain_string_buffer_putc(&line_buf, ' ');
             ++width_of_line;
         }
         else
         {
-            fwrite(line_string, line_buf.position, 1, fp);
+            if (0 == fwrite(line_string, line_buf.position, 1, fp))
+                return;
             putc('\n', fp);
             line_buf.position = 0;
             width_of_line = 0;
         }
-        libexplain_string_buffer_puts(&line_buf, word_string);
+        explain_string_buffer_puts(&line_buf, word_string);
         width_of_line += width_of_word;
 
         /*
@@ -168,13 +170,13 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
 #else
 
 void
-libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
+explain_wrap_and_print_width(FILE *fp, const char *text, int width)
 {
     const char      *cp;
     char            line_string[MAX_LINE_LENGTH + 1];
-    libexplain_string_buffer_t line_buf;
+    explain_string_buffer_t line_buf;
     char            word_string[MAX_LINE_LENGTH + 1];
-    libexplain_string_buffer_t word_buf;
+    explain_string_buffer_t word_buf;
 
     assert(width > 0);
     if (width <= 0)
@@ -183,8 +185,8 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
         width = MAX_LINE_LENGTH;
     assert(sizeof(word_string) <= sizeof(line_string));
     cp = text;
-    libexplain_string_buffer_init(&line_buf, line_string, sizeof(line_string));
-    libexplain_string_buffer_init(&word_buf, word_string, sizeof(word_string));
+    explain_string_buffer_init(&line_buf, line_string, sizeof(line_string));
+    explain_string_buffer_init(&word_buf, word_string, sizeof(word_string));
     for (;;)
     {
         unsigned char c = *cp++;
@@ -192,7 +194,8 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
         {
             if (line_buf.position)
             {
-                fwrite(line_string, line_buf.position, 1, fp);
+                if (0 == fwrite(line_string, line_buf.position, 1, fp))
+                    return;
                 putc('\n', fp);
             }
             return;
@@ -207,8 +210,8 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
         word_buf.position = 0;
         for (;;)
         {
-            libexplain_string_buffer_putc(&word_buf, c);
-            if (libexplain_string_buffer_full(&word_buf))
+            explain_string_buffer_putc(&word_buf, c);
+            if (explain_string_buffer_full(&word_buf))
                 break;
             c = *cp;
             if (c == '\0')
@@ -224,15 +227,16 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
         }
         else if (line_buf.position + 1 + word_buf.position <= (size_t)width)
         {
-            libexplain_string_buffer_putc(&line_buf, ' ');
+            explain_string_buffer_putc(&line_buf, ' ');
         }
         else
         {
-            fwrite(line_string, line_buf.position, 1, fp);
+            if (0 == fwrite(line_string, line_buf.position, 1, fp))
+                return;
             putc('\n', fp);
             line_buf.position = 0;
         }
-        libexplain_string_buffer_puts(&line_buf, word_string);
+        explain_string_buffer_puts(&line_buf, word_string);
         /*
          * Note: it is possible for a line to be longer than (width)
          * when it contains a single word that is itself longer than
@@ -245,7 +249,7 @@ libexplain_wrap_and_print_width(FILE *fp, const char *text, int width)
 
 
 void
-libexplain_wrap_and_print(FILE *fp, const char *text)
+explain_wrap_and_print(FILE *fp, const char *text)
 {
     int             width;
     int             fildes;
@@ -286,5 +290,5 @@ libexplain_wrap_and_print(FILE *fp, const char *text)
     /*
      * Print the text using the window width.
      */
-    libexplain_wrap_and_print_width(fp, text, width);
+    explain_wrap_and_print_width(fp, text, width);
 }

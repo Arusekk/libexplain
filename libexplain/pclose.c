@@ -22,9 +22,9 @@
 
 
 const char *
-libexplain_pclose(FILE *fp)
+explain_pclose(FILE *fp)
 {
-    return libexplain_errno_pclose(errno, fp);
+    return explain_errno_pclose(errno, fp);
 }
 
 /* vim:ts=8:sw=4:et */

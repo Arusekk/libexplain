@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return 0;
 
         default:
@@ -59,6 +59,6 @@ main(int argc, char **argv)
         usage();
     path = argv[optind];
 
-    libexplain_rmdir_or_die(path);
+    explain_rmdir_or_die(path);
     return 0;
 }

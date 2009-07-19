@@ -25,16 +25,10 @@
 
 
 void
-libexplain_freopen_or_die(const char *pathname, const char *flags, FILE *fp)
+explain_freopen_or_die(const char *pathname, const char *flags, FILE *fp)
 {
-    if (!freopen(pathname, flags, fp))
+    if (!explain_freopen_on_error(pathname, flags, fp))
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_freopen(pathname, flags, fp)
-        );
         exit(EXIT_FAILURE);
     }
 }

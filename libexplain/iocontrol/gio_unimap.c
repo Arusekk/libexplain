@@ -26,7 +26,7 @@
 #define GIO_UNIMAP -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_gio_unimap =
+const explain_iocontrol_t explain_iocontrol_gio_unimap =
 {
     "GIO_UNIMAP", /* name */
     GIO_UNIMAP, /* value */

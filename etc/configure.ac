@@ -14,18 +14,50 @@ dnl! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 dnl! General Public License for more details.
 dnl!
 dnl! You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+dnl! along with this program. If not, see <http://www.gnu.org/licenses/>.
 dnl!
 AC_INIT(install-sh)
 AC_CONFIG_HEADER(libexplain/config.h)
+AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
 AC_PROG_CPP
 AC_CANONICAL_HOST
-AC_GNU_SOURCE
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PROG_YACC
-AC_MINIX
+
+case "$YACC" in
+*bison*)
+  ;;
+*)
+  AC_MSG_RESULT([
+        You must have GNU Bison installed to build libexplain.
+        Homepage: http://www.gnu.org/software/bison/])
+  OK=no
+  if apt-get --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo apt-get install bison
+    ])
+    OK=yes
+  fi
+  if yum --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo yum install bison
+    ])
+    OK=yes
+  fi
+  if test "$OK" != "yes"; then
+    AC_MSG_RESULT([
+        If you are using a package based install, you will need the
+        bison package.
+    ])
+  fi
+  exit 1
+  ;;
+esac
+
 AC_ISC_POSIX
 AC_OBJEXT
 AC_EXEEXT
@@ -35,6 +67,36 @@ dnl Large file support.
 dnl
 AC_FUNC_FSEEKO
 AC_SYS_LARGEFILE
+
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([long])
+AC_CHECK_SIZEOF([long long])
+AC_CHECK_SIZEOF([off_t])
+AC_CHECK_SIZEOF([ptrdiff_t])
+AC_CHECK_SIZEOF([size_t])
+AC_CHECK_SIZEOF([ssize_t])
+AC_CHECK_SIZEOF([void *])
+
+
+dnl @synopsis AC_ADD_CFLAGS
+dnl
+dnl Add the given option to CFLAGS, if it doesn't break the compiler
+dnl
+AC_DEFUN([AC_ADD_CFLAGS],
+[AC_MSG_CHECKING([if $CC accepts $1])
+  ac_add_cflags__old_cflags="$CFLAGS"
+  CFLAGS="$CFLAGS $1"
+  AC_TRY_LINK([#include <stdio.h>],
+    [printf("Hello, World!\n"); return 0;],
+    AC_MSG_RESULT([yes]),
+    AC_MSG_RESULT([no])
+    CFLAGS="$ac_add_cflags__old_cflags")
+])
+
+AC_ADD_CFLAGS(-Wall)
+AC_ADD_CFLAGS(-Wextra)
+AC_ADD_CFLAGS([-Wl,--as-needed])
+
 
 dnl
 dnl we need to check for libiconv before we check for libintl
@@ -86,40 +148,16 @@ then
   exit 1
 fi
 
+dnl!
+dnl!   libexplain doesn't *require* lsof, but it helps give better error
+dnl!   messages.  However: Linux doesn't need lsof because /proc is
+dnl!   actually useful, unlike BSD and Solaris.
+dnl!
 AC_CHECK_PROGS(LSOF, lsof)
-
-if test -z "$LSOF"
-then
-  AC_MSG_RESULT([
-        You must have lsof(1) installed to use libexplain.
-        Homepage: http://people.freebsd.org/~abe/])
-  OK=no
-  if apt-get --version > /dev/null 2> /dev/null; then
-    AC_MSG_RESULT([
-        The following command may be used to install it:
-        sudo apt-get install lsof
-    ])
-    OK=yes
-  fi
-  if yum --version > /dev/null 2> /dev/null; then
-    AC_MSG_RESULT([
-        The following command may be used to install it:
-        sudo yum install lsof
-    ])
-    OK=yes
-  fi
-  if test "$OK" != "yes"; then
-    AC_MSG_RESULT([
-        If you are using a package based install, you will need the
-        lsof package.
-    ])
-  fi
-  exit 1
-fi
 
 if test -L /proc/self/fd/0 2> /dev/null
 then
-    AC_DEFINE(PROC_FS_USEFUL, 1,
+    AC_DEFINE([PROC_FS_USEFUL], [1],
     [Define this symbol if your system has symbolic links containing the
      absolute path of open files in /proc/self/fd/nnn])
 fi
@@ -337,6 +375,7 @@ AC_CHECK_HEADERS(          \
     stdlib.h               \
     string.h               \
     sys/capability.h       \
+    sys/eventfd.h          \
     sys/file.h             \
     sys/ioctl.h            \
     sys/mman.h             \
@@ -347,9 +386,14 @@ AC_CHECK_HEADERS(          \
     sys/raw.h              \
     sys/resource.h         \
     sys/select.h           \
+    sys/signalfd.h          \
     sys/socket.h           \
     sys/stat.h             \
+    sys/statfs.h           \
     sys/time.h             \
+    sys/timeb.h            \
+    sys/timex.h            \
+    sys/timerfd.h          \
     sys/types.h            \
     sys/un.h               \
     sys/vfs.h              \
@@ -361,6 +405,23 @@ AC_CHECK_HEADERS(          \
     wchar.h                \
     wctype.h               \
     )
+
+if test "$ac_cv_header_net_if_h" = yes -a "$ac_cv_header_linux_if_h" = yes
+then
+  # Can we include both of them at the same time?
+  # Weirdly, the answer depends on the architecture.
+  AC_MSG_CHECKING([if <net/if.h> and <linux/if.h> play nice])
+  AC_TRY_COMPILE([
+#include <sys/types.h>
+#include <net/if.h>
+#include <linux/if.h>],
+    [return 0;],
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(NET_IF_LINUX_IF_PLAY_NICE, 1,
+        [Define this symbol if your system is able to include <net/if.h> and
+        <linux/if.h> in the compilation unit.]),
+    AC_MSG_RESULT([no]))
+fi
 
 if test "$HAVE_MNTENT_H" != "1"
 then
@@ -379,6 +440,8 @@ fi
 
 AC_SEARCH_LIBS(cap_get_proc, cap)
 
+AC_CHECK_TYPES([sigset_t], , , [#include <signal.h>])
+
 AC_HEADER_DIRENT
 AC_TYPE_SIGNAL
 AC_TYPE_SIZE_T
@@ -394,25 +457,29 @@ fi
 
 AC_SYS_LONG_FILE_NAMES
 AC_FUNC_STRERROR_R
-AC_CHECK_FUNCS(  \
-    cap_get_proc \
-    capget       \
-    getpagesize  \
-    gettext      \
-    hasmntopt    \
-    lchown       \
-    mbrtowc      \
-    mincore      \
-    remove       \
-    setlocale    \
-    snprintf     \
-    strcasecmp   \
-    strendcpy    \
-    strerror     \
-    strncasecmp  \
-    strsignal    \
-    vsnprintf    \
-    wcwidth      \
+AC_CHECK_FUNCS(    \
+    accept4        \
+    adjtimex       \
+    cap_get_proc   \
+    capget         \
+    eventfd        \
+    getpagesize    \
+    gettext        \
+    hasmntopt      \
+    lchown         \
+    mbrtowc        \
+    remove         \
+    setlocale      \
+    signalfd       \
+    snprintf       \
+    strcasecmp     \
+    strendcpy      \
+    strerror       \
+    strncasecmp    \
+    strsignal      \
+    timerfd_create \
+    vsnprintf      \
+    wcwidth        \
     )
 
 if test "$ac_cv_func_capget" = "yes"
@@ -446,6 +513,22 @@ Homepage: ftp://ftp.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.2/])
     exit 1
   fi
 fi
+
+dnl!
+dnl!    The mincore(2) function is broken more often than not.  The
+dnl!    test_mincore program will sort out whether or not the mincore(2)
+dnl!    function is at all useful.
+dnl!
+AC_MSG_CHECKING([for mincore])
+AC_RUN_IFELSE([
+#include "test_mincore/main.c"
+], [
+AC_MSG_RESULT([yes])
+AC_DEFINE([HAVE_MINCORE], [1],
+  [Define if mincore exists and also works for non-mmap memory.])
+], [
+AC_MSG_RESULT([broken])
+])
 
 dnl
 dnl     Test to see where TIOCGWINSZ is defined.

@@ -16,34 +16,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
-#include <libexplain/option.h>
 #include <libexplain/realloc.h>
-#include <libexplain/wrap_and_print.h>
 
 
 void *
-libexplain_realloc_or_die(void *ptr, size_t size)
+explain_realloc_or_die(void *ptr, size_t size)
 {
-    size_t          ok_size;
     void            *result;
 
-    /*
-     * Common mis-implementations of the posix standard:
-     * Some realloc implementations can't cope with a size of zero.
-     * Some realloc implementations can't cope with a ptr of NULL.
-     */
-    ok_size = size ? size : 1;
-    result = ptr ? realloc(ptr, ok_size) : malloc(ok_size);
+    result = explain_realloc_on_error(ptr, size);
     if (!result)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_realloc(ptr, size));
         exit(EXIT_FAILURE);
     }
     return result;
 }
+
 
 /* vim:ts=8:sw=4:et */

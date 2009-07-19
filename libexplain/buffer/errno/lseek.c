@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,36 +22,39 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/ebadf.h>
+#include <libexplain/buffer/enosys.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/lseek.h>
-#include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/lseek_whence.h>
+#include <libexplain/buffer/off_t.h>
 #include <libexplain/explanation.h>
 
 
 static void
-libexplain_buffer_errno_lseek_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_lseek_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, off_t offset, int whence)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "lseek(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_printf(sb, ", offset = %lld", (long long)offset);
-    libexplain_string_buffer_puts(sb, ", whence = ");
-    libexplain_buffer_lseek_whence(sb, whence);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "lseek(fildes = ");
+    explain_buffer_fildes(sb, fildes);
+    explain_string_buffer_puts(sb, ", offset = ");
+    explain_buffer_off_t(sb, offset);
+    explain_string_buffer_puts(sb, ", whence = ");
+    explain_buffer_lseek_whence(sb, whence);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
-static void
-libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
+void
+explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, off_t offset, int whence)
 {
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EINVAL:
@@ -63,9 +66,10 @@ libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
             switch (whence)
             {
             default:
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "'whence' is not one of SEEK_SET, SEEK_CUR, SEEK_END"
                 );
                 break;
@@ -98,23 +102,25 @@ libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
             {
                 if (destination < 0)
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the resulting file offset would be "
                         "negative"
                     );
                 }
                 else
                 {
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the resulting offset would be beyond "
                         "the end of a seekable device"
                     );
                 }
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     " (%lld)",
@@ -123,9 +129,10 @@ libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
                 break;
             }
 
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the resulting file offset would be negative, "
                 "or beyond the end of a seekable device"
             );
@@ -133,9 +140,10 @@ libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EOVERFLOW:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the resulting file offset cannot be represented in an off_t"
         );
         break;
@@ -146,18 +154,20 @@ libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
 
             if (fstat(fildes, &st) == 0)
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "the file descriptor is associated with a "
                 );
-                libexplain_buffer_file_type(sb, st.st_mode);
+                explain_buffer_file_type(sb, st.st_mode);
             }
             else
             {
-                libexplain_string_buffer_puts
+                explain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "the file descriptor is associated with a "
                     "pipe, socket, or FIFO"
                 );
@@ -169,28 +179,24 @@ libexplain_buffer_errno_lseek_explanation(libexplain_string_buffer_t *sb,
 #if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
     case EOPNOTSUPP:
 #endif
-        libexplain_string_buffer_puts
-        (
-            sb,
-            "the device is incapable of seeking"
-        );
+        explain_buffer_enosys_fildes(sb, fildes, "fildes", "lseek");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_lseek(explain_string_buffer_t *sb, int errnum,
     int fildes, off_t offset, int whence)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_lseek_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_lseek_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -198,7 +204,7 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
         offset,
         whence
     );
-    libexplain_buffer_errno_lseek_explanation
+    explain_buffer_errno_lseek_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -206,5 +212,5 @@ libexplain_buffer_errno_lseek(libexplain_string_buffer_t *sb, int errnum,
         offset,
         whence
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

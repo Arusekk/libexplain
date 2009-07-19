@@ -27,9 +27,9 @@
 
 
 void
-libexplain_buffer_line_discipline(libexplain_string_buffer_t *sb, int data)
+explain_buffer_line_discipline(explain_string_buffer_t *sb, int data)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "N_TTY", N_TTY },
         { "N_SLIP", N_SLIP },
@@ -49,20 +49,20 @@ libexplain_buffer_line_discipline(libexplain_string_buffer_t *sb, int data)
         { "N_HCI", N_HCI },
     };
 
-    libexplain_parse_bits_print_single(sb, data, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_line_discipline_star(libexplain_string_buffer_t *sb,
+explain_buffer_line_discipline_star(explain_string_buffer_t *sb,
     const int *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
-        libexplain_string_buffer_puts(sb, "{ ");
-        libexplain_buffer_line_discipline(sb, *data);
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, "{ ");
+        explain_buffer_line_discipline(sb, *data);
+        explain_string_buffer_puts(sb, " }");
     }
 }

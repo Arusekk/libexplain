@@ -21,17 +21,17 @@
 
 
 const char *
-libexplain_errno_realloc(int errnum, void *ptr, size_t size)
+explain_errno_realloc(int errnum, void *ptr, size_t size)
 {
-    libexplain_message_errno_realloc
+    explain_message_errno_realloc
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         ptr,
         size
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }
 
 /* vim:ts=8:sw=4:et */

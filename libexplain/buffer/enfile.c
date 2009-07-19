@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@
 static long
 get_maxfile(void)
 {
-    if (libexplain_option_dialect_specific())
+    if (explain_option_dialect_specific())
     {
 #ifdef __linux__
         /*
@@ -80,7 +80,7 @@ get_maxfile(void)
 
 
 void
-libexplain_buffer_enfile(libexplain_string_buffer_t *sb)
+explain_buffer_enfile(explain_string_buffer_t *sb)
 {
     long            maxfile;
 
@@ -89,7 +89,7 @@ libexplain_buffer_enfile(libexplain_string_buffer_t *sb)
      * a sysconf() name for this.  The _SC_OPEN_MAX name is for the
      * EMFILE error, which is different.
      */
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -108,5 +108,5 @@ libexplain_buffer_enfile(libexplain_string_buffer_t *sb)
      */
     maxfile = get_maxfile();
     if (maxfile > 0)
-        libexplain_string_buffer_printf(sb, " (%ld)", maxfile);
+        explain_string_buffer_printf(sb, " (%ld)", maxfile);
 }

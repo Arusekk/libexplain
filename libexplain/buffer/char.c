@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,34 +24,34 @@
 
 
 void
-libexplain_buffer_char(libexplain_string_buffer_t *sb, int c)
+explain_buffer_char(explain_string_buffer_t *sb, int c)
 {
     const char      *p;
 
     c = (unsigned char)c;
     if (c == '\'' || c == '\\')
     {
-        libexplain_string_buffer_putc(sb, '\'');
-        libexplain_string_buffer_putc(sb, '\\');
-        libexplain_string_buffer_putc(sb, c);
-        libexplain_string_buffer_putc(sb, '\'');
+        explain_string_buffer_putc(sb, '\'');
+        explain_string_buffer_putc(sb, '\\');
+        explain_string_buffer_putc(sb, c);
+        explain_string_buffer_putc(sb, '\'');
         return;
     }
     if (isprint(c))
     {
-        libexplain_string_buffer_putc(sb, '\'');
-        libexplain_string_buffer_putc(sb, c);
-        libexplain_string_buffer_putc(sb, '\'');
+        explain_string_buffer_putc(sb, '\'');
+        explain_string_buffer_putc(sb, c);
+        explain_string_buffer_putc(sb, '\'');
         return;
     }
     p = strchr("\aa\bb\ff\nn\rr\tt\vv", c);
     if (p)
     {
-        libexplain_string_buffer_putc(sb, '\'');
-        libexplain_string_buffer_putc(sb, '\\');
-        libexplain_string_buffer_putc(sb, p[1]);
-        libexplain_string_buffer_putc(sb, '\'');
+        explain_string_buffer_putc(sb, '\'');
+        explain_string_buffer_putc(sb, '\\');
+        explain_string_buffer_putc(sb, p[1]);
+        explain_string_buffer_putc(sb, '\'');
         return;
     }
-    libexplain_string_buffer_printf(sb, "0x%02X", c);
+    explain_string_buffer_printf(sb, "0x%02X", c);
 }

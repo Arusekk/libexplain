@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_popen(char *message, int message_size, const char *command,
+explain_message_popen(char *message, int message_size, const char *command,
     const char *flags)
 {
-    libexplain_message_errno_popen
+    explain_message_errno_popen
     (
         message,
         message_size,

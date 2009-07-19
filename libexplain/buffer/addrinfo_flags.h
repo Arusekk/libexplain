@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,17 +22,17 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_addrinfo_flags function may be used to
+  * The explain_buffer_addrinfo_flags function may be used to
   *
   * @param sb
   *    The string buffer to print into.
   * @param flgs
   *    the addrinfo.ai_flags value to be printed
   */
-void libexplain_buffer_addrinfo_flags(libexplain_string_buffer_t *sb, int flgs);
+void explain_buffer_addrinfo_flags(explain_string_buffer_t *sb, int flgs);
 
 /**
-  * The libexplain_parse_addrinfo_flags_or_die function may be used to
+  * The explain_parse_addrinfo_flags_or_die function may be used to
   * parse a tet string into a addrinfo.ai_flags value.  On error, prints
   * diagnostic and exits EXIT_FAILURE.
   *
@@ -43,6 +43,6 @@ void libexplain_buffer_addrinfo_flags(libexplain_string_buffer_t *sb, int flgs);
   * @returns
   *     flags value
   */
-int libexplain_parse_addrinfo_flags_or_die(const char *text, const char *captn);
+int explain_parse_addrinfo_flags_or_die(const char *text, const char *captn);
 
 #endif /* LIBEXPLAIN_BUFFER_ADDRINFO_FLAGS_H */

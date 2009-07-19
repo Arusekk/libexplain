@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 
 
 const char *
-libexplain_getc(FILE *fp)
+explain_getc(FILE *fp)
 {
-    return libexplain_errno_getc(errno, fp);
+    return explain_errno_getc(errno, fp);
 }

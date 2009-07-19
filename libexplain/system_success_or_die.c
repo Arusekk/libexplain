@@ -90,7 +90,7 @@ static int
 command_on_path(const char *cmd)
 {
     char            combo[PATH_MAX * 2 + 3];
-    libexplain_string_buffer_t combo_sb;
+    explain_string_buffer_t combo_sb;
     const char      *path;
     const char      *start;
 
@@ -108,12 +108,12 @@ command_on_path(const char *cmd)
                 break;
             ++path;
         }
-        libexplain_string_buffer_init(&combo_sb, combo, sizeof(combo));
+        explain_string_buffer_init(&combo_sb, combo, sizeof(combo));
         if (start == path)
-            libexplain_string_buffer_putc(&combo_sb, '.');
+            explain_string_buffer_putc(&combo_sb, '.');
         else
-            libexplain_string_buffer_write(&combo_sb, start, path - start);
-        libexplain_string_buffer_path_join(&combo_sb, cmd);
+            explain_string_buffer_write(&combo_sb, start, path - start);
+        explain_string_buffer_path_join(&combo_sb, cmd);
         if (access(combo, X_OK) >= 0)
             return 1;
         if (*path == '\0')
@@ -125,33 +125,33 @@ command_on_path(const char *cmd)
 
 
 int
-libexplain_system_success(const char *command)
+explain_system_success(const char *command)
 {
     int             status;
 
     status = system(command);
     if (status < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_system(command));
+        explain_program_name_assemble_internal(1);
+        explain_wrap_and_print(stderr, explain_system(command));
     }
     else if (status != 0)
     {
-        libexplain_string_buffer_t sb;
-        libexplain_string_buffer_init
+        explain_string_buffer_t sb;
+        explain_string_buffer_init
         (
             &sb,
-            libexplain_common_message_buffer,
-            libexplain_common_message_buffer_size
+            explain_common_message_buffer,
+            explain_common_message_buffer_size
         );
-        libexplain_buffer_errno_system(&sb, 0, command);
+        explain_buffer_errno_system(&sb, 0, command);
 
         if (!command)
             command = "/bin/sh";
 
         /* FIXME: i18n */
-        libexplain_string_buffer_puts(&sb, ", but ");
-        libexplain_buffer_wait_status(&sb, status);
+        explain_string_buffer_puts(&sb, ", but ");
+        explain_buffer_wait_status(&sb, status);
         if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
         {
             char            cmd[PATH_MAX + 1];
@@ -167,8 +167,8 @@ libexplain_system_success(const char *command)
                 {
                     if (access(cmd, X_OK) < 0)
                     {
-                        libexplain_string_buffer_puts(&sb, ", ");
-                        libexplain_buffer_errno_access_explanation
+                        explain_string_buffer_puts(&sb, ", ");
+                        explain_buffer_errno_access_explanation
                         (
                             &sb,
                             errno,
@@ -179,9 +179,9 @@ libexplain_system_success(const char *command)
                 }
                 else if (!command_on_path(cmd))
                 {
-                    libexplain_string_buffer_puts(&sb, ", ");
-                    libexplain_string_buffer_puts_quoted(&sb, cmd);
-                    libexplain_string_buffer_puts
+                    explain_string_buffer_puts(&sb, ", ");
+                    explain_string_buffer_puts_quoted(&sb, cmd);
+                    explain_string_buffer_puts
                     (
                         &sb,
                         " command not found on $PATH"
@@ -189,16 +189,16 @@ libexplain_system_success(const char *command)
                 }
             }
         }
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_common_message_buffer);
+        explain_program_name_assemble_internal(1);
+        explain_wrap_and_print(stderr, explain_common_message_buffer);
     }
     return status;
 }
 
 
 void
-libexplain_system_success_or_die(const char *command)
+explain_system_success_or_die(const char *command)
 {
-    if (libexplain_system_success(command))
+    if (explain_system_success(command))
         exit(EXIT_FAILURE);
 }

@@ -26,15 +26,13 @@
 
 
 DIR *
-libexplain_opendir_or_die(const char *pathname)
+explain_opendir_or_die(const char *pathname)
 {
     DIR             *result;
 
-    result = opendir(pathname);
+    result = explain_opendir_on_error(pathname);
     if (!result)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_opendir(pathname));
         exit(EXIT_FAILURE);
     }
     return result;

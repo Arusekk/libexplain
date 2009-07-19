@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,18 +23,18 @@
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/string_buffer.h>
 
-typedef struct libexplain_explanation_t libexplain_explanation_t;
-struct libexplain_explanation_t
+typedef struct explain_explanation_t explain_explanation_t;
+struct explain_explanation_t
 {
     char system_call[PATH_MAX * 3 + 200];
-    libexplain_string_buffer_t system_call_sb;
+    explain_string_buffer_t system_call_sb;
     int errnum;
     char explanation[PATH_MAX * 2 + 200];
-    libexplain_string_buffer_t explanation_sb;
+    explain_string_buffer_t explanation_sb;
 };
 
 /**
-  * The libexplain_explanation_init function i sused to initialize an
+  * The explain_explanation_init function i sused to initialize an
   * explanation struct for use.
   *
   * @param exp
@@ -42,10 +42,10 @@ struct libexplain_explanation_t
   * @param errnum
   *     The errno value provoking this message
   */
-void libexplain_explanation_init(libexplain_explanation_t *exp, int errnum);
+void explain_explanation_init(explain_explanation_t *exp, int errnum);
 
 /**
-  * The libexplain_explanation_assemble function may be used to
+  * The explain_explanation_assemble function may be used to
   * carefully glue the problem statement and the explanation together,
   * using internationalization, for which localizations may re-arrange
   * the order.
@@ -56,11 +56,11 @@ void libexplain_explanation_init(libexplain_explanation_t *exp, int errnum);
   * @param result
   *     where to print the resulting completed explanation.
   */
-void libexplain_explanation_assemble(libexplain_explanation_t *exp,
-    libexplain_string_buffer_t *result);
+void explain_explanation_assemble(explain_explanation_t *exp,
+    explain_string_buffer_t *result);
 
 /**
-  * The libexplain_explanation_assemble_gai function may be used to
+  * The explain_explanation_assemble_gai function may be used to
   * carefully glue the problem statement and the explanation together,
   * using internationalization, for which localizations may re-arrange
   * the order.  (specific to getaddrinfo)
@@ -71,7 +71,7 @@ void libexplain_explanation_assemble(libexplain_explanation_t *exp,
   * @param result
   *     where to print the resulting completed explanation.
   */
-void libexplain_explanation_assemble_gai(libexplain_explanation_t *exp,
-    libexplain_string_buffer_t *result);
+void explain_explanation_assemble_gai(explain_explanation_t *exp,
+    explain_string_buffer_t *result);
 
 #endif /* LIBEXPLAIN_EXPLANATION_H */

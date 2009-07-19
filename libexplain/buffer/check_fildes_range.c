@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,9 +23,9 @@
 
 
 static void
-whinge(libexplain_string_buffer_t *sb, const char *caption)
+whinge(explain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_string_buffer_printf_gettext
+    explain_string_buffer_printf_gettext
     (
         sb,
         /*
@@ -43,7 +43,7 @@ whinge(libexplain_string_buffer_t *sb, const char *caption)
 
 
 int
-libexplain_buffer_check_fildes_range(libexplain_string_buffer_t *sb,
+explain_buffer_check_fildes_range(explain_string_buffer_t *sb,
     int fildes, const char *caption)
 {
     long            open_max;
@@ -62,9 +62,9 @@ libexplain_buffer_check_fildes_range(libexplain_string_buffer_t *sb,
         if (fildes < 0 || fildes >= open_max)
         {
             whinge(sb, caption);
-            if (libexplain_option_dialect_specific())
+            if (explain_option_dialect_specific())
             {
-                libexplain_string_buffer_printf(sb, " (0..%ld)", open_max - 1);
+                explain_string_buffer_printf(sb, " (0..%ld)", open_max - 1);
             }
             return 0;
         }

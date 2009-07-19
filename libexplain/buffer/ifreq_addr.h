@@ -24,7 +24,7 @@
 struct ifreq; /* forward */
 
 /**
-  * The libexplain_buffer_ifreq_addr function may be used to
+  * The explain_buffer_ifreq_addr function may be used to
   * print a representation of a ifreq structure, addr member.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct ifreq; /* forward */
   * @param data
   *     The ifreq_addr structure to be printed.
   */
-void libexplain_buffer_ifreq_addr(libexplain_string_buffer_t *sb,
+void explain_buffer_ifreq_addr(explain_string_buffer_t *sb,
     const struct ifreq *data);
 
 #endif /* LIBEXPLAIN_BUFFER_IFREQ_ADDR_H */

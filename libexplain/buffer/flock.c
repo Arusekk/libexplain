@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,42 +25,42 @@
 
 
 void
-libexplain_buffer_flock(libexplain_string_buffer_t *sb, const struct flock *flp)
+explain_buffer_flock(explain_string_buffer_t *sb, const struct flock *flp)
 {
-    libexplain_string_buffer_puts(sb, "{ l_type = ");
+    explain_string_buffer_puts(sb, "{ l_type = ");
     switch (flp->l_type)
     {
     case F_RDLCK:
-        libexplain_string_buffer_puts(sb, "F_RDLCK");
+        explain_string_buffer_puts(sb, "F_RDLCK");
         break;
 
     case F_WRLCK:
-        libexplain_string_buffer_puts(sb, "F_WRLCK");
+        explain_string_buffer_puts(sb, "F_WRLCK");
         break;
 
     case F_UNLCK:
-        libexplain_string_buffer_puts(sb, "F_UNLCK");
+        explain_string_buffer_puts(sb, "F_UNLCK");
         break;
 
     default:
-        libexplain_string_buffer_printf(sb, "%d", flp->l_type);
+        explain_string_buffer_printf(sb, "%d", flp->l_type);
         break;
     }
-    libexplain_string_buffer_puts(sb, "; l_whence = ");
-    libexplain_buffer_lseek_whence(sb, flp->l_whence);
-    libexplain_string_buffer_printf
+    explain_string_buffer_puts(sb, "; l_whence = ");
+    explain_buffer_lseek_whence(sb, flp->l_whence);
+    explain_string_buffer_printf
     (
         sb,
         "; l_start = %lld; ",
         (long long)flp->l_start
     );
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "l_len = %lld; ",
         (long long)flp->l_len
     );
-    libexplain_string_buffer_printf(sb, "l_pid = %d }", (int)flp->l_pid);
+    explain_string_buffer_printf(sb, "l_pid = %d }", (int)flp->l_pid);
 }
 
 
@@ -68,43 +68,43 @@ libexplain_buffer_flock(libexplain_string_buffer_t *sb, const struct flock *flp)
 #if F_GETLK64 != F_GETLK
 
 void
-libexplain_buffer_flock64(libexplain_string_buffer_t *sb,
+explain_buffer_flock64(explain_string_buffer_t *sb,
     const struct flock64 *flp)
 {
-    libexplain_string_buffer_puts(sb, "{ l_type = ");
+    explain_string_buffer_puts(sb, "{ l_type = ");
     switch (flp->l_type)
     {
     case F_RDLCK:
-        libexplain_string_buffer_puts(sb, "F_RDLCK");
+        explain_string_buffer_puts(sb, "F_RDLCK");
         break;
 
     case F_WRLCK:
-        libexplain_string_buffer_puts(sb, "F_WRLCK");
+        explain_string_buffer_puts(sb, "F_WRLCK");
         break;
 
     case F_UNLCK:
-        libexplain_string_buffer_puts(sb, "F_UNLCK");
+        explain_string_buffer_puts(sb, "F_UNLCK");
         break;
 
     default:
-        libexplain_string_buffer_printf(sb, "%d", flp->l_type);
+        explain_string_buffer_printf(sb, "%d", flp->l_type);
         break;
     }
-    libexplain_string_buffer_puts(sb, "; l_whence = ");
-    libexplain_buffer_lseek_whence(sb, flp->l_whence);
-    libexplain_string_buffer_printf
+    explain_string_buffer_puts(sb, "; l_whence = ");
+    explain_buffer_lseek_whence(sb, flp->l_whence);
+    explain_string_buffer_printf
     (
         sb,
         "; l_start = %lld; ",
         (long long)flp->l_start
     );
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "l_len = %lld; ",
         (long long)flp->l_len
     );
-    libexplain_string_buffer_printf(sb, "l_pid = %d }", (int)flp->l_pid);
+    explain_string_buffer_printf(sb, "l_pid = %d }", (int)flp->l_pid);
 }
 
 #endif

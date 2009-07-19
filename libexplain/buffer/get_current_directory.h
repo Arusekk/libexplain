@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_get_current_directory function may be used to
+  * The explain_buffer_get_current_directory function may be used to
   * obtain the path of the current directory, printing errors as and when
   * they are found.
   *
@@ -36,7 +36,7 @@
   *    int; 0 in success (path found, no errors), or -1 when path not
   *    found and message already printed.
   */
-int libexplain_buffer_get_current_directory(libexplain_string_buffer_t *sb,
+int explain_buffer_get_current_directory(explain_string_buffer_t *sb,
     char *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_GET_CURRENT_DIRECTORY_H */

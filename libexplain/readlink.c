@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 
 
 const char *
-libexplain_readlink(const char *pathname, char *data, int data_size)
+explain_readlink(const char *pathname, char *data, size_t data_size)
 {
-    return libexplain_errno_readlink(errno, pathname, data, data_size);
+    return explain_errno_readlink(errno, pathname, data, data_size);
 }

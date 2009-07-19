@@ -30,7 +30,7 @@ extern "C" {
 #endif
 
 /**
-  * The libexplain_program_name_get function may be used to obtain the
+  * The explain_program_name_get function may be used to obtain the
   * command name of the process.  Depending on how capable /proc is
   * on your system, or, failing that, how capanle lsof(1) is on your
   * system, this may or may not produce a sensable result.  It works
@@ -40,29 +40,29 @@ extern "C" {
   *    pointer to string containing the command name (no slashes) of the
   *    calling process.
   */
-const char *libexplain_program_name_get(void);
+const char *explain_program_name_get(void);
 
 /**
-  * The libexplain_program_name_set function may be used to set
+  * The explain_program_name_set function may be used to set
   * the libexplain libraries' idea of the command name of the
   * calling process, setting the string to be returned by the
-  * libexplain_program_name_get function.  This overrides the automatic
+  * explain_program_name_get function.  This overrides the automatic
   * behaviour, which can be quite desirable in commands that can be
   * invoked with more than one name, e.g. if they are a hard link
   * synoym.
   *
   * This also sets the option to include the program name in all of the
-  * error messages issued by the libexplain_*_or_die functions.
+  * error messages issued by the explain_*_or_die functions.
   *
   * @param name
   *     The name of the calling process.
   */
-void libexplain_program_name_set(const char *name);
+void explain_program_name_set(const char *name);
 
 /**
-  * The libexplain_program_name_assemble function is used to control
+  * The explain_program_name_assemble function is used to control
   * whether or not the name of the calling process is to be included in
-  * error messages issued by the libexplain_*_or_die functions.  If not
+  * error messages issued by the explain_*_or_die functions.  If not
   * expolicitly set, is controlled by the LIBEXPLAIN_OPTIONS environemnt
   * variable, or defaults to false if not set there either.
   *
@@ -70,7 +70,7 @@ void libexplain_program_name_set(const char *name);
   *     non-zero (true) to have program name included,
   *     zero (false) to have program name excluded.
   */
-void libexplain_program_name_assemble(int yesno);
+void explain_program_name_assemble(int yesno);
 
 #ifdef __cplusplus
 }

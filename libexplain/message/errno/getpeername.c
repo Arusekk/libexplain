@@ -21,14 +21,14 @@
 
 
 void
-libexplain_message_errno_getpeername(char *message, int message_size,
+explain_message_errno_getpeername(char *message, int message_size,
     int errnum, int fildes, struct sockaddr *sock_addr,
     socklen_t *sock_addr_size)
 {
-    libexplain_string_buffer_t sb;
+    explain_string_buffer_t sb;
 
-    libexplain_string_buffer_init(&sb, message, message_size);
-    libexplain_buffer_errno_getpeername
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_getpeername
     (
         &sb,
         errnum,

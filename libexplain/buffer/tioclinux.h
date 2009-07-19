@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_tioclinux function may be used to print a
+  * The explain_buffer_tioclinux function may be used to print a
   * representation of the value passed to the TIOCLINUX iotcl request.
   *
   * @param sb
@@ -30,7 +30,7 @@
   * @param data
   *     The data to be decoded.
   */
-void libexplain_buffer_tioclinux(libexplain_string_buffer_t *sb,
+void explain_buffer_tioclinux(explain_string_buffer_t *sb,
     const void *data);
 
 #endif /* LIBEXPLAIN_BUFFER_TIOCLINUX_H */

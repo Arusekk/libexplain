@@ -25,7 +25,7 @@ struct termios; /* forward */
 struct termio; /* forward */
 
 /**
-  * The libexplain_buffer_termios function may be used to
+  * The explain_buffer_termios function may be used to
   * print a representation of a struct termios value.
   *
   * @param sb
@@ -33,11 +33,11 @@ struct termio; /* forward */
   * @param value
   *    The value to be printed.
   */
-void libexplain_buffer_termios(libexplain_string_buffer_t *sb,
+void explain_buffer_termios(explain_string_buffer_t *sb,
     const struct termios *value);
 
 /**
-  * The libexplain_buffer_termio function may be used to
+  * The explain_buffer_termio function may be used to
   * print a representation of a struct termio value.
   *
   * @param sb
@@ -45,7 +45,7 @@ void libexplain_buffer_termios(libexplain_string_buffer_t *sb,
   * @param value
   *    The value to be printed.
   */
-void libexplain_buffer_termio(libexplain_string_buffer_t *sb,
+void explain_buffer_termio(explain_string_buffer_t *sb,
     const struct termio *value);
 
 #endif /* LIBEXPLAIN_BUFFER_TERMIOS_H */

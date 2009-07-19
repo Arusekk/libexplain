@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 
 
 void
-libexplain_message_fclose(char *message, int message_size, FILE *fp)
+explain_message_fclose(char *message, int message_size, FILE *fp)
 {
-    libexplain_message_errno_fclose(message, message_size, errno, fp);
+    explain_message_errno_fclose(message, message_size, errno, fp);
 }

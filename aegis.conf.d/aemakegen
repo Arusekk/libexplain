@@ -25,19 +25,11 @@ project_specific =
     },
     {
         name = "aemakegen:version-info";
-        value = "8:0:7";
+        value = "13:0:4";
     },
     {
         name = "aemakegen:debian:copyright";
-        value =
-            "The library functions are licensed under the GNU Lesser "
-            "General Public License (LGPL).\n"
-            "/usr/share/common-licenses/LGPL\n"
-            "\n"
-            "The utility programs are licensed under the GNU General "
-            "Public License (GPL).\n"
-            "/usr/share/common-licenses/GPL\n"
-            ;
+        value = "false";
     },
     {
         name = "aemakegen:debian:homepage";
@@ -83,5 +75,9 @@ project_specific =
     {
         name = "aemakegen:debian:depends";
         value = "lsof";
+    },
+    {
+        name = "aemakegen:debian:dm-upload-allowed";
+        value = "true";
     },
 ];

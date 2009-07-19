@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_stream function may be used to
+  * The explain_buffer_stream function may be used to
   * print a FILE pointer into the given string buffer.
   *
   * @param sb
@@ -33,6 +33,6 @@
   * @param fp
   *    The FILE pointer to represent
   */
-void libexplain_buffer_stream(libexplain_string_buffer_t *sb, FILE *fp);
+void explain_buffer_stream(explain_string_buffer_t *sb, FILE *fp);
 
 #endif /* LIBEXPLAIN_BUFFER_STREAM_H */

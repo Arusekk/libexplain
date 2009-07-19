@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_rmdir function
+  * The explain_buffer_errno_rmdir function
   * may be used to describe errors returned by the
   * rmdir() system call.  The least the
   * message will contain is the value of strerror(errnum),
@@ -43,12 +43,12 @@
   * @param pathname
   *     The original pathname, exactly as passed to the rmdir(2) system call.
   */
-void libexplain_buffer_errno_rmdir(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_rmdir(explain_string_buffer_t *sb, int errnum,
     const char *pathname);
 
 /**
-  * The libexplain_buffer_errno_rmdir_explanation function is used by the
-  * libexplain_buffer_errno_rmdir function (and others) to print the
+  * The explain_buffer_errno_rmdir_explanation function is used by the
+  * explain_buffer_errno_rmdir function (and others) to print the
   * explanation "because..." part.
   *
   * @param sb
@@ -58,7 +58,7 @@ void libexplain_buffer_errno_rmdir(libexplain_string_buffer_t *sb, int errnum,
   * @param pathname
   *     The original pathname, exactly as passed to the rmdir(2) system call.
   */
-void libexplain_buffer_errno_rmdir_explanation(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_RMDIR_H */

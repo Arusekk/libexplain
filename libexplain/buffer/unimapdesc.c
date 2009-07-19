@@ -27,31 +27,31 @@
 #ifdef HAVE_LINUX_KD_H
 
 void
-libexplain_buffer_unimapdesc(libexplain_string_buffer_t *sb,
+explain_buffer_unimapdesc(explain_string_buffer_t *sb,
     const struct unimapdesc *value, int extra)
 {
-    if (libexplain_pointer_is_efault(value, sizeof(*value)))
-        libexplain_buffer_pointer(sb, value);
+    if (explain_pointer_is_efault(value, sizeof(*value)))
+        explain_buffer_pointer(sb, value);
     else
     {
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             "{ entry_ct = %d, entries = ",
             value->entry_ct
         );
-        if (extra && libexplain_option_debug())
+        if (extra && explain_option_debug())
         {
             const struct unipair *ep;
             const struct unipair *end;
 
             ep = value->entries;
             end = ep + value->entry_ct;
-            if (!libexplain_pointer_is_efault(ep, (end - ep) * sizeof(*ep)))
+            if (!explain_pointer_is_efault(ep, (end - ep) * sizeof(*ep)))
             {
                 for (; ep < end; ++ep)
                 {
-                    libexplain_string_buffer_printf
+                    explain_string_buffer_printf
                     (
                         sb,
                         " { unicode = 0x%04X, fontpos = %u },",
@@ -59,11 +59,11 @@ libexplain_buffer_unimapdesc(libexplain_string_buffer_t *sb,
                         ep->fontpos
                     );
                 }
-                libexplain_string_buffer_puts(sb, " }");
+                explain_string_buffer_puts(sb, " }");
                 return;
             }
         }
-        libexplain_buffer_pointer(sb, value->entries);
+        explain_buffer_pointer(sb, value->entries);
     }
 }
 

@@ -26,15 +26,13 @@
 
 
 int
-libexplain_dup_or_die(int fildes)
+explain_dup_or_die(int fildes)
 {
     int             result;
 
-    result = dup(fildes);
+    result = explain_dup_on_error(fildes);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_dup(fildes));
         exit(EXIT_FAILURE);
     }
     return result;

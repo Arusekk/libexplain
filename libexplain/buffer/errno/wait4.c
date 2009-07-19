@@ -30,46 +30,46 @@
 
 
 static void
-libexplain_buffer_errno_wait4_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_wait4_system_call(explain_string_buffer_t *sb,
     int errnum, int pid, int *status, int options, struct rusage *rusage)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "wait4(pid = %d", pid);
+    explain_string_buffer_printf(sb, "wait4(pid = %d", pid);
     if (pid == 0)
-        libexplain_string_buffer_printf(sb, " = process group %d", getpgrp());
+        explain_string_buffer_printf(sb, " = process group %d", getpgrp());
     else if (pid < -1)
-        libexplain_string_buffer_printf(sb, " = process group %d", -pid);
-    libexplain_string_buffer_puts(sb, ", status = ");
-    libexplain_buffer_pointer(sb, status);
-    libexplain_string_buffer_puts(sb, ", options = ");
-    libexplain_buffer_waitpid_options(sb, options);
-    libexplain_string_buffer_puts(sb, ", rusage = ");
-    libexplain_buffer_pointer(sb, rusage);
-    libexplain_string_buffer_putc(sb, ')');
+        explain_string_buffer_printf(sb, " = process group %d", -pid);
+    explain_string_buffer_puts(sb, ", status = ");
+    explain_buffer_pointer(sb, status);
+    explain_string_buffer_puts(sb, ", options = ");
+    explain_buffer_waitpid_options(sb, options);
+    explain_string_buffer_puts(sb, ", rusage = ");
+    explain_buffer_pointer(sb, rusage);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 void
-libexplain_buffer_errno_wait4_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_wait4_explanation(explain_string_buffer_t *sb,
     int errnum, int pid, int *status, int options, struct rusage *rusage)
 {
     switch (errnum)
     {
     case EFAULT:
-        if (rusage && libexplain_pointer_is_efault(rusage, sizeof(*rusage)))
+        if (rusage && explain_pointer_is_efault(rusage, sizeof(*rusage)))
         {
-            libexplain_buffer_efault(sb, "rusage");
+            explain_buffer_efault(sb, "rusage");
             break;
         }
-        if (libexplain_pointer_is_efault(status, sizeof(*status)))
+        if (explain_pointer_is_efault(status, sizeof(*status)))
         {
-            libexplain_buffer_efault(sb, "status");
+            explain_buffer_efault(sb, "status");
             break;
         }
         break;
 
     default:
-        libexplain_buffer_errno_waitpid_explanation
+        explain_buffer_errno_waitpid_explanation
         (
             sb,
             errnum,
@@ -83,13 +83,13 @@ libexplain_buffer_errno_wait4_explanation(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_errno_wait4(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_wait4(explain_string_buffer_t *sb, int errnum,
     int pid, int *status, int options, struct rusage *rusage)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_wait4_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_wait4_system_call
     (
         &exp.system_call_sb,
         errnum,
@@ -98,7 +98,7 @@ libexplain_buffer_errno_wait4(libexplain_string_buffer_t *sb, int errnum,
         options,
         rusage
     );
-    libexplain_buffer_errno_wait4_explanation
+    explain_buffer_errno_wait4_explanation
     (
         &exp.explanation_sb,
         errnum,
@@ -107,5 +107,5 @@ libexplain_buffer_errno_wait4(libexplain_string_buffer_t *sb, int errnum,
         options,
         rusage
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,20 +26,20 @@
 
 
 static void
-libexplain_buffer_errno_putchar_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_putchar_system_call(explain_string_buffer_t *sb,
     int errnum, int c)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "putchar(c = ");
-    libexplain_buffer_char(sb, c);
-    libexplain_string_buffer_puts(sb, ", fp = ");
-    libexplain_buffer_stream(sb, stdout);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "putchar(c = ");
+    explain_buffer_char(sb, c);
+    explain_string_buffer_puts(sb, ", fp = ");
+    explain_buffer_stream(sb, stdout);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_putchar_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_putchar_explanation(explain_string_buffer_t *sb,
     int errnum, int c)
 {
     int             fildes;
@@ -48,29 +48,29 @@ libexplain_buffer_errno_putchar_explanation(libexplain_string_buffer_t *sb,
      * http://www.opengroup.org/onlinepubs/009695399/functions/putchar.html
      */
     (void)c;
-    fildes = libexplain_stream_to_fildes(stdout);
-    libexplain_buffer_errno_write_explanation(sb, errnum, fildes, NULL, 0);
+    fildes = explain_stream_to_fildes(stdout);
+    explain_buffer_errno_write_explanation(sb, errnum, fildes, NULL, 0);
 }
 
 
 void
-libexplain_buffer_errno_putchar(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_putchar(explain_string_buffer_t *sb, int errnum,
     int c)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_putchar_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_putchar_system_call
     (
         &exp.system_call_sb,
         errnum,
         c
     );
-    libexplain_buffer_errno_putchar_explanation
+    explain_buffer_errno_putchar_explanation
     (
         &exp.explanation_sb,
         errnum,
         c
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

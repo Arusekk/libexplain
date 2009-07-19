@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
     { "S_ISUID", S_ISUID },
     { "S_ISGID", S_ISGID },
@@ -46,14 +46,14 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_permission_mode(libexplain_string_buffer_t *sb, int mode)
+explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode)
 {
-    const libexplain_parse_bits_table_t *tp;
+    const explain_parse_bits_table_t *tp;
     int             first;
 
     if (mode == 0)
     {
-        libexplain_string_buffer_putc(sb, '0');
+        explain_string_buffer_putc(sb, '0');
         return;
     }
     first = 1;
@@ -62,8 +62,8 @@ libexplain_buffer_permission_mode(libexplain_string_buffer_t *sb, int mode)
         if (tp->value != 0 && (mode & tp->value) == tp->value)
         {
             if (!first)
-                libexplain_string_buffer_puts(sb, " | ");
-            libexplain_string_buffer_puts(sb, tp->name);
+                explain_string_buffer_puts(sb, " | ");
+            explain_string_buffer_puts(sb, tp->name);
             first = 0;
             mode -= tp->value;
         }
@@ -71,14 +71,14 @@ libexplain_buffer_permission_mode(libexplain_string_buffer_t *sb, int mode)
     if (mode != 0)
     {
         if (!first)
-            libexplain_string_buffer_puts(sb, " | ");
-        libexplain_string_buffer_printf(sb, "%#o", mode);
+            explain_string_buffer_puts(sb, " | ");
+        explain_string_buffer_printf(sb, "%#o", mode);
     }
 }
 
 
 int
-libexplain_permission_mode_parse_or_die(const char *text, const char *caption)
+explain_permission_mode_parse_or_die(const char *text, const char *caption)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

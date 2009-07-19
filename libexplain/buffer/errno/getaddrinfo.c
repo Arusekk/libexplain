@@ -30,26 +30,26 @@
 
 
 static void
-libexplain_buffer_errcode_getaddrinfo_system_call(
-    libexplain_string_buffer_t *sb, int errcode, const char *node,
+explain_buffer_errcode_getaddrinfo_system_call(
+    explain_string_buffer_t *sb, int errcode, const char *node,
     const char *service, const struct addrinfo *hints, struct addrinfo **res)
 {
     (void)errcode;
-    libexplain_string_buffer_puts(sb, "getaddrinfo(node = ");
-    libexplain_buffer_pathname(sb, node);
-    libexplain_string_buffer_puts(sb, ", service = ");
-    libexplain_buffer_pathname(sb, service);
-    libexplain_string_buffer_puts(sb, ", hints = ");
-    libexplain_buffer_addrinfo(sb, hints);
-    libexplain_string_buffer_puts(sb, ", res = ");
-    libexplain_buffer_pointer(sb, res);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "getaddrinfo(node = ");
+    explain_buffer_pathname(sb, node);
+    explain_string_buffer_puts(sb, ", service = ");
+    explain_buffer_pathname(sb, service);
+    explain_string_buffer_puts(sb, ", hints = ");
+    explain_buffer_addrinfo(sb, hints);
+    explain_string_buffer_puts(sb, ", res = ");
+    explain_buffer_pointer(sb, res);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errcode_getaddrinfo_explanation(
-    libexplain_string_buffer_t *sb, int errcode, const char *node,
+explain_buffer_errcode_getaddrinfo_explanation(
+    explain_string_buffer_t *sb, int errcode, const char *node,
     const char *service, const struct addrinfo *hints, struct addrinfo **res)
 {
     if (errcode > 0)
@@ -57,30 +57,30 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         switch (errcode)
         {
         case EFAULT:
-            if (node && libexplain_path_is_efault(node))
+            if (node && explain_path_is_efault(node))
             {
-                libexplain_buffer_efault(sb, "node");
+                explain_buffer_efault(sb, "node");
                 break;
             }
-            if (service && libexplain_path_is_efault(service))
+            if (service && explain_path_is_efault(service))
             {
-                libexplain_buffer_efault(sb, "service");
+                explain_buffer_efault(sb, "service");
                 break;
             }
-            if (hints && libexplain_pointer_is_efault(hints, sizeof(*hints)))
+            if (hints && explain_pointer_is_efault(hints, sizeof(*hints)))
             {
-                libexplain_buffer_efault(sb, "hints");
+                explain_buffer_efault(sb, "hints");
                 break;
             }
-            if (res && libexplain_pointer_is_efault(res, sizeof(*res)))
+            if (res && explain_pointer_is_efault(res, sizeof(*res)))
             {
-                libexplain_buffer_efault(sb, "res");
+                explain_buffer_efault(sb, "res");
                 break;
             }
             break;
 
         case ENOMEM:
-            libexplain_buffer_enomem_kernel(sb);
+            explain_buffer_enomem_kernel(sb);
             break;
 
         default:
@@ -95,7 +95,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
     switch (errcode)
     {
     case EAI_ADDRFAMILY:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the specified network host does not have any network "
@@ -103,7 +103,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         );
 
     case EAI_AGAIN:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the name server returned a temporary failure indication, "
@@ -112,7 +112,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_BADFLAGS:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the ai->ai_flags parameter had an invalid value"
@@ -120,7 +120,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_FAIL:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the name server returned a permanent failure indication "
@@ -129,7 +129,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_FAMILY:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the requested address family is not supported"
@@ -137,7 +137,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_NODATA:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the specified network host exists, but does not have any "
@@ -148,7 +148,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
     case EAI_NONAME:
         if (!node && !service)
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "both node and service are NULL, you have to specify at "
@@ -158,7 +158,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         }
         if (hints && (hints->ai_flags & AI_NUMERICSERV) && service)
         {
-            libexplain_string_buffer_puts
+            explain_string_buffer_puts
             (
                 sb,
                 "service was not a numeric port-number string"
@@ -167,15 +167,15 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         }
         if (!service)
         {
-            libexplain_string_buffer_puts(sb, "the node is not known");
+            explain_string_buffer_puts(sb, "the node is not known");
             break;
         }
         if (!node)
         {
-            libexplain_string_buffer_puts(sb, "the service is not known");
+            explain_string_buffer_puts(sb, "the service is not known");
             break;
         }
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the node or service is not known"
@@ -183,7 +183,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_SERVICE:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the requested service is not available for the requested "
@@ -193,7 +193,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_SOCKTYPE:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "the requested socket type is not supported"
@@ -201,7 +201,7 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_SYSTEM:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "a system error occurred, the error code can be found in errno"
@@ -209,11 +209,11 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
         break;
 
     case EAI_MEMORY:
-        libexplain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb);
         break;
 
     case EAI_OVERFLOW:
-        libexplain_string_buffer_puts
+        explain_string_buffer_puts
         (
             sb,
             "an argument buffer overflowed"
@@ -227,14 +227,14 @@ libexplain_buffer_errcode_getaddrinfo_explanation(
 
 
 void
-libexplain_buffer_errcode_getaddrinfo(libexplain_string_buffer_t *sb,
+explain_buffer_errcode_getaddrinfo(explain_string_buffer_t *sb,
     int errcode, const char *node, const char *service,
     const struct addrinfo *hints, struct addrinfo **res)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errcode);
-    libexplain_buffer_errcode_getaddrinfo_system_call
+    explain_explanation_init(&exp, errcode);
+    explain_buffer_errcode_getaddrinfo_system_call
     (
         &exp.system_call_sb,
         errcode,
@@ -243,7 +243,7 @@ libexplain_buffer_errcode_getaddrinfo(libexplain_string_buffer_t *sb,
         hints,
         res
     );
-    libexplain_buffer_errcode_getaddrinfo_explanation
+    explain_buffer_errcode_getaddrinfo_explanation
     (
         &exp.explanation_sb,
         errcode,
@@ -252,5 +252,5 @@ libexplain_buffer_errcode_getaddrinfo(libexplain_string_buffer_t *sb,
         hints,
         res
     );
-    libexplain_explanation_assemble_gai(&exp, sb);
+    explain_explanation_assemble_gai(&exp, sb);
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,9 @@
 
 
 static void
-report_error(libexplain_string_buffer_t *sb, const char *caption)
+report_error(explain_string_buffer_t *sb, const char *caption)
 {
-    libexplain_string_buffer_printf
+    explain_string_buffer_printf
     (
         sb,
         "%s, or a directory component of %s, is too long",
@@ -38,13 +38,13 @@ report_error(libexplain_string_buffer_t *sb, const char *caption)
 
 
 void
-libexplain_buffer_enametoolong(libexplain_string_buffer_t *sb,
+explain_buffer_enametoolong(explain_string_buffer_t *sb,
     const char *pathname, const char *pathname_caption,
-    const libexplain_final_t *final_component)
+    const explain_final_t *final_component)
 {
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ENAMETOOLONG,
@@ -64,15 +64,15 @@ libexplain_buffer_enametoolong(libexplain_string_buffer_t *sb,
 
 
 void
-libexplain_buffer_enametoolong2(libexplain_string_buffer_t *sb,
+explain_buffer_enametoolong2(explain_string_buffer_t *sb,
     const char *oldpath, const char *oldpath_caption,
-    const libexplain_final_t *oldpath_final_component,
+    const explain_final_t *oldpath_final_component,
     const char *newpath, const char *newpath_caption,
-    const libexplain_final_t *newpath_final_component)
+    const explain_final_t *newpath_final_component)
 {
     if
     (
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ENAMETOOLONG,
@@ -81,7 +81,7 @@ libexplain_buffer_enametoolong2(libexplain_string_buffer_t *sb,
             oldpath_final_component
         )
     &&
-        libexplain_buffer_errno_path_resolution
+        explain_buffer_errno_path_resolution
         (
             sb,
             ENAMETOOLONG,

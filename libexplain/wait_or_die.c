@@ -16,25 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/sys/wait.h>
 
-#include <libexplain/option.h>
 #include <libexplain/wait.h>
-#include <libexplain/wrap_and_print.h>
 
 
 int
-libexplain_wait_or_die(int *status)
+explain_wait_or_die(int *status)
 {
     int             result;
 
-    result = wait(status);
+    result = explain_wait_on_error(status);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_wait(status));
         exit(EXIT_FAILURE);
     }
     return result;

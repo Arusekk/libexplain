@@ -26,7 +26,7 @@
 #define PIO_FONTRESET -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_pio_fontreset =
+const explain_iocontrol_t explain_iocontrol_pio_fontreset =
 {
     "PIO_FONTRESET", /* name */
     PIO_FONTRESET, /* value */

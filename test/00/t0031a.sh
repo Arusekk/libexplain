@@ -18,7 +18,7 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-TEST_SUBJECT="libexplain_open vs ENOSPC"
+TEST_SUBJECT="explain_open vs ENOSPC"
 . test_prelude
 
 fmt > test.ok << 'fubar'

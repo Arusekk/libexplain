@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocsbrk.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocsbrk =
+const explain_iocontrol_t explain_iocontrol_tiocsbrk =
 {
     "TIOCSBRK", /* name */
     TIOCSBRK, /* value */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -49,27 +49,27 @@
   *     error message has already been printed.
   */
 static int
-recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
-    const struct stat *dot_st, libexplain_string_buffer_t *result)
+recursive_pwd(explain_string_buffer_t *sb, explain_string_buffer_t *dot,
+    const struct stat *dot_st, explain_string_buffer_t *result)
 {
     DIR             *dp;
     struct stat     dotdot_st;
 
-    libexplain_string_buffer_puts(dot, "/..");
+    explain_string_buffer_puts(dot, "/..");
     dp = opendir(dot->message);
     if (!dp)
     {
         int             errnum;
-        libexplain_final_t final_component;
+        explain_final_t final_component;
         int             ok;
 
         errnum = errno;
-        libexplain_final_init(&final_component);
+        explain_final_init(&final_component);
         final_component.want_to_read = 1;
         final_component.must_be_a_st_mode = 1;
         final_component.st_mode = S_IFDIR;
         ok =
-            libexplain_buffer_errno_path_resolution
+            explain_buffer_errno_path_resolution
             (
                 sb,
                 errnum,
@@ -81,7 +81,7 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
     }
     if (fstat(dirfd(dp), &dotdot_st) < 0)
     {
-        libexplain_buffer_errno_fstat_explanation
+        explain_buffer_errno_fstat_explanation
         (
             sb,
             errno,
@@ -90,9 +90,9 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
         );
         return -1;
     }
-    if (libexplain_is_same_inode(dot_st, &dotdot_st))
+    if (explain_is_same_inode(dot_st, &dotdot_st))
     {
-        libexplain_string_buffer_putc(result, '/');
+        explain_string_buffer_putc(result, '/');
         return 0;
     }
     for (;;)
@@ -109,17 +109,17 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
         if (0 == strcmp(dep->d_name, ".."))
             continue;
         old_pos = dot->position;
-        libexplain_string_buffer_path_join(dot, dep->d_name);
+        explain_string_buffer_path_join(dot, dep->d_name);
         if (lstat(dot->message, &dirent_st) < 0)
         {
             int             errnum;
-            libexplain_final_t final_component;
+            explain_final_t final_component;
             int             ok;
 
             errnum = errno;
-            libexplain_final_init(&final_component);
+            explain_final_init(&final_component);
             ok =
-                libexplain_buffer_errno_path_resolution
+                explain_buffer_errno_path_resolution
                 (
                     sb,
                     errnum,
@@ -129,8 +129,8 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
                 );
             return (ok ? 0 : -1);
         }
-        libexplain_string_buffer_truncate(dot, old_pos);
-        if (libexplain_is_same_inode(dot_st, &dirent_st))
+        explain_string_buffer_truncate(dot, old_pos);
+        if (explain_is_same_inode(dot_st, &dirent_st))
         {
             char            name[NAME_MAX + 1];
 
@@ -146,7 +146,7 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
             {
                 return -1;
             }
-            libexplain_string_buffer_path_join(result, name);
+            explain_string_buffer_path_join(result, name);
             return 0;
         }
     }
@@ -156,22 +156,22 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
      * No such directory.
      */
     {
-        libexplain_string_buffer_t msg1_sb;
-        libexplain_string_buffer_t msg2_sb;
+        explain_string_buffer_t msg1_sb;
+        explain_string_buffer_t msg2_sb;
         char            msg1[PATH_MAX + 1];
         char            msg2[PATH_MAX + 5];
 
-        libexplain_string_buffer_init(&msg1_sb, msg1, sizeof(msg1));
-        libexplain_string_buffer_puts(&msg1_sb, dot->message);
-        libexplain_string_buffer_puts(&msg1_sb, "/..");
+        explain_string_buffer_init(&msg1_sb, msg1, sizeof(msg1));
+        explain_string_buffer_puts(&msg1_sb, dot->message);
+        explain_string_buffer_puts(&msg1_sb, "/..");
 
-        libexplain_string_buffer_init(&msg2_sb, msg2, sizeof(msg2));
-        libexplain_string_buffer_puts_quoted(&msg2_sb, msg1);
+        explain_string_buffer_init(&msg2_sb, msg2, sizeof(msg2));
+        explain_string_buffer_puts_quoted(&msg2_sb, msg1);
 
-        libexplain_string_buffer_init(&msg1_sb, msg1, sizeof(msg1));
-        libexplain_string_buffer_puts_quoted(&msg1_sb, dot->message);
+        explain_string_buffer_init(&msg1_sb, msg1, sizeof(msg1));
+        explain_string_buffer_puts_quoted(&msg1_sb, dot->message);
 
-        libexplain_string_buffer_printf_gettext
+        explain_string_buffer_printf_gettext
         (
             sb,
             /*
@@ -187,8 +187,8 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
         );
         if (0 == strcmp(result->message, "/") && dot_st->st_ino != 2)
         {
-            libexplain_string_buffer_puts(sb, ", ");
-            libexplain_buffer_gettext
+            explain_string_buffer_puts(sb, ", ");
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -207,7 +207,7 @@ recursive_pwd(libexplain_string_buffer_t *sb, libexplain_string_buffer_t *dot,
 
 
 int
-libexplain_buffer_get_current_directory(libexplain_string_buffer_t *sb,
+explain_buffer_get_current_directory(explain_string_buffer_t *sb,
     char *data, size_t data_size)
 {
     assert(data_size > PATH_MAX);
@@ -231,7 +231,7 @@ libexplain_buffer_get_current_directory(libexplain_string_buffer_t *sb,
             &&
                 lstat(pwd, &pwd_st) >= 0
             &&
-                libexplain_is_same_inode(&dot_st, &pwd_st)
+                explain_is_same_inode(&dot_st, &pwd_st)
             )
             {
                 strendcpy(data, pwd, data + data_size);
@@ -260,7 +260,7 @@ libexplain_buffer_get_current_directory(libexplain_string_buffer_t *sb,
             &&
                 lstat(data, &pwd_st) >= 0
             &&
-                libexplain_is_same_inode(&dot_st, &pwd_st)
+                explain_is_same_inode(&dot_st, &pwd_st)
             )
             {
                 return 0;
@@ -273,23 +273,23 @@ libexplain_buffer_get_current_directory(libexplain_string_buffer_t *sb,
      * If all else fails, do it the slow way.
      */
     {
-        libexplain_string_buffer_t dot_sb;
-        libexplain_string_buffer_t result_sb;
+        explain_string_buffer_t dot_sb;
+        explain_string_buffer_t result_sb;
         struct stat     dot_st;
         char dot[PATH_MAX * 2 + 1];
 
         if (lstat(".", &dot_st) < 0)
         {
             int             errnum;
-            libexplain_final_t final_component;
+            explain_final_t final_component;
             int             ok;
 
             errnum = errno;
-            libexplain_final_init(&final_component);
+            explain_final_init(&final_component);
             final_component.must_be_a_st_mode = 1;
             final_component.st_mode = S_IFDIR;
             ok =
-                libexplain_buffer_errno_path_resolution
+                explain_buffer_errno_path_resolution
                 (
                     sb,
                     errnum,
@@ -299,9 +299,9 @@ libexplain_buffer_get_current_directory(libexplain_string_buffer_t *sb,
                 );
             return (ok ? 0 : -1);
         }
-        libexplain_string_buffer_init(&dot_sb, dot, sizeof(dot));
-        libexplain_string_buffer_putc(&dot_sb, '.');
-        libexplain_string_buffer_init(&result_sb, data, data_size);
+        explain_string_buffer_init(&dot_sb, dot, sizeof(dot));
+        explain_string_buffer_putc(&dot_sb, '.');
+        explain_string_buffer_init(&result_sb, data, data_size);
         return recursive_pwd(sb, &dot_sb, &dot_st, &result_sb);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -38,8 +38,8 @@
 /*
  * We attach this attribute to functions that should never have their
  * return value ignored.  Amongst other things, this can detect the case
- * where the client has called libexplain_fubar when they meant to call
- * libexplain_fubar_or_die instead.
+ * where the client has called explain_fubar when they meant to call
+ * explain_fubar_or_die instead.
  */
 #if LIBEXPLAIN_GNUC_PREREQ(3, 4)
 #define LIBEXPLAIN_WARN_UNUSED_RESULT __attribute__ ((__warn_unused_result__))

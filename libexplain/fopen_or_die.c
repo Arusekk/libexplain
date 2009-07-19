@@ -25,15 +25,13 @@
 
 
 FILE *
-libexplain_fopen_or_die(const char *pathname, const char *flags)
+explain_fopen_or_die(const char *pathname, const char *flags)
 {
     FILE            *fp;
 
-    fp = fopen(pathname, flags);
+    fp = explain_fopen_on_error(pathname, flags);
     if (!fp)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fopen(pathname, flags));
         exit(EXIT_FAILURE);
     }
     return fp;

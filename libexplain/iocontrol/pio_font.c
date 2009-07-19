@@ -29,18 +29,18 @@
 #ifdef HAVE_LINUX_KD_H
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_char_data(sb, data, 8192);
+    explain_buffer_char_data(sb, data, 8192);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_pio_font =
+const explain_iocontrol_t explain_iocontrol_pio_font =
 {
     "PIO_FONT", /* name */
     PIO_FONT, /* value */
@@ -52,7 +52,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_pio_font =
 
 #else
 
-const libexplain_iocontrol_t libexplain_iocontrol_pio_font =
+const explain_iocontrol_t explain_iocontrol_pio_font =
 {
     0, /* name */
     0, /* value */

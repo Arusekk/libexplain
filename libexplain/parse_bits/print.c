@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,15 +22,15 @@
 
 
 void
-libexplain_parse_bits_print(libexplain_string_buffer_t *sb, int value,
-    const libexplain_parse_bits_table_t *table, int table_size)
+explain_parse_bits_print(explain_string_buffer_t *sb, int value,
+    const explain_parse_bits_table_t *table, int table_size)
 {
     int             first;
     int             other;
 
     if (value == 0)
     {
-        libexplain_string_buffer_puts(sb, "0");
+        explain_string_buffer_puts(sb, "0");
         return;
     }
     first = 1;
@@ -38,16 +38,16 @@ libexplain_parse_bits_print(libexplain_string_buffer_t *sb, int value,
     for (;;)
     {
         int             bit;
-        const libexplain_parse_bits_table_t *tp;
+        const explain_parse_bits_table_t *tp;
 
         bit = value & -value;
         value -= bit;
-        tp = libexplain_parse_bits_find_by_value(bit, table, table_size);
+        tp = explain_parse_bits_find_by_value(bit, table, table_size);
         if (tp)
         {
             if (!first)
-                libexplain_string_buffer_puts(sb, " | ");
-            libexplain_string_buffer_puts(sb, tp->name);
+                explain_string_buffer_puts(sb, " | ");
+            explain_string_buffer_puts(sb, tp->name);
             first = 0;
         }
         else
@@ -58,7 +58,7 @@ libexplain_parse_bits_print(libexplain_string_buffer_t *sb, int value,
     if (other)
     {
         if (!first)
-            libexplain_string_buffer_puts(sb, " | ");
-        libexplain_string_buffer_printf(sb, "0x%X", other);
+            explain_string_buffer_puts(sb, " | ");
+        explain_string_buffer_printf(sb, "0x%X", other);
     }
 }

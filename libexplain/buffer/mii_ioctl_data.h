@@ -24,7 +24,7 @@
 struct mii_ioctl_data; /* forward */
 
 /**
-  * The libexplain_buffer_mii_ioctl_data function may be used to
+  * The explain_buffer_mii_ioctl_data function may be used to
   * print a representation of a mii_ioctl_data structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct mii_ioctl_data; /* forward */
   * @param data
   *     The mii_ioctl_data structure to be printed.
   */
-void libexplain_buffer_mii_ioctl_data(libexplain_string_buffer_t *sb,
+void explain_buffer_mii_ioctl_data(explain_string_buffer_t *sb,
     const struct mii_ioctl_data *data);
 
 #endif /* LIBEXPLAIN_BUFFER_MII_IOCTL_DATA_H */

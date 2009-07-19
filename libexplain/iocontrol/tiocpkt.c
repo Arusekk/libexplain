@@ -27,26 +27,26 @@
 
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_int_star(sb, data);
+    explain_buffer_int_star(sb, data);
 }
 
 
 static void
-print_explanation(const libexplain_iocontrol_t *p,
-    libexplain_string_buffer_t *sb, int errnum, int fildes, int request,
+print_explanation(const explain_iocontrol_t *p,
+    explain_string_buffer_t *sb, int errnum, int fildes, int request,
     const void *data)
 {
     switch (errnum)
     {
     case ENOTTY:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -59,7 +59,7 @@ print_explanation(const libexplain_iocontrol_t *p,
         break;
 
     default:
-        libexplain_iocontrol_generic.print_explanation
+        explain_iocontrol_generic.print_explanation
         (
             p,
             sb,
@@ -73,7 +73,7 @@ print_explanation(const libexplain_iocontrol_t *p,
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocpkt =
+const explain_iocontrol_t explain_iocontrol_tiocpkt =
 {
     "TIOCPKT", /* name */
     TIOCPKT, /* value */

@@ -28,15 +28,15 @@
 #ifdef HAVE_LINUX_KD_H
 
 void
-libexplain_buffer_kbdiacrs(libexplain_string_buffer_t *sb,
+explain_buffer_kbdiacrs(explain_string_buffer_t *sb,
     const struct kbdiacrs *value, int extra)
 {
-    if (libexplain_pointer_is_efault(value, sizeof(*value)))
-        libexplain_buffer_pointer(sb, value);
+    if (explain_pointer_is_efault(value, sizeof(*value)))
+        explain_buffer_pointer(sb, value);
     else
     {
-        libexplain_string_buffer_printf(sb, "{ kb_cnt = %u", value->kb_cnt);
-        if (extra && libexplain_option_debug())
+        explain_string_buffer_printf(sb, "{ kb_cnt = %u", value->kb_cnt);
+        if (extra && explain_option_debug())
         {
             size_t          max;
             const struct kbdiacr *ep;
@@ -47,10 +47,10 @@ libexplain_buffer_kbdiacrs(libexplain_string_buffer_t *sb,
                 max = SIZEOF(value->kbdiacr);
             ep = value->kbdiacr;
             end = ep + max;
-            libexplain_string_buffer_puts(sb, ", kbdiacr = {");
+            explain_string_buffer_puts(sb, ", kbdiacr = {");
             for (; ep < end; ++ep)
             {
-                libexplain_string_buffer_printf
+                explain_string_buffer_printf
                 (
                     sb,
                     " { diacr = %u, base = %u, result = %u },",
@@ -59,9 +59,9 @@ libexplain_buffer_kbdiacrs(libexplain_string_buffer_t *sb,
                     ep->result
                 );
             }
-            libexplain_string_buffer_puts(sb, " }");
+            explain_string_buffer_puts(sb, " }");
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }
 

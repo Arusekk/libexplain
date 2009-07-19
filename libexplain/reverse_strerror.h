@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #define LIBEXPLAIN_REVERSE_STRERROR_H
 
 /**
-  * The libexplain_reverse_strerror function may be used to translate
+  * The explain_reverse_strerror function may be used to translate
   * the text of an error returned by strerror back into an errno value.
   * Given that useres frequently mangle the text when they are reporting
   * error messages, this can be tricky.
@@ -31,6 +31,6 @@
   * @returns
   *    an errno value, or -1 if there is nothing remotely similar
   */
-int libexplain_reverse_strerror(const char *text);
+int explain_reverse_strerror(const char *text);
 
 #endif /* LIBEXPLAIN_REVERSE_STRERROR_H */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,10 +22,10 @@
 
 
 void
-libexplain_buffer_and_the_process_is_not_privileged(
-    libexplain_string_buffer_t *sb)
+explain_buffer_and_the_process_is_not_privileged(
+    explain_string_buffer_t *sb)
 {
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*

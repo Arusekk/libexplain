@@ -24,7 +24,7 @@
 struct kbkeycode; /* forward */
 
 /**
-  * The libexplain_buffer_kbkeycode function may be used to
+  * The explain_buffer_kbkeycode function may be used to
   * print a representation of a kbkeycode structure.
   *
   * @param sb
@@ -34,7 +34,7 @@ struct kbkeycode; /* forward */
   * @param extra
   *     whether or not to print the return portion
   */
-void libexplain_buffer_kbkeycode(libexplain_string_buffer_t *sb,
+void explain_buffer_kbkeycode(explain_string_buffer_t *sb,
     const struct kbkeycode *data, int extra);
 
 #endif /* LIBEXPLAIN_BUFFER_KBKEYCODE_H */

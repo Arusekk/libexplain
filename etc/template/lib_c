@@ -21,6 +21,6 @@
 
 
 void
-${ident ${trim_ext $filename}}(void)
+explain_${ident ${trim_ext ${trim_dir $filename}}}(void)
 {
 }

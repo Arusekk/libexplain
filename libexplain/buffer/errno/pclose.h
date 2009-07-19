@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_pclose function
+  * The explain_buffer_errno_pclose function
   * is used to obtain an explanation of an error returned
   * by the pclose(3) system call.
   * The least the message will contain is the value of
@@ -43,7 +43,7 @@
   * @param fp
   *     The original fp, exactly as passed to the pclose(3) system call.
   */
-void libexplain_buffer_errno_pclose(libexplain_string_buffer_t *sb, int errnum,
+void explain_buffer_errno_pclose(explain_string_buffer_t *sb, int errnum,
     FILE *fp);
 
 /* vim:ts=8:sw=4:et */

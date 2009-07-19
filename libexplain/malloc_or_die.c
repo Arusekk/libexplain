@@ -26,25 +26,17 @@
 
 
 void *
-libexplain_malloc_or_die(size_t size)
+explain_malloc_or_die(size_t size)
 {
-    size_t          ok_size;
     void            *result;
 
-     /*
-      * Common mis-implementation of the posix standard:
-      * Some malloc implementations can't cope with a size of zero.
-      */
-    ok_size = size ? size : 1;
-    errno = ENOMEM;
-    result = malloc(ok_size);
+    result = explain_malloc_on_error(size);
     if (!result)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_malloc(size));
         exit(EXIT_FAILURE);
     }
     return result;
 }
+
 
 /* vim:ts=8:sw=4:et */

@@ -16,38 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
-#include <libexplain/option.h>
 #include <libexplain/remove.h>
-#include <libexplain/wrap_and_print.h>
-
-
-#ifndef HAVE_REMOVE
-
-static int
-remove(const char *pathname)
-{
-    int             result;
-
-    result = unlink(pathname);
-    if (result < 0 && errno == EISDIR)
-        result = rmdir(pathname);
-    return result;
-}
-
-#endif
 
 
 void
-libexplain_remove_or_die(const char *pathname)
+explain_remove_or_die(const char *pathname)
 {
-    if (remove(pathname) < 0)
+    if (explain_remove_on_error(pathname) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_remove(pathname));
         exit(EXIT_FAILURE);
     }
 }

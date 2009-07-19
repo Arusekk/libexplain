@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_pid_t_star function may be used to
+  * The explain_buffer_pid_t_star function may be used to
   * print a pid_t* value.
   *
   * @param sb
@@ -31,7 +31,7 @@
   * @param value
   *    The value to be printed
   */
-void libexplain_buffer_pid_t_star(libexplain_string_buffer_t *sb,
+void explain_buffer_pid_t_star(explain_string_buffer_t *sb,
     const pid_t *value);
 
 #endif /* LIBEXPLAIN_BUFFER_PID_T_STAR_H */

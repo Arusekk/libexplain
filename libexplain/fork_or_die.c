@@ -26,15 +26,13 @@
 
 
 int
-libexplain_fork_or_die(void)
+explain_fork_or_die(void)
 {
     int             result;
 
-    result = fork();
+    result = explain_fork_on_error();
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_fork());
         exit(EXIT_FAILURE);
     }
     return result;

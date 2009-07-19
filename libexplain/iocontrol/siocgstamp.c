@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/siocgstamp.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocgstamp =
+const explain_iocontrol_t explain_iocontrol_siocgstamp =
 {
     "SIOCGSTAMP", /* name */
     SIOCGSTAMP, /* value */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -47,35 +47,35 @@
 
 
 static void
-libexplain_buffer_errno_access_call(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_access_call(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode)
 {
     (void)errnum;
-    libexplain_string_buffer_puts(sb, "access(pathname = ");
-    libexplain_buffer_pathname(sb, pathname);
-    libexplain_string_buffer_puts(sb, ", mode = ");
-    libexplain_buffer_access_mode(sb, mode);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_puts(sb, "access(pathname = ");
+    explain_buffer_pathname(sb, pathname);
+    explain_string_buffer_puts(sb, ", mode = ");
+    explain_buffer_access_mode(sb, mode);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 void
-libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_access_explanation(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode)
 {
-    libexplain_final_t final_component;
+    explain_final_t final_component;
 
     /*
      * Translate the mode into final component flags.
      */
-    libexplain_final_init(&final_component);
+    explain_final_init(&final_component);
     if (mode & R_OK)
         final_component.want_to_read = 1;
     if (mode & W_OK)
         final_component.want_to_write = 1;
     if (mode & X_OK)
     {
-        if (libexplain_pathname_is_a_directory(pathname))
+        if (explain_pathname_is_a_directory(pathname))
             final_component.want_to_search = 1;
         else
             final_component.want_to_execute = 1;
@@ -98,7 +98,7 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
     switch (errnum)
     {
     case EACCES:
-        libexplain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
 
         /*
          * If they asked for more than one permission, explain that they
@@ -107,8 +107,8 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
          */
         if (mode != (mode & -mode))
         {
-            libexplain_string_buffer_puts(sb, "; ");
-            libexplain_buffer_gettext
+            explain_string_buffer_puts(sb, "; ");
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -126,8 +126,8 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
 
         if (getuid() != geteuid() || getgid() != getgid())
         {
-            libexplain_string_buffer_puts(sb, "; ");
-            libexplain_buffer_gettext
+            explain_string_buffer_puts(sb, "; ");
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -154,11 +154,11 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
 
     case ELOOP:
     case EMLINK: /* BSD */
-        libexplain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
     case ENAMETOOLONG:
-        libexplain_buffer_enametoolong
+        explain_buffer_enametoolong
         (
             sb,
             pathname,
@@ -168,64 +168,64 @@ libexplain_buffer_errno_access_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case ENOENT:
-        libexplain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOTDIR:
-        libexplain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
         break;
 
     case EROFS:
-        libexplain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     case EFAULT:
-        libexplain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, "pathname");
         break;
 
     case EINVAL:
-        libexplain_buffer_einval_bits(sb, "mode");
+        explain_buffer_einval_bits(sb, "mode");
         break;
 
     case EIO:
-        libexplain_buffer_eio_path(sb, pathname);
+        explain_buffer_eio_path(sb, pathname);
         break;
 
     case ENOMEM:
-        libexplain_buffer_enomem_kernel(sb);
+        explain_buffer_enomem_kernel(sb);
         break;
 
     case ETXTBSY:
-        libexplain_buffer_etxtbsy(sb, pathname);
+        explain_buffer_etxtbsy(sb, pathname);
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_access(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_access(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_access_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_access_call
     (
         &exp.system_call_sb,
         errnum,
         pathname,
         mode
     );
-    libexplain_buffer_errno_access_explanation
+    explain_buffer_errno_access_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
         mode
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

@@ -30,40 +30,40 @@
 
 
 int
-libexplain_pclose_success(FILE *fp)
+explain_pclose_success(FILE *fp)
 {
     int             status;
 
     status = pclose(fp);
     if (status < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print(stderr, libexplain_pclose(fp));
+        explain_program_name_assemble_internal(1);
+        explain_wrap_and_print(stderr, explain_pclose(fp));
     }
     else if (status != 0)
     {
-        libexplain_string_buffer_t sb;
+        explain_string_buffer_t sb;
 
-        libexplain_string_buffer_init
+        explain_string_buffer_init
         (
             &sb,
-            libexplain_common_message_buffer,
-            libexplain_common_message_buffer_size
+            explain_common_message_buffer,
+            explain_common_message_buffer_size
         );
-        libexplain_buffer_errno_pclose(&sb, 0, 0);
+        explain_buffer_errno_pclose(&sb, 0, 0);
 
         /* FIXME: i18n */
-        libexplain_string_buffer_puts(&sb, ", but ");
-        libexplain_buffer_wait_status(&sb, status);
-        libexplain_wrap_and_print(stderr, libexplain_common_message_buffer);
+        explain_string_buffer_puts(&sb, ", but ");
+        explain_buffer_wait_status(&sb, status);
+        explain_wrap_and_print(stderr, explain_common_message_buffer);
     }
     return status;
 }
 
 
 void
-libexplain_pclose_success_or_die(FILE *fp)
+explain_pclose_success_or_die(FILE *fp)
 {
-    if (libexplain_pclose_success(fp))
+    if (explain_pclose_success(fp))
         exit(EXIT_FAILURE);
 }

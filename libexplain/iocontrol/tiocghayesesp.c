@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocghayesesp.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocghayesesp =
+const explain_iocontrol_t explain_iocontrol_tiocghayesesp =
 {
     "TIOCGHAYESESP", /* name */
     TIOCGHAYESESP, /* value */

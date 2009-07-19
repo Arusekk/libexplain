@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_siocgifbr function may be used to print a
+  * The explain_buffer_siocgifbr function may be used to print a
   * representation of the artumets to an ioctl SIOCGIFBR request.
   *
   * @param sb
@@ -30,7 +30,7 @@
   * @param data
   *    The argument to be printed.
   */
-void libexplain_buffer_siocgifbr(libexplain_string_buffer_t *sb,
+void explain_buffer_siocgifbr(explain_string_buffer_t *sb,
     const unsigned long data[3]);
 
 #endif /* LIBEXPLAIN_BUFFER_SIOCGIFBR_H */

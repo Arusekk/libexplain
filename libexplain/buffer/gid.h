@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_gid function may be used to
+  * The explain_buffer_gid function may be used to
   * insert a group ID into the given buffer.
   *
   * @param sb
@@ -31,15 +31,15 @@
   * @param gid
   *    The goup ID to print.
   */
-void libexplain_buffer_gid(libexplain_string_buffer_t *sb, int gid);
+void explain_buffer_gid(explain_string_buffer_t *sb, int gid);
 
 /**
-  * The libexplain_buffer_gid_supplementary function is used to print a
+  * The explain_buffer_gid_supplementary function is used to print a
   * list of the processes supplementary groups.
   *
   * @param sb
   *     The string buffer to print into.
   */
-void libexplain_buffer_gid_supplementary(struct libexplain_string_buffer_t *sb);
+void explain_buffer_gid_supplementary(struct explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_GID_H */

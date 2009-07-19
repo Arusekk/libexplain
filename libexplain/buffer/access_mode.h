@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,10 @@
 #ifndef LIBEXPLAIN_BUFFER_ACCESS_MODE_H
 #define LIBEXPLAIN_BUFFER_ACCESS_MODE_H
 
-struct libexplain_string_buffer_t; /* forward */
+struct explain_string_buffer_t; /* forward */
 
 /**
-  * The libexplain_buffer_access_mode function may be used to
+  * The explain_buffer_access_mode function may be used to
   * emit a human readable representation of an access mode.
   *
   * @param sb
@@ -31,11 +31,11 @@ struct libexplain_string_buffer_t; /* forward */
   * @param mode
   *     The access(2) mode to encode.
   */
-void libexplain_buffer_access_mode(struct libexplain_string_buffer_t *sb,
+void explain_buffer_access_mode(struct explain_string_buffer_t *sb,
     int mode);
 
 /**
-  * The libexplain_access_mode_parse function may be used to parse a C-like
+  * The explain_access_mode_parse function may be used to parse a C-like
   * expression string, into an access(2) mode argument.
   *
   * @param text
@@ -43,10 +43,10 @@ void libexplain_buffer_access_mode(struct libexplain_string_buffer_t *sb,
   * @returns
   *     int; access mode on success, -1 on failure
   */
-int libexplain_access_mode_parse(const char *text);
+int explain_access_mode_parse(const char *text);
 
 /**
-  * The libexplain_access_mode_parse_or_die function may be used to
+  * The explain_access_mode_parse_or_die function may be used to
   * parse a C-like expression string, into an access(2) mode argument.
   * If string is not valie, issues a diagnostic and exits EXIT_FAILURE.
   *
@@ -57,6 +57,6 @@ int libexplain_access_mode_parse(const char *text);
   * @returns
   *     the access mode
   */
-int libexplain_access_mode_parse_or_die(const char *text, const char *caption);
+int explain_access_mode_parse_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_ACCESS_MODE_H */

@@ -24,7 +24,7 @@
 struct in6_ifreq; /* forward */
 
 /**
-  * The libexplain_buffer_in6_ifreq function may be used to
+  * The explain_buffer_in6_ifreq function may be used to
   * print a representation of an in6_ifreq structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct in6_ifreq; /* forward */
   * @param data
   *    The in6_ifreq structure to be printed.
   */
-void libexplain_buffer_in6_ifreq(libexplain_string_buffer_t *sb,
+void explain_buffer_in6_ifreq(explain_string_buffer_t *sb,
     const struct in6_ifreq *data);
 
 #endif /* LIBEXPLAIN_BUFFER_IN6_IFREQ_H */

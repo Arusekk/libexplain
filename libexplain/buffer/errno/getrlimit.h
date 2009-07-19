@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
 struct rlimit; /* forward */
 
 /**
-  * The libexplain_buffer_errno_getrlimit function is used to obtain an
+  * The explain_buffer_errno_getrlimit function is used to obtain an
   * explanation of an error returned by the getrlimit(2) system call.
   * The least the message will contain is the value of strerror(errnum),
   * but usually it will do much better, and indicate the underlying
@@ -47,7 +47,7 @@ struct rlimit; /* forward */
   * @param rlim
   *     The original rlim, exactly as passed to the getrlimit(2) system call.
   */
-void libexplain_buffer_errno_getrlimit(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_getrlimit(explain_string_buffer_t *sb,
     int errnum, int resource, struct rlimit *rlim);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_GETRLIMIT_H */

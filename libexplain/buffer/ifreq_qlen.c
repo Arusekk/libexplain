@@ -24,11 +24,11 @@
 
 
 void
-libexplain_buffer_ifreq_qlen(libexplain_string_buffer_t *sb,
+explain_buffer_ifreq_qlen(explain_string_buffer_t *sb,
     const struct ifreq *data)
 {
-    if (libexplain_pointer_is_efault(data, sizeof(*data)))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
     else
     {
         const struct ifreq *ifr;
@@ -38,14 +38,14 @@ libexplain_buffer_ifreq_qlen(libexplain_string_buffer_t *sb,
          * case is given the interface name and the interface flags.
          */
         ifr = data;
-        libexplain_string_buffer_puts(sb, "{ ifr_name = ");
-        libexplain_string_buffer_puts_quoted_n
+        explain_string_buffer_puts(sb, "{ ifr_name = ");
+        explain_string_buffer_puts_quoted_n
         (
             sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
-        libexplain_string_buffer_printf
+        explain_string_buffer_printf
         (
             sb,
             ", ifr_qlen = %d }",

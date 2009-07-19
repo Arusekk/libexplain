@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_errno_generic function is used to explain
+  * The explain_buffer_errno_generic function is used to explain
   * errors for which a completely generic explanation is possible, and
   * which is more informative than strerror alone.
   *
@@ -32,7 +32,7 @@
   * @param errnum
   *    The errno value to explain
   */
-void libexplain_buffer_errno_generic(libexplain_string_buffer_t *sb,
+void explain_buffer_errno_generic(explain_string_buffer_t *sb,
     int errnum);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_GENERIC_H */

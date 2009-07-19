@@ -28,9 +28,9 @@
 #ifdef HAVE_LINUX_TIOCL_H
 
 static void
-libexplain_buffer_tiocl(libexplain_string_buffer_t *sb, int value)
+explain_buffer_tiocl(explain_string_buffer_t *sb, int value)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "TIOCL_SETSEL", TIOCL_SETSEL },
         { "TIOCL_PASTESEL", TIOCL_PASTESEL },
@@ -44,17 +44,19 @@ libexplain_buffer_tiocl(libexplain_string_buffer_t *sb, int value)
         { "TIOCL_SCROLLCONSOLE", TIOCL_SCROLLCONSOLE },
         { "TIOCL_BLANKSCREEN", TIOCL_BLANKSCREEN },
         { "TIOCL_BLANKEDSCREEN", TIOCL_BLANKEDSCREEN },
+#ifdef TIOCL_GETKMSGREDIRECT
         { "TIOCL_GETKMSGREDIRECT", TIOCL_GETKMSGREDIRECT },
+#endif
     };
 
-    libexplain_parse_bits_print_single(sb, value, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, value, table, SIZEOF(table));
 }
 
 
 static void
-libexplain_buffer_tiocl_setsel(libexplain_string_buffer_t *sb, int value)
+explain_buffer_tiocl_setsel(explain_string_buffer_t *sb, int value)
 {
-    static const libexplain_parse_bits_table_t table[] =
+    static const explain_parse_bits_table_t table[] =
     {
         { "TIOCL_SELCHAR", TIOCL_SELCHAR },
         { "TIOCL_SELWORD", TIOCL_SELWORD },
@@ -65,25 +67,25 @@ libexplain_buffer_tiocl_setsel(libexplain_string_buffer_t *sb, int value)
         { "TIOCL_SELBUTTONMASK", TIOCL_SELBUTTONMASK },
     };
 
-    libexplain_parse_bits_print_single(sb, value, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, value, table, SIZEOF(table));
 }
 
 
 void
-libexplain_buffer_tioclinux(libexplain_string_buffer_t *sb, const void *data)
+explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
 {
     /* See console_ioctl(4) for more information. */
     if (!data)
     {
         print_pointer:
-        libexplain_buffer_pointer(sb, data);
+        explain_buffer_pointer(sb, data);
     }
     else
     {
         const unsigned char *cp;
 
         cp = data;
-        libexplain_string_buffer_puts(sb, "{ ");
+        explain_string_buffer_puts(sb, "{ ");
         switch (*cp)
         {
         case TIOCL_SETSEL:
@@ -97,43 +99,43 @@ libexplain_buffer_tioclinux(libexplain_string_buffer_t *sb, const void *data)
                 const foo_t     *foo;
 
                 foo = data;
-                if (libexplain_pointer_is_efault(foo, sizeof(*foo)))
+                if (explain_pointer_is_efault(foo, sizeof(*foo)))
                     goto print_pointer;
-                libexplain_buffer_tiocl(sb, cp[0]);
-                libexplain_string_buffer_puts(sb, ", { ");
-                libexplain_string_buffer_printf(sb, "xs = %u, ", foo->sel.xs);
-                libexplain_string_buffer_printf(sb, "ys = %u, ", foo->sel.ys);
-                libexplain_string_buffer_printf(sb, "xe = %u, ", foo->sel.xe);
-                libexplain_string_buffer_printf(sb, "ye = %u, ", foo->sel.ye);
-                libexplain_string_buffer_puts(sb, "sel_mode = ");
-                libexplain_buffer_tiocl_setsel(sb, foo->sel.sel_mode);
-                libexplain_string_buffer_puts(sb, " }");
+                explain_buffer_tiocl(sb, cp[0]);
+                explain_string_buffer_puts(sb, ", { ");
+                explain_string_buffer_printf(sb, "xs = %u, ", foo->sel.xs);
+                explain_string_buffer_printf(sb, "ys = %u, ", foo->sel.ys);
+                explain_string_buffer_printf(sb, "xe = %u, ", foo->sel.xe);
+                explain_string_buffer_printf(sb, "ye = %u, ", foo->sel.ye);
+                explain_string_buffer_puts(sb, "sel_mode = ");
+                explain_buffer_tiocl_setsel(sb, foo->sel.sel_mode);
+                explain_string_buffer_puts(sb, " }");
             }
             break;
 
         case TIOCL_SETVESABLANK:
-            if (libexplain_pointer_is_efault(data, 2))
+            if (explain_pointer_is_efault(data, 2))
                 goto print_pointer;
-            libexplain_buffer_tiocl(sb, cp[0]);
-            libexplain_string_buffer_printf(sb, ", %d", cp[1]);
+            explain_buffer_tiocl(sb, cp[0]);
+            explain_string_buffer_printf(sb, ", %d", cp[1]);
             break;
 
         default:
-            if (libexplain_pointer_is_efault(data, 1))
+            if (explain_pointer_is_efault(data, 1))
                 goto print_pointer;
-            libexplain_buffer_tiocl(sb, *cp);
+            explain_buffer_tiocl(sb, *cp);
             break;
         }
-        libexplain_string_buffer_puts(sb, " }");
+        explain_string_buffer_puts(sb, " }");
     }
 }
 
 #else
 
 void
-libexplain_buffer_tioclinux(libexplain_string_buffer_t *sb, const void *data)
+explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
 {
-    libexplain_buffer_pointer(sb, data);
+    explain_buffer_pointer(sb, data);
 }
 
 #endif

@@ -21,7 +21,6 @@ build: build-stamp
 build-stamp: config.status
 	dh_testdir
 	$(MAKE)
-	$(MAKE) check
 	touch $@
 
 clean:
@@ -39,6 +38,8 @@ install: build
 	mkdir -p $(CURDIR)/debian/tmp/usr/lib
 	mkdir -p $(CURDIR)/debian/tmp/usr/share
 	$(MAKE) DESTDIR=$(CURDIR)/debian/tmp install
+	rm $(CURDIR)/debian/tmp/usr/share/man/man1/explain_license.1
+	rm $(CURDIR)/debian/tmp/usr/share/man/man3/explain_license.3
 
 binary-indep: build install
 
@@ -50,7 +51,7 @@ binary-arch: build install
 	dh_installdocs -A
 	dh_install --fail-missing --sourcedir=debian/tmp
 	dh_installman -A
-	dh_strip --dbg-package=libexplain1-dbg
+	dh_strip --dbg-package=libexplain9-dbg
 	dh_compress -A
 	dh_fixperms
 	dh_makeshlibs

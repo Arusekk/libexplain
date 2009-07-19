@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,7 @@
 #include <libexplain/sizeof.h>
 
 
-static const libexplain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t table[] =
 {
 #ifdef _PC_LINK_MAX
     { "_PC_LINK_MAX", _PC_LINK_MAX },
@@ -92,21 +92,21 @@ static const libexplain_parse_bits_table_t table[] =
 
 
 void
-libexplain_buffer_pathconf_name(libexplain_string_buffer_t *sb, int name)
+explain_buffer_pathconf_name(explain_string_buffer_t *sb, int name)
 {
-    libexplain_parse_bits_print_single(sb, name, table, SIZEOF(table));
+    explain_parse_bits_print_single(sb, name, table, SIZEOF(table));
 }
 
 
 int
-libexplain_parse_pathconf_name_or_die(const char *text)
+explain_parse_pathconf_name_or_die(const char *text)
 {
-    return libexplain_parse_bits_or_die(text, table, SIZEOF(table), 0);
+    return explain_parse_bits_or_die(text, table, SIZEOF(table), 0);
 }
 
 
 int
-libexplain_valid_pathconf_name(int name)
+explain_valid_pathconf_name(int name)
 {
-    return !!libexplain_parse_bits_find_by_value(name, table, SIZEOF(table));
+    return !!explain_parse_bits_find_by_value(name, table, SIZEOF(table));
 }

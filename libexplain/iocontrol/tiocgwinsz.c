@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/tiocgwinsz.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_tiocgwinsz =
+const explain_iocontrol_t explain_iocontrol_tiocgwinsz =
 {
     "TIOCGWINSZ", /* name */
     TIOCGWINSZ, /* value */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,9 @@
 
 
 void
-libexplain_buffer_enomem_kernel(libexplain_string_buffer_t *sb)
+explain_buffer_enomem_kernel(explain_string_buffer_t *sb)
 {
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -40,11 +40,11 @@ libexplain_buffer_enomem_kernel(libexplain_string_buffer_t *sb)
 
 
 void
-libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
+explain_buffer_enomem_user(explain_string_buffer_t *sb)
 {
     struct rlimit   rlim;
 
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*
@@ -64,8 +64,8 @@ libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
     {
         if (rlim.rlim_cur == RLIM_INFINITY)
         {
-            libexplain_string_buffer_puts(sb, ", ");
-            libexplain_buffer_gettext
+            explain_string_buffer_puts(sb, ", ");
+            explain_buffer_gettext
             (
                 sb,
                 /*
@@ -81,17 +81,17 @@ libexplain_buffer_enomem_user(libexplain_string_buffer_t *sb)
         }
         else
         {
-            libexplain_string_buffer_putc(sb, ' ');
-            libexplain_buffer_rlimit(sb, &rlim);
+            explain_string_buffer_putc(sb, ' ');
+            explain_buffer_rlimit(sb, &rlim);
         }
     }
 }
 
 
 void
-libexplain_buffer_enomem_kernel_or_user(libexplain_string_buffer_t *sb)
+explain_buffer_enomem_kernel_or_user(explain_string_buffer_t *sb)
 {
-    libexplain_buffer_gettext
+    explain_buffer_gettext
     (
         sb,
         /*

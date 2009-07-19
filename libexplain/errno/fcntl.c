@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,16 +22,16 @@
 
 
 const char *
-libexplain_errno_fcntl(int errnum, int fildes, int command, long arg)
+explain_errno_fcntl(int errnum, int fildes, int command, long arg)
 {
-    libexplain_message_errno_fcntl
+    explain_message_errno_fcntl
     (
-        libexplain_common_message_buffer,
-        libexplain_common_message_buffer_size,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
         errnum,
         fildes,
         command,
         arg
     );
-    return libexplain_common_message_buffer;
+    return explain_common_message_buffer;
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 void
-libexplain_string_buffer_path_join(libexplain_string_buffer_t *dst,
+explain_string_buffer_path_join(explain_string_buffer_t *dst,
     const char *s)
 {
     while (s[0] == '.' && s[1] == '/')
@@ -33,6 +33,6 @@ libexplain_string_buffer_path_join(libexplain_string_buffer_t *dst,
     if (dst->position == 1 && dst->message[0] == '.')
         dst->position = 0;
     else if (dst->position > 0 && dst->message[dst->position - 1] != '/')
-        libexplain_string_buffer_putc(dst, '/');
-    libexplain_string_buffer_puts(dst, s);
+        explain_string_buffer_putc(dst, '/');
+    explain_string_buffer_puts(dst, s);
 }

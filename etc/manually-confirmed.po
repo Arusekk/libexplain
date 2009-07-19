@@ -18,7 +18,7 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2009-02-08 19:40+1100\n"
+        "POT-Creation-Date: 2009-07-17 16:07+1000\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
 #.
@@ -200,6 +200,19 @@ msgid   "%s failed, %s because %s"
 msgstr  "%s failed, %s because %s"
 
 #.
+#. this error message is issued to explain an ENOSYS
+#. or EOPNOTSUPP error in the case where a system call is not
+#. supported for a particular device (or perhapse si not
+#. supported by the device driver).
+#.
+#. %1$s => the type of the special file (already translated)
+#. %2$s => the name of the offending system call.
+#.
+#, c-format
+msgid   "%s is a %s that does not support the %s system call"
+msgstr  "%s is a %s that does not support the %s system call"
+
+#.
 #. This message is used to explan an
 #. EACCES error reported by a rename(2) system
 #. call.  This is the generic explanation given when
@@ -267,6 +280,18 @@ msgstr  "%s is not an empty directory; that is, it contains entries other "
         "than \".\" and \"..\""
 
 #.
+#. This error message is issued to explain an ENOSYS
+#. or EOPNOTSUPP or ENOTTY error, in the generic case.  There are
+#. more specific messages, try to use those instead.
+#.
+#. %1$s => the name of the offending system call argument
+#. %2$s => the name of the offending system call
+#.
+#, c-format
+msgid   "%s is not associated with an object to which %s can be applied"
+msgstr  "%s is not associated with an object to which %s can be applied"
+
+#.
 #. This message is used when an attempt is made to write to
 #. a file descriptor that was not opened for writing.  The actual open
 #. mode will be printed separately.
@@ -276,6 +301,16 @@ msgstr  "%s is not an empty directory; that is, it contains entries other "
 #, c-format
 msgid   "%s is not open for writing"
 msgstr  "%s is not open for writing"
+
+#.
+#. This error message is issued when a system call
+#. reports an ESOCKTNOSUPPORT error.
+#.
+#. %1$s => the name of the offending system call
+#.
+#, c-format
+msgid   "%s is not supported by the network type"
+msgstr  "%s is not supported by the network type"
 
 #.
 #. This message is used when a file descriptor
@@ -310,6 +345,19 @@ msgstr  "%s is the NULL pointer"
 #, c-format
 msgid   "%s refers to a %s, not a %s"
 msgstr  "%s refers to a %s, not a %s"
+
+#.
+#. This message is used to explain an EISDIR
+#. reported by an open(2) system call.  You may not open a
+#. directory for writing.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "%s refers to a directory and the access requested involved "
+        "writing"
+msgstr  "%s refers to a directory and the access requested involved "
+        "writing"
 
 #.
 #. This message is used when a system call argument
@@ -348,6 +396,18 @@ msgstr  "%s, or a directory component of %s, does not exist or is a "
 #, c-format
 msgid   "%s: success"
 msgstr  "%s: success"
+
+#.
+#. this error message is issued when the acct(2)
+#. system call is used against a Linux kernel that does not
+#. have BSD process accounting compiled in.
+#.
+msgid   "BSD process accounting has not been enabled when the operating "
+        "system kernel was compiled (the kernel configuration parameter "
+        "controlling this feature is CONFIG_BSD_PROCESS_ACCT)"
+msgstr  "BSD process accounting has not been enabled when the operating "
+        "system kernel was compiled (the kernel configuration parameter "
+        "controlling this feature is CONFIG_BSD_PROCESS_ACCT)"
 
 #.
 #. This string is the type of a file (see stat(2)
@@ -453,14 +513,12 @@ msgid   "a low-level I/O error occurred, probably in hardware"
 msgstr  "a low-level I/O error occurred, probably in hardware"
 
 #.
-#. This message is used to explain and EPROTO
-#. error reported by an accept(2) system call, in the case
-#. where a protocol error has occurred.
+#. This message is used to explain and EPROTO error reported
+#. by an accept(2) system call, in the case where a protocol error has
+#. occurred.
 #.
-msgid   "a protocol error has occurred; for example, the STREAMS protocol "
-        "stack has not been initialized"
-msgstr  "a protocol error has occurred; for example, the STREAMS protocol "
-        "stack has not been initialized"
+msgid   "a protocol error has occurred"
+msgstr  "a protocol error has occurred"
 
 #.
 #. This message is used when a
@@ -485,10 +543,9 @@ msgid   "an ELF interpreter was a directory"
 msgstr  "an ELF interpreter was a directory"
 
 #.
-#. This message is used to explan an ECONNABORTED
-#. error reported by the accept(2) system call, in the case
-#. where an incoming connection has been aborted by the
-#. remote host.
+#. This message is used to explan an ECONNABORTED error
+#. reported by the accept(2) system call, in the case where an incoming
+#. connection has been aborted by the remote host.
 #.
 msgid   "an incoming connection has been aborted by the remote host"
 msgstr  "an incoming connection has been aborted by the remote host"
@@ -588,18 +645,6 @@ msgid   "effective UID"
 msgstr  "effective UID"
 
 #.
-#. This message is used to explain an ENOTTY
-#. error reported by an ioctl(2) system call, when a more
-#. specific explanation is not availble.
-#.
-msgid   "fildes is not associated with a character special device; or, "
-        "fildes is not associated with an object to which request can be "
-        "applied"
-msgstr  "fildes is not associated with a character special device; or, "
-        "fildes is not associated with an object to which request can be "
-        "applied"
-
-#.
 #. This message is used to explain an EPERM error
 #. reported by an accept(2) system call, in the case where
 #. firewall rules forbid connection.
@@ -683,6 +728,13 @@ msgid   "it is not possible to execute the %s, only regular files can be "
         "executed"
 msgstr  "it is not possible to execute the %s, only regular files can be "
         "executed"
+
+#.
+#. This string is the type of a file (see stat(2) for
+#. more information) when that file is a Linux kernel special file.
+#.
+msgid   "kernel special file"
+msgstr  "kernel special file"
 
 #.
 #. This message is used to inform users of the
@@ -960,16 +1012,6 @@ msgid   "pathname refers to a %s %s and no corresponding device exists"
 msgstr  "pathname refers to a %s %s and no corresponding device exists"
 
 #.
-#. This message is used to explain an EISDIR
-#. reported by an open(2) system call.  You may not open
-#. a directory for writing.
-#.
-msgid   "pathname refers to a directory and the access requested involved "
-        "writing"
-msgstr  "pathname refers to a directory and the access requested involved "
-        "writing"
-
-#.
 #. This message is used when explaining an EIO
 #. error, for a file open for both reading and writing.
 #.
@@ -1107,11 +1149,80 @@ msgid   "socket"
 msgstr  "socket"
 
 #.
+#. This error message is issued to explain an
+#. EOVERFLOW error.  This is the generic form, some system calls
+#. have much more specific EOVERFLOW explaianions, and those
+#. should be used if preference whenever possible.
+#.
+msgid   "some values were too large to be represented in the returned "
+        "struct"
+msgstr  "some values were too large to be represented in the returned "
+        "struct"
+
+#.
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is a symbolic link.
 #.
 msgid   "symbolic link"
 msgstr  "symbolic link"
+
+#.
+#. this error message is issued to explain
+#. an ENOSYS or EOPNOTSUPP error in the case where
+#. a system call is not supported for a particular
+#. device (or perhapse not supported by the device
+#. driver).
+#.
+#. %1$s => the file system path of the device special file
+#. %2$s => the type of the special file (already translated)
+#. %3$s => the name of the offending system call.
+#.
+#, c-format
+msgid   "the %s %s does not support the %s system call"
+msgstr  "the %s %s does not support the %s system call"
+
+#.
+#. This error message is issued when a call to
+#. strtol is given a string containing no digits.
+#. Similarly for related functions.
+#.
+#, c-format
+msgid   "the %s argument does not appear to be a number"
+msgstr  "the %s argument does not appear to be a number"
+
+#.
+#. This error message is issued when a DIR* pointer
+#. does not refer to a valid directory stream.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument does not refer a valid directory stream"
+msgstr  "the %s argument does not refer a valid directory stream"
+
+#.
+#. This error message is issued when a FILE* pointer
+#. does not refer to a valid file stream.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument does not refer a valid file stream"
+msgstr  "the %s argument does not refer a valid file stream"
+
+#.
+#. This error message is issued when the signalfd system
+#. call reposrt an EINVAL error, in the case where the file descriptor
+#. is actually open, but does not refer to a valid signalfd file
+#. descriptor.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "the %s argument does not refer to a valid signalfd file "
+        "descriptor"
+msgstr  "the %s argument does not refer to a valid signalfd file "
+        "descriptor"
 
 #.
 #. This message is used to explain an ENOTCONN
@@ -1173,6 +1284,17 @@ msgstr  "the %s argument was incorrectly specified, it was negative"
 #.
 #. This message is used when explaining an EINVAL
 #. error returned by a system call that is complaining about a
+#. size being too large.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument was incorrectly specified, it was too large"
+msgstr  "the %s argument was incorrectly specified, it was too large"
+
+#.
+#. This message is used when explaining an EINVAL
+#. error returned by a system call that is complaining about a
 #. size being too small or negative (e.g. bind's sock_addr_size
 #. field).
 #.
@@ -1181,6 +1303,24 @@ msgstr  "the %s argument was incorrectly specified, it was negative"
 #, c-format
 msgid   "the %s argument was incorrectly specified, it was too small"
 msgstr  "the %s argument was incorrectly specified, it was too small"
+
+#.
+#. This message is used when explaining an EINVAL or
+#. ENAMETOOLONG error returned by the gethostname system call,
+#. in the case where the supplied data buffer is smaller than
+#. the actual host name.
+#.
+#. %1$s => the name of the offending system call argument
+#. %2$d => the minimum size (in bytes) needed to hold the actual
+#.         host name
+#.
+#, c-format
+msgid   "the %s argument was incorrectly specified, the actual host name "
+        "requires at least %d bytes, or preferably use the HOST_NAME_MAX "
+        "macro"
+msgstr  "the %s argument was incorrectly specified, the actual host name "
+        "requires at least %d bytes, or preferably use the HOST_NAME_MAX "
+        "macro"
 
 #.
 #. This message is used when directory has a directory
@@ -1236,6 +1376,36 @@ msgstr  "the %s in the %s refers to %s that does not exist"
 #, c-format
 msgid   "the %s in the %s should not exist yet"
 msgstr  "the %s in the %s should not exist yet"
+
+#.
+#. This error message is issued when a system call
+#. reports an ERESTART error.
+#.
+#. This differs from EINTR in that it is provoked by ptrace()ing
+#. an executable being debugged.
+#.
+#. %1$s => the name of the offending system call
+#.
+#, c-format
+msgid   "the %s was interrupted and should be restarted (this should only "
+        "ever occur when debugging a program)"
+msgstr  "the %s was interrupted and should be restarted (this should only "
+        "ever occur when debugging a program)"
+
+#.
+#. this error message is issued to explain an
+#. EWOULDBLOCK error.  It is a generic response, suitable for
+#. many system calls, however there are also some more specific
+#. EWOULDBLOCK messages that contributors should check for
+#. re-usability before using this one.
+#.
+#. %1$s => the name of the system call
+#.
+#, c-format
+msgid   "the %s would have had to wait to complete however it was "
+        "instructed not to do so"
+msgstr  "the %s would have had to wait to complete however it was "
+        "instructed not to do so"
 
 #.
 #. This message is used when an EPERM erro is
@@ -1416,6 +1586,20 @@ msgid   "the file descriptor is not open for reading"
 msgstr  "the file descriptor is not open for reading"
 
 #.
+#. this error message is issued to explain
+#. an ENOSYS or EOPNOTSUPP error in the case where a
+#. file system does not support a particular system
+#. call.
+#.
+#. %1$s => the mount point of the file system,
+#.         in parentheses
+#. %2$s => the name of the offending system call.
+#.
+#, c-format
+msgid   "the file system %s does not support the %s system call"
+msgstr  "the file system %s does not support the %s system call"
+
+#.
 #. This message is used to provide an
 #. explanation for and ENOSPC error returned by an
 #. open(2) system call, in the case where there is no
@@ -1461,6 +1645,18 @@ msgstr  "the file system does not allow unlinking of files; or, the "
         "to be deleted nor that of the directory containing it"
 
 #.
+#. this error message is issued to explain
+#. an ENOSYS or EOPNOTSUPP error in the case where a
+#. file system does not support a particular system
+#. call.
+#.
+#. %1$s => the name of the offending system call.
+#.
+#, c-format
+msgid   "the file system does not support the %s system call"
+msgstr  "the file system does not support the %s system call"
+
+#.
 #. This message is used when explaining why some
 #. permission mode bits are ignored.
 #.
@@ -1473,6 +1669,21 @@ msgid   "the group permission mode %s is ignored"
 msgstr  "the group permission mode %s is ignored"
 
 #.
+#. this error message is issued when a process
+#. attempts to set the hostname, and the hostname contains
+#. characters not in the RFC1035 spec (section 2.3.1).
+#.
+msgid   "the hostname specified contains invalid characters"
+msgstr  "the hostname specified contains invalid characters"
+
+#.
+#. this error message is issued when a process
+#. attempts to set the hostname, and the name is too long.
+#.
+msgid   "the hostname specified is too long"
+msgstr  "the hostname specified is too long"
+
+#.
 #. This message is used to explain an EINVAL error
 #. reported by the pathconf system call.
 #.
@@ -1483,6 +1694,32 @@ msgstr  "the group permission mode %s is ignored"
 #, c-format
 msgid   "the implementation does not support an association of %s with %s"
 msgstr  "the implementation does not support an association of %s with %s"
+
+#.
+#. This message is issued to explain an ENODEV error
+#. reported by the eventfs, eventpoll, signalfd and timerfd system
+#. call.
+#.
+msgid   "the kernel could not mount the internal anonymous inode device"
+msgstr  "the kernel could not mount the internal anonymous inode device"
+
+#.
+#. This error message is issued when a system call
+#. reports an ENONET error.
+#.
+msgid   "the local host is not connected to any network, or is not "
+        "connected to the network required for the connection"
+msgstr  "the local host is not connected to any network, or is not "
+        "connected to the network required for the connection"
+
+#.
+#. This error message is issued when a system call
+#. reports an ENETDOWN error.
+#.
+msgid   "the local network cable is not plugged in, or a local network "
+        "router or switch or hub is switched off"
+msgstr  "the local network cable is not plugged in, or a local network "
+        "router or switch or hub is switched off"
 
 #.
 #. This message is used to explain an EISDIR error
@@ -1512,6 +1749,13 @@ msgstr  "the named file is a directory; directories may not be unlinked, "
 #.
 msgid   "the network port address is protected"
 msgstr  "the network port address is protected"
+
+#.
+#. This error message is issued when a system call
+#. reports an EPROTONOSUPPORT error.
+#.
+msgid   "the network protocol requested is not available on this system"
+msgstr  "the network protocol requested is not available on this system"
 
 #.
 #. This message is used when explaining why
@@ -1645,10 +1889,9 @@ msgstr  "the process already has the maximum number of file descriptors "
         "open"
 
 #.
-#. The message is used when explaining an EPERM
-#. error reported by the chown(2) system call, in the case
-#. where no more specific explanation is available,
-#. but the call attempted to only the GID.
+#. The message is used when explaining an EPERM error reported
+#. by the chown(2) system call, in the case where no more specific
+#. explanation is available, but the call attempted to change the GID.
 #.
 msgid   "the process did not have the required permissions to change the "
         "group GID"
@@ -1686,6 +1929,14 @@ msgid   "the process did not have the required permissions to change the "
         "owner UID or group GID"
 msgstr  "the process did not have the required permissions to change the "
         "owner UID or group GID"
+
+#.
+#. This error message is issued when a system call
+#. reports an ESRCH error, in the case where the pid was
+#. positive.
+#.
+msgid   "the process does not exist"
+msgstr  "the process does not exist"
 
 #.
 #. This message is used when wait(2) is called and
@@ -1744,6 +1995,48 @@ msgid   "the process does not have inode modification permission to the %"
         "s in the %s"
 msgstr  "the process does not have inode modification permission to the %"
         "s in the %s"
+
+#.
+#. This error message is issued when a
+#. process attempts to change its root directory.
+#.
+msgid   "the process does not have permission to change its root directory"
+msgstr  "the process does not have permission to change its root directory"
+
+#.
+#. xgetetxt:  This error message is issued to explain an EPERM error
+#. of they nice system call, in the case where the calling process
+#. attempted to increase its priority by supplying a negative value
+#. but has insufficient privileges.
+#.
+msgid   "the process does not have permission to increase its priority"
+msgstr  "the process does not have permission to increase its priority"
+
+#.
+#. This error message is issued to explain an
+#. EPERM error reported by the kill(2) system call.
+#.
+msgid   "the process does not have permission to send the signal to any "
+        "of the target processes"
+msgstr  "the process does not have permission to send the signal to any "
+        "of the target processes"
+
+#.
+#. this error message is issued when a process
+#. attempts to set the hostname without sufficient privilege.
+#.
+msgid   "the process does not have permission to set the hostname"
+msgstr  "the process does not have permission to set the hostname"
+
+#.
+#. This error message is issued to explain an
+#. EPERM error reported by the adjtimex (etc) system call.
+#.
+#, c-format
+msgid   "the process does not have permission to use the %s system call "
+        "to modify the system time"
+msgstr  "the process does not have permission to use the %s system call "
+        "to modify the system time"
 
 #.
 #. This message is used when a process does not have
@@ -1864,6 +2157,24 @@ msgstr  "the process does not have write permission to the %s, this is "
         "needed to remove the directory entry for the %s"
 
 #.
+#. This error message is issued when a system call
+#. reports an ESRCH error, in the case where the pid was
+#. negative.
+#.
+msgid   "the process group does not exist"
+msgstr  "the process group does not exist"
+
+#.
+#. This error message is issued when a process
+#. attempts to enable or disable process accounting without
+#. sufficient privilege.
+#.
+msgid   "the process has insufficient privilege to control process "
+        "accounting"
+msgstr  "the process has insufficient privilege to control process "
+        "accounting"
+
+#.
 #. This message is used by the wait*()
 #. explanations to describe the relationship between SIGCHLD
 #. and the wait*() functions.
@@ -1911,6 +2222,33 @@ msgstr  "the process tried to connect to a broadcast address without "
         "request failed because of a local firewall rule"
 
 #.
+#. This eror message is issued to explain an
+#. EHOSTUNREACH error.
+#.
+msgid   "the remote host does not appear to be connected to the network "
+        "or is turned off"
+msgstr  "the remote host does not appear to be connected to the network "
+        "or is turned off"
+
+#.
+#. This error message is issued to explain an
+#. EHOSTDOWN error.
+#.
+msgid   "the remote host has disappeared without cleanly closing its "
+        "network connections"
+msgstr  "the remote host has disappeared without cleanly closing its "
+        "network connections"
+
+#.
+#. This error message is issued when a system call
+#. reports an ENETUNREACH error.
+#.
+msgid   "the remote network is unreachable, or an intermediate network "
+        "router is down or unplugged"
+msgstr  "the remote network is unreachable, or an intermediate network "
+        "router is down or unplugged"
+
+#.
 #. This message is used to explain an ECONNREFUSED
 #. error reported by the connect(2) system call, in the
 #. case where the remote server is accessible but is not
@@ -1950,6 +2288,18 @@ msgid   "the requested network address was not local or a nonexistent "
         "interface was requested"
 msgstr  "the requested network address was not local or a nonexistent "
         "interface was requested"
+
+#.
+#. This error message is issued when a call to a
+#. function would result in a return value that cannot be
+#. represented by the return data type.
+#.
+#. The explanation has to make sense to a user without a
+#. mathematical background, so saying things like "magnitude
+#. exceeds data type representation limits" doesn't cut it.
+#.
+msgid   "the resulting value would have been too large to store"
+msgstr  "the resulting value would have been too large to store"
 
 #.
 #. This message is used when an AF_UNIX socket
@@ -2065,13 +2415,12 @@ msgid   "the socket is not listening for connections"
 msgstr  "the socket is not listening for connections"
 
 #.
-#. This message is used to explain an EOPNOTSUPP
-#. error returned by a listen(2) system call.
+#. This message is used to explain an ENOSYS or EOPNOTSUPP
+#. error returned by a (accept, listen, etc) system call.
 #.
-msgid   "the socket is not of a type that supports the accept(2) system "
-        "call"
-msgstr  "the socket is not of a type that supports the accept(2) system "
-        "call"
+#, c-format
+msgid   "the socket is not of a type that supports the %s system call"
+msgstr  "the socket is not of a type that supports the %s system call"
 
 #.
 #. This message is used to explain an EOPNOTSUPP
@@ -2129,6 +2478,16 @@ msgid   "the terminal has already been redirected"
 msgstr  "the terminal has already been redirected"
 
 #.
+#. This error message is issued when a system call
+#. reports an ETIMEDOUT error.
+#.
+#. %1$s => the name of the offending system call
+#.
+#, c-format
+msgid   "the time limit expired before %s was able to complete"
+msgstr  "the time limit expired before %s was able to complete"
+
+#.
 #. This message is used when explaining an ENOTTY
 #. error reported by an ioctl TIOCGSID system call.
 #.
@@ -2136,6 +2495,15 @@ msgid   "the tty is not a master pty or the tty is not the controlling "
         "tty of the process"
 msgstr  "the tty is not a master pty or the tty is not the controlling "
         "tty of the process"
+
+#.
+#. This error message is issued when a system call
+#. reports a EINVAL error, in the case where an argument's value
+#. is outside the valid range.
+#.
+#, c-format
+msgid   "the value of the %s argument is outside the valid range"
+msgstr  "the value of the %s argument is outside the valid range"
 
 #.
 #. This message is used to explain an ENOENT error
@@ -2207,6 +2575,17 @@ msgstr  "this is more likely to be a software error (a bug) than it is to "
 #.
 msgid   "this may only be applied to the master side of a pseudo-terminal"
 msgstr  "this may only be applied to the master side of a pseudo-terminal"
+
+#.
+#. This error message is issued to explain an ENOSYS
+#. or EOPNOTSUPP or ENOTTY error, in the generic case.  There are
+#. more specific messages, try to use those instead.
+#.
+#. %1$s => the name of the offending system call
+#.
+#, c-format
+msgid   "this system does not support the %s system call"
+msgstr  "this system does not support the %s system call"
 
 #.
 #. This message is used when explaining

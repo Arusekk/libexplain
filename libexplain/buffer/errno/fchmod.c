@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,35 +37,35 @@
 
 
 static void
-libexplain_buffer_errno_fchmod_system_call(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fchmod_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, int mode)
 {
     (void)errnum;
-    libexplain_string_buffer_printf(sb, "fchmod(fildes = %d", fildes);
-    libexplain_buffer_fildes_to_pathname(sb, fildes);
-    libexplain_string_buffer_puts(sb, ", mode = ");
-    libexplain_buffer_permission_mode(sb, mode);
-    libexplain_string_buffer_putc(sb, ')');
+    explain_string_buffer_printf(sb, "fchmod(fildes = %d", fildes);
+    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, ", mode = ");
+    explain_buffer_permission_mode(sb, mode);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-libexplain_buffer_errno_fchmod_explanation(libexplain_string_buffer_t *sb,
+explain_buffer_errno_fchmod_explanation(explain_string_buffer_t *sb,
     int errnum, int fildes, int mode)
 {
     (void)mode;
     switch (errnum)
     {
     case EBADF:
-        libexplain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, "fildes");
         break;
 
     case EIO:
-        libexplain_buffer_eio_fildes(sb, fildes);
+        explain_buffer_eio_fildes(sb, fildes);
         break;
 
     case EPERM:
-        libexplain_buffer_does_not_have_inode_modify_permission_fd
+        explain_buffer_does_not_have_inode_modify_permission_fd
         (
             sb,
             fildes,
@@ -74,36 +74,36 @@ libexplain_buffer_errno_fchmod_explanation(libexplain_string_buffer_t *sb,
         break;
 
     case EROFS:
-        libexplain_buffer_erofs_fildes(sb, fildes, "fildes");
+        explain_buffer_erofs_fildes(sb, fildes, "fildes");
         break;
 
     default:
-        libexplain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum);
         break;
     }
 }
 
 
 void
-libexplain_buffer_errno_fchmod(libexplain_string_buffer_t *sb, int errnum,
+explain_buffer_errno_fchmod(explain_string_buffer_t *sb, int errnum,
     int fildes, int mode)
 {
-    libexplain_explanation_t exp;
+    explain_explanation_t exp;
 
-    libexplain_explanation_init(&exp, errnum);
-    libexplain_buffer_errno_fchmod_system_call
+    explain_explanation_init(&exp, errnum);
+    explain_buffer_errno_fchmod_system_call
     (
         &exp.system_call_sb,
         errnum,
         fildes,
         mode
     );
-    libexplain_buffer_errno_fchmod_explanation
+    explain_buffer_errno_fchmod_explanation
     (
         &exp.explanation_sb,
         errnum,
         fildes,
         mode
     );
-    libexplain_explanation_assemble(&exp, sb);
+    explain_explanation_assemble(&exp, sb);
 }

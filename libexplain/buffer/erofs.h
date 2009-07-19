@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_erofs function may be used to
+  * The explain_buffer_erofs function may be used to
   * report EROFS errors.
   *
   * @param sb
@@ -33,11 +33,11 @@
   * @param caption
   *    The name of the parameter of the path name of the pffending file.
   */
-void libexplain_buffer_erofs(libexplain_string_buffer_t *sb,
+void explain_buffer_erofs(explain_string_buffer_t *sb,
     const char *pathname, const char *caption);
 
 /**
-  * The libexplain_buffer_erofs function may be used to
+  * The explain_buffer_erofs function may be used to
   * report EROFS errors, given a file descriptor.
   *
   * @param sb
@@ -47,7 +47,7 @@ void libexplain_buffer_erofs(libexplain_string_buffer_t *sb,
   * @param caption
   *    The name of the parameter of the file descriptor of the offending file.
   */
-void libexplain_buffer_erofs_fildes(libexplain_string_buffer_t *sb, int fildes,
+void explain_buffer_erofs_fildes(explain_string_buffer_t *sb, int fildes,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_EROFS_H */

@@ -27,7 +27,7 @@
 #define PIO_CMAP -1
 #endif
 
-const libexplain_iocontrol_t libexplain_iocontrol_pio_cmap =
+const explain_iocontrol_t explain_iocontrol_pio_cmap =
 {
     "PIO_CMAP", /* name */
     PIO_CMAP, /* value */

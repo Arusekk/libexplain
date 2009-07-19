@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ main(int argc, char **argv)
             break;
 
         case 'V':
-            libexplain_version_print();
+            explain_version_print();
             return EXIT_SUCCESS;
 
         default:
@@ -100,13 +100,13 @@ main(int argc, char **argv)
         char            buf[100];
         ssize_t         n;
 
-        fildes = libexplain_socket_or_die(AF_UNIX, SOCK_STREAM, 0);
+        fildes = explain_socket_or_die(AF_UNIX, SOCK_STREAM, 0);
 
         sun.sun_family = AF_UNIX;
         strncpy(sun.sun_path, pathname, sizeof(sun.sun_path));
-        libexplain_connect_or_die(fildes, (struct sockaddr *)&sun, sizeof(sun));
-        n = libexplain_read_or_die(fildes, buf, sizeof(buf));
-        libexplain_fwrite_or_die(buf, 1, n, stdout);
+        explain_connect_or_die(fildes, (struct sockaddr *)&sun, sizeof(sun));
+        n = explain_read_or_die(fildes, buf, sizeof(buf));
+        explain_fwrite_or_die(buf, 1, n, stdout);
     }
     else
     {
@@ -119,11 +119,11 @@ main(int argc, char **argv)
 
         atexit(unlink_pathname);
 
-        fildes = libexplain_socket_or_die(AF_UNIX, SOCK_STREAM, 0);
+        fildes = explain_socket_or_die(AF_UNIX, SOCK_STREAM, 0);
 
         sun.sun_family = AF_UNIX;
         strncpy(sun.sun_path, pathname, sizeof(sun.sun_path));
-        libexplain_bind_or_die(fildes, (struct sockaddr *)&sun, sizeof(sun));
+        explain_bind_or_die(fildes, (struct sockaddr *)&sun, sizeof(sun));
 
         /*
          * We set an alarm so that automated tests that fail do not wait
@@ -132,14 +132,14 @@ main(int argc, char **argv)
         signal(SIGALRM, timeout);
         alarm(10);
 
-        libexplain_listen_or_die(fildes, 1);
+        explain_listen_or_die(fildes, 1);
 
         peer_addr = (struct sockaddr *)&peer_addr_storage;
         peer_addr_size = sizeof(peer_addr_storage);
-        fd2 = libexplain_accept_or_die(fildes, peer_addr, &peer_addr_size);
-        libexplain_write_or_die(fd2, "Hello, World!\n", 14);
-        libexplain_close_or_die(fd2);
-        libexplain_close_or_die(fildes);
+        fd2 = explain_accept_or_die(fildes, peer_addr, &peer_addr_size);
+        explain_write_or_die(fd2, "Hello, World!\n", 14);
+        explain_close_or_die(fd2);
+        explain_close_or_die(fildes);
     }
     return EXIT_SUCCESS;
 }

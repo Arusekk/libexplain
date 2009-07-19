@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,13 +24,27 @@
 
 
 void
-libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
+explain_buffer_file_type(explain_string_buffer_t *sb, int mode)
 {
     mode &= S_IFMT;
     switch (mode)
     {
+#ifdef __linux__
+    case 0:
+        explain_buffer_gettext
+        (
+            sb,
+            /*
+             * xgettext:  This string is the type of a file (see stat(2) for
+             * more information) when that file is a Linux kernel special file.
+             */
+            i18n("kernel special file")
+        );
+        break;
+#endif
+
     case S_IFSOCK:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -42,7 +56,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFLNK:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -54,7 +68,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFREG:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -66,7 +80,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFBLK:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -79,7 +93,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFDIR:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -91,7 +105,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFCHR:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -104,7 +118,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFIFO:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -117,7 +131,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFMPC
     case S_IFMPC:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -133,7 +147,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFNAM
     case S_IFNAM:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -153,7 +167,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFMPB
     case S_IFMPB:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -169,7 +183,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFCMP
     case S_IFCMP:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -184,7 +198,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFNWK
     case S_IFNWK:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -199,7 +213,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFDOOR
     case S_IFDOOR:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -214,7 +228,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 
 #ifdef S_IFWHT
     case S_IFWHT:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -229,7 +243,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
 #endif
 
     default:
-        libexplain_buffer_gettext
+        explain_buffer_gettext
         (
             sb,
             /*
@@ -239,7 +253,7 @@ libexplain_buffer_file_type(libexplain_string_buffer_t *sb, int mode)
              */
             i18n("unknown file type")
         );
-        libexplain_string_buffer_printf(sb, " (%#o)", mode);
+        explain_string_buffer_printf(sb, " (%#o)", mode);
         break;
     }
 }

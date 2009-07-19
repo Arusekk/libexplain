@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@
 #endif
 
 /**
-  * The libexplain_gettext function may be used to translate a string,
+  * The explain_gettext function may be used to translate a string,
   * if i18n in in use.
   *
   * @param text
@@ -32,6 +32,6 @@
   * @returns
   *    translated text, or the input argument if no translation available.
   */
-const char *libexplain_gettext(const char *text);
+const char *explain_gettext(const char *text);
 
 #endif /* LIBEXPLAIN_GETTEXT_H */

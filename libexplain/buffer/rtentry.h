@@ -24,7 +24,7 @@
 struct rtentry; /* forward */
 
 /**
-  * The libexplain_buffer_rtentry function may be used to
+  * The explain_buffer_rtentry function may be used to
   * print a representation of a rtentry structure.
   *
   * @param sb
@@ -32,7 +32,7 @@ struct rtentry; /* forward */
   * @param data
   *    The rtentry structure to be printed.
   */
-void libexplain_buffer_rtentry(libexplain_string_buffer_t *sb,
+void explain_buffer_rtentry(explain_string_buffer_t *sb,
     const struct rtentry *data);
 
 #endif /* LIBEXPLAIN_BUFFER_RTENTRY_H */

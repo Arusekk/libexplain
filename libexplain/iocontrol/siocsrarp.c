@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/siocsrarp.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocsrarp =
+const explain_iocontrol_t explain_iocontrol_siocsrarp =
 {
     "SIOCSRARP", /* name */
     SIOCSRARP, /* value */

@@ -26,16 +26,10 @@
 
 
 void
-libexplain_fchown_or_die(int fildes, int owner, int group)
+explain_fchown_or_die(int fildes, int owner, int group)
 {
-    if (fchown(fildes, owner, group) < 0)
+    if (explain_fchown_on_error(fildes, owner, group) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_fchown(fildes, owner, group)
-        );
         exit(EXIT_FAILURE);
     }
 }

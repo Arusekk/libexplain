@@ -16,29 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/sys/wait.h>
 
-#include <libexplain/option.h>
 #include <libexplain/wait3.h>
-#include <libexplain/wrap_and_print.h>
 
 
 int
-libexplain_wait3_or_die(int *status, int options, struct rusage *rusage)
+explain_wait3_or_die(int *status, int options, struct rusage *rusage)
 {
     int             result;
 
-    result = wait3(status, options, rusage);
+    result = explain_wait3_on_error(status, options, rusage);
     if (result < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_wait3(status, options, rusage)
-        );
         exit(EXIT_FAILURE);
     }
     return result;

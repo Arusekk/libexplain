@@ -16,26 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
-#include <libexplain/option.h>
 #include <libexplain/setsockopt.h>
-#include <libexplain/wrap_and_print.h>
 
 
 void
-libexplain_setsockopt_or_die(int fildes, int level, int name, void *data,
+explain_setsockopt_or_die(int fildes, int level, int name, void *data,
     socklen_t data_size)
 {
-    if (setsockopt(fildes, level, name, data, data_size) < 0)
+    if (explain_setsockopt_on_error(fildes, level, name, data, data_size) < 0)
     {
-        libexplain_program_name_assemble_internal(1);
-        libexplain_wrap_and_print
-        (
-            stderr,
-            libexplain_setsockopt(fildes, level, name, data, data_size)
-        );
         exit(EXIT_FAILURE);
     }
 }

@@ -24,7 +24,7 @@
 struct in_addr; /* forward */
 
 /**
-  * The libexplain_buffer_sockaddr function may be used to
+  * The explain_buffer_sockaddr function may be used to
   *
   * @param sb
   *    The string buffer to print into.
@@ -33,11 +33,11 @@ struct in_addr; /* forward */
   * @param sa_len
   *    The length of the socket address of interest
   */
-void libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
+void explain_buffer_sockaddr(explain_string_buffer_t *sb,
     const struct sockaddr *sa, int sa_len);
 
 /**
-  * The libexplain_buffer_in_addr function is used
+  * The explain_buffer_in_addr function is used
   * to print a representation of an in_addr structure.
   *
   * @param sb
@@ -45,7 +45,7 @@ void libexplain_buffer_sockaddr(libexplain_string_buffer_t *sb,
   * @param addr
   *    Pointer to the in address of interest
   */
-void libexplain_buffer_in_addr(libexplain_string_buffer_t *sb,
+void explain_buffer_in_addr(explain_string_buffer_t *sb,
     const struct in_addr *addr);
 
 #endif /* LIBEXPLAIN_BUFFER_SOCKADDR_H */

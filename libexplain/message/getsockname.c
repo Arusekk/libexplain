@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_getsockname(char *message, int message_size, int fildes,
+explain_message_getsockname(char *message, int message_size, int fildes,
     struct sockaddr *sock_addr, socklen_t *sock_addr_size)
 {
-    libexplain_message_errno_getsockname
+    explain_message_errno_getsockname
     (
         message,
         message_size,

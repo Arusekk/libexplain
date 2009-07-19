@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_pathconf_name function may be used to
+  * The explain_buffer_pathconf_name function may be used to
   * translate a numeric pathconf parameter name into a synbolic name.
   *
   * @param sb
@@ -30,10 +30,10 @@
   * @param name
   *    The name to be translated
   */
-void libexplain_buffer_pathconf_name(libexplain_string_buffer_t *sb, int name);
+void explain_buffer_pathconf_name(explain_string_buffer_t *sb, int name);
 
 /**
-  * The libexplain_parse_pathconf_name_or_die function is used to parse a text
+  * The explain_parse_pathconf_name_or_die function is used to parse a text
   * representation of a pathconf name into a numeric value.
   *
   * @param text
@@ -42,10 +42,10 @@ void libexplain_buffer_pathconf_name(libexplain_string_buffer_t *sb, int name);
   *     on success, the numeric value.
   *     On faulure it prints a diagnostic and exits.
   */
-int libexplain_parse_pathconf_name_or_die(const char *text);
+int explain_parse_pathconf_name_or_die(const char *text);
 
 /**
-  * The libexplain_valid_pathconf_name function is used determine
+  * The explain_valid_pathconf_name function is used determine
   * whether or not a pathconf name is valid.
   *
   * @param name
@@ -54,6 +54,6 @@ int libexplain_parse_pathconf_name_or_die(const char *text);
   *     int (bool); non-zero (true) if name is valid, zero (false) if
   *     name is not valid.
   */
-int libexplain_valid_pathconf_name(int name);
+int explain_valid_pathconf_name(int name);
 
 #endif /* LIBEXPLAIN_BUFFER_PATHCONF_NAME_H */

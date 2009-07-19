@@ -22,11 +22,11 @@
 
 
 void
-libexplain_buffer_string_n(libexplain_string_buffer_t *sb, const char *data,
+explain_buffer_string_n(explain_string_buffer_t *sb, const char *data,
     size_t data_size)
 {
-    if (libexplain_path_is_efault(data))
-        libexplain_buffer_pointer(sb, data);
+    if (explain_pointer_is_efault(data, data_size))
+        explain_buffer_pointer(sb, data);
     else
-        libexplain_string_buffer_puts_quoted_n(sb, data, data_size);
+        explain_string_buffer_puts_quoted_n(sb, data, data_size);
 }

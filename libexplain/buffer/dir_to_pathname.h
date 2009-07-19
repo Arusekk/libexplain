@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The libexplain_buffer_dir_to_pathname function may be used to
+  * The explain_buffer_dir_to_pathname function may be used to
   * extract the file descriptor from the gibe DIR pointer, and print the
   * name of the associated file.
   *
@@ -34,7 +34,7 @@
   * @param dir
   *    the DIR pointer of interest
   */
-void libexplain_buffer_dir_to_pathname(libexplain_string_buffer_t *sb,
+void explain_buffer_dir_to_pathname(explain_string_buffer_t *sb,
     DIR *dir);
 
 #endif /* LIBEXPLAIN_BUFFER_DIR_TO_PATHNAME_H */

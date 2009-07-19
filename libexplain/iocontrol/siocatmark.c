@@ -22,7 +22,7 @@
 #include <libexplain/iocontrol/siocatmark.h>
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_siocatmark =
+const explain_iocontrol_t explain_iocontrol_siocatmark =
 {
     "SIOCATMARK", /* name */
     SIOCATMARK, /* value */

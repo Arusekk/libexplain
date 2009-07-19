@@ -23,8 +23,7 @@ TEST_SUBJECT="accept EPROTO"
 
 fmt > test.ok << 'fubar'
 accept(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = { 128 })
-failed, Protocol error (EPROTO) because a protocol error has occurred;
-for example, the STREAMS protocol stack has not been initialized
+failed, Protocol error (EPROTO) because a protocol error has occurred
 fubar
 test $? -eq 0 || no_result
 

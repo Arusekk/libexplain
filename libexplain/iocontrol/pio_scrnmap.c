@@ -26,18 +26,18 @@
 #ifdef HAVE_LINUX_KD_H
 
 static void
-print_data(const libexplain_iocontrol_t *p, libexplain_string_buffer_t *sb,
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
     (void)errnum;
     (void)fildes;
     (void)request;
-    libexplain_buffer_char_data(sb, data, E_TABSZ);
+    explain_buffer_char_data(sb, data, E_TABSZ);
 }
 
 
-const libexplain_iocontrol_t libexplain_iocontrol_pio_scrnmap =
+const explain_iocontrol_t explain_iocontrol_pio_scrnmap =
 {
     "PIO_SCRNMAP", /* name */
     PIO_SCRNMAP, /* value */
@@ -49,7 +49,7 @@ const libexplain_iocontrol_t libexplain_iocontrol_pio_scrnmap =
 
 #else
 
-const libexplain_iocontrol_t libexplain_iocontrol_pio_scrnmap =
+const explain_iocontrol_t explain_iocontrol_pio_scrnmap =
 {
     0, /* name */
     0, /* value */

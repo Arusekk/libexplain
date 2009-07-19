@@ -22,10 +22,10 @@
 
 
 void
-libexplain_message_getsockopt(char *message, int message_size, int fildes,
+explain_message_getsockopt(char *message, int message_size, int fildes,
     int level, int name, void *data, socklen_t *data_size)
 {
-    libexplain_message_errno_getsockopt
+    explain_message_errno_getsockopt
     (
         message,
         message_size,
