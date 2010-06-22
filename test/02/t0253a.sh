@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 TEST_SUBJECT="wait ECHILD"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 wait(status = 0xNNNNNNNN) failed, No child processes (ECHILD) because the
 process does not have any unwaited-for child processes
 fubar
@@ -30,7 +30,10 @@ test $? -eq 0 || no_result
 explain -eECHILD wait > test.out2
 test $? -eq 0 || fail
 
-sed 's|status = [^)]*|status = 0xNNNNNNNN|' test.out2 > test.out
+sed 's|status = [^)]*|status = 0xNNNNNNNN|' test.out2 > test.out1
+test $? -eq 0 || no_result
+
+fmt < test.out1 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

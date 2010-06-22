@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -33,6 +33,17 @@
 void explain_buffer_int(explain_string_buffer_t *sb, int value);
 
 /**
+  * The explain_buffer_int function may be used to print an unsigned
+  * integer value.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param value
+  *    The value to be printed.
+  */
+void explain_buffer_uint(explain_string_buffer_t *sb, unsigned value);
+
+/**
   * The explain_buffer_int_star function may be used to print an integer
   * value.
   *
@@ -41,7 +52,32 @@ void explain_buffer_int(explain_string_buffer_t *sb, int value);
   * @param value
   *    a pointer to the value to be printed.
   */
-void explain_buffer_int_star(explain_string_buffer_t *sb,
-    const int *value);
+void explain_buffer_int_star(explain_string_buffer_t *sb, const int *value);
+
+/**
+  * The explain_buffer_int_star function may be used to print an integer
+  * value.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param value
+  *    a pointer to the values to be printed.
+  * @param size
+  *    the number of values to be printed
+  */
+void explain_buffer_int_array(explain_string_buffer_t *sb, const int *value,
+    size_t size);
+
+/**
+  * The explain_buffer_uint_star function may be used to print an integer
+  * value.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param value
+  *    a pointer to the value to be printed.
+  */
+void explain_buffer_uint_star(explain_string_buffer_t *sb,
+    const unsigned *value);
 
 #endif /* LIBEXPLAIN_BUFFER_INT_H */

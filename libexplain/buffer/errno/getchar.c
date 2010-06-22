@@ -42,7 +42,15 @@ explain_buffer_errno_getchar_explanation(explain_string_buffer_t *sb,
     int             fildes;
 
     fildes = fileno(stdin);
-    explain_buffer_errno_read_explanation(sb, errnum, fildes, NULL, 0);
+    explain_buffer_errno_read_explanation
+    (
+        sb,
+        errnum,
+        "getchar",
+        fildes,
+        NULL,
+        0
+    );
 }
 
 

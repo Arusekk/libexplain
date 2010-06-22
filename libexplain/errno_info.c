@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,397 +26,976 @@
 const explain_errno_info_t explain_errno_info[] =
 {
 #ifdef EPERM
-    { EPERM, "EPERM" },
+    {
+        EPERM,
+        "EPERM",
+        "Operation not permitted"
+    },
 #endif
 #ifdef ENOENT
-    { ENOENT, "ENOENT" },
+    {
+        ENOENT,
+        "ENOENT",
+        "No such file or directory"
+    },
 #endif
 #ifdef ESRCH
-    { ESRCH, "ESRCH" },
+    {
+        ESRCH,
+        "ESRCH",
+        "No such process"
+    },
 #endif
 #ifdef EINTR
-    { EINTR, "EINTR" },
+    {
+        EINTR,
+        "EINTR",
+        "Interrupted system call"
+    },
 #endif
 #ifdef EIO
-    { EIO, "EIO" },
+    {
+        EIO,
+        "EIO",
+        "Input/output error"
+    },
 #endif
 #ifdef ENXIO
-    { ENXIO, "ENXIO" },
+    {
+        ENXIO,
+        "ENXIO",
+        "No such device or address"
+    },
 #endif
 #ifdef E2BIG
-    { E2BIG, "E2BIG" },
+    {
+        E2BIG,
+        "E2BIG",
+        "Argument list too long"
+    },
 #endif
 #ifdef ENOEXEC
-    { ENOEXEC, "ENOEXEC" },
+    {
+        ENOEXEC,
+        "ENOEXEC",
+        "Exec format error"
+    },
 #endif
 #ifdef EBADF
-    { EBADF, "EBADF" },
+    {
+        EBADF,
+        "EBADF",
+        "Bad file descriptor"
+    },
 #endif
 #ifdef ECHILD
-    { ECHILD, "ECHILD" },
+    {
+        ECHILD,
+        "ECHILD",
+        "No child processes"
+    },
 #endif
 #ifdef EAGAIN
-    { EAGAIN, "EAGAIN" },
+    {
+        EAGAIN,
+        "EAGAIN",
+        "Resource temporarily unavailable"
+    },
 #endif
 #ifdef ENOMEM
-    { ENOMEM, "ENOMEM" },
+    {
+        ENOMEM,
+        "ENOMEM",
+        "Cannot allocate memory"
+    },
 #endif
 #ifdef EACCES
-    { EACCES, "EACCES" },
+    {
+        EACCES,
+        "EACCES",
+        "Permission denied"
+    },
 #endif
 #ifdef EFAULT
-    { EFAULT, "EFAULT" },
+    {
+        EFAULT,
+        "EFAULT",
+        "Bad address"
+    },
 #endif
 #ifdef ENOTBLK
-    { ENOTBLK, "ENOTBLK" },
+    {
+        ENOTBLK,
+        "ENOTBLK",
+        "Block device required"
+    },
 #endif
 #ifdef EBUSY
-    { EBUSY, "EBUSY" },
+    {
+        EBUSY,
+        "EBUSY",
+        "Device or resource busy"
+    },
 #endif
 #ifdef EEXIST
-    { EEXIST, "EEXIST" },
+    {
+        EEXIST,
+        "EEXIST",
+        "File exists"
+    },
 #endif
 #ifdef EXDEV
-    { EXDEV, "EXDEV" },
+    {
+        EXDEV,
+        "EXDEV",
+        "Invalid cross-device link"
+    },
 #endif
 #ifdef ENODEV
-    { ENODEV, "ENODEV" },
+    {
+        ENODEV,
+        "ENODEV",
+        "No such device"
+    },
 #endif
 #ifdef ENOTDIR
-    { ENOTDIR, "ENOTDIR" },
+    {
+        ENOTDIR,
+        "ENOTDIR",
+        "Not a directory"
+    },
 #endif
 #ifdef EISDIR
-    { EISDIR, "EISDIR" },
+    {
+        EISDIR,
+        "EISDIR",
+        "Is a directory"
+    },
 #endif
 #ifdef EINVAL
-    { EINVAL, "EINVAL" },
+    {
+        EINVAL,
+        "EINVAL",
+        "Invalid argument"
+    },
 #endif
 #ifdef ENFILE
-    { ENFILE, "ENFILE" },
+    {
+        ENFILE,
+        "ENFILE",
+        "Too many open files in system"
+    },
 #endif
 #ifdef EMFILE
-    { EMFILE, "EMFILE" },
+    {
+        EMFILE,
+        "EMFILE",
+        "Too many open files"
+    },
 #endif
 #ifdef ENOTTY
-    { ENOTTY, "ENOTTY" },
+    {
+        ENOTTY,
+        "ENOTTY",
+        "Inappropriate ioctl for device"
+    },
 #endif
 #ifdef ETXTBSY
-    { ETXTBSY, "ETXTBSY" },
+    {
+        ETXTBSY,
+        "ETXTBSY",
+        "Text file busy"
+    },
 #endif
 #ifdef EFBIG
-    { EFBIG, "EFBIG" },
+    {
+        EFBIG,
+        "EFBIG",
+        "File too large"
+    },
 #endif
 #ifdef ENOSPC
-    { ENOSPC, "ENOSPC" },
+    {
+        ENOSPC,
+        "ENOSPC",
+        "No space left on device"
+    },
 #endif
 #ifdef ESPIPE
-    { ESPIPE, "ESPIPE" },
+    {
+        ESPIPE,
+        "ESPIPE",
+        "Illegal seek"
+    },
 #endif
 #ifdef EROFS
-    { EROFS, "EROFS" },
+    {
+        EROFS,
+        "EROFS",
+        "Read-only file system"
+    },
 #endif
 #ifdef EMLINK
-    { EMLINK, "EMLINK" },
+    {
+        EMLINK,
+        "EMLINK",
+        "Too many links"
+    },
 #endif
 #ifdef EPIPE
-    { EPIPE, "EPIPE" },
+    {
+        EPIPE,
+        "EPIPE",
+        "Broken pipe"
+    },
 #endif
 #ifdef EDOM
-    { EDOM, "EDOM" },
+    {
+        EDOM,
+        "EDOM",
+        "Numerical argument out of domain"
+    },
 #endif
 #ifdef ERANGE
-    { ERANGE, "ERANGE" },
+    {
+        ERANGE,
+        "ERANGE",
+        "Numerical result out of range"
+    },
 #endif
 #ifdef EDEADLK
-    { EDEADLK, "EDEADLK" },
+    {
+        EDEADLK,
+        "EDEADLK",
+        "Resource deadlock avoided"
+    },
 #endif
 #ifdef EDEADLOCK
-    { EDEADLOCK, "EDEADLOCK" },
+    {
+        EDEADLOCK,
+        "EDEADLOCK",
+        "Resource deadlock avoided"
+    },
 #endif
 #ifdef ENAMETOOLONG
-    { ENAMETOOLONG, "ENAMETOOLONG" },
+    {
+        ENAMETOOLONG,
+        "ENAMETOOLONG",
+        "File name too long"
+    },
 #endif
 #ifdef ENOLCK
-    { ENOLCK, "ENOLCK" },
+    {
+        ENOLCK,
+        "ENOLCK",
+        "No locks available"
+    },
 #endif
 #ifdef ENOSYS
-    { ENOSYS, "ENOSYS" },
+    {
+        ENOSYS,
+        "ENOSYS",
+        "Function not implemented"
+    },
 #endif
 #ifdef ENOTEMPTY
-    { ENOTEMPTY, "ENOTEMPTY" },
+    {
+        ENOTEMPTY,
+        "ENOTEMPTY",
+        "Directory not empty"
+    },
 #endif
 #ifdef ELOOP
-    { ELOOP, "ELOOP" },
+    {
+        ELOOP,
+        "ELOOP",
+        "Too many levels of symbolic links"
+    },
 #endif
 #ifdef EWOULDBLOCK
-    { EWOULDBLOCK, "EWOULDBLOCK" },
+    {
+        EWOULDBLOCK,
+        "EWOULDBLOCK",
+        "Resource temporarily unavailable"
+    },
 #endif
 #ifdef ENOMSG
-    { ENOMSG, "ENOMSG" },
+    {
+        ENOMSG,
+        "ENOMSG",
+        "No message of desired type"
+    },
 #endif
 #ifdef EIDRM
-    { EIDRM, "EIDRM" },
+    {
+        EIDRM,
+        "EIDRM",
+        "Identifier removed"
+    },
 #endif
 #ifdef ECHRNG
-    { ECHRNG, "ECHRNG" },
+    {
+        ECHRNG,
+        "ECHRNG",
+        "Channel number out of range"
+    },
 #endif
 #ifdef EL2NSYNC
-    { EL2NSYNC, "EL2NSYNC" },
+    {
+        EL2NSYNC,
+        "EL2NSYNC",
+        "Level 2 not synchronized"
+    },
 #endif
 #ifdef EL3HLT
-    { EL3HLT, "EL3HLT" },
+    {
+        EL3HLT,
+        "EL3HLT",
+        "Level 3 halted"
+    },
 #endif
 #ifdef EL3RST
-    { EL3RST, "EL3RST" },
+    {
+        EL3RST,
+        "EL3RST",
+        "Level 3 reset"
+    },
 #endif
 #ifdef ELNRNG
-    { ELNRNG, "ELNRNG" },
+    {
+        ELNRNG,
+        "ELNRNG",
+        "Link number out of range"
+    },
 #endif
 #ifdef EUNATCH
-    { EUNATCH, "EUNATCH" },
+    {
+        EUNATCH,
+        "EUNATCH",
+        "Protocol driver not attached"
+    },
 #endif
 #ifdef ENOCSI
-    { ENOCSI, "ENOCSI" },
+    {
+        ENOCSI,
+        "ENOCSI",
+        "No CSI structure available"
+    },
 #endif
 #ifdef EL2HLT
-    { EL2HLT, "EL2HLT" },
+    {
+        EL2HLT,
+        "EL2HLT",
+        "Level 2 halted"
+    },
 #endif
 #ifdef EBADE
-    { EBADE, "EBADE" },
+    {
+        EBADE,
+        "EBADE",
+        "Invalid exchange"
+    },
 #endif
 #ifdef EBADR
-    { EBADR, "EBADR" },
+    {
+        EBADR,
+        "EBADR",
+        "Invalid request descriptor"
+    },
 #endif
 #ifdef EXFULL
-    { EXFULL, "EXFULL" },
+    {
+        EXFULL,
+        "EXFULL",
+        "Exchange full"
+    },
 #endif
 #ifdef ENOANO
-    { ENOANO, "ENOANO" },
+    {
+        ENOANO,
+        "ENOANO",
+        "No anode"
+    },
 #endif
 #ifdef EBADRQC
-    { EBADRQC, "EBADRQC" },
+    {
+        EBADRQC,
+        "EBADRQC",
+        "Invalid request code"
+    },
 #endif
 #ifdef EBADSLT
-    { EBADSLT, "EBADSLT" },
+    {
+        EBADSLT,
+        "EBADSLT",
+        "Invalid slot"
+    },
 #endif
 #ifdef EBFONT
-    { EBFONT, "EBFONT" },
+    {
+        EBFONT,
+        "EBFONT",
+        "Bad font file format"
+    },
 #endif
 #ifdef ENOSTR
-    { ENOSTR, "ENOSTR" },
+    {
+        ENOSTR,
+        "ENOSTR",
+        "Device not a stream"
+    },
 #endif
 #ifdef ENODATA
-    { ENODATA, "ENODATA" },
+    {
+        ENODATA,
+        "ENODATA",
+        "No data available"
+    },
 #endif
 #ifdef ETIME
-    { ETIME, "ETIME" },
+    {
+        ETIME,
+        "ETIME",
+        "Timer expired"
+    },
 #endif
 #ifdef ENOSR
-    { ENOSR, "ENOSR" },
+    {
+        ENOSR,
+        "ENOSR",
+        "Out of streams resources"
+    },
 #endif
 #ifdef ENONET
-    { ENONET, "ENONET" },
+    {
+        ENONET,
+        "ENONET",
+        "Machine is not on the network"
+    },
 #endif
 #ifdef ENOPKG
-    { ENOPKG, "ENOPKG" },
+    {
+        ENOPKG,
+        "ENOPKG",
+        "Package not installed"
+    },
 #endif
 #ifdef EREMOTE
-    { EREMOTE, "EREMOTE" },
+    {
+        EREMOTE,
+        "EREMOTE",
+        "Object is remote"
+    },
 #endif
 #ifdef ENOLINK
-    { ENOLINK, "ENOLINK" },
+    {
+        ENOLINK,
+        "ENOLINK",
+        "Link has been severed"
+    },
 #endif
 #ifdef EADV
-    { EADV, "EADV" },
+    {
+        EADV,
+        "EADV",
+        "Advertise error"
+    },
 #endif
 #ifdef ESRMNT
-    { ESRMNT, "ESRMNT" },
+    {
+        ESRMNT,
+        "ESRMNT",
+        "Srmount error"
+    },
 #endif
 #ifdef ECOMM
-    { ECOMM, "ECOMM" },
+    {
+        ECOMM,
+        "ECOMM",
+        "Communication error on send"
+    },
 #endif
 #ifdef EPROTO
-    { EPROTO, "EPROTO" },
+    {
+        EPROTO,
+        "EPROTO",
+        "Protocol error"
+    },
 #endif
 #ifdef EMULTIHOP
-    { EMULTIHOP, "EMULTIHOP" },
+    {
+        EMULTIHOP,
+        "EMULTIHOP",
+        "Multihop attempted"
+    },
 #endif
 #ifdef EDOTDOT
-    { EDOTDOT, "EDOTDOT" },
+    {
+        EDOTDOT,
+        "EDOTDOT",
+        "RFS specific error"
+    },
 #endif
 #ifdef EBADMSG
-    { EBADMSG, "EBADMSG" },
+    {
+        EBADMSG,
+        "EBADMSG",
+        "Bad message"
+    },
 #endif
 #ifdef EOVERFLOW
-    { EOVERFLOW, "EOVERFLOW" },
+    {
+        EOVERFLOW,
+        "EOVERFLOW",
+        "Value too large for defined data type"
+    },
 #endif
 #ifdef ENOTUNIQ
-    { ENOTUNIQ, "ENOTUNIQ" },
+    {
+        ENOTUNIQ,
+        "ENOTUNIQ",
+        "Name not unique on network"
+    },
 #endif
 #ifdef EBADFD
-    { EBADFD, "EBADFD" },
+    {
+        EBADFD,
+        "EBADFD",
+        "File descriptor in bad state"
+    },
 #endif
 #ifdef EREMCHG
-    { EREMCHG, "EREMCHG" },
+    {
+        EREMCHG,
+        "EREMCHG",
+        "Remote address changed"
+    },
 #endif
 #ifdef ELIBACC
-    { ELIBACC, "ELIBACC" },
+    {
+        ELIBACC,
+        "ELIBACC",
+        "Can not access a needed shared library"
+    },
 #endif
 #ifdef ELIBBAD
-    { ELIBBAD, "ELIBBAD" },
+    {
+        ELIBBAD,
+        "ELIBBAD",
+        "Accessing a corrupted shared library"
+    },
 #endif
 #ifdef ELIBSCN
-    { ELIBSCN, "ELIBSCN" },
+    {
+        ELIBSCN,
+        "ELIBSCN",
+        ".lib section in a.out corrupted"
+    },
 #endif
 #ifdef ELIBMAX
-    { ELIBMAX, "ELIBMAX" },
+    {
+        ELIBMAX,
+        "ELIBMAX",
+        "Attempting to link in too many shared libraries"
+    },
 #endif
 #ifdef ELIBEXEC
-    { ELIBEXEC, "ELIBEXEC" },
+    {
+        ELIBEXEC,
+        "ELIBEXEC",
+        "Cannot exec a shared library directly"
+    },
 #endif
 #ifdef EILSEQ
-    { EILSEQ, "EILSEQ" },
+    {
+        EILSEQ,
+        "EILSEQ",
+        "Invalid or incomplete multibyte or wide character"
+    },
 #endif
 #ifdef ERESTART
-    { ERESTART, "ERESTART" },
+    {
+        ERESTART,
+        "ERESTART",
+        "Interrupted system call should be restarted"
+    },
 #endif
 #ifdef ESTRPIPE
-    { ESTRPIPE, "ESTRPIPE" },
+    {
+        ESTRPIPE,
+        "ESTRPIPE",
+        "Streams pipe error"
+    },
 #endif
 #ifdef EUSERS
-    { EUSERS, "EUSERS" },
+    {
+        EUSERS,
+        "EUSERS",
+        "Too many users"
+    },
 #endif
 #ifdef ENOTSOCK
-    { ENOTSOCK, "ENOTSOCK" },
+    {
+        ENOTSOCK,
+        "ENOTSOCK",
+        "Socket operation on non-socket"
+    },
 #endif
 #ifdef EDESTADDRREQ
-    { EDESTADDRREQ, "EDESTADDRREQ" },
+    {
+        EDESTADDRREQ,
+        "EDESTADDRREQ",
+        "Destination address required"
+    },
 #endif
 #ifdef EMSGSIZE
-    { EMSGSIZE, "EMSGSIZE" },
+    {
+        EMSGSIZE,
+        "EMSGSIZE",
+        "Message too long"
+    },
 #endif
 #ifdef EPROTOTYPE
-    { EPROTOTYPE, "EPROTOTYPE" },
+    {
+        EPROTOTYPE,
+        "EPROTOTYPE",
+        "Protocol wrong type for socket"
+    },
 #endif
 #ifdef ENOPROTOOPT
-    { ENOPROTOOPT, "ENOPROTOOPT" },
+    {
+        ENOPROTOOPT,
+        "ENOPROTOOPT",
+        "Protocol not available"
+    },
 #endif
 #ifdef EPROTONOSUPPORT
-    { EPROTONOSUPPORT, "EPROTONOSUPPORT" },
+    {
+        EPROTONOSUPPORT,
+        "EPROTONOSUPPORT",
+        "Protocol not supported"
+    },
 #endif
 #ifdef ESOCKTNOSUPPORT
-    { ESOCKTNOSUPPORT, "ESOCKTNOSUPPORT" },
+    {
+        ESOCKTNOSUPPORT,
+        "ESOCKTNOSUPPORT",
+        "Socket type not supported"
+    },
 #endif
 #ifdef EOPNOTSUPP
-    { EOPNOTSUPP, "EOPNOTSUPP" },
+    {
+        EOPNOTSUPP,
+        "EOPNOTSUPP",
+        "Operation not supported"
+    },
 #endif
 #ifdef EPFNOSUPPORT
-    { EPFNOSUPPORT, "EPFNOSUPPORT" },
+    {
+        EPFNOSUPPORT,
+        "EPFNOSUPPORT",
+        "Protocol family not supported"
+    },
 #endif
 #ifdef EAFNOSUPPORT
-    { EAFNOSUPPORT, "EAFNOSUPPORT" },
+    {
+        EAFNOSUPPORT,
+        "EAFNOSUPPORT",
+        "Address family not supported by protocol"
+    },
 #endif
 #ifdef EADDRINUSE
-    { EADDRINUSE, "EADDRINUSE" },
+    {
+        EADDRINUSE,
+        "EADDRINUSE",
+        "Address already in use"
+    },
 #endif
 #ifdef EADDRNOTAVAIL
-    { EADDRNOTAVAIL, "EADDRNOTAVAIL" },
+    {
+        EADDRNOTAVAIL,
+        "EADDRNOTAVAIL",
+        "Cannot assign requested address"
+    },
 #endif
 #ifdef ENETDOWN
-    { ENETDOWN, "ENETDOWN" },
+    {
+        ENETDOWN,
+        "ENETDOWN",
+        "Network is down"
+    },
 #endif
 #ifdef ENETUNREACH
-    { ENETUNREACH, "ENETUNREACH" },
+    {
+        ENETUNREACH,
+        "ENETUNREACH",
+        "Network is unreachable"
+    },
 #endif
 #ifdef ENETRESET
-    { ENETRESET, "ENETRESET" },
+    {
+        ENETRESET,
+        "ENETRESET",
+        "Network dropped connection on reset"
+    },
 #endif
 #ifdef ECONNABORTED
-    { ECONNABORTED, "ECONNABORTED" },
+    {
+        ECONNABORTED,
+        "ECONNABORTED",
+        "Software caused connection abort"
+    },
 #endif
 #ifdef ECONNRESET
-    { ECONNRESET, "ECONNRESET" },
+    {
+        ECONNRESET,
+        "ECONNRESET",
+        "Connection reset by peer"
+    },
 #endif
 #ifdef ENOBUFS
-    { ENOBUFS, "ENOBUFS" },
+    {
+        ENOBUFS,
+        "ENOBUFS",
+        "No buffer space available"
+    },
 #endif
 #ifdef EISCONN
-    { EISCONN, "EISCONN" },
+    {
+        EISCONN,
+        "EISCONN",
+        "Transport endpoint is already connected"
+    },
 #endif
 #ifdef ENOTCONN
-    { ENOTCONN, "ENOTCONN" },
+    {
+        ENOTCONN,
+        "ENOTCONN",
+        "Transport endpoint is not connected"
+    },
 #endif
 #ifdef ESHUTDOWN
-    { ESHUTDOWN, "ESHUTDOWN" },
+    {
+        ESHUTDOWN,
+        "ESHUTDOWN",
+        "Cannot send after transport endpoint shutdown"
+    },
 #endif
 #ifdef ETOOMANYREFS
-    { ETOOMANYREFS, "ETOOMANYREFS" },
+    {
+        ETOOMANYREFS,
+        "ETOOMANYREFS",
+        "Too many references: cannot splice"
+    },
 #endif
 #ifdef ETIMEDOUT
-    { ETIMEDOUT, "ETIMEDOUT" },
+    {
+        ETIMEDOUT,
+        "ETIMEDOUT",
+        "Connection timed out"
+    },
 #endif
 #ifdef ECONNREFUSED
-    { ECONNREFUSED, "ECONNREFUSED" },
+    {
+        ECONNREFUSED,
+        "ECONNREFUSED",
+        "Connection refused"
+    },
 #endif
 #ifdef EHOSTDOWN
-    { EHOSTDOWN, "EHOSTDOWN" },
+    {
+        EHOSTDOWN,
+        "EHOSTDOWN",
+        "Host is down"
+    },
 #endif
 #ifdef EHOSTUNREACH
-    { EHOSTUNREACH, "EHOSTUNREACH" },
+    {
+        EHOSTUNREACH,
+        "EHOSTUNREACH",
+        "No route to host"
+    },
 #endif
 #ifdef EALREADY
-    { EALREADY, "EALREADY" },
+    {
+        EALREADY,
+        "EALREADY",
+        "Operation already in progress"
+    },
 #endif
 #ifdef EINPROGRESS
-    { EINPROGRESS, "EINPROGRESS" },
+    {
+        EINPROGRESS,
+        "EINPROGRESS",
+        "Operation now in progress"
+    },
 #endif
 #ifdef ESTALE
-    { ESTALE, "ESTALE" },
+    {
+        ESTALE,
+        "ESTALE",
+        "Stale NFS file handle"
+    },
 #endif
 #ifdef EUCLEAN
-    { EUCLEAN, "EUCLEAN" },
+    {
+        EUCLEAN,
+        "EUCLEAN",
+        "Structure needs cleaning"
+    },
 #endif
 #ifdef ENOTNAM
-    { ENOTNAM, "ENOTNAM" },
+    {
+        ENOTNAM,
+        "ENOTNAM",
+        "Not a XENIX named type file"
+    },
 #endif
 #ifdef ENAVAIL
-    { ENAVAIL, "ENAVAIL" },
+    {
+        ENAVAIL,
+        "ENAVAIL",
+        "No XENIX semaphores available"
+    },
 #endif
 #ifdef EISNAM
-    { EISNAM, "EISNAM" },
+    {
+        EISNAM,
+        "EISNAM",
+        "Is a named type file"
+    },
 #endif
 #ifdef EREMOTEIO
-    { EREMOTEIO, "EREMOTEIO" },
+    {
+        EREMOTEIO,
+        "EREMOTEIO",
+        "Remote I/O error"
+    },
 #endif
 #ifdef EDQUOT
-    { EDQUOT, "EDQUOT" },
+    {
+        EDQUOT,
+        "EDQUOT",
+        "Disk quota exceeded"
+    },
 #endif
 #ifdef ENOMEDIUM
-    { ENOMEDIUM, "ENOMEDIUM" },
+    {
+        ENOMEDIUM,
+        "ENOMEDIUM",
+        "No medium found"
+    },
 #endif
 #ifdef EMEDIUMTYPE
-    { EMEDIUMTYPE, "EMEDIUMTYPE" },
+    {
+        EMEDIUMTYPE,
+        "EMEDIUMTYPE",
+        "Wrong medium type"
+    },
 #endif
 #ifdef ECANCELED
-    { ECANCELED, "ECANCELED" },
+    {
+        ECANCELED,
+        "ECANCELED",
+        "Operation canceled"
+    },
 #endif
 #ifdef ENOKEY
-    { ENOKEY, "ENOKEY" },
+    {
+        ENOKEY,
+        "ENOKEY",
+        "Required key not available"
+    },
 #endif
 #ifdef EKEYEXPIRED
-    { EKEYEXPIRED, "EKEYEXPIRED" },
+    {
+        EKEYEXPIRED,
+        "EKEYEXPIRED",
+        "Key has expired"
+    },
 #endif
 #ifdef EKEYREVOKED
-    { EKEYREVOKED, "EKEYREVOKED" },
+    {
+        EKEYREVOKED,
+        "EKEYREVOKED",
+        "Key has been revoked"
+    },
 #endif
 #ifdef EKEYREJECTED
-    { EKEYREJECTED, "EKEYREJECTED" },
+    {
+        EKEYREJECTED,
+        "EKEYREJECTED",
+        "Key was rejected by service"
+    },
 #endif
 #ifdef EOWNERDEAD
-    { EOWNERDEAD, "EOWNERDEAD" },
+    {
+        EOWNERDEAD,
+        "EOWNERDEAD",
+        "Owner died"
+    },
 #endif
 #ifdef ENOTRECOVERABLE
-    { ENOTRECOVERABLE, "ENOTRECOVERABLE" },
+    {
+        ENOTRECOVERABLE,
+        "ENOTRECOVERABLE",
+        "State not recoverable"
+    },
+#endif
+#ifdef ELIBAD
+    { ELIBAD, "ELIBAD", 0 }, /* FreeBSD */
+#endif
+#ifdef EAUTH
+    { EAUTH, "EAUTH", 0 }, /* FreeBSD */
+#endif
+#ifdef EBADRPC
+    { EBADRPC, "EBADRPC", 0 }, /* FreeBSD */
+#endif
+#ifdef EDIRIOCTL
+    { EDIRIOCTL, "EDIRIOCTL", 0 }, /* pseudo, FreeBSD */
+#endif
+#ifdef EDOOFUS
+    { EDOOFUS, "EDOOFUS", 0 }, /* FreeBSD */
+#endif
+#ifdef EFTYPE
+    { EFTYPE, "EFTYPE", 0 }, /* FreeBSD */
+#endif
+#ifdef EJUSTRETURN
+    { EJUSTRETURN, "EJUSTRETURN", 0 }, /* pseudo, FreeBSD */
+#endif
+#ifdef ENEEDAUTH
+    { ENEEDAUTH, "ENEEDAUTH", 0 }, /* FreeBSD */
+#endif
+#ifdef ENOATTR
+    { ENOATTR, "ENOATTR", 0 }, /* FreeBSD */
+#endif
+#ifdef ENOIOCTL
+    { ENOIOCTL, "ENOIOCTL", 0 }, /* pseudo, FreeBSD */
+#endif
+#ifdef EPROCLIM
+    { EPROCLIM, "EPROCLIM", 0 }, /* FreeBSD */
+#endif
+#ifdef EPROCUNAVAIL
+    { EPROCUNAVAIL, "EPROCUNAVAIL", 0 }, /* FreeBSD */
+#endif
+#ifdef EPROGMISMATCH
+    { EPROGMISMATCH, "EPROGMISMATCH", 0 }, /* FreeBSD */
+#endif
+#ifdef EPROGUNAVAIL
+    { EPROGUNAVAIL, "EPROGUNAVAIL", 0 }, /* FreeBSD */
+#endif
+#ifdef ERPCMISMATCH
+    { ERPCMISMATCH, "ERPCMISMATCH", 0 }, /* FreeBSD */
+#endif
+#ifdef ENOTSUP
+    {
+        ENOTSUP,
+        "ENOTSUP",
+        "Operation not supported"
+    },
+#endif
+#ifdef ELAST
+    { ELAST, "ELAST", 0 }, /* FreeBSD: "must be equal to largest errno" */
 #endif
 };
 

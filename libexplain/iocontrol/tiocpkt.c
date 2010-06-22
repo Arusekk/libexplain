@@ -26,6 +26,8 @@
 #include <libexplain/iocontrol/tiocpkt.h>
 
 
+#ifdef TIOCPKT
+
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
@@ -80,5 +82,27 @@ const explain_iocontrol_t explain_iocontrol_tiocpkt =
     0, /* disambiguate */
     0, /* print_name */
     print_data,
-    print_explanation
+    print_explanation,
+    0, /* print_data_returned */
+    sizeof(int), /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocpkt =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
+    0, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#endif

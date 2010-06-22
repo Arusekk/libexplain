@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_SYS_TIMERFD_H
 #define LIBEXPLAIN_AC_SYS_TIMERFD_H
 
+/**
+  * @file
+  * @brief Insulate <sys/timerfd.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_SYS_TIMERFD_H

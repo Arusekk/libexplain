@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@ TEST_SUBJECT="wait EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-wait(status = 0x00000123) failed, Bad address (EFAULT) because status
+wait(status = 0x09876543) failed, Bad address (EFAULT) because status
 refers to memory that is outside the process's accessible address space;
 this is more likely to be a software error (a bug) than it is to be a user
 error
 fubar
 test $? -eq 0 || no_result
 
-explain -e EFAULT wait 0x123 > test.out
+explain -e EFAULT wait 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

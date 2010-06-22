@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,8 +22,8 @@ TEST_SUBJECT="fcntl vs EDEADLK"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_SETLKW, arg = { l_type = F_RDLCK; l_whence =
-SEEK_SET; l_start = 0; l_len = 0; l_pid = 0 }) failed, Resource deadlock
+fcntl(fildes = 42, command = F_SETLKW, data = { l_type = F_RDLCK, l_whence
+= SEEK_SET, l_start = 0, l_len = 0, l_pid = 0 }) failed, Resource deadlock
 avoided (EDEADLK) because it was detected that the specified F_SETLKW
 command would cause a deadlock
 fubar

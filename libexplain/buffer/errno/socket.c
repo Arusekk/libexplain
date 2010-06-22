@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -57,9 +57,9 @@ explain_buffer_errno_socket_system_call(explain_string_buffer_t *sb,
 }
 
 
-static void
+void
 explain_buffer_errno_socket_explanation(explain_string_buffer_t *sb,
-    int errnum, int family, int type, int protocol)
+    int errnum, const char *syscall_name, int family, int type, int protocol)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/socket.html
@@ -77,6 +77,7 @@ explain_buffer_errno_socket_explanation(explain_string_buffer_t *sb,
      * AF_RAW                                               raw(7)
      */
     (void)family;
+    (void)type;
     (void)protocol;
     switch (errnum)
     {
@@ -149,7 +150,7 @@ explain_buffer_errno_socket_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -174,6 +175,7 @@ explain_buffer_errno_socket(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "socket",
         family,
         type,
         protocol

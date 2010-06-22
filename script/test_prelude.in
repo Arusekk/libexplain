@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008-2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,9 @@ then
     exit 2
 fi
 
-LIBEXPLAIN_OPTIONS='debug, no-numeric-errno, no-dialect-specific,
-    no-program-name'
-export LIBEXPLAIN_OPTIONS
+EXPLAIN_OPTIONS='debug=true, numeric-errno=false, dialect-specific=false,
+    program-name=false, symbolic-mode-bits=true, internal-strerror=true'
+export EXPLAIN_OPTIONS
 
 #
 # Remember where we came from, so that we can refer back to it as necessary.

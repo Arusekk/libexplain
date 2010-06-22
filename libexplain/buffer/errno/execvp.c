@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,6 +30,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 #include <libexplain/have_permission.h>
+#include <libexplain/name_max.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/sizeof.h>
 
@@ -61,38 +62,43 @@ explain_buffer_errno_execvp_system_call(explain_string_buffer_t *sb,
         explain_buffer_pointer(sb, argv);
     else
     {
+        size_t          argc;
         size_t          n;
         size_t          argsize;
 
         /*
          * produce output similar to execve
          */
+        argc = count(argv);
         explain_string_buffer_putc(sb, '[');
         argsize = 0;
-        for (n = 0; ; ++n)
+        for (n = 0; n < argc && argsize < 1000; ++n)
         {
             const char      *s;
 
-            s = argv[n];
-            if (!s)
-                break;
-            argsize += strlen(s);
             if (n)
-            {
                 explain_string_buffer_puts(sb, ", ");
-                if (argsize >= 1000)
-                {
-                    explain_string_buffer_printf
-                    (
-                        sb,
-                        /* FIXME: i18n */
-                        "... plus another %d command line arguments",
-                        count(argv) - n
-                    );
-                    break;
-                }
+            s = argv[n];
+            if (explain_path_is_efault(s))
+            {
+                explain_buffer_pointer(sb, s);
+                argsize += 8;
             }
-            explain_string_buffer_puts_quoted(sb, s);
+            else
+            {
+                explain_string_buffer_puts_quoted(sb, s);
+                argsize += strlen(s);
+            }
+        }
+        if (n < argc)
+        {
+            explain_string_buffer_printf
+            (
+                sb,
+                /* FIXME: i18n */
+                "... plus another %d command line arguments",
+                (int)(count(argv) - n)
+            );
         }
         explain_string_buffer_putc(sb, ']');
     }
@@ -114,9 +120,10 @@ can_execute(const char *pathname)
 }
 
 
-static void
+void
 explain_buffer_errno_execvp_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, char *const *argv)
+    int errnum, const char *syscall_name, const char *pathname,
+    char *const *argv)
 {
     const char      *p;
     const char      *path;
@@ -137,7 +144,7 @@ explain_buffer_errno_execvp_explanation(explain_string_buffer_t *sb,
     if (!path)
     {
         if (!confstr(_CS_PATH, dpath, sizeof(dpath)))
-            strendcpy(dpath, ".:/bin:/usr/bin", ENDOF(dpath));
+            explain_strendcpy(dpath, ".:/bin:/usr/bin", ENDOF(dpath));
         path = dpath;
     }
     path_len = strlen(path);
@@ -285,6 +292,7 @@ explain_buffer_errno_execvp_explanation(explain_string_buffer_t *sb,
             (
                 sb,
                 errnum,
+                syscall_name,
                 command_path,
                 argv,
                 environ
@@ -337,6 +345,7 @@ explain_buffer_errno_execvp_explanation(explain_string_buffer_t *sb,
     (
         sb,
         errnum,
+        syscall_name,
         pathname,
         argv,
         environ
@@ -362,6 +371,7 @@ explain_buffer_errno_execvp(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "execvp",
         pathname,
         argv
     );

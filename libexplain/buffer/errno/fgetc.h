@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -47,5 +47,29 @@
   */
 void explain_buffer_errno_fgetc(explain_string_buffer_t *sb, int errnum,
     FILE *fp);
+
+/**
+  * The explain_buffer_errno_fgetc_explanation function
+  * is used to obtain an explanation of an error returned
+  * by the fgetc(3) system call.
+  *
+  * @param sb
+  *     The string buffer to print the message into.  If a
+  *     safe buffer is specified, this function is thread
+  *     safe.
+  * @param errnum
+  *     The error value to be decoded, usually obtained
+  *     from the errno global variable just before this
+  *     function is called.  This is necessary if you need
+  *     to call <b>any</b> code between the system call to
+  *     be explained and this function, because many libc
+  *     functions will alter the value of errno.
+  * @param syscall_name
+  *     The name of the offended system call.
+  * @param fp
+  *     The original fp, exactly as passed to the fgetc(3) system call.
+  */
+void explain_buffer_errno_fgetc_explanation(explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, FILE *fp);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FGETC_H */

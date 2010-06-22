@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/output.h>
 #include <libexplain/realloc.h>
 
 
@@ -29,7 +30,7 @@ explain_realloc_or_die(void *ptr, size_t size)
     result = explain_realloc_on_error(ptr, size);
     if (!result)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return result;
 }

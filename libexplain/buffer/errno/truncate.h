@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -18,6 +18,8 @@
 
 #ifndef LIBEXPLAIN_BUFFER_ERRNO_TRUNCATE_H
 #define LIBEXPLAIN_BUFFER_ERRNO_TRUNCATE_H
+
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/string_buffer.h>
 
@@ -46,6 +48,6 @@
   *     The original length, exactly as passed to the truncate(2) system call.
   */
 void explain_buffer_errno_truncate(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, long long length);
+    int errnum, const char *pathname, off_t length);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_TRUNCATE_H */

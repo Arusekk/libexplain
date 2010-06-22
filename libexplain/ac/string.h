@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
 
 #ifndef LIBEXPLAIN_AC_STRING_H
 #define LIBEXPLAIN_AC_STRING_H
+
+/**
+  * @file
+  * @brief Insulate <string.h> differences
+  */
 
 #include <libexplain/config.h>
 
@@ -55,9 +60,8 @@ const char *explain_strsignal(int);
 int strverscmp(const char *, const char *);
 #endif
 
-#if !HAVE_STRENDCPY
 /**
-  * The strendcpy function is a buffer-overrun-safe replacement for
+  * The explain_strendcpy function is a buffer-overrun-safe replacement for
   * strcpy, strcat, and a more efficient replacement for strlcpy and
   * strlcat.
   *
@@ -122,13 +126,18 @@ int strverscmp(const char *, const char *);
   * megabytes away) before they can return.  The strendcpy function does
   * not suffer from either of these performance problems.
   */
-char *strendcpy(char *dst, const char *src, const char *end);
-#endif
+char *explain_strendcpy(char *dst, const char *src, const char *end);
+
+#define strendcpy you_mean_explain_strendcpy!^%
 
 #undef strcat
 #define strcat strcat_is_unsafe__use_strendcpy_instead@
 #undef strcpy
 #define strcpy strcpy_is_unsafe__use_strendcpy_instead@
+
+#ifndef HAVE_STRNSTR
+char *strnstr(const char *haystack, const char *needle, size_t haystack_size);
+#endif
 
 #ifdef __cplusplus
 }

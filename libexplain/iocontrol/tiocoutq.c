@@ -19,15 +19,45 @@
 
 #include <libexplain/ac/sys/ioctl.h>
 
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocoutq.h>
 
 
+#ifdef TIOCOUTQ
+
+/*
+ * We have conflicts
+ * TIOCOUTQ -- for terminals (coded as "not sockets");
+ * SIOCOUTQ -- for sockets
+ */
 const explain_iocontrol_t explain_iocontrol_tiocoutq =
 {
     "TIOCOUTQ", /* name */
     TIOCOUTQ, /* value */
+    explain_iocontrol_disambiguate_is_not_a_socket,
+    0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    explain_iocontrol_generic_print_data_int_star, /* print_data_returned */
+    sizeof(int), /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocoutq =
+{
+    0, /* name */
+    0, /* value */
     0, /* disambiguate */
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

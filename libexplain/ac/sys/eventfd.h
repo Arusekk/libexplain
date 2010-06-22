@@ -20,10 +20,19 @@
 #ifndef LIBEXPLAIN_AC_SYS_EVENTFD_H
 #define LIBEXPLAIN_AC_SYS_EVENTFD_H
 
+/**
+  * @file
+  * @brief Insulate <sys/eventfd.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_SYS_EVENTFD_H
 #include <sys/eventfd.h>
+#else
+# ifdef HAVE_EVENTFD
+int eventfd(unsigned, int);
+# endif
 #endif
 
 #endif /* LIBEXPLAIN_AC_SYS_EVENTFD_H */

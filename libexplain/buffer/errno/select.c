@@ -64,8 +64,8 @@ file_descriptor_is_open(int fildes)
 
 static void
 explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
-    int errnum, int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
-    struct timeval *timeout)
+    int errnum, const char *syscall_name, int nfds, fd_set *readfds,
+    fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/select.html
@@ -146,7 +146,7 @@ explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINTR:
-        explain_buffer_eintr(sb, "select");
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     case EINVAL:
@@ -155,7 +155,7 @@ explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_puts(sb, "nfds is negative");
             break;
         }
-        if (nfds > FD_SETSIZE)
+        if ((unsigned)nfds > (unsigned)FD_SETSIZE)
         {
             explain_string_buffer_puts
             (
@@ -178,7 +178,7 @@ explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -206,6 +206,7 @@ explain_buffer_errno_select(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "select",
         nfds,
         readfds,
         writefds,

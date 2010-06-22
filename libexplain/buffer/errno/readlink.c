@@ -180,7 +180,7 @@ explain_buffer_errno_readlink_explanation(explain_string_buffer_t *sb,
              * Provide the actual size, if available.
              */
             actual_size = get_actual_size(pathname);
-            if (actual_size > 0 && data_size < actual_size)
+            if (actual_size > 0 && (off_t)data_size < actual_size)
             {
                 explain_string_buffer_puts(sb, " (");
                 explain_buffer_off_t(sb, actual_size);
@@ -190,7 +190,7 @@ explain_buffer_errno_readlink_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "readlink");
         break;
     }
 }

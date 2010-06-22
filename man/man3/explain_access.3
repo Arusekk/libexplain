@@ -20,7 +20,9 @@
 .TH explain_access 3
 .SH NAME
 explain_access \- explain access(2) errors
+.if require_index \{
 .XX "explain_access(3)" "explain access(2) errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/access.h>
 .br
@@ -231,6 +233,7 @@ The original pathname, exactly as passed to the \f[I]access\fP(2) system call.
 The original mode, exactly as passed to the \f[I]access\fP(2) system call.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

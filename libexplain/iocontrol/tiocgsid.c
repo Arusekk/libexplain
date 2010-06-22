@@ -21,14 +21,16 @@
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/pid_t_star.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocgsid.h>
 
 
+#ifdef TIOCGSID
+
 static void
-print_explanation(const explain_iocontrol_t *p,
-    explain_string_buffer_t *sb, int errnum, int fildes, int request,
-    const void *data)
+print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
 {
     switch (errnum)
     {
@@ -60,12 +62,46 @@ print_explanation(const explain_iocontrol_t *p,
 }
 
 
+static void
+print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_int_pid_star(sb, data);
+}
+
+
 const explain_iocontrol_t explain_iocontrol_tiocgsid =
 {
     "TIOCGSID", /* name */
     TIOCGSID, /* value */
     0, /* disambiguate */
     0, /* print_name */
-    0, /* print_data */
-    print_explanation
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    print_explanation,
+    print_data_returned,
+    sizeof(int), /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocgsid =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
+    0, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#endif

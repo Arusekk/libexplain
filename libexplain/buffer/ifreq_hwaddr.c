@@ -46,6 +46,7 @@ explain_buffer_ifreq_hwaddr(explain_string_buffer_t *sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
+#ifdef ifr_hwaddr
         explain_string_buffer_puts(sb, ", ifr_hwaddr = ");
         explain_buffer_sockaddr
         (
@@ -53,6 +54,7 @@ explain_buffer_ifreq_hwaddr(explain_string_buffer_t *sb,
             &ifr->ifr_hwaddr,
             sizeof(ifr->ifr_hwaddr)
         );
+#endif
         explain_string_buffer_puts(sb, " }");
     }
 }

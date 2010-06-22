@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/net/route.h>
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/rtentry.h>
@@ -45,6 +46,10 @@ const explain_iocontrol_t explain_iocontrol_siocrtmsg =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(struct rtentry), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef SIOCRTMSG */
@@ -57,6 +62,10 @@ const explain_iocontrol_t explain_iocontrol_siocrtmsg =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* SIOCRTMSG */

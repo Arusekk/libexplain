@@ -85,7 +85,7 @@ explain_buffer_errno_fstatfs_explanation(explain_string_buffer_t *sb, int
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "fstatfs");
         break;
     }
 }

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="lstat ENOTDIR"
 . test_prelude
 
 cat > test.ok << 'fubar'
-lstat(pathname = "a/b/c", buf = 0x01234567) failed, Not a directory
+lstat(pathname = "a/b/c", data = 0x09876543) failed, Not a directory
 (ENOTDIR) because the "b" regular file in the pathname "a" directory is
 being used as a directory when it is not
 fubar
@@ -34,7 +34,7 @@ test $? -eq 0 || no_result
 touch a/b
 test $? -eq 0 || no_result
 
-explain -e ENOTDIR -o test.out lstat a/b/c 0x1234567
+explain -e ENOTDIR -o test.out lstat a/b/c 0x9876543
 test $? -eq 0 || fail
 
 diff test.ok test.out

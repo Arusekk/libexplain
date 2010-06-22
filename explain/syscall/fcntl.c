@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -139,6 +139,7 @@ explain_syscall_fcntl(int errnum, int argc, char **argv)
                 exit(EXIT_FAILURE);
             }
             f = f_zero;
+            f.l_type = F_RDLCK;
             explain_wrap_and_print
             (
                 stdout,
@@ -161,6 +162,7 @@ explain_syscall_fcntl(int errnum, int argc, char **argv)
                 exit(EXIT_FAILURE);
             }
             f = f_zero;
+            f.l_type = F_RDLCK;
             explain_wrap_and_print
             (
                 stdout,

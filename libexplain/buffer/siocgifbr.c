@@ -23,6 +23,8 @@
 #include <libexplain/sizeof.h>
 
 
+#ifdef HAVE_LINUX_IF_BRIDGE_H
+
 static void
 explain_buffer_brctl(explain_string_buffer_t *sb, int data)
 {
@@ -61,3 +63,21 @@ explain_buffer_siocgifbr(explain_string_buffer_t *sb,
     explain_buffer_brctl(sb, data[0]);
     explain_string_buffer_printf(sb, ", %lu, %lu }", data[1], data[2]);
 }
+
+#else
+
+void
+explain_buffer_siocgifbr(explain_string_buffer_t *sb,
+    const unsigned long data[3])
+{
+    explain_string_buffer_printf
+    (
+        sb,
+        "{ %lu, %lu, %lu }",
+        data[0],
+        data[1],
+        data[2]
+    );
+}
+
+#endif

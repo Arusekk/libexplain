@@ -20,7 +20,12 @@
 #ifndef LIBEXPLAIN_AC_NET_ROUTE_H
 #define LIBEXPLAIN_AC_NET_ROUTE_H
 
-#include <libexplain/config.h>
+/**
+  * @file
+  * @brief insulate <net/route.h> differences
+  */
+
+#include <libexplain/ac/sys/socket.h>
 
 #ifdef HAVE_NET_ROUTE_H
 #include <net/route.h>

@@ -55,7 +55,7 @@ explain_buffer_errno_timerfd_create_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_timerfd_create_explanation(explain_string_buffer_t *sb,
-    int errnum, int clockid, int flags)
+    int errnum, const char *syscall_name, int clockid, int flags)
 {
     (void)flags;
     switch (errnum)
@@ -76,7 +76,7 @@ explain_buffer_errno_timerfd_create_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENODEV:
-        explain_buffer_enodev_anon_inodes(sb, "timerfd_create");
+        explain_buffer_enodev_anon_inodes(sb, syscall_name);
         break;
 
     case ENOMEM:
@@ -87,11 +87,11 @@ explain_buffer_errno_timerfd_create_explanation(explain_string_buffer_t *sb,
 #if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
     case EOPNOTSUPP:
 #endif
-        explain_buffer_enosys_vague(sb, "timerfd_create");
+        explain_buffer_enosys_vague(sb, syscall_name);
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -104,10 +104,21 @@ explain_buffer_errno_timerfd_create(explain_string_buffer_t *sb, int errnum, int
     explain_explanation_t exp;
 
     explain_explanation_init(&exp, errnum);
-    explain_buffer_errno_timerfd_create_system_call(&exp.system_call_sb, errnum,
-        clockid, flags);
-    explain_buffer_errno_timerfd_create_explanation(&exp.explanation_sb, errnum,
-        clockid, flags);
+    explain_buffer_errno_timerfd_create_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        clockid,
+        flags
+    );
+    explain_buffer_errno_timerfd_create_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        "timerfd_create",
+        clockid,
+        flags
+    );
     explain_explanation_assemble(&exp, sb);
 }
 

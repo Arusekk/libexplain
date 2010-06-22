@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,8 +19,10 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/dirent.h>
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
@@ -29,6 +31,7 @@
 #include <libexplain/buffer/errno/fstat.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/is_same_inode.h>
+#include <libexplain/name_max.h>
 
 
 /**
@@ -79,19 +82,38 @@ recursive_pwd(explain_string_buffer_t *sb, explain_string_buffer_t *dot,
             );
         return (ok ? 0 : -1);
     }
+#ifdef HAVE_DIRFD
     if (fstat(dirfd(dp), &dotdot_st) < 0)
     {
         explain_buffer_errno_fstat_explanation
         (
             sb,
             errno,
+            "fstat",
             dirfd(dp),
             &dotdot_st
         );
+        closedir(dp);
         return -1;
     }
+#else
+    if (stat(dot->message, &dotdot_st) < 0)
+    {
+        explain_buffer_errno_stat_explanation
+        (
+            sb,
+            errno,
+            "stat",
+            dot->message,
+            &dotdot_st
+        );
+        closedir(dp);
+        return -1;
+    }
+#endif
     if (explain_is_same_inode(dot_st, &dotdot_st))
     {
+        closedir(dp);
         explain_string_buffer_putc(result, '/');
         return 0;
     }
@@ -127,6 +149,7 @@ recursive_pwd(explain_string_buffer_t *sb, explain_string_buffer_t *dot,
                     "pathname",
                     &final_component
                 );
+            closedir(dp);
             return (ok ? 0 : -1);
         }
         explain_string_buffer_truncate(dot, old_pos);
@@ -134,7 +157,7 @@ recursive_pwd(explain_string_buffer_t *sb, explain_string_buffer_t *dot,
         {
             char            name[NAME_MAX + 1];
 
-            strendcpy(name, dep->d_name, name + sizeof(name));
+            explain_strendcpy(name, dep->d_name, name + sizeof(name));
             closedir(dp);
             /*
              * Now we recurse up the directory tree until we find the
@@ -234,7 +257,7 @@ explain_buffer_get_current_directory(explain_string_buffer_t *sb,
                 explain_is_same_inode(&dot_st, &pwd_st)
             )
             {
-                strendcpy(data, pwd, data + data_size);
+                explain_strendcpy(data, pwd, data + data_size);
                 return 0;
             }
         }

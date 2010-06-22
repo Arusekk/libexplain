@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -215,7 +215,6 @@ strsignal(int n)
 #endif /* !HAVE_STRSIGNAL */
 
 
-LINKAGE_HIDDEN
 const char *
 explain_strsignal(int n)
 {
@@ -228,11 +227,8 @@ explain_strsignal(int n)
 }
 
 
-#ifndef HAVE_STRENDCPY
-
-LINKAGE_HIDDEN
 char *
-strendcpy(char *dst, const char *src, const char *end)
+explain_strendcpy(char *dst, const char *src, const char *end)
 {
     if (dst < end)
     {
@@ -250,4 +246,25 @@ strendcpy(char *dst, const char *src, const char *end)
     return dst;
 }
 
-#endif /* !HAVE_STRENDCPY */
+#ifndef HAVE_STRNSTR
+
+/* this should have LINKAGE_HIDDEN except that codegen needs it */
+
+char *
+strnstr(const char *haystack, const char *needle, size_t haystack_size)
+{
+    size_t          needle_size;
+    size_t          j;
+
+    needle_size = strlen(needle);
+    if (haystack_size < needle_size)
+        return 0;
+    for (j = 0; needle_size + j <= haystack_size; ++j)
+    {
+        if (0 == memcmp(haystack + j, needle, needle_size))
+            return (char *)(haystack + j);
+    }
+    return 0;
+}
+
+#endif /* !HAVE_STRNSTR */

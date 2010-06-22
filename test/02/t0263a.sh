@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="utime EPERM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-utime(pathname = "foobar", times = 0x00001000) failed, Operation not
+utime(pathname = "foobar", times = 0x00054321) failed, Operation not
 permitted (EPERM) because write access to pathname was not allowed, or one
 of the directory components of pathname did not allow search permission
 fubar
@@ -31,7 +31,7 @@ test $? -eq 0 || no_result
 touch foobar
 test $? -eq 0 || no_result
 
-explain -eEPERM utime foobar 0x1000 > test.out
+explain -eEPERM utime foobar 0x54321 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="utime EACCES"
 . test_prelude
 
 cat > test.ok << 'fubar'
-utime(pathname = "foobar", times = 0x00001000) failed, Permission denied
+utime(pathname = "foobar", times = 0x09876543) failed, Permission denied
 (EACCES) because write access to pathname was not allowed, or one of the
 directory components of pathname did not allow search permission
 fubar
@@ -34,7 +34,7 @@ test $? -eq 0 || no_result
 chmod a-w foobar
 test $? -eq 0 || no_result
 
-explain -eEACCES utime foobar 0x1000 > test.out
+explain -eEACCES utime foobar 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

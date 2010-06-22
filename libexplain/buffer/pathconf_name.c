@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -87,6 +87,9 @@ static const explain_parse_bits_table_t table[] =
 #endif
 #ifdef _PC_2_SYMLINKS
     { "_PC_2_SYMLINKS", _PC_2_SYMLINKS },
+#endif
+#ifdef _PC_MIN_HOLE_SIZE
+    { "_PC_MIN_HOLE_SIZE", _PC_MIN_HOLE_SIZE },
 #endif
 };
 

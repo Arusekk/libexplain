@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,8 +17,11 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/sys/socket.h>
 
 #include <libexplain/accept4.h>
+#include <libexplain/buffer/errno/accept4.h>
+#include <libexplain/common_message_buffer.h>
 
 
 const char *
@@ -26,6 +29,38 @@ explain_accept4(int fildes, struct sockaddr *sock_addr, socklen_t
     *sock_addr_size, int flags)
 {
     return explain_errno_accept4(errno, fildes, sock_addr, sock_addr_size,
+        flags);
+}
+
+
+const char *
+explain_errno_accept4(int errnum, int fildes, struct sockaddr *sock_addr,
+    socklen_t *sock_addr_size, int flags)
+{
+    explain_message_errno_accept4(explain_common_message_buffer,
+        explain_common_message_buffer_size, errnum, fildes, sock_addr,
+        sock_addr_size, flags);
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_accept4(char *message, int message_size, int fildes, struct
+    sockaddr *sock_addr, socklen_t *sock_addr_size, int flags)
+{
+    explain_message_errno_accept4(message, message_size, errno, fildes,
+        sock_addr, sock_addr_size, flags);
+}
+
+
+void
+explain_message_errno_accept4(char *message, int message_size, int errnum, int
+    fildes, struct sockaddr *sock_addr, socklen_t *sock_addr_size, int flags)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_accept4(&sb, errnum, fildes, sock_addr, sock_addr_size,
         flags);
 }
 

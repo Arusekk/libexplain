@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,12 +17,11 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/sys/eventfd.h>
 
 #include <libexplain/eventfd.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 int
@@ -30,7 +29,7 @@ explain_eventfd_on_error(unsigned initval, int flags)
 {
     int             result;
 
-#ifdef HAVE_EVENTFD
+#if defined(HAVE_EVENTFD)
     result = eventfd(initval, flags);
 #else
     result = -1;
@@ -38,8 +37,13 @@ explain_eventfd_on_error(unsigned initval, int flags)
 #endif
     if (result < 0)
     {
+        int             hold_errno;
+
+        hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_eventfd(initval, flags));
+        explain_output_message(explain_errno_eventfd(hold_errno,
+            initval, flags));
+        errno = hold_errno;
     }
     return result;
 }

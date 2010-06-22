@@ -20,7 +20,9 @@
 .TH explain_symlink 3
 .SH NAME
 explain_symlink \- explain symlink(2) errors
+.if require_index \{
 .XX "explain_symlink(3)" "explain symlink(2) errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/symlink.h>
 .br
@@ -228,6 +230,7 @@ The original newpath,
 exactly as passed to the \f[I]symlink\fP(2) system call.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

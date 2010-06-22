@@ -22,9 +22,9 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/fchmod.h>
 #include <libexplain/open.h>
-#include <libexplain/permission_mode.h>
 #include <libexplain/version_print.h>
 
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,10 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/errno/getgroups.h>
+#include <libexplain/common_message_buffer.h>
 #include <libexplain/getgroups.h>
 
 
@@ -25,6 +28,35 @@ const char *
 explain_getgroups(int data_size, gid_t *data)
 {
     return explain_errno_getgroups(errno, data_size, data);
+}
+
+
+const char *
+explain_errno_getgroups(int errnum, int data_size, gid_t *data)
+{
+    explain_message_errno_getgroups(explain_common_message_buffer,
+        explain_common_message_buffer_size, errnum, data_size, data);
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_getgroups(char *message, int message_size, int data_size, gid_t
+    *data)
+{
+    explain_message_errno_getgroups(message, message_size, errno, data_size,
+        data);
+}
+
+
+void
+explain_message_errno_getgroups(char *message, int message_size, int errnum, int
+    data_size, gid_t *data)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_getgroups(&sb, errnum, data_size, data);
 }
 
 

@@ -50,6 +50,7 @@ explain_buffer_errno_fwrite_explanation(explain_string_buffer_t *sb,
     (
         sb,
         errnum,
+        "fwrite",
         fildes,
         ptr,
         size * nmemb

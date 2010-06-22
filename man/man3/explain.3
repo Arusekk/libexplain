@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008, 2009 Peter Miller
+.\" Copyright (C) 2008-2010 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -19,9 +19,11 @@
 .TH libexplain 3
 .SH NAME
 libexplain \- Explain errno values returned by libc functions
+.if require_index \{
 .XX "libexplain(3)" "Explain errno values returned by libc functions"
+.\}
 .SH SYNOPSIS
-cc ... -lexplain;
+cc ... \-lexplain;
 .sp
 #include <libexplain/libexplain.h>
 .SH DESCRIPTION
@@ -35,42 +37,117 @@ describing the specific cause from amongst the numerous meanings each
 The explanation of the cause of an error is dependent on the environment
 of the error to remain unchanged, so that when libexplain gets around to
 looking for the cause, the cause is still there.  On a running system,
-and particularly a multi-user system, this is not always possible.
+and particularly a multi\[hy]user system, this is not always possible.
 .PP
 If an incorrect explanation is provided,
-it is possible because the cause is no longer present.
+it is possible that the cause is no longer present.
+.SS Compiling
+Assuming the library header files has been installed into \f[CW]/usr/include\fP,
+and the library files have been installed into \f[CW]/usr/lib\fP,
+compiling against libexplain requires no special \f[CW]-I\fP options.
+.PP
+When linking your pograms, add \f[CW]\-lexplain\fP to the list of
+libraries at the end of your link line.
+.RS
+.ft CW
+cc \&... \-lexplain
+.ft R
+.RE
+.PP
+When you configure your package with GNU Autoconf,
+you need the large file support macro
+.RS
+AC_SYS_LARGEFILE
+.RE
+.PP
+If you aren't using GNU Autoconf, you will have to work out the needed
+large file support requirements yourdelf.
+.PP
+There is a \f[I]pkg-config\fP(1) package for you to use, too:
+.RS
+CFLAGS="$CFLAGS `pkg-config libexplain --cflags`"
+LIBS="$LIBS `pkg-config libexplain --libs`"
+.RE
+This can make figuring out the command line requirements
+much easier.
 .SS Environment Variable
-The \f[CW]LIBEXPLAIN_OPTIONS\fP environment variable may be used
+The \f[CW]EXPLAIN_OPTIONS\fP environment variable may be used
 to control some of the content in the messages.
+Options are separated by comma (\[lq],\[rq]) characters.
+.PP
+There are three ways to set an option:
+.TP 3m
+1.
+The form \[lq]\f[I]name\fP=\f[I]value\fP\[rq] may be used explicitly.
+The values \[lq]true\[rq] and \[lq]false\[rq] are used for boolean options.
+.TP 3m
+2.
+An option name alone is interpreted to mean \[lq]\f[I]name\fP=true\[rq].
+.TP 3m
+3.
+The form \[lq]no\[hy]\f[I]name\fP\[rq] is interpreted to
+mean \[lq]\f[I]name\fP=false\[rq].
+.PP
+The following options are available:
 .TP 8n
 debug
 Additional debugging messages for libexplain developers.
 Not generally useful to clients of the library.
+.br
+Default: false.
 .TP 8n
-no-numeric-errno
-This option suppresses the numeric \f[I]errno\fP value from being
-included in the message, \f[I]e.g.\fP \[lq](ENOENT)\[rq] rather than
-\[lq](2, ENOENT)\[rq].
-This option is more generally of use in automated testing, to prevent
-UNIX dialect differences from producing false negatives.
+numeric\[hy]errno
+This option includes the numeric \f[I]errno\fP value
+in the message,
+\f[I]e.g.\fP \[lq](2, ENOENT)\[rq] rather than \[lq](ENOENT)\[rq].
+Disabling this option is generally of use in automated testing, to
+prevent UNIX dialect differences from producing false negatives.
+.br
+Default: true
 .TP 8n
-no-dialect-specific
-The option suppresses explanatory text specific to a particular UNIX dialect.
+dialect\[hy]specific
+The controls the presence of explanatory text specific to a particular
+UNIX dialect.
 It also suppresses printing system specific maximums.
-This option is more generally of use in automated testing, to prevent
-UNIX dialect differences from producing false negatives.
+Disabling this option is generally of use in automated testing, to
+prevent UNIX dialect differences from producing false negatives.
+.br
+Default: true.
 .TP 8n
-no-program-name
-By default the explain_*_or_die functions include the name of the
-executing program at the start of the error message, and this helps
-users understand which command is throwing the error.
-This option may be used to suppress the inclusion of the program name,
-which may be of some interest to script writers.
+internal\[hy]strerror
+This option controls the source of
+system eror message texts.
+If false, it uses \f[I]streror\P(3) for the text.
+If true, it uses internal string for the text.
+This is mostly of use for automated testing, to avoid false negatives
+induced by inconsistencies across Unix implementations.
+.br
+Default: false.
+.TP 8n
+program\[hy]name
+This option controls the inclusion of the program name at the
+start of error messages, by
+the explain_*_or_die
+and explain_*_on_error
+functions.
+This helps users understand which command is throwing the error.
+Disabling this option may be of some interest to script writers.
 Program developers can use the \f[I]explain_program_name_set\fP(3)
-function is set the name of the command, if they wish to override
+function to set the name of the command, if they wish to override
 the name that libexplain would otherwise obtain from the operating system.
 Program developers can use the \f[I]explain_program_name_assemble\fP(3)
-function is they wish to trump the environment variable.
+function to trump this option.
+.br
+Default: true.
+.TP 8n
+symbolic\[hy]mode\[hy]bits
+This option controls how permission mode bits are represented in error messages.
+Setting this option to true will cause symbolic names to be printed
+(\f[I]e.g.\fP S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH).
+Setting this option to false will cause octal values to be printed
+(\f[I]e.g.\fP 0644).
+.br
+Default: false.
 .SH Supported System Calls
 Each supported system call has its own \f[I]man\fP page.
 .\" please keep the following list sorted
@@ -194,6 +271,12 @@ Explain \f[I]eventfd\fP(2) errors
 \f[I]explain_eventfd_or_die\fP(3)
 create a file descriptor for event notification and report errors
 .TP 8n
+\f[I]explain_execlp\fP(3)
+Explain \f[I]execlp\fP(3) errors
+.TP 8n
+\f[I]explain_execlp_or_die\fP(3)
+execute a file and report errors
+.TP 8n
 \f[I]explain_execve\fP(3)
 Explain \f[I]execve\fP(2) errors
 .TP 8n
@@ -206,6 +289,9 @@ Explain \f[I]execvp\fP(3) errors
 \f[I]explain_execvp_or_die\fP(3)
 execute program and report errors
 .\" ----------  F  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_exit\fP(3)
+print an explanation of exit status before exiting
 .TP 8n
 \f[I]explain_fchdir\fP(3)
 Explain \f[I]fchdir\fP(2) errors
@@ -240,6 +326,18 @@ Explain \f[I]fdopen\fP(3) errors
 \f[I]explain_fdopen_or_die\fP(3)
 stream open function and report errors
 .TP 8n
+\f[I]explain_fdopendir\fP(3)
+Explain \f[I]fdopendir\fP(3) errors
+.TP 8n
+\f[I]explain_fdopendir_or_die\fP(3)
+open a directory and report errors
+.TP 8n
+\f[I]explain_feof\fP(3)
+Explain \f[I]feof\fP(3) errors
+.TP 8n
+\f[I]explain_feof_or_die\fP(3)
+check and reset stream status and report errors
+.TP 8n
 \f[I]explain_ferror\fP(3)
 Explain \f[I]ferror\fP(3) errors
 .TP 8n
@@ -257,6 +355,12 @@ Explain \f[I]fgetc\fP(3) errors
 .TP 8n
 \f[I]explain_fgetc_or_die\fP(3)
 input of characters and report errors
+.TP 8n
+\f[I]explain_fgetpos\fP(3)
+Explain \f[I]fgetpos\fP(3) errors
+.TP 8n
+\f[I]explain_fgetpos_or_die\fP(3)
+reposition a stream and report errors
 .TP 8n
 \f[I]explain_fgets\fP(3)
 Explain \f[I]fgets\fP(3) errors
@@ -294,11 +398,29 @@ Explain \f[I]fpathconf\fP(3) errors
 \f[I]explain_fpathconf_or_die\fP(3)
 get configuration values for files and report errors
 .TP 8n
+\f[I]explain_fprintf\fP(3)
+Explain \f[I]fprintf\fP(3) errors
+.TP 8n
+\f[I]explain_fprintf_or_die\fP(3)
+formatted output conversion and report errors
+.TP 8n
+\f[I]explain_fpurge\fP(3)
+Explain \f[I]fpurge\fP(3) errors
+.TP 8n
+\f[I]explain_fpurge_or_die\fP(3)
+purge a stream and report errors
+.TP 8n
 \f[I]explain_fputc\fP(3)
 Explain \f[I]fputc\fP(3) errors
 .TP 8n
 \f[I]explain_fputc_or_die\fP(3)
 output of characters and report errors
+.TP 8n
+\f[I]explain_fputs\fP(3)
+Explain \f[I]fputs\fP(3) errors
+.TP 8n
+\f[I]explain_fputs_or_die\fP(3)
+write a string to a stream and report errors
 .TP 8n
 \f[I]explain_fread\fP(3)
 Explain \f[I]fread\fP(3) errors
@@ -312,6 +434,18 @@ Explain \f[I]freopen\fP(3) errors
 \f[I]explain_freopen_or_die\fP(3)
 open files and report errors
 .TP 8n
+\f[I]explain_fseek\fP(3)
+Explain \f[I]fseek\fP(3) errors
+.TP 8n
+\f[I]explain_fseek_or_die\fP(3)
+reposition a stream and report errors
+.TP 8n
+\f[I]explain_fsetpos\fP(3)
+Explain \f[I]fsetpos\fP(3) errors
+.TP 8n
+\f[I]explain_fsetpos_or_die\fP(3)
+reposition a stream and report errors
+.TP 8n
 \f[I]explain_fstat\fP(3)
 Explain \f[I]fstat\fP(3) errors
 .TP 8n
@@ -323,6 +457,24 @@ Explain \f[I]fstatfs\fP(2) errors
 .TP 8n
 \f[I]explain_fstatfs_or_die\fP(3)
 get file system statistics and report errors
+.TP 8n
+\f[I]explain_fstatvfs\fP(3)
+Explain \f[I]fstatvfs\fP(2) errors
+.TP 8n
+\f[I]explain_fstatvfs_or_die\fP(3)
+get file system statistics and report errors
+.TP 8n
+\f[I]explain_fsync\fP(3)
+Explain \f[I]fsync\fP(2) errors
+.TP 8n
+\f[I]explain_fsync_or_die\fP(3)
+synchronize a file's in\[hy]core state with storage device and report errors
+.TP 8n
+\f[I]explain_ftell\fP(3)
+Explain \f[I]ftell\fP(3) errors
+.TP 8n
+\f[I]explain_ftell_or_die\fP(3)
+get stream position and report errors
 .TP 8n
 \f[I]explain_ftime\fP(3)
 Explain \f[I]ftime\fP(3) errors
@@ -370,6 +522,12 @@ input of characters and report errors
 \f[I]explain_getcwd\fP(3)
 Explain \f[I]getcwd\fP(2) errors
 .TP 8n
+\f[I]explain_getdomainname\fP(3)
+Explain \f[I]getdomainname\fP(2) errors
+.TP 8n
+\f[I]explain_getdomainname_or_die\fP(3)
+get domain name and report errors
+.TP 8n
 \f[I]explain_getgroups\fP(3)
 Explain \f[I]getgroups\fP(2) errors
 .TP 8n
@@ -414,6 +572,12 @@ Explain \f[I]gettimeofday\fP(2) errors
 .TP 8n
 \f[I]explain_gettimeofday_or_die\fP(3)
 get time and report errors
+.TP 8n
+\f[I]explain_getw\fP(3)
+Explain \f[I]getw\fP(3) errors
+.TP 8n
+\f[I]explain_getw_or_die\fP(3)
+input a word (int) and report errors
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
 .TP 8n
@@ -473,6 +637,48 @@ Explain \f[I]mkdir\fP(2) errors
 .TP 8n
 \f[I]explain_mkdir_or_die\fP(3)
 create directory and report errors
+.TP 8n
+\f[I]explain_mkdtemp\fP(3)
+Explain \f[I]mkdtemp\fP(3) errors
+.TP 8n
+\f[I]explain_mkdtemp_or_die\fP(3)
+create a unique temporary directory and report errors
+.TP 8n
+\f[I]explain_mknod\fP(3)
+Explain \f[I]mknod\fP(2) errors
+.TP 8n
+\f[I]explain_mknod_or_die\fP(3)
+create a special or ordinary file and report errors
+.TP 8n
+\f[I]explain_mkostemp\fP(3)
+Explain \f[I]mkostemp\fP(3) errors
+.TP 8n
+\f[I]explain_mkostemp_or_die\fP(3)
+create a unique temporary file and report errors
+.TP 8n
+\f[I]explain_mkstemp\fP(3)
+Explain \f[I]mkstemp\fP(3) errors
+.TP 8n
+\f[I]explain_mkstemp_or_die\fP(3)
+create a unique temporary file and report errors
+.TP 8n
+\f[I]explain_mktemp\fP(3)
+Explain \f[I]mktemp\fP(3) errors
+.TP 8n
+\f[I]explain_mktemp_or_die\fP(3)
+make a unique temporary filename and report errors
+.TP 8n
+\f[I]explain_mmap\fP(3)
+Explain \f[I]mmap\fP(2) errors
+.TP 8n
+\f[I]explain_mmap_or_die\fP(3)
+map file or device into memory and report errors
+.TP 8n
+\f[I]explain_munmap\fP(3)
+Explain \f[I]munmap\fP(2) errors
+.TP 8n
+\f[I]explain_munmap_or_die\fP(3)
+unmap a file or device from memory and report errors
 .\" ----------  N  ---------------------------------------------------------
 .TP 8n
 \f[I]explain_nice\fP(3)
@@ -525,6 +731,12 @@ Explain \f[I]pread\fP(2) errors
 \f[I]explain_pread_or_die\fP(3)
 read from a file descriptor at a given offset and report errors
 .TP 8n
+\f[I]explain_printf\fP(3)
+Explain \f[I]printf\fP(3) errors
+.TP 8n
+\f[I]explain_printf_or_die\fP(3)
+formatted output conversion and report errors
+.TP 8n
 \f[I]explain_putc\fP(3)
 Explain \f[I]putc\fP(3) errors
 .TP 8n
@@ -537,6 +749,24 @@ Explain \f[I]putchar\fP(3) errors
 \f[I]explain_putchar_or_die\fP(3)
 output of characters and report errors
 .TP 8n
+\f[I]explain_putenv\fP(3)
+Explain \f[I]putenv\fP(3) errors
+.TP 8n
+\f[I]explain_putenv_or_die\fP(3)
+change or add an environment variable and report errors
+.TP 8n
+\f[I]explain_puts\fP(3)
+Explain \f[I]puts\fP(3) errors
+.TP 8n
+\f[I]explain_puts_or_die\fP(3)
+write a string and a trailing newline to stdout and report errors
+.TP 8n
+\f[I]explain_putw\fP(3)
+Explain \f[I]putw\fP(3) errors
+.TP 8n
+\f[I]explain_putw_or_die\fP(3)
+output a word (int) and report errors
+.TP 8n
 \f[I]explain_pwrite\fP(3)
 Explain \f[I]pwrite\fP(2) errors
 .TP 8n
@@ -544,6 +774,12 @@ Explain \f[I]pwrite\fP(2) errors
 write to a file descriptor at a given offset and report errors
 .\" ----------  Q  ---------------------------------------------------------
 .\" ----------  R  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_raise\fP(3)
+Explain \f[I]raise\fP(3) errors
+.TP 8n
+\f[I]explain_raise_or_die\fP(3)
+send a signal to the caller and report errors
 .TP 8n
 \f[I]explain_read\fP(3)
 Explain \f[I]read\fP(2) errors
@@ -562,6 +798,12 @@ Explain \f[I]readlink\fP(2) errors
 .TP 8n
 \f[I]explain_readlink_or_die\fP(3)
 read value of a symbolic link and report errors
+.TP 8n
+\f[I]explain_readv\fP(3)
+Explain \f[I]readv\fP(2) errors
+.TP 8n
+\f[I]explain_readv_or_die\fP(3)
+read data into multiple buffers and report errors
 .TP 8n
 \f[I]explain_realloc\fP(3)
 Explain \f[I]realloc\fP(3) errors
@@ -588,6 +830,30 @@ Explain \f[I]select\fP(2) errors
 \f[I]explain_select_or_die\fP(3)
 execute \f[I]select\fP(2) and report errors
 .TP 8n
+\f[I]explain_setbuf\fP(3)
+Explain \f[I]setbuf\fP(3) errors
+.TP 8n
+\f[I]explain_setbuffer\fP(3)
+Explain \f[I]setbuffer\fP(3) errors
+.TP 8n
+\f[I]explain_setbuffer_or_die\fP(3)
+stream buffering operations and report errors
+.TP 8n
+\f[I]explain_setbuf_or_die\fP(3)
+set stream buffer and report errors
+.TP 8n
+\f[I]explain_setdomainname\fP(3)
+Explain \f[I]setdomainname\fP(2) errors
+.TP 8n
+\f[I]explain_setdomainname_or_die\fP(3)
+set domain name and report errors
+.TP 8n
+\f[I]explain_setenv\fP(3)
+Explain \f[I]setenv\fP(3) errors
+.TP 8n
+\f[I]explain_setenv_or_die\fP(3)
+change or add an environment variable and report errors
+.TP 8n
 \f[I]explain_setgroups\fP(3)
 Explain \f[I]setgroups\fP(2) errors
 .TP 8n
@@ -600,11 +866,23 @@ Explain \f[I]sethostname\fP(2) errors
 \f[I]explain_sethostname_or_die\fP(3)
 set hostname and report errors
 .TP 8n
+\f[I]explain_setlinebuf\fP(3)
+Explain \f[I]setlinebuf\fP(3) errors
+.TP 8n
+\f[I]explain_setlinebuf_or_die\fP(3)
+stream buffering operations and report errors
+.TP 8n
 \f[I]explain_setsockopt\fP(3)
 Explain \f[I]setsockopt\fP(2) errors
 .TP 8n
 \f[I]explain_setsockopt_or_die\fP(3)
 execute \f[I]setsockopt\fP(2) and report errors
+.TP 8n
+\f[I]explain_setvbuf\fP(3)
+Explain \f[I]setvbuf\fP(3) errors
+.TP 8n
+\f[I]explain_setvbuf_or_die\fP(3)
+stream buffering operations and report errors
 .TP 8n
 \f[I]explain_signalfd\fP(3)
 Explain \f[I]signalfd\fP(2) errors
@@ -618,6 +896,18 @@ Explain \f[I]socket\fP(2) errors
 \f[I]explain_socket_or_die\fP(3)
 create an endpoint for communication and report errors
 .TP 8n
+\f[I]explain_socketpair\fP(3)
+Explain \f[I]socketpair\fP(2) errors
+.TP 8n
+\f[I]explain_socketpair_or_die\fP(3)
+create a pair of connected sockets and report errors
+.TP 8n
+\f[I]explain_sprintf\fP(3)
+Explain \f[I]sprintf\fP(3) errors
+.TP 8n
+\f[I]explain_sprintf_or_die\fP(3)
+formatted output conversion and report errors
+.TP 8n
 \f[I]explain_stat\fP(3)
 Explain \f[I]stat\fP(2) errors
 .TP 8n
@@ -626,6 +916,18 @@ Explain \f[I]statfs\fP(2) errors
 .TP 8n
 \f[I]explain_statfs_or_die\fP(3)
 get file system statistics and report errors
+.TP 8n
+\f[I]explain_statvfs\fP(3)
+Explain \f[I]statvfs\fP(2) errors
+.TP 8n
+\f[I]explain_statvfs_or_die\fP(3)
+get file system statistics and report errors
+.TP 8n
+\f[I]explain_stime\fP(3)
+Explain \f[I]stime\fP(2) errors
+.TP 8n
+\f[I]explain_stime_or_die\fP(3)
+set system time and report errors
 .TP 8n
 \f[I]explain_strdup\fP(3)
 Explain \f[I]strdup\fP(3) errors
@@ -643,13 +945,13 @@ duplicate a string and report errors
 Explain \f[I]strtod\fP(3) errors
 .TP 8n
 \f[I]explain_strtod_or_die\fP(3)
-convert string to floating-point number and report errors
+convert string to floating\[hy]point number and report errors
 .TP 8n
 \f[I]explain_strtof\fP(3)
 Explain \f[I]strtof\fP(3) errors
 .TP 8n
 \f[I]explain_strtof_or_die\fP(3)
-convert string to floating-point number and report errors
+convert string to floating\[hy]point number and report errors
 .TP 8n
 \f[I]explain_strtol\fP(3)
 Explain \f[I]strtol\fP(3) errors
@@ -661,7 +963,7 @@ convert a string to a long integer and report errors
 Explain \f[I]strtold\fP(3) errors
 .TP 8n
 \f[I]explain_strtold_or_die\fP(3)
-convert string to floating-point number and report errors
+convert string to floating\[hy]point number and report errors
 .TP 8n
 \f[I]explain_strtoll\fP(3)
 Explain \f[I]strtoll\fP(3) errors
@@ -694,6 +996,54 @@ Explain \f[I]system\fP(3) errors
 execute a shell command and report errors
 .\" ----------  T  ---------------------------------------------------------
 .TP 8n
+\f[I]explain_tcdrain\fP(3)
+Explain \f[I]tcdrain\fP(3) errors
+.TP 8n
+\f[I]explain_tcdrain_or_die\fP(3)
+Execute \f[I]tcdrain\fP(3) and report errors
+.TP 8n
+\f[I]explain_tcflow\fP(3)
+Explain \f[I]tcflow\fP(3) errors
+.TP 8n
+\f[I]explain_tcflow_or_die\fP(3)
+Execute \f[I]tcflow\fP(3) and report errors
+.TP 8n
+\f[I]explain_tcflush\fP(3)
+Explain \f[I]tcflush\fP(3) errors
+.TP 8n
+\f[I]explain_tcflush_or_die\fP(3)
+discard terminal data and report errors
+.TP 8n
+\f[I]explain_tcgetattr\fP(3)
+Explain \f[I]tcgetattr\fP(3) errors
+.TP 8n
+\f[I]explain_tcgetattr_or_die\fP(3)
+get terminal parameters and report errors
+.TP 8n
+\f[I]explain_tcsendbreak\fP(3)
+Explain \f[I]tcsendbreak\fP(3) errors
+.TP 8n
+\f[I]explain_tcsendbreak_or_die\fP(3)
+send terminal line break and report errors
+.TP 8n
+\f[I]explain_tcsetattr\fP(3)
+Explain \f[I]tcsetattr\fP(3) errors
+.TP 8n
+\f[I]explain_tcsetattr_or_die\fP(3)
+set terminal attributes and report errors
+.TP 8n
+\f[I]explain_telldir\fP(3)
+Explain \f[I]telldir\fP(3) errors
+.TP 8n
+\f[I]explain_telldir_or_die\fP(3)
+return current location in directory stream and report errors
+.TP 8n
+\f[I]explain_tempnam\fP(3)
+Explain \f[I]tempnam\fP(3) errors
+.TP 8n
+\f[I]explain_tempnam_or_die\fP(3)
+create a name for a temporary file and report errors
+.TP 8n
 \f[I]explain_time\fP(3)
 Explain \f[I]time\fP(2) errors
 .TP 8n
@@ -706,6 +1056,18 @@ Explain \f[I]timerfd_create\fP(2) errors
 \f[I]explain_timerfd_create_or_die\fP(3)
 timers that notify via file descriptors and report errors
 .TP 8n
+\f[I]explain_tmpfile\fP(3)
+Explain \f[I]tmpfile\fP(3) errors
+.TP 8n
+\f[I]explain_tmpfile_or_die\fP(3)
+create a temporary file and report errors
+.TP 8n
+\f[I]explain_tmpnam\fP(3)
+Explain \f[I]tmpnam\fP(3) errors
+.TP 8n
+\f[I]explain_tmpnam_or_die\fP(3)
+create a name for a temporary file and report errors
+.TP 8n
 \f[I]explain_truncate\fP(3)
 Explain \f[I]truncate\fP(2) errors
 .TP 8n
@@ -713,18 +1075,78 @@ Explain \f[I]truncate\fP(2) errors
 truncate a file to a specified length and report errors
 .\" ----------  U  ---------------------------------------------------------
 .TP 8n
+\f[I]explain_ungetc\fP(3)
+Explain \f[I]ungetc\fP(3) errors
+.TP 8n
+\f[I]explain_ungetc_or_die\fP(3)
+push a character back to a stream and report errors
+.TP 8n
 \f[I]explain_unlink\fP(3)
 Explain \f[I]unlink\fP(2) errors
 .TP 8n
 \f[I]explain_unlink_or_die\fP(3)
 delete a file and report errors
 .TP 8n
+\f[I]explain_unsetenv\fP(3)
+Explain \f[I]unsetenv\fP(3) errors
+.TP 8n
+\f[I]explain_unsetenv_or_die\fP(3)
+remove an environment variable and report errors
+.TP 8n
+\f[I]explain_ustat\fP(3)
+Explain \f[I]ustat\fP(2) errors
+.TP 8n
+\f[I]explain_ustat_or_die\fP(3)
+get file system statistics and report errors
+.TP 8n
 \f[I]explain_utime\fP(3)
 Explain \f[I]utime\fP(2) errors
 .TP 8n
 \f[I]explain_utime_or_die\fP(3)
 change file last access and modification times and report errors
+.TP 8n
+\f[I]explain_utimes\fP(3)
+Explain \f[I]utimes\fP(2) errors
+.TP 8n
+\f[I]explain_utimes_or_die\fP(3)
+change file last access and modification times and report errors
 .\" ----------  V  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_vfork\fP(3)
+Explain \f[I]vfork\fP(2) errors
+.TP 8n
+\f[I]explain_vfork_or_die\fP(3)
+create a child process and block parent and report errors
+.TP 8n
+\f[I]explain_vfprintf\fP(3)
+Explain \f[I]vfprintf\fP(3) errors
+.TP 8n
+\f[I]explain_vfprintf_or_die\fP(3)
+formatted output conversion and report errors
+.TP 8n
+\f[I]explain_vprintf\fP(3)
+Explain \f[I]vprintf\fP(3) errors
+.TP 8n
+\f[I]explain_vprintf_or_die\fP(3)
+formatted output conversion and report errors
+.TP 8n
+\f[I]explain_vsnprintf\fP(3)
+Explain \f[I]vsnprintf\fP(3) errors
+.TP 8n
+\f[I]explain_vsnprintf_or_die\fP(3)
+formatted output conversion and report errors
+.TP 8n
+\f[I]explain_snprintf\fP(3)
+Explain \f[I]snprintf\fP(3) errors
+.TP 8n
+\f[I]explain_snprintf_or_die\fP(3)
+formatted output conversion and report errors
+.TP 8n
+\f[I]explain_vsprintf\fP(3)
+Explain \f[I]vsprintf\fP(3) errors
+.TP 8n
+\f[I]explain_vsprintf_or_die\fP(3)
+formatted output conversion and report errors
 .\" ----------  W  ---------------------------------------------------------
 .TP 8n
 \f[I]explain_wait\fP(3)
@@ -756,6 +1178,12 @@ Explain \f[I]write\fP(2) errors
 .TP 8n
 \f[I]explain_write_or_die\fP(3)
 write to a file descriptor and report errors
+.TP 8n
+\f[I]explain_writev\fP(3)
+Explain \f[I]writev\fP(2) errors
+.TP 8n
+\f[I]explain_writev_or_die\fP(3)
+write data from multiple buffers and report errors
 .\" ----------  X  ---------------------------------------------------------
 .\" ----------  Y  ---------------------------------------------------------
 .\" ----------  Z  ---------------------------------------------------------
@@ -767,6 +1195,9 @@ This list is expected to expand in later releases of this library.
 .TP 8n
 \f[I]errno\fP(3)
 number of last error
+.TP 8n
+\f[I]perror\fP(3)
+print a system error message
 .TP 8n
 \f[I]strerror\fP(3)
 return string describing error number

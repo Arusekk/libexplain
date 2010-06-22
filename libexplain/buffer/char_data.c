@@ -47,3 +47,14 @@ explain_buffer_char_data(explain_string_buffer_t *sb, const void *data,
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+
+void
+explain_buffer_char_data_quoted(explain_string_buffer_t *sb, const void *data,
+    size_t data_size)
+{
+    if (explain_pointer_is_efault(data, data_size))
+        explain_buffer_pointer(sb, data);
+    else
+        explain_string_buffer_puts_quoted_n(sb, data, data_size);
+}

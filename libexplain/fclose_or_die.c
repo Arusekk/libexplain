@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,12 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdio.h>
-#include <libexplain/ac/stdlib.h>
 
 #include <libexplain/fclose.h>
+#include <libexplain/fflush.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
+
+
+int
+explain_fclose_on_error(FILE *fp)
+{
+    int             result;
+
+    result = explain_fflush_on_error(fp);
+    if (result < 0)
+    {
+        int             hold_errno;
+
+        hold_errno = errno;
+        explain_program_name_assemble_internal(1);
+        explain_output_message(explain_errno_fflush(hold_errno, fp));
+        fclose(fp);
+        errno = hold_errno;
+        return result;
+    }
+
+    result = fclose(fp);
+    if (result < 0)
+    {
+        int             hold_errno;
+
+        hold_errno = errno;
+        explain_program_name_assemble_internal(1);
+        explain_output_message(explain_errno_fclose(hold_errno, fp));
+        errno = hold_errno;
+    }
+    return result;
+}
 
 
 void
@@ -30,6 +63,9 @@ explain_fclose_or_die(FILE *fp)
 {
     if (explain_fclose_on_error(fp))
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
 }
+
+
+/* vim: set ts=8 sw=4 et */

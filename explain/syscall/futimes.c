@@ -16,12 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/time.h>
 #include <libexplain/ac/utime.h>
 
 #include <libexplain/futimes.h>
-#include <libexplain/strtod_or_die.h>
+#include <libexplain/strtod.h>
 #include <libexplain/strtol.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -33,7 +33,7 @@ timeval_or_die(const char *s, struct timeval *tv)
 {
     double          n;
 
-    n = explain_strtod_or_die(s);
+    n = explain_strtod_or_die(s, 0);
     tv->tv_sec = (long)n;
     tv->tv_usec = (long)((n - tv->tv_sec) * 1e6);
 }

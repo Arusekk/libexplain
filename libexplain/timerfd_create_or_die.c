@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,8 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
-
+#include <libexplain/output.h>
 #include <libexplain/timerfd_create.h>
 
 
@@ -29,7 +28,7 @@ explain_timerfd_create_or_die(int clockid, int flags)
     result = explain_timerfd_create_on_error(clockid, flags);
     if (result < 0)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return result;
 }

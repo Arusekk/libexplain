@@ -53,7 +53,8 @@ explain_buffer_errno_fopen_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_fopen_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, const char *flags)
+    int errnum, const char *syscall_name, const char *pathname,
+    const char *flags)
 {
     explain_string_flags_t sf;
     int             permission_mode;
@@ -99,6 +100,7 @@ explain_buffer_errno_fopen_explanation(explain_string_buffer_t *sb,
         (
             sb,
             errnum,
+            syscall_name,
             pathname,
             sf.flags,
             permission_mode
@@ -126,6 +128,7 @@ explain_buffer_errno_fopen(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "fopen",
         pathname,
         flags_string
     );

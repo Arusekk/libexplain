@@ -20,7 +20,9 @@
 .TH explain_program_name 3
 .SH NAME
 explain_program_name \- manipulate the program name
+.if require_index \{
 .XX "explain_program_name(3)" "manipulate the program name"
+.\}
 .SH SYNOPSIS
 #include <libexplain/libexplain.h>
 .sp 0.3
@@ -68,7 +70,7 @@ void explain_program_name_assemble(int yesno);
 The explain_program_name_assemble function is used to control whether
 or not the name of the calling process is to be included in error
 messages issued by the \f[I]explain_*_or_die\fP(3) functions.
-If not explicitly set, is controlled by the LIBEXPLAIN_OPTIONS
+If not explicitly set, is controlled by the EXPLAIN_OPTIONS
 environment variable, or defaults to true if not set there either.
 .TP 8n
 \fIyesno\fP

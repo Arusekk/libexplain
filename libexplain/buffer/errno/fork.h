@@ -53,8 +53,10 @@ void explain_buffer_errno_fork(explain_string_buffer_t *sb, int errnum);
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   */
 void explain_buffer_errno_fork_explanation(explain_string_buffer_t *sb,
-    int errnum);
+    int errnum, const char *syscall_name);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FORK_H */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,6 +24,12 @@
 #include <libexplain/path_is_efault.h>
 #include <libexplain/sizeof.h>
 
+
+#if defined(TIOCMBIC) || \
+    defined(TIOCMBIS) || \
+    defined(TIOCMGET) || \
+    defined(TIOCMIWAIT) || \
+    defined(TIOCMSET)
 
 static const explain_parse_bits_table_t table[] =
 {
@@ -60,3 +66,13 @@ explain_buffer_tiocm_star(explain_string_buffer_t *sb, const int *value)
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+#else
+
+void
+explain_buffer_tiocm_star(explain_string_buffer_t *sb, const int *value)
+{
+    explain_buffer_pointer(sb, value);
+}
+
+#endif

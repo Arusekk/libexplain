@@ -67,4 +67,20 @@ void explain_buffer_enametoolong2(explain_string_buffer_t *sb,
     const char *newpath, const char *newpath_caption,
     const struct explain_final_t *newpath_final_component);
 
+/**
+  * The explain_buffer_enametoolong_gethostname function is sued to
+  * print an explaination for an ENAMETOOLONG error reported by the
+  * gethostname, getdomainname (etc) functions.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param actual_length
+  *     The actual length of the host/domain name, this will be larger
+  *     than the value passed.
+  * @param caption
+  *     The name of the offending system call argument
+  */
+void explain_buffer_enametoolong_gethostname(explain_string_buffer_t *sb,
+    int actual_length, const char *caption);
+
 #endif /* LIBEXPLAIN_BUFFER_ENAMETOOLONG_H */

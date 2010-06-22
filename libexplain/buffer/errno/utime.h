@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -49,5 +49,25 @@
   */
 void explain_buffer_errno_utime(explain_string_buffer_t *sb, int errnum,
     const char *pathname, const struct utimbuf *times);
+
+/**
+  * The explain_buffer_errno_utime_explanation function
+  * is used to print the explanation of an error returned
+  * by the utime(2) system call.
+  *
+  * @param sb
+  *     The string buffer to print the message into.
+  * @param errnum
+  *     The error value to be decoded
+  * @param syscall_name
+  *     The name of the system call.
+  * @param pathname
+  *     The original pathname, exactly as passed to the utime(2) system call.
+  * @param times
+  *     The original times, exactly as passed to the utime(2) system call.
+  */
+void explain_buffer_errno_utime_explanation(explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, const char *pathname,
+    const struct utimbuf *times);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_UTIME_H */

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="fcntl vs EMFILE"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_DUPFD, arg = 2) failed, Too many open files
+fcntl(fildes = 42, command = F_DUPFD, data = 2) failed, Too many open files
 (EMFILE) because the process already has the maximum number of file
 descriptors open
 fubar

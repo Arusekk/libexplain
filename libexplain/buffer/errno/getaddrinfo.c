@@ -94,6 +94,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
      */
     switch (errcode)
     {
+#ifdef EAI_ADDRFAMILY
     case EAI_ADDRFAMILY:
         explain_string_buffer_puts
         (
@@ -101,6 +102,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
             "the specified network host does not have any network "
             "addresses in the requested address family"
         );
+#endif
 
     case EAI_AGAIN:
         explain_string_buffer_puts
@@ -136,6 +138,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
         );
         break;
 
+#ifdef EAI_NODATA
     case EAI_NODATA:
         explain_string_buffer_puts
         (
@@ -144,6 +147,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
             "network addresses defined"
         );
         break;
+#endif
 
     case EAI_NONAME:
         if (!node && !service)
@@ -212,6 +216,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
         explain_buffer_enomem_user(sb);
         break;
 
+#ifdef EAI_OVERFLOW
     case EAI_OVERFLOW:
         explain_string_buffer_puts
         (
@@ -219,6 +224,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
             "an argument buffer overflowed"
         );
         break;
+#endif
 
     default:
         break;

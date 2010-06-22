@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_LINUX_HAYESESP_H
 #define LIBEXPLAIN_AC_LINUX_HAYESESP_H
 
+/**
+  * @file
+  * @brief Insulate <linux/hayesesp.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_LINUX_HAYESESP_H

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,12 +20,13 @@
 doxygen = [find_command doxygen];
 if [doxygen] then
 {
-    integration-build-targets += web-site/doc-external/index.html;
-    all += web-site/doc-internal/index.html;
+    all += web-site/doc-external/index.html;
+    integration-build-targets += web-site/doc-internal/index.html;
 }
 
 web-site/doc-internal/files =
     [match_mask libexplain/%0%.h [source_files]]
+    [match_mask libexplain/%0%.c [source_files]]
     ;
 
 web-site/doc-external/files =
@@ -63,8 +64,12 @@ function remove_not_existing_paths =
 }
 
 web-site/%/index.html: [web-site/%/files] etc/doxygen.cfg
-    set shallow
+    set shallow gate-first
+    if [in % doc-internal doc-external]
 {
+    if [not [verbose]] then
+        function print DOX [target];
+
     rm -rf web-site/% doxygen-tmp;
     cat [resolve etc/doxygen.cfg] - > Doxyfile;
 data

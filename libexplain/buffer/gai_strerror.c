@@ -36,15 +36,33 @@ static const explain_parse_bits_table_t table[] =
     { "EAI_SERVICE", EAI_SERVICE },
     { "EAI_MEMORY", EAI_MEMORY },
     { "EAI_SYSTEM", EAI_SYSTEM },
+#ifdef EAI_OVERFLOW
     { "EAI_OVERFLOW", EAI_OVERFLOW },
+#endif
+#ifdef EAI_NODATA
     { "EAI_NODATA", EAI_NODATA },
+#endif
+#ifdef EAI_ADDRFAMILY
     { "EAI_ADDRFAMILY", EAI_ADDRFAMILY },
+#endif
+#ifdef EAI_INPROGRESS
     { "EAI_INPROGRESS", EAI_INPROGRESS },
+#endif
+#ifdef EAI_CANCELED
     { "EAI_CANCELED", EAI_CANCELED },
+#endif
+#ifdef EAI_NOTCANCELED
     { "EAI_NOTCANCELED", EAI_NOTCANCELED },
+#endif
+#ifdef EAI_ALLDONE
     { "EAI_ALLDONE", EAI_ALLDONE },
+#endif
+#ifdef EAI_INTR
     { "EAI_INTR", EAI_INTR },
+#endif
+#ifdef EAI_IDN_ENCODE
     { "EAI_IDN_ENCODE", EAI_IDN_ENCODE },
+#endif
 };
 
 

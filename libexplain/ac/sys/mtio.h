@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_SYS_MTIO_H
 #define LIBEXPLAIN_AC_SYS_MTIO_H
 
+/**
+  * @file
+  * @brief Insulate <sys/mtio.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_SYS_MTIO_H

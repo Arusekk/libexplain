@@ -1,16 +1,16 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or (at
  * your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ * General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
@@ -22,9 +22,15 @@
 /**
   * @file
   * @brief explain lseek(2) errors
+  *
+  * These functions may be used to obtain explanations for errors returned
+  * by the <i>lseek</i>(2) system call.
   */
 
 #include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
+#include <unistd.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,14 +39,8 @@ extern "C" {
 /**
   * The explain_lseek_or_die function is used to call the <i>lseek</i>(2)
   * system call. On failure an explanation will be printed to stderr,
-  * obtained from the explain_lseek(3) function, and then the process
-  * terminates by calling exit(EXIT_FAILURE).
-  *
-  * This function is intended to be used in a fashion similar to the
-  * following example:
-  * @code
-  * explain_lseek_or_die(fildes, offset, whence);
-  * @endcode
+  * obtained from the <i>#explain_lseek</i>(3) function, and then the
+  * process terminates by calling <tt>exit(EXIT_FAILURE)</tt>.
   *
   * @param fildes
   *     The fildes, exactly as to be passed to the <i>lseek</i>(2) system
@@ -52,25 +52,23 @@ extern "C" {
   *     The whence, exactly as to be passed to the <i>lseek</i>(2) system
   *     call.
   * @returns
-  *     This function only returns on success. On failure, prints an
-  *     explanation and exits, it does not return.
+  *     This function only returns on success, see <i>lseek</i>(2) for more
+  *     information. On failure, prints an explanation and exits, it does
+  *     not return.
+  *
+  * @par Example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * off_t result = explain_lseek_or_die(fildes, offset, whence);
+  * @endcode
   */
-long long explain_lseek_or_die(int fildes, long long offset, int whence);
+off_t explain_lseek_or_die(int fildes, off_t offset, int whence);
 
 /**
   * The explain_lseek_on_error function is used to call the <i>lseek</i>(2)
   * system call. On failure an explanation will be printed to stderr,
-  * obtained from the explain_lseek(3) function.
-  *
-  * This function is intended to be used in a fashion similar to the
-  * following example:
-  * @code
-  * if (explain_lseek_on_error(fildes, offset, whence) == (off_t)-1)
-  * {
-  *     ...cope with error
-  *     ...no need to print error message
-  * }
-  * @endcode
+  * obtained from the <i>#explain_lseek</i>(3) function.
   *
   * @param fildes
   *     The fildes, exactly as to be passed to the <i>lseek</i>(2) system
@@ -83,9 +81,20 @@ long long explain_lseek_or_die(int fildes, long long offset, int whence);
   *     call.
   * @returns
   *     The value returned by the wrapped <i>lseek</i>(2) system call.
+  *
+  * @par Example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * off_t result = explain_lseek_on_error(fildes, offset, whence);
+  * if (result < 0)
+  * {
+  *     ...cope with error
+  *     ...no need to print error message
+  * }
+  * @endcode
   */
-long long explain_lseek_on_error(int fildes, long long offset, int whence)
-                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+off_t explain_lseek_on_error(int fildes, off_t offset, int whence);
 
 /**
   * The explain_lseek function is used to obtain an explanation of an error
@@ -95,19 +104,6 @@ long long explain_lseek_on_error(int fildes, long long offset, int whence)
   *
   * The errno global variable will be used to obtain the error value to be
   * decoded.
-  *
-  * This function is intended to be used in a fashion similar to the
-  * following example:
-  * @code
-  * if (lseek(fildes, offset, whence) == (off_t)-1)
-  * {
-  *     fprintf(stderr, "%s\n", explain_lseek(fildes, offset, whence));
-  *     exit(EXIT_FAILURE);
-  * }
-  * @endcode
-  *
-  * The above code example is available pre-packaged as the
-  * #explain_lseek_or_die function.
   *
   * @param fildes
   *     The original fildes, exactly as passed to the <i>lseek</i>(2)
@@ -128,8 +124,23 @@ long long explain_lseek_on_error(int fildes, long long offset, int whence)
   *     This function is <b>not</b> thread safe, because it shares a return
   *     buffer across all threads, and many other functions in this
   *     library.
+  *
+  * @par Example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * off_t result = lseek(fildes, offset, whence);
+  * if (result < 0)
+  * {
+  *     fprintf(stderr, "%s\n", explain_lseek(fildes, offset, whence));
+  *     exit(EXIT_FAILURE);
+  * }
+  * @endcode
+  * @par
+  * The above code example is available pre-packaged as the
+  * #explain_lseek_or_die function.
   */
-const char *explain_lseek(int fildes, long long offset, int whence)
+const char *explain_lseek(int fildes, off_t offset, int whence)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -138,21 +149,6 @@ const char *explain_lseek(int fildes, long long offset, int whence)
   * message will contain is the value of <tt>strerror(errnum)</tt>, but
   * usually it will do much better, and indicate the underlying cause in
   * more detail.
-  *
-  * This function is intended to be used in a fashion similar to the
-  * following example:
-  * @code
-  * if (lseek(fildes, offset, whence) == (off_t)-1)
-  * {
-  *     int err = errno;
-  *     fprintf(stderr, "%s\n", explain_errno_lseek(err, fildes, offset,
-  *         whence));
-  *     exit(EXIT_FAILURE);
-  * }
-  * @endcode
-  *
-  * The above code example is available pre-packaged as the
-  * #explain_lseek_or_die function.
   *
   * @param errnum
   *     The error value to be decoded, usually obtained from the errno
@@ -179,8 +175,25 @@ const char *explain_lseek(int fildes, long long offset, int whence)
   *     This function is <b>not</b> thread safe, because it shares a return
   *     buffer across all threads, and many other functions in this
   *     library.
+  *
+  * @par Example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * off_t result = lseek(fildes, offset, whence);
+  * if (result < 0)
+  * {
+  *     int err = errno;
+  *     fprintf(stderr, "%s\n", explain_errno_lseek(err, fildes, offset,
+  *         whence));
+  *     exit(EXIT_FAILURE);
+  * }
+  * @endcode
+  * @par
+  * The above code example is available pre-packaged as the
+  * #explain_lseek_or_die function.
   */
-const char *explain_errno_lseek(int errnum, int fildes, long long offset,
+const char *explain_errno_lseek(int errnum, int fildes, off_t offset,
     int whence)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
@@ -194,21 +207,6 @@ const char *explain_errno_lseek(int errnum, int fildes, long long offset,
   * The errno global variable will be used to obtain the error value to be
   * decoded.
   *
-  * This function is intended to be used in a fashion similar to the
-  * following example:
-  * @code
-  * if (lseek(fildes, offset, whence) == (off_t)-1)
-  * {
-  *     char message[3000];
-  *     explain_message_lseek(message, sizeof(message), fildes, offset, whence);
-  *     fprintf(stderr, "%s\n", message);
-  *     exit(EXIT_FAILURE);
-  * }
-  * @endcode
-  *
-  * The above code example is available pre-packaged as the
-  * #explain_lseek_or_die function.
-  *
   * @param message
   *     The location in which to store the returned message. If a suitable
   *     message return buffer is supplied, this function is thread safe.
@@ -224,9 +222,26 @@ const char *explain_errno_lseek(int errnum, int fildes, long long offset,
   * @param whence
   *     The original whence, exactly as passed to the <i>lseek</i>(2)
   *     system call.
+  *
+  * @par Example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * off_t result = lseek(fildes, offset, whence);
+  * if (result < 0)
+  * {
+  *     char message[3000];
+  *     explain_message_lseek(message, sizeof(message), fildes, offset, whence);
+  *     fprintf(stderr, "%s\n", message);
+  *     exit(EXIT_FAILURE);
+  * }
+  * @endcode
+  * @par
+  * The above code example is available pre-packaged as the
+  * #explain_lseek_or_die function.
   */
 void explain_message_lseek(char *message, int message_size, int fildes,
-    long long offset, int whence);
+    off_t offset, int whence);
 
 /**
   * The explain_message_errno_lseek function is used to obtain an
@@ -234,23 +249,6 @@ void explain_message_lseek(char *message, int message_size, int fildes,
   * The least the message will contain is the value of
   * <tt>strerror(errnum)</tt>, but usually it will do much better, and
   * indicate the underlying cause in more detail.
-  *
-  * This function is intended to be used in a fashion similar to the
-  * following example:
-  * @code
-  * if (lseek(fildes, offset, whence) == (off_t)-1)
-  * {
-  *     int err = errno;
-  *     char message[3000];
-  *     explain_message_errno_lseek(message, sizeof(message), err, fildes,
-  *         offset, whence);
-  *     fprintf(stderr, "%s\n", message);
-  *     exit(EXIT_FAILURE);
-  * }
-  * @endcode
-  *
-  * The above code example is available pre-packaged as the
-  * #explain_lseek_or_die function.
   *
   * @param message
   *     The location in which to store the returned message. If a suitable
@@ -273,9 +271,28 @@ void explain_message_lseek(char *message, int message_size, int fildes,
   * @param whence
   *     The original whence, exactly as passed to the <i>lseek</i>(2)
   *     system call.
+  *
+  * @par Example:
+  * This function is intended to be used in a fashion similar to the
+  * following example:
+  * @code
+  * off_t result = lseek(fildes, offset, whence);
+  * if (result < 0)
+  * {
+  *     int err = errno;
+  *     char message[3000];
+  *     explain_message_errno_lseek(message, sizeof(message), err, fildes,
+  *         offset, whence);
+  *     fprintf(stderr, "%s\n", message);
+  *     exit(EXIT_FAILURE);
+  * }
+  * @endcode
+  * @par
+  * The above code example is available pre-packaged as the
+  * #explain_lseek_or_die function.
   */
 void explain_message_errno_lseek(char *message, int message_size, int errnum,
-    int fildes, long long offset, int whence);
+    int fildes, off_t offset, int whence);
 
 #ifdef __cplusplus
 }

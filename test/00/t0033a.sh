@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008-2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,21 @@
 TEST_SUBJECT="write vs ENOSPC"
 . test_prelude
 
-fmt > test.ok << 'fubar'
-write(fildes = 1, data = 0x00000123, data_size = 1110) failed, No space
-left on device (ENOSPC) because the file system containing the file
-("/example", 99% full) has no room for the data
+fmt > test.ok.1 << 'fubar'
+write(fildes = 1, data = 0x09876543, data_size = 1110) failed, No
+space left on device (ENOSPC) because the file system containing fildes
+("/example", 99% full) has no more space for data
 fubar
 test $? -eq 0 || no_result
 
-explain -e ENOSPC write 1 0x123 0x456 > test.out.narrow
+fmt > test.ok.2 << 'fubar'
+write(fildes = 1, data = 0x09876543, data_size = 1110) failed, No space
+left on device (ENOSPC) because the file system containing fildes has
+no more space for data
+fubar
+test $? -eq 0 || no_result
+
+explain -e ENOSPC write 1 0x9876543 0x456 > test.out.narrow
 test $? -eq 0 || fail
 
 fmt -w300 test.out.narrow > test.out.wide
@@ -42,7 +49,9 @@ test $? -eq 0 || no_result
 fmt test.out.cooked > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out
+diff test.ok.1 test.out > /dev/null 2>/dev/null && pass
+
+diff test.ok.2 test.out
 test $? -eq 0 || fail
 
 #

@@ -137,6 +137,7 @@ explain_buffer_sockaddr_af_inet(explain_string_buffer_t *sb,
 
 
 #ifdef AF_AX25
+#ifdef HAVE_LINUX_X25_H
 
 static void
 explain_buffer_sockaddr_af_ax25(explain_string_buffer_t *sb,
@@ -151,6 +152,7 @@ explain_buffer_sockaddr_af_ax25(explain_string_buffer_t *sb,
     /* file /usr/include/netax25/ax25.h */
 }
 
+#endif
 #endif
 
 #ifdef AF_IPX
@@ -222,6 +224,7 @@ explain_buffer_sockaddr_af_bridge(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_ATMPVC
+#ifdef HAVE_LINUX_ATM_H
 
 static void
 explain_buffer_sockaddr_af_atmpvc(explain_string_buffer_t *sb,
@@ -236,8 +239,10 @@ explain_buffer_sockaddr_af_atmpvc(explain_string_buffer_t *sb,
 }
 
 #endif
+#endif
 
 #ifdef AF_X25
+#ifdef HAVE_LINUX_X25_H
 
 /*
  * See x25(7) for more information.
@@ -251,6 +256,7 @@ explain_buffer_sockaddr_af_x25(explain_string_buffer_t *sb,
     explain_string_buffer_puts_quoted(sb, sa->sx25_addr.x25_addr);
 }
 
+#endif
 #endif
 
 #ifdef AF_INET6
@@ -421,6 +427,7 @@ explain_buffer_sockaddr_af_key(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_NETLINK
+#ifdef HAVE_LINUX_NETLINK_H
 
 static void
 explain_buffer_sockaddr_af_netlink(explain_string_buffer_t *sb,
@@ -434,6 +441,7 @@ explain_buffer_sockaddr_af_netlink(explain_string_buffer_t *sb,
     /* file /usr/include/linux/netlink.h */
 }
 
+#endif
 #endif
 
 #ifdef AF_PACKET
@@ -503,6 +511,7 @@ explain_buffer_sockaddr_af_econet(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_ATMSVC
+#ifdef HAVE_LINUX_ATM_H
 
 static void
 explain_buffer_sockaddr_af_atmsvc(explain_string_buffer_t *sb,
@@ -515,6 +524,7 @@ explain_buffer_sockaddr_af_atmsvc(explain_string_buffer_t *sb,
     explain_buffer_hexdump(sb, sa, sa_len);
 }
 
+#endif
 #endif
 
 #ifdef AF_SNA
@@ -533,6 +543,7 @@ explain_buffer_sockaddr_af_sna(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_IRDA
+#ifdef HAVE_LINUX_IRDA_H
 
 static void
 explain_buffer_sockaddr_af_irda(explain_string_buffer_t *sb,
@@ -546,8 +557,10 @@ explain_buffer_sockaddr_af_irda(explain_string_buffer_t *sb,
 }
 
 #endif
+#endif
 
 #ifdef AF_PPPOX
+#ifdef HAVE_LINUX_IF_PPPOX_H
 
 static void
 explain_buffer_sockaddr_af_pppox(explain_string_buffer_t *sb,
@@ -561,6 +574,7 @@ explain_buffer_sockaddr_af_pppox(explain_string_buffer_t *sb,
     /* file /usr/include/linux/if_pppox.h */
 }
 
+#endif
 #endif
 
 #ifdef AF_WANPIPE
@@ -667,6 +681,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
         break;
 
 #ifdef AF_AX25
+#ifdef HAVE_LINUX_X25_H
     case AF_AX25:
         explain_buffer_sockaddr_af_ax25
         (
@@ -675,6 +690,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
             sa_len
         );
         break;
+#endif
 #endif
 
 #ifdef AF_IPX
@@ -712,6 +728,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_ATMPVC
+#ifdef HAVE_LINUX_ATM_H
     case AF_ATMPVC:
         explain_buffer_sockaddr_af_atmpvc
         (
@@ -721,8 +738,10 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
         );
         break;
 #endif
+#endif
 
 #ifdef AF_X25
+#ifdef HAVE_LINUX_X25_H
     case AF_X25:
         explain_buffer_sockaddr_af_x25
         (
@@ -731,6 +750,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
             sa_len
         );
         break;
+#endif
 #endif
 
 #ifdef AF_INET6
@@ -780,6 +800,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_NETLINK
+#ifdef HAVE_LINUX_NETLINK_H
     case AF_NETLINK:
  /* case AF_ROUTE: */
         explain_buffer_sockaddr_af_netlink
@@ -789,6 +810,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
             sa_len
         );
         break;
+#endif
 #endif
 
 #ifdef AF_PACKET
@@ -825,6 +847,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_ATMSVC
+#ifdef HAVE_LINUX_ATM_H
     case AF_ATMSVC:
         explain_buffer_sockaddr_af_atmsvc
         (
@@ -834,6 +857,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
         );
         break;
 #endif
+#endif
 
 #ifdef AF_SNA
     case AF_SNA:
@@ -842,6 +866,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
 #endif
 
 #ifdef AF_IRDA
+#ifdef HAVE_LINUX_IRDA_H
     case AF_IRDA:
         explain_buffer_sockaddr_af_irda
         (
@@ -851,8 +876,10 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
         );
         break;
 #endif
+#endif
 
 #ifdef AF_PPPOX
+#ifdef HAVE_LINUX_IF_PPPOX_H
     case AF_PPPOX:
         explain_buffer_sockaddr_af_pppox
         (
@@ -861,6 +888,7 @@ explain_buffer_sockaddr(explain_string_buffer_t *sb,
             sa_len
         );
         break;
+#endif
 #endif
 
 #ifdef AF_WANPIPE

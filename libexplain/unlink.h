@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -72,8 +72,7 @@ void explain_unlink_or_die(const char *pathname);
   * @returns
   *     The value returned by the wrapped <i>unlink</i>(2) system call.
   */
-int explain_unlink_on_error(const char *pathname)
-                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+int explain_unlink_on_error(const char *pathname);
 
 /**
   * The explain_unlink function is used to obtain an explanation of an

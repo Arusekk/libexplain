@@ -23,6 +23,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef MTIOCPOS
+
 void
 explain_buffer_mtpos(explain_string_buffer_t *sb,
     const struct mtpos *data)
@@ -39,3 +41,14 @@ explain_buffer_mtpos(explain_string_buffer_t *sb,
         );
     }
 }
+
+#else
+
+void
+explain_buffer_mtpos(explain_string_buffer_t *sb,
+    const struct mtpos *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

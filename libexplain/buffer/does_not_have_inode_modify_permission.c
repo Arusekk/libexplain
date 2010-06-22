@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,8 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/stat.h>
 
 #include <libexplain/buffer/caption_name_type.h>
@@ -28,6 +29,7 @@
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/uid.h>
 #include <libexplain/dirname.h>
+#include <libexplain/name_max.h>
 
 
 void
@@ -80,7 +82,7 @@ process_does_not_match_the_owner_uid(explain_string_buffer_t *sb,
          * permission" message, explaining that the process effective UID
          * must match the file owner UID.
          *
-         * %1$s => thekind of UID, eother "real UID" or "effective UID"
+         * %1$s => the kind of UID, either "real UID" or "effective UID",
          *         already translated
          * %2$s => the numeric UID of the process, and the corresponding
          *         login name from the password file, if available.

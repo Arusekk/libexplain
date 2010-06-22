@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/sys/mount.h>
 #include <libexplain/ac/sys/statfs.h>
 
 #include <libexplain/fstatfs.h>

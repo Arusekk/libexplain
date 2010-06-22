@@ -24,62 +24,16 @@
 #include <libexplain/ac/netrose/rose.h>
 
 #include <libexplain/buffer/hexdump.h>
+#include <libexplain/buffer/int.h>
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/route_struct.h>
+#include <libexplain/buffer/rtentry.h>
 #include <libexplain/buffer/sockaddr.h>
 #include <libexplain/fildes_to_address_family.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/sizeof.h>
-
-
-static void
-explain_buffer_rtentry_flags(explain_string_buffer_t *sb, int flags)
-{
-    static const explain_parse_bits_table_t table[] =
-    {
-        { "RTF_UP", RTF_UP },
-        { "RTF_GATEWAY", RTF_GATEWAY },
-        { "RTF_HOST", RTF_HOST },
-        { "RTF_REINSTATE", RTF_REINSTATE },
-        { "RTF_DYNAMIC", RTF_DYNAMIC },
-        { "RTF_MODIFIED", RTF_MODIFIED },
-        { "RTF_MTU", RTF_MTU },
-        { "RTF_WINDOW", RTF_WINDOW },
-        { "RTF_IRTT", RTF_IRTT },
-        { "RTF_REJECT", RTF_REJECT },
-    };
-
-    explain_parse_bits_print(sb, flags, table, SIZEOF(table));
-}
-
-
-static void
-explain_buffer_rtentry(explain_string_buffer_t *sb,
-    const struct rtentry *data)
-{
-    if (explain_pointer_is_efault(data, sizeof(*data)))
-    {
-        explain_buffer_pointer(sb, data);
-        return;
-    }
-
-    explain_string_buffer_puts(sb, "{ rt_dst = ");
-    explain_buffer_sockaddr(sb, &data->rt_dst, sizeof(data->rt_dst));
-    explain_string_buffer_puts(sb, ", rt_gateway = ");
-    explain_buffer_sockaddr(sb, &data->rt_gateway, sizeof(data->rt_gateway));
-    explain_string_buffer_puts(sb, ", rt_genmask = ");
-    explain_buffer_sockaddr(sb, &data->rt_genmask, sizeof(data->rt_genmask));
-    explain_string_buffer_puts(sb, ", rt_flags = ");
-    explain_buffer_rtentry_flags(sb, data->rt_flags);
-    explain_string_buffer_printf(sb, ", rt_metric = %d, ", data->rt_metric);
-    explain_string_buffer_puts(sb, "rt_dev = ");
-    explain_buffer_pathname(sb, data->rt_dev);
-    explain_string_buffer_printf(sb, ", rt_mtu = %ld, ", data->rt_mtu);
-    explain_string_buffer_printf(sb, ", rt_mtu = %lu, ", data->rt_window);
-    explain_string_buffer_printf(sb, ", rt_mtu = %u }", data->rt_irtt);
-}
 
 
 #ifdef HAVE_NETAX25_AX25_H
@@ -189,7 +143,7 @@ explain_buffer_nr_route_struct(explain_string_buffer_t *sb,
 }
 
 #endif
-
+#ifdef __linux__
 
 static void
 explain_buffer_in6_addr(explain_string_buffer_t *sb,
@@ -210,20 +164,36 @@ explain_buffer_rtmsg_type(explain_string_buffer_t *sb,
     {
 #if 0
         /*
-         * These are defined, but in terms of symbols are are NOT
+         * These are defined, but in terms of symbols that are are NOT
          * defined.  Sheesh.
          */
         { "RTMSG_ACK", RTMSG_ACK },
         { "RTMSG_OVERRUN", RTMSG_OVERRUN },
 #endif
+#ifdef RTMSG_NEWDEVICE
         { "RTMSG_NEWDEVICE", RTMSG_NEWDEVICE },
+#endif
+#ifdef RTMSG_DELDEVICE
         { "RTMSG_DELDEVICE", RTMSG_DELDEVICE },
+#endif
+#ifdef RTMSG_NEWROUTE
         { "RTMSG_NEWROUTE", RTMSG_NEWROUTE },
+#endif
+#ifdef RTMSG_DELROUTE
         { "RTMSG_DELROUTE", RTMSG_DELROUTE },
+#endif
+#ifdef RTMSG_NEWRULE
         { "RTMSG_NEWRULE", RTMSG_NEWRULE },
+#endif
+#ifdef RTMSG_DELRULE
         { "RTMSG_DELRULE", RTMSG_DELRULE },
+#endif
+#ifdef RTMSG_CONTROL
         { "RTMSG_CONTROL", RTMSG_CONTROL },
+#endif
+#ifdef RTMSG_AR_FAILED
         { "RTMSG_AR_FAILED", RTMSG_AR_FAILED },
+#endif
     };
 
     explain_parse_bits_print(sb, data, table, SIZEOF(table));
@@ -313,6 +283,7 @@ explain_buffer_in6_rtmsg(explain_string_buffer_t *sb,
     );
 }
 
+#endif
 #ifdef HAVE_NETROSE_ROSE_H
 
 static void
@@ -440,9 +411,11 @@ explain_buffer_route_struct(explain_string_buffer_t *sb, int fildes,
         break;
 #endif
 
+#ifdef __linux__
     case AF_INET6:
         explain_buffer_in6_rtmsg(sb, data);
         break;
+#endif
 
 #ifdef HAVE_NETROM_NETROM_H
     case AF_NETROM:

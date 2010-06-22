@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/net/if.h>
 
 #include <libexplain/buffer/ifreq_hwaddr.h>
 #include <libexplain/buffer/pointer.h>
@@ -47,6 +48,10 @@ const explain_iocontrol_t explain_iocontrol_siocaddmulti =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(struct ifreq), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef SIOCADDMULTI */
@@ -59,6 +64,10 @@ const explain_iocontrol_t explain_iocontrol_siocaddmulti =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* SIOCADDMULTI */

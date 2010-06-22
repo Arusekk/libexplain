@@ -48,4 +48,7 @@
 void explain_buffer_errno_mkdir(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int mode);
 
+void explain_buffer_errno_mkdir_explanation(explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, const char *pathname, int mode);
+
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_MKDIR_H */

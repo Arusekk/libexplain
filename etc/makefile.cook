@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,6 +32,7 @@ else
 
 check-tarball: etc/check-tarball.sh web-site/[project_minus].tar.gz
 {
+    set no-silent;
     sh [resolve etc/check-tarball.sh web-site/[project_minus].tar.gz];
 }
 
@@ -62,6 +63,7 @@ source_file_order =
      */
     etc/ref-parts.so
     etc/new.so
+    etc/coverage.so
 
     /*
      * For pkg-config
@@ -77,20 +79,35 @@ source_file_order =
 web-site/%.tar.gz: [source_file_order] debian/control
     set shallow ingredients-fingerprint
 {
+    if [not [verbose]] then
+        function print TAR [target];
+
     if [exists web-site/%.tar] then
         rm web-site/%.tar
             set clearstat;
-    [tar-cmd] --create --file - --dereference
-            [resolve [sort [source_file_order]]]
-	    debian/changelog
-	    debian/compat
-	    debian/control
-	    debian/rules
-	    'debian/*.install'
-        | tardy -unu 0 -gnu 0 -una Peter -gna Miller
-            -p % -ms 0644 -mc 07022 -now
-            [prepost "-rp=" "" [search_list]]
+    [tar-cmd] --create --file web-site/%.tmp --dereference --files-from\=- ;
+data
+[unsplit "\n"
+    [resolve
+        [sort
+            [source_file_order]
+            debian/changelog
+            debian/compat
+            debian/control
+            debian/rules
+        ]
+    ]
+    [glob 'debian/*.install' ]
+]
+dataend
+
+    tardy -unu 0 -gnu 0 -una Peter -gna Miller
+        -p % -ms 0644 -mc 07022 -now
+        [prepost "-rp=" "" [search_list]]
+        < web-site/%.tmp
         > web-site/%.tar;
+    rm web-site/%.tmp
+        set silent;
     gzip -9 -v web-site/%.tar;
 }
 
@@ -104,6 +121,9 @@ vs_file = libexplain/patchlevel.h;
 [vs_file]:
     set shallow
 {
+    if [not [verbose]] then
+        function print GEN [target];
+
     echo "'#define PATCHLEVEL \""[version]"\"'"
         > [target];
     aesub -p [project] -c [change]
@@ -117,6 +137,9 @@ aemakegen = aemakegen;
 
 Makefile.in: [source_files]
 {
+    if [not [verbose]] then
+        function print GEN [target];
+
     [aemakegen] -p [project] -c [change] -o [target]
         libdir/pkgconfig/[project_short].pc.in
         ;
@@ -126,6 +149,9 @@ Makefile.in: [source_files]
 etc/version.so:
     set shallow
 {
+    if [not [verbose]] then
+        function print GEN [target];
+
     aesub "'.ds v) ${project version}'" > [target];
     aesub "'.ds V) ${version}'" >> [target];
     aesub "'.ds Y) ${copyright_years}'" >> [target];
@@ -137,6 +163,9 @@ debian/libexplain-dev.install
 debian/changelog: [source_files]
     set shallow
 {
+    if [not [verbose]] then
+        function print DEB [target];
+
     /* This actually makes more files than just debian/control */
     [aemakegen] -p [project] -c [change] --target\=debian
         libdir/pkgconfig/[project_short].pc.in
@@ -156,9 +185,13 @@ if [in [fromto %1D%2 %2 [version]] 001 002 003 004] then
     integration-build-targets += debian-package;
 }
 
+web-site/debian/build.sh
 debian-package: web-site/[project_minus].tar.gz bin/test_user
     debian/changelog
 {
+    if [not [verbose]] then
+        function print PKG [project_minus];
+
     local vsn = [collect head -1 [resolve debian/changelog]
                          | sed "'s|.*(\\([^()]*\\).*|\\1|'" ];
     vsn = [fromto %-1 % [vsn]];
@@ -199,16 +232,36 @@ debian-package: web-site/[project_minus].tar.gz bin/test_user
     rm -rf [project_minus] &&
     lintian -iIv --pedantic *.changes
     ;
+
+    cat > web-site/debian/build.sh;
+data
+#!/bin/sh
+version="[vsn]"
+set -e
+set -x
+rm -rf libexplain-${version}
+tar xzf libexplain_${version}.orig.tar.gz
+zcat libexplain_${version}-1.diff.gz | patch -p0
+cd libexplain-${version}
+chmod a+rx debian/rules
+dpkg-buildpackage -rfakeroot
+dataend
 }
 
 libdir/pkgconfig/[project_short].pc.in: [source_files]
 {
+    if [not [verbose]] then
+        function print GEN [target];
+
     [aemakegen] -p\=[project] -c\=[change] --target\=pkg-config
             > [target];
 }
 
 libexplain/public_config.h: etc/large.awk libexplain/config.h
 {
+    if [not [verbose]] then
+        function print GEN [target];
+
     awk -f [resolve etc/large.awk libexplain/config.h] > [target];
 }
 

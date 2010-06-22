@@ -18,29 +18,62 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/sys/stat.h>
 
-#include <libexplain/buffer/int.h>
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocinq.h>
 
+#ifdef TIOCINQ
 
-static void
-print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
-    int errnum, int fildes, int request, const void *data)
+
+static int
+disambiguate(int fildes, int request, const void *data)
 {
-    (void)p;
-    (void)errnum;
-    (void)fildes;
+    struct stat     st;
+
+    /* success = 0, failure = -1 */
     (void)request;
-    explain_buffer_int_star(sb, data);
+    (void)data;
+    if (fstat(fildes, &st) >= 0 && S_ISCHR(st.st_mode))
+        return 0;
+    return -1;
 }
 
 
+/*
+ * We have conflicts...
+ * SIOCINQ - sockets only
+ * TIOCINQ - terminals only
+ * FIONREAD - everything else
+ */
 const explain_iocontrol_t explain_iocontrol_tiocinq =
 {
     "TIOCINQ", /* name */
     TIOCINQ, /* value */
+    disambiguate,
+    0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    explain_iocontrol_generic_print_data_int_star, /* print_data_returned */
+    sizeof(int), /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocinq =
+{
+    0, /* name */
+    0, /* value */
     0, /* disambiguate */
     0, /* print_name */
-    print_data,
+    0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,20 +20,23 @@
 #ifndef LIBEXPLAIN_ERRNO_INFO_H
 #define LIBEXPLAIN_ERRNO_INFO_H
 
+#include <libexplain/ac/stddef.h>
+
 /**
   * The explain_errno_info_t type describes an errno value, and its
   * (macro) name.
   *
-  * The table does NOT contain the strerror() translation bause, (a)
-  * that would be redundant, and (b) strerror generously translate
-  * according to locale, and that is something we don't want to
-  * duplicate, either.
+  * While the tables contains a description string, it is only used if
+  * the "internal-strerror=true" option is set.  It is principally of
+  * use for automated testing, to elimitate differences between Unix
+  * implimentations.
   */
 typedef struct explain_errno_info_t explain_errno_info_t;
 struct explain_errno_info_t
 {
     int error_number;
     const char *name;
+    const char *description;
 };
 
 /**
@@ -94,5 +97,31 @@ const explain_errno_info_t *explain_errno_info_by_text(const char *text);
   */
 const explain_errno_info_t *explain_errno_info_by_text_fuzzy(
     const char *text);
+
+/**
+  * The explain_internal_strerror method may be used to obtain
+  * a string corresponding to an error number.  It honors the
+  * #explain_option_internal_strerror flag.
+  *
+  * @returns
+  *     on failure, NULL if the error number os unknown; or
+  *     on success, a pointer to a string that may not bee altered or free()ed.
+  */
+const char *explain_internal_strerror(int n);
+
+/**
+  * The explain_internal_strerror_r method may be used to obtain
+  * a string corresponding to an error number.  It honors the
+  * #explain_option_internal_strerror flag.
+  *
+  * @param errnum
+  *     The error number to describe
+  * @param data
+  *     The array in which to return the result.
+  * @param data_size
+  *     The maximum size of thereturned string, including the
+  *     terminating NUL character.
+  */
+void explain_internal_strerror_r(int errnum, char *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_ERRNO_INFO_H */

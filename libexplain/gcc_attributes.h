@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,13 +21,11 @@
 #define LIBEXPLAIN_GCC_ATTRIBUTES_H
 
 #ifdef __GNUC__
-#define LIBEXPLAIN_FORMAT_PRINTF(x, y) __attribute__((format(printf, x, y)))
-#define NORETURN __attribute__((noreturn))
-#define LINKAGE_HIDDEN __attribute__((visibility("hidden")))
+#define LIBEXPLAIN_NORETURN __attribute__((noreturn))
+#define LIBEXPLAIN_LINKAGE_HIDDEN __attribute__((visibility("hidden")))
 #else
-#define LIBEXPLAIN_FORMAT_PRINTF(x, y)
-#define NORETURN
-#define LINKAGE_HIDDEN
+#define LIBEXPLAIN_NORETURN
+#define LIBEXPLAIN_LINKAGE_HIDDEN
 #endif
 
 #endif /* LIBEXPLAIN_GCC_ATTRIBUTES_H */

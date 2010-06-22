@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,7 +21,10 @@
 #include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/eloop.h>
+#include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
+#include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
@@ -46,9 +49,10 @@ explain_buffer_errno_utime_system_call(explain_string_buffer_t *sb,
 }
 
 
-static void
+void
 explain_buffer_errno_utime_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, const struct utimbuf *times)
+    int errnum, const char *syscall_name, const char *pathname,
+    const struct utimbuf *times)
 {
     explain_final_t final_component;
 
@@ -70,29 +74,36 @@ explain_buffer_errno_utime_explanation(explain_string_buffer_t *sb,
         explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
-    case EPERM:
-        /*
-         * if times is not NULL, change as given,
-         * but need inode modify permission
-         * */
-        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
-        break;
-
     case EFAULT:
         if (explain_path_is_efault(pathname))
-        {
             explain_buffer_efault(sb, "pathname");
-            break;
-        }
-        if (explain_pointer_is_efault(times, sizeof(*times)))
-        {
+        else
             explain_buffer_efault(sb, "times");
-            break;
-        }
+        break;
+
+    case ELOOP:
+    case EMLINK:
+        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        break;
+
+    case ENAMETOOLONG:
+        explain_buffer_enametoolong(sb, pathname, "pathname", &final_component);
         break;
 
     case ENOENT:
         explain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        break;
+
+    case ENOTDIR:
+        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        break;
+
+    case EPERM:
+        /*
+         * If times is not NULL, change as given,
+         * but need inode modify permission
+         */
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     case EROFS:
@@ -100,7 +111,7 @@ explain_buffer_errno_utime_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -124,6 +135,7 @@ explain_buffer_errno_utime(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "utime",
         pathname,
         times
     );

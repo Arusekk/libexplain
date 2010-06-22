@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="getsockname EBADF"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-getsockname(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = { 128 })
+getsockname(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = { XXX })
 failed, Bad file descriptor (EBADF) because fildes does not refer to an
 open file; this is more likely to be a software error (a bug) than it is to
 be a user error
@@ -35,7 +35,9 @@ test $? -eq 0 || fail
 fmt -w700 test.out.4 > test.out.3
 test $? -eq 0 || no_result
 
-sed 's|sock_addr = [^,)]*|sock_addr = 0xNNNNNNNN|' < test.out.3 > test.out.2
+sed -e 's|0x[0-9a-fA-F][0-9a-fA-F]*|0xNNNNNNNN|g' \
+    -e 's|size = { [0-9]* }|size = { XXX }|g' \
+    test.out.3 > test.out.2
 test $? -eq 0 || no_result
 
 fmt test.out.2 > test.out

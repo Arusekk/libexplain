@@ -22,9 +22,9 @@
 
 #include <libexplain/buffer/errno/creat.h>
 #include <libexplain/buffer/errno/open.h>
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
-#include <libexplain/permission_mode.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -50,7 +50,15 @@ explain_buffer_errno_creat_explanation(explain_string_buffer_t *sb,
     int             flags;
 
     flags = O_WRONLY | O_CREAT | O_TRUNC;
-    explain_buffer_errno_open_explanation(sb, errnum, pathname, flags, mode);
+    explain_buffer_errno_open_explanation
+    (
+        sb,
+        errnum,
+        "creat",
+        pathname,
+        flags,
+        mode
+    );
 }
 
 

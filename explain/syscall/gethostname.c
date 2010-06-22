@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -20,8 +20,11 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/gethostname.h>
+#include <libexplain/host_name_max.h>
+#include <libexplain/malloc.h>
 #include <libexplain/strtol.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -31,12 +34,11 @@
 void
 explain_syscall_gethostname(int errnum, int argc, char **argv)
 {
-    char            buffer[HOST_NAME_MAX];
     char            *data;
     size_t          data_size;
 
-    data = buffer;
-    data_size = sizeof(buffer);
+    data_size = explain_get_host_name_max() + 1;
+    data = explain_malloc_or_die(data_size);
     switch (argc)
     {
     case 0:

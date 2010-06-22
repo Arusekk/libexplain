@@ -21,9 +21,25 @@
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/loff_t.h>
 #include <libexplain/buffer/wrong_file_type.h>
 #include <libexplain/iocontrol/fioqsize.h>
 #include <libexplain/iocontrol/generic.h>
+
+
+#ifdef FIOQSIZE
+
+static void
+print_data_returned(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_loff_t_star(sb, data);
+}
 
 
 static void
@@ -80,6 +96,28 @@ const explain_iocontrol_t explain_iocontrol_fioqsize =
     FIOQSIZE, /* value */
     0, /* disambiguate */
     0, /* print_name */
-    0, /* print_data */
-    print_explanation
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    print_explanation,
+    print_data_returned,
+    sizeof(loff_t), /* data_size */
+    __FILE__,
+    __LINE__
 };
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_fioqsize =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
+    0, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__
+};
+
+#endif

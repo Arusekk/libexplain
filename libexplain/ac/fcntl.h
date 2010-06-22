@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_FCNTL_H
 #define LIBEXPLAIN_AC_FCNTL_H
 
+/**
+  * @file
+  * @brief Insulate <fcntl.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_FCNTL_H
@@ -41,6 +46,15 @@
  */
 #ifndef O_DIRECTORY
 #define O_DIRECTORY 0x40000000
+#endif
+
+/*
+ * Even when O_LARGEFILE is not necessary, glibc adds one in for free.
+ * The trouble is that this make things interesting when decoding
+ * flags values returned by the kernel.
+ */
+#if defined(__linux__) && (O_LARGEFILE == 0)
+#define O_LARGEFILE_HIDDEN 0100000
 #endif
 
 #endif /* LIBEXPLAIN_AC_FCNTL_H */

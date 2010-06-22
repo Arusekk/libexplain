@@ -42,6 +42,10 @@ file_template =
         body = "${read_file ${source etc/template/lib_c abs}}";
     },
     {
+        pattern = [ "*.c", "*.cook" ];
+        body = "${read_file ${source etc/template/lib_c abs}}";
+    },
+    {
         pattern = [ "*.[cyl]" ];
         body = "${read_file ${source etc/template/c abs}}";
     },
@@ -88,6 +92,10 @@ file_template =
     {
         pattern = [ "*.so", "*.ms", "*.me" ];
         body = "${read_file ${source etc/template/ms abs}}";
+    },
+    {
+        pattern = [ "*.html" ];
+        body = "${read_file ${source etc/template/html abs}}";
     },
     {
         pattern = [ "*" ];

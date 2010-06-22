@@ -37,7 +37,7 @@ explain_buffer_errno_fork_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_fork_explanation(explain_string_buffer_t *sb,
-    int errnum)
+    int errnum, const char *syscall_name)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/fork.html
@@ -123,7 +123,7 @@ explain_buffer_errno_fork_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -135,15 +135,7 @@ explain_buffer_errno_fork(explain_string_buffer_t *sb, int errnum)
     explain_explanation_t exp;
 
     explain_explanation_init(&exp, errnum);
-    explain_buffer_errno_fork_system_call
-    (
-        &exp.system_call_sb,
-        errnum
-    );
-    explain_buffer_errno_fork_explanation
-    (
-        &exp.explanation_sb,
-        errnum
-    );
+    explain_buffer_errno_fork_system_call(&exp.system_call_sb, errnum);
+    explain_buffer_errno_fork_explanation(&exp.explanation_sb, errnum, "fork");
     explain_explanation_assemble(&exp, sb);
 }

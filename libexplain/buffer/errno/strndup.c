@@ -43,7 +43,13 @@ explain_buffer_errno_strndup_explanation(explain_string_buffer_t *sb, int
     errnum, const char *data, size_t data_size)
 {
     (void)data;
-    explain_buffer_errno_malloc_explanation(sb, errnum, data_size + 1);
+    explain_buffer_errno_malloc_explanation
+    (
+        sb,
+        errnum,
+        "strndup",
+        data_size + 1
+    );
 }
 
 

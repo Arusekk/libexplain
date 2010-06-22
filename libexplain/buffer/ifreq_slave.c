@@ -46,6 +46,7 @@ explain_buffer_ifreq_slave(explain_string_buffer_t *sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
+#ifdef ifr_slave
         explain_string_buffer_puts(sb, ", ifr_slave = ");
         explain_string_buffer_puts_quoted_n
         (
@@ -53,6 +54,7 @@ explain_buffer_ifreq_slave(explain_string_buffer_t *sb,
             ifr->ifr_slave,
             sizeof(ifr->ifr_slave)
         );
+#endif
         explain_string_buffer_puts(sb, " }");
     }
 }

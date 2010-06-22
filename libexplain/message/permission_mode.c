@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/permission_mode.h>
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/string_buffer.h>
 
 

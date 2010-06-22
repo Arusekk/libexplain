@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@ TEST_SUBJECT="gettimeofday EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-gettimeofday(tv = 0x12345678, tz = NULL) failed, Bad address (EFAULT)
+gettimeofday(tv = 0x09876543, tz = NULL) failed, Bad address (EFAULT)
 because tv refers to memory that is outside the process's accessible
 address space; this is more likely to be a software error (a bug) than it
 is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT gettimeofday 0x12345678 0 > test.out
+explain -eEFAULT gettimeofday 0x9876543 0 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -20,7 +20,9 @@
 .TH explain_freopen_or_die 3
 .SH NAME
 explain_freopen_or_die \- open file and report errors
+.if require_index \{
 .XX "explain_freopen_or_die(3)" "open file and report errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/freopen.h>
 .br
@@ -57,6 +59,7 @@ Only ever return on success.
 Never returns on failure.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

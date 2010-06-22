@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_SYS_IOCTL_H
 #define LIBEXPLAIN_AC_SYS_IOCTL_H
 
+/**
+  * @file
+  * @brief Insulate <sys/ioctl.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_SYS_IOCTL_H

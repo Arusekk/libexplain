@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-integration-build-targets +=
+integration-build-targets += web;
+all += web;
+
+web:
     [fromto web-src/%0% web-site/%0%
         [match_mask web-src/%0%.html [source_files]]
     ]
@@ -33,29 +36,40 @@ integration-build-targets +=
     web-site/fixme.html
     web-site/[project_minus].README
     web-site/[project_minus].pdf
+    web-site/lca2010/lca2010.pdf
     ;
 
+web-site/lca2010/lca2010.pdf: man/pdf1/explain_lca2010.pdf
+{
+    cp [resolve [need]] [target];
+}
 
-web-src/%.html.d: web-src/%.html
+web-src/%0%.html.d: web-src/%0%.html
         set no-cascade
 {
     c_incl -nc -ns -eia -r -nrec
         [addprefix "-I" [search_list]]
-        -prefix "'cascade web-src/"%".html ='"
+        -prefix "'cascade web-src/"%0%".html ='"
         -suffix "';'"
-        [resolve web-src/%.html]
+        [resolve web-src/%0%.html]
         [prepost "-rlp=" "" [search_list]] /* remove leading path */
         -o [target];
 }
 
-#include-cooked [addsuffix ".d" [match_mask web-src/%.html [source_files]]]
+web-deps =
+    [addsuffix ".d" [match_mask web-src/%0%.html [source_files]]]
+    ;;
+#include-cooked-nowarn [web-deps]
 
-web-site/%.html: web-src/%.html: etc/version.so
+web-site/%0%.html: web-src/%0%.html: etc/version.so
     set shallow
 {
+    if [not [verbose]] then
+            function print VAL [target];
+
     roffpp
         [addprefix "-I" [search_list]]
-        [resolve web-src/%.html]
+        [resolve web-src/%0%.html]
     | groff -Tascii -t -P-bcu -man
     > [target];
     validate [target];
@@ -67,21 +81,25 @@ web-site/%.html: web-src/%.html: etc/version.so
     uudecode -o [target] [resolve %0%.uue];
 }
 
-web-src/%1.%2.png: web-src/%1.png
+web-src/%0%1.%2.png: web-src/%0%1.png
 {
-    convert [resolve web-src/%1.png] -scale %2 [target];
+    convert [resolve web-src/%0%1.png] -scale %2 [target];
 }
 
-web-site/%.png: web-src/%.png
+web-site/%0%.png: web-src/%0%.png
     set shallow
 {
-    cp [resolve web-src/%.png] [target];
+    cp [resolve web-src/%0%.png] [target];
 }
 
 
-web-site/fixme.html: [source_files]
+web-site/fixme.html: [source_files] bin/fixme-html
 {
-    awk -f [resolve web-src/fixme.awk [source_files]] > [target];
+    function print "GEN "[target];
+    [resolve bin/fixme-html] -o [target] -F-;
+data
+[unsplit "\n" [resolve [source_files]]]
+dataend
 }
 
 web-site/[project_minus].README: README

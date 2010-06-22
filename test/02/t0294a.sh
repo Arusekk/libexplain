@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="select EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-select(nfds = 42, readfds = 0x3ADE68B1, writefds = 0x0BD8EB78, exceptfds =
+select(nfds = 42, readfds = 0x09876543, writefds = 0x0BD8EB78, exceptfds =
 {}, timeout = { 60 seconds }) failed, Bad address (EFAULT) because readfds
 refers to memory that is outside the process's accessible address space;
 this is more likely to be a software error (a bug) than it is to be a user
@@ -30,7 +30,7 @@ error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT select 42 987654321 198765432 > test.out
+explain -eEFAULT select 42 0x9876543 198765432 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -140,6 +140,15 @@ void explain_buffer_dac_broadcast(explain_string_buffer_t *sb);
 void explain_buffer_dac_admin(explain_string_buffer_t *sb);
 
 /**
+  * The explain_buffer_dac_net_admin function may be used to
+  * explain the absence of the DAC_NET_ADNIB capability.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  */
+void explain_buffer_dac_net_admin(explain_string_buffer_t *sb);
+
+/**
   * The explain_buffer_dac_net_raw function may be used to
   * explain the absence of the DAC_NET_RAW capability.
   *

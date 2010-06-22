@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_AC_LINUX_FD_H
 #define LIBEXPLAIN_AC_LINUX_FD_H
 
-#include <libexplain/config.h>
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_LINUX_FD_H
 #include <linux/fd.h>

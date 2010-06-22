@@ -19,8 +19,10 @@
 .TH explain_pathconf_or_die 3
 .SH NAME
 explain_pathconf_or_die \- get configuration values and report errors
+.if require_index \{
 .XX "explain_pathconf_or_die(3)" \
     "get configuration values for files and report errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/pathconf.h>
 .sp 0.3
@@ -43,7 +45,7 @@ long value = explain_pathconf_or_die(pathname, name);
 .fi
 .ft R
 .RE
-Note that a -1 return value is still possible,
+Note that a \[mi]1 return value is still possible,
 meaning the system does not have a limit for the requested resource.
 .TP 8n
 \f[I]pathname\fP

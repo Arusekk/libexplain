@@ -63,6 +63,8 @@ void explain_buffer_errno_wait4(explain_string_buffer_t *sb, int errnum,
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param pid
   *     The original pid, exactly as passed to the wait4(2) system call.
   * @param status
@@ -73,6 +75,7 @@ void explain_buffer_errno_wait4(explain_string_buffer_t *sb, int errnum,
   *     The original rusage, exactly as passed to the wait4(2) system call.
   */
 void explain_buffer_errno_wait4_explanation(explain_string_buffer_t *sb,
-    int errnum, int pid, int *status, int options, struct rusage *rusage);
+    int errnum, const char *syscall_name, int pid, int *status, int options,
+    struct rusage *rusage);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WAIT4_H */

@@ -79,7 +79,7 @@ explain_buffer_errno_getpeername_explanation(explain_string_buffer_t *sb,
         }
         if
         (
-            *sock_addr_size > 0
+            (int)*sock_addr_size > 0
         &&
             explain_pointer_is_efault(sock_addr, *sock_addr_size)
         )
@@ -103,7 +103,7 @@ explain_buffer_errno_getpeername_explanation(explain_string_buffer_t *sb,
         (
             sb,
             "sock_addr_size",
-            *sock_addr_size
+            (int)*sock_addr_size
         );
         break;
 
@@ -121,7 +121,7 @@ explain_buffer_errno_getpeername_explanation(explain_string_buffer_t *sb,
 
     default:
         dunno:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "getpeername");
         break;
     }
 }

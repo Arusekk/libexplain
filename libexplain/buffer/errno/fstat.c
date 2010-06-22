@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -29,22 +29,22 @@
 
 static void
 explain_buffer_errno_fstat_system_call(explain_string_buffer_t *sb,
-    int errnum, int fildes, const struct stat *buf)
+    int errnum, int fildes, const struct stat *data)
 {
     (void)errnum;
     explain_string_buffer_printf(sb, "fstat(fildes = %d", fildes);
     explain_buffer_fildes_to_pathname(sb, fildes);
-    explain_string_buffer_puts(sb, ", buf = ");
-    explain_buffer_pointer(sb, buf);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_buffer_pointer(sb, data);
     explain_string_buffer_putc(sb, ')');
 }
 
 
 void
 explain_buffer_errno_fstat_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, const struct stat *buf)
+    int errnum, const char *syscall_name, int fildes, const struct stat *data)
 {
-    (void)buf;
+    (void)data;
     switch (errnum)
     {
     case EBADF:
@@ -56,7 +56,7 @@ explain_buffer_errno_fstat_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -64,7 +64,7 @@ explain_buffer_errno_fstat_explanation(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_fstat(explain_string_buffer_t *sb, int errnum,
-    int fildes, const struct stat *buf)
+    int fildes, const struct stat *data)
 {
     explain_explanation_t exp;
 
@@ -74,14 +74,15 @@ explain_buffer_errno_fstat(explain_string_buffer_t *sb, int errnum,
         &exp.system_call_sb,
         errnum,
         fildes,
-        buf
+        data
     );
     explain_buffer_errno_fstat_explanation
     (
         &exp.explanation_sb,
         errnum,
+        "fstat",
         fildes,
-        buf
+        data
     );
     explain_explanation_assemble(&exp, sb);
 }

@@ -17,11 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/linux/serial.h>
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/serial_struct.h>
 #include <libexplain/iocontrol/tiocsserial.h>
 
+
+#ifdef TIOCSSERIAL
 
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
@@ -43,4 +46,26 @@ const explain_iocontrol_t explain_iocontrol_tiocsserial =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(struct serial_struct), /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocsserial =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
+    0, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#endif

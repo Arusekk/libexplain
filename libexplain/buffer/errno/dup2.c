@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,6 +26,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/dup2.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/explanation.h>
 
 
@@ -89,17 +90,23 @@ explain_buffer_errno_dup2_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "dup2");
         break;
     }
     if (fcntl(newfd, F_GETFL) >= 0)
     {
-        explain_string_buffer_puts
+        explain_string_buffer_puts(sb->footnotes, "; ");
+        explain_buffer_gettext
         (
-            sb,
-            "; any errors that would have been reported by close(newfd) "
-            "are lost, a careful programmer will not use dup2() without "
-            "closing newfd first"
+            sb->footnotes,
+            /*
+             * xgettext:  This error message is used when dup2(2) system
+             * call fails, the destination file descriptor may or may
+             * not be closed.
+             */
+            i18n("note that any errors that would have been reported by "
+            "close(newfd) are lost, a careful programmer will not use "
+            "dup2() without closing newfd first")
         );
     }
 }

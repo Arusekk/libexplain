@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/stdio.h>
 
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/errno/generic.h>
@@ -46,12 +47,13 @@ explain_buffer_errno_fileno_explanation(explain_string_buffer_t *sb, int errnum,
     (void)fp;
     switch (errnum)
     {
+    case EINVAL:
     case EBADF:
         explain_buffer_ebadf_stream(sb, "fp");
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "fileno");
         break;
     }
 }

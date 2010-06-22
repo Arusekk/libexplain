@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2009 Peter Miller
+# Copyright (C) 2008-2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,9 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2009-07-17 16:07+1000\n"
+        "POT-Creation-Date: 2010-03-08 13:33+1100\n"
+        "PO-Revision-Date: 2010-03-08\n"
+        "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
 #.
@@ -46,6 +48,17 @@ msgid   "%s contained a path prefix of %s; or, more generally, an attempt "
         "was made to make a directory a subdirectory of itself"
 msgstr  "%s contained a path prefix of %s; or, more generally, an attempt "
         "was made to make a directory a subdirectory of itself"
+
+#.
+#. This message is used when a system call
+#. argument is passed a string containing an equals ('=')
+#. character, when it should not.
+#.
+#. %1$s => The name of the system call's offending argument.
+#.
+#, c-format
+msgid   "%s contains an equals ('=') character, and it should not"
+msgstr  "%s contains an equals ('=') character, and it should not"
 
 #.
 #. This message is used when a path is being used as a
@@ -335,6 +348,16 @@ msgid   "%s is the NULL pointer"
 msgstr  "%s is the NULL pointer"
 
 #.
+#. This message is used when a system call
+#. argument is passed an emoty string, and it should not be.
+#.
+#. %1$s => The name of the system call's offending argument.
+#.
+#, c-format
+msgid   "%s is the empty string, and it should not be"
+msgstr  "%s is the empty string, and it should not be"
+
+#.
 #. This message is used when a file descriptor is
 #. passed to a system call, and it has the wrong file type.
 #.
@@ -551,6 +574,14 @@ msgid   "an incoming connection has been aborted by the remote host"
 msgstr  "an incoming connection has been aborted by the remote host"
 
 #.
+#. This error message is issued to explain an
+#. EEXIST error reported by an system call attempting to
+#. create a new network interface.
+#.
+msgid   "an interface of that name already exists"
+msgstr  "an interface of that name already exists"
+
+#.
 #. This message is used when explaining why file
 #. access is denied, and the process is not root.
 #.
@@ -578,16 +609,6 @@ msgstr  "block special device"
 #.
 msgid   "character special device"
 msgstr  "character special device"
-
-#.
-#. This message is used to explain an
-#. EPERM error reported by a chown (or similar)
-#. system call, in the case where chown is
-#. restricted, i.e. when it is not sufficent to be
-#. the owner of the file to change its ownership.
-#.
-msgid   "chown is restricted"
-msgstr  "chown is restricted"
 
 #.
 #. the name of the current directory, rather than
@@ -849,6 +870,45 @@ msgid   "note that %s still exists"
 msgstr  "note that %s still exists"
 
 #.
+#. This error message is used, on Linux, when
+#. a "cross mount point" hard link should work, but it
+#. does not.
+#.
+#, c-format
+msgid   "note that Linux permits a file system to be mounted at multiple "
+        "points, but the %s system call does not work across different "
+        "mount points, even if the same file system is mounted on both"
+msgstr  "note that Linux permits a file system to be mounted at multiple "
+        "points, but the %s system call does not work across different "
+        "mount points, even if the same file system is mounted on both"
+
+#.
+#. This message is used to supplement an
+#. explanation for an error reported by open(2)
+#. system call, in the case where the caller used
+#. O_TRUNC in a combination that explicitly
+#. ignores O_TRUNC.
+#.
+#. %1$s => the type of the special file, already
+#.         translated
+#.
+#, c-format
+msgid   "note that a %s will ignore the O_TRUNC flag"
+msgstr  "note that a %s will ignore the O_TRUNC flag"
+
+#.
+#. This error message is used when dup2(2) system
+#. call fails, the destination file descriptor may or may
+#. not be closed.
+#.
+msgid   "note that any errors that would have been reported by close"
+        "(newfd) are lost, a careful programmer will not use dup2() "
+        "without closing newfd first"
+msgstr  "note that any errors that would have been reported by close"
+        "(newfd) are lost, a careful programmer will not use dup2() "
+        "without closing newfd first"
+
+#.
 #. This message is used when supplementing an
 #. EACCES error returned by the access(2) system call,
 #. to remind users that it is an error if ANY of the
@@ -863,6 +923,24 @@ msgstr  "note that it is an error if any of the access types in mode are "
         "permitted"
 
 #.
+#. This error message is used when the rmdir(2)
+#. system call returns EBUSY, on a Linux system.
+#.
+msgid   "note that pathname is currently used as a mount point or is the "
+        "root directory of the calling process"
+msgstr  "note that pathname is currently used as a mount point or is the "
+        "root directory of the calling process"
+
+#.
+#. This message is used to supplement an explanation
+#. for an error reported by open(2) system call, in the case
+#. where the caller used a flags combination with explicitly
+#. undefined behavior.
+#.
+msgid   "note that the behavior of (O_RDONLY | O_TRUNC) is undefined"
+msgstr  "note that the behavior of (O_RDONLY | O_TRUNC) is undefined"
+
+#.
 #. This message is used to supplement an explanation for
 #. an error reported by open(2) system call, and the caller used a
 #. flags combination with explicitly undefined behavior.
@@ -871,6 +949,68 @@ msgid   "note that the behavior of O_EXCL is undefined if O_CREAT is not "
         "specified"
 msgstr  "note that the behavior of O_EXCL is undefined if O_CREAT is not "
         "specified"
+
+#.
+#. This message is used to supplement an
+#. explanation for an error reported by open(2)
+#. system call, in the case where the caller used
+#. O_TRUNC in a combination with explicitly
+#. undefined behavior.
+#.
+#. %1$s => the type of the special file, already
+#.         translated
+#.
+#, c-format
+msgid   "note that the behavior of O_TRUNC on a %s is undefined"
+msgstr  "note that the behavior of O_TRUNC on a %s is undefined"
+
+#.
+#. This error message is used when a close(2)
+#. system call fails and the file descriptor remains open.
+#.
+msgid   "note that the file descriptor is still open"
+msgstr  "note that the file descriptor is still open"
+
+#.
+#. This error message is used when a process
+#. is catches, blocks or ignores the SIGPIPE signal, but
+#. it is nopt possible to be more specific.
+#.
+msgid   "note that this process catches, blocks or ignores the SIGPIPE "
+        "signal"
+msgstr  "note that this process catches, blocks or ignores the SIGPIPE "
+        "signal"
+
+#.
+#. This error message is used when a
+#. process is blocking the SIGPIPE signal.
+#.
+msgid   "note that this process is blocking the SIGPIPE signal"
+msgstr  "note that this process is blocking the SIGPIPE signal"
+
+#.
+#. This error message is used when a
+#. process is catching the SIGPIPE signal.
+#.
+msgid   "note that this process is catching the SIGPIPE signal"
+msgstr  "note that this process is catching the SIGPIPE signal"
+
+#.
+#. This error message is used when a
+#. process is ignoring the SIGPIPE signal.
+#.
+msgid   "note that this process is ignoring the SIGPIPE signal"
+msgstr  "note that this process is ignoring the SIGPIPE signal"
+
+#.
+#. This error message is used when an fclose(3) or freopen(3)
+#. system call fails, and the underlying file descriptor may still be
+#. open.
+#.
+msgid   "note that while the FILE stream is no longer valid, the "
+        "underlying file descriptor may still be open"
+msgstr  "note that while the FILE stream is no longer valid, the "
+        "underlying file descriptor may still be open"
 
 #.
 #. This message is used when explaining an EMLINK
@@ -929,32 +1069,11 @@ msgstr  "oldpath is a directory and the %s already has the maximum number "
 msgid   "oldpath or newpath is a directory that is in use by some process "
         "(perhaps as current working directory, or as root directory, or "
         "it was open for reading) or is in use by the system (for example "
-        "as mount point)"
+        "as a mount point)"
 msgstr  "oldpath or newpath is a directory that is in use by some process "
         "(perhaps as current working directory, or as root directory, or "
         "it was open for reading) or is in use by the system (for example "
-        "as mount point)"
-
-#.
-#. This message is used to EPERM error
-#. reported by a rename(2) system call, in the case
-#. where newpath is an existing file and the directory
-#. containing it has the sticky bit set and the
-#. process's effective user ID is neither the user ID
-#. of the file to be replaced nor that of the directory
-#. containing it, and the process is not privileged.
-#.
-#. %1$s => the name of the offending system call argument
-#.
-#, c-format
-msgid   "or %s is an existing file and the directory containing it has "
-        "the sticky bit set and the process's effective user ID is "
-        "neither the user ID of the file to be replaced nor that of the "
-        "directory containing it, and the process is not privileged"
-msgstr  "or %s is an existing file and the directory containing it has "
-        "the sticky bit set and the process's effective user ID is "
-        "neither the user ID of the file to be replaced nor that of the "
-        "directory containing it, and the process is not privileged"
+        "as a mount point)"
 
 #.
 #. This message is used when getcwd() is
@@ -967,18 +1086,40 @@ msgid   "or is outside your chroot jail"
 msgstr  "or is outside your chroot jail"
 
 #.
-#. This message is used to EPERM error reported by a
-#. rename(2) system call, in the case where the the file system
-#. containing pathname does not support renaming of the type
-#. requested.
+#. This error message is used when the rmdir(2)
+#. system call returns EINVAL, in the case where the final
+#. path component is "."
 #.
-#. %1$s => the name of the offending system call argument
+msgid   "pathname has \".\" as last component"
+msgstr  "pathname has \".\" as last component"
+
 #.
-#, c-format
-msgid   "or the file system containing %s does not support renaming of "
-        "the type requested"
-msgstr  "or the file system containing %s does not support renaming of "
-        "the type requested"
+#. This error message is used when the rmdir(2)
+#. system call returns EINVAL, in the case where the final
+#. path component is ".."
+#.
+msgid   "pathname has \"..\" as its final component"
+msgstr  "pathname has \"..\" as its final component"
+
+#.
+#. This error message is used when the rmdir(2)
+#. system call returns EBUSY.
+#.
+msgid   "pathname is currently in use by the system or some process that "
+        "prevents its removal"
+msgstr  "pathname is currently in use by the system or some process that "
+        "prevents its removal"
+
+#.
+#. This error message is used when the
+#. rmdir(2) system call returns EEXIST or ENOTEMPTY, in
+#. the case where pathname is not an empty directory;
+#. that is, it contains entries other than "." and ".."
+#.
+msgid   "pathname is not an empty directory; that is, it contains entries "
+        "other than \".\" and \"..\""
+msgstr  "pathname is not an empty directory; that is, it contains entries "
+        "other than \".\" and \"..\""
 
 #.
 #. This message is used to explain an EFBIG
@@ -995,10 +1136,8 @@ msgstr  "pathname referes to a regular file that is too large to be "
         "opened %s, the O_LARGEFILE flag is necessary"
 
 #.
-#. This message is used to explain
-#. an ENODEV error reported by an open(2)
-#. system call, and the device does not
-#. actually exist.
+#. This message is used to explain an ENODEV error reported by
+#. an open(2) system call, and the device does not actually exist.
 #.
 #. %1$s => the file type of the special file,
 #.         already translated.
@@ -1191,6 +1330,19 @@ msgid   "the %s argument does not appear to be a number"
 msgstr  "the %s argument does not appear to be a number"
 
 #.
+#. This error message is issued when a system call
+#. reports a problem with a printf(3)-style format string,
+#. in the case where a %n$ specifier has not been used.
+#.
+#. %1$s => the name of the offending system-call argument.
+#. %2$s => the argument position of the missing format specifier,
+#.         already quoted (including percent and dollar sign).
+#.
+#, c-format
+msgid   "the %s argument does not contain a %s specification"
+msgstr  "the %s argument does not contain a %s specification"
+
+#.
 #. This error message is issued when a DIR* pointer
 #. does not refer to a valid directory stream.
 #.
@@ -1211,6 +1363,17 @@ msgid   "the %s argument does not refer a valid file stream"
 msgstr  "the %s argument does not refer a valid file stream"
 
 #.
+#. This error message is issued to explain an EINVAL error
+#. reported by the ustat syatem call, in the case where the devive
+#. specified does not contain a mounted file system.
+#.
+#, c-format
+msgid   "the %s argument does not refer to a device containing a mounted "
+        "file system"
+msgstr  "the %s argument does not refer to a device containing a mounted "
+        "file system"
+
+#.
 #. This error message is issued when the signalfd system
 #. call reposrt an EINVAL error, in the case where the file descriptor
 #. is actually open, but does not refer to a valid signalfd file
@@ -1223,6 +1386,18 @@ msgid   "the %s argument does not refer to a valid signalfd file "
         "descriptor"
 msgstr  "the %s argument does not refer to a valid signalfd file "
         "descriptor"
+
+#.
+#. This error message is issued when a system call
+#. argument is requested to be a multiple of a particular
+#. number, but it is not.
+#.
+#. %1$s => the name of the offending system call argument
+#. %2$d => the required multiple
+#.
+#, c-format
+msgid   "the %s argument is not a multiple of %d"
+msgstr  "the %s argument is not a multiple of %d"
 
 #.
 #. This message is used to explain an ENOTCONN
@@ -1306,21 +1481,45 @@ msgstr  "the %s argument was incorrectly specified, it was too small"
 
 #.
 #. This message is used when explaining an EINVAL or
-#. ENAMETOOLONG error returned by the gethostname system call,
-#. in the case where the supplied data buffer is smaller than
-#. the actual host name.
+#. ENAMETOOLONG error returned by the gethostname, getdomainname
+#. (etc) system call, in the case where the supplied data buffer
+#. is smaller than the actual value.
 #.
 #. %1$s => the name of the offending system call argument
 #. %2$d => the minimum size (in bytes) needed to hold the actual
-#.         host name
+#.         value
 #.
 #, c-format
-msgid   "the %s argument was incorrectly specified, the actual host name "
+msgid   "the %s argument was incorrectly specified, the actual value "
         "requires at least %d bytes, or preferably use the HOST_NAME_MAX "
         "macro"
-msgstr  "the %s argument was incorrectly specified, the actual host name "
+msgstr  "the %s argument was incorrectly specified, the actual value "
         "requires at least %d bytes, or preferably use the HOST_NAME_MAX "
         "macro"
+
+#.
+#. This error message is used to explain an EPERM
+#. error reported by the unlink(2) system call, in the case
+#. where the file system does not allow unlinking of files;
+#. or, the directory containing pathname has the sticky
+#. bit (S_ISVTX) set and the process's effective UID is
+#. neither the UID of the file to be deleted nor that of the
+#. directory containing it.
+#.
+#. $1$s => the name of the offending system call argument
+#. $2$s => the name of the offended system call
+#.
+#, c-format
+msgid   "the %s does not refer to a file system object to which %s may be "
+        "applied; or, the directory containing pathname has the sticky "
+        "bit (S_ISVTX) set and the process's effective UID is neither the "
+        "UID of the file to be deleted nor that of the directory "
+        "containing it"
+msgstr  "the %s does not refer to a file system object to which %s may be "
+        "applied; or, the directory containing pathname has the sticky "
+        "bit (S_ISVTX) set and the process's effective UID is neither the "
+        "UID of the file to be deleted nor that of the directory "
+        "containing it"
 
 #.
 #. This message is used when directory has a directory
@@ -1360,22 +1559,117 @@ msgid   "the %s in the %s refers to %s that does not exist"
 msgstr  "the %s in the %s refers to %s that does not exist"
 
 #.
-#. This message is used when directory has a directory
-#. entry for the named component, but a directory was expected
-#. and something else was there instead.
-#.
-#. Different language grammars may need to rearrange the parts.
-#.
-#. %1$s => The name of the offending path component and file
-#.         type (will never have slashes).  It will be quoted.
-#. %2$s => The name of the directory that contains the problematic
-#.         component; it may have zero, one or more slashes in it.  Will
-#.         include the name of the function call argument, the name of
-#.         the directory, and the file type "directory".
+#. This error message is issued when a system call
+#. reports an EBUSY error.
 #.
 #, c-format
-msgid   "the %s in the %s should not exist yet"
-msgstr  "the %s in the %s should not exist yet"
+msgid   "the %s is in use by another process or by the system and this "
+        "prevents the %s system call from operating"
+msgstr  "the %s is in use by another process or by the system and this "
+        "prevents the %s system call from operating"
+
+#.
+#. This message is used when explaining an EACCES
+#. error returned by an open(2) system call, in the case
+#. where the file is a character special device or a block
+#. special device, and the file system has been mounted with
+#. the "nodev" option.
+#.
+#. %1$s => the file type (character sepcial device, etc)
+#.         already translated.
+#.
+#, c-format
+msgid   "the %s is on a file system mounted with the \"nodev\" option"
+msgstr  "the %s is on a file system mounted with the \"nodev\" option"
+
+#.
+#. This error message is issued to explain an
+#. EINVAL error reported by the mkstemp system call, in the
+#. case where the file name template is too small.
+#.
+#. %1$s => The name of the offending system call argument.
+#.
+#, c-format
+msgid   "the %s is too small, it must be at least six characters"
+msgstr  "the %s is too small, it must be at least six characters"
+
+#.
+#. This message is used when explaining an EMLINK
+#. error, in the case where mkdir fails because a directory
+#. already has too many hand links.
+#.
+#. Note that this message may be followed by the actual
+#. limit in parentheses, so it helps of the last phrase
+#. can be sensably followed by it.
+#.
+#. %1$s => The name of the offending syscall argument.
+#. %2$s => The name (already quoted) of the parent directory
+#.         that has the problem.
+#.
+#, c-format
+msgid   "the %s parent directory %s already has the maximum number of "
+        "links"
+msgstr  "the %s parent directory %s already has the maximum number of "
+        "links"
+
+#.
+#. This error message is issued when a system call
+#. reports an EINVAL error, in the case where mkdir was trying
+#. to create an inappropriate kind of file node.
+#.
+#, c-format
+msgid   "the %s system call cannot be used to create a %s"
+msgstr  "the %s system call cannot be used to create a %s"
+
+#.
+#. This error message is issued to explain an EINVAL error
+#. reported by the ungetc(3) system call, in the case where EOF was
+#. given.
+#.
+#. %1$s => the name of the offended system call
+#.
+#, c-format
+msgid   "the %s system call does not accept EOF"
+msgstr  "the %s system call does not accept EOF"
+
+#.
+#. This error message is issued when a dangerous
+#. system call is used.  (Not that the user can do anything
+#. about it, of course, but it will eventually get into a bug
+#. report.)
+#.
+#. %1$s => the name of the dangerous system call.
+#.
+#, c-format
+msgid   "the %s system call is dangerous, a more secure alternative "
+        "should be used"
+msgstr  "the %s system call is dangerous, a more secure alternative "
+        "should be used"
+
+#.
+#. This error message is issued when a dangerous
+#. system call is used.  (Not that the user can do anything
+#. about it, of course, but it will eventually get into a bug
+#. report.)
+#.
+#. %1$s => the name of the dangerous system call.
+#. %2$s => the name of the alternative system call.
+#.
+#, c-format
+msgid   "the %s system call is dangerous, the more secure %s system call "
+        "should be used instead"
+msgstr  "the %s system call is dangerous, the more secure %s system call "
+        "should be used instead"
+
+#.
+#. The aupplementary message is used when a different
+#. system call would be (more) appropriate.
+#.
+#. %1$s => The name of the alternate system call.
+#.
+#, c-format
+msgid   "the %s system call would be more appropriate"
+msgstr  "the %s system call would be more appropriate"
 
 #.
 #. This error message is issued when a system call
@@ -1410,7 +1704,7 @@ msgstr  "the %s would have had to wait to complete however it was "
 #.
 #. This message is used when an EPERM erro is
 #. returned by an open(2) system call, and the O_NOATIME
-#. open flag was specific, but the process lacked the
+#. open flag was specified, but the process lacked the
 #. permissions required.
 #.
 #. %1$s => the number and name of the process effective UID,
@@ -1436,6 +1730,23 @@ msgid   "the O_NONBLOCK flag was specified, and an incompatible lease was "
         "held on the file"
 msgstr  "the O_NONBLOCK flag was specified, and an incompatible lease was "
         "held on the file"
+
+#.
+#. This error message is used when trying to close
+#. a non-blocking file descriptor that is stillactive.
+#.
+msgid   "the O_NONBLOCK flag was specified, and an operation has yet to "
+        "complete"
+msgstr  "the O_NONBLOCK flag was specified, and an operation has yet to "
+        "complete"
+
+#.
+#. This error message is issued to explain
+#. an EROFS error, in the case of a Secure Disk /
+#. Multimedia Card.
+#.
+msgid   "the SD/MMC card has the write-protect tab set"
+msgstr  "the SD/MMC card has the write-protect tab set"
 
 #.
 #. This message is used when and EADDRINUSE error
@@ -1500,24 +1811,53 @@ msgstr  "the connection attempt took to long; the server may be too busy "
         "discarding your packets"
 
 #.
-#. This message is used to EPERM error reported by
-#. a rename(2) system call, in the case where the directory
-#. containing oldpath has the sticky bit (S_ISVTX) set and the
-#. process's effective user ID is neither the user ID of the
-#. file to be deleted nor that of the directory containing it,
-#. and the process is not privileged.
+#. This error message is used to explain an
+#. ENOSPC error, in the case where more specific information
+#. is not available.
 #.
-#. %1$s => the name of the offending system call argument
+msgid   "the device containing the file referred to by the file "
+        "descriptor has no space for the data; or, the file system "
+        "containing the file has no space for the data"
+msgstr  "the device containing the file referred to by the file "
+        "descriptor has no space for the data; or, the file system "
+        "containing the file has no space for the data"
+
+#.
+#. This error message is used to explain an
+#. ENOSPC error, in the case where a device has no space
+#. for more data.
+#.
+#. %1$s => The name of the offending syscall argument.
 #.
 #, c-format
-msgid   "the directory containing %s has the sticky bit (S_ISVTX) set and "
-        "the process's effective user ID is neither the user ID of the "
-        "file to be deleted nor that of the directory containing it, and "
-        "the process is not privileged"
-msgstr  "the directory containing %s has the sticky bit (S_ISVTX) set and "
-        "the process's effective user ID is neither the user ID of the "
-        "file to be deleted nor that of the directory containing it, and "
-        "the process is not privileged"
+msgid   "the device referred to by %s has no more space for data"
+msgstr  "the device referred to by %s has no more space for data"
+
+#.
+#. This error message is used to explain an EPERM error
+#. reported by the unlink(2) system call, in the case where the
+#. directory containing pathname has the sticky bit (S_ISVTX) set
+#. and the process's effective UID is neither the UID of the file to
+#. be deleted nor that of the directory containing it.
+#.
+#. %1$s => The path for the directory containing the file ot be
+#.         unlinked, already quoted.
+#. %2$s => The process's effective UID, and user name (already
+#.         quoted) if available
+#. %3$s => The file to be deleted's effective UID, and user name
+#.         (already quoted) if available
+#. %4$s => The directory's effective UID, and user name (already
+#.         quoted) if available
+#.
+#, c-format
+msgid   "the directory containing pathname (%s) has the sticky bit "
+        "(S_ISVTX) set and the process's effective UID (%s) is neither "
+        "the UID of the file to be deleted (%s) nor that of the directory "
+        "containing it (%s)"
+msgstr  "the directory containing pathname (%s) has the sticky bit "
+        "(S_ISVTX) set and the process's effective UID (%s) is neither "
+        "the UID of the file to be deleted (%s) nor that of the directory "
+        "containing it (%s)"
 
 #.
 #. %1$s => the kind of UID, either "effective UID" or "real
@@ -1538,6 +1878,30 @@ msgid   "the directory has the sticky bit (S_ISVTX) set and the process's "
 msgstr  "the directory has the sticky bit (S_ISVTX) set and the process's "
         "%s %s is neither the owner UID %s of the %s to be removed, nor "
         "the owner UID %s of the directory containing it"
+
+#.
+#. This error message is issued to explain an
+#. EROFS error, in the case of a CD-ROM disc (or similar).
+#.
+msgid   "the disc cannot be written to"
+msgstr  "the disc cannot be written to"
+
+#.
+#. This error message is issued to explain an
+#. ENOMEDIUM error, when a more specific explaination is not
+#. available.
+#.
+msgid   "the disk drive is a type that has removable disks, and there "
+        "does not appear to be a disk in the drive"
+msgstr  "the disk drive is a type that has removable disks, and there "
+        "does not appear to be a disk in the drive"
+
+#.
+#. This error message is issued to explain an EROFS
+#. error, in the case of a floppy disk (or similar).
+#.
+msgid   "the disk has the write-protect tab set"
+msgstr  "the disk has the write-protect tab set"
 
 #.
 #. This message is used when the process
@@ -1565,22 +1929,9 @@ msgstr  "the executable is on a file system that is mounted with the "
         "\"nosuid\" option"
 
 #.
-#. This message is used when explaining an
-#. EEXIST error returned by an open(2) system call.
-#. Usually path_resolution(7) will have a better
-#. explanation, this explanation is only used when a
-#. more specific explanation is not available.
-#.
-msgid   "the file already exists when it should not (flags O_CREAT and "
-        "O_EXCL were used)"
-msgstr  "the file already exists when it should not (flags O_CREAT and "
-        "O_EXCL were used)"
-
-#.
-#. This message is used when an attempt is
-#. made to read from a file descriptor that was not
-#. opened for reading.  The actual open mode will be
-#. printed separately.
+#. This message is used when an attempt is made to read from
+#. a file descriptor that was not opened for reading.  The actual open
+#. mode will be printed separately.
 #.
 msgid   "the file descriptor is not open for reading"
 msgstr  "the file descriptor is not open for reading"
@@ -1600,6 +1951,34 @@ msgid   "the file system %s does not support the %s system call"
 msgstr  "the file system %s does not support the %s system call"
 
 #.
+#. This error message is issued when a system call
+#. reports an EPERM error, in the case where a file node is
+#. being created (e.g. mkdir or mknod).
+#.
+#. %1$s => The name of the offending syscall argument.
+#. %2$s => The name of the mount point, in parentheses
+#. %3$s => The type of node being created, already translated
+#.
+#, c-format
+msgid   "the file system containing %s %s does not support the creation "
+        "of a %s"
+msgstr  "the file system containing %s %s does not support the creation "
+        "of a %s"
+
+#.
+#. This error message is used to explain an
+#. ENOSPC error, in the case where a file system has no
+#. room to increase the size of a file.
+#.
+#. %1$s => The name of the problematic system call argument
+#. %2$s => The file system mount point and usage,
+#.         in parentheses
+#.
+#, c-format
+msgid   "the file system containing %s %s has no more space for data"
+msgstr  "the file system containing %s %s has no more space for data"
+
+#.
 #. This message is used to provide an
 #. explanation for and ENOSPC error returned by an
 #. open(2) system call, in the case where there is no
@@ -1610,39 +1989,10 @@ msgstr  "the file system %s does not support the %s system call"
 #.         in parentheses
 #.
 #, c-format
-msgid   "the file system containing %s %s has no room for the new file"
-msgstr  "the file system containing %s %s has no room for the new file"
-
-#.
-#. This message is used to explain an ENOSPC error
-#. reported by a rename(2) system call.
-#.
-#. It may optionally be followed by the actual mount point,
-#. so it helps if the sentance structure works for that
-#. case.
-#.
-msgid   "the file system containing the file has no room for the new "
+msgid   "the file system containing %s %s has no space for a new "
         "directory entry"
-msgstr  "the file system containing the file has no room for the new "
+msgstr  "the file system containing %s %s has no space for a new "
         "directory entry"
-
-#.
-#. This error message is used to explain an EPERM
-#. error reported by the unlink(2) system call, in the case
-#. where the file system does not allow unlinking of files;
-#. or, the directory containing pathname has the sticky bit
-#. (S_ISVTX) set and the process's effective UID is neither
-#. the UID of the file to be deleted nor that of the directory
-#. containing it.
-#.
-msgid   "the file system does not allow unlinking of files; or, the "
-        "directory containing pathname has the sticky bit (S_ISVTX) set "
-        "and the process's effective UID is neither the UID of the file "
-        "to be deleted nor that of the directory containing it"
-msgstr  "the file system does not allow unlinking of files; or, the "
-        "directory containing pathname has the sticky bit (S_ISVTX) set "
-        "and the process's effective UID is neither the UID of the file "
-        "to be deleted nor that of the directory containing it"
 
 #.
 #. this error message is issued to explain
@@ -1704,6 +2054,18 @@ msgid   "the kernel could not mount the internal anonymous inode device"
 msgstr  "the kernel could not mount the internal anonymous inode device"
 
 #.
+#. This error message is issued to explain an
+#. EINVAL error reported by the mkstemp system call, in
+#. the case where the file name template does not end in
+#. "XXXXXX".
+#.
+#. %1$s => The name of the offending system call argument.
+#.
+#, c-format
+msgid   "the last six characters of the %s were not \"XXXXXX\""
+msgstr  "the last six characters of the %s were not \"XXXXXX\""
+
+#.
 #. This error message is issued when a system call
 #. reports an ENONET error.
 #.
@@ -1740,6 +2102,14 @@ msgid   "the named file is a directory; directories may not be unlinked, "
         "use rmdir(2) or remove(3) instead"
 msgstr  "the named file is a directory; directories may not be unlinked, "
         "use rmdir(2) or remove(3) instead"
+
+#.
+#. this error message is issued when ioctl
+#. EQL_EMANCIPATE reports an EINVAL error.  We already
+#. know the file descriptor is suitable.
+#.
+msgid   "the named slave network interface cannot be emancipated"
+msgstr  "the named slave network interface cannot be emancipated"
 
 #.
 #. This message is used to explain an EACCES
@@ -1781,6 +2151,14 @@ msgid   "the others permission mode is %s"
 msgstr  "the others permission mode is %s"
 
 #.
+#. This error message is issued to explain an EINVAL error
+#. reported by a chown (or similar) system call, in the case where
+#. either the UID is invalid, the GID is invalid, or both.
+#.
+msgid   "the owner UID or group GID is not a value supported by the system"
+msgstr  "the owner UID or group GID is not a value supported by the system"
+
+#.
 #. This error message is used to explain an
 #. unlink EBUSY error, in the case where the pathname is
 #. being used by the system or another process and the
@@ -1791,13 +2169,6 @@ msgid   "the pathname is being used by the system or another process and "
         "the implementation considers this an error"
 msgstr  "the pathname is being used by the system or another process and "
         "the implementation considers this an error"
-
-#.
-#. This message is used to explain an EBUSY
-#. error reported by an ioctl TIOCSHAYESESP system call.
-#.
-msgid   "the port is in use"
-msgstr  "the port is in use"
 
 #.
 #. This message is used when explaining which
@@ -1824,7 +2195,7 @@ msgstr  "the process %s %s does not match the %s owner %s so the owner "
 #. permission" message, explaining that the process effective UID
 #. must match the file owner UID.
 #.
-#. %1$s => thekind of UID, eother "real UID" or "effective UID"
+#. %1$s => the kind of UID, either "real UID" or "effective UID",
 #.         already translated
 #. %2$s => the numeric UID of the process, and the corresponding
 #.         login name from the password file, if available.
@@ -2004,6 +2375,46 @@ msgid   "the process does not have permission to change its root directory"
 msgstr  "the process does not have permission to change its root directory"
 
 #.
+#. This error message is issued to explain and
+#. EACCES error reported by a CDROM_DEBUG ioctl.
+#.
+msgid   "the process does not have permission to change the CD-ROM "
+        "debugging flag"
+msgstr  "the process does not have permission to change the CD-ROM "
+        "debugging flag"
+
+#.
+#. This error message is issued when ioctl
+#. BLKBSZSET returns an EACCES error.
+#.
+msgid   "the process does not have permission to change the logical block "
+        "size"
+msgstr  "the process does not have permission to change the logical block "
+        "size"
+
+#.
+#. This error message is issued when a system call
+#. reports an EPERM error, in the case where a file node is
+#. being created (e.g. mkdir or mknod).
+#.
+#. %1$s => The name of the offending syscall argument.
+#. %2$s => The name of the mount point, in parentheses
+#. %3$s => The type of node being created, already translated
+#.
+#, c-format
+msgid   "the process does not have permission to create a %s"
+msgstr  "the process does not have permission to create a %s"
+
+#.
+#. This error message is issued to explain an
+#. EACCES error reported by the BLKFLSBUF ioctl, in the case
+#. where the process does not have permission to flush the
+#. buffers.
+#.
+msgid   "the process does not have permission to flush the buffers"
+msgstr  "the process does not have permission to flush the buffers"
+
+#.
 #. xgetetxt:  This error message is issued to explain an EPERM error
 #. of they nice system call, in the case where the calling process
 #. attempted to increase its priority by supplying a negative value
@@ -2011,6 +2422,13 @@ msgstr  "the process does not have permission to change its root directory"
 #.
 msgid   "the process does not have permission to increase its priority"
 msgstr  "the process does not have permission to increase its priority"
+
+#.
+#. This error message is issued to explain and
+#. EACCES error reported by a CDROMRESET ioctl.
+#.
+msgid   "the process does not have permission to reset the CD-ROM drive"
+msgstr  "the process does not have permission to reset the CD-ROM drive"
 
 #.
 #. This error message is issued to explain an
@@ -2023,10 +2441,49 @@ msgstr  "the process does not have permission to send the signal to any "
 
 #.
 #. this error message is issued when a process
+#. attempts to set the domain name without sufficient privilege.
+#.
+msgid   "the process does not have permission to set the domain name"
+msgstr  "the process does not have permission to set the domain name"
+
+#.
+#. this error message is issued when a process
 #. attempts to set the hostname without sufficient privilege.
 #.
 msgid   "the process does not have permission to set the hostname"
 msgstr  "the process does not have permission to set the hostname"
+
+#.
+#. This error message is issued to explain an EACCES
+#. error reported by a system call, in the case where a more
+#. specific explanation is not available.
+#.
+#. %1$s => the name of the offending system call.
+#.
+#, c-format
+msgid   "the process does not have permission to use the %s system call"
+msgstr  "the process does not have permission to use the %s system call"
+
+#.
+#. This error message is issued to explain an EPERM error
+#. reported by system call that need the CAP_SYS_TTY_CONFIG capability.
+#.
+#, c-format
+msgid   "the process does not have permission to use the %s system call "
+        "to modify the TTY configuration"
+msgstr  "the process does not have permission to use the %s system call "
+        "to modify the TTY configuration"
+
+#.
+#. This error message is issued to explain an
+#. EPERM error reported by the a system call that requires
+#. CAP_NET_ADMIN capaility.
+#.
+#, c-format
+msgid   "the process does not have permission to use the %s system call "
+        "to modify the network configuration"
+msgstr  "the process does not have permission to use the %s system call "
+        "to modify the network configuration"
 
 #.
 #. This error message is issued to explain an
@@ -2094,10 +2551,13 @@ msgstr  "the process does not have search permission to the %s in the %s"
 #. of an EPERM error returned by any system call that does
 #. not provide a more specific explanation.
 #.
-msgid   "the process does not have the appropriate privileges to use this "
-        "system call"
-msgstr  "the process does not have the appropriate privileges to use this "
-        "system call"
+#. %1$s => the name of the offending system call
+#.
+#, c-format
+msgid   "the process does not have the appropriate privileges to use the %"
+        "s system call"
+msgstr  "the process does not have the appropriate privileges to use the %"
+        "s system call"
 
 #.
 #. This message is used when a process does not have
@@ -2155,6 +2615,37 @@ msgid   "the process does not have write permission to the %s, this is "
         "needed to remove the directory entry for the %s"
 msgstr  "the process does not have write permission to the %s, this is "
         "needed to remove the directory entry for the %s"
+
+#.
+#. This message is used to explain an
+#. EPERM error reported by a chown (or similar)
+#. system call, in the case where chown is
+#. restricted, i.e. when it is not sufficent to be
+#. the owner of the file to change its ownership.
+#.
+#. %1$s => the process effictive UID number and name,
+#.         already quoted
+#. %2$s => the name of the offending syscall argument
+#.
+#, c-format
+msgid   "the process effective UID %s is the same as the owner UID of %s "
+        "but this is not sufficient privilege to change the owner UID"
+msgstr  "the process effective UID %s is the same as the owner UID of %s "
+        "but this is not sufficient privilege to change the owner UID"
+
+#.
+#. This error message is used to explain
+#. an EPERM error reported by the chown(2) system
+#. call, in the case where the process euid does not
+#. match the file's owner.
+#.
+#. %1$s => the process effective UID, already quoted
+#. %2$s => the name of the offenting syscall argument
+#. %3$s => the file's UID, already quoted
+#.
+#, c-format
+msgid   "the process effective UID is %s but the %s owner UID is %s"
+msgstr  "the process effective UID is %s but the %s owner UID is %s"
 
 #.
 #. This error message is issued when a system call
@@ -2277,6 +2768,25 @@ msgstr  "the requested access to the file is not allowed, or search "
         "permission is denied for one of the directories in the path "
         "prefix of pathname, or the file did not exist yet and write "
         "access to the parent directory is not allowed"
+
+#.
+#. This error message is used when the
+#. chown(2) system call returns an EPERM error, is
+#. the case where the GID is inappropriate, and the
+#. process is not priviliged.
+#.
+#. %1$s => the name and number of the requested GID,
+#.         already quoted.
+#. %2$s => the name and number of the process effective
+#.         GID, already quoted.
+#. %3$s => the names and numbers of the supplementary GID
+#.         list, already quoted.
+#.
+#, c-format
+msgid   "the requested group GID %s is not the process effective group "
+        "GID %s and is not in the supplementary GID list %s"
+msgstr  "the requested group GID %s is not the process effective group "
+        "GID %s and is not in the supplementary GID list %s"
 
 #.
 #. This message is used to explain an EADDRNOTAVAIL
@@ -2471,6 +2981,49 @@ msgstr  "the system limit on the total number of open files has been "
         "reached"
 
 #.
+#. This error message is issued when we
+#. are unable to locate a temporary directory in
+#. which to create temporary files (ENOENT).
+#.
+#. %1$s => The list of directories tried, already quoted.
+#.
+#, c-format
+msgid   "the system was unable to find a temporary directory, tried %s"
+msgstr  "the system was unable to find a temporary directory, tried %s"
+
+#.
+#. This error message is issued when we
+#. are unable to locate a unique temporary file.
+#.
+#. %1$s => The directory used to hold temporary files.
+#.
+#, c-format
+msgid   "the system was unable to find a unique unused temporary file "
+        "name in the %s directory"
+msgstr  "the system was unable to find a unique unused temporary file "
+        "name in the %s directory"
+
+#.
+#. This error message is issued when we
+#. are unable to locate a unique temporary file.
+#.
+#. %1$s => The directory used to hold temporary files.
+#. %2$d => the number of attempts (TMP_MAX)
+#.
+#, c-format
+msgid   "the system was unable to find a unique unused temporary file "
+        "name in the %s directory, after %d attempts"
+msgstr  "the system was unable to find a unique unused temporary file "
+        "name in the %s directory, after %d attempts"
+
+#.
+#. This error message is issued to explain an EROFS
+#. error, in the case of a magnetic tape (or similar).
+#.
+msgid   "the tape has the write-protect tab set"
+msgstr  "the tape has the write-protect tab set"
+
+#.
 #. This message is used when explaining an EBUSY
 #. error repoorted by and ioctl TIOCCONS system call.
 #.
@@ -2504,6 +3057,72 @@ msgstr  "the tty is not a master pty or the tty is not the controlling "
 #, c-format
 msgid   "the value of the %s argument is outside the valid range"
 msgstr  "the value of the %s argument is outside the valid range"
+
+#.
+#. this error message is used to explain an EBUSY error
+#. returned by an ioctl VT_DISALLOCATE system call.
+#.
+msgid   "the virtual console is still in use"
+msgstr  "the virtual console is still in use"
+
+#.
+#. This error message is issued to explain an ENOMEDIUM
+#. error, in the case of a SD/MMC slot (or similar).
+#.
+msgid   "there does not appear to be a card in the SD/MMC slot"
+msgstr  "there does not appear to be a card in the SD/MMC slot"
+
+#.
+#. This error message is issued to explain an
+#. ENOMEDIUM error, in the case of a CD-ROM drive (or
+#. similar).
+#.
+#. %1$s => the type of drive, "CD-ROM" or "DVD".
+#.
+#, c-format
+msgid   "there does not appear to be a disc in the %s drive"
+msgstr  "there does not appear to be a disc in the %s drive"
+
+#.
+#. This error message is issued to explain an
+#. ENOMEDIUM error, in the case of a floppy drive (or
+#. similar).
+#.
+#. %1$s => the type of floppy drive, e.g. "3 1/2"
+#.
+#, c-format
+msgid   "there does not appear to be a disk in the %s floppy drive"
+msgstr  "there does not appear to be a disk in the %s floppy drive"
+
+#.
+#. This error message is issued to explain an
+#. ENOMEDIUM error, in the case of a SCSI tape drive
+#. (or similar).
+#.
+msgid   "there does not appear to be a tape in the SCSI tape drive"
+msgstr  "there does not appear to be a tape in the SCSI tape drive"
+
+#.
+#. This error message is issued to explain an
+#. ENOMEDIUM error, in the case of a magnetic tape drive
+#. (or similar).
+#.
+msgid   "there does not appear to be a tape in the magnetic tape drive"
+msgstr  "there does not appear to be a tape in the magnetic tape drive"
+
+#.
+#. This error message is issued when a system call
+#. reports an EEXIST error, in the case where the directory
+#. entry to be created already exists, although possibly not the
+#. intended type.
+#.
+#. %1$s => the name and type of the file, the last path component
+#. %2$s => the name and type of the containing directory, all but the
+#.         last path component.
+#.
+#, c-format
+msgid   "there is already a %s in the %s"
+msgstr  "there is already a %s in the %s"
 
 #.
 #. This message is used to explain an ENOENT error
@@ -2544,6 +3163,14 @@ msgid   "there is no directory entry in %s that has the same inode number "
         "as %s; this means that the directory has been unlinked"
 msgstr  "there is no directory entry in %s that has the same inode number "
         "as %s; this means that the directory has been unlinked"
+
+#.
+#. This error message is issued when a PPP ioctl
+#. reports an ENXIO error, in the case where the unit number
+#. specific is invalid.
+#.
+msgid   "there is no such PPP interface available"
+msgstr  "there is no such PPP interface available"
 
 #.
 #. This message is used to explain an
@@ -2611,6 +3238,14 @@ msgid   "too many levels of interpreters (%s)"
 msgstr  "too many levels of interpreters (%s)"
 
 #.
+#. This error mesage is issued to explain an
+#. EINVAL error returned form ioctl PPPIOCDETACH, in the
+#. case where more than one process has the interface open.
+#.
+msgid   "too many processes have this PPP interface open"
+msgstr  "too many processes have this PPP interface open"
+
+#.
 #. This message is used when too
 #. may links (ELOOP or EMLINK) are seen when
 #. resolving a path.
@@ -2665,6 +3300,22 @@ msgstr  "warning: using access(2) to check if a user is authorized, for "
         "avoided"
 
 #.
+#. This error message is issued when a system call
+#. reports a problem with a printf(3)-style format string,
+#. in the case where a format specifier is malformed.
+#.
+#. %1$s =>  the name of the offending system-call argument.
+#. %2$s =>  the offending format specification (already quoted)
+#. %3$ld => the byte position of the invalid format specifier within
+#.          the format string
+#.
+#, c-format
+msgid   "within the %s argument the conversion specification %s, starting "
+        "at position %ld, is not valid"
+msgstr  "within the %s argument the conversion specification %s, starting "
+        "at position %ld, is not valid"
+
+#.
 #. This message is used to explain an EACCES error,
 #. when attempting to write a file, when path_resolution(7) can
 #. not find anything more specific.
@@ -2677,6 +3328,29 @@ msgid   "write access to %s was not allowed, or one of the directory "
         "components of %s did not allow search permission"
 msgstr  "write access to %s was not allowed, or one of the directory "
         "components of %s did not allow search permission"
+
+#.
+#. This error message is ised to explain an EROFS error,
+#. usually from an open(2) system call.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#, c-format
+msgid   "write access was requested and %s refers to a file on a read-"
+        "only file system"
+msgstr  "write access was requested and %s refers to a file on a read-"
+        "only file system"
+
+#.
+#. This error message is ised to explain an EROFS error,
+#. usually from an open(2) system call, in the case where write access
+#. was requested for a read-only device.
+#.
+#. %1$s => The name of the offending system call argument
+#.
+#, c-format
+msgid   "write access was requested and %s refers to a read-only device"
+msgstr  "write access was requested and %s refers to a read-only device"
 
 #.
 #. This message is used when a process attempts to
@@ -2712,3 +3386,100 @@ msgid   "you cannot use open(2) to open socket files, you must use connect"
         "(2) instead; a named pipe may be what was intended"
 msgstr  "you cannot use open(2) to open socket files, you must use connect"
         "(2) instead; a named pipe may be what was intended"
+
+#.
+#. This message is used to explain when a system call
+#. argument is required to be a multipe of the page size, but is not.
+#.
+#, c-format
+msgid "the %s must be a multiple of the page size"
+msgstr "the %s must be a multiple of the page size"
+
+#.
+#. This message is used when an attempt is
+#. made to mmap shared access to a file descriptor
+#. that was not opened for both reading and writing.
+#. The actual open mode will be printed separately.
+#.
+msgid "the file descriptor is not open for both reading and writing"
+msgstr "the file descriptor is not open for both reading and writing"
+
+#.
+#. This message is used when an attempt is
+#. made to mmap write access to a file descriptor that
+#. is opened for append only.  The actual open mode will
+#. be printed separately.
+#.
+msgid "the file descriptor is open for append"
+msgstr "the file descriptor is open for append"
+
+#.
+#. This message is used to explain an
+#. EAGAIN error reported by the mmap(2) syatem call,
+#. in the case where too much memory has been locked.
+#. The relevant getrlimit values will be printed
+#. separately.
+#.
+msgid "the locked memory size of the process would have been exceeded"
+msgstr "the locked memory size of the process would have been exceeded"
+
+#.
+#. This message is used to explain an
+#. EAGAIN error reported by the mmap(2) syatem call,
+#. in the case where the file has been locked.
+#.
+msgid "the file is locked"
+msgstr "the file is locked"
+
+#.
+#. This message is used to explain an ETXTBSY
+#. error reported by a mmap(2) system call, in the case
+#. where MAP_DENYWRITE was set but the object specified
+#. by the file descriptor is open for writing.
+#. The file's open mode is printed separately.
+#.
+#: libexplain/buffer/errno/mmap.c:497
+msgid ""
+"the mapping flag MAP_DENYWRITE is incompatable with the open mode of the "
+"file descriptor"
+msgstr ""
+"the mapping flag MAP_DENYWRITE is incompatable with the open mode of the "
+"file descriptor"
+
+#.
+#. This message is used to explain an EPERM error
+#. reported by the mmap(2) system call, in the case where the
+#. prot argument asks for PROT_EXEC but the mapped area belongs
+#. to a file on a file system that was mounted no-exec.
+#.
+msgid "the underlying file system does not permit execution"
+msgstr "the underlying file system does not permit execution"
+
+#.
+#. This message is used to explain in ENODEV error
+#. reported by mmap(2), in the case where the underlying
+#. file system of the specified file does not support memory
+#. mapping.
+#.
+msgid "the underlying file system does not support memory mapping"
+msgstr "the underlying file system does not support memory mapping"
+
+#.
+#. This message is used to explain an ENOMEM
+#. error reported by the mmap(2) syatem call, in the
+#. case where the virtual memory size of the process
+#. was exceeded.  The relevant getrlimit values will be
+#. printed separately.
+#.
+msgid ""
+"the virtual memory size limit of the process would have been exceeded"
+msgstr ""
+"the virtual memory size limit of the process would have been exceeded"
+
+#.
+#. This message is used to explain in EINVAL error
+#. reported by mmap(2), in the case where the flags did not
+#. contain exactly one of MAP_PRIVATE or MAP_SHARED.
+#.
+msgid "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
+msgstr "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"

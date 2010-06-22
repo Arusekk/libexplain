@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -75,19 +75,19 @@ explain_buffer_errno_connect_explanation(explain_string_buffer_t *sb,
     case EACCES:
         if (serv_addr->sa_family == AF_UNIX)
         {
-            const struct sockaddr_un *sun;
+            const struct sockaddr_un *saddr;
             explain_final_t final_component;
 
-            sun = (const struct sockaddr_un *)serv_addr;
+            saddr = (const struct sockaddr_un *)serv_addr;
             explain_final_init(&final_component);
             final_component.want_to_write = 1;
             final_component.must_be_a_st_mode = 1;
             final_component.st_mode = S_IFSOCK;
-            final_component.path_max = sizeof(sun->sun_path) - 1;
+            final_component.path_max = sizeof(saddr->sun_path) - 1;
             explain_buffer_eacces
             (
                 sb,
-                sun->sun_path,
+                saddr->sun_path,
                 "sock_addr",
                 &final_component
             );
@@ -150,10 +150,10 @@ explain_buffer_errno_connect_explanation(explain_string_buffer_t *sb,
             explain_option_dialect_specific()
         )
         {
-            explain_string_buffer_puts(sb, "; ");
+            explain_string_buffer_puts(sb->footnotes, "; ");
             explain_buffer_gettext
             (
-                sb,
+                sb->footnotes,
                 /*
                  * xgettext: This message is used to supplement an
                  * EAGAIN explanation for the connect(2) system call, on
@@ -312,7 +312,7 @@ explain_buffer_errno_connect_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "connect");
         break;
     }
 }

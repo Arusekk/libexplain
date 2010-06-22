@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="ftruncate EINVAL"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-ftruncate(fildes = 3, length = -8) failed, Invalid argument (EINVAL)
+ftruncate(fildes = N, length = -8) failed, Invalid argument (EINVAL)
 because 'length' is negative
 fubar
 test $? -eq 0 || no_result
@@ -41,7 +41,9 @@ fi
 fmt -w700 test.out4 > test.out3
 test $? -eq 0 || no_result
 
-sed 's| "[^"]*foobar"||' test.out3 > test.out2
+sed -e 's| "[^"]*foobar"||' \
+    -e 's|fildes = [0-9]*|fildes = N|' \
+    test.out3 > test.out2
 test $? -eq 0 || no_result
 
 fmt test.out2 > test.out

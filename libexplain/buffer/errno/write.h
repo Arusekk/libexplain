@@ -60,6 +60,8 @@ void explain_buffer_errno_write(explain_string_buffer_t *sb, int errnum,
   *    The string buffer into which the message is to be written.
   * @param errnum
   *    The error value to be decoded.
+  * @param syscall_name
+  *    The name of the offending system call.
   * @param fildes
   *    The original fildes, exactly as passed to the write(2) system call.
   * @param data
@@ -68,6 +70,7 @@ void explain_buffer_errno_write(explain_string_buffer_t *sb, int errnum,
   *    The original data_size, exactly as passed to the write(2) system call.
   */
 void explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, const void *data, size_t data_size);
+    int errnum, const char *syscall_name, int fildes, const void *data,
+    size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WRITE_H */

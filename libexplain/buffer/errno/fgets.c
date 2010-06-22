@@ -54,6 +54,7 @@ explain_buffer_errno_fgets_explanation(explain_string_buffer_t *sb,
     (
         sb,
         errnum,
+        "fgets",
         explain_stream_to_fildes(fp),
         data,
         data_size

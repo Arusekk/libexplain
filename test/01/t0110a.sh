@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,11 +21,18 @@
 TEST_SUBJECT="rename EXDEV"
 . test_prelude
 
-fmt > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, Invalid cross-device
 link (EXDEV) because oldpath ("/example", 42% full) and newpath
 ("/example", 42% full) are not on the same mounted file system; note that
 oldpath still exists
+fubar
+test $? -eq 0 || no_result
+
+fmt > test.ok.2 << 'fubar'
+rename(oldpath = "foo", newpath = "bar") failed, Invalid cross-device
+link (EXDEV) because oldpath and newpath are not on the same mounted
+file system; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result
 
@@ -44,7 +51,9 @@ test $? -eq 0 || no_result
 fmt test.out2 > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out
+diff test.ok.2 test.out > /dev/null 2> /dev/null && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

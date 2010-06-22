@@ -66,6 +66,8 @@ void explain_buffer_errno_open(explain_string_buffer_t *sb, int errnum,
   *     is necessary if you need to call <b>any</b> code between the
   *     system call to be explained and this function, because many libc
   *     functions will alter the value of errno.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param pathname
   *     The original pathname, exactly has passed to the open(2) system call.
   * @param flags
@@ -75,6 +77,7 @@ void explain_buffer_errno_open(explain_string_buffer_t *sb, int errnum,
   *     zero if the original call didn't need a mode argument).
   */
 void explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int flags, int mode);
+    int errnum, const char *syscall_name, const char *pathname, int flags,
+    int mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_OPEN_H */

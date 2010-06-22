@@ -18,10 +18,13 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/stdint.h>
 
-#include <libexplain/buffer/int.h>
+#include <libexplain/buffer/tcflush_selector.h>
 #include <libexplain/iocontrol/tcflsh.h>
 
+
+#ifdef TCFLSH
 
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
@@ -31,7 +34,7 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     (void)errnum;
     (void)fildes;
     (void)request;
-    explain_buffer_int(sb, (int)data);
+    explain_buffer_tcflush_selector(sb, (intptr_t)data);
 }
 
 
@@ -43,4 +46,26 @@ const explain_iocontrol_t explain_iocontrol_tcflsh =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    NOT_A_POINTER, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tcflsh =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
+    0, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#endif

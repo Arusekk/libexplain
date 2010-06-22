@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -58,6 +58,11 @@ struct statfs; /* forward */
   * @code
   * explain_statfs_or_die(pathname, data);
   * @endcode
+  *
+  * @note
+  *     The statfs system call is obsolete, it would be better
+  *     to use the statvfs system call instead, possibly via the
+  *     #explain_statvfs_or_die function.
   */
 void explain_statfs_or_die(const char *pathname, struct statfs *data);
 
@@ -85,6 +90,11 @@ void explain_statfs_or_die(const char *pathname, struct statfs *data);
   *     ...no need to print error message
   * }
   * @endcode
+  *
+  * @note
+  *     The statfs system call is obsolete, it would be better
+  *     to use the statvfs system call instead, possibly via the
+  *     #explain_statvfs_on_error function.
   */
 int explain_statfs_on_error(const char *pathname, struct statfs *data)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
@@ -129,6 +139,10 @@ int explain_statfs_on_error(const char *pathname, struct statfs *data)
   * @par
   * The above code example is available pre-packaged as the
   * #explain_statfs_or_die function.
+  *
+  * @note
+  *     The statfs system call is obsolete, it would be better to use
+  *     the statvfs system call instead.
   */
 const char *explain_statfs(const char *pathname, struct statfs *data)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
@@ -177,6 +191,10 @@ const char *explain_statfs(const char *pathname, struct statfs *data)
   * @par
   * The above code example is available pre-packaged as the
   * #explain_statfs_or_die function.
+  *
+  * @note
+  *     The statfs system call is obsolete, it would be better to use
+  *     the statvfs system call instead.
   */
 const char *explain_errno_statfs(int errnum, const char *pathname, struct statfs
     *data)
@@ -220,6 +238,10 @@ const char *explain_errno_statfs(int errnum, const char *pathname, struct statfs
   * @par
   * The above code example is available pre-packaged as the
   * #explain_statfs_or_die function.
+  *
+  * @note
+  *     The statfs system call is obsolete, it would be better to use
+  *     the statvfs system call instead.
   */
 void explain_message_statfs(char *message, int message_size, const char
     *pathname, struct statfs *data);
@@ -267,6 +289,10 @@ void explain_message_statfs(char *message, int message_size, const char
   * @par
   * The above code example is available pre-packaged as the
   * #explain_statfs_or_die function.
+  *
+  * @note
+  *     The statfs system call is obsolete, it would be better to use
+  *     the statvfs system call instead.
   */
 void explain_message_errno_statfs(char *message, int message_size, int errnum,
     const char *pathname, struct statfs *data);

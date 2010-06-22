@@ -30,7 +30,7 @@
  */
 build_command =
     "cook -book ${s etc/howto.cook} search_path=$search_path "
-    "project=$p change=$c version=$v -star -no-log -action -notouch"
+    "project=$p change=$c version=$v -no-log -action -notouch"
     ;
 
 /*

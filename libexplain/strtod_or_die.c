@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,8 +17,8 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdlib.h>
 
+#include <libexplain/output.h>
 #include <libexplain/strtod.h>
 
 
@@ -32,7 +32,7 @@ explain_strtod_or_die(const char *nptr, char **endptr)
     errno = 0;
     result = explain_strtod_on_error(nptr, endptr);
     if (errno)
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     errno = err;
     return result;
 }

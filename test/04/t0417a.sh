@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,13 +22,13 @@ TEST_SUBJECT="ftime EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-ftime(tp = 0x01234567) failed, Bad address (EFAULT) because tp refers to
+ftime(tp = 0x09876543) failed, Bad address (EFAULT) because tp refers to
 memory that is outside the process's accessible address space; this is more
 likely to be a software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT ftime 0x1234567 > test.out
+explain -eEFAULT ftime 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

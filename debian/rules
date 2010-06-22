@@ -21,6 +21,7 @@ build: build-stamp
 build-stamp: config.status
 	dh_testdir
 	$(MAKE)
+	$(MAKE) check
 	touch $@
 
 clean:
@@ -51,7 +52,7 @@ binary-arch: build install
 	dh_installdocs -A
 	dh_install --fail-missing --sourcedir=debian/tmp
 	dh_installman -A
-	dh_strip --dbg-package=libexplain9-dbg
+	dh_strip --dbg-package=libexplain30-dbg
 	dh_compress -A
 	dh_fixperms
 	dh_makeshlibs

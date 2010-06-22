@@ -19,6 +19,11 @@
 #ifndef LIBEXPLAIN_AC_NET_IF_H
 #define LIBEXPLAIN_AC_NET_IF_H
 
+/**
+  * @file
+  * @brief insulate <net/if.h> differences
+  */
+
 #include <libexplain/ac/sys/types.h>
 #include <libexplain/ac/sys/socket.h>
 

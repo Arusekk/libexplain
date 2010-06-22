@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,16 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
+#include <libexplain/ac/errno.h>
+#include <libexplain/ac/stdlib.h>
 
 #include <libexplain/realloc.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 void *
 explain_realloc_on_error(void *ptr, size_t size)
 {
+    int             hold_errno;
     size_t          ok_size;
     void            *result;
 
@@ -34,13 +36,20 @@ explain_realloc_on_error(void *ptr, size_t size)
      * Some realloc implementations can't cope with a size of zero.
      * Some realloc implementations can't cope with a ptr of NULL.
      */
+    hold_errno = errno;
+    errno = 0;
     ok_size = size ? size : 1;
     result = ptr ? realloc(ptr, ok_size) : malloc(ok_size);
     if (!result)
     {
+        hold_errno = errno;
+        if (hold_errno == 0)
+            hold_errno = ENOMEM;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_realloc(ptr, size));
+        explain_output_message(explain_errno_realloc(hold_errno, ptr,
+            size));
     }
+    errno = hold_errno;
     return result;
 }
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,15 +20,16 @@
 
 sortflag=
 if test "$1" = "-r"; then
-        sortflag=r
+        sortflag=-r
         shift
 fi
 echo $* |
 tr ' ' '\12' |
-sort -t. +1n$sortflag -2 +2n$sortflag -3 +3n$sortflag -5 |
+sort -V $sortflag |
 while read f
 do
         echo ".br"
+        echo ".ne 3i"
         echo ".so $f"
 done
 exit 0

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ main(int argc, char **argv)
 {
     int             fildes;
     int             name;
+    long            result;
 
     for (;;)
     {
@@ -60,7 +61,7 @@ main(int argc, char **argv)
         usage();
     fildes = explain_strtol_or_die(argv[optind], 0, 0);
     name = explain_parse_pathconf_name_or_die(argv[optind + 1]);
-
-    printf("%ld\n", explain_fpathconf_or_die(fildes, name));
+    result = explain_fpathconf_or_die(fildes, name);
+    printf("%ld\n", result);
     return EXIT_SUCCESS;
 }

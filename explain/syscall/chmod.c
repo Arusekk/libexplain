@@ -20,8 +20,8 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/chmod.h>
-#include <libexplain/permission_mode.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/syscall/chmod.h>

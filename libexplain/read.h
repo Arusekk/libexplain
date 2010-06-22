@@ -25,6 +25,9 @@
   */
 
 #include <libexplain/warn_unused_result.h>
+#include <libexplain/large_file_support.h>
+
+#include <unistd.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,7 +58,7 @@ extern "C" {
   *     This function only returns on success. On failure, prints an
   *     explanation and exits, it does not return.
   */
-long explain_read_or_die(int fildes, void *data, long data_size);
+ssize_t explain_read_or_die(int fildes, void *data, size_t data_size);
 
 /**
   * The explain_read_on_error function is used to call the <i>read</i>(2)
@@ -85,7 +88,7 @@ long explain_read_or_die(int fildes, void *data, long data_size);
   * @returns
   *     The value returned by the wrapped <i>read</i>(2) system call.
   */
-int explain_read_on_error(int fildes, void *data, long data_size)
+ssize_t explain_read_on_error(int fildes, void *data, size_t data_size)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -131,7 +134,7 @@ int explain_read_on_error(int fildes, void *data, long data_size)
   *     buffer across all threads, and many other functions in this
   *     library.
   */
-const char *explain_read(int fildes, const void *data, long data_size)
+const char *explain_read(int fildes, const void *data, size_t data_size)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -183,7 +186,7 @@ const char *explain_read(int fildes, const void *data, long data_size)
   *     library.
   */
 const char *explain_errno_read(int errnum, int fildes, const void *data,
-    long data_size)
+    size_t data_size)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -229,7 +232,7 @@ const char *explain_errno_read(int errnum, int fildes, const void *data,
   *     system call.
   */
 void explain_message_read(char *message, int message_size, int fildes,
-    const void *data, long data_size);
+    const void *data, size_t data_size);
 
 /**
   * The explain_message_errno_read function is used to obtain an
@@ -279,7 +282,7 @@ void explain_message_read(char *message, int message_size, int fildes,
   *     system call.
   */
 void explain_message_errno_read(char *message, int message_size, int errnum,
-    int fildes, const void *data, long data_size);
+    int fildes, const void *data, size_t data_size);
 
 #ifdef __cplusplus
 }

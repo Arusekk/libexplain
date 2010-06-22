@@ -43,7 +43,7 @@ get_max_file_size(int file_size_bits)
         max_file_size = (unsigned long long)1 << file_size_bits;
     if (getrlimit(RLIMIT_FSIZE, &szlim) < 0 || szlim.rlim_cur == RLIM_INFINITY)
         return max_file_size;
-    if (szlim.rlim_cur < max_file_size)
+    if ((unsigned long long)szlim.rlim_cur < max_file_size)
         max_file_size = szlim.rlim_cur;
     return max_file_size;
 }

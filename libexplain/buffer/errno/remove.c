@@ -42,12 +42,28 @@ explain_buffer_errno_remove_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_remove_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname)
+    int errnum, const char *syscall_name, const char *pathname)
 {
     if (explain_pathname_is_a_directory(pathname))
-        explain_buffer_errno_rmdir_explanation(sb, errnum, pathname);
+    {
+        explain_buffer_errno_rmdir_explanation
+        (
+            sb,
+            errnum,
+            syscall_name,
+            pathname
+        );
+    }
     else
-        explain_buffer_errno_unlink_explanation(sb, errnum, pathname);
+    {
+        explain_buffer_errno_unlink_explanation
+        (
+            sb,
+            errnum,
+            syscall_name,
+            pathname
+        );
+    }
 }
 
 
@@ -68,6 +84,7 @@ explain_buffer_errno_remove(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "remove",
         pathname
     );
     explain_explanation_assemble(&exp, sb);

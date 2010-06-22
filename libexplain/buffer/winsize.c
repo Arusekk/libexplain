@@ -29,10 +29,19 @@ explain_buffer_winsize(explain_string_buffer_t *sb,
     explain_string_buffer_printf
     (
         sb,
-        "{ ws_row = %d, ws_col = %d, ws_xpixel = %d, ws_ypixel = %d }",
+        "{ ws_row = %d, ws_col = %d",
         value->ws_row,
-        value->ws_col,
-        value->ws_xpixel,
-        value->ws_ypixel
+        value->ws_col
     );
+    if (value->ws_xpixel || value->ws_ypixel)
+    {
+        explain_string_buffer_printf
+        (
+            sb,
+            ", ws_xpixel = %d, ws_ypixel = %d",
+            value->ws_xpixel,
+            value->ws_ypixel
+        );
+    }
+    explain_string_buffer_puts(sb, " }");
 }

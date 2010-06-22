@@ -19,6 +19,11 @@
 #ifndef LIBEXPLAIN_AC_SYS_SELECT_H
 #define LIBEXPLAIN_AC_SYS_SELECT_H
 
+/**
+  * @file
+  * @brief Insulate <sys/select.h> differences
+  */
+
 #include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_SYS_SELECT_H

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,20 +17,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/ctype.h>
 #include <libexplain/ac/assert.h>
+#include <libexplain/ac/ctype.h>
 #include <libexplain/ac/dirent.h>
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/caption_name_type.h>
 #include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/does_not_have_inode_modify_permission.h>
+#include <libexplain/buffer/eexist.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
@@ -41,6 +43,7 @@
 #include <libexplain/fstrcmp.h>
 #include <libexplain/getppcwd.h>
 #include <libexplain/have_permission.h>
+#include <libexplain/name_max.h>
 #include <libexplain/option.h>
 #include <libexplain/symloopmax.h>
 
@@ -87,7 +90,12 @@ look_for_similar(explain_string_buffer_t *sb, const char *lookup_directory,
         if (best_weight < weight)
         {
             best_weight = weight;
-            strendcpy(best_name, dep->d_name, best_name + sizeof(best_name));
+            explain_strendcpy
+            (
+                best_name,
+                dep->d_name,
+                best_name + sizeof(best_name)
+            );
         }
     }
     closedir(dp);
@@ -107,9 +115,9 @@ look_for_similar(explain_string_buffer_t *sb, const char *lookup_directory,
 
         ipath_end = ipath + sizeof(ipath);
         ip = ipath;
-        ip = strendcpy(ip, lookup_directory, ipath_end);
-        ip = strendcpy(ip, "/", ipath_end);
-        ip = strendcpy(ip, best_name, ipath_end);
+        ip = explain_strendcpy(ip, lookup_directory, ipath_end);
+        ip = explain_strendcpy(ip, "/", ipath_end);
+        ip = explain_strendcpy(ip, best_name, ipath_end);
         if (lstat(ipath, &st) == 0)
             st_mode = st.st_mode;
     }
@@ -794,44 +802,6 @@ not_a_subdirectory(explain_string_buffer_t *sb, const char *comp,
 
 
 static void
-must_not_exist(explain_string_buffer_t *sb, const char *comp,
-    int comp_st_mode, const char *caption, const char *dir, int dir_st_mode)
-{
-    char part1[NAME_MAX * 4 + 100];
-    explain_string_buffer_t part1_sb;
-    char part2[PATH_MAX * 4 + 100];
-    explain_string_buffer_t part2_sb;
-
-    explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    explain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st_mode);
-    explain_string_buffer_init(&part2_sb, part2, sizeof(part2));
-    explain_buffer_caption_name_type(&part2_sb, caption, dir, dir_st_mode);
-
-    explain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used when directory has a directory
-         * entry for the named component, but a directory was expected
-         * and something else was there instead.
-         *
-         * Different language grammars may need to rearrange the parts.
-         *
-         * %1$s => The name of the offending path component and file
-         *         type (will never have slashes).  It will be quoted.
-         * %2$s => The name of the directory that contains the problematic
-         *         component; it may have zero, one or more slashes in it.  Will
-         *         include the name of the function call argument, the name of
-         *         the directory, and the file type "directory".
-         */
-        i18n("the %s in the %s should not exist yet"),
-        part1,
-        part2
-    );
-}
-
-
-static void
 wrong_file_type(explain_string_buffer_t *sb, const char *caption,
     const char *dir, int dir_st_mode, const char *comp, int comp_st_mode,
     int wanted_st_mode)
@@ -944,7 +914,7 @@ explain_sticky_bit_vs_unlink(explain_string_buffer_t *sb,
     explain_buffer_uid(&file_part_sb, file_st->st_uid);
     explain_buffer_file_type(&ftype_sb, file_st->st_mode);
 
-    explain_string_buffer_puts(sb, "; ");
+    explain_string_buffer_puts(sb, ", ");
     explain_string_buffer_printf_gettext
     (
         sb,
@@ -1031,9 +1001,15 @@ explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
      * In the original Unix, the empty pathname referred to the current
      * directory.  Nowadays POSIX decrees that an empty pathname must
      * not be resolved successfully.  Linux returns ENOENT in this case.
+     *
+     * FIXME: is there a way pathconf can tell us which semanrics apply?
+     *        or maybe sysconf?
      */
     if (!initial_pathname || !*initial_pathname)
     {
+#ifdef __sun__
+        initial_pathname = ".";
+#else
         explain_string_buffer_printf
         (
             sb,
@@ -1048,6 +1024,7 @@ explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
             caption
         );
         return 0;
+#endif
     }
 
     /*
@@ -1598,7 +1575,9 @@ explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
                     sizeof(intermediate_path)
                 );
                 if (rlb[0] == '/')
+                {
                     explain_string_buffer_puts(&intermediate_path_buf, rlb);
+                }
                 else
                 {
                     explain_string_buffer_puts
@@ -1634,8 +1613,8 @@ explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
 
                 if (rlb[0] == '/')
                 {
-                    lookup_directory_buf.position = 1;
-                    lookup_directory[0] = '/';
+                    explain_string_buffer_rewind(&lookup_directory_buf);
+                    explain_string_buffer_putc(&lookup_directory_buf, '/');
                 }
                 ++number_of_symlinks_followed;
                 if (number_of_symlinks_followed >= symloop_max)
@@ -1710,12 +1689,11 @@ explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
          */
         if (final_component->must_not_exist)
         {
-            must_not_exist
+            explain_buffer_eexist5
             (
                 sb,
                 component,
                 intermediate_path_st.st_mode,
-                caption,
                 lookup_directory,
                 lookup_directory_st.st_mode
             );

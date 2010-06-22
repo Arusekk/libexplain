@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 TEST_SUBJECT="strtof ERANGE"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 strtof(nptr = "1e65537", endptr = 0xNNNNNNNN) failed, Numerical result out
 of range (ERANGE) because the resulting value would have been too large to
 store
@@ -31,7 +31,10 @@ test $? -eq 0 || no_result
 test_strtof 1e65537 > test.out.2 2>&1
 test $? -eq 1 || fail
 
-sed 's|0x[0-9a-zA-Z]*|0xNNNNNNNN|' test.out.2 > test.out
+sed 's|0x[0-9a-fA-F][0-9a-zA-Z]*|0xNNNNNNNN|' test.out.2 > test.out.1
+test $? -eq 0 || no_result
+
+fmt < test.out.1 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

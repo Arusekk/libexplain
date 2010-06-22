@@ -19,15 +19,45 @@
 
 #include <libexplain/ac/sys/ioctl.h>
 
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocsergstruct.h>
 
 
+#ifdef TIOCSERGSTRUCT
+
+/*
+ * This ioctl is "for debugging only" and comes in wide variety of
+ * sizes, all of which are private to the kernel, and all of which
+ * are hard to separate out.
+ */
 const explain_iocontrol_t explain_iocontrol_tiocsergstruct =
 {
     "TIOCSERGSTRUCT", /* name */
     TIOCSERGSTRUCT, /* value */
     0, /* disambiguate */
     0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    explain_iocontrol_generic_print_data_pointer, /* print_data_returned */
+    65536, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocsergstruct =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

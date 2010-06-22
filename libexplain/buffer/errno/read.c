@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/mtio.h>
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
@@ -36,7 +37,6 @@
 #include <libexplain/buffer/size_t.h>
 #include <libexplain/explanation.h>
 #include <libexplain/is_same_inode.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -68,7 +68,7 @@ is_a_tape(int fildes)
 
 void
 explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
-    int fildes, const void *data, size_t data_size)
+    const char *syscall_name, int fildes, const void *data, size_t data_size)
 {
     (void)data;
     (void)data_size;
@@ -92,20 +92,7 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
             flags = fcntl(fildes, F_GETFL);
             if (flags >= 0)
             {
-                explain_buffer_gettext
-                (
-                    sb,
-                    /*
-                     * xgettext: This message is used when an attempt is
-                     * made to read from a file descriptor that was not
-                     * opened for reading.  The actual open mode will be
-                     * printed separately.
-                     */
-                    i18n("the file descriptor is not open for reading")
-                );
-                explain_string_buffer_puts(sb, " (");
-                explain_buffer_open_flags(sb, flags);
-                explain_string_buffer_putc(sb, ')');
+                explain_buffer_ebadf_not_open_for_reading(sb, flags);
             }
             else
             {
@@ -119,7 +106,7 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     case EINTR:
-        explain_buffer_eintr(sb, "read");
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     case EINVAL:
@@ -131,15 +118,7 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
             {
                 if ((flags & O_ACCMODE) == O_WRONLY)
                 {
-                    explain_string_buffer_puts
-                    (
-                        sb,
-                        /* FIXME: i18n */
-                        "the file descriptor is attached to an object "
-                        "which is unsuitable for reading ("
-                    );
-                    explain_buffer_open_flags(sb, flags);
-                    explain_string_buffer_putc(sb, ')');
+                    explain_buffer_ebadf_not_open_for_reading(sb, flags);
                 }
 #ifdef O_DIRECT
                 else if (flags & O_DIRECT)
@@ -219,10 +198,9 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
                     (
                         sb,
                         /* FIXME: i18n */
-                        "the process is in a background "
-                        "process group, and tried to read from its "
-                        "controlling tty, and either it is ignoring or "
-                        "blocking SIGTTIN"
+                        "the process is in a background process group, and "
+                        "tried to read from its controlling tty, and the "
+                        "controlling tty is either ignoring or blocking SIGTTIN"
                     );
                     close(controlling_tty_fd);
                     break;
@@ -290,7 +268,7 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -315,6 +293,7 @@ explain_buffer_errno_read(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "read",
         fildes,
         data,
         data_size

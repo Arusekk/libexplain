@@ -1,6 +1,6 @@
 dnl!
 dnl! libexplain - Explain errno values returned by libc functions
-dnl! Copyright (C) 2008, 2009 Peter Miller
+dnl! Copyright (C) 2008-2010 Peter Miller
 dnl! Written by Peter Miller <pmiller@opensource.org.au>
 dnl!
 dnl! This program is free software; you can redistribute it and/or
@@ -45,6 +45,20 @@ case "$YACC" in
     AC_MSG_RESULT([
         The following command may be used to install it:
         sudo yum install bison
+    ])
+    OK=yes
+  fi
+  if pkg_info -a > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg_add -r bison
+    ])
+    OK=yes
+  fi
+  if pkg --help > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg install SUNWbison
     ])
     OK=yes
   fi
@@ -97,6 +111,11 @@ AC_ADD_CFLAGS(-Wall)
 AC_ADD_CFLAGS(-Wextra)
 AC_ADD_CFLAGS([-Wl,--as-needed])
 
+dnl!
+dnl!  Solaris keeps socket functions in different library than libc.
+dnl!
+AC_CHECK_LIB(socket, bind, ,
+    unset ac_cv_func_bind)
 
 dnl
 dnl we need to check for libiconv before we check for libintl
@@ -116,6 +135,7 @@ AC_CHECK_LIB(intl, gettext, ,
       unset ac_cv_func_gettext)
   ]
 )
+AC_CHECK_LIB(compat, ftime)
 
 AC_CHECK_PROGS(LIBTOOL, libtool)
 
@@ -136,6 +156,20 @@ then
     AC_MSG_RESULT([
         The following command may be used to install it:
         sudo yum install libtool
+    ])
+    OK=yes
+  fi
+  if pkg_info -a > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg_add -r libtool
+    ])
+    OK=yes
+  fi
+  if pkg --help > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg install SUNWlibtool
     ])
     OK=yes
   fi
@@ -240,7 +274,8 @@ fi
 AC_SUBST(GROFF_MM_MACROS)
 AC_MSG_RESULT([-m$GROFF_MM_MACROS])
 
-AC_CHECK_HEADERS(          \
+AC_CHECK_HEADERS([         \
+    _G_config.h            \
     arpa/inet.h            \
     bluetooth/bluetooth.h  \
     bluetooth/bnep.h       \
@@ -248,12 +283,15 @@ AC_CHECK_HEADERS(          \
     bluetooth/hci.h        \
     bluetooth/hidp.h       \
     bluetooth/rfcomm.h     \
+    dlfcn.h                \
     fcntl.h                \
+    float.h                \
+    getopt.h               \
     libintl.h              \
     limits.h               \
     linux/apm_bios.h       \
     linux/arcfb.h          \
-    linux/atalk.h          \
+    linux/ata.h            \
     linux/atm.h            \
     linux/atm_eni.h        \
     linux/atm_he.h         \
@@ -262,21 +300,22 @@ AC_CHECK_HEADERS(          \
     linux/atm_tcp.h        \
     linux/atm_zatm.h       \
     linux/atmarp.h         \
-    linux/atmbr2684.h      \
     linux/atmclip.h        \
     linux/atmdev.h         \
     linux/atmlec.h         \
     linux/atmmpc.h         \
     linux/atmsvc.h         \
-    linux/auto_fs.h        \
-    linux/auto_fs4.h       \
     linux/blkpg.h          \
+    linux/blktrace_api.h   \
     linux/capi.h           \
     linux/cciss_ioctl.h    \
     linux/cdk.h            \
+    linux/cdrom.h          \
     linux/chio.h           \
+    linux/cm206.h          \
     linux/cm4000_cs.h      \
     linux/comstats.h       \
+    linux/cyclades.h       \
     linux/dn.h             \
     linux/dvb/audio.h      \
     linux/dvb/ca.h         \
@@ -286,46 +325,48 @@ AC_CHECK_HEADERS(          \
     linux/dvb/osd.h        \
     linux/dvb/video.h      \
     linux/ethtool.h        \
-    linux/ext2_fs.h        \
     linux/fb.h             \
     linux/fd.h             \
+    linux/fiemap.h         \
+    linux/filter.h         \
     linux/firewire-cdev.h  \
     linux/fs.h             \
     linux/hayesesp.h       \
+    linux/hdreg.h          \
     linux/hiddev.h         \
     linux/hidraw.h         \
     linux/hpet.h           \
     linux/i2o-dev.h        \
     linux/if.h             \
-    linux/if_bonding.h     \
     linux/if_bridge.h      \
-    linux/if_frad.h        \
-    linux/if_ppp.h         \
-    linux/if_pppox.h       \
-    linux/if_pppox.h       \
+    linux/if_eql.h         \
     linux/if_tun.h         \
+    linux/if_vlan.h        \
     linux/input.h          \
     linux/ipmi.h           \
     linux/ipv6.h           \
-    linux/irda.h           \
     linux/isdn.h           \
     linux/isdn_ppp.h       \
     linux/ivtvfb.h         \
     linux/joystick.h       \
     linux/kd.h             \
+    linux/kdev_t.h         \
     linux/kvm.h            \
+    linux/lp.h             \
+    linux/major.h          \
     linux/matroxfb.h       \
     linux/mii.h            \
     linux/mmtimer.h        \
     linux/msdos_fs.h       \
     linux/mtio.h           \
     linux/nbd.h            \
-    linux/ncp_fs.h         \
-    linux/netlink.h        \
+    linux/net_tstamp.h     \
     linux/nvram.h          \
     linux/phantom.h        \
     linux/pmu.h            \
     linux/ppdev.h          \
+    linux/ppp-comp.h       \
+    linux/ppp_defs.h       \
     linux/radeonfb.h       \
     linux/random.h         \
     linux/raw.h            \
@@ -341,6 +382,7 @@ AC_CHECK_HEADERS(          \
     linux/spi/spidev.h     \
     linux/suspend_ioctls.h \
     linux/synclink.h       \
+    linux/termios.h        \
     linux/tiocl.h          \
     linux/types.h          \
     linux/udf_fs_i.h       \
@@ -352,13 +394,15 @@ AC_CHECK_HEADERS(          \
     linux/video_encoder.h  \
     linux/videodev.h       \
     linux/videodev2.h      \
+    linux/vt.h             \
     linux/watchdog.h       \
-    linux/x25.h            \
     mntent.h               \
     net/ethernet.h         \
     net/if.h               \
     net/if_arp.h           \
     net/if_ppp.h           \
+    net/ppp-comp.h         \
+    net/ppp_defs.h         \
     net/route.h            \
     netash/ash.h           \
     netax25/ax25.h         \
@@ -369,42 +413,233 @@ AC_CHECK_HEADERS(          \
     netiucv/iucv.h         \
     netpacket/packet.h     \
     netrom/netrom.h        \
-    netrose/rose.h         \
     pwd.h                  \
+    regex.h                \
     stddef.h               \
+    stdint.h               \
+    stdio_ext.h            \
     stdlib.h               \
     string.h               \
     sys/capability.h       \
     sys/eventfd.h          \
     sys/file.h             \
+    sys/filio.h            \
     sys/ioctl.h            \
     sys/mman.h             \
+    sys/mntent.h           \
+    sys/mnttab.h           \
     sys/mount.h            \
-    sys/mtio.h             \
     sys/mtio.h             \
     sys/param.h            \
     sys/raw.h              \
     sys/resource.h         \
     sys/select.h           \
-    sys/signalfd.h          \
+    sys/signalfd.h         \
     sys/socket.h           \
+    sys/sockio.h           \
     sys/stat.h             \
     sys/statfs.h           \
+    sys/statvfs.h          \
+    sys/sysmacros.h        \
+    sys/termio.h           \
     sys/time.h             \
     sys/timeb.h            \
-    sys/timex.h            \
     sys/timerfd.h          \
+    sys/timex.h            \
+    sys/ttycom.h           \
     sys/types.h            \
+    sys/uio.h              \
     sys/un.h               \
     sys/vfs.h              \
     sys/wait.h             \
+    syslog.h               \
+    termio.h               \
     termios.h              \
     time.h                 \
     unistd.h               \
+    ustat.h                \
     utime.h                \
     wchar.h                \
     wctype.h               \
-    )
+    ])
+
+dnl! =======================================================================
+dnl!
+dnl!  Headers that need special handling.
+dnl!
+
+AC_CHECK_HEADERS([linux/atalk.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/atmbr2684.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/auto_fs.h], [], [], [[
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/auto_fs4.h], [], [], [[
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/ext2_fs.h], [], [], [[
+#ifdef HAVE_LINUX_FS_H
+#include <linux/fs.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/if_bonding.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/if_frad.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/if_ppp.h], [], [], [[
+#include <linux/types.h>
+#include <linux/ppp_defs.h>
+#include <linux/if.h>
+
+#ifndef aligned_u64
+#define aligned_u64 __u64 __attribute__((aligned(8)))
+#endif
+
+]])
+
+AC_CHECK_HEADERS([linux/if_pppox.h], [], [], [[
+#ifdef HAVE_NET_ETHERNET_H
+#include <net/ethernet.h>
+#endif
+#ifdef HAVE_NET_IF_H
+#include <net/if.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/irda.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/ncp_fs.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/netlink.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([linux/x25.h], [], [], [[
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([netrose/rose.h], [], [], [[
+#ifdef HAVE_NETAX25_AX25_H
+#include <netax25/ax25.h>
+#endif
+]])
+
+dnl! =======================================================================
+
+dnl!
+dnl!  We need to know whether getmntent takes one argument or two.
+dnl!
+AC_MSG_CHECKING([number of arguments to getmntent])
+AC_TRY_COMPILE([
+#ifdef HAVE_MNTENT_H
+#include <mntent.h>
+#endif
+#ifdef HAVE_SYS_MNTENT_H
+#include <sys/mntent.h>
+#endif
+#ifdef HAVE_SYS_MNTTAB_H
+#include <sys/mnttab.h>
+#endif
+], [
+    getmntent(0);
+    return 0;
+], [
+    ac_av_getmntent_nargs=1
+    AC_MSG_RESULT([1])
+], [
+    ac_av_getmntent_nargs=2
+    AC_MSG_RESULT([2])
+])
+AC_DEFINE_UNQUOTED([GETMNTENT_NARGS], $ac_av_getmntent_nargs,
+[Define this symbol to be the number of arguments required by the
+getmntent function.])
+
+dnl! =======================================================================
+
+dnl!
+dnl!  We need to know whether va_list is compatible with const void *
+dnl!
+AC_MSG_CHECKING([what va_list is compatible with])
+AC_TRY_COMPILE([
+#include <stdarg.h>
+], [
+    va_list ap;
+    const void *p;
+    p = ap;
+    return 0;
+], [
+    ac_av_va_list_void_star=1
+    AC_MSG_RESULT(const void *)
+], [
+    ac_av_va_list_void_star=0
+    AC_MSG_RESULT(nothing, sorry)
+])
+AC_DEFINE_UNQUOTED([VA_LIST_VOID_STAR], $ac_av_va_list_void_star,
+[Define this symbol to 1 if va_list type is compatible with const void *.])
+
+dnl! =======================================================================
+
+dnl!
+dnl!  We need to know whether statfs takes two arguments or four.
+dnl!
+AC_MSG_CHECKING([number of arguments to statfs])
+AC_TRY_COMPILE([
+#ifdef HAVE_SYS_MNTENT_H
+#include <sys/statfs.h>
+#endif
+], [
+    statfs(0, 0);
+    return 0;
+], [
+    ac_av_statfs_nargs=2
+    AC_MSG_RESULT([2])
+], [
+    ac_av_statfs_nargs=4
+    AC_MSG_RESULT([4])
+])
+AC_DEFINE_UNQUOTED([STATFS_NARGS], $ac_av_statfs_nargs,
+[Define to the number of arguments for the statfs function.])
+
+dnl! =======================================================================
 
 if test "$ac_cv_header_net_if_h" = yes -a "$ac_cv_header_linux_if_h" = yes
 then
@@ -434,13 +669,17 @@ then
     _PATH_MOUNTED=${_PATH_MNTTAB}
     # OpenBSD doesn't have /etc/mtab
     test -f /etc/mtab && _PATH_MOUNTED=/etc/mtab
+    test -f /etc/mnttab && _PATH_MOUNTED=/etc/mnttab
     AC_DEFINE_UNQUOTED(_PATH_MOUNTED, ["${_PATH_MOUNTED}"],
     [File listing currently active mount points.])
 fi
 
 AC_SEARCH_LIBS(cap_get_proc, cap)
+AC_SEARCH_LIBS(dlopen, dl)
 
-AC_CHECK_TYPES([sigset_t], , , [#include <signal.h>])
+AC_CHECK_TYPES([sigset_t, loff_t], , ,
+[#include <signal.h>
+#include <sys/types.h>])
 
 AC_HEADER_DIRENT
 AC_TYPE_SIGNAL
@@ -458,28 +697,61 @@ fi
 AC_SYS_LONG_FILE_NAMES
 AC_FUNC_STRERROR_R
 AC_CHECK_FUNCS(    \
+    __fpurge       \
     accept4        \
     adjtimex       \
+    atexit         \
     cap_get_proc   \
     capget         \
+    cfmakeraw      \
+    dirfd          \
+    dladdr         \
+    dlsym          \
+    endmntent      \
     eventfd        \
+    flock          \
+    fpurge         \
+    fstatfs        \
+    ftime          \
+    futimes        \
+    getdomainname  \
+    gethostname    \
+    getmntent      \
     getpagesize    \
     gettext        \
     hasmntopt      \
     lchown         \
     mbrtowc        \
+    mkostemp       \
+    mmap           \
+    munmap         \
+    on_exit        \
+    readv          \
     remove         \
+    setdomainname  \
     setlocale      \
+    setmntent      \
     signalfd       \
     snprintf       \
+    statfs         \
     strcasecmp     \
-    strendcpy      \
     strerror       \
     strncasecmp    \
+    strndup        \
+    strnstr        \
     strsignal      \
+    tcdrain        \
+    tcflow         \
+    tcflush        \
+    tcgetattr      \
+    tcsendbreak    \
+    tcsetattr      \
     timerfd_create \
+    ustat          \
+    utimes         \
     vsnprintf      \
     wcwidth        \
+    writev         \
     )
 
 if test "$ac_cv_func_capget" = "yes"
@@ -552,7 +824,7 @@ AC_MSG_RESULT(cross))
 
 dnl the strsignal function is usually defined in <string.h>
 dnl but is sometimes defined in <unistd.h>
-AC_CHECK_DECLS([strsignal],,, [
+AC_CHECK_DECLS([strsignal,ustat,strverscmp],,, [
 #ifndef __USE_GNU
 #define __USE_GNU
 #endif
@@ -562,8 +834,33 @@ AC_CHECK_DECLS([strsignal],,, [
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#ifdef HAVE_USTAT_H
+#include <ustat.h>
+#endif
 ])
-AC_CHECK_DECLS([strverscmp])
+
+dnl!
+dnl! Look for the NAME_MAX symbol.  This is the maximum length of a
+dnl! pathname component (between th slashes) in a path.
+dnl!
+ac_av_name_max=0
+AC_COMPUTE_INT([ac_av_name_max],
+    [pathconf(\"/\", _PC_NAME_MAX)],
+    [#include <unistd.h>])
+if test "$ac_av_name_max" -gt 0
+then
+    AC_DEFINE_UNQUOTED(CONF_NAME_MAX, $ac_av_name_max,
+        [Define this symbol to the value of pathconf("/", _PC_NAME_MAX) if your
+        system does not have a native NAME_MAX symbol defined in the <limits.h>
+        or <sys/param.h> system include files.])
+fi
+
+dnl!
+dnl!    Do not do this until after all of the compiler and symbol tests
+dnl!    are done, otherwise you get false negatives.
+dnl!    Probably don't need to impose this on downstream.
+dnl!
+dnl! AC_ADD_CFLAGS(-Werror)
 
 dnl
 dnl   Test to find a Bourne shell which understands functions
@@ -670,6 +967,20 @@ then
     ])
     OK=yes
   fi
+  if pkg_info -a > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg_add -r gettext
+    ])
+    OK=yes
+  fi
+  if pkg --help > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg install SUNWgnu-gettext
+    ])
+    OK=yes
+  fi
   if test "$OK" != "yes"; then
     AC_MSG_RESULT([
         If you are using a package based install, you will need the
@@ -735,6 +1046,13 @@ else
     ])
     OK=yes
   fi
+  if pkg --help > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg install SUNWgroff
+    ])
+    OK=yes
+  fi
   if test "$OK" != "yes"; then
     AC_MSG_RESULT([
         If you are using a package based install, you will need the
@@ -759,7 +1077,7 @@ AC_SUBST(PROGRAM_SUFFIX)
 AH_TOP(
 [/*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -36,27 +36,28 @@
 #include <libexplain/buffer/etxtbsy.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
-#include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/off_t.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
 
 
 static void
 explain_buffer_errno_truncate_system_call(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, long long length)
+    int errnum, const char *pathname, off_t length)
 {
+    (void)errnum;
     explain_string_buffer_puts(sb, "truncate(pathname = ");
-    if (errnum == EFAULT)
-        explain_buffer_pointer(sb, pathname);
-    else
-        explain_string_buffer_puts_quoted(sb, pathname);
-    explain_string_buffer_printf(sb, ", length = %lld)", length);
+    explain_buffer_pathname(sb, pathname);
+    explain_string_buffer_puts(sb, ", length = ");
+    explain_buffer_off_t(sb, length);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
 explain_buffer_errno_truncate_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, long long length)
+    int errnum, const char *syscall_name, const char *pathname, off_t length)
 {
     explain_final_t final_component;
 
@@ -78,7 +79,7 @@ explain_buffer_errno_truncate_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINTR:
-        explain_buffer_eintr(sb, "truncate");
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     case EINVAL:
@@ -167,7 +168,7 @@ explain_buffer_errno_truncate_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -175,7 +176,7 @@ explain_buffer_errno_truncate_explanation(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_truncate(explain_string_buffer_t *sb, int errnum,
-    const char *pathname, long long length)
+    const char *pathname, off_t length)
 {
     explain_explanation_t exp;
 
@@ -191,6 +192,7 @@ explain_buffer_errno_truncate(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "truncate",
         pathname,
         length
     );

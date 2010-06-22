@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,24 +17,21 @@
  */
 
 #include <libexplain/ac/sys/timerfd.h>
+#include <libexplain/ac/sys/time.h>
 
 #include <libexplain/buffer/clockid.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/sizeof.h>
 
 
-#ifndef CLOCK_MONOTONIC
-#define CLOCK_MONOTONIC 0
-#endif
-#ifndef CLOCK_REALTIME
-#define CLOCK_REALTIME (CLOCK_MONOTONIC+1)
-#endif
-
-
 static const explain_parse_bits_table_t table[] =
 {
+#ifdef CLOCK_MONOTONIC
     { "CLOCK_MONOTONIC", CLOCK_MONOTONIC },
+#endif
+#ifdef CLOCK_REALTIME
     { "CLOCK_REALTIME", CLOCK_REALTIME },
+#endif
 };
 
 

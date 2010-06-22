@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/assert.h>
+#include <libexplain/ac/getopt.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
@@ -26,18 +27,31 @@
 #include <libexplain/version_print.h>
 
 #include <codegen/catalogue.h>
+#include <codegen/elastic_buffer.h>
 #include <codegen/generate.h>
 #include <codegen/gram.h>
-#include <codegen/string_buffer.h>
+#include <codegen/ioctl_scan.h>
 
 
 static void
 usage(void)
 {
     fprintf(stderr, "Usage: codegen <declaration>\n");
+    fprintf(stderr, "       codegen -i <include-file>\n");
     fprintf(stderr, "       codegen -V\n");
     exit(EXIT_FAILURE);
 }
+
+
+static const struct option options[] =
+{
+    { "ioctl-scan-include", 1, 0, 'i' },
+    { "ioctl-scan-generate", 1, 0, 'I' },
+    { "lisp", 0, 0, 'l' },
+    { "specific", 1, 0, 'g' },
+    { "version", 0, 0, 'V' },
+    { 0, 0, 0, 0 }
+};
 
 
 int
@@ -52,7 +66,7 @@ main(int argc, char **argv)
     lisp = 0;
     for (;;)
     {
-        int c = getopt(argc, argv, "g:lV");
+        int c = getopt_long(argc, argv, "g:I:i:lV", options, 0);
         if (c < 0)
             break;
         switch (c)
@@ -60,6 +74,14 @@ main(int argc, char **argv)
         case 'g':
             generate_specific(optarg);
             break;
+
+        case 'I':
+            ioctl_scan_generate(optarg);
+            return 0;
+
+        case 'i':
+            ioctl_scan_include(optarg);
+            return 0;
 
         case 'l':
             lisp = 1;
@@ -82,6 +104,11 @@ main(int argc, char **argv)
     {
         char            catpath[300];
 
+        if (strchr(decl, '/'))
+        {
+            fprintf(stderr, "did you mean \"-g %s\" ?!?\n", decl);
+            exit(1);
+        }
         snprintf(catpath, sizeof(catpath), "catalogue/%s", decl);
         /* using prototype from message catalogue */
         cp = catalogue_open(catpath);

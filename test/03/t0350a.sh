@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,13 +22,13 @@ TEST_SUBJECT="ioctl ENOTTY"
 . test_prelude
 
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = TCGETS, data = 0x00012345) failed,
+ioctl(fildes = 42, request = TCGETS, data = 0x09876543) failed,
 Inappropriate ioctl for device (ENOTTY) because fildes is not associated
 with an object to which ioctl TCGETS can be applied
 fubar
 test $? -eq 0 || no_result
 
-explain -eENOTTY ioctl 42 TCGETS 0x12345 > test.out
+explain -eENOTTY ioctl 42 TCGETS 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

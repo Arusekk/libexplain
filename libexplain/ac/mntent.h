@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,45 +20,39 @@
 #ifndef LIBEXPLAIN_AC_MNTENT_H
 #define LIBEXPLAIN_AC_MNTENT_H
 
+/**
+  * @file
+  * @brief Insulate <mntent.h> differences
+  */
+
 #include <libexplain/ac/stdio.h>
 
 #if HAVE_MNTENT_H
-
 #include <mntent.h>
+#endif
+#if HAVE_SYS_MNTENT_H
+#include <sys/mntent.h>
+#endif
+#if HAVE_SYS_MNTTAB_H
+#include <sys/mnttab.h>
+#endif
 
 #ifndef MOUNTED
 # ifdef _PATH_MOUNTED
 #  define MOUNTED _PATH_MOUNTED
 # else
-#  define MOUNTED "/etc/mtab"
+#  ifdef MNTTAB
+#   define MOUNTED MNTTAB
+#  else
+#   define MOUNTED "/etc/mtab"
+#  endif
 # endif
 #endif
 
-#else /* !HAVE_MNTENT_H */
-
-#ifndef MOUNTED
-# ifdef _PATH_MOUNTED
-#  define MOUNTED _PATH_MOUNTED
-# else
-#  define MOUNTED "/etc/mtab"
-# endif
+/* Solaris is fugly. */
+#if defined(HAVE_GETMNTENT) && !defined(HAVE_SETMNTENT)
+#define setmntent fopen
+#define endmntent fclose
 #endif
-
-struct mntent
-{
-    char            *mnt_fsname;
-    char            *mnt_dir;
-    char            *mnt_type;
-    char            *mnt_opts;
-    int             mnt_freq;
-    int             mnt_passno;
-};
-
-
-FILE *setmntent(const char *, const char *);
-struct mntent *getmntent(FILE *);
-int endmntent(FILE *);
-
-#endif /* !HAVE_MNTENT_H */
 
 #endif /* LIBEXPLAIN_AC_MNTENT_H */

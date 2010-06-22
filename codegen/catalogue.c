@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,7 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/ctype.h>
 #include <libexplain/ac/stdio.h>
+#include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
@@ -32,8 +33,8 @@
 #include <codegen/aegis.h>
 #include <codegen/boolean.h>
 #include <codegen/catalogue.h>
+#include <codegen/elastic_buffer.h>
 #include <codegen/header.h>
-#include <codegen/string_buffer.h>
 #include <codegen/wrapper.h>
 
 
@@ -231,7 +232,36 @@ catalogue_get_bool(catalogue_t *cp, const char *name, int dflt)
         if (0 == strcasecmp(cdp->name, name))
             return string_to_boolean(cdp->value);
     }
-    catalogue_set(cp, name, boolean_to_string(dflt));
+    catalogue_set_bool(cp, name, dflt);
+    return dflt;
+}
+
+
+int
+catalogue_get_int(catalogue_t *cp, const char *name, int dflt)
+{
+    size_t          j;
+
+    for (j = 0; j < cp->data_length; ++j)
+    {
+        catalogue_data_t *cdp;
+
+        cdp = cp->data[j];
+        if (0 == strcasecmp(cdp->name, name))
+        {
+            const char      *s;
+            char            *ep;
+            long            n;
+
+            s = cdp->value;
+            ep = 0;
+            n = strtol(s, &ep, 0);
+            if (ep != s && !*ep)
+                return n;
+            break;
+        }
+    }
+    catalogue_set_int(cp, name, dflt);
     return dflt;
 }
 
@@ -274,15 +304,32 @@ catalogue_set(catalogue_t *cp, const char *name, const char *value)
 
 
 void
+catalogue_set_int(catalogue_t *cp, const char *name, int value)
+{
+    char            buffer[30];
+
+    snprintf(buffer, sizeof(buffer), "%d", value);
+    catalogue_set(cp, name, buffer);
+}
+
+
+void
+catalogue_set_bool(catalogue_t *cp, const char *name, int value)
+{
+    catalogue_set(cp, name, boolean_to_string(value));
+}
+
+
+void
 catalogue_save(catalogue_t *cp)
 {
     catalogue_data_t *cdp;
     size_t          j;
     const char      *filename;
     FILE            *fp;
-    string_buffer_t sb;
+    elastic_buffer_t sb;
 
-    string_buffer_constructor(&sb);
+    elastic_buffer_constructor(&sb);
     filename = catalogue_get(cp, "Filename");
     assert(filename);
     fp = explain_fopen_or_die(filename, "w");
@@ -292,11 +339,11 @@ catalogue_save(catalogue_t *cp)
         cdp = cp->data[j];
         if (0 != strcasecmp(cdp->name, "Filename"))
         {
-            string_buffer_rewind(&sb);
-            string_buffer_printf(&sb, "%s: %s", cdp->name, cdp->value);
-            wrapper_hang(fp, "", string_buffer_get(&sb));
+            elastic_buffer_rewind(&sb);
+            elastic_buffer_printf(&sb, "%s: %s", cdp->name, cdp->value);
+            wrapper_hang(fp, "", elastic_buffer_get(&sb));
         }
     }
     explain_fclose_or_die(fp);
-    string_buffer_destructor(&sb);
+    elastic_buffer_destructor(&sb);
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -61,18 +61,24 @@ struct explain_final_t; /* forward */
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param path
   *     The original path, exactly as passed to the chown(2) system call.
   * @param owner
   *     The original owner, exactly as passed to the chown(2) system call.
   * @param group
   *     The original group, exactly as passed to the chown(2) system call.
+  * @param path_caption
+  *     The name of the offending syscall argument.
   * @param final_component
   *     The designed properties of the final component.
   */
 void explain_buffer_errno_chown_explanation_fc(
-    explain_string_buffer_t *sb, int errnum, const char *path, int owner,
-    int group, struct explain_final_t *final_component);
+    explain_string_buffer_t *sb, int errnum, const char *syscall_name,
+    const char *path, int owner, int group,
+    const char *path_caption,
+    struct explain_final_t *final_component);
 
 /**
   * The explain_buffer_errno_fchown_explanation
@@ -83,14 +89,19 @@ void explain_buffer_errno_chown_explanation_fc(
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param fildes
   *     The original fildes, exactly as passed to the fchown(2) system call.
   * @param owner
   *     The original owner, exactly as passed to the fchown(2) system call.
   * @param group
   *     The original group, exactly as passed to the fchown(2) system call.
+  * @param fildes_caption
+  *     The name of the offending syscall argument.
   */
 void explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, int owner, int group);
+    int errnum, const char *syscall_name, int fildes, int owner, int group,
+    const char *fildes_caption);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CHOWN_H */

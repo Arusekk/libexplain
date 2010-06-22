@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,14 +17,28 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/kd.h>
 
+#include <libexplain/buffer/char_data.h>
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/gio_font.h>
 
 
-#ifndef GIO_FONT
-#define GIO_FONT -1
-#endif
+#ifdef GIO_FONT
+
+static void
+print_data_returned(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_char_data(sb, data, 1 * 32 * 256);
+}
+
 
 const explain_iocontrol_t explain_iocontrol_gio_font =
 {
@@ -32,6 +46,28 @@ const explain_iocontrol_t explain_iocontrol_gio_font =
     GIO_FONT, /* value */
     0, /* disambiguate */
     0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    print_data_returned,
+    1 * 32 * 256, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_gio_font =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

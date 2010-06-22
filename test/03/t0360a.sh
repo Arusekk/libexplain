@@ -23,7 +23,7 @@ TEST_SUBJECT="pclose EINTR"
 
 fmt > test.ok << 'fubar'
 pclose(fp = stdout) failed, Interrupted system call (EINTR) because the
-process was interrupted by a signal before the waitpid was complete
+process was interrupted by a signal before the pclose was complete
 fubar
 test $? -eq 0 || no_result
 

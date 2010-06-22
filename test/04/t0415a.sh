@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,12 +22,12 @@ TEST_SUBJECT="fileno EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fileno(fp = 0x01234567) failed, Bad file descriptor (EBADF) because the fp
+fileno(fp = 0x09876543) failed, Bad file descriptor (EBADF) because the fp
 argument does not refer a valid file stream
 fubar
 test $? -eq 0 || no_result
 
-explain -eEBADF fileno 0x1234567 > test.out
+explain -eEBADF fileno 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

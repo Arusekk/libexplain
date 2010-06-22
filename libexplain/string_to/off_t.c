@@ -26,6 +26,6 @@ explain_string_to_off_t(const char *text)
 #if SIZEOF_OFF_T > SIZEOF_LONG
     return explain_string_to_longlong(text);
 #else
-    return explain_tsring_to_long(text);
+    return explain_string_to_long(text);
 #endif
 }

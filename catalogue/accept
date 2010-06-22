@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -16,6 +16,7 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 Prototype: int accept(int fildes, struct sockaddr *sock_addr, socklen_t
-    sock_addr_size);
+    *sock_addr_size);
+Include: sys/socket.h
 Synopsis: accept a connection on a socket
 Use-Return-Value: true

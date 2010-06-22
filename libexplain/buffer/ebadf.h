@@ -61,4 +61,18 @@ void explain_buffer_ebadf_stream(explain_string_buffer_t *sb,
 void explain_buffer_ebadf_dir(explain_string_buffer_t *sb,
     const char *caption);
 
+/**
+  * The explain_buffer_ebafd_not_open_for_reading function is used to
+  * print an EBADF or EINVAL explanation into the string buffer, in the
+  * case where a file descriptor needs to be open for reading, but it is
+  * not.
+  *
+  * @param sb
+  *    The string buffer to print into
+  * @param flags
+  *    The file's open flags, as returned by fcntl(fildes, F_GETFL);
+  */
+void explain_buffer_ebadf_not_open_for_reading(explain_string_buffer_t *sb,
+    int flags);
+
 #endif /* LIBEXPLAIN_BUFFER_EBADF_H */

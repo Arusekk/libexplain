@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,13 +22,13 @@ TEST_SUBJECT="time EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-time(t = 0x00012345) failed, Bad address (EFAULT) because t refers to
+time(t = 0x09876543) failed, Bad address (EFAULT) because t refers to
 memory that is outside the process's accessible address space; this is more
 likely to be a software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT time 0x12345 > test.out
+explain -eEFAULT time 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

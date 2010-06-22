@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_AC_LINUX_FS_H
 #define LIBEXPLAIN_AC_LINUX_FS_H
 
-#include <libexplain/config.h>
+#include <libexplain/ac/sys/types.h> /* for size_t */
 
 #ifdef HAVE_LINUX_FS_H
 #include <linux/fs.h>

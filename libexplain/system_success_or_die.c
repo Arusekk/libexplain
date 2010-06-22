@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,9 +20,10 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/ctype.h>
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/wait.h>
 #include <libexplain/ac/unistd.h>
 
@@ -32,10 +33,10 @@
 #include <libexplain/buffer/errno/wait.h>
 #include <libexplain/buffer/wait_status.h>
 #include <libexplain/common_message_buffer.h>
-#include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/system.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/option.h>
+#include <libexplain/output.h>
 
 
 static int
@@ -133,7 +134,7 @@ explain_system_success(const char *command)
     if (status < 0)
     {
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_system(command));
+        explain_output_message(explain_system(command));
     }
     else if (status != 0)
     {
@@ -172,6 +173,7 @@ explain_system_success(const char *command)
                         (
                             &sb,
                             errno,
+                            "system",
                             cmd,
                             X_OK
                         );
@@ -190,7 +192,7 @@ explain_system_success(const char *command)
             }
         }
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_common_message_buffer);
+        explain_output_message(explain_common_message_buffer);
     }
     return status;
 }
@@ -200,5 +202,5 @@ void
 explain_system_success_or_die(const char *command)
 {
     if (explain_system_success(command))
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
 }

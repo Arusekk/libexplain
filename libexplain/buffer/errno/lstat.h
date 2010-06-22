@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,12 +39,31 @@ struct stat; /* forward */
   *     is necessary if you need to call <b>any</b> code between the
   *     system call to be explained and this function, because many libc
   *     functions will alter the value of errno.
-  * @param path
+  * @param pathname
   *     The original path, exactly has passed to the lstat(2) system call.
   * @param stp
   *     The original stp, exactly has passed to the lstat(2) system call.
   */
 void explain_buffer_errno_lstat(struct explain_string_buffer_t *sb,
-    int errnum, const char *path, const struct stat *stp);
+    int errnum, const char *pathname, const struct stat *stp);
+
+/**
+  * The explain_buffer_errno_lstat-explanation function is used to print an
+  * explanation of an error returned by the lstat(2) system call.
+  *
+  * @param sb
+  *     The string buffer in which the message is being constructed.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offended system call.
+  * @param pathname
+  *     The original path, exactly has passed to the lstat(2) system call.
+  * @param stp
+  *     The original stp, exactly has passed to the lstat(2) system call.
+  */
+void explain_buffer_errno_lstat_explanation(struct explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, const char *pathname,
+    const struct stat *stp);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_LSTAT_H */

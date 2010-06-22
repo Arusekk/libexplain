@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -50,29 +50,83 @@ static const explain_parse_bits_table_t table[] =
     { "O_RDWR", O_RDWR },
     { "O_CREAT", O_CREAT },
     { "O_EXCL", O_EXCL },
+#ifdef O_NOCTTY
     { "O_NOCTTY", O_NOCTTY },
+#endif
     { "O_TRUNC", O_TRUNC },
-    { "O_APPEND", FAPPEND },
-    { "FAPPEND", O_APPEND }, /* BSD */
+    { "O_APPEND", O_APPEND },
+#ifdef FAPPEND
+    { "FAPPEND", FAPPEND }, /* BSD */
+#endif
+#ifdef O_NONBLOCK
     { "O_NONBLOCK", O_NONBLOCK },
+#endif
+#ifdef FNONBLOCK
     { "FNONBLOCK", FNONBLOCK }, /* BSD */
+#endif
+#ifdef O_NDELAY
     { "O_NDELAY", O_NDELAY },
+#endif
+#ifdef FNDELAY
     { "FNDELAY", FNDELAY }, /* BSD */
+#endif
+#ifdef O_SYNC
     { "O_SYNC", O_SYNC },
+#endif
+
+    /*
+     * No, this isn't a mistake.  On debian sparc there is a
+     *
+     *     #define FFSYNC O_FSYNC
+     *
+     * but O_FSYNC isn't actually defined, leading to a build failure.
+     * Thus, the O_FSYNC bracketing goes around both of them.
+     */
+#ifdef O_FSYNC
     { "O_FSYNC", O_FSYNC },
+#ifdef FFSYNC
     { "FFSYNC", FFSYNC }, /* BSD */
+#endif
+#endif
+
+#ifdef O_DSYNC
     { "O_DSYNC", O_DSYNC },
+#endif
+#ifdef O_RSYNC
     { "O_RSYNC", O_RSYNC },
+#endif
+#ifdef O_ASYNC
     { "O_ASYNC", O_ASYNC },
+#endif
+#ifdef FASYNC
     { "FASYNC", FASYNC }, /* BSD */
+#endif
+#ifdef O_DIRECT
     { "O_DIRECT", O_DIRECT },
+#endif
+#ifdef O_DIRECTORY
     { "O_DIRECTORY", O_DIRECTORY },
+#endif
+#ifdef O_NOFOLLOW
     { "O_NOFOLLOW", O_NOFOLLOW },
+#endif
+#ifdef O_NOATIME
     { "O_NOATIME", O_NOATIME },
+#endif
+#ifdef O_CLOEXEC
     { "O_CLOEXEC", O_CLOEXEC },
+#endif
+#ifdef O_LARGEFILE_HIDDEN
+    { "O_LARGEFILE", O_LARGEFILE_HIDDEN },
+#else
     { "O_LARGEFILE", O_LARGEFILE },
+#endif
+#ifdef O_BINARY
     { "O_BINARY", O_BINARY },
+#endif
+#ifdef O_TEXT
     { "O_TEXT", O_TEXT },
+#endif
 };
 
 
@@ -103,21 +157,23 @@ explain_buffer_open_flags(explain_string_buffer_t *sb, int flags)
         break;
     }
     other = 0;
-    while (flags)
+    while (flags != 0)
     {
         int             bit;
         const explain_parse_bits_table_t *tp;
 
         bit = (flags & -flags);
-        flags -= bit;
-        explain_string_buffer_puts(sb, " | ");
+        flags &= ~bit;
         tp = explain_parse_bits_find_by_value(bit, table, SIZEOF(table));
         if (tp)
+        {
+            explain_string_buffer_puts(sb, " | ");
             explain_string_buffer_puts(sb, tp->name);
+        }
         else
             other |= bit;
     }
-    if (other)
+    if (other != 0)
         explain_string_buffer_printf(sb, " | %#o", other);
 }
 

@@ -26,7 +26,7 @@
 #include <libexplain/buffer/errno/futimes.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/fildes_not_open_for_writing.h>
-#include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/timeval.h>
@@ -39,8 +39,8 @@ explain_buffer_errno_futimes_system_call(explain_string_buffer_t *sb,
     int errnum, int fildes, const struct timeval *tv)
 {
     (void)errnum;
-    explain_string_buffer_printf(sb, "futimes(fildes = %d", fildes);
-    explain_buffer_fildes_to_pathname(sb, fildes);
+    explain_string_buffer_puts(sb, "futimes(fildes = ");
+    explain_buffer_fildes(sb, fildes);
     explain_string_buffer_puts(sb, ", tv = ");
     if (explain_pointer_is_efault(tv, sizeof(*tv)))
     {
@@ -93,7 +93,7 @@ explain_buffer_errno_futimes_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "futimes");
         break;
     }
 }

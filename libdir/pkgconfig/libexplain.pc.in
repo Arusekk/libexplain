@@ -7,8 +7,8 @@ datarootdir=@datarootdir@
 includedir=@includedir@
 
 Name: libexplain
-Description: Explain errno values returned by libc functions
-Version: 0.14.D001
+Description: a library of system-call-specific strerror replacements
+Version: 0.32.D001
 URL: http://libexplain.sourceforge.net/
 Libs: -L${libdir} -lexplain
 Libs.private: @LIBS@

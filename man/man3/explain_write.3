@@ -20,7 +20,9 @@
 .TH explain_write 3
 .SH NAME
 explain_write \- explain write(2) errors
+.if require_index \{
 .XX "explain_write(3)" "explain write(2) errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/write.h>
 .br
@@ -61,7 +63,7 @@ if (n < 0)
     exit(EXIT_FAILURE);
 }
 .fi
-.FT R
+.ft R
 .RE
 .TP 8n
 \f[I]fildes\fP
@@ -241,6 +243,7 @@ The original data_size, exactly as passed to the \f[I]write\fP(2) system call.
 Given a suitably thread safe buffer, this function is thread safe.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

@@ -35,7 +35,7 @@ explain_buffer_errno_malloc_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_malloc_explanation(explain_string_buffer_t *sb,
-    int errnum, size_t size)
+    int errnum, const char *syscall_name, size_t size)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/malloc.html
@@ -48,7 +48,7 @@ explain_buffer_errno_malloc_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -61,16 +61,12 @@ explain_buffer_errno_malloc(explain_string_buffer_t *sb, int errnum,
     explain_explanation_t exp;
 
     explain_explanation_init(&exp, errnum);
-    explain_buffer_errno_malloc_system_call
-    (
-        &exp.system_call_sb,
-        errnum,
-        size
-    );
+    explain_buffer_errno_malloc_system_call(&exp.system_call_sb, errnum, size);
     explain_buffer_errno_malloc_explanation
     (
         &exp.explanation_sb,
         errnum,
+        "malloc",
         size
     );
     explain_explanation_assemble(&exp, sb);

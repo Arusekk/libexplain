@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@ TEST_SUBJECT="mkdir EEXIST"
 
 cat > test.ok << 'fubar'
 mkdir(pathname = "foobar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed, File
-exists (EEXIST) because the "foobar" regular file in the current directory
-should not exist yet
+exists (EEXIST) because there is already a "foobar" regular file in the
+current directory
 fubar
 test $? -eq 0 || no_result
 

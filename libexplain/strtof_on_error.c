@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,22 +17,21 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/strtof.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 float
 explain_strtof_on_error(const char *nptr, char **endptr)
 {
-    int             err;
+    int             hold_errno;
     char            *dummy;
     float           result;
 
-    err = errno;
+    hold_errno = errno;
     dummy = 0;
     errno = 0;
     result = strtof(nptr, endptr ? endptr : &dummy);
@@ -46,11 +45,14 @@ explain_strtof_on_error(const char *nptr, char **endptr)
     }
     if (errno != 0)
     {
+        hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_strtof(nptr, endptr));
+        explain_output_message
+        (
+            explain_errno_strtof(hold_errno, nptr, endptr)
+        );
     }
-    else
-        errno = err;
+    errno = hold_errno;
     return result;
 }
 

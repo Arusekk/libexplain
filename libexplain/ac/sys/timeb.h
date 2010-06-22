@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_SYS_TIMEB_H
 #define LIBEXPLAIN_AC_SYS_TIMEB_H
 
+/**
+  * @file
+  * @brief Insulate <sys/timeb.h> differences
+  */
+
 #include <libexplain/ac/time.h>
 
 #ifdef HAVE_SYS_TIMEB_H

@@ -66,6 +66,8 @@ void explain_buffer_errno_read(explain_string_buffer_t *sb,
   *    is necessary if you need to call <b>any</b> code between the
   *    system call to be explained and this function, because many libc
   *    functions will alter the value of errno.
+  * @param syscall_name
+  *    The name of the offending system call.
   * @param fildes
   *    The file descriptor to be read from,
   *    exactly as passed to the read(2) system call.
@@ -80,6 +82,7 @@ void explain_buffer_errno_read(explain_string_buffer_t *sb,
   *    Given a suitably thread safe buffer, this function is thread safe.
   */
 void explain_buffer_errno_read_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, const void *data, size_t data_size);
+    int errnum, const char *syscall_name, int fildes, const void *data,
+    size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_READ_H */

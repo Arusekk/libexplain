@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/sys/mtio.h>
 
+#include <libexplain/buffer/long.h>
 #include <libexplain/buffer/mtget.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/path_is_efault.h>
@@ -31,22 +32,22 @@ explain_buffer_mtget(explain_string_buffer_t *sb,
         explain_buffer_pointer(sb, data);
     else
     {
-        explain_string_buffer_printf(sb, "{ mt_type = %ld, ", data->mt_type);
-        explain_string_buffer_printf(sb, "mt_resid = %ld, ", data->mt_resid);
-        explain_string_buffer_printf(sb, "mt_dsreg = %ld, ", data->mt_dsreg);
-        explain_string_buffer_printf(sb, "mt_gstat = %ld, ", data->mt_gstat);
-        explain_string_buffer_printf(sb, "mt_erreg = %ld, ", data->mt_erreg);
-        explain_string_buffer_printf
-        (
-            sb,
-            "mt_fileno = %ld, ",
-            (long)data->mt_fileno
-        );
-        explain_string_buffer_printf
-        (
-            sb,
-            "mt_blkno = %ld }",
-            (long)data->mt_blkno
-        );
+        explain_string_buffer_puts(sb, "{ mt_type = ");
+        explain_buffer_long(sb, data->mt_type);
+        explain_string_buffer_puts(sb, ", mt_resid = ");
+        explain_buffer_long(sb, data->mt_resid);
+        explain_string_buffer_puts(sb, ", mt_dsreg = ");
+        explain_buffer_long(sb, data->mt_dsreg);
+#ifdef __linux__
+        explain_string_buffer_puts(sb, ", mt_gstat = ");
+        explain_buffer_long(sb, data->mt_gstat);
+#endif
+        explain_string_buffer_puts(sb, ", mt_erreg = ");
+        explain_buffer_long(sb, data->mt_erreg);
+        explain_string_buffer_puts(sb, ", mt_fileno = ");
+        explain_buffer_long(sb, data->mt_fileno);
+        explain_string_buffer_puts(sb, ", mt_blkno = ");
+        explain_buffer_long(sb, data->mt_blkno);
+        explain_string_buffer_puts(sb, " }");
     }
 }

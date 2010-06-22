@@ -17,16 +17,21 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/einval.h>
+#include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enosys.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/gethostname.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/software_error.h>
 #include <libexplain/explanation.h>
+#include <libexplain/host_name_max.h>
 
 
 static void
@@ -43,57 +48,30 @@ explain_buffer_errno_gethostname_system_call(explain_string_buffer_t *sb,
 static size_t
 get_actual_hostname_size(void)
 {
-    /*
-     * SUSv2 guarantees that "Host names are limited to 255
-     * bytes".  POSIX.1-2001 guarantees that "Host names (not
-     * including the terminating null byte) are limited to
-     * HOST_NAME_MAX bytes". On Linux, HOST_NAME_MAX is defined
-     * with the value 64, which has been the limit since Linux
-     * 1.0 (earlier kernels imposed a limit of 8 bytes).
-     */
-#if HOST_NAME_MAX > 255
-    char name[HOST_NAME_MAX + 2];
-#else
-    char name[257];
-#endif
-    if (gethostname(name, sizeof(name) - 1) == 0)
+#ifdef HAVE_GETHOSTNAME
+    size_t name_size = explain_get_host_name_max();
+    char *name = malloc(name_size + 1);
+    if (name)
     {
-        /* paranoia */
-        name[sizeof(name) - 1] = '\0';
+        if (gethostname(name, name_size) == 0)
+        {
+            size_t          result;
 
-        return strlen(name);
+            /* paranoia */
+            name[name_size] = '\0';
+
+            result = strlen(name);
+            free(name);
+            return result;
+        }
+        free(name);
     }
+#endif
 
     /*
      * no idea what the length is
      */
     return 0;
-}
-
-
-static void
-enametoolong(explain_string_buffer_t *sb, size_t actual_size,
-    const char *caption)
-{
-    explain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used when explaining an EINVAL or
-         * ENAMETOOLONG error returned by the gethostname system call,
-         * in the case where the supplied data buffer is smaller than
-         * the actual host name.
-         *
-         * %1$s => the name of the offending system call argument
-         * %2$d => the minimum size (in bytes) needed to hold the actual
-         *         host name
-         */
-        i18n("the %s argument was incorrectly specified, the actual host name "
-            "requires at least %d bytes, or preferably use the HOST_NAME_MAX "
-            "macro"),
-        caption,
-        (int)(actual_size + 1)
-    );
 }
 
 
@@ -112,37 +90,45 @@ explain_buffer_errno_gethostname_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
+        if (!data)
         {
-            size_t          actual_size;
-
-            if ((int)data_size <= 0)
-            {
-                explain_buffer_einval_too_small(sb, "data_size", data_size);
-                break;
-            }
-            actual_size = get_actual_hostname_size();
-            if (actual_size > 0 && data_size < actual_size + 1)
-                enametoolong(sb, actual_size, "data_size");
-            else
-                explain_buffer_einval_vague(sb, "data_size");
-            explain_buffer_software_error(sb);
+            explain_buffer_is_the_null_pointer(sb, "data");
+            break;
         }
-        break;
+        if ((int)data_size <= 0)
+        {
+            explain_buffer_einval_too_small(sb, "data_size", data_size);
+            break;
+        }
+        /* fall through... */
 
     case ENAMETOOLONG:
         /* data_size is smaller than the actual size.  */
         {
             size_t actual_size = get_actual_hostname_size();
             if (actual_size > 0 && data_size < actual_size + 1)
-                enametoolong(sb, actual_size, "data_size");
+            {
+                explain_buffer_enametoolong_gethostname
+                (
+                    sb,
+                    actual_size,
+                    "data_size"
+                );
+            }
             else
+            {
                 explain_buffer_einval_too_small(sb, "data_size", data_size);
+            }
             explain_buffer_software_error(sb);
         }
         break;
 
+    case ENOSYS:
+        explain_buffer_enosys_vague(sb, "gethostname");
+        break;
+
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "gethostname");
         break;
     }
 }

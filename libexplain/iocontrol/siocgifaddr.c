@@ -18,7 +18,9 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/net/if.h>
 
+#include <libexplain/buffer/ifreq_addr.h>
 #include <libexplain/buffer/ifreq_name.h>
 #include <libexplain/iocontrol/siocgifaddr.h>
 
@@ -37,6 +39,18 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 }
 
 
+static void
+print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_ifreq_addr(sb, data);
+}
+
+
 const explain_iocontrol_t explain_iocontrol_siocgifaddr =
 {
     "SIOCGIFADDR", /* name */
@@ -45,6 +59,10 @@ const explain_iocontrol_t explain_iocontrol_siocgifaddr =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    print_data_returned,
+    sizeof(struct ifreq), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef SIOCGIFADDR */
@@ -57,6 +75,10 @@ const explain_iocontrol_t explain_iocontrol_siocgifaddr =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* SIOCGIFADDR */

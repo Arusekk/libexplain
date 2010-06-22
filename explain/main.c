@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,13 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
-#include <getopt.h>
+#include <libexplain/ac/getopt.h>
 
 #include <libexplain/errno_info.h>
+#include <libexplain/errno_info/print.h>
+#include <libexplain/exit.h>
 #include <libexplain/freopen.h>
+#include <libexplain/iocontrol.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/version_print.h>
 #include <libexplain/wrap_and_print.h>
@@ -44,8 +47,12 @@ usage(void)
 static const struct option options[] =
 {
     { "errno", 1, 0, 'e' },
+    { "explain-exit-status", 0, 0, 'E' },
     { "message", 1, 0, 'm' },
+    { "print-errno-info", 0, 0, 'P' },
+    { "statistics", 0, 0, 's' },
     { "version", 0, 0, 'V' },
+    { "check-ioctl-conflicts", 0, 0, 'Z' },
     { 0, 0, 0, 0 }
 };
 
@@ -108,7 +115,11 @@ figure_out_error(const char *text)
             &sb,
             " doesn't match any known symbol, guessing you meant "
         );
-        explain_string_buffer_puts_quoted(&sb, strerror(eip->error_number));
+        explain_string_buffer_puts_quoted
+        (
+            &sb,
+            explain_internal_strerror(eip->error_number)
+        );
         explain_string_buffer_puts(&sb, " instead");
         explain_wrap_and_print(stderr, message);
         exit_status = EXIT_FAILURE;
@@ -130,6 +141,23 @@ figure_out_error(const char *text)
 }
 
 
+static void
+print_statistics(void)
+{
+    int             syscall_total;
+    int             ioctl_total;
+    int             ioctl_active;
+
+    syscall_statistics(&syscall_total);
+    printf("Coverage includes %d system calls ", syscall_total);
+
+    explain_iocontrol_statistics(&ioctl_total, &ioctl_active);
+    printf("and %d ioctl requests.\n", ioctl_total);
+    if (ioctl_active < ioctl_total)
+        printf(".\\\" only %d ioctls relevant to this system\n", ioctl_active);
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -140,11 +168,15 @@ main(int argc, char **argv)
     err = -1;
     for (;;)
     {
-        int c = getopt_long(argc, argv, "e:o:V", options, 0);
+        int c = getopt_long(argc, argv, "Ee:o:PpsVZ", options, 0);
         if (c == EOF)
             break;
         switch (c)
         {
+        case 'E':
+            explain_exit_on_exit();
+            break;
+
         case 'e':
             err = figure_out_error(optarg);
             break;
@@ -153,8 +185,24 @@ main(int argc, char **argv)
             explain_freopen_or_die(optarg, "w", stdout);
             break;
 
+        case 'p':
+            explain_errno_info_print(0);
+            return 0;
+
+        case 'P':
+            explain_errno_info_print(1);
+            return 0;
+
+        case 's':
+            print_statistics();
+            return 0;
+
         case 'V':
             explain_version_print();
+            return 0;
+
+        case 'Z':
+            explain_iocontrol_check_conflicts();
             return 0;
 
         default:

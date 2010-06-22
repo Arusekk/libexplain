@@ -49,7 +49,15 @@ explain_buffer_errno_putchar_explanation(explain_string_buffer_t *sb,
      */
     (void)c;
     fildes = explain_stream_to_fildes(stdout);
-    explain_buffer_errno_write_explanation(sb, errnum, fildes, NULL, 0);
+    explain_buffer_errno_write_explanation
+    (
+        sb,
+        errnum,
+        "putchar",
+        fildes,
+        NULL,
+        0
+    );
 }
 
 

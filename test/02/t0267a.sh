@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@ permission to create a socket of the specified type and/or protocol
 fubar
 test $? -eq 0 || no_result
 
-explain -eEPERM socket PF_INET SOCK_STREAM TCP > test.out
+explain -eEPERM socket PF_INET SOCK_STREAM IPPROTO_TCP > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

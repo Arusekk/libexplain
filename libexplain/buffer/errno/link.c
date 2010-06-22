@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/eexist.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
@@ -28,6 +29,7 @@
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enospc.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/link.h>
@@ -35,6 +37,7 @@
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/exdev.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/note/still_exists.h>
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/dirname.h>
 #include <libexplain/explanation.h>
@@ -118,11 +121,7 @@ explain_buffer_errno_link_explanation(explain_string_buffer_t *sb,
         break;
 
     case EEXIST:
-        explain_string_buffer_puts
-        (
-            sb,
-            "newpath already exists"
-        );
+        explain_buffer_eexist(sb, newpath);
         break;
 
     case EFAULT:
@@ -191,17 +190,7 @@ explain_buffer_errno_link_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOSPC:
-        explain_string_buffer_puts
-        (
-            sb,
-            "the file system containing newpath"
-        );
-        explain_buffer_mount_point_dirname(sb, newpath);
-        explain_string_buffer_puts
-        (
-            sb,
-            " has no room for the new directory entry"
-        );
+        explain_buffer_enospc(sb, newpath, "newpath");
         break;
 
     case ENOTDIR:
@@ -269,25 +258,14 @@ explain_buffer_errno_link_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "link");
         break;
     }
 
     /*
      * Let the user know where things stand after the failure.
      */
-    {
-        struct stat st;
-        if (lstat(newpath, &st) == 0)
-        {
-            explain_string_buffer_puts
-            (
-                sb,
-                "; note that newpath exists"
-            );
-        }
-    }
-
+    explain_buffer_note_if_exists(sb, newpath, "newpath");
 }
 
 

@@ -64,7 +64,15 @@ explain_buffer_errno_fread_explanation(explain_string_buffer_t *sb,
     }
 
     nbytes = size * nmemb;
-    explain_buffer_errno_read_explanation(sb, errnum, fildes, ptr, nbytes);
+    explain_buffer_errno_read_explanation
+    (
+        sb,
+        errnum,
+        "fread",
+        fildes,
+        ptr,
+        nbytes
+    );
 }
 
 

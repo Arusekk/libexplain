@@ -29,6 +29,7 @@
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/string_n.h>
 #include <libexplain/explanation.h>
+#include <libexplain/host_name_max.h>
 #include <libexplain/path_is_efault.h>
 
 
@@ -37,26 +38,9 @@ explain_buffer_errno_sethostname_system_call(explain_string_buffer_t *sb,
     int errnum, const char *name, size_t name_size)
 {
     (void)errnum;
-    explain_string_buffer_puts(sb, "gethostname(name = ");
+    explain_string_buffer_puts(sb, "sethostname(name = ");
     explain_buffer_string_n(sb, name, name_size);
     explain_string_buffer_printf(sb, ", name_size = %zd)", name_size);
-}
-
-
-static size_t
-get_host_name_max(void)
-{
-#ifdef _SC_HOST_NAME_MAX
-    long n = sysconf(_SC_HOST_NAME_MAX);
-    if (n > 0)
-        return n;
-#endif
-#if HOST_NAME_MAX > 0
-    return HOST_NAME_MAX;
-#else
-    /* no idea */
-    return 0;
-#endif
 }
 
 
@@ -286,7 +270,7 @@ explain_buffer_errno_sethostname_explanation(explain_string_buffer_t *sb,
             explain_buffer_einval_too_small(sb, "name_size", name_ssize);
             break;
         }
-        host_name_max = get_host_name_max();
+        host_name_max = explain_get_host_name_max();
         if (host_name_max && name_size > host_name_max)
         {
             /* The Linux kernel checks this */
@@ -316,7 +300,8 @@ explain_buffer_errno_sethostname_explanation(explain_string_buffer_t *sb,
             );
             break;
         }
-        goto generic;
+        /* just guessing */
+        goto enametoolong;
 
     case ENAMETOOLONG:
 #ifdef EOVERFLOW
@@ -332,7 +317,7 @@ explain_buffer_errno_sethostname_explanation(explain_string_buffer_t *sb,
              */
             i18n("the hostname specified is too long")
         );
-        host_name_max = get_host_name_max();
+        host_name_max = explain_get_host_name_max();
         if (host_name_max && name_size > host_name_max)
         {
             explain_string_buffer_printf
@@ -359,8 +344,7 @@ explain_buffer_errno_sethostname_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        generic:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "sethostname");
         break;
     }
 }

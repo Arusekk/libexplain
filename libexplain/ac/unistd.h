@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_UNISTD_H
 #define LIBEXPLAIN_AC_UNISTD_H
 
+/**
+  * @file
+  * @brief insulate <unistd.h> differences
+  */
+
 #include <libexplain/config.h>
 
 /*

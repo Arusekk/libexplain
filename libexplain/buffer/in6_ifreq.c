@@ -24,6 +24,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef HAVE_LINUX_IPV6_H
+
 void
 explain_buffer_in6_ifreq(explain_string_buffer_t *sb,
     const struct in6_ifreq *data)
@@ -43,3 +45,14 @@ explain_buffer_in6_ifreq(explain_string_buffer_t *sb,
         );
     }
 }
+
+#else
+
+void
+explain_buffer_in6_ifreq(explain_string_buffer_t *sb,
+    const struct in6_ifreq *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

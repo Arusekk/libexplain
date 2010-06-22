@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/limits.h> /* for NGROUPS_MAX on Solaris */
 
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/einval.h>
@@ -80,7 +81,7 @@ explain_buffer_errno_setgroups_explanation(explain_string_buffer_t *sb, int
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "setgroups");
         break;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,26 +17,32 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/pathconf.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 long
 explain_pathconf_on_error(const char *pathname, int name)
 {
     long            result;
+    int             hold_errno;
 
+    hold_errno = errno;
     errno = 0;
     result = pathconf(pathname, name);
     if (result == -1 && errno != 0)
     {
+        hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_pathconf(pathname, name));
+        explain_output_message
+        (
+            explain_errno_pathconf(hold_errno, pathname, name)
+        );
     }
+    errno = hold_errno;
     return result;
 }
 

@@ -63,7 +63,7 @@ void explain_program_name_set(const char *name);
   * The explain_program_name_assemble function is used to control
   * whether or not the name of the calling process is to be included in
   * error messages issued by the explain_*_or_die functions.  If not
-  * expolicitly set, is controlled by the LIBEXPLAIN_OPTIONS environemnt
+  * expolicitly set, is controlled by the EXPLAIN_OPTIONS environemnt
   * variable, or defaults to false if not set there either.
   *
   * @param yesno

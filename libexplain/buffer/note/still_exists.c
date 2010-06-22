@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -25,6 +25,7 @@ void
 explain_buffer_note_still_exists(explain_string_buffer_t *sb,
     const char *caption)
 {
+    sb = sb->footnotes;
     explain_string_buffer_puts(sb, "; ");
     explain_string_buffer_printf_gettext
     (
@@ -57,6 +58,7 @@ void
 explain_buffer_note_exists(explain_string_buffer_t *sb,
     const char *caption)
 {
+    sb = sb->footnotes;
     explain_string_buffer_puts(sb, "; ");
     explain_string_buffer_printf_gettext
     (

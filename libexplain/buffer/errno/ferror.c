@@ -69,12 +69,28 @@ explain_buffer_errno_ferror_explanation(explain_string_buffer_t *sb,
     {
     case O_RDONLY:
         read_error:
-        explain_buffer_errno_read_explanation(sb, errnum, fildes, NULL, 0);
+        explain_buffer_errno_read_explanation
+        (
+            sb,
+            errnum,
+            "ferror",
+            fildes,
+            NULL,
+            0
+        );
         break;
 
     case O_WRONLY:
         write_error:
-        explain_buffer_errno_write_explanation(sb, errnum, fildes, NULL, 0);
+        explain_buffer_errno_write_explanation
+        (
+            sb,
+            errnum,
+            "ferror",
+            fildes,
+            NULL,
+            0
+        );
         break;
 
     default:

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/chdir.h>
+#include <libexplain/output.h>
 #include <libexplain/version_print.h>
 
 
@@ -42,11 +43,22 @@ main(int argc, char **argv)
     path = 0;
     for (;;)
     {
-        int c = getopt(argc, argv, "V");
+        int c = getopt(argc, argv, "sV");
         if (c == EOF)
             break;
         switch (c)
         {
+        case 's':
+            explain_output_register
+            (
+                explain_output_tee_new
+                (
+                    explain_output_stderr_new(),
+                    explain_output_syslog_new()
+                )
+            );
+            break;
+
         case 'V':
             explain_version_print();
             return 0;

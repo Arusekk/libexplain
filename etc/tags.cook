@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -90,6 +90,9 @@ if [find_command ctags] then
 tags: [change_files]
     set shallow no-cascade
 {
+    if [not [verbose]] then
+        function print GEN [target];
+
     xargs ctags [ctags-opts] [target]
             set meter;
 data
@@ -100,7 +103,10 @@ dataend
 TAGS: [change_files]
     set shallow no-cascade
 {
-    xargs [etags] [etags-opts] [target]
+    if [not [verbose]] then
+        function print GEN [target];
+
+    xargs [etags] [etags-opts]
         set meter;
 data
 [unsplit "\n" [resolve [source_files]]]

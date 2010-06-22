@@ -20,7 +20,12 @@
 #ifndef LIBEXPLAIN_AC_SYS_MOUNT_H
 #define LIBEXPLAIN_AC_SYS_MOUNT_H
 
-#include <libexplain/config.h>
+/**
+  * @file
+  * @brief Insulate <sys/mount.h> differences
+  */
+
+#include <libexplain/ac/sys/param.h>
 
 #ifdef HAVE_SYS_MOUNT_H
 #include <sys/mount.h>

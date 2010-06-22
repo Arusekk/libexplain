@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,14 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/stdio.h>
 
 #include <libexplain/common_message_buffer.h>
-#include <libexplain/option.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/program_name.h>
 #include <libexplain/string_buffer.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/option.h>
+#include <libexplain/output.h>
 
 
 int
@@ -38,7 +38,9 @@ explain_parse_bits_or_die(const char *text,
     if (explain_parse_bits(text, table, table_size, &result) < 0)
     {
         explain_string_buffer_t sb;
+        char            errstr[500];
 
+        snprintf(errstr, sizeof(errstr), "%s", explain_parse_bits_get_error());
         explain_string_buffer_init
         (
             &sb,
@@ -61,9 +63,9 @@ explain_parse_bits_or_die(const char *text,
             explain_string_buffer_puts(&sb, caption);
             explain_string_buffer_puts(&sb, ": ");
         }
-        explain_string_buffer_puts(&sb, explain_parse_bits_get_error());
-        explain_wrap_and_print(stderr, explain_common_message_buffer);
-        exit(EXIT_FAILURE);
+        explain_string_buffer_puts(&sb, errstr);
+        explain_output_message(explain_common_message_buffer);
+        explain_output_exit_failure();
     }
     return result;
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/sockios.h>
+#include <libexplain/ac/net/if.h>
+#include <libexplain/ac/sys/sockio.h>
 
+#include <libexplain/buffer/ifreq_metric.h>
 #include <libexplain/buffer/ifreq_name.h>
 #include <libexplain/iocontrol/siocgifmem.h>
 
@@ -37,6 +41,18 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 }
 
 
+static void
+print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_ifreq_metric(sb, data);
+}
+
+
 const explain_iocontrol_t explain_iocontrol_siocgifmem =
 {
     "SIOCGIFMEM", /* name */
@@ -45,6 +61,10 @@ const explain_iocontrol_t explain_iocontrol_siocgifmem =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    print_data_returned,
+    sizeof(struct ifreq), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef SIOCGIFMEM */
@@ -57,6 +77,10 @@ const explain_iocontrol_t explain_iocontrol_siocgifmem =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* SIOCGIFMEM */

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@ TEST_SUBJECT="sethostname EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-gethostname(name = 0x07654321, name_size = 10) failed, Bad address (EFAULT)
+sethostname(name = 0x09876543, name_size = 10) failed, Bad address (EFAULT)
 because name refers to memory that is outside the process's accessible
 address space; this is more likely to be a software error (a bug) than it
 is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT sethostname 0x7654321 10 > test.out 2>&1
+explain -eEFAULT sethostname 0x9876543 10 > test.out 2>&1
 test $? -eq 0 || fail
 
 diff test.ok test.out

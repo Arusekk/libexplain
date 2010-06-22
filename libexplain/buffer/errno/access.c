@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@ explain_buffer_errno_access_call(explain_string_buffer_t *sb, int errnum,
 
 void
 explain_buffer_errno_access_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int mode)
+    int errnum, const char *syscall_name, const char *pathname, int mode)
 {
     explain_final_t final_component;
 
@@ -107,10 +107,10 @@ explain_buffer_errno_access_explanation(explain_string_buffer_t *sb,
          */
         if (mode != (mode & -mode))
         {
-            explain_string_buffer_puts(sb, "; ");
+            explain_string_buffer_puts(sb->footnotes, "; ");
             explain_buffer_gettext
             (
-                sb,
+                sb->footnotes,
                 /*
                  * xgettext: This message is used when supplementing an
                  * EACCES error returned by the access(2) system call,
@@ -126,10 +126,10 @@ explain_buffer_errno_access_explanation(explain_string_buffer_t *sb,
 
         if (getuid() != geteuid() || getgid() != getgid())
         {
-            explain_string_buffer_puts(sb, "; ");
+            explain_string_buffer_puts(sb->footnotes, "; ");
             explain_buffer_gettext
             (
-                sb,
+                sb->footnotes,
                 /*
                  * xgettext: This message is used when supplementing
                  * and explanation for an EACCES error reported by
@@ -200,7 +200,7 @@ explain_buffer_errno_access_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -224,6 +224,7 @@ explain_buffer_errno_access(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "access",
         pathname,
         mode
     );

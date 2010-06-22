@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_SYS_FILE_H
 #define LIBEXPLAIN_AC_SYS_FILE_H
 
+/**
+  * @file
+  * @brief Insulate <sys/file.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_SYS_FILE_H

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@ TEST_SUBJECT="utime EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-utime(pathname = "foobar", times = 0x00001000) failed, Bad address (EFAULT)
+utime(pathname = "foobar", times = 0x09876543) failed, Bad address (EFAULT)
 because times refers to memory that is outside the process's accessible
 address space; this is more likely to be a software error (a bug) than it
 is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT utime foobar 0x1000 > test.out
+explain -eEFAULT utime foobar 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

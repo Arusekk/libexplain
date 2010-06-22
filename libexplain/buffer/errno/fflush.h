@@ -57,11 +57,13 @@ void explain_buffer_errno_fflush(explain_string_buffer_t *sb, int errnum,
   *    The string buffer into which the message is to be written.
   * @param errnum
   *    The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param fp
   *    The original fp, exactly as passed to the fflush(3) system call.
   */
 void explain_buffer_errno_fflush_explanation(explain_string_buffer_t *sb,
-    int errnum, FILE *fp);
+    int errnum, const char *syscall_name, FILE *fp);
 
 /* vim: set ts=8 sw=4 et */
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FFLUSH_H */

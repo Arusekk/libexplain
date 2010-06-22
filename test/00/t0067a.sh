@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,8 +22,9 @@ TEST_SUBJECT="lstat ENOENT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-lstat(pathname = "a/b", buf = 0x00001000) failed, No such file or directory
-(ENOENT) because there is no "a" directory in the current directory
+lstat(pathname = "a/b", data = 0x00001000) failed, No such file or
+directory (ENOENT) because there is no "a" directory in the current
+directory
 fubar
 test $? -eq 0 || no_result
 

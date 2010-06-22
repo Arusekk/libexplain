@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,9 @@
 #ifndef LIBEXPLAIN_AC_LINUX_IF_PPP_H
 #define LIBEXPLAIN_AC_LINUX_IF_PPP_H
 
-#include <libexplain/config.h>
+#include <libexplain/ac/linux/types.h>
+#include <libexplain/ac/linux/ppp_defs.h>
+#include <libexplain/ac/net/if.h>
 
 #ifdef HAVE_LINUX_IF_PPP_H
 #include <linux/if_ppp.h>

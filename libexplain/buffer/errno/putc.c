@@ -49,7 +49,7 @@ explain_buffer_errno_putc_explanation(explain_string_buffer_t *sb,
      */
     (void)c;
     fildes = explain_stream_to_fildes(fp);
-    explain_buffer_errno_write_explanation(sb, errnum, fildes, NULL, 0);
+    explain_buffer_errno_write_explanation(sb, errnum, "putc", fildes, NULL, 0);
 }
 
 

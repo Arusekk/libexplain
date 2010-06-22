@@ -17,7 +17,12 @@
  */
 
 #include <libexplain/ac/linux/tiocl.h>
+#include <libexplain/ac/stdint.h>
+#include <libexplain/ac/string.h>
 
+#include <libexplain/buffer/int.h>
+#include <libexplain/buffer/int32_t.h>
+#include <libexplain/buffer/int8.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/tioclinux.h>
 #include <libexplain/parse_bits.h>
@@ -85,30 +90,28 @@ explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
         const unsigned char *cp;
 
         cp = data;
-        explain_string_buffer_puts(sb, "{ ");
         switch (*cp)
         {
         case TIOCL_SETSEL:
             {
-                typedef struct foo_t foo_t;
-                struct foo_t
-                {
-                    char            subcode;
-                    struct tiocl_selection sel;
-                };
-                const foo_t     *foo;
+                struct tiocl_selection sel;
 
-                foo = data;
-                if (explain_pointer_is_efault(foo, sizeof(*foo)))
+                if (explain_pointer_is_efault(cp, 1 + sizeof(sel)))
                     goto print_pointer;
+                memcpy(&sel, cp + 1, sizeof(sel));
                 explain_buffer_tiocl(sb, cp[0]);
-                explain_string_buffer_puts(sb, ", { ");
-                explain_string_buffer_printf(sb, "xs = %u, ", foo->sel.xs);
-                explain_string_buffer_printf(sb, "ys = %u, ", foo->sel.ys);
-                explain_string_buffer_printf(sb, "xe = %u, ", foo->sel.xe);
-                explain_string_buffer_printf(sb, "ye = %u, ", foo->sel.ye);
-                explain_string_buffer_puts(sb, "sel_mode = ");
-                explain_buffer_tiocl_setsel(sb, foo->sel.sel_mode);
+                explain_string_buffer_puts(sb, "{ case = ");
+                explain_buffer_tiocl(sb, cp[0]);
+                explain_string_buffer_puts(sb, ", xs = ");
+                explain_buffer_uint(sb, sel.xs);
+                explain_string_buffer_puts(sb, ", ys = ");
+                explain_buffer_uint(sb, sel.ys);
+                explain_string_buffer_puts(sb, ", xe = ");
+                explain_buffer_uint(sb, sel.xe);
+                explain_string_buffer_puts(sb, ", ye = ");
+                explain_buffer_uint(sb, sel.ye);
+                explain_string_buffer_puts(sb, ", sel_mode = ");
+                explain_buffer_tiocl_setsel(sb, sel.sel_mode);
                 explain_string_buffer_puts(sb, " }");
             }
             break;
@@ -116,17 +119,71 @@ explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
         case TIOCL_SETVESABLANK:
             if (explain_pointer_is_efault(data, 2))
                 goto print_pointer;
+            explain_string_buffer_puts(sb, "{ case = ");
             explain_buffer_tiocl(sb, cp[0]);
-            explain_string_buffer_printf(sb, ", %d", cp[1]);
+            explain_string_buffer_puts(sb, ", value = ");
+            explain_buffer_uint8(sb, cp[1]);
+            explain_string_buffer_puts(sb, " }");
             break;
 
+        case TIOCL_SELLOADLUT:
+            {
+                uint32_t        lut[8];
+
+                if (explain_pointer_is_efault(data, 4 + sizeof(lut)))
+                    goto print_pointer;
+                memcpy(lut, cp + 4, sizeof(lut));
+                explain_string_buffer_puts(sb, "{ case = ");
+                explain_buffer_tiocl(sb, cp[0]);
+                explain_string_buffer_puts(sb, ", value = ");
+                explain_buffer_uint32_array(sb, lut, SIZEOF(lut));
+                explain_string_buffer_puts(sb, " }");
+            }
+            break;
+
+        case TIOCL_SCROLLCONSOLE:
+            {
+                int32_t         value;
+
+                if (explain_pointer_is_efault(data, 4 + sizeof(value)))
+                    goto print_pointer;
+                memcpy(&value, cp + 4, sizeof(value));
+                explain_string_buffer_puts(sb, "{ case = ");
+                explain_buffer_tiocl(sb, cp[0]);
+                explain_string_buffer_puts(sb, ", value = ");
+                explain_buffer_int32_t(sb, value);
+                explain_string_buffer_puts(sb, " }");
+            }
+            break;
+
+        case TIOCL_GETSHIFTSTATE:
+        case TIOCL_GETMOUSEREPORTING:
+        case TIOCL_SETKMSGREDIRECT:
+        case TIOCL_GETFGCONSOLE:
+            /*
+             * The above 4 cases return data BUT they overwrite the
+             * control bytes, so we don't know at print_data_returned
+             * time which code it was, and thus can't print a
+             * representation.  Sigh.
+             *
+             * Fall through...
+             */
+
+        case TIOCL_BLANKEDSCREEN:
+        case TIOCL_BLANKSCREEN:
+        case TIOCL_PASTESEL:
+        case TIOCL_UNBLANKSCREEN:
+#ifdef TIOCL_GETKMSGREDIRECT
+        case TIOCL_GETKMSGREDIRECT:
+#endif
         default:
             if (explain_pointer_is_efault(data, 1))
                 goto print_pointer;
-            explain_buffer_tiocl(sb, *cp);
+            explain_string_buffer_puts(sb, "{ case = ");
+            explain_buffer_tiocl(sb, cp[0]);
+            explain_string_buffer_puts(sb, " }");
             break;
         }
-        explain_string_buffer_puts(sb, " }");
     }
 }
 

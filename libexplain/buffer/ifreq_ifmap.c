@@ -23,6 +23,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef ifr_ifmap
+
 static void
 explain_buffer_ifmap(explain_string_buffer_t *sb,
     const struct ifmap *data)
@@ -73,3 +75,14 @@ explain_buffer_ifreq_ifmap(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+#else
+
+void
+explain_buffer_ifreq_ifmap(explain_string_buffer_t *sb,
+    const struct ifreq *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

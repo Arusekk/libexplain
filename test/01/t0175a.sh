@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,13 @@ pathname is not an empty directory; that is, it contains entries other than
 fubar
 test $? -eq 0 || no_result
 
+cat > test.ok.solaris << 'fubar'
+rmdir(pathname = "a") failed, File exists (EEXIST) because pathname is not
+an empty directory; that is, it contains entries other than "." and ".."
+(2); note that pathname still exists
+fubar
+test $? -eq 0 || no_result
+
 mkdir a
 test $? -eq 0 || no_result
 
@@ -45,6 +52,7 @@ then
     fail
 fi
 
+diff test.ok.solaris test.out > /dev/null 2> /dev/null ||
 diff test.ok test.out
 test $? -eq 0 || fail
 

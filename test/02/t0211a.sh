@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ TEST_SUBJECT="mkdir ENOSPC"
 fmt > test.ok << 'fubar'
 mkdir(pathname = "foobar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed,
 No space left on device (ENOSPC) because the file system containing
-pathname has no room for the new directory ("/explain", 42% full)
+pathname ("/explain", 42% full) has no space for a new directory entry
 fubar
 test $? -eq 0 || no_result
 

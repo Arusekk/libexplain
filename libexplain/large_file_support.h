@@ -41,7 +41,8 @@
   * scribbles and segfaults.)
   */
 
-#if ((LIBEXPLAIN_FILE_OFFSET_BITS != _FILE_OFFSET_BITS) || \
+#if ((defined(LIBEXPLAIN_FILE_OFFSET_BITS) && \
+        (LIBEXPLAIN_FILE_OFFSET_BITS-0 != _FILE_OFFSET_BITS-0)) || \
      (defined(LIBEXPLAIN_LARGEFILE_SOURCE) && !defined(_LARGEFILE_SOURCE)) || \
      (defined(LIBEXPLAIN_LARGE_FILES) && !defined(_LARGE_FILES)))
 #error "\

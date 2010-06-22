@@ -27,6 +27,7 @@ void
 explain_buffer_ifreq_ifindex(explain_string_buffer_t *sb,
     const struct ifreq *data)
 {
+#if defined(ifr_ifindex)
     if (explain_pointer_is_efault(data, sizeof(*data)))
         explain_buffer_pointer(sb, data);
     else
@@ -45,4 +46,26 @@ explain_buffer_ifreq_ifindex(explain_string_buffer_t *sb,
             ifr->ifr_ifindex
         );
     }
+#elif defined(ifr_index)
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
+    else
+    {
+        const struct ifreq *ifr;
+
+        /*
+         * This is actually a huge big sucky union.  This specific
+         * case gives the interface index.
+         */
+        ifr = data;
+        explain_string_buffer_printf
+        (
+            sb,
+            "{ ifr_index = %d }",
+            ifr->ifr_index
+        );
+    }
+#else
+    explain_buffer_pointer(sb, data);
+#endif
 }

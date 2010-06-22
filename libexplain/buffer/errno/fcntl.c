@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,18 +24,22 @@
 #include <libexplain/buffer/check_fildes_range.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
+#include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eintr.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/errno/fcntl.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/flock.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/signal.h>
 #include <libexplain/explanation.h>
 #include <libexplain/fcntl.h>
 #include <libexplain/open_flags.h>
 #include <libexplain/parse_bits.h>
+#include <libexplain/path_is_efault.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 
@@ -92,7 +96,7 @@ explain_fcntl_command_parse_or_die(const char *text, const char *caption)
 
 static void
 explain_buffer_errno_fcntl_system_call(explain_string_buffer_t *sb,
-    int errnum, int fildes, int command, long arg)
+    int errnum, int fildes, int command, long data)
 {
     const explain_parse_bits_table_t *tp;
 
@@ -115,33 +119,33 @@ explain_buffer_errno_fcntl_system_call(explain_string_buffer_t *sb,
 #endif
     case F_SETFD:
     case F_SETOWN:
-        explain_string_buffer_printf(sb, ", arg = %ld", arg);
+        explain_string_buffer_printf(sb, ", data = %ld", data);
         break;
 
 #ifdef F_SETSIG
     case F_SETSIG:
-        explain_string_buffer_puts(sb, ", arg = ");
-        explain_buffer_signal(sb, arg);
+        explain_string_buffer_puts(sb, ", data = ");
+        explain_buffer_signal(sb, data);
         break;
 #endif
 
 #ifdef F_SETLEASE
     case F_SETLEASE:
         /* FIXME: decode lease flag */
-        explain_string_buffer_printf(sb, ", arg = %ld", arg);
+        explain_string_buffer_printf(sb, ", data = %ld", data);
         break;
 #endif
 
 #ifdef F_NOTIFY
     case F_NOTIFY:
         /* FIXME: decode notify bits */
-        explain_string_buffer_printf(sb, ", arg = %ld", arg);
+        explain_string_buffer_printf(sb, ", data = %ld", data);
         break;
 #endif
 
     case F_SETFL:
-        explain_string_buffer_puts(sb, ", arg = ");
-        explain_buffer_open_flags(sb, arg);
+        explain_string_buffer_puts(sb, ", data = ");
+        explain_buffer_open_flags(sb, data);
         break;
 
     case F_GETLK:
@@ -150,8 +154,8 @@ explain_buffer_errno_fcntl_system_call(explain_string_buffer_t *sb,
         {
             const struct flock *p;
 
-            p = (const struct flock *)arg;
-            explain_string_buffer_puts(sb, ", arg = ");
+            p = (const struct flock *)data;
+            explain_string_buffer_puts(sb, ", data = ");
             if (errnum == EFAULT)
                 explain_buffer_pointer(sb, p);
             else
@@ -167,8 +171,8 @@ explain_buffer_errno_fcntl_system_call(explain_string_buffer_t *sb,
         {
             const struct flock64 *p;
 
-            p = (const struct flock64 *)arg;
-            explain_string_buffer_puts(sb, ", arg = ");
+            p = (const struct flock64 *)data;
+            explain_string_buffer_puts(sb, ", data = ");
             if (errnum == EFAULT)
                 explain_buffer_pointer(sb, p);
             else
@@ -184,7 +188,7 @@ explain_buffer_errno_fcntl_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, int command, long arg)
+    int errnum, int fildes, int command, long data)
 {
     switch (errnum)
     {
@@ -193,6 +197,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the operation is prohibited by locks held by other processes"
         );
         break;
@@ -202,6 +207,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the operation is prohibited by locks held by other "
             "processes; or, the operation is prohibited because the "
             "file has been memory-mapped by another process"
@@ -221,6 +227,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the file descriptor open flags"
             );
             {
@@ -243,7 +250,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
             break;
 
         default:
-            break;
+            goto generic;
         }
         break;
 
@@ -252,13 +259,14 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "it was detected that the specified F_SETLKW "
             "command would cause a deadlock"
         );
         break;
 
     case EFAULT:
-        explain_buffer_efault(sb, "arg");
+        explain_buffer_efault(sb, "data");
         break;
 
     case EINTR:
@@ -273,6 +281,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the command was interrupted by a signal "
                 "before the lock was checked or acquired; most likely "
                 "when locking a remote file (e.g. locking over NFS), "
@@ -289,7 +298,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
 #ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
 #endif
-            explain_buffer_check_fildes_range(sb, arg, "arg");
+            explain_buffer_check_fildes_range(sb, data, "data");
             break;
 
 #ifdef F_SETSIG
@@ -297,13 +306,59 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_puts
             (
                 sb,
-                "the arg is not an allowable signal number"
+                /* FIXME: i18n */
+                "the data argument is not an allowable signal number"
             );
             break;
 #endif
 
+        case F_GETLK:
+        case F_SETLK:
+        case F_SETLKW:
+            {
+                struct flock    *f;
+
+                f = (struct flock *)data;
+                if (!f)
+                {
+                    explain_buffer_is_the_null_pointer(sb, "data");
+                    break;
+                }
+                if (explain_pointer_is_efault(f, sizeof(*f)))
+                {
+                    explain_buffer_efault(sb, "data");
+                    break;
+                }
+                switch (f->l_type)
+                {
+                case F_RDLCK:
+                case F_WRLCK:
+                case F_UNLCK:
+#ifdef F_UNLKSYS
+                case F_UNLKSYS:
+#endif
+                    break;
+
+                default:
+                    explain_buffer_einval_vague(sb, "data->l_type");
+                    goto done;
+                }
+                switch (f->l_whence)
+                {
+                case SEEK_SET:
+                case SEEK_CUR:
+                case SEEK_END:
+                    break;
+
+                default:
+                    explain_buffer_einval_vague(sb, "data->l_whence");
+                    goto done;
+                }
+                goto generic;
+            }
+
         default:
-            break;
+            goto generic;
         }
         break;
 
@@ -318,7 +373,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
             break;
 
         default:
-            break;
+            goto generic;
         }
         break;
 
@@ -326,6 +381,7 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "too many segment locks are open, or the lock table is full, "
             "or a remote locking protocol failed (e.g. locking over "
             "NFS)"
@@ -336,21 +392,24 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "it was attempted to clear the O_APPEND flag on a file "
             "that has the append-only attribute set"
         );
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        generic:
+        explain_buffer_errno_generic(sb, errnum, "fcntl");
         break;
     }
+    done:;
 }
 
 
 void
 explain_buffer_errno_fcntl(explain_string_buffer_t *sb, int errnum,
-    int fildes, int command, long arg)
+    int fildes, int command, long data)
 {
     explain_explanation_t exp;
 
@@ -361,7 +420,7 @@ explain_buffer_errno_fcntl(explain_string_buffer_t *sb, int errnum,
         errnum,
         fildes,
         command,
-        arg
+        data
     );
     explain_buffer_errno_fcntl_explanation
     (
@@ -369,7 +428,7 @@ explain_buffer_errno_fcntl(explain_string_buffer_t *sb, int errnum,
         errnum,
         fildes,
         command,
-        arg
+        data
     );
     explain_explanation_assemble(&exp, sb);
 }

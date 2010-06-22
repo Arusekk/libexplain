@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,15 +17,29 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/kd.h>
 
+#include <libexplain/buffer/int8.h>
 #include <libexplain/buffer/char_data.h>
 #include <libexplain/iocontrol/pio_cmap.h>
 
 
-#ifndef PIO_CMAP
-#define PIO_CMAP -1
-#endif
+#ifdef PIO_CMAP
+
+static void
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_uint8_star(sb, data, 3 * 16);
+}
+
+
+/* FIXME: EPERM */
 
 const explain_iocontrol_t explain_iocontrol_pio_cmap =
 {
@@ -33,6 +47,28 @@ const explain_iocontrol_t explain_iocontrol_pio_cmap =
     PIO_CMAP, /* value */
     0, /* disambiguate */
     0, /* print_name */
+    print_data,
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    3 * 16, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_pio_cmap =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

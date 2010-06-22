@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -33,12 +33,24 @@
 #include <libexplain/sizeof.h>
 
 
+/*
+ * On Solaris, even though flock(2) says these defines are available in
+ * <sys/file.h>, the defines do not appear to be actually there.
+ */
 static const explain_parse_bits_table_t table[] =
 {
+#ifdef LOCK_SH
     { "LOCK_SH", LOCK_SH },
+#endif
+#ifdef LOCK_EX
     { "LOCK_EX", LOCK_EX },
+#endif
+#ifdef LOCK_UN
     { "LOCK_UN", LOCK_UN },
+#endif
+#ifdef LOCK_NB
     { "LOCK_NB", LOCK_NB },
+#endif
 };
 
 
@@ -103,7 +115,7 @@ explain_buffer_errno_flock_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "flock");
         break;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,14 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/kd.h>
 
 #include <libexplain/iocontrol/kdgkbmeta.h>
+#include <libexplain/iocontrol/generic.h>
 
 
-#ifndef KDGKBMETA
-#define KDGKBMETA -1
-#endif
+#ifdef KDGKBMETA
 
 const explain_iocontrol_t explain_iocontrol_kdgkbmeta =
 {
@@ -32,6 +32,28 @@ const explain_iocontrol_t explain_iocontrol_kdgkbmeta =
     KDGKBMETA, /* value */
     0, /* disambiguate */
     0, /* print_name */
+    explain_iocontrol_generic_print_data_long, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    NOT_A_POINTER, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_kdgkbmeta =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

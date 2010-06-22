@@ -20,7 +20,9 @@
 .TH explain_freopen 3
 .SH NAME
 explain_freopen \- explain freopen(3) errors
+.if require_index \{
 .XX "explain_freopen(3)" "explain freopen(3) errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/freopen.h>
 .br
@@ -235,6 +237,7 @@ The original flags, exactly as passed to the \f[I]freopen\fP(3) system call.
 The original fp, exactly as passed to the \f[I]freopen\fP(3) system call.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -44,6 +44,68 @@ void explain_buffer_eperm_kill(explain_string_buffer_t *sb);
   *     The name of the offending system call.
   */
 void explain_buffer_eperm_sys_time(explain_string_buffer_t *sb,
+    const char *syscall_name);
+
+/**
+  * The explain_buffer_eperm_sys_tty_config function may be used to print an
+  * explanation of an EPERM error, for syscalls that need CAP_SYS_TTY_CONFIG.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param syscall_name
+  *     The name of the offending system call.
+  */
+void explain_buffer_eperm_sys_tty_config(explain_string_buffer_t *sb,
+    const char *syscall_name);
+
+/**
+  * The explain_buffer_eperm_net_admin function may be used to print an
+  * explanation of an EPERM error, for syscalls that need CAP_NET_ADMIN
+  * capability.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param syscall_name
+  *     The name of the offending system call.
+  */
+void explain_buffer_eperm_net_admin(explain_string_buffer_t *sb,
+    const char *syscall_name);
+
+/**
+  * The explain_buffer_eperm_mknod function is use to print an explanation
+  * of a EPERM error, in the case where the file system is incapable of
+  * making a node of the type specified.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param pathname
+  *     The path of the attempted node creation.
+  * @param pathname_caption
+  *     The name of the syscall argument containinbg the path of the
+  *     attempted node creation.
+  * @param mode
+  *     The S_IFMT bits describe what sort of node was attempted.
+  */
+void explain_buffer_eperm_mknod(explain_string_buffer_t *sb,
+    const char *pathname, const char *pathname_caption, int mode);
+
+/**
+  * The explain_buffer_eperm_unlink functions is used to print an
+  * explanation of a EPERM error, in the case where the sticky bit has
+  * been set.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param pathname
+  *     The path of the attempted node creation.
+  * @param pathname_caption
+  *     The name of the syscall argument containinbg the path of the
+  *     attempted node creation.
+  * @param syscall_name
+  *     The name of the offended system call.
+  */
+void explain_buffer_eperm_unlink(explain_string_buffer_t *sb,
+    const char *pathname, const char *pathname_caption,
     const char *syscall_name);
 
 #endif /* LIBEXPLAIN_BUFFER_EPERM_H */

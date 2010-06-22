@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,15 @@
 
 TEST_SUBJECT="unlink ENOENT"
 . test_prelude
+
+if test `uname -s` = SunOS
+then
+    echo
+    echo "    Solaris has non-POSIX semantics for empty paths."
+    echo "    This test is declared to pass by default."
+    echo
+    pass
+fi
 
 cat > test.ok << 'fubar'
 unlink(pathname = "") failed, No such file or directory (ENOENT) because

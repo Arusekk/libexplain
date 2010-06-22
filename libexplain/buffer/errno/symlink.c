@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,18 +18,21 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/eacces.h>
+#include <libexplain/buffer/eexist.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eio.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enospc.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
@@ -75,16 +78,7 @@ explain_buffer_errno_symlink_explanation(explain_string_buffer_t *sb,
         break;
 
     case EEXIST:
-        {
-            struct stat st;
-            if (lstat(newpath, &st) == 0)
-            {
-                explain_string_buffer_putc(sb, ' ');
-                explain_buffer_file_type(sb, st.st_mode);
-            }
-        }
-        /* FIXME: i18n */
-        explain_string_buffer_puts(sb, " newpath already exists");
+        explain_buffer_eexist(sb, newpath);
         break;
 
     case EFAULT:
@@ -164,18 +158,7 @@ explain_buffer_errno_symlink_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOSPC:
-        /* FIXME: i18n */
-        explain_string_buffer_puts
-        (
-            sb,
-            "the file system containing newpath"
-        );
-        explain_buffer_mount_point_dirname(sb, newpath);
-        explain_string_buffer_puts
-        (
-            sb,
-            " has no room for the new directory entry"
-        );
+        explain_buffer_enospc(sb, newpath, "newpath");
         break;
 
     case ENOTDIR:
@@ -202,7 +185,7 @@ explain_buffer_errno_symlink_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "symlink");
         break;
     }
 }

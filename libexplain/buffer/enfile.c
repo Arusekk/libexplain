@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ get_maxfile(void)
          * system call (and others) will return ENFILE.
          */
         struct __sysctl_args args;
-        long maxfile;
+        int32_t maxfile;
         size_t maxfile_size = sizeof(maxfile);
         int name[] = { CTL_FS, FS_MAXFILE };
 

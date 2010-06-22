@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -40,12 +40,12 @@
   *     to call <b>any</b> code between the system call to
   *     be explained and this function, because many libc
   *     functions will alter the value of errno.
-  * @param buf
-  *     The original buf, exactly as passed to the getcwd(2) system call.
-  * @param size
-  *     The original size, exactly as passed to the getcwd(2) system call.
+  * @param data
+  *     The original data, exactly as passed to the getcwd(2) system call.
+  * @param data_size
+  *     The original data_size, exactly as passed to the getcwd(2) system call.
   */
 void explain_buffer_errno_getcwd(explain_string_buffer_t *sb, int errnum,
-    char *buf, size_t size);
+    char *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_GETCWD_H */

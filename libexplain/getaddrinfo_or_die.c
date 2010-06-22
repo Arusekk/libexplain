@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -19,12 +19,9 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/netdb.h>
-#include <libexplain/ac/stdio.h>
-#include <libexplain/ac/stdlib.h>
 
 #include <libexplain/getaddrinfo.h>
-#include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 void
@@ -33,6 +30,6 @@ explain_getaddrinfo_or_die(const char *node, const char *service,
 {
     if (explain_getaddrinfo_on_error(node, service, hints, res))
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
 }

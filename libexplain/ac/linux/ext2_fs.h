@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_AC_LINUX_EXT2_FS_H
 #define LIBEXPLAIN_AC_LINUX_EXT2_FS_H
 
-#include <libexplain/config.h>
+#include <libexplain/ac/linux/fs.h>
 
 #ifdef HAVE_LINUX_EXT2_FS_H
 #include <linux/ext2_fs.h>

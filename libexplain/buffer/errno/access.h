@@ -56,12 +56,14 @@ void explain_buffer_errno_access(explain_string_buffer_t *sb, int errnum,
   *     The string buffer in which the message is being constructed.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param pathname
   *     The original pathname, exactly has passed to the access(2) system call.
   * @param mode
   *     The original mode, exactly has passed to the access(2) system call.
   */
 void explain_buffer_errno_access_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int mode);
+    int errnum, const char *syscall_name, const char *pathname, int mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_ACCESS_H */

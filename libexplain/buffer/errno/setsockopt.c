@@ -61,19 +61,30 @@ explain_buffer_sockopt(explain_string_buffer_t *sb, int level, int name,
     /* FIXME: add support for SOL_ICMP */
     /* FIXME: add support for SOL_ICMPV6 */
 
+#ifdef SOL_IP
     case SOL_IP:
         switch (name)
         {
         case IP_TOS:
         case IP_TTL:
         case IP_HDRINCL:
+#ifdef IP_ROUTER_ALERT
         case IP_ROUTER_ALERT:
+#endif
         case IP_RECVOPTS:
+#ifdef IP_PKTINFO
         case IP_PKTINFO:
+#endif
+#ifdef IP_MTU_DISCOVER
         case IP_MTU_DISCOVER:
+#endif
+#ifdef IP_RECVERR
         case IP_RECVERR:
+#endif
         case IP_RECVTTL:
+#ifdef IP_RECVTOS
         case IP_RECVTOS:
+#endif
         case IP_MULTICAST_TTL:
         case IP_MULTICAST_LOOP:
             if (data_size >= sizeof(int))
@@ -83,6 +94,7 @@ explain_buffer_sockopt(explain_string_buffer_t *sb, int level, int name,
             }
             goto dunno;
 
+#ifndef __bsd__
         case IP_OPTIONS:
         case IP_RETOPTS:
             if (data_size >= sizeof(struct ip_opts))
@@ -98,6 +110,7 @@ explain_buffer_sockopt(explain_string_buffer_t *sb, int level, int name,
                 break;
             }
             goto dunno;
+#endif
 
         case IP_PKTOPTIONS:
             goto dunno;
@@ -267,6 +280,7 @@ explain_buffer_sockopt(explain_string_buffer_t *sb, int level, int name,
             goto dunno;
         }
         break;
+#endif
 
     /* FIXME: add support for SOL_IPV6 */
     /* FIXME: add support for SOL_IPX */
@@ -285,9 +299,11 @@ explain_buffer_sockopt(explain_string_buffer_t *sb, int level, int name,
     case SOL_SOCKET:
         switch (name)
         {
+#ifdef SO_BINDTODEVICE
         case SO_BINDTODEVICE:
             explain_string_buffer_puts_quoted_n(sb, data, data_size);
             break;
+#endif
 
         case SO_LINGER:
             if (data_size >= sizeof(struct linger))
@@ -391,7 +407,7 @@ explain_buffer_errno_setsockopt_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "setsockopt");
         break;
     }
 }

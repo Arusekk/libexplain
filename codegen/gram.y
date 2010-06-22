@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -118,11 +118,13 @@ static const res_tab_t res_tab[] =
     { "auto", AUTO },
     { "char", CHAR },
     { "const", CONST },
+    { "dev_t", TYPE_NAME },
     { "double", DOUBLE },
     { "enum", ENUM },
     { "extern", EXTERN },
     { "fd_set", TYPE_NAME },
     { "float", FLOAT },
+    { "fpos_t", TYPE_NAME },
     { "gid_t", TYPE_NAME },
     { "int", INT },
     { "long", LONG },
@@ -144,6 +146,7 @@ static const res_tab_t res_tab[] =
     { "uid_t", TYPE_NAME },
     { "union", UNION },
     { "unsigned", UNSIGNED },
+    { "va_list", TYPE_NAME },
     { "void", VOID },
     { "volatile", VOLATILE },
 };
@@ -184,6 +187,14 @@ yylex(void)
             break;
 
         default:
+            return c;
+
+        case '.':
+            if (pos[0] == '.' && pos[1] == '.')
+            {
+                pos += 2;
+                return ELLIPSIS;
+            }
             return c;
 
         case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':

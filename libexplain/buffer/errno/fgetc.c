@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -38,9 +38,9 @@ explain_buffer_errno_fgetc_system_call(explain_string_buffer_t *sb,
 }
 
 
-static void
+void
 explain_buffer_errno_fgetc_explanation(explain_string_buffer_t *sb,
-    int errnum, FILE *fp)
+    int errnum, const char *syscall_name, FILE *fp)
 {
     int             fildes;
 
@@ -57,7 +57,15 @@ explain_buffer_errno_fgetc_explanation(explain_string_buffer_t *sb,
         return;
     }
 
-    explain_buffer_errno_read_explanation(sb, errnum, fildes, NULL, 0);
+    explain_buffer_errno_read_explanation
+    (
+        sb,
+        errnum,
+        syscall_name,
+        fildes,
+        NULL,
+        0
+    );
 }
 
 
@@ -69,6 +77,12 @@ explain_buffer_errno_fgetc(explain_string_buffer_t *sb, int errnum,
 
     explain_explanation_init(&exp, errnum);
     explain_buffer_errno_fgetc_system_call(&exp.system_call_sb, errnum, fp);
-    explain_buffer_errno_fgetc_explanation(&exp.explanation_sb, errnum, fp);
+    explain_buffer_errno_fgetc_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        "fgetc",
+        fp
+    );
     explain_explanation_assemble(&exp, sb);
 }

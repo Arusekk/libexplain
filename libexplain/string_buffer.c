@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,4 +35,5 @@ explain_string_buffer_init(explain_string_buffer_t *sb, char *message,
     sb->position = 0;
     sb->maximum = message_size;
     sb->message[0] = '\0';
+    sb->footnotes = sb;
 }

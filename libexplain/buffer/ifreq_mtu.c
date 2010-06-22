@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,9 +23,10 @@
 #include <libexplain/path_is_efault.h>
 
 
+#if defined(SIOCSIFMTU) || defined(SIOCGIFMTU)
+
 void
-explain_buffer_ifreq_mtu(explain_string_buffer_t *sb,
-    const struct ifreq *data)
+explain_buffer_ifreq_mtu(explain_string_buffer_t *sb, const struct ifreq *data)
 {
     if (explain_pointer_is_efault(data, sizeof(*data)))
         explain_buffer_pointer(sb, data);
@@ -48,3 +49,14 @@ explain_buffer_ifreq_mtu(explain_string_buffer_t *sb,
         explain_string_buffer_printf(sb, ", ifr_mtu = %d }", data->ifr_mtu);
     }
 }
+
+!@#$
+#else
+
+void
+explain_buffer_ifreq_mtu(explain_string_buffer_t *sb, const struct ifreq *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

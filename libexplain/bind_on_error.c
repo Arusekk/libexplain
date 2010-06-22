@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -9,19 +9,19 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
+#include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/socket.h>
 
 #include <libexplain/bind.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 int
@@ -33,14 +33,16 @@ explain_bind_on_error(int fildes, const struct sockaddr *sock_addr,
     result = bind(fildes, sock_addr, sock_addr_size);
     if (result < 0)
     {
+        int             hold_errno;
+
+        hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print
-        (
-            stderr,
-            explain_bind(fildes, sock_addr, sock_addr_size)
-        );
+        explain_output_message(explain_errno_bind(hold_errno, fildes,
+            sock_addr, sock_addr_size));
+        errno = hold_errno;
     }
     return result;
 }
+
 
 /* vim: set ts=8 sw=4 et */

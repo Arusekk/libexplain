@@ -26,8 +26,8 @@
 #include <libexplain/sizeof.h>
 #include <libexplain/strdup.h>
 
+#include <codegen/elastic_buffer.h>
 #include <codegen/node.h>
-#include <codegen/string_buffer.h>
 
 
 node_t *
@@ -324,7 +324,7 @@ node_print(const node_t *np, FILE *fp)
 
 
 void
-node_print_sb(const node_t *np, string_buffer_t *sb, node_print_style_t style)
+node_print_sb(const node_t *np, elastic_buffer_t *sb, node_print_style_t style)
 {
     if
     (
@@ -338,7 +338,7 @@ node_print_sb(const node_t *np, string_buffer_t *sb, node_print_style_t style)
     )
     {
         /* only wrapper_hang honors this. */
-        string_buffer_putc(sb, '\n');
+        elastic_buffer_putc(sb, '\n');
     }
     if (node_is(np, "parameter_type_list"))
         style = node_print_style_normal;
@@ -346,7 +346,7 @@ node_print_sb(const node_t *np, string_buffer_t *sb, node_print_style_t style)
     if (node_is_a_literal(np))
     {
         assert(!np->nchild);
-        string_buffer_puts(sb, np->literal);
+        elastic_buffer_puts(sb, np->literal);
     }
     else
     {
@@ -365,11 +365,11 @@ node_print_sb(const node_t *np, string_buffer_t *sb, node_print_style_t style)
                 )
                 {
                     /* only wrapper_hang honors this */
-                    string_buffer_putc(sb, '\t');
+                    elastic_buffer_putc(sb, '\t');
                 }
                 else if (need_space_between(np->child[j - 1], np->child[j]))
                 {
-                    string_buffer_putc(sb, ' ');
+                    elastic_buffer_putc(sb, ' ');
                 }
             }
             node_print_sb(np->child[j], sb, style);
@@ -1238,6 +1238,7 @@ node_synth_result_variable(node_t *np)
 #define IS_SOCKLEN_T (1 << 23)
 #define IS_PTRDIFF_T (1 << 24)
 #define IS_TIME_T    (1 << 25)
+#define IS_DEV_T     (1 << 26)
 
 
 static int
@@ -1306,6 +1307,8 @@ grope_type_specifier(node_t *np)
     assert(node_is_a_literal(np));
     if (node_is_literal(np, "size_t"))
         return IS_SIZE_T;
+    if (node_is_literal(np, "dev_t"))
+        return IS_DEV_T;
     if (node_is_literal(np, "ssize_t"))
         return IS_SSIZE_T;
     if (node_is_literal(np, "ptrdiff_t") )
@@ -1507,47 +1510,51 @@ node_parameter_is_formatable(const node_t *parameter, char *fmt,
     case IS_SHORT | IS_SIGNED:
     case IS_SHORT | IS_INT:
     case IS_SHORT | IS_INT | IS_SIGNED:
-        strsizecopy(fmt, "%hd", fmt_size);
+        strsizecopy(fmt, "explain_buffer_short", fmt_size);
         return 1;
 
     case IS_SHORT | IS_UNSIGNED:
     case IS_SHORT | IS_INT | IS_UNSIGNED:
-        strsizecopy(fmt, "%hu", fmt_size);
+        strsizecopy(fmt, "explain_buffer_ushort", fmt_size);
         return 1;
 
     case IS_INT:
     case IS_INT | IS_SIGNED:
     case IS_SIGNED:
-        strsizecopy(fmt, "%d", fmt_size);
+        strsizecopy(fmt, "explain_buffer_int", fmt_size);
         return 1;
 
     case IS_INT | IS_UNSIGNED:
     case IS_UNSIGNED:
-        strsizecopy(fmt, "%u", fmt_size);
+        strsizecopy(fmt, "explain_buffer_uint", fmt_size);
         return 1;
 
     case IS_LONG:
     case IS_LONG | IS_SIGNED:
     case IS_LONG | IS_INT:
     case IS_LONG | IS_INT | IS_SIGNED:
-        strsizecopy(fmt, "%ld", fmt_size);
+        strsizecopy(fmt, "explain_buffer_long", fmt_size);
         return 1;
 
     case IS_LONG | IS_UNSIGNED:
     case IS_LONG | IS_INT | IS_UNSIGNED:
-        strsizecopy(fmt, "%lu", fmt_size);
+        strsizecopy(fmt, "explain_buffer_ulong", fmt_size);
         return 1;
 
     case IS_LONGLONG:
     case IS_LONGLONG | IS_SIGNED:
     case IS_LONGLONG | IS_INT:
     case IS_LONGLONG | IS_INT | IS_SIGNED:
-        strsizecopy(fmt, "%lld", fmt_size);
+        strsizecopy(fmt, "explain_buffer_long_long", fmt_size);
         return 1;
 
     case IS_LONGLONG | IS_UNSIGNED:
     case IS_LONGLONG | IS_INT | IS_UNSIGNED:
-        strsizecopy(fmt, "%llu", fmt_size);
+        strsizecopy(fmt, "explain_buffer_unsigned_long_long", fmt_size);
+        return 1;
+
+    case IS_DEV_T:
+        strsizecopy(fmt, "explain_buffer_dev_t", fmt_size);
         return 1;
 
     case IS_PTRDIFF_T:

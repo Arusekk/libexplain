@@ -66,7 +66,7 @@ explain_buffer_errno_nice_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "nice");
         break;
     }
 }

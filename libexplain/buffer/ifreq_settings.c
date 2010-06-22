@@ -18,11 +18,16 @@
 
 #include <libexplain/ac/sys/socket.h>
 #include <libexplain/ac/linux/if.h>
+#ifndef HAVE_LINUX_IF_H
+#include <libexplain/ac/net/if.h>
+#endif
 
 #include <libexplain/buffer/ifreq_settings.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/path_is_efault.h>
 
+
+#ifdef HAVE_LINUX_IF_H
 
 static void
 explain_buffer_if_settings(explain_string_buffer_t *sb,
@@ -37,6 +42,7 @@ explain_buffer_if_settings(explain_string_buffer_t *sb,
     );
 }
 
+#endif
 
 void
 explain_buffer_ifreq_settings(explain_string_buffer_t *sb,
@@ -60,6 +66,7 @@ explain_buffer_ifreq_settings(explain_string_buffer_t *sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
+#ifdef HAVE_LINUX_IF_H
         explain_string_buffer_puts(sb, ", ifr_settings = ");
 #if 0
         explain_buffer_if_settings(sb, &ifr->ifr_settings);
@@ -73,6 +80,7 @@ explain_buffer_ifreq_settings(explain_string_buffer_t *sb,
             sb,
             (const struct if_settings *)&ifr->ifr_ifru
         );
+#endif
 #endif
         explain_string_buffer_puts(sb, " }");
     }

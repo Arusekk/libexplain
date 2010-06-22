@@ -68,7 +68,7 @@ explain_buffer_errno_closedir_explanation(explain_string_buffer_t *sb,
         explain_buffer_ebadf_dir(sb, "dir");
         return;
     }
-    explain_buffer_errno_close_explanation(sb, errno, fildes);
+    explain_buffer_errno_close_explanation(sb, errno, "closedir", fildes);
 }
 
 

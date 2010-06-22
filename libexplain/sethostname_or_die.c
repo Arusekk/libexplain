@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,8 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/unistd.h>
 
+#include <libexplain/output.h>
 #include <libexplain/sethostname.h>
 
 
@@ -25,7 +26,7 @@ void
 explain_sethostname_or_die(const char *name, size_t name_size)
 {
     if (explain_sethostname_on_error(name, name_size) < 0)
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
 }
 
 /* vim: set ts=8 sw=4 et */

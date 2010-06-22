@@ -34,16 +34,26 @@ explain_buffer_ifflags(explain_string_buffer_t *sb, int flags)
         { "IFF_DEBUG", IFF_DEBUG },
         { "IFF_LOOPBACK", IFF_LOOPBACK },
         { "IFF_POINTOPOINT", IFF_POINTOPOINT },
+#ifdef IFF_NOTRAILERS
         { "IFF_NOTRAILERS", IFF_NOTRAILERS },
+#endif
         { "IFF_RUNNING", IFF_RUNNING },
         { "IFF_NOARP", IFF_NOARP },
         { "IFF_PROMISC", IFF_PROMISC },
         { "IFF_ALLMULTI", IFF_ALLMULTI },
+#ifdef IFF_MASTER
         { "IFF_MASTER", IFF_MASTER },
+#endif
+#ifdef IFF_SLAVE
         { "IFF_SLAVE", IFF_SLAVE },
+#endif
         { "IFF_MULTICAST", IFF_MULTICAST },
+#ifdef IFF_PORTSEL
         { "IFF_PORTSEL", IFF_PORTSEL },
+#endif
+#ifdef IFF_AUTOMEDIA
         { "IFF_AUTOMEDIA", IFF_AUTOMEDIA },
+#endif
 #ifdef IFF_DYNAMIC
         { "IFF_DYNAMIC", IFF_DYNAMIC },
 #endif

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,12 +26,10 @@ int
 explain_fildes_to_address_family(int fildes)
 {
     struct sockaddr_storage ss;
-    struct sockaddr *sa;
     socklen_t       sa_size;
 
-    sa = (struct sockaddr *)&ss;
     sa_size = sizeof(ss);
-    if (getsockname(fildes, sa, &sa_size) < 0)
+    if (getsockname(fildes, (struct sockaddr *)&ss, &sa_size) < 0)
         return -1;
-    return sa->sa_family;
+    return ss.ss_family;
 }

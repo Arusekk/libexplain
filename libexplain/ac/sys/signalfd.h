@@ -20,10 +20,19 @@
 #ifndef LIBEXPLAIN_AC_SYS_SIGNALFD_H
 #define LIBEXPLAIN_AC_SYS_SIGNALFD_H
 
+/**
+  * @file
+  * @brief Insulate <sys/signalfd.h> differences
+  */
+
 #include <libexplain/ac/signal.h>
 
 #ifdef HAVE_SYS_SIGNALFD_H
 #include <sys/signalfd.h>
+#else
+# ifdef HAVE_SIGNALFD
+int signalfd(int, const void *, int);
+# endif
 #endif
 
 #endif /* LIBEXPLAIN_AC_SYS_SIGNALFD_H */

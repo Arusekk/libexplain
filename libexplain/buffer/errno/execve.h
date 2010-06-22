@@ -59,6 +59,8 @@ void explain_buffer_errno_execve(explain_string_buffer_t *sb, int errnum,
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param pathname
   *     The original pathname, exactly as passed to the execve(2) system call.
   * @param argv
@@ -67,6 +69,7 @@ void explain_buffer_errno_execve(explain_string_buffer_t *sb, int errnum,
   *     The original envp, exactly as passed to the execve(2) system call.
   */
 void explain_buffer_errno_execve_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, char *const *argv, char *const *envp);
+    int errnum, const char *syscall_name, const char *pathname,
+    char *const *argv, char *const *envp);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_EXECVE_H */

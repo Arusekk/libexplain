@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@ TEST_SUBJECT="accept4 EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-accept4(fildes = 42, sock_addr = 0x12340000, sock_addr_size = 0x12345000,
+accept4(fildes = 42, sock_addr = 0x09876543, sock_addr_size = 0x09876543,
 flags = 0) failed, Bad address (EFAULT) because sock_addr_size refers to
 memory that is outside the process's accessible address space; this is more
 likely to be a software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT accept4 42 0x12340000 0x12345000 0 > test.out
+explain -eEFAULT accept4 42 0x09876543 0x09876543 0 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

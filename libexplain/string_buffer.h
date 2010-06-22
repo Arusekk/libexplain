@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/ac/stdarg.h>
 #include <libexplain/ac/stddef.h>
 
-#include <libexplain/gcc_attributes.h>
+#include <libexplain/format_printf.h>
 
 #ifndef i18n
 #define i18n(x) x
@@ -40,6 +40,7 @@ struct explain_string_buffer_t
     char *message;
     size_t position;
     size_t maximum;
+    explain_string_buffer_t *footnotes;
 };
 
 /**
@@ -83,8 +84,8 @@ void explain_string_buffer_putc_quoted(explain_string_buffer_t *sb,
   * @param c
   *    The character to be printed if possible, and C escaped if not.
   * @param delimiter
-  *    The delimiter character; '\'' for character constants,
-  *    '"' for string constants
+  *    The delimiter character; single quote for character constants,
+  *    double quote for string constants
   */
 void explain_string_buffer_putc_escaped(explain_string_buffer_t *sb,
     int c, int delimiter);
@@ -209,5 +210,14 @@ void explain_string_buffer_write(explain_string_buffer_t *sb,
   */
 void explain_string_buffer_truncate(explain_string_buffer_t *sb,
     long new_position);
+
+/**
+  * The explain_string_buffer_rewind function is used to trim a
+  * string buffer back to empty.
+  *
+  * @param sb
+  *     The string buffer to shorten
+  */
+void explain_string_buffer_rewind(explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_STRING_BUFFER_H */

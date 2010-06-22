@@ -23,6 +23,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/kill.h>
 #include <libexplain/buffer/esrch.h>
+#include <libexplain/buffer/pid_t_star.h>
 #include <libexplain/buffer/signal.h>
 #include <libexplain/explanation.h>
 
@@ -33,16 +34,16 @@ explain_buffer_errno_kill_system_call(explain_string_buffer_t *sb, int errnum,
 {
     (void)errnum;
     explain_string_buffer_puts(sb, "kill(pid = ");
-    explain_string_buffer_printf(sb, "%ld", (long)pid);
+    explain_buffer_pid_t(sb, pid);
     explain_string_buffer_puts(sb, ", sig = ");
     explain_buffer_signal(sb, sig);
     explain_string_buffer_putc(sb, ')');
 }
 
 
-static void
+void
 explain_buffer_errno_kill_explanation(explain_string_buffer_t *sb, int errnum,
-    pid_t pid, int sig)
+    const char *syscall_name, pid_t pid, int sig)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/kill.html
@@ -63,7 +64,7 @@ explain_buffer_errno_kill_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -78,8 +79,8 @@ explain_buffer_errno_kill(explain_string_buffer_t *sb, int errnum, pid_t pid,
     explain_explanation_init(&exp, errnum);
     explain_buffer_errno_kill_system_call(&exp.system_call_sb, errnum, pid,
         sig);
-    explain_buffer_errno_kill_explanation(&exp.explanation_sb, errnum, pid,
-        sig);
+    explain_buffer_errno_kill_explanation(&exp.explanation_sb, errnum, "kill",
+        pid, sig);
     explain_explanation_assemble(&exp, sb);
 }
 

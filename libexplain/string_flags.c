@@ -138,4 +138,7 @@ explain_string_flags_init(explain_string_flags_t *sf, const char *flags)
 #ifdef O_LARGEFILE
     sf->flags |= O_LARGEFILE;
 #endif
+#ifdef O_LARGEFILE_HIDDEN
+    sf->flags |= O_LARGEFILE_HIDDEN;
+#endif
 }

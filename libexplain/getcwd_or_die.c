@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,12 +16,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
-#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/errno.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/getcwd.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
+
+
+char *
+explain_getcwd_on_error(char *data, size_t data_size)
+{
+    char            *result;
+
+    result = getcwd(data, data_size);
+    if (!result)
+    {
+        int             hold_errno;
+
+        hold_errno = errno;
+        explain_program_name_assemble_internal(1);
+        explain_output_message(explain_errno_getcwd(hold_errno, data,
+            data_size));
+        errno = hold_errno;
+    }
+    return result;
+}
 
 
 char *
@@ -32,7 +52,10 @@ explain_getcwd_or_die(char *data, size_t data_size)
     result = explain_getcwd_on_error(data, data_size);
     if (!result)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return result;
 }
+
+
+/* vim: set ts=8 sw=4 et */

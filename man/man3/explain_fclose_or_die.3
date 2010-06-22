@@ -20,7 +20,9 @@
 .TH explain_fclose_or_die 3
 .SH NAME
 explain_fclose_or_die \- close a stream and report errors
+.if require_index \{
 .XX "explain_fclose_or_die(3)" "close a stream and report errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/fclose.h>
 .br
@@ -47,6 +49,7 @@ Only returns on success.
 Reports error and process exits on failure.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

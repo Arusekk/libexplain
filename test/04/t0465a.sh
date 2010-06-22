@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,12 +22,12 @@ TEST_SUBJECT="dirfd EINVAL"
 . test_prelude
 
 cat > test.ok << 'fubar'
-dirfd(dir = 0x00012345) failed, Invalid argument (EINVAL) because the dir
+dirfd(dir = 0x09876543) failed, Invalid argument (EINVAL) because the dir
 argument does not refer a valid directory stream
 fubar
 test $? -eq 0 || no_result
 
-explain -eEINVAL dirfd 0x12345 > test.out
+explain -eEINVAL dirfd 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

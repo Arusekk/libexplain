@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,10 +18,12 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/stdio.h> /* for snprintf */
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/ebadf.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/enosys.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/lseek.h>
@@ -47,9 +49,45 @@ explain_buffer_errno_lseek_system_call(explain_string_buffer_t *sb,
 }
 
 
+#if defined(SEEK_HOLE) || defined(SEEK_DATA)
+
+static int
+holes_are_not_supported(int fildes)
+{
+    long            result;
+
+    errno = 0;
+    result = fpathconf(fildes, _PC_MIN_HOLE_SIZE);
+    if (result == -1 && errno != 0)
+    {
+        switch (errno)
+        {
+        case EINVAL:
+        case ENOSYS:
+            /* yes, not supported */
+            return 1;
+
+        case EBADF:
+        default:
+            /* no, can't tell */
+            return 0;
+        }
+    }
+    if (result <= 0)
+    {
+        /* yes, not supported */
+        return 1;
+    }
+    /* no, holes are supported */
+    return 0;
+}
+
+#endif
+
+
 void
 explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, off_t offset, int whence)
+    int errnum, const char *syscall_name, int fildes, off_t offset, int whence)
 {
     switch (errnum)
     {
@@ -72,7 +110,35 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
                     /* FIXME: i18n */
                     "'whence' is not one of SEEK_SET, SEEK_CUR, SEEK_END"
                 );
+                return;
+
+#ifdef SEEK_HOLE
+            case SEEK_HOLE:
+                if (holes_are_not_supported(fildes))
+                    goto seek_hole_enosys;
+                if (offset < 0)
+                {
+                    explain_buffer_einval_too_small(sb, "offset", offset);
+                    return;
+                }
+                destination = lseek(fildes, offset, whence);
+                offset = 0;
                 break;
+#endif
+
+#ifdef SEEK_DATA
+            case SEEK_DATA:
+                if (holes_are_not_supported(fildes))
+                    goto seek_data_enosys;
+                if (offset < 0)
+                {
+                    explain_buffer_einval_too_small(sb, "offset", offset);
+                    return;
+                }
+                destination = lseek(fildes, offset, whence);
+                offset = 0;
+                break;
+#endif
 
             case SEEK_SET:
                 current_position = 0;
@@ -139,6 +205,31 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
         }
         break;
 
+    case ENXIO:
+#ifdef SEEK_HOLE
+        if (whence == SEEK_HOLE)
+        {
+            explain_string_buffer_puts
+            (
+                sb,
+                /* FIXME: i18n */
+                "there is no hole extent beyond the current file position"
+            );
+        }
+#endif
+#ifdef SEEK_DATA
+        if (whence == SEEK_DATA)
+        {
+            explain_string_buffer_puts
+            (
+                sb,
+                /* FIXME: i18n */
+                "there is no data extent beyond the current file position"
+            );
+        }
+#endif
+        goto generic;
+
     case EOVERFLOW:
         explain_string_buffer_puts
         (
@@ -179,11 +270,34 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
 #if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
     case EOPNOTSUPP:
 #endif
-        explain_buffer_enosys_fildes(sb, fildes, "fildes", "lseek");
+#ifdef SEEK_HOLE
+        if (whence == SEEK_HOLE && holes_are_not_supported(fildes))
+        {
+            char            temp[50];
+
+            seek_hole_enosys:
+            snprintf(temp, sizeof(temp), "%s SEEK_HOLE", syscall_name);
+            explain_buffer_enosys_fildes(sb, fildes, "fildes", temp);
+            break;
+        }
+#endif
+#ifdef SEEK_DATA
+        if (whence == SEEK_DATA && holes_are_not_supported(fildes))
+        {
+            char            temp[50];
+
+            seek_data_enosys:
+            snprintf(temp, sizeof(temp), "%s SEEK_DATA", syscall_name);
+            explain_buffer_enosys_fildes(sb, fildes, "fildes", temp);
+            break;
+        }
+#endif
+        explain_buffer_enosys_fildes(sb, fildes, "fildes", syscall_name);
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        generic:
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -208,6 +322,7 @@ explain_buffer_errno_lseek(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "lseek",
         fildes,
         offset,
         whence

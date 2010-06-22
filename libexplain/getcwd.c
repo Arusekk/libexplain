@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,12 +17,56 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/errno/getcwd.h>
+#include <libexplain/common_message_buffer.h>
 #include <libexplain/getcwd.h>
 
 
 const char *
-explain_getcwd(char *buf, size_t size)
+explain_getcwd(char *data, size_t data_size)
 {
-    return explain_errno_getcwd(errno, buf, size);
+    return explain_errno_getcwd(errno, data, data_size);
+}
+
+
+const char *
+explain_errno_getcwd(int errnum, char *data, size_t data_size)
+{
+    explain_message_errno_getcwd
+    (
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
+        errnum,
+        data,
+        data_size
+    );
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_getcwd(char *message, int message_size, char *data,
+    size_t data_size)
+{
+    explain_message_errno_getcwd
+    (
+        message,
+        message_size,
+        errno,
+        data,
+        data_size
+    );
+}
+
+
+void
+explain_message_errno_getcwd(char *message, int message_size, int errnum,
+    char *data, size_t data_size)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_getcwd(&sb, errnum, data, data_size);
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,10 +24,10 @@
 
 void
 explain_message_errno_lstat(char *message, int message_size, int errnum,
-    const char *pathname, const struct stat *buf)
+    const char *pathname, const struct stat *data)
 {
     explain_string_buffer_t sb;
 
     explain_string_buffer_init(&sb, message, message_size);
-    explain_buffer_errno_lstat(&sb, errnum, pathname, buf);
+    explain_buffer_errno_lstat(&sb, errnum, pathname, data);
 }

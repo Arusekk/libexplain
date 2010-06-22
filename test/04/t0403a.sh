@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ test $? -eq 0 || no_result
 test_strtoll 0x10000000000000000 0 > test.out.2 2>&1
 test $? -eq 1 || fail
 
-sed 's|endptr = 0x[0-9a-fA-F]*|endptr = 0xNNNNNNNN|' test.out.2 > test.out
+sed 's|endptr = 0x[0-9a-fA-F][0-9a-fA-F]*|endptr = 0xNNNNNNNN|' test.out.2 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

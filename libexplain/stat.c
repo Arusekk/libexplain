@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 
 
 const char *
-explain_stat(const char *pathname, const struct stat *buf)
+explain_stat(const char *pathname, const struct stat *data)
 {
-    return explain_errno_stat(errno, pathname, buf);
+    return explain_errno_stat(errno, pathname, data);
 }

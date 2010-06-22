@@ -20,7 +20,7 @@
 #include <libexplain/ac/ctype.h>
 #include <libexplain/ac/string.h>
 
-#include <codegen/string_buffer.h>
+#include <codegen/elastic_buffer.h>
 #include <codegen/wrapper.h>
 
 #define DEFAULT_LINE_WIDTH 75
@@ -32,8 +32,8 @@ wrapper(FILE *fp, const char *prefix, const char *text)
     size_t          prefix_len;
     size_t          width;
     const char      *cp;
-    static string_buffer_t line_buf;
-    static string_buffer_t word_buf;
+    static elastic_buffer_t line_buf;
+    static elastic_buffer_t word_buf;
 
     if (!prefix)
         prefix = "";
@@ -41,7 +41,7 @@ wrapper(FILE *fp, const char *prefix, const char *text)
     width = DEFAULT_LINE_WIDTH;
     if (prefix_len < DEFAULT_LINE_WIDTH)
         width = DEFAULT_LINE_WIDTH - prefix_len;
-    string_buffer_rewind(&line_buf);
+    elastic_buffer_rewind(&line_buf);
     cp = text;
     for (;;)
     {
@@ -51,7 +51,7 @@ wrapper(FILE *fp, const char *prefix, const char *text)
             if (line_buf.data_length)
             {
                 fputs(prefix, fp);
-                string_buffer_fwrite(&line_buf, fp);
+                elastic_buffer_fwrite(&line_buf, fp);
                 putc('\n', fp);
             }
             return;
@@ -63,10 +63,10 @@ wrapper(FILE *fp, const char *prefix, const char *text)
         /*
          * Grab the next word.
          */
-        string_buffer_rewind(&word_buf);
+        elastic_buffer_rewind(&word_buf);
         for (;;)
         {
-            string_buffer_putc(&word_buf, c);
+            elastic_buffer_putc(&word_buf, c);
             c = *cp;
             if (c == '\0')
                 break;
@@ -81,16 +81,16 @@ wrapper(FILE *fp, const char *prefix, const char *text)
         }
         else if (line_buf.data_length + 1 + word_buf.data_length <= width)
         {
-            string_buffer_putc(&line_buf, ' ');
+            elastic_buffer_putc(&line_buf, ' ');
         }
         else
         {
             fputs(prefix, fp);
-            string_buffer_fwrite(&line_buf, fp);
+            elastic_buffer_fwrite(&line_buf, fp);
             putc('\n', fp);
-            string_buffer_rewind(&line_buf);
+            elastic_buffer_rewind(&line_buf);
         }
-        string_buffer_puts(&line_buf, string_buffer_get(&word_buf));
+        elastic_buffer_puts(&line_buf, elastic_buffer_get(&word_buf));
     }
 }
 
@@ -101,8 +101,8 @@ wrapper_hang(FILE *fp, const char *prefix, const char *text)
     size_t          prefix_len;
     size_t          width;
     const char      *cp;
-    static string_buffer_t line_buf;
-    static string_buffer_t word_buf;
+    static elastic_buffer_t line_buf;
+    static elastic_buffer_t word_buf;
     int             extra_indent;
 
     if (!prefix)
@@ -111,7 +111,7 @@ wrapper_hang(FILE *fp, const char *prefix, const char *text)
     width = 80;
     if (prefix_len < DEFAULT_LINE_WIDTH)
         width -= prefix_len;
-    string_buffer_rewind(&line_buf);
+    elastic_buffer_rewind(&line_buf);
     cp = text;
     extra_indent = 0;
     for (;;)
@@ -124,7 +124,7 @@ wrapper_hang(FILE *fp, const char *prefix, const char *text)
                 fputs(prefix, fp);
                 if (extra_indent)
                     fputs("    ", fp);
-                string_buffer_fwrite(&line_buf, fp);
+                elastic_buffer_fwrite(&line_buf, fp);
                 putc('\n', fp);
             }
             return;
@@ -134,7 +134,7 @@ wrapper_hang(FILE *fp, const char *prefix, const char *text)
         {
             for (;;)
             {
-                string_buffer_putc(&line_buf, ' ');
+                elastic_buffer_putc(&line_buf, ' ');
                 if (line_buf.data_length >= 16)
                     break;
             }
@@ -147,10 +147,10 @@ wrapper_hang(FILE *fp, const char *prefix, const char *text)
                 fputs(prefix, fp);
                 if (extra_indent)
                     fputs("    ", fp);
-                string_buffer_fwrite(&line_buf, fp);
+                elastic_buffer_fwrite(&line_buf, fp);
                 putc('\n', fp);
             }
-            string_buffer_rewind(&line_buf);
+            elastic_buffer_rewind(&line_buf);
             extra_indent = 0;
             continue;
         }
@@ -161,10 +161,10 @@ wrapper_hang(FILE *fp, const char *prefix, const char *text)
         /*
          * Grab the next word.
          */
-        string_buffer_rewind(&word_buf);
+        elastic_buffer_rewind(&word_buf);
         for (;;)
         {
-            string_buffer_putc(&word_buf, c);
+            elastic_buffer_putc(&word_buf, c);
             c = *cp;
             if (c == '\0')
                 break;
@@ -183,22 +183,22 @@ wrapper_hang(FILE *fp, const char *prefix, const char *text)
         }
         else if (line_buf.data_length + 1 + word_buf.data_length <= width)
         {
-            string_buffer_putc(&line_buf, ' ');
+            elastic_buffer_putc(&line_buf, ' ');
         }
         else
         {
             fputs(prefix, fp);
             if (extra_indent)
                 fputs("    ", fp);
-            string_buffer_fwrite(&line_buf, fp);
+            elastic_buffer_fwrite(&line_buf, fp);
             putc('\n', fp);
-            string_buffer_rewind(&line_buf);
+            elastic_buffer_rewind(&line_buf);
             if (!extra_indent)
             {
                 extra_indent = 1;
                 width -= 4;
             }
         }
-        string_buffer_puts(&line_buf, string_buffer_get(&word_buf));
+        elastic_buffer_puts(&line_buf, elastic_buffer_get(&word_buf));
     }
 }

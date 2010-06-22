@@ -22,10 +22,7 @@
 #include <libexplain/iocontrol/tiocttygstruct.h>
 
 
-#ifndef TIOCTTYGSTRUCT
-#define TIOCTTYGSTRUCT -1
-#endif
-
+#ifdef TIOCTTYGSTRUCT
 
 const explain_iocontrol_t explain_iocontrol_tiocttygstruct =
 {
@@ -35,4 +32,26 @@ const explain_iocontrol_t explain_iocontrol_tiocttygstruct =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocttygstruct =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
+    0, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#endif

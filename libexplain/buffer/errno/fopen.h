@@ -55,12 +55,14 @@ void explain_buffer_errno_fopen(explain_string_buffer_t *sb, int errnum,
   *     The string buffer in which the message is being constructed.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param path
   *     The original path, exactly has passed to the fopen(3) system call.
   * @param mode
   *     The original mode, exactly has passed to the fopen(3) system call.
   */
 void explain_buffer_errno_fopen_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *path, const char *mode);
+    int errnum, const char *syscall_name, const char *path, const char *mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FOPEN_H */

@@ -32,6 +32,6 @@ explain_string_buffer_truncate(explain_string_buffer_t *sb,
     if (new_size < sb->position)
     {
         sb->position = new_size;
-        sb->message[sb->position] = 0;
+        sb->message[sb->position] = '\0';
     }
 }

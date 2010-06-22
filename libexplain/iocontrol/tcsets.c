@@ -18,11 +18,13 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/termios.h>
 #include <libexplain/iocontrol/tcsets.h>
 #include <libexplain/string_buffer.h>
 
+#ifdef TCSETS
 
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
@@ -44,26 +46,26 @@ const explain_iocontrol_t explain_iocontrol_tcsets =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(struct termios), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
+#else
 
-const explain_iocontrol_t explain_iocontrol_tcsetsf =
+const explain_iocontrol_t explain_iocontrol_tcsets =
 {
-    "TCSETSF", /* name */
-    TCSETSF, /* value */
+    0, /* name */
+    0, /* value */
     0, /* disambiguate */
     0, /* print_name */
-    print_data,
+    0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
-
-const explain_iocontrol_t explain_iocontrol_tcsetsw =
-{
-    "TCSETSW", /* name */
-    TCSETSW, /* value */
-    0, /* disambiguate */
-    0, /* print_name */
-    print_data,
-    0, /* print_explanation */
-};
+#endif

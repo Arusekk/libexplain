@@ -37,11 +37,11 @@ explain_buffer_errno_pclose_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_pclose_explanation(explain_string_buffer_t *sb,
-    int errnum, FILE *fp)
+    int errnum, const char *syscall_name, FILE *fp)
 {
     /* punt everything to waitpid */
     (void)fp;
-    explain_buffer_errno_waitpid_explanation(sb, errnum, 0, 0, 0);
+    explain_buffer_errno_waitpid_explanation(sb, errnum, syscall_name, 0, 0, 0);
 }
 
 
@@ -62,6 +62,7 @@ explain_buffer_errno_pclose(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "pclose",
         fp
     );
     explain_explanation_assemble(&exp, sb);

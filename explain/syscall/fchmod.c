@@ -20,8 +20,8 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/fchmod.h>
-#include <libexplain/permission_mode.h>
 #include <libexplain/strtol.h>
 #include <libexplain/wrap_and_print.h>
 

@@ -104,7 +104,7 @@ explain_pointer_is_efault(const void *data, size_t data_size)
         heap_vec = malloc(vec_bytes);
         if (!heap_vec)
             goto plan_b;
-        if (mincore(lo, bsize, heap_vec) < 0)
+        if (mincore(lo, bsize, (void *)heap_vec) < 0)
         {
             int             err;
 
@@ -118,7 +118,7 @@ explain_pointer_is_efault(const void *data, size_t data_size)
         return 0;
     }
 
-    if (mincore(lo, bsize, stack_vec) < 0)
+    if (mincore(lo, bsize, (void *)stack_vec) < 0)
     {
         if (errno == ENOMEM)
             return 1;

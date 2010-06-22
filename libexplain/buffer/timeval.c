@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,23 +23,17 @@
 #include <libexplain/path_is_efault.h>
 
 
-void
-explain_buffer_timeval(explain_string_buffer_t *sb,
-    const struct timeval *tvp)
+static void
+print(explain_string_buffer_t *sb, const struct timeval *data)
 {
-    if (explain_pointer_is_efault(tvp, sizeof(*tvp)))
-    {
-        explain_buffer_pointer(sb, tvp);
-        return;
-    }
-    if (tvp->tv_usec < 0)
+    if (data->tv_usec < 0)
     {
         explain_string_buffer_printf
         (
             sb,
             "{ tv_sec = %ld, tv_usec = %ld }",
-            tvp->tv_sec,
-            tvp->tv_usec
+            (long)data->tv_sec,
+            (long)data->tv_usec
         );
     }
     else
@@ -48,7 +42,39 @@ explain_buffer_timeval(explain_string_buffer_t *sb,
         (
             sb,
             "{ %.8g seconds }",
-            tvp->tv_sec + 1e-6 * tvp->tv_usec
+            data->tv_sec + 1e-6 * data->tv_usec
         );
     }
+}
+
+
+void
+explain_buffer_timeval(explain_string_buffer_t *sb, const struct timeval *data)
+{
+    if (explain_pointer_is_efault(data, sizeof(*data)))
+        explain_buffer_pointer(sb, data);
+    else
+        print(sb, data);
+}
+
+
+void
+explain_buffer_timeval_array(explain_string_buffer_t *sb,
+    const struct timeval *data, unsigned data_size)
+{
+    unsigned        j;
+
+    if (explain_pointer_is_efault(data, sizeof(*data) * data_size))
+    {
+        explain_buffer_pointer(sb, data);
+        return;
+    }
+    explain_string_buffer_putc(sb, '{');
+    for (j = 0; j < data_size; ++j)
+    {
+        if (j)
+            explain_string_buffer_puts(sb, ", ");
+        print(sb, data + j);
+    }
+    explain_string_buffer_putc(sb, '}');
 }

@@ -1,0 +1,66 @@
+#
+# libexplain - Explain errno values returned by libc functions
+# Copyright (C) 2009 Peter Miller
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful,but
+# WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNULesser General Public
+# License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+Include: linux/cdrom.h
+Get:
+ CDROMREADTOCHDR
+ CDROMREADTOCENTRY
+ CDROM_GET_MCN
+ CDROMVOLREAD
+ CDROMGETSPINDOWN
+ CDROM_MEDIA_CHANGED
+ CDROM_DRIVE_STATUS
+ CDROM_DISC_STATUS
+ CDROM_CHANGER_NSLOTS
+ CDROM_GET_CAPABILITY
+ DVD_READ_STRUCT
+ CDROM_NEXT_WRITABLE
+ CDROM_LAST_WRITTEN
+Put:
+ CDROMPAUSE
+ CDROMRESUME
+ CDROMPLAYMSF
+ CDROMPLAYTRKIND
+ CDROMSTOP
+ CDROMSTART
+ CDROMEJECT
+ CDROMVOLCTRL
+ CDROMSUBCHNL
+ CDROMREADMODE2
+ CDROMREADMODE1
+ CDROMREADAUDIO
+ CDROMEJECT_SW
+ CDROMMULTISESSION
+ CDROMRESET
+ CDROMREADRAW
+ CDROMREADCOOKED
+ CDROMSEEK
+ CDROMPLAYBLK
+ CDROMREADALL
+ CDROMSETSPINDOWN
+ CDROMCLOSETRAY
+ CDROM_SET_OPTIONS
+ CDROM_CLEAR_OPTIONS
+ CDROM_SELECT_SPEED
+ CDROM_SELECT_DISC
+ CDROM_LOCKDOOR
+ CDROM_DEBUG
+ CDROM_GET_CAPABILITY
+ CDROMAUDIOBUFSIZ
+ DVD_WRITE_STRUCT
+ DVD_AUTH
+ CDROM_SEND_PACKET

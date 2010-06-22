@@ -17,14 +17,25 @@ BEFORE YOU START
                 ftp://ftp.kernel.org/pub/linux/libs/security/linux-
                 privs/kernel-2.2/
 
-        lsof    For systems with inadequate or non-existent /proc facilities,
-                the lsof(1) is needed to obtain supplementary information
-                about open file descriptors.  However, if lsof(1) does not
-                support your operating system, libexplain will still work, but
-                some useful information (such as translating file descriptors
-                into the name of the open file) will be absent from error
-                messages.
+        lsof
+                For systems with inadequate or non-existent /proc facilities,
+                and that includes *BSD and MacOS X, the lsof(1) program is
+                needed to obtain supplementary information about open file
+                descriptors.  However, if lsof(1) is not supported on your
+                operating system, libexplain will still work, but some useful
+                information (such as translating file descriptors into the
+                name of the open file) will be absent from error explanations.
+
+                ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
                 http://people.freebsd.org/~abe/
+
+                You must have lsof(1) installed on *BSD and Solaris, otherwise
+                the test suite will generate staggering numbers of false
+                negatives.  It will produce less informative error messages,
+                too.
+
+                Supported systems include: Free BSD, HP/UX, Linux, Mac OS X,
+                NetBSD, Open BSD, Solaris, and several others.
 
         GNU libtool
                 The libtool program is used to build shared libraries.  It
@@ -46,8 +57,8 @@ BEFORE YOU START
 
         GCC     You may also want to consider fetching and installing the GNU
                 C Compiler if you have not done so already.  This is not
-                essential.  libexplain was developed using the GNU C++
-                compiler, and the GNU C++ libraries.
+                essential.  libexplain was developed using the GNU C compiler,
+                and the GNU C libraries.
 
         The GNU FTP archives may be found at ftp.gnu.org, and are mirrored
         around the world.
@@ -126,14 +137,14 @@ SITE CONFIGURATION
         you can give configure initial values for variables by setting them in
         the environment.  In Bourne-compatible shells, you can do that on the
         command line like this:
-                $ CXX='gcc -traditional' LIBS=-lposix ./configure
+                $ CC='gcc -ansi' LIBS=-lposix ./configure
                 ...lots of output...
                 $
         Here are the make variables that you might want to override with
         environment variables when running configure.
 
         Variable: CC
-                C compiler program.  The default is c++.
+                C compiler program.  The default is gcc.
 
         Variable: CPPFLAGS
                 Preprocessor flags, commonly defines and include search paths.
@@ -161,7 +172,8 @@ BUILDING LIBEXPLAIN
                 % make
                 ...lots of output...
                 %
-        command and wait.
+        command and wait.  This can take a long time, as there are a few
+        thousand files to be compiled.
 
         You can remove the program binaries and object files from the source
         directory by using the
@@ -194,8 +206,18 @@ TESTING LIBEXPLAIN
                 Passed All Tests
         should appear at the end of the make.
 
-        Please Note: you will get false negatives if you run the tests as
+        Please Note: You will get false negatives if you run the tests as
         root.
+
+        Please Note: If you run the tests in a chroot jail build environment,
+        maybe with bind mounts for the file systems, it is necessary to make
+        sure /etc/mtab (or equivalent) has sensable contents, otherwise some
+        of the path resolution tests will return false negatives.
+
+        Please Note: If your system has a completely inadequate /proc
+        implementation (including, but not limited to: *BSD, Mac OS X, and
+        Solaris) or no /proc at all, and you have not installed the lsof(1)
+        tool, then most of the tests will return false negatives.
 
 INSTALLING LIBEXPLAIN
         As explained in the SITE CONFIGURATION section, above, the libexplain
@@ -222,7 +244,7 @@ GETTING HELP
         When reporting problems, please include the version number given by
         the
                 % explain -version
-                explain version 0.D014
+                explain version 0.D032
                 ...warranty disclaimer...
                 %
         command.  Please do not send this example; run the program for the
@@ -230,7 +252,7 @@ GETTING HELP
 
 COPYRIGHT
         libexplain version 0
-        Copyright (C) 2008, 2009 Peter Miller
+        Copyright (C) 2008, 2009, 2010 Peter Miller
 
         The libexplain package is distributed in the hope that it will be
         useful, but WITHOUT ANY WARRANTY; without even the implied warranty of

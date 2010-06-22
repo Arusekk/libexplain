@@ -20,7 +20,9 @@
 .TH explain_fchdir 3
 .SH NAME
 explain_fchdir \- explain fchdir(2) errors
+.if require_index \{
 .XX "explain_fchdir(3)" "explain fchdir(2) errors"
+.\}
 .SH SYNOPSIS
 #include <libexplain/fchdir.h>
 .br
@@ -203,6 +205,7 @@ value of \f[I]errno\fP.
 The original fildes, exactly as passed to the \f[I]fchdir\fP(2) system call.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

@@ -1,0 +1,43 @@
+.\"
+.\" libexplain - Explain errno values returned by libc functions
+.\" Copyright (C) 2010 Peter Miller
+.\" Written by Peter Miller <pmiller@opensource.org.au>
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License along
+.\" with this program. If not, see <http://www.gnu.org/licenses/>.
+.\"
+.\" ------------------------------------------------------------------------
+.PP
+.if n *
+.if t \(bu
+.\" libexplain.0.22.D003
+.\" Change 26
+.\" pmiller, Sun Feb 21 12:41:04 2010, ftbfs on alpha
+This change set fixes a problem discovered by the Debian build
+farm.  It turns out that on alpha architecture, you can't
+disambiguate the FIBMAP vs BMP_IOCTL case in the pre-processor.
+The code now uses a disambiguate function.
+.br
+Debian: Closes: 570671
+.PP
+.if n *
+.if t \(bu
+.\" Change 25
+This change set modifies explain_string_buffer_putc_quoted to
+build the octal representation itself, because too many system
+get %03o and %3.3o wrong, and inconsistently.
+.\" ------------------------------------------------------------------------
+.\" Add new entries above this line.
+.ne 2i
+.SS Version 0.22 (2010-Feb-12)
+.\" vim: set ts=8 sw=4 et

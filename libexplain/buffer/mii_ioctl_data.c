@@ -25,6 +25,8 @@
 #include <libexplain/sizeof.h>
 
 
+#ifdef HAVE_LINUX_MII_H
+
 static void
 explain_buffer_mii_reg(explain_string_buffer_t *sb, int data)
 {
@@ -271,3 +273,14 @@ explain_buffer_mii_ioctl_data(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+#else
+
+void
+explain_buffer_mii_ioctl_data(explain_string_buffer_t *sb,
+    const struct mii_ioctl_data *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #include <libexplain/ac/signal.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/socket.h>
 #include <libexplain/ac/sys/un.h>
 #include <libexplain/ac/unistd.h>
@@ -96,22 +97,22 @@ main(int argc, char **argv)
     if (connect_mode)
     {
         int             fildes;
-        struct sockaddr_un sun;
+        struct sockaddr_un sadr;
         char            buf[100];
         ssize_t         n;
 
         fildes = explain_socket_or_die(AF_UNIX, SOCK_STREAM, 0);
 
-        sun.sun_family = AF_UNIX;
-        strncpy(sun.sun_path, pathname, sizeof(sun.sun_path));
-        explain_connect_or_die(fildes, (struct sockaddr *)&sun, sizeof(sun));
+        sadr.sun_family = AF_UNIX;
+        strncpy(sadr.sun_path, pathname, sizeof(sadr.sun_path));
+        explain_connect_or_die(fildes, (struct sockaddr *)&sadr, sizeof(sadr));
         n = explain_read_or_die(fildes, buf, sizeof(buf));
         explain_fwrite_or_die(buf, 1, n, stdout);
     }
     else
     {
         int             fildes;
-        struct sockaddr_un sun;
+        struct sockaddr_un sadr;
         struct sockaddr_storage peer_addr_storage;
         struct sockaddr *peer_addr;
         socklen_t       peer_addr_size;
@@ -121,9 +122,9 @@ main(int argc, char **argv)
 
         fildes = explain_socket_or_die(AF_UNIX, SOCK_STREAM, 0);
 
-        sun.sun_family = AF_UNIX;
-        strncpy(sun.sun_path, pathname, sizeof(sun.sun_path));
-        explain_bind_or_die(fildes, (struct sockaddr *)&sun, sizeof(sun));
+        sadr.sun_family = AF_UNIX;
+        strncpy(sadr.sun_path, pathname, sizeof(sadr.sun_path));
+        explain_bind_or_die(fildes, (struct sockaddr *)&sadr, sizeof(sadr));
 
         /*
          * We set an alarm so that automated tests that fail do not wait

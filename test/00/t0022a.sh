@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="fcntl vs EPERM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_SETFL, arg = O_RDWR) failed, Operation not
+fcntl(fildes = 42, command = F_SETFL, data = O_RDWR) failed, Operation not
 permitted (EPERM) because it was attempted to clear the O_APPEND flag on a
 file that has the append-only attribute set
 fubar

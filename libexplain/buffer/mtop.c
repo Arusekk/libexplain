@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -167,8 +167,8 @@ explain_buffer_mtop(explain_string_buffer_t *sb,
             explain_string_buffer_printf
             (
                 sb,
-                "%d",
-                data->mt_count & ~MT_ST_HPLOADER_OFFSET
+                "%ld",
+                (long)(data->mt_count & ~MT_ST_HPLOADER_OFFSET)
             );
             break;
 #endif
@@ -183,17 +183,18 @@ explain_buffer_mtop(explain_string_buffer_t *sb,
                 explain_string_buffer_printf
                 (
                     sb,
-                    "%d",
-                    data->mt_count & 0xFFFFFFF
+                    "%ld",
+                    (long)(data->mt_count & 0x0FFFFFFF)
                 );
+                break;
             }
 #endif
-            explain_string_buffer_printf(sb, "%d", data->mt_count);
+            explain_string_buffer_printf(sb, "%ld", (long)data->mt_count);
             break;
 #endif
 
         default:
-            explain_string_buffer_printf(sb, "%d", data->mt_count);
+            explain_string_buffer_printf(sb, "%ld", (long)data->mt_count);
             break;
         }
         explain_string_buffer_puts(sb, " }");

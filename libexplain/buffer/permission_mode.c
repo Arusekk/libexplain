@@ -19,13 +19,22 @@
 
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/buffer/permission_mode.h>
+#include <libexplain/option.h>
 #include <libexplain/parse_bits.h>
-#include <libexplain/permission_mode.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 
 
-static const explain_parse_bits_table_t table[] =
+static const explain_parse_bits_table_t short_table[] =
+{
+    { "S_ISUID", S_ISUID },
+    { "S_ISGID", S_ISGID },
+    { "S_ISVTX", S_ISVTX },
+};
+
+
+static const explain_parse_bits_table_t long_table[] =
 {
     { "S_ISUID", S_ISUID },
     { "S_ISGID", S_ISGID },
@@ -48,6 +57,8 @@ static const explain_parse_bits_table_t table[] =
 void
 explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode)
 {
+    const explain_parse_bits_table_t *table;
+    const explain_parse_bits_table_t *table_end;
     const explain_parse_bits_table_t *tp;
     int             first;
 
@@ -57,7 +68,14 @@ explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode)
         return;
     }
     first = 1;
-    for (tp = table; tp < ENDOF(table); ++tp)
+    table = short_table;
+    table_end = short_table + SIZEOF(short_table);
+    if (explain_option_symbolic_mode_bits())
+    {
+        table = long_table;
+        table_end = long_table + SIZEOF(long_table);
+    }
+    for (tp = table; tp < table_end; ++tp)
     {
         if (tp->value != 0 && (mode & tp->value) == tp->value)
         {
@@ -80,5 +98,12 @@ explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode)
 int
 explain_permission_mode_parse_or_die(const char *text, const char *caption)
 {
-    return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
+    return
+        explain_parse_bits_or_die
+        (
+            text,
+            long_table,
+            SIZEOF(long_table),
+            caption
+        );
 }

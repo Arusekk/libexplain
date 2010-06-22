@@ -3,9 +3,10 @@ Section: devel
 Priority: optional
 Maintainer: Peter Miller <pmiller@opensource.org.au>
 Homepage: http://libexplain.sourceforge.net/
-XS-DM-Upload-Allowed: yes
-Build-Depends: bison, debhelper (>= 5), groff, libcap-dev, libtool, lsof
-Standards-Version: 3.8.2
+DM-Upload-Allowed: yes
+Build-Depends: bison, debhelper (>= 5), groff, libcap-dev, libtool,
+ linux-libc-dev, lsof
+Standards-Version: 3.8.3
 
 Package: explain
 Section: devel
@@ -14,39 +15,39 @@ Architecture: any
 Description: utility to explain system call errors
  This package provides a command to explain Unix and Linux system call errors,
  after the fact.
-Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain9, lsof
+Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain30, lsof
 
-Package: libexplain9
+Package: libexplain30
 Section: libs
 Priority: optional
 Architecture: any
-Description: Explain errno values returned by libc functions
+Description: library of syscall-specific strerror replacements
  This package provides a library which may be used to explain Unix and Linux
  system call errors.  The library is not quite a drop-in replacement for
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
 Depends: ${misc:Depends}, ${shlibs:Depends}, lsof
 
-Package: libexplain9-dbg
+Package: libexplain30-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Description: Explain errno values returned by libc functions - debugging symbols
+Description: library of syscall-specific strerror replacements - debugging symbols
  This package provides a library which may be used to explain Unix and Linux
  system call errors.  The library is not quite a drop-in replacement for
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
 Depends: ${misc:Depends}, ${shlibs:Depends}, lsof,
- libexplain9 (= ${binary:Version})
+ libexplain30 (= ${binary:Version})
 
 Package: libexplain-dev
 Section: libdevel
 Priority: optional
 Architecture: any
-Description: Explain errno values returned by libc functions - development files
+Description: library of syscall-specific strerror replacements - development files
  This package provides a library which may be used to explain Unix and Linux
  system call errors.  The library is not quite a drop-in replacement for
  strerror, but it comes close, with each system call having a dedicated
  libexplain function.
-Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain9 (= ${binary:Version}),
+Depends: ${misc:Depends}, ${shlibs:Depends}, libexplain30 (= ${binary:Version}),
  lsof

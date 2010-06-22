@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,8 @@ explain_buffer_errno_lchown_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_lchown_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int owner, int group)
+    int errnum, const char *syscall_name, const char *pathname, int owner,
+    int group)
 {
     explain_final_t final_component;
 
@@ -59,9 +60,11 @@ explain_buffer_errno_lchown_explanation(explain_string_buffer_t *sb,
     (
         sb,
         errnum,
+        syscall_name,
         pathname,
         owner,
         group,
+        "pathname",
         &final_component
     );
 }
@@ -86,6 +89,7 @@ explain_buffer_errno_lchown(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "lchown",
         pathname,
         owner,
         group

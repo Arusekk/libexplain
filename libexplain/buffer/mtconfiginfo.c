@@ -23,6 +23,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef MTIOCSETCONFIG
+
 void
 explain_buffer_mtconfiginfo(explain_string_buffer_t *sb,
     const struct mtconfiginfo *data)
@@ -88,3 +90,14 @@ explain_buffer_mtconfiginfo(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+#else
+
+void
+explain_buffer_mtconfiginfo(explain_string_buffer_t *sb,
+    const struct mtconfiginfo *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

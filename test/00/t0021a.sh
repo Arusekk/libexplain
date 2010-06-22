@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,8 +22,8 @@ TEST_SUBJECT="fcntl vs ENOLCK"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_SETLK, arg = { l_type = F_RDLCK; l_whence =
-SEEK_SET; l_start = 0; l_len = 0; l_pid = 0 }) failed, No locks available
+fcntl(fildes = 42, command = F_SETLK, data = { l_type = F_RDLCK, l_whence =
+SEEK_SET, l_start = 0, l_len = 0, l_pid = 0 }) failed, No locks available
 (ENOLCK) because too many segment locks are open, or the lock table is
 full, or a remote locking protocol failed (e.g. locking over NFS)
 fubar

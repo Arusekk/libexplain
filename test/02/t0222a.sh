@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="readlink ENOENT"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-readlink(pathname = "foobar", data = 0xNNNNNNNN, data_size = 4097)
+readlink(pathname = "foobar", data = 0xNNNNNNNN, data_size = N)
 failed, No such file or directory (ENOENT) because there is no "foobar"
 regular file in the current directory
 fubar
@@ -39,7 +39,9 @@ fi
 fmt -w700 test.out4 > test.out3
 test $? -eq 0 || no_result
 
-sed 's|data = [^,]*|data = 0xNNNNNNNN|' test.out3 > test.out2
+sed -e 's|data = [^,]*|data = 0xNNNNNNNN|' \
+    -e 's|data_size = [0-9]*|data_size = N|' \
+    test.out3 > test.out2
 test $? -eq 0 || no_result
 
 fmt test.out2 > test.out

@@ -56,6 +56,7 @@ main(int argc, char **argv)
             usage();
         }
     }
+    nptr = 0;
     base = 0;
     switch (argc - optind)
     {

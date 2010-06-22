@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,12 +17,9 @@
  */
 
 #include <libexplain/ac/fcntl.h>
-#include <libexplain/ac/stdio.h>
-#include <libexplain/ac/stdlib.h>
 
 #include <libexplain/creat.h>
-#include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 int
@@ -33,7 +30,7 @@ explain_creat_or_die(const char *pathname, int mode)
     fildes = explain_creat_on_error(pathname, mode);
     if (fildes < 0)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return fildes;
 }

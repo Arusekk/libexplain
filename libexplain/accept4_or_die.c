@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,9 +16,47 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/errno.h>
+#include <libexplain/ac/sys/socket.h>
 
 #include <libexplain/accept4.h>
+#include <libexplain/option.h>
+#include <libexplain/output.h>
+
+
+int
+explain_accept4_on_error(int fildes, struct sockaddr *sock_addr,
+    socklen_t *sock_addr_size, int flags)
+{
+    int             result;
+
+#ifdef HAVE_ACCEPT4
+    result = accept4(fildes, sock_addr, sock_addr_size, flags);
+#else
+    result = -1;
+    errno = ENOSYS;
+#endif
+    if (result < 0)
+    {
+        int             hold_errno;
+
+        hold_errno = errno;
+        explain_program_name_assemble_internal(1);
+        explain_output_message
+        (
+            explain_errno_accept4
+            (
+                hold_errno,
+                fildes,
+                sock_addr,
+                sock_addr_size,
+                flags
+            )
+        );
+        errno = hold_errno;
+    }
+    return result;
+}
 
 
 int
@@ -30,7 +68,7 @@ explain_accept4_or_die(int fildes, struct sockaddr *sock_addr, socklen_t
     result = explain_accept4_on_error(fildes, sock_addr, sock_addr_size, flags);
     if (result < 0)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return result;
 }

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,15 @@
 
 TEST_SUBJECT="ioctl MTIOCSETCONFIG"
 . test_prelude
+
+if test `uname -s` = SunOS
+then
+    echo
+    echo "    Solaris does not have ioctl MTIOCSETCONFIG."
+    echo "    This test is declared to pass by default."
+    echo
+    pass
+fi
 
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = MTIOCSETCONFIG, data = { mt_type = 0, ifc_type

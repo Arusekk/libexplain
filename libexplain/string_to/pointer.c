@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/dlfcn.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/string.h>
 
@@ -42,6 +43,30 @@ explain_string_to_pointer(const char *text)
         return stdout;
     if (0 == strcmp(text, "stderr"))
         return stderr;
+
+#ifdef HAVE_DLSYM
+    if (text[0] == '&')
+    {
+        void            *handle;
+
+        handle = dlopen(NULL, RTLD_NOW);
+        if (handle)
+        {
+            void            *p;
+
+            /* clear any previous error */
+            dlerror();
+
+            p = dlsym(handle, text + 1);
+            if (dlerror() == NULL)
+            {
+                dlclose(handle);
+                return p;
+            }
+            dlclose(handle);
+        }
+    }
+#endif
 
     /*
      * Pointers are strange beasts, and NULL pointers even stranger.  The ANSI C

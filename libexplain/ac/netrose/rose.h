@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2009 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,6 +18,11 @@
 
 #ifndef LIBEXPLAIN_AC_NETROSE_ROSE_H
 #define LIBEXPLAIN_AC_NETROSE_ROSE_H
+
+/**
+  * @file
+  * @brief Insulate <netrose/rose.h> differences
+  */
 
 #include <libexplain/ac/netax25/ax25.h>
 

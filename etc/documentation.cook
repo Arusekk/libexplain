@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,11 +24,15 @@ documentation:
         [match_mask man/man%1/%2.%1 [source_files]]
     ]
     etc/reference.pdf
+    man/pdf1/explain_lca2010.pdf
     ;
 
 man/cat%1/%2.%1: man/man%1/%2.%1
     etc/groff.sh
 {
+    if [not [verbose]] then
+        function print GRO [target];
+
     sh [resolve etc/groff.sh]
         [addprefix "-I" [search_list]]
         -Tascii -t -P-c -man
@@ -36,9 +40,28 @@ man/cat%1/%2.%1: man/man%1/%2.%1
         > [target];
 }
 
+man/pdf%1/%2.pdf: man/man%1/%2.%1
+    etc/groff.sh
+{
+    if [not [verbose]] then
+        function print GRO [target];
+
+    sh [resolve etc/groff.sh]
+        [addprefix "-I" [search_list]]
+        -Tps -t -man
+        [resolve man/man%1/%2.%1]
+        > man/pdf%1/%2.ps;
+
+    ps2pdf man/pdf%1/%2.ps man/pdf%1/%2.pdf;
+    rm man/pdf%1/%2.ps;
+}
+
 man/man%1/%2.%1.d: man/man%1/%2.%1
     set no-cascade
 {
+    if [not [verbose]] then
+        function print DEP man/man%1/%2.%1;
+
     c_incl -nc -ns -api -nrec
         --lang\=roff
         [addprefix "-I" [search_list]]
@@ -52,6 +75,9 @@ man/man%1/%2.%1.d: man/man%1/%2.%1
 man/man%1/%2.so.d: man/man%1/%2.so
     set no-cascade
 {
+    if [not [verbose]] then
+        function print DEP man/man%1/%2.so;
+
     c_incl -nc -ns -api -nrec
         --lang\=roff
         [addprefix "-I" [search_list]]
@@ -65,6 +91,9 @@ man/man%1/%2.so.d: man/man%1/%2.so
 etc/%.so.d: etc/%.so
     set no-cascade
 {
+    if [not [verbose]] then
+        function print DEP etc/%.so;
+
     c_incl -nc -ns -api -nrec
         --lang\=roff
         [addprefix "-I" [search_list]]
@@ -82,12 +111,16 @@ etc/%.so.d: etc/%.so
 etc/%.pdf: etc/%.man etc/page-list.awk
     etc/groff.sh
 {
+    if [not [verbose]] then
+        function print GRO [target];
+
     sh [resolve etc/groff.sh]
         [addprefix "-I" [search_list]]
         -t -man
         [resolve etc/%.man]
         > %.ps.tmp;
     psselect -p`awk -f [resolve etc/page-list.awk] %.ps.tmp`
+        [ 'if' [not [verbose]] 'then' -q ]
         %.ps.tmp > %.ps;
     rm %.ps.tmp
         set silent;
@@ -99,6 +132,9 @@ etc/%.pdf: etc/%.man etc/page-list.awk
 etc/%.man.d: etc/%.man
     set no-cascade
 {
+    if [not [verbose]] then
+        function print DEP etc/%.man;
+
     c_incl -nc -ns -api -nrec
         --lang\=roff
         [addprefix "-I" [search_list]]
@@ -132,6 +168,9 @@ cascade etc/readme.man = etc/new.so ;
 
 %: etc/[downcase %].man: etc/groff.sh
 {
+    if [not [verbose]] then
+        function print GRO [target];
+
     sh [resolve etc/groff.sh] -Tascii -t -P-bcu -man
         [addprefix "-I" [search_list]]
         [resolve etc/[downcase %].man]
@@ -140,8 +179,29 @@ cascade etc/readme.man = etc/new.so ;
 
 LICENSE: man/man3/explain_license.3
 {
+    if [not [verbose]] then
+        function print GRO [target];
+
     sh [resolve etc/groff.sh] -Tascii -t -P-bcu -man
         [addprefix "-I" [search_list]]
         [resolve man/man3/explain_license.3]
         > [target];
 }
+
+
+etc/coverage.so: etc/coverage.sh
+    explain/syscall.c
+    libexplain/iocontrol/table.c
+{
+    if [not [verbose]] then
+        function print GEN [target];
+
+    sh [resolve etc/coverage.sh]
+        [resolve explain/syscall.c]
+        [resolve libexplain/iocontrol/table.c]
+    > [target];
+}
+
+cascade etc/readme.man = etc/coverage.so;
+cascade web-src/index.html = etc/coverage.so;
+cascade man/man1/explain_lca2010.1 = etc/coverage.so;

@@ -20,6 +20,11 @@
 #ifndef LIBEXPLAIN_AC_NET_IF_PPP_H
 #define LIBEXPLAIN_AC_NET_IF_PPP_H
 
+/**
+  * @file
+  * @brief insulate <net/if_pp.h> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_NET_IF_PPP_H

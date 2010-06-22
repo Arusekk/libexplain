@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -169,7 +169,7 @@ explain_buffer_errno_listen_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "listen");
         break;
     }
     if (explain_option_dialect_specific())
@@ -179,10 +179,10 @@ explain_buffer_errno_listen_explanation(explain_string_buffer_t *sb,
         somaxconn = get_somaxconn();
         if (somaxconn > 0 && backlog > somaxconn)
         {
-            explain_string_buffer_puts(sb, "; ");
+            explain_string_buffer_puts(sb->footnotes, "; ");
             explain_string_buffer_printf_gettext
             (
-                sb,
+                sb->footnotes,
                 /*
                  * xgettext: This message is used to inform users of the
                  * listen(2) system call when they specify a backlog

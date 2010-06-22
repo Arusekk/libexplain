@@ -26,9 +26,10 @@
 #include <libexplain/sizeof.h>
 
 
+#ifdef HAVE_LINUX_ETHTOOL_H
+
 void
-explain_buffer_siocethtool(explain_string_buffer_t *sb,
-    const struct ifreq *ifr)
+explain_buffer_siocethtool(explain_string_buffer_t *sb, const struct ifreq *ifr)
 {
     if (explain_pointer_is_efault(ifr, sizeof(*ifr)))
         explain_buffer_pointer(sb, ifr);
@@ -102,3 +103,13 @@ explain_buffer_siocethtool(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+#else
+
+void
+explain_buffer_siocethtool(explain_string_buffer_t *sb, const struct ifreq *ifr)
+{
+    explain_buffer_pointer(sb, ifr);
+}
+
+#endif

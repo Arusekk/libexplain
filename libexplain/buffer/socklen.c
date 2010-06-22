@@ -24,7 +24,7 @@
 void
 explain_buffer_socklen(explain_string_buffer_t *sb, socklen_t data)
 {
-    explain_string_buffer_printf(sb, "%ld", (long)data);
+    explain_string_buffer_printf(sb, "%d", (int)data);
 }
 
 

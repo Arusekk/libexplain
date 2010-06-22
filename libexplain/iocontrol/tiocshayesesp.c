@@ -21,8 +21,10 @@
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/hayesesp.h>
 
+#include <libexplain/buffer/ebusy.h>
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/hayes_esp_config.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocshayesesp.h>
@@ -30,37 +32,6 @@
 
 
 #ifdef TIOCSHAYESESP
-
-static void
-explain_buffer_hayes_esp_config(explain_string_buffer_t *sb,
-    const struct hayes_esp_config *data)
-{
-    if (explain_pointer_is_efault(data, sizeof(*data)))
-        explain_buffer_pointer(sb, data);
-    else
-    {
-        explain_string_buffer_printf
-        (
-            sb,
-            "{ flow_on = %d, "
-                "flow_off = %d, "
-                "rx_trigger = %d, "
-                "tx_trigger = %d, "
-                "pio_threshold = %d, "
-                "rx_timeout = %d, "
-                "dma_channel = %d "
-                "}",
-            data->flow_on,
-            data->flow_off,
-            data->rx_trigger,
-            data->tx_trigger,
-            data->pio_threshold,
-            data->rx_timeout,
-            data->dma_channel
-        );
-    }
-}
-
 
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
@@ -82,17 +53,10 @@ print_explanation(const explain_iocontrol_t *p,
     switch (errnum)
     {
     case EBUSY:
-        explain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: This message is used to explain an EBUSY
-             * error reported by an ioctl TIOCSHAYESESP system call.
-             */
-            i18n("the port is in use")
-        );
+        explain_buffer_ebusy(sb, fildes, "ioctl TIOCSHAYESESP");
         break;
 
+#ifdef HAVE_LINUX_HAYESESP_H
     case EINVAL:
         {
             const struct hayes_esp_config *q;
@@ -155,6 +119,7 @@ print_explanation(const explain_iocontrol_t *p,
             }
         }
         break;
+#endif
 
     default:
         explain_iocontrol_generic.print_explanation
@@ -178,7 +143,11 @@ const explain_iocontrol_t explain_iocontrol_tiocshayesesp =
     0, /* disambiguate */
     0, /* print_name */
     print_data,
-    print_explanation
+    print_explanation,
+    0, /* print_data_returned */
+    sizeof(struct hayes_esp_config), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else
@@ -186,11 +155,15 @@ const explain_iocontrol_t explain_iocontrol_tiocshayesesp =
 const explain_iocontrol_t explain_iocontrol_tiocshayesesp =
 {
     0, /* name */
-    -1, /* value */
+    0, /* value */
     0, /* disambiguate */
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif

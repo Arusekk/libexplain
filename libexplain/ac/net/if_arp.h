@@ -20,7 +20,12 @@
 #ifndef LIBEXPLAIN_AC_NET_IF_ARP_H
 #define LIBEXPLAIN_AC_NET_IF_ARP_H
 
-#include <libexplain/config.h>
+/**
+  * @file
+  * @brief insulate <sys/socket.h> differences
+  */
+
+#include <libexplain/ac/sys/socket.h>
 
 #ifdef HAVE_NET_IF_ARP_H
 #include <net/if_arp.h>

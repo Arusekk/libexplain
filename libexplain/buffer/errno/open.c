@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,19 +20,23 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
-#include <libexplain/ac/sys/stat.h>
+#include <libexplain/ac/sys/sysmacros.h> /* major()/minor() on Solaris */
+#include <libexplain/ac/sys/stat.h> /* major()/minor() every where else */
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/dac.h>
+#include <libexplain/buffer/eexist.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/eisdir.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/emfile.h>
-#include <libexplain/buffer/enfile.h>
 #include <libexplain/buffer/enametoolong.h>
+#include <libexplain/buffer/enfile.h>
 #include <libexplain/buffer/enoent.h>
+#include <libexplain/buffer/enomedium.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enospc.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
@@ -43,6 +47,7 @@
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/path_to_pid.h>
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/pretty_size.h>
 #include <libexplain/buffer/uid.h>
@@ -50,7 +55,6 @@
 #include <libexplain/explanation.h>
 #include <libexplain/open_flags.h>
 #include <libexplain/option.h>
-#include <libexplain/permission_mode.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -108,18 +112,16 @@ no_corresponding_device(explain_string_buffer_t *sb, const struct stat *st)
     explain_string_buffer_printf
     (
         &numbers_sb,
-        "(%d, %d)",
-        major(st->st_dev),
-        minor(st->st_dev)
+        "(%ld, %ld)",
+        (long)major(st->st_dev),
+        (long)minor(st->st_dev)
     );
     explain_string_buffer_printf_gettext
     (
         sb,
         /*
-         * xgettext: This message is used to explain
-         * an ENODEV error reported by an open(2)
-         * system call, and the device does not
-         * actually exist.
+         * xgettext: This message is used to explain an ENODEV error reported by
+         * an open(2) system call, and the device does not actually exist.
          *
          * %1$s => the file type of the special file,
          *         already translated.
@@ -135,9 +137,32 @@ no_corresponding_device(explain_string_buffer_t *sb, const struct stat *st)
 }
 
 
+static int
+is_device_file(const struct stat *st)
+{
+    switch (st->st_mode & S_IFMT)
+    {
+    case S_IFCHR:
+    case S_IFBLK:
+#ifdef S_IFMPC
+    case S_IFMPC:
+#endif
+#ifdef S_IFMPB
+   case S_IFMPB:
+#endif
+        return 1;
+
+    default:
+        break;
+    }
+    return 0;
+}
+
+
 void
 explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int flags, int mode)
+    int errnum, const char *syscall_name, const char *pathname, int flags,
+    int mode)
 {
     explain_final_t final_component;
 
@@ -192,6 +217,44 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             )
         )
         {
+            struct stat     st;
+
+            if
+            (
+                stat(pathname, &st) >= 0
+            &&
+                is_device_file(&st)
+            &&
+                explain_mount_point_nodev(&st)
+            )
+            {
+                explain_string_buffer_t file_type_sb;
+                char            file_type[50];
+
+                explain_string_buffer_init(&file_type_sb, file_type,
+                    sizeof(file_type));
+                explain_buffer_file_type(&file_type_sb, st.st_mode);
+                explain_string_buffer_printf_gettext
+                (
+                    sb,
+                    /*
+                     * xgettext:  This message is used when explaining an EACCES
+                     * error returned by an open(2) system call, in the case
+                     * where the file is a character special device or a block
+                     * special device, and the file system has been mounted with
+                     * the "nodev" option.
+                     *
+                     * %1$s => the file type (character sepcial device, etc)
+                     *         already translated.
+                     */
+                    i18n("the %s is on a file system mounted with the "
+                        "\"nodev\" option"),
+                    file_type
+                );
+                explain_buffer_mount_point_stat(sb, &st);
+                break;
+            }
+
             explain_buffer_gettext
             (
                 sb,
@@ -228,19 +291,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             )
         )
         {
-            explain_buffer_gettext
-            (
-                sb,
-                /*
-                 * xgettext:  This message is used when explaining an
-                 * EEXIST error returned by an open(2) system call.
-                 * Usually path_resolution(7) will have a better
-                 * explanation, this explanation is only used when a
-                 * more specific explanation is not available.
-                 */
-                i18n("the file already exists when it should not (flags "
-                "O_CREAT and O_EXCL were used)")
-            );
+            explain_buffer_eexist(sb, pathname);
         }
         break;
 
@@ -248,6 +299,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
         explain_buffer_efault(sb, "pathname");
         break;
 
+#if defined(O_LARGEFILE) && (O_LARGEFILE != 0)
     case EFBIG:
     case EOVERFLOW:
         if (!(flags & O_LARGEFILE))
@@ -283,6 +335,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             }
         }
         break;
+#endif
 
     case EISDIR:
         if ((flags & O_ACCMODE) != O_RDONLY)
@@ -342,37 +395,18 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
         explain_buffer_enoent(sb, pathname, "pathname", &final_component);
         break;
 
+#ifdef ENOMEDIUM
+    case ENOMEDIUM:
+        explain_buffer_enomedium(sb, pathname);
+        break;
+#endif
+
     case ENOMEM:
         explain_buffer_enomem_kernel(sb);
         break;
 
     case ENOSPC:
-        {
-            char            mntpt[100];
-            explain_string_buffer_t mntpt_sb;
-
-            explain_string_buffer_init(&mntpt_sb, mntpt, sizeof(mntpt));
-            explain_buffer_mount_point_dirname(&mntpt_sb, pathname);
-            explain_string_buffer_printf_gettext
-            (
-                sb,
-                /*
-                 * xgettext: This message is used to provide an
-                 * explanation for and ENOSPC error returned by an
-                 * open(2) system call, in the case where there is no
-                 * more room for a new file.
-                 *
-                 * %1$s => The name of the problematic system call argument
-                 * %2$s => The file system mount point and usage,
-                 *         in parentheses
-                 */
-                i18n("the file system containing %s %s has no "
-                    "room for the new file"),
-                "pathname",
-                mntpt
-            );
-            /* FIXME: has no blocks left or has no inodes left? */
-        }
+        explain_buffer_enospc(sb, pathname, "pathname");
         break;
 
     case ENOTDIR:
@@ -436,6 +470,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
         }
         break;
 
+#if defined(O_NOATIME) && (O_NOATIME != 0)
     case EPERM:
         if (flags & O_NOATIME)
         {
@@ -464,7 +499,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
                 /*
                  * xgettext: This message is used when an EPERM erro is
                  * returned by an open(2) system call, and the O_NOATIME
-                 * open flag was specific, but the process lacked the
+                 * open flag was specified, but the process lacked the
                  * permissions required.
                  *
                  * %1$s => the number and name of the process effective UID,
@@ -487,6 +522,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             explain_buffer_dac_fowner(sb);
         }
         break;
+#endif
 
     case EROFS:
         explain_buffer_erofs(sb, pathname, "pathname");
@@ -538,10 +574,10 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
 #ifdef __linux__
                     if (explain_option_dialect_specific())
                     {
-                        explain_string_buffer_puts(sb, "; ");
+                        explain_string_buffer_puts(sb->footnotes, "; ");
                         explain_buffer_gettext
                         (
-                            sb,
+                            sb->footnotes,
                             /*
                              * xgettext: This message is used to explain an
                              * ENODEV error reported by an open(2) system
@@ -567,15 +603,119 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
 
     default:
         generic:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
+
+    if (flags & O_TRUNC)
+    {
+        if ((flags & O_ACCMODE) == O_RDONLY)
+        {
+            explain_string_buffer_puts(sb->footnotes, "; ");
+            explain_buffer_gettext
+            (
+                sb->footnotes,
+                /*
+                 * xgettext: This message is used to supplement an explanation
+                 * for an error reported by open(2) system call, in the case
+                 * where the caller used a flags combination with explicitly
+                 * undefined behavior.
+                 */
+                i18n("note that the behavior of (O_RDONLY | O_TRUNC) is "
+                    "undefined")
+            );
+        }
+        else
+        {
+            struct stat st;
+
+            if (stat(pathname, &st) >= 0)
+            {
+                explain_string_buffer_t file_type_sb;
+                char            file_type[50];
+
+                explain_string_buffer_init(&file_type_sb, file_type,
+                    sizeof(file_type));
+                explain_buffer_file_type(&file_type_sb, st.st_mode);
+
+                switch (st.st_mode & S_IFMT)
+                {
+                default:
+                    break;
+
+                case S_IFSOCK:
+                case S_IFIFO:
+                    /* explicitly ignored */
+                    {
+                        explain_string_buffer_puts(sb->footnotes, "; ");
+                        explain_string_buffer_printf_gettext
+                        (
+                            sb->footnotes,
+                            /*
+                             * xgettext: This message is used to supplement an
+                             * explanation for an error reported by open(2)
+                             * system call, in the case where the caller used
+                             * O_TRUNC in a combination that explicitly
+                             * ignores O_TRUNC.
+                             *
+                             * %1$s => the type of the special file, already
+                             *         translated
+                             */
+                            i18n("note that a %s will ignore the O_TRUNC flag"),
+                            file_type
+                        );
+                    }
+                    break;
+
+                case S_IFCHR:
+                    /*
+                     * The O_TRUNC flags is explicitly ignored for TTY devices,
+                     * but is undefined for all other character devices.  Since
+                     * we can't tell which case we have at this moment, we fall
+                     * through...
+                     */
+
+                case S_IFBLK:
+#ifdef S_IFMPC
+                case S_IFMPC:
+#endif
+#ifdef S_IFMPB
+                case S_IFMPB:
+#endif
+                    /* explicitly undefined */
+                    {
+                        explain_string_buffer_puts(sb->footnotes, "; ");
+                        explain_string_buffer_printf_gettext
+                        (
+                            sb->footnotes,
+                            /*
+                             * xgettext: This message is used to supplement an
+                             * explanation for an error reported by open(2)
+                             * system call, in the case where the caller used
+                             * O_TRUNC in a combination with explicitly
+                             * undefined behavior.
+                             *
+                             * %1$s => the type of the special file, already
+                             *         translated
+                             */
+                            i18n("note that the behavior of O_TRUNC on a %s is "
+                                "undefined"),
+                            file_type
+                        );
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     if ((flags & O_EXCL) && !(flags & O_CREAT))
     {
-        explain_string_buffer_puts(sb, "; ");
+        explain_string_buffer_puts(sb->footnotes, "; ");
+        /* FIXME: except for a TTY, where it means single open */
         explain_buffer_gettext
         (
-            sb,
+            sb->footnotes,
             /*
              * xgettext: This message is used to supplement an explanation for
              * an error reported by open(2) system call, and the caller used a
@@ -607,6 +747,7 @@ explain_buffer_errno_open(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "open",
         pathname,
         flags,
         mode

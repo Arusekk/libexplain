@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -141,19 +141,19 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
         if (sock_addr->sa_family == AF_UNIX)
         {
             explain_final_t final_component;
-            const struct sockaddr_un *sun;
+            const struct sockaddr_un *saddr;
 
-            sun = (const struct sockaddr_un *)sock_addr;
+            saddr = (const struct sockaddr_un *)sock_addr;
             explain_final_sock_init(&final_component);
             final_component.want_to_write = 1;
             final_component.want_to_create = 1;
             final_component.must_be_a_st_mode = 1;
             final_component.st_mode = S_IFSOCK;
-            final_component.path_max = sizeof(sun->sun_path) - 1;
+            final_component.path_max = sizeof(saddr->sun_path) - 1;
             explain_buffer_eacces
             (
                 sb,
-                sun->sun_path,
+                saddr->sun_path,
                 "sock_addr->sun_path",
                 &final_component
             );
@@ -248,23 +248,24 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
         break;
 
     case EADDRNOTAVAIL:
+        /* FIXME: which is it? differentiate between these two cases */
+        explain_string_buffer_puts
+        (
+            sb,
+            /*
+             * xgettext: This message is used to explain an EADDRNOTAVAIL
+             * error reported by a bind(2) system call, in the case where
+             * the requested network address was not local or a nonexistent
+             * interface was requested.
+             */
+            i18n("the requested network address was not local or a "
+            "nonexistent interface was requested")
+        );
+
+#ifdef SO_BINDTODEVICE
         {
             char            name[IFNAMSIZ + 1];
             socklen_t       namsiz;
-
-            /* FIXME: which is it? */
-            explain_string_buffer_puts
-            (
-                sb,
-                /*
-                 * xgettext: This message is used to explain an EADDRNOTAVAIL
-                 * error reported by a bind(2) system call, in the case where
-                 * the requested network address was not local or a nonexistent
-                 * interface was requested.
-                 */
-                i18n("the requested network address was not local or a "
-                "nonexistent interface was requested")
-            );
 
             /*
              * This is only useful for AF_INET and AF_INET6,
@@ -285,6 +286,7 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
                 explain_string_buffer_putc(sb, ')');
             }
         }
+#endif
         break;
 
     case EFAULT:
@@ -294,16 +296,16 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
     case ELOOP:
         if (sock_addr->sa_family == AF_UNIX)
         {
-            struct sockaddr_un *sun;
+            struct sockaddr_un *saddr;
             explain_final_t final_component;
 
             explain_final_sock_init(&final_component);
-            sun = (struct sockaddr_un *)sock_addr;
+            saddr = (struct sockaddr_un *)sock_addr;
 
             explain_buffer_eloop
             (
                 sb,
-                sun->sun_path,
+                saddr->sun_path,
                 "sock_addr->sun_path",
                 &final_component
             );
@@ -313,16 +315,16 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
     case ENAMETOOLONG:
         if (sock_addr->sa_family == AF_UNIX)
         {
-            struct sockaddr_un *sun;
+            struct sockaddr_un *saddr;
             explain_final_t final_component;
 
             explain_final_sock_init(&final_component);
-            sun = (struct sockaddr_un *)sock_addr;
+            saddr = (struct sockaddr_un *)sock_addr;
 
             explain_buffer_enametoolong
             (
                 sb,
-                sun->sun_path,
+                saddr->sun_path,
                 "sock_addr->sun_path",
                 &final_component
             );
@@ -332,16 +334,16 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
     case ENOENT:
         if (sock_addr->sa_family == AF_UNIX)
         {
-            struct sockaddr_un *sun;
+            struct sockaddr_un *saddr;
             explain_final_t final_component;
 
             explain_final_sock_init(&final_component);
-            sun = (struct sockaddr_un *)sock_addr;
+            saddr = (struct sockaddr_un *)sock_addr;
 
             explain_buffer_enoent
             (
                 sb,
-                sun->sun_path,
+                saddr->sun_path,
                 "sock_addr->sun_path",
                 &final_component
             );
@@ -355,16 +357,16 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
     case ENOTDIR:
         if (sock_addr->sa_family == AF_UNIX)
         {
-            struct sockaddr_un *sun;
+            struct sockaddr_un *saddr;
             explain_final_t final_component;
 
             explain_final_sock_init(&final_component);
-            sun = (struct sockaddr_un *)sock_addr;
+            saddr = (struct sockaddr_un *)sock_addr;
 
             explain_buffer_enotdir
             (
                 sb,
-                sun->sun_path,
+                saddr->sun_path,
                 "sock_addr->sun_path",
                 &final_component
             );
@@ -374,15 +376,15 @@ explain_buffer_errno_bind_explanation(explain_string_buffer_t *sb,
     case EROFS:
         if (sock_addr->sa_family == AF_UNIX)
         {
-            struct sockaddr_un *sun;
+            struct sockaddr_un *saddr;
 
-            sun = (struct sockaddr_un *)sock_addr;
-            explain_buffer_erofs(sb, sun->sun_path, "sock_addr->sun_path");
+            saddr = (struct sockaddr_un *)sock_addr;
+            explain_buffer_erofs(sb, saddr->sun_path, "sock_addr->sun_path");
         }
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "bind");
         break;
     }
 }

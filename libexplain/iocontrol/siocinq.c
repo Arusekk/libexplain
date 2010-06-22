@@ -21,31 +21,45 @@
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/stat.h>
 
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/siocinq.h>
 
+#ifdef SIOCINQ
 
-#ifndef SIOCINQ
-#define SIOCINQ -1
-#endif
-
-
-static int
-disambiguate(int fildes, int request, const void *data)
-{
-    struct stat     st;
-
-    (void)request;
-    (void)data;
-    return (fstat(fildes, &st) >= 0 && S_ISSOCK(st.st_mode));
-}
-
-
+/*
+ * We have conflicts:
+ * SIOCINQ -- sockets only
+ * TIOCINQ -- terminals only
+ * FIONREAD -- everything else
+ */
 const explain_iocontrol_t explain_iocontrol_siocinq =
 {
     "SIOCINQ", /* name */
     SIOCINQ, /* value */
-    disambiguate,
+    explain_iocontrol_disambiguate_is_a_socket,
+    0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    explain_iocontrol_generic_print_data_int_star, /* print_data_returned */
+    sizeof(int), /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_siocinq =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

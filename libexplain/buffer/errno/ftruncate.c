@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -33,24 +33,27 @@
 #include <libexplain/buffer/fildes_not_open_for_writing.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/off_t.h>
 #include <libexplain/explanation.h>
 #include <libexplain/open_flags.h>
 
 
 static void
 explain_buffer_errno_ftruncate_system_call(explain_string_buffer_t *sb,
-    int errnum, int fildes, long long length)
+    int errnum, int fildes, off_t length)
 {
     (void)errnum;
     explain_string_buffer_printf(sb, "ftruncate(fildes = %d", fildes);
     explain_buffer_fildes_to_pathname(sb, fildes);
-    explain_string_buffer_printf(sb, ", length = %lld)", length);
+    explain_string_buffer_puts(sb, ", length = ");
+    explain_buffer_off_t(sb, length);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
 explain_buffer_errno_ftruncate_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, long long length)
+    int errnum, int fildes, off_t length)
 {
     switch (errnum)
     {
@@ -76,9 +79,9 @@ explain_buffer_errno_ftruncate_explanation(explain_string_buffer_t *sb,
         }
         else
         {
+#ifdef _PC_FILESIZEBITS
             long            file_size_bits;
 
-#ifdef _PC_FILESIZEBITS
             /*
              * FIXME: also use getrlimit(RLIMIT_FSIZE)
              *
@@ -96,7 +99,7 @@ explain_buffer_errno_ftruncate_explanation(explain_string_buffer_t *sb,
             (
                 file_size_bits > 0
             &&
-                (size_t)file_size_bits < 8 * sizeof(long long)
+                (size_t)file_size_bits < 8 * sizeof(off_t)
             &&
                 length > (1LL << file_size_bits)
             )
@@ -200,7 +203,7 @@ explain_buffer_errno_ftruncate_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "ftruncate");
         break;
     }
 }
@@ -208,7 +211,7 @@ explain_buffer_errno_ftruncate_explanation(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_ftruncate(explain_string_buffer_t *sb, int errnum,
-    int fildes, long long length)
+    int fildes, off_t length)
 {
     explain_explanation_t exp;
 

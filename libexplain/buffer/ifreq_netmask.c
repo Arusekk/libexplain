@@ -48,6 +48,7 @@ explain_buffer_ifreq_netmask(explain_string_buffer_t *sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
+#ifdef ifr_netmask
         explain_string_buffer_puts(sb, ", ifr_netmask = ");
         explain_buffer_sockaddr
         (
@@ -55,6 +56,7 @@ explain_buffer_ifreq_netmask(explain_string_buffer_t *sb,
             &ifr->ifr_netmask,
             sizeof(ifr->ifr_netmask)
         );
+#endif
         explain_string_buffer_puts(sb, " }");
     }
 }

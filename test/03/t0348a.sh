@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,15 +21,24 @@
 TEST_SUBJECT="ioctl EFAULT"
 . test_prelude
 
+if test `uname -s` = SunOS
+then
+    echo
+    echo "    Solaris doen't have TIOCCONS."
+    echo "    This test is declared to pass by default."
+    echo
+    pass
+fi
+
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = FIONREAD, data = 0x00000123) failed, Bad
+ioctl(fildes = 42, request = FIONREAD, data = 0x09876543) failed, Bad
 address (EFAULT) because data refers to memory that is outside the
 process's accessible address space; this is more likely to be a software
 error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT ioctl 42 TIOCINQ 0x123 > test.out
+explain -eEFAULT ioctl 42 TIOCINQ 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

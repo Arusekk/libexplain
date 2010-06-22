@@ -52,7 +52,8 @@ explain_buffer_errno_signalfd_system_call(explain_string_buffer_t *sb, int
 
 static void
 explain_buffer_errno_signalfd_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, const sigset_t *mask, int flags)
+    int errnum, const char *syscall_name, int fildes, const sigset_t *mask,
+    int flags)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/signalfd.html
@@ -85,7 +86,7 @@ explain_buffer_errno_signalfd_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENODEV:
-        explain_buffer_enodev_anon_inodes(sb, "signalfd");
+        explain_buffer_enodev_anon_inodes(sb, syscall_name);
         break;
 
     case ENOMEM:
@@ -93,11 +94,11 @@ explain_buffer_errno_signalfd_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOSYS:
-        explain_buffer_enosys_vague(sb, "signalfd");
+        explain_buffer_enosys_vague(sb, syscall_name);
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -110,10 +111,23 @@ explain_buffer_errno_signalfd(explain_string_buffer_t *sb, int errnum, int
     explain_explanation_t exp;
 
     explain_explanation_init(&exp, errnum);
-    explain_buffer_errno_signalfd_system_call(&exp.system_call_sb, errnum,
-        fildes, mask, flags);
-    explain_buffer_errno_signalfd_explanation(&exp.explanation_sb, errnum,
-        fildes, mask, flags);
+    explain_buffer_errno_signalfd_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        mask,
+        flags
+    );
+    explain_buffer_errno_signalfd_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        "signalfd",
+        fildes,
+        mask,
+        flags
+    );
     explain_explanation_assemble(&exp, sb);
 }
 

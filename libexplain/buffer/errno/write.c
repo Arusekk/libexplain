@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 #include <libexplain/buffer/efbig.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/eio.h>
+#include <libexplain/buffer/enospc.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/write.h>
 #include <libexplain/buffer/fildes_not_open_for_writing.h>
@@ -64,7 +65,8 @@ explain_buffer_errno_write_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, const void *data, size_t data_size)
+    int errnum, const char *syscall_name, int fildes, const void *data,
+    size_t data_size)
 {
     switch (errnum)
     {
@@ -72,6 +74,7 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the file descriptor has been marked non-blocking "
             "(O_NONBLOCK) and the write would block"
         );
@@ -95,11 +98,12 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
             if (pos == (off_t)-1)
                 pos = 0;
             max_file_size = explain_get_max_file_size_by_fildes(fildes);
-            if (pos >= 0 && pos + data_size > max_file_size)
+            if (pos >= 0 && pos + (off_t)data_size > max_file_size)
             {
                 explain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "an attempt was made to write a file that "
                     "exceeds the process's file size limit"
                 );
@@ -109,6 +113,7 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
                 explain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "an attempt was made to write at a position past the "
                     "process's file size limit"
                 );
@@ -123,7 +128,7 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINTR:
-        explain_buffer_eintr(sb, "write");
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     case EINVAL:
@@ -136,6 +141,7 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
                     explain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the file descriptor is attached to an object "
                         "which is unsuitable for writing ("
                     );
@@ -150,8 +156,9 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
                     explain_string_buffer_puts
                     (
                         sb,
+                        /* FIXME: i18n */
                         "the file was opened with the O_DIRECT flag, "
-                        "and either the address specified in buf is not "
+                        "and either the address specified in data is not "
                         "suitably aligned, the value specified in count "
                         "is not suitably aligned, or the current file "
                         "offset is not suitably aligned"
@@ -178,10 +185,11 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
                 explain_string_buffer_puts
                 (
                     sb,
+                    /* FIXME: i18n */
                     "the file descriptor is attached to an object which "
                     "is unsuitable for writing; or, the file was opened "
                     "with the O_DIRECT flag, and either the address "
-                    "specified in buf is not suitably aligned, the "
+                    "specified in data is not suitably aligned, the "
                     "value specified in count is not suitably aligned, "
                     "or the current file offset is not suitably aligned"
                 );
@@ -194,45 +202,7 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOSPC:
-        {
-            struct stat st;
-            if (fstat(fildes, &st) == 0)
-            {
-                if (S_ISBLK(st.st_mode) || S_ISCHR(st.st_mode))
-                {
-                    explain_string_buffer_puts
-                    (
-                        sb,
-                        "the device has no room for the data"
-                    );
-                }
-                else
-                {
-                    explain_string_buffer_puts
-                    (
-                        sb,
-                        "the file system containing the file"
-                    );
-                    explain_buffer_mount_point_stat(sb, &st);
-                    explain_string_buffer_puts
-                    (
-                        sb,
-                        " has no room for the data"
-                    );
-                }
-            }
-            else
-            {
-                explain_string_buffer_puts
-                (
-                    sb,
-                    "the device containing the file referred "
-                    "to by the file descriptor has no room for the "
-                    "data; or, the file system containing the file has "
-                    "no room for the data"
-                );
-            }
-        }
+        explain_buffer_enospc_fildes(sb, fildes, "fildes");
         break;
 
     case EPIPE:
@@ -243,6 +213,7 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the file descriptor is connected to a pipe or "
                 "socket whose reading end is closed, when this happens "
                 "the writing process will also receive a SIGPIPE signal"
@@ -258,10 +229,16 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
                  * FIXME: The use of sigprocmask() is undefined in a
                  * multithreaded process; see pthread_sigmask(3).
                  */
-                explain_string_buffer_puts
+                explain_string_buffer_puts(sb->footnotes, "; ");
+                explain_buffer_gettext
                 (
-                    sb,
-                    "; this process is blocking the SIGPIPE signal"
+                    sb->footnotes,
+                    /*
+                     * xgettext:  This error message is used when a
+                     * process is blocking the SIGPIPE signal.
+                     */
+                    i18n("note that this process is blocking the SIGPIPE "
+                        "signal")
                 );
                 break;
             }
@@ -274,32 +251,52 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
             {
                 if (sa.sa_handler == SIG_IGN)
                 {
-                    explain_string_buffer_puts
+                    explain_string_buffer_puts(sb->footnotes, "; ");
+                    explain_buffer_gettext
                     (
-                        sb,
-                        "; this process is ignoring the SIGPIPE signal"
+                        sb->footnotes,
+                        /*
+                         * xgettext:  This error message is used when a
+                         * process is ignoring the SIGPIPE signal.
+                         */
+                        i18n("note that this process is ignoring the SIGPIPE "
+                            "signal")
                     );
                     break;
                 }
                 if (sa.sa_handler != SIG_DFL)
                 {
-                    explain_string_buffer_puts
+                    explain_string_buffer_puts(sb->footnotes, "; ");
+                    explain_buffer_gettext
                     (
-                        sb,
-                        "; this process is catching the SIGPIPE signal"
+                        sb->footnotes,
+                        /*
+                         * xgettext:  This error message is used when a
+                         * process is catching the SIGPIPE signal.
+                         */
+                        i18n("note that this process is catching the SIGPIPE "
+                            "signal")
                     );
                     break;
                 }
             }
-            explain_string_buffer_puts
+            explain_string_buffer_puts(sb->footnotes, "; ");
+            explain_buffer_gettext
             (
-                sb,
-                "; this process catches, blocks or ignores the SIGPIPE signal"
+                sb->footnotes,
+                /*
+                 * xgettext:  This error message is used when a process
+                 * is catches, blocks or ignores the SIGPIPE signal, but
+                 * it is nopt possible to be more specific.
+                 */
+                i18n("note that this process catches, blocks or ignores the "
+                    "SIGPIPE signal")
             );
         }
         break;
 
     case ENOENT:
+        /* FIXME: i18n */
         explain_string_buffer_puts
         (
             sb,
@@ -315,7 +312,7 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -340,6 +337,7 @@ explain_buffer_errno_write(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "write",
         fildes,
         data,
         data_size

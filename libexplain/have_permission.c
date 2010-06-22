@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -168,7 +168,7 @@ owner_permission_mode_ignored(explain_string_buffer_t *sb,
          */
         i18n("the process %s %s does not match the %s owner "
             "%s so the owner permission mode %s is ignored"),
-        explain_have_identity_kind_of_gid(hip),
+        explain_have_identity_kind_of_uid(hip),
         part1,
         filtyp,
         part2,

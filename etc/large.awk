@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -55,6 +55,28 @@ BEGIN {
     print ""
     line = $0
     sub(/HAVE_SIGSET_T/, "LIBEXPLAIN_SIGSET_T", line)
+    print prev;
+    print line;
+    prev = "";
+    next
+    print
+    line = $0
+}
+/HAVE_USTAT_H/{
+    print ""
+    line = $0
+    sub(/HAVE_USTAT_H/, "LIBEXPLAIN_HAVE_USTAT_H", line)
+    print prev;
+    print line;
+    prev = "";
+    next
+    print
+    line = $0
+}
+/STATFS_NARGS/{
+    print ""
+    line = $0
+    sub(/STATFS_NARGS/, "LIBEXPLAIN_STATFS_NARGS", line)
     print prev;
     print line;
     prev = "";

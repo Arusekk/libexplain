@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,15 +18,14 @@
  */
 
 #include <libexplain/ac/stdio.h>
-#include <libexplain/ac/stdlib.h>
 
 #include <libexplain/buffer/errno/pclose.h>
 #include <libexplain/buffer/wait_status.h>
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/pclose.h>
-#include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/option.h>
+#include <libexplain/output.h>
 
 
 int
@@ -38,7 +37,7 @@ explain_pclose_success(FILE *fp)
     if (status < 0)
     {
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_pclose(fp));
+        explain_output_message(explain_pclose(fp));
     }
     else if (status != 0)
     {
@@ -50,12 +49,12 @@ explain_pclose_success(FILE *fp)
             explain_common_message_buffer,
             explain_common_message_buffer_size
         );
-        explain_buffer_errno_pclose(&sb, 0, 0);
+        explain_buffer_errno_pclose(&sb, 0, fp);
 
         /* FIXME: i18n */
         explain_string_buffer_puts(&sb, ", but ");
         explain_buffer_wait_status(&sb, status);
-        explain_wrap_and_print(stderr, explain_common_message_buffer);
+        explain_output_message(explain_common_message_buffer);
     }
     return status;
 }
@@ -65,5 +64,5 @@ void
 explain_pclose_success_or_die(FILE *fp)
 {
     if (explain_pclose_success(fp))
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -30,22 +30,10 @@ struct termio; /* forward */
   *
   * @param sb
   *    The string buffer to print into.
-  * @param value
+  * @param data
   *    The value to be printed.
   */
 void explain_buffer_termios(explain_string_buffer_t *sb,
-    const struct termios *value);
-
-/**
-  * The explain_buffer_termio function may be used to
-  * print a representation of a struct termio value.
-  *
-  * @param sb
-  *    The string buffer to print into.
-  * @param value
-  *    The value to be printed.
-  */
-void explain_buffer_termio(explain_string_buffer_t *sb,
-    const struct termio *value);
+    const struct termios *data);
 
 #endif /* LIBEXPLAIN_BUFFER_TERMIOS_H */

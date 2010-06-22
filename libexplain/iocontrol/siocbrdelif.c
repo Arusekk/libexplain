@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/sockios.h>
+#include <libexplain/ac/net/if.h>
+#include <libexplain/ac/sys/sockio.h>
 
 #include <libexplain/buffer/ifreq_ifindex.h>
 #include <libexplain/iocontrol/siocbrdelif.h>
@@ -45,6 +48,10 @@ const explain_iocontrol_t explain_iocontrol_siocbrdelif =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(struct ifreq), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef SIOCBRDELIF */
@@ -57,6 +64,10 @@ const explain_iocontrol_t explain_iocontrol_siocbrdelif =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* SIOCBRDELIF */

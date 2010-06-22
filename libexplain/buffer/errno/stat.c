@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,7 @@
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/stat.h>
 #include <libexplain/buffer/pathname.h>
+#include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 #include <libexplain/path_is_efault.h>
 #include <libexplain/string_buffer.h>
@@ -38,22 +39,24 @@
 
 static void
 explain_buffer_errno_stat_system_call(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, const struct stat *buf)
+    int errnum, const char *pathname, const struct stat *data)
 {
     (void)errnum;
     explain_string_buffer_printf(sb, "stat(pathname = ");
     explain_buffer_pathname(sb, pathname);
-    explain_string_buffer_printf(sb, ", buf = %p)", buf);
+    explain_string_buffer_puts(sb, ", data = ");
+    explain_buffer_pointer(sb, data);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
 explain_buffer_errno_stat_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, const struct stat *buf)
+    int errnum, const char *pathname, const struct stat *data)
 {
     explain_final_t final_component;
 
-    (void)buf;
+    (void)data;
     explain_final_init(&final_component);
 
     switch (errnum)
@@ -68,9 +71,9 @@ explain_buffer_errno_stat_explanation(explain_string_buffer_t *sb,
             explain_buffer_efault(sb, "pathname");
             break;
         }
-        if (explain_pointer_is_efault(buf, sizeof(*buf)))
+        if (explain_pointer_is_efault(data, sizeof(*data)))
         {
-            explain_buffer_efault(sb, "buf");
+            explain_buffer_efault(sb, "data");
             break;
         }
         break;
@@ -103,7 +106,7 @@ explain_buffer_errno_stat_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "stat");
         break;
     }
 }
@@ -111,7 +114,7 @@ explain_buffer_errno_stat_explanation(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_stat(explain_string_buffer_t *sb, int errnum,
-    const char *pathname, const struct stat *buf)
+    const char *pathname, const struct stat *data)
 {
     explain_explanation_t exp;
 
@@ -121,14 +124,14 @@ explain_buffer_errno_stat(explain_string_buffer_t *sb, int errnum,
         &exp.system_call_sb,
         errnum,
         pathname,
-        buf
+        data
     );
     explain_buffer_errno_stat_explanation
     (
         &exp.explanation_sb,
         errnum,
         pathname,
-        buf
+        data
     );
     explain_explanation_assemble(&exp, sb);
 }

@@ -55,11 +55,12 @@ explain_buffer_errno_getrlimit_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
+        /* FIXME: i18n */
         explain_string_buffer_puts(sb, "the resource specified is unknown");
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "getrlimit");
         break;
     }
 }

@@ -49,5 +49,24 @@
 void explain_buffer_errno_kill(explain_string_buffer_t *sb, int errnum, pid_t
     pid, int sig);
 
+/**
+  * The explain_buffer_errno_kill_explanation function is used to print
+  * an explanation (the text after "basecase") of an error returned by
+  * the <i>kill</i>(2) system call.
+  *
+  * @param sb
+  *     The string buffer to print the message into.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
+  * @param pid
+  *     The original pid, exactly as passed to the system call.
+  * @param sig
+  *     The original sig, exactly as passed to the system call.
+  */
+void explain_buffer_errno_kill_explanation(explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, pid_t pid, int sig);
+
 /* vim: set ts=8 sw=4 et */
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_KILL_H */

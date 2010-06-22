@@ -24,6 +24,8 @@
 #include <libexplain/string_buffer.h>
 
 
+#ifdef TIOCSPGRP
+
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
@@ -32,7 +34,7 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     (void)errnum;
     (void)fildes;
     (void)request;
-    explain_buffer_pid_t_star(sb, data);
+    explain_buffer_int_pid_star(sb, data);
 }
 
 
@@ -44,4 +46,26 @@ const explain_iocontrol_t explain_iocontrol_tiocspgrp =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(int), /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocspgrp =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
+    0, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#endif

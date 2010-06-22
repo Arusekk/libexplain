@@ -22,7 +22,8 @@
 #include <libexplain/string_buffer.h>
 
 /**
-  * The explain_buffer_char_data function may be used to
+  * The explain_buffer_char_data function may be used to print an array
+  * of char data, but it is <b>not</b> a string.
   *
   * @param sb
   *    The string buffer to print into.
@@ -32,6 +33,20 @@
   *    The size of the array to be printed, int bytes.
   */
 void explain_buffer_char_data(explain_string_buffer_t *sb,
+    const void *data, size_t data_size);
+
+/**
+  * The explain_buffer_char_data_quoted function may be used to print an
+  * array of char data, and it is thought to be a NUL-terminated string.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param data
+  *    The base of the array to be printed
+  * @param data_size
+  *    The size of the array to be printed, int bytes.
+  */
+void explain_buffer_char_data_quoted(explain_string_buffer_t *sb,
     const void *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_CHAR_DATA_H */

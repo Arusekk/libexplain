@@ -26,6 +26,8 @@
 #include <libexplain/string_buffer.h>
 
 
+#ifdef N_TTY
+
 void
 explain_buffer_line_discipline(explain_string_buffer_t *sb, int data)
 {
@@ -51,6 +53,16 @@ explain_buffer_line_discipline(explain_string_buffer_t *sb, int data)
 
     explain_parse_bits_print_single(sb, data, table, SIZEOF(table));
 }
+
+#else
+
+void
+explain_buffer_line_discipline(explain_string_buffer_t *sb, int data)
+{
+    explain_string_buffer_printf(sb, "%d", data);
+}
+
+#endif
 
 
 void

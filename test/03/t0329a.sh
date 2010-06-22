@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2009 Peter Miller
+# Copyright (C) 2008-2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="accept ENOBUFS"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-accept(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = { 128 })
+accept(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = { XXX })
 failed, No buffer space available (ENOBUFS) because insufficient kernel
 resources are available in the system to complete the system call
 fubar
@@ -34,7 +34,9 @@ test $? -eq 0 || fail
 fmt -w700 test.out4 > test.out3
 test $? -eq 0 || no_result
 
-sed 's|0x........|0xNNNNNNNN|g' test.out3 > test.out2
+sed -e 's|0x[0-9a-fA-F][0-9a-fA-F]*|0xNNNNNNNN|g' \
+    -e 's|size = { [0-9]* }|size = { XXX }|g' \
+    test.out3 > test.out2
 test $? -eq 0 || no_result
 
 fmt  test.out2 > test.out

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,12 +29,18 @@ static const explain_parse_bits_table_t table[] =
     { "SEEK_SET", SEEK_SET },
     { "SEEK_CUR", SEEK_CUR },
     { "SEEK_END", SEEK_END },
+#ifdef SEEK_DATA
+    { "SEEK_DATA", SEEK_DATA },
+#endif
+#ifdef SEEK_HOLE
+    { "SEEK_HOLE", SEEK_HOLE },
+#endif
 #ifdef SEEK_MAX
     { "SEEK_MAX", SEEK_MAX },
 #endif
-    { "L_SET",    SEEK_SET },
-    { "L_INCR",   SEEK_CUR },
-    { "L_XTND",   SEEK_END },
+    { "L_SET", SEEK_SET },
+    { "L_INCR", SEEK_CUR },
+    { "L_XTND", SEEK_END },
 };
 
 

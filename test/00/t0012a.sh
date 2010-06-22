@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -25,8 +25,8 @@ cat > test.ok << 'fubar'
 write(fildes = 42, data = 0x00001000, data_size = 10) failed, Broken pipe
 (EPIPE) because the file descriptor is connected to a pipe or socket whose
 reading end is closed, when this happens the writing process will also
-receive a SIGPIPE signal; this process catches, blocks or ignores the
-SIGPIPE signal
+receive a SIGPIPE signal; note that this process catches, blocks or ignores
+the SIGPIPE signal
 fubar
 test $? -eq 0 || no_result
 

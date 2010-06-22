@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,26 +44,39 @@
 #include <explain/syscall/dup.h>
 #include <explain/syscall/dup2.h>
 #include <explain/syscall/eventfd.h>
+#include <explain/syscall/execlp.h>
 #include <explain/syscall/execve.h>
 #include <explain/syscall/execvp.h>
 #include <explain/syscall/fchdir.h>
 #include <explain/syscall/fchmod.h>
 #include <explain/syscall/fchown.h>
+#include <explain/syscall/fclose.h>
 #include <explain/syscall/fcntl.h>
 #include <explain/syscall/fdopen.h>
+#include <explain/syscall/fdopendir.h>
+#include <explain/syscall/feof.h>
 #include <explain/syscall/ferror.h>
 #include <explain/syscall/fflush.h>
 #include <explain/syscall/fgetc.h>
+#include <explain/syscall/fgetpos.h>
 #include <explain/syscall/fgets.h>
 #include <explain/syscall/fileno.h>
 #include <explain/syscall/flock.h>
 #include <explain/syscall/fopen.h>
 #include <explain/syscall/fork.h>
 #include <explain/syscall/fpathconf.h>
+#include <explain/syscall/fpurge.h>
 #include <explain/syscall/fputc.h>
+#include <explain/syscall/fputs.h>
 #include <explain/syscall/fread.h>
+#include <explain/syscall/freopen.h>
+#include <explain/syscall/fseek.h>
+#include <explain/syscall/fsetpos.h>
 #include <explain/syscall/fstat.h>
 #include <explain/syscall/fstatfs.h>
+#include <explain/syscall/fstatvfs.h>
+#include <explain/syscall/fsync.h>
+#include <explain/syscall/ftell.h>
 #include <explain/syscall/ftime.h>
 #include <explain/syscall/ftruncate.h>
 #include <explain/syscall/futimes.h>
@@ -71,6 +84,7 @@
 #include <explain/syscall/getc.h>
 #include <explain/syscall/getchar.h>
 #include <explain/syscall/getcwd.h>
+#include <explain/syscall/getdomainname.h>
 #include <explain/syscall/getgroups.h>
 #include <explain/syscall/gethostname.h>
 #include <explain/syscall/getpeername.h>
@@ -78,6 +92,7 @@
 #include <explain/syscall/getsockname.h>
 #include <explain/syscall/getsockopt.h>
 #include <explain/syscall/gettimeofday.h>
+#include <explain/syscall/getw.h>
 #include <explain/syscall/ioctl.h>
 #include <explain/syscall/kill.h>
 #include <explain/syscall/lchown.h>
@@ -87,6 +102,13 @@
 #include <explain/syscall/lstat.h>
 #include <explain/syscall/malloc.h>
 #include <explain/syscall/mkdir.h>
+#include <explain/syscall/mkdtemp.h>
+#include <explain/syscall/mknod.h>
+#include <explain/syscall/mkostemp.h>
+#include <explain/syscall/mkstemp.h>
+#include <explain/syscall/mktemp.h>
+#include <explain/syscall/mmap.h>
+#include <explain/syscall/munmap.h>
 #include <explain/syscall/nice.h>
 #include <explain/syscall/opendir.h>
 #include <explain/syscall/open.h>
@@ -97,22 +119,36 @@
 #include <explain/syscall/pread.h>
 #include <explain/syscall/putc.h>
 #include <explain/syscall/putchar.h>
+#include <explain/syscall/putenv.h>
+#include <explain/syscall/puts.h>
+#include <explain/syscall/putw.h>
 #include <explain/syscall/pwrite.h>
+#include <explain/syscall/raise.h>
 #include <explain/syscall/read.h>
 #include <explain/syscall/readdir.h>
 #include <explain/syscall/readlink.h>
+#include <explain/syscall/readv.h>
 #include <explain/syscall/realloc.h>
 #include <explain/syscall/remove.h>
 #include <explain/syscall/rename.h>
 #include <explain/syscall/rmdir.h>
 #include <explain/syscall/select.h>
+#include <explain/syscall/setbuf.h>
+#include <explain/syscall/setbuffer.h>
+#include <explain/syscall/setdomainname.h>
+#include <explain/syscall/setenv.h>
 #include <explain/syscall/setgroups.h>
 #include <explain/syscall/sethostname.h>
+#include <explain/syscall/setlinebuf.h>
 #include <explain/syscall/setsockopt.h>
+#include <explain/syscall/setvbuf.h>
 #include <explain/syscall/signalfd.h>
 #include <explain/syscall/socket.h>
+#include <explain/syscall/socketpair.h>
 #include <explain/syscall/stat.h>
 #include <explain/syscall/statfs.h>
+#include <explain/syscall/statvfs.h>
+#include <explain/syscall/stime.h>
 #include <explain/syscall/strdup.h>
 #include <explain/syscall/strerror.h>
 #include <explain/syscall/strndup.h>
@@ -125,16 +161,32 @@
 #include <explain/syscall/strtoull.h>
 #include <explain/syscall/symlink.h>
 #include <explain/syscall/system.h>
+#include <explain/syscall/tcdrain.h>
+#include <explain/syscall/tcflow.h>
+#include <explain/syscall/tcflush.h>
+#include <explain/syscall/tcgetattr.h>
+#include <explain/syscall/tcsendbreak.h>
+#include <explain/syscall/tcsetattr.h>
+#include <explain/syscall/telldir.h>
+#include <explain/syscall/tempnam.h>
 #include <explain/syscall/time.h>
 #include <explain/syscall/timerfd_create.h>
+#include <explain/syscall/tmpfile.h>
+#include <explain/syscall/tmpnam.h>
 #include <explain/syscall/truncate.h>
+#include <explain/syscall/ungetc.h>
 #include <explain/syscall/unlink.h>
+#include <explain/syscall/unsetenv.h>
+#include <explain/syscall/ustat.h>
 #include <explain/syscall/utime.h>
+#include <explain/syscall/utimes.h>
+#include <explain/syscall/vfork.h>
 #include <explain/syscall/wait.h>
 #include <explain/syscall/wait3.h>
 #include <explain/syscall/wait4.h>
 #include <explain/syscall/waitpid.h>
 #include <explain/syscall/write.h>
+#include <explain/syscall/writev.h>
 
 
 typedef struct table_t table_t;
@@ -190,6 +242,9 @@ static const table_t table[] =
     /* FIXME: add support for epoll_pwait */
     /* FIXME: add support for epoll_wait */
     { "eventfd", explain_syscall_eventfd },
+    /* FIXME: add support for execl */
+    /* FIXME: add support for execle */
+    { "execlp", explain_syscall_execlp },
     { "execve", explain_syscall_execve },
     { "execvp", explain_syscall_execvp },
     /* ----------  F  ------------------------------------------------------- */
@@ -199,14 +254,16 @@ static const table_t table[] =
     { "fchdir", explain_syscall_fchdir },
     { "fchmod", explain_syscall_fchmod },
     { "fchown", explain_syscall_fchown },
+    { "fclose", explain_syscall_fclose },
     { "fcntl", explain_syscall_fcntl },
     /* FIXME: add support for fdatasync */
     { "fdopen", explain_syscall_fdopen },
-    /* FIXME: add support for fdopendir */
+    { "fdopendir", explain_syscall_fdopendir },
+    { "feof", explain_syscall_feof },
     { "ferror", explain_syscall_ferror },
     { "fflush", explain_syscall_fflush },
     { "fgetc", explain_syscall_fgetc },
-    /* FIXME: add support for fgetpos */
+    { "fgetpos", explain_syscall_fgetpos },
     { "fgets", explain_syscall_fgets },
     /* FIXME: add support for fgetxattr */
     { "fileno", explain_syscall_fileno },
@@ -215,21 +272,22 @@ static const table_t table[] =
     { "fopen", explain_syscall_fopen },
     { "fork", explain_syscall_fork },
     { "fpathconf", explain_syscall_fpathconf },
-    /* FIXME: add support for fprintf */
-    /* FIXME: add support for fpurge */
+    { "fpurge", explain_syscall_fpurge },
     { "fputc", explain_syscall_fputc },
-    /* FIXME: add support for fputs */
+    { "fputs", explain_syscall_fputs },
     { "fread", explain_syscall_fread },
     /* FIXME: add support for free_hugepages */
+    { "freopen", explain_syscall_freopen },
     /* FIXME: add support for fremovexattr */
     /* FIXME: add support for fscanf */
-    /* FIXME: add support for fseek */
-    /* FIXME: add support for fsetpos */
+    { "fseek", explain_syscall_fseek },
+    { "fsetpos", explain_syscall_fsetpos },
     /* FIXME: add support for fsetxattr */
     { "fstat", explain_syscall_fstat },
     { "fstatfs", explain_syscall_fstatfs },
-    /* FIXME: add support for fsync */
-    /* FIXME: add support for ftell */
+    { "fstatvfs", explain_syscall_fstatvfs },
+    { "fsync", explain_syscall_fsync },
+    { "ftell", explain_syscall_ftell },
     { "ftime", explain_syscall_ftime },
     { "ftruncate", explain_syscall_ftruncate },
     /* FIXME: add support for futex */
@@ -241,6 +299,7 @@ static const table_t table[] =
     /* FIXME: add support for getcpu */
     { "getcwd", explain_syscall_getcwd },
     /* FIXME: add support for getdents */
+    { "getdomainname", explain_syscall_getdomainname },
     { "getgroups", explain_syscall_getgroups },
     { "gethostname", explain_syscall_gethostname },
     /* FIXME: add support for getitimer */
@@ -266,7 +325,7 @@ static const table_t table[] =
     /* FIXME: add support for get_thread_area */
     /* FIXME: add support for gettid */
     { "gettimeofday", explain_syscall_gettimeofday },
-    /* FIXME: add support for getw */
+    { "getw", explain_syscall_getw },
     /* FIXME: add support for getxattr */
     /* FIXME: add support for gtty */
     /* ----------  H  ------------------------------------------------------- */
@@ -313,11 +372,14 @@ static const table_t table[] =
     /* FIXME: add support for migrate_pages */
     /* FIXME: add support for mincore */
     { "mkdir", explain_syscall_mkdir },
-    /* FIXME: add support for mknod */
-    /* FIXME: add support for mktemp */
+    { "mkdtemp", explain_syscall_mkdtemp },
+    { "mknod", explain_syscall_mknod },
+    { "mkostemp", explain_syscall_mkostemp },
+    { "mkstemp", explain_syscall_mkstemp },
+    { "mktemp", explain_syscall_mktemp },
     /* FIXME: add support for mlock */
     /* FIXME: add support for mlockall */
-    /* FIXME: add support for mmap */
+    { "mmap", explain_syscall_mmap },
     /* FIXME: add support for mmap2 */
     /* FIXME: add support for modify_ldt */
     /* FIXME: add support for mount */
@@ -338,7 +400,7 @@ static const table_t table[] =
     /* FIXME: add support for msync */
     /* FIXME: add support for munlock */
     /* FIXME: add support for munlockall */
-    /* FIXME: add support for munmap */
+    { "munmap", explain_syscall_munmap },
     /* ----------  N  ------------------------------------------------------- */
     /* FIXME: add support for nanosleep */
     /* FIXME: add support for nfsservctl */
@@ -363,26 +425,27 @@ static const table_t table[] =
     /* FIXME: add support for ppoll */
     /* FIXME: add support for prctl */
     { "pread", explain_syscall_pread },
-    /* FIXME: add support for printf */
     /* FIXME: add support for prof */
     /* FIXME: add support for profil */
     /* FIXME: add support for pselect6 */
     /* FIXME: add support for ptrace */
     { "putc", explain_syscall_putc },
     { "putchar", explain_syscall_putchar },
+    { "putenv", explain_syscall_putenv },
     /* FIXME: add support for putpmsg */
-    /* FIXME: add support for puts */
-    /* FIXME: add support for putw */
+    { "puts", explain_syscall_puts },
+    { "putw", explain_syscall_putw },
     { "pwrite", explain_syscall_pwrite },
     /* ----------  Q  ------------------------------------------------------- */
     /* FIXME: add support for query_module */
     /* FIXME: add support for quotactl */
     /* ----------  R  ------------------------------------------------------- */
+    { "raise", explain_syscall_raise },
     { "read", explain_syscall_read },
     /* FIXME: add support for readahead */
     { "readdir", explain_syscall_readdir },
     { "readlink", explain_syscall_readlink },
-    /* FIXME: add support for readv */
+    { "readv", explain_syscall_readv },
     { "realloc", explain_syscall_realloc },
     /* FIXME: add support for reboot */
     /* FIXME: add support for recv */
@@ -426,16 +489,17 @@ static const table_t table[] =
     /* FIXME: add support for sendfile */
     /* FIXME: add support for sendmsg */
     /* FIXME: add support for sendto */
-    /* FIXME: add support for setbuf */
-    /* FIXME: add support for setbuffer */
-    /* FIXME: add support for setdomainname */
+    { "setbuf", explain_syscall_setbuf },
+    { "setbuffer", explain_syscall_setbuffer },
+    { "setdomainname", explain_syscall_setdomainname },
+    { "setenv", explain_syscall_setenv },
     /* FIXME: add support for setfsgid */
     /* FIXME: add support for setfsuid */
     /* FIXME: add support for setgid */
     { "setgroups", explain_syscall_setgroups },
     { "sethostname", explain_syscall_sethostname },
     /* FIXME: add support for setitimer */
-    /* FIXME: add support for setlinebuf */
+    { "setlinebuf", explain_syscall_setlinebuf },
     /* FIXME: add support for set_mempolicy */
     /* FIXME: add support for setpgid */
     /* FIXME: add support for setpriority */
@@ -452,7 +516,7 @@ static const table_t table[] =
     /* FIXME: add support for settimeofday */
     /* FIXME: add support for setuid */
     /* FIXME: add support for setup */
-    /* FIXME: add support for setvbuf */
+    { "setvbuf", explain_syscall_setvbuf },
     /* FIXME: add support for setxattr */
     /* FIXME: add support for set_zone_reclaim */
     /* FIXME: add support for sgetmask */
@@ -471,7 +535,7 @@ static const table_t table[] =
     /* FIXME: add support for sigsuspend */
     { "socket", explain_syscall_socket },
     /* FIXME: add support for socketcall */
-    /* FIXME: add support for socketpair */
+    { "socketpair", explain_syscall_socketpair },
     /* FIXME: add support for splice */
     /* FIXME: add support for sprintf */
     /* FIXME: add support for spu_create */
@@ -480,7 +544,8 @@ static const table_t table[] =
     /* FIXME: add support for ssetmask */
     { "stat", explain_syscall_stat },
     { "statfs", explain_syscall_statfs },
-    /* FIXME: add support for stime */
+    { "statvfs", explain_syscall_statvfs },
+    { "stime", explain_syscall_stime },
     { "strdup", explain_syscall_strdup },
     { "strerror", explain_syscall_strerror },
     { "strndup", explain_syscall_strndup },
@@ -502,9 +567,15 @@ static const table_t table[] =
     /* FIXME: add support for syslog */
     { "system", explain_syscall_system },
     /* ----------  T  ------------------------------------------------------- */
+    { "tcdrain", explain_syscall_tcdrain },
+    { "tcflow", explain_syscall_tcflow },
+    { "tcflush", explain_syscall_tcflush },
+    { "tcgetattr", explain_syscall_tcgetattr },
+    { "tcsendbreak", explain_syscall_tcsendbreak },
+    { "tcsetattr", explain_syscall_tcsetattr },
     /* FIXME: add support for tee */
-    /* FIXME: add support for telldir */
-    /* FIXME: add support for tempnam */
+    { "telldir", explain_syscall_telldir },
+    { "tempnam", explain_syscall_tempnam },
     /* FIXME: add support for tgkill */
     { "time", explain_syscall_time },
     /* FIXME: add support for timer_create */
@@ -517,8 +588,8 @@ static const table_t table[] =
     /* FIXME: add support for timer_settime */
     /* FIXME: add support for times */
     /* FIXME: add support for tkill */
-    /* FIXME: add support for tmpfile */
-    /* FIXME: add support for tmpnam */
+    { "tmpfile", explain_syscall_tmpfile },
+    { "tmpnam", explain_syscall_tmpnam },
     { "truncate", explain_syscall_truncate },
     /* FIXME: add support for tuxcall */
     /* ----------  U  ------------------------------------------------------- */
@@ -526,24 +597,22 @@ static const table_t table[] =
     /* FIXME: add support for ulimit */
     /* FIXME: add support for umount */
     /* FIXME: add support for uname */
-    /* FIXME: add support for ungetc */
+    { "ungetc", explain_syscall_ungetc },
     { "unlink", explain_syscall_unlink },
+    { "unsetenv", explain_syscall_unsetenv },
     /* FIXME: add support for unshare */
     /* FIXME: add support for uselib */
-    /* FIXME: add support for ustat */
+    { "ustat", explain_syscall_ustat },
     { "utime", explain_syscall_utime },
     /* FIXME: add support for utimens */
-    /* FIXME: add support for utimes */
+    { "utimes", explain_syscall_utimes },
     /* ----------  V  ------------------------------------------------------- */
-    /* FIXME: add support for vfork */
-    /* FIXME: add support for vfprintf */
+    { "vfork", explain_syscall_vfork },
     /* FIXME: add support for vfscanf */
     /* FIXME: add support for vhangup */
     /* FIXME: add support for vmsplice */
-    /* FIXME: add support for vprintf */
     /* FIXME: add support for vscanf */
     /* FIXME: add support for vserver */
-    /* FIXME: add support for vsprintf */
     /* FIXME: add support for vsscanf */
     /* ----------  W  ------------------------------------------------------- */
     { "wait", explain_syscall_wait },
@@ -552,7 +621,7 @@ static const table_t table[] =
     /* FIXME: add support for waitid */
     { "waitpid", explain_syscall_waitpid },
     { "write", explain_syscall_write },
-    /* FIXME: add support for writev */
+    { "writev", explain_syscall_writev },
     /* ----------  X  ------------------------------------------------------- */
     /* ----------  Y  ------------------------------------------------------- */
     /* ----------  Z  ------------------------------------------------------- */
@@ -601,4 +670,11 @@ find_function(const char *name)
         fprintf(stderr, "function \"%s\" unknown\n", name);
     exit(EXIT_FAILURE);
     return 0;
+}
+
+
+void
+syscall_statistics(int *total)
+{
+    *total = SIZEOF(table);
 }

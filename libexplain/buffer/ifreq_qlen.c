@@ -45,11 +45,14 @@ explain_buffer_ifreq_qlen(explain_string_buffer_t *sb,
             ifr->ifr_name,
             sizeof(ifr->ifr_name)
         );
+#ifdef ifr_qlen
         explain_string_buffer_printf
         (
             sb,
-            ", ifr_qlen = %d }",
+            ", ifr_qlen = %d",
             ifr->ifr_qlen
         );
+#endif
+        explain_string_buffer_puts(sb, " }");
     }
 }

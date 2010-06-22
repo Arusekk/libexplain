@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/unistd.h>
+
 #include <libexplain/buffer/errno/write.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/write.h>
@@ -24,7 +26,7 @@
 
 void
 explain_message_errno_write(char *message, int message_size, int errnum,
-    int fildes, const void *data, long data_size)
+    int fildes, const void *data, size_t data_size)
 {
     explain_string_buffer_t sb;
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,11 +17,9 @@
  */
 
 #include <libexplain/ac/stdio.h>
-#include <libexplain/ac/stdlib.h>
 
 #include <libexplain/pclose.h>
-#include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 int
@@ -32,7 +30,7 @@ explain_pclose_or_die(FILE *fp)
     result = explain_pclose_on_error(fp);
     if (result < 0)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return result;
 }

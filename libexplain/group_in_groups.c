@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/limits.h> /* for NGROUPS_MAX on Solaris */
 #include <libexplain/ac/sys/param.h>
 #include <libexplain/ac/unistd.h>
 
@@ -30,6 +31,13 @@ explain_group_in_groups(int gid, const explain_have_identity_t *hip)
     int             n;
     int             j;
 
+    /*
+     * FIXME: NFS only transports 16 of the groups (this is because
+     * Solaris only supports NGROUPS_MAX=16, and Sun invented NFS).  We
+     * need to diagnose the case where they are in the list of groups on
+     * Linux (where NGROUPS_MAX > 16), but are not in the list of groups
+     * on the NFS server.
+     */
     if (gid == hip->gid)
         return 1;
     n = getgroups(NGROUPS_MAX, groups);

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,28 +17,29 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/dirent.h>
 
 #include <libexplain/readdir.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 struct dirent *
 explain_readdir_on_error(DIR *dir)
 {
+    int             hold_errno;
     struct dirent   *result;
 
+    hold_errno = errno;
     errno = 0;
     result = readdir(dir);
-    if (!result && errno)
+    if (!result && errno != 0)
     {
-        int err = errno;
+        hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_readdir(dir));
-        errno = err;
+        explain_output_message(explain_errno_readdir(hold_errno, dir));
     }
+    errno = hold_errno;
     return result;
 }
 

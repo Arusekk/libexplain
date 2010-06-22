@@ -1,0 +1,61 @@
+#
+# libexplain - Explain errno values returned by libc functions
+# Copyright (C) 2009 Peter Miller
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful,but
+# WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNULesser General Public
+# License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+Include: linux/hdreg.h
+#
+# Requests that don't alter system state, device state or media state.
+# These are safe to probe, and will not cause probems or damage.
+Get:
+ HDIO_GETGEO
+ HDIO_GET_32BIT
+ HDIO_GET_ACOUSTIC
+ HDIO_GET_ADDRESS
+ HDIO_GET_BUSSTATE
+ HDIO_GET_DMA
+ HDIO_GET_IDENTITY
+ HDIO_GET_MULTCOUNT
+ HDIO_GET_NICE
+ HDIO_GET_NOWERR
+ HDIO_GET_QDMA
+ HDIO_GET_UNMASKINTR
+ HDIO_GET_WCACHE
+#
+# These are requests that alter the system state.
+Set:
+ HDIO_DRIVE_CMD
+ HDIO_DRIVE_RESET
+ HDIO_DRIVE_TASK
+ HDIO_DRIVE_TASKFILE
+ HDIO_GET_KEEPSETTINGS
+ HDIO_OBSOLETE_IDENTITY
+ HDIO_SCAN_HWIF
+ HDIO_SET_32BIT
+ HDIO_SET_ACOUSTIC
+ HDIO_SET_ADDRESS
+ HDIO_SET_BUSSTATE
+ HDIO_SET_DMA
+ HDIO_SET_KEEPSETTINGS
+ HDIO_SET_MULTCOUNT
+ HDIO_SET_NICE
+ HDIO_SET_NOWERR
+ HDIO_SET_PIO_MODE
+ HDIO_SET_QDMA
+ HDIO_SET_UNMASKINTR
+ HDIO_SET_WCACHE
+ HDIO_SET_XFER
+ HDIO_TRISTATE_HWIF
+ HDIO_UNREGISTER_HWIF

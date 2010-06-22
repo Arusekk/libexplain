@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,8 +24,8 @@ TEST_SUBJECT="write vs ENOSPC"
 cat > test.ok << 'fubar'
 write(fildes = 42, data = 0x00001000, data_size = 10) failed, No space left
 on device (ENOSPC) because the device containing the file referred to by
-the file descriptor has no room for the data; or, the file system
-containing the file has no room for the data
+the file descriptor has no space for the data; or, the file system
+containing the file has no space for the data
 fubar
 test $? -eq 0 || no_result
 

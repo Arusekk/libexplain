@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,11 +19,15 @@
 
 %{
 
+#include <libexplain/ac/dlfcn.h>
 #include <libexplain/ac/stdarg.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/sys/stat.h> /* for major()/minor() except Solaris */
+#include <libexplain/ac/sys/sysmacros.h> /* for major()/minor() on Solaris */
+#include <libexplain/ac/linux/kdev_t.h>
 
 #include <libexplain/gcc_attributes.h>
 #include <libexplain/parse_bits.h>
@@ -54,6 +58,9 @@ extern int yydebug;
 %token FUNC_IOR
 %token FUNC_IOW
 %token FUNC_IOWR
+%token FUNC_MKDEV
+%token FUNC_MAJOR
+%token FUNC_MINOR
 
 %union
 {
@@ -89,7 +96,7 @@ yyerror(const char *fmt, ...)
     va_list         ap;
 
     if (error_buffer.position > 0)
-        explain_string_buffer_puts(&error_buffer, "; ");
+        explain_string_buffer_puts(&error_buffer, ", ");
     va_start(ap, fmt);
     explain_string_buffer_vprintf(&error_buffer, fmt, ap);
     va_end(ap);
@@ -107,14 +114,85 @@ yyerror(const char *fmt, ...)
 static explain_parse_bits_table_t constants[] =
 {
     { "NULL", 0 },
-    { "_IOC_NONE", _IOC_NONE },
-    { "_IOC_READ", _IOC_READ },
-    { "_IOC_WRITE", _IOC_WRITE },
-    { "IOC_IN", IOC_IN },
-    { "IOC_OUT", IOC_OUT },
-    { "IOC_INOUT", IOC_INOUT },
+    {
+        "_IOC_NONE",
+#ifdef _IOC_NONE
+        _IOC_NONE
+#elif defined(IOC_VOID)
+        IOC_VOID
+#else
+        0
+#endif
+    },
+    {
+        "_IOC_READ",
+#ifdef _IOC_READ
+        _IOC_READ
+#elif defined(IOC_OUT)
+        IOC_OUT
+#else
+        0
+#endif
+    },
+    {
+        "_IOC_WRITE",
+#ifdef _IOC_WRITE
+        _IOC_WRITE
+#elif defined(IOC_OUT)
+        IOC_OUT
+#else
+        0
+#endif
+    },
+    {
+        "IOC_VOID",
+#ifdef IOC_VOID
+        IOC_VOID
+#elif defined(_IOC_NONE)
+        _IOC_NONE
+#else
+        0
+#endif
+    },
+    {
+        "IOC_IN",
+#ifdef IOC_IN
+        IOC_IN
+#elif defined(_IOC_WRITE)
+        _IOC_WRITE
+#else
+        0
+#endif
+    },
+    {
+        "IOC_OUT",
+#ifdef IOC_OUT
+        IOC_OUT
+#elif defined(_IOC_READ)
+        _IOC_READ
+#else
+        0
+#endif
+    },
+    {
+        "IOC_INOUT",
+#ifdef IOC_INOUT
+        IOC_INOUT
+#elif defined(_IOC_READ)
+        _IOC_READ | _IOC_WRITE
+#else
+        0
+#endif
+    },
+#ifdef IOC_DIRMASK
+    { "IOC_DIRMASK", IOC_DIRMASK },
+#endif
+#ifdef IOCSIZE_MASK
     { "IOCSIZE_MASK", IOCSIZE_MASK },
+#endif
+#ifdef IOCSIZE_SHIFT
     { "IOCSIZE_SHIFT", IOCSIZE_SHIFT },
+#endif
 };
 
 
@@ -125,6 +203,10 @@ static explain_parse_bits_table_t keywords[] =
     { "_IOR", FUNC_IOR },
     { "_IOWR", FUNC_IOWR },
     { "_IOW", FUNC_IOW },
+    { "MKDEV", FUNC_MKDEV },
+    { "makedev", FUNC_MKDEV },
+    { "MAJOR", FUNC_MAJOR },
+    { "MINOR", FUNC_MINOR },
 };
 
 
@@ -271,6 +353,31 @@ yylex(void)
                     yylval.lv_number = tp->value;
                     return NUMBER;
                 }
+
+#ifdef HAVE_DLSYM
+                {
+                    void            *handle;
+
+                    handle = dlopen(NULL, RTLD_NOW);
+                    if (handle)
+                    {
+                        void            *p;
+
+                        /* clear any previous error */
+                        dlerror();
+
+                        p = dlsym(handle, name);
+                        if (dlerror() == NULL)
+                        {
+                            yylval.lv_number = (long)p;
+                            dlclose(handle);
+                            return NUMBER;
+                        }
+                        dlclose(handle);
+                    }
+                }
+#endif
+
                 yyerror("name \"%s\" unknown", name);
             }
             return JUNK;
@@ -348,6 +455,8 @@ explain_parse_bits(const char *text,
 const char *
 explain_parse_bits_get_error(void)
 {
+    if (!error_message[0])
+        return "something went wrong";
     return error_message;
 }
 
@@ -383,9 +492,21 @@ expression
         { $$ = $1 | $3; }
     | FUNC_IOC LP expression COMMA expression COMMA expression COMMA expression
             RP
-        { $$ = _IOC($3, $5, $7, $9); }
+        {
+#ifdef _IOC
+            $$ = _IOC($3, $5, $7, $9);
+#else
+            $$ = ($5 << 8) + $7;
+#endif
+        }
     | FUNC_IO LP expression COMMA expression RP
-        { $$ = _IO($3, $5); }
+        {
+#ifdef _IO
+            $$ = _IO($3, $5);
+#else
+            $$ = ($3 << 8) + $5;
+#endif
+        }
     | FUNC_IOR LP expression COMMA expression COMMA expression RP
         {
             /*
@@ -393,7 +514,13 @@ expression
              * _IOR define uses sizeof() on its last argument, but we
              * want to specify the size explicitly.
              */
+#ifdef _IOC_READ
             $$ = _IOC(_IOC_READ, $3, $5, $7);
+#elif defined(IOC_OUT)
+            $$ = _IOC(IOC_OUT, $3, $5, $7);
+#else
+            $$ = ($3 << 8) + $5;
+#endif
         }
     | FUNC_IOW LP expression COMMA expression COMMA expression RP
         {
@@ -402,7 +529,13 @@ expression
              * _IOW define uses sizeof() on its last argument, but we
              * want to specify the size explicitly.
              */
+#ifdef _IOC_WRITE
             $$ = _IOC(_IOC_WRITE, $3, $5, $7);
+#elif defined(IOC_IN)
+            $$ = _IOC(IOC_IN, $3, $5, $7);
+#else
+            $$ = ($3 << 8) + $5;
+#endif
         }
     | FUNC_IOWR LP expression COMMA expression COMMA expression RP
         {
@@ -411,6 +544,36 @@ expression
              * _IORW define uses sizeof() on its last argument, but we
              * want to specify the size explicitly.
              */
+#if defined(_IOC_READ) && defined(_IOC_WRITE)
             $$ = _IOC(_IOC_READ | _IOC_WRITE, $3, $5, $7);
+#elif defined(IOC_INOUT)
+            $$ = _IOC(IOC_INOUT, $3, $5, $7);
+#else
+            $$ = ($3 << 8) + $5;
+#endif
+        }
+    | FUNC_MKDEV LP expression COMMA expression RP
+        {
+#ifdef MKDEV
+            $$ = MKDEV($3, $5);
+#else
+            $$ = makedev($3, $5);
+#endif
+        }
+    | FUNC_MAJOR LP expression RP
+        {
+#ifdef major
+            $$ = major($3);
+#else
+            $$ = MAJOR($3);
+#endif
+        }
+    | FUNC_MINOR LP expression RP
+        {
+#ifdef minor
+            $$ = minor($3);
+#else
+            $$ = MINOR($3);
+#endif
         }
     ;

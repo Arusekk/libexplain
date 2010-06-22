@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -53,6 +53,23 @@ if [match_mask %1D%2 [version]] then
  * Use file fingerprints to supplement file-modified times.
  */
 set fingerprint;
+
+if [not [defined verbose]] then
+    verbose = 0;
+
+libtool-quiet = ;
+if [not [verbose]] then
+{
+    set silent;
+    libtool-quiet = --quiet;
+    set no-star;
+}
+else
+{
+    set no-silent;
+    libtool-quiet = ;
+    set star;
+}
 
 /* -------------------------------------------------------------------------
  *
@@ -115,10 +132,12 @@ CFLAGS = -Werror -Wall -Wextra
     -Wmissing-prototypes
     -Wmissing-declarations
     -Wnested-externs
+    -Wuninitialized
     -g
+    -O2
     ;
 LDFLAGS = -Wl,--as-needed;
-LIBS = -lcap;
+LIBS = -lcap -ldl;
 
 /* -------------------------------------------------------------------------
  * Section: Compile Flags
@@ -185,16 +204,19 @@ loop lib = [libraries]
 
 lib%/lib%.la lib%/.libs/lib%.a lib%/.libs/lib%.so:
         [[target]_obj]
-    set unlink
+    set unlink ingredients-fingerprint
 {
+    if [not [verbose]] then
+        function print LNK [target];
+
     /*
      * We include the "hidden" libtool output files because we need to
-     * fingerprint somethign that actually changes, and the .la file is
+     * fingerprint something that actually changes, and the .la file is
      * pretty much static.
      */
     local version-info =
         [collect aesub "'${project_specific aemakegen:version-info}'" ];
-    libtool --mode\=link
+    libtool [libtool-quiet] --mode\=link
     [CC] [CPPFLAGS] [CFLAGS]
         -o [target]
         [resolve [[target]_obj]]
@@ -204,8 +226,8 @@ lib%/lib%.la lib%/.libs/lib%.a lib%/.libs/lib%.so:
         /*
          * If you don't specify -rpath it doesn't make the shared
          * library, even though the Debian people Really Don't Like
-         * Rpath.  We really really want th e.so so we can chek out
-         * version-info using the aede-policy soname.
+         * Rpath.  We really really want the .so so we can check the
+         * version-info using the aede-policy "soname".
          */
         -rpath /usr/local/bin
         ;
@@ -257,12 +279,23 @@ bin/% bin/.libs/%: [[target]_obj] [defined-or-null [target]_libs]
     set gate-first shallow /* tests need them */
     if [defined [target]_obj]
 {
+    if [not [verbose]] then
+        function print LNK [target];
+
     rm -f bin/.libs/lt-%;
-    libtool --mode\=link
+    libtool [libtool-quiet] --mode\=link
     [CC] -o [target]
         [LDFLAGS]
         [resolve [[target]_obj] [defined-or-null [target]_libs]]
         ;
+
+    /*
+     * Libtool makes intermediate shell scripts.
+     * Make sure the fingerprint changes when it rebuilds,
+     * otherwise some tests get confused.
+     */
+    date "'+# %%c'" >> [target]
+        set silent;
 
     /*
      * libtool creates bin/% as a script, which, when executed, does the
@@ -271,7 +304,7 @@ bin/% bin/.libs/%: [[target]_obj] [defined-or-null [target]_libs]
      * the baseline.  So we goose it into linking now, which would seem
      * to defeat the purpose.
      */
-    [target] -V;
+    [target] -V > /dev/null 2>&1;
 }
 
 /* --------------------------------------------------------------------------
@@ -296,8 +329,11 @@ if [match_mask %1D%2 [version]] then
 #if 0
 %0%.o: %0%.c
 {
+    if [not [verbose]] then
+        function print "CC  %0%.c";
+
     rm -f %0.libs/%.o %0.libs/%.lo;
-    libtool --mode\=compile
+    libtool [libtool-quiet] --mode\=compile
     [CC] [CFLAGS]
         [defined-or-null %0%.c_CFLAGS]
         [defined-or-null [dir %0%.c]_CFLAGS]
@@ -309,10 +345,13 @@ if [match_mask %1D%2 [version]] then
 
 cascade %0%.lo = %0%.o %0.libs/%.lo;
 
-%0%.lo %0%.o %0.libs/%.o: %0%.c
+%0%.lo %0%.o %0.libs/%.o: %0%.c libexplain/config.h
 {
+    if [not [verbose]] then
+        function print "CC %0%.c";
+
     rm -f %0%.lo %0.libs/%.o %0.libs/%.lo;
-    libtool --mode\=compile
+    libtool [libtool-quiet] --mode\=compile
     [CC] [CFLAGS]
         [defined-or-null %0%.c_CFLAGS]
         [defined-or-null [dir %0%.c]_CFLAGS]
@@ -356,6 +395,7 @@ c_incl_excludes =
 dirent_exceptions =
     libexplain/closedir.h
     libexplain/dirfd.h
+    libexplain/fdopendir.h
     libexplain/opendir.h
     libexplain/readdir.h
     libexplain/rewinddir.h
@@ -371,6 +411,7 @@ signal_exceptions =
 stdio_exceptions =
     libexplain/fclose.h
     libexplain/fdopen.h
+    libexplain/feof.h
     libexplain/ferror.h
     libexplain/fflush.h
     libexplain/fgetc.h
@@ -379,6 +420,7 @@ stdio_exceptions =
     libexplain/fileno.h
     libexplain/fopen.h
     libexplain/fprintf.h
+    libexplain/fpurge.h
     libexplain/fputc.h
     libexplain/fputs.h
     libexplain/fread.h
@@ -392,22 +434,34 @@ stdio_exceptions =
     libexplain/getc.h
     libexplain/getchar.h
     libexplain/gets.h
+    libexplain/getw.h
     libexplain/pclose.h
     libexplain/popen.h
     libexplain/printf.h
     libexplain/putc.h
     libexplain/putchar.h
     libexplain/puts.h
+    libexplain/putw.h
     libexplain/rewind.h
     libexplain/scanf.h
+    libexplain/setbuf.h
+    libexplain/setbuffer.h
+    libexplain/setlinebuf.h
+    libexplain/setvbuf.h
+    libexplain/snprintf.h
+    libexplain/sprintf.h
+    libexplain/tmpfile.h
     libexplain/ungetc.h
     libexplain/vfprintf.h
     libexplain/vfscanf.h
     libexplain/vprintf.h
     libexplain/vscanf.h
+    libexplain/vsnprintf.h
+    libexplain/vsprintf.h
     ;
 
 stdlib_exceptions =
+    cat/main.c
     libexplain/malloc.h
     libexplain/realloc.h
     test_mincore/main.c
@@ -424,6 +478,8 @@ sys/select_exceptions =
 
 sys/mman_exceptions =
     test_mincore/main.c
+    libexplain/mmap.h
+    libexplain/munmap.h
     ;
 
 sys/socket_exceptions =
@@ -441,27 +497,62 @@ sys/timeb_exceptions =
 
 sys/types_exceptions =
     libexplain/kill.h
+    libexplain/mknod.h
+    libexplain/ustat.h
+    libexplain/vfork.h
+    ;
+
+sys/uio_exceptions =
+    libexplain/readv.h
+    libexplain/writev.h
     ;
 
 time_exceptions =
+    libexplain/ftime.h
+    libexplain/stime.h
     libexplain/time.h
     ;
 
 unistd_exceptions =
+    cat/main.c
+    libexplain/ftruncate.h
     libexplain/getcwd.h
+    libexplain/getdomainname.h
     libexplain/getgroups.h
     libexplain/gethostname.h
+    libexplain/lseek.h
     libexplain/pread.h
     libexplain/pwrite.h
+    libexplain/read.h
     libexplain/readlink.h
+    libexplain/setdomainname.h
     libexplain/setgroups.h
     libexplain/sethostname.h
+    libexplain/truncate.h
+    libexplain/vfork.h
+    libexplain/write.h
     test_mincore/main.c
+    ;
+
+ustat_exceptions =
+    libexplain/ustat.h
+    ;
+
+/*
+ * This file is only to be used by users if this library, not the
+ * library itself.  The source files listed here must be example sources
+ * ONLY... but they get compiled so we know we haven't broken anything.
+ */
+libexplain/libexplain_exceptions =
+    cat/main.c
     ;
 
 %0%.c.d: %0%.c
     set no-cascade
 {
+    if [not [verbose]] then
+        function print DEP %0%.c;
+
     /*
      * Generated files may use excluded headers, because we
      * have no control over the quality of generated code.
@@ -471,6 +562,8 @@ unistd_exceptions =
     {
         if [not [filter libexplain/ac/%%0%% %0%.c]] then
             ex = [c_incl_excludes];
+        if [in %0%.c [libexplain/libexplain_exceptions]] then
+            ex = [stringset [ex] - "-ex=libexplain/libexplain.h"];
         if [in %0%.c [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
         if [in %0%.c [signal_exceptions]] then
@@ -489,10 +582,14 @@ unistd_exceptions =
             ex = [stringset [ex] - "-ex=sys/timeb.h"];
         if [in %0%.c [sys/types_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/types.h"];
+        if [in %0%.c [sys/uio_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/uio.h"];
         if [in %0%.c [time_exceptions]] then
             ex = [stringset [ex] - "-ex=time.h"];
         if [in %0%.c [unistd_exceptions]] then
             ex = [stringset [ex] - "-ex=unistd.h"];
+        if [in %0%.c [ustat_exceptions]] then
+            ex = [stringset [ex] - "-ex=ustat.h"];
     }
 
     c_incl -nc -ns -eia -nrec
@@ -511,6 +608,9 @@ unistd_exceptions =
 %0%.h.d: %0%.h: libexplain/config.h
     set no-cascade
 {
+    if [not [verbose]] then
+        function print DEP %0%.h;
+
     /*
      * Generated files may use excluded headers, because we
      * have no control over the quality of generated code.
@@ -520,6 +620,8 @@ unistd_exceptions =
     {
         if [not [filter libexplain/ac/%%0%% %0%.c]] then
             ex = [c_incl_excludes];
+        if [in %0%.c [libexplain/libexplain_exceptions]] then
+            ex = [stringset [ex] - "-ex=libexplain/libexplain.h"];
         if [in %0%.h [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
         if [in %0%.h [signal_exceptions]] then
@@ -540,10 +642,14 @@ unistd_exceptions =
             ex = [stringset [ex] - "-ex=sys/timeb.h"];
         if [in %0%.h [sys/types_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/types.h"];
+        if [in %0%.h [sys/uio_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/uio.h"];
         if [in %0%.h [time_exceptions]] then
             ex = [stringset [ex] - "-ex=time.h"];
         if [in %0%.h [unistd_exceptions]] then
             ex = [stringset [ex] - "-ex=unistd.h"];
+        if [in %0%.h [ustat_exceptions]] then
+            ex = [stringset [ex] - "-ex=ustat.h"];
     }
 
     c_incl -nc -ns -eia -nrec
@@ -566,13 +672,10 @@ unistd_exceptions =
  * relationships such as this be placed in a primary source cookbook.
  */
 
-cascade libexplain/ac/errno.h =  libexplain/config.h;
-cascade libexplain/ac/stddef.h = libexplain/config.h;
-cascade libexplain/ac/stdio.h =  libexplain/config.h;
-cascade libexplain/ac/stdlib.h = libexplain/config.h;
-cascade libexplain/ac/string.h = libexplain/config.h;
-cascade libexplain/ac/fcntl.h =  libexplain/config.h;
+cascade libexplain/ac/%0%.h = libexplain/config.h;
 cascade libexplain/bits/sigset_t.h = libexplain/public_config.h;
+cascade libexplain/large_file_support.h = libexplain/public_config.h;
+cascade libexplain/libexplain.h = libexplain/public_config.h;
 
 /* --------------------------------------------------------------------------
  * Section: Using Yacc Source Files
@@ -585,17 +688,22 @@ cascade libexplain/bits/sigset_t.h = libexplain/public_config.h;
 
 /* yacc = yacc; */
 yacc = bison -y;
-yacc_flags = ;
+yacc_flags = -v;
 
 /* LIBS += -ly; */
 
 %0%.yacc.c %0%.yacc.h: %0%.y
     single-thread y.tab.c y.tab.h
 {
+    if [not [verbose]] then
+        function print YAC %0%.y;
+
     local name = [substitute / _ %0%_];
     [yacc] -d [yacc_flags] [resolve %0%.y];
     sed -e "'s|[yY][yY]|"[name]"|g'" y.tab.c > %0%.yacc.c;
     sed -e "'s|[yY][yY]|"[name]"|g'" y.tab.h > %0%.yacc.h;
+    if [exists y.output] then
+        mv y.output %0%.yacc.list;
     rm y.tab.c y.tab.h;
 }
 
@@ -611,6 +719,10 @@ yacc_d_files =
 
 web-site/[project_minus].ae: [source_files]
 {
+    if [not [verbose]] then
+        function print GEN [target];
+
+    set no-silent;
     aedist --send --entire-source -p [project] -c [change] -ndh -naa
         -o [target];
 }
@@ -624,6 +736,36 @@ web-site/[project_minus].ae: [source_files]
 scripts = [fromto script/%.in % [match_mask script/%.in [source_files]]];
 
 all += [addprefix bin/ [scripts]];
+
+
+/* ----------------------------------------------------------------------
+ * Checking for ioctl number conflicts
+ */
+all = .explain-iocontrol-check-conflicts [all];
+
+.explain-iocontrol-check-conflicts: bin/explain
+{
+    if [not [verbose]] then
+        function print CHK ioctl conflicts;
+
+    [resolve bin/explain] -Z;
+    date > [target]
+        set silent;
+}
+
+all += .include.gotchas;
+
+.include.gotchas: bin/test_include_gotchas [source_files]
+{
+    if [not [verbose]] then
+        function print CHK include portability;
+
+    [resolve bin/test_include_gotchas]
+        [filter -I%0% [CPPFLAGS]]
+        [source_files];
+    date > [target]
+        set silent;
+}
 
 
 /* ---------------------------------------------------------------------- */

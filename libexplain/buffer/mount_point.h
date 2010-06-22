@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_BUFFER_MOUNT_POINT_H
 #define LIBEXPLAIN_BUFFER_MOUNT_POINT_H
 
+#include <libexplain/ac/sys/stat.h>
+
 #include <libexplain/string_buffer.h>
 
 /**
@@ -64,8 +66,6 @@ int explain_buffer_mount_point_dirname(explain_string_buffer_t *sb,
 int explain_buffer_mount_point_fd(explain_string_buffer_t *sb,
     int fildes);
 
-struct stat; /* forward */
-
 /**
   * The explain_buffer_mount_point_stat function may be used to insert
   * the mount point of the file system, as described by the stat struct.
@@ -81,9 +81,21 @@ int explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
     const struct stat *st);
 
 /**
-  * The explain_mount_point_noexec function may be used to test
-  * whether or not a file system has been mounted with a particular
-  * option.
+  * The explain_buffer_mount_point_dev function may be used to insert
+  * the mount point of the file system, identified by the mounted device.
+  *
+  * @param sb
+  *     The string buffer to write to.
+  * @param dev
+  *     The the mounted device to look for.
+  * @returns
+  *     0 on success, -1 if no mount point inserted
+  */
+int explain_buffer_mount_point_dev(explain_string_buffer_t *sb, dev_t dev);
+
+/**
+  * The explain_mount_point_noexec function may be used to test whether
+  * or not a file system has been mounted with the "noexec" option.
   *
   * @param pathname
   *     The pathname of the file of interest
@@ -94,9 +106,8 @@ int explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
 int explain_mount_point_noexec(const char *pathname);
 
 /**
-  * The explain_mount_point_nosuid function may be used to test
-  * whether or not a file system has been mounted with a particular
-  * option.
+  * The explain_mount_point_nosuid function may be used to test whether
+  * or not a file system has been mounted with the "nosuid" option.
   *
   * @param pathname
   *     The pathname of the file of interest
@@ -105,5 +116,19 @@ int explain_mount_point_noexec(const char *pathname);
   *     zero (false) if not.
   */
 int explain_mount_point_nosuid(const char *pathname);
+
+struct stat; /* forward */
+
+/**
+  * The explain_mount_point_nodev function may be used to test whether
+  * or not a file system has been mounted with the "nodev" option.
+  *
+  * @param pathname
+  *     The pathname of the file of interest
+  * @returns
+  *     int; zon-zero (true) if the "nodev" mount option is used,
+  *     zero (false) if not.
+  */
+int explain_mount_point_nodev(const struct stat *pathname);
 
 #endif /* LIBEXPLAIN_BUFFER_MOUNT_POINT_H */

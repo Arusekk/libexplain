@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,10 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/errno/gethostname.h>
+#include <libexplain/common_message_buffer.h>
 #include <libexplain/gethostname.h>
 
 
@@ -26,5 +29,47 @@ explain_gethostname(char *data, size_t data_size)
 {
     return explain_errno_gethostname(errno, data, data_size);
 }
+
+
+const char *
+explain_errno_gethostname(int errnum, char *data, size_t data_size)
+{
+    explain_message_errno_gethostname
+    (
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
+        errnum,
+        data,
+        data_size
+    );
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_gethostname(char *message, int message_size, char *data,
+    size_t data_size)
+{
+    explain_message_errno_gethostname
+    (
+        message,
+        message_size,
+        errno,
+        data,
+        data_size
+    );
+}
+
+
+void
+explain_message_errno_gethostname(char *message, int message_size, int errnum,
+    char *data, size_t data_size)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_gethostname(&sb, errnum, data, data_size);
+}
+
 
 /* vim: set ts=8 sw=4 et */

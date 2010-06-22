@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,18 +21,25 @@
 TEST_SUBJECT="fcntl vs EFAULT"
 . test_prelude
 
-cat > test.ok << 'fubar'
-fcntl(fildes = 42, command = F_SETLKW, arg = PPPPPPPP) failed, Bad
-address (EFAULT) because arg refers to memory that is outside the process's
-accessible address space; this is more likely to be a software error (a
-bug) than it is to be a user error
+fmt > test.ok << 'fubar'
+fcntl(fildes = 42, command = F_SETLKW, data = PPPPPPPP) failed, Bad address
+(EFAULT) because data refers to memory that is outside the process's accessible
+address space; this is more likely to be a software error (a bug) than it is to
+be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -e EFAULT fcntl 42 F_SETLKW > test.out.raw
+explain -e EFAULT fcntl 42 F_SETLKW > test.out.4
 test $? -eq 0 || fail
 
-sed 's|, arg = [^,)]*)|, arg = PPPPPPPP)|' < test.out.raw > test.out
+fmt -w700 < test.out.4 > test.out.3
+test $? -eq 0 || no_result
+
+sed 's|, data = [^,)]*)|, data = PPPPPPPP)|' < test.out.3 > test.out.2
+test $? -eq 0 || no_result
+
+fmt < test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

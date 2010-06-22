@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/mtio.h>
 
 #include <libexplain/buffer/mtop.h>
@@ -45,6 +46,10 @@ const explain_iocontrol_t explain_iocontrol_mtioctop =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(struct mtop), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef MTIOCTOP */
@@ -57,6 +62,10 @@ const explain_iocontrol_t explain_iocontrol_mtioctop =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* MTIOCTOP */

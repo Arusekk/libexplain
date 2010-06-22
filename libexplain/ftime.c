@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,11 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/sys/timeb.h>
+#include <libexplain/ac/time.h>
 
+#include <libexplain/buffer/errno/ftime.h>
+#include <libexplain/common_message_buffer.h>
 #include <libexplain/ftime.h>
 
 
@@ -25,6 +29,33 @@ const char *
 explain_ftime(struct timeb *tp)
 {
     return explain_errno_ftime(errno, tp);
+}
+
+
+const char *
+explain_errno_ftime(int errnum, struct timeb *tp)
+{
+    explain_message_errno_ftime(explain_common_message_buffer,
+        explain_common_message_buffer_size, errnum, tp);
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_ftime(char *message, int message_size, struct timeb *tp)
+{
+    explain_message_errno_ftime(message, message_size, errno, tp);
+}
+
+
+void
+explain_message_errno_ftime(char *message, int message_size, int errnum, struct
+    timeb *tp)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_ftime(&sb, errnum, tp);
 }
 
 

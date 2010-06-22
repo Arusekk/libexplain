@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,23 +17,22 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/strtoull.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 unsigned long long
 explain_strtoull_on_error(const char *nptr, char **endptr, int base)
 {
-    int             err;
+    int             hold_errno;
     char            *dummy;
     unsigned long long result;
 
-    err = errno;
     dummy = 0;
+    hold_errno = errno;
     errno = 0;
     result = strtoull(nptr, endptr ? endptr : &dummy, base);
     if (errno == 0 && (endptr ? *endptr : dummy) == nptr)
@@ -46,11 +45,14 @@ explain_strtoull_on_error(const char *nptr, char **endptr, int base)
     }
     if (errno != 0)
     {
+        hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_strtoull(nptr, endptr, base));
+        explain_output_message
+        (
+            explain_errno_strtoull(hold_errno, nptr, endptr, base)
+        );
     }
-    else
-        errno = err;
+    errno = hold_errno;
     return result;
 }
 

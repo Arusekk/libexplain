@@ -31,23 +31,32 @@ DESCRIPTION
        different, but similarly named, function.  The library also provides
        thread safe variants of each explanation function.
 
+       Coverage includes 162 system calls and 444 ioctl requests.
+
+   Tutorial Documentation
+       There is a paper available in PDF format
+       (http://libexplain.sourceforge.net/lca2010/lca2010.pdf) that describes
+       the library and how to use LibExplain.  The paper can also be accessed
+       as explain_lca2010(1), which also appears in the reference manual (see
+       below).
+
 HOME PAGE
        The latest version of libexplain is available on the Web from:
 
           URL:    http://libexplain.sourceforge.net/
           File:   index.html               # the libexplain page
-          File:   libexplain.0.14.README   # Description, from the tar file
-          File:   libexplain.0.14.lsm      # Description, LSM format
-          File:   libexplain.0.14.tar.gz   # the complete source
-          File:   libexplain.0.14.pdf      # Reference Manual
+          File:   libexplain.0.32.README   # Description, from the tar file
+          File:   libexplain.0.32.lsm      # Description, LSM format
+          File:   libexplain.0.32.tar.gz   # the complete source
+          File:   libexplain.0.32.pdf      # Reference Manual
 
 BUILDING LIBEXPLAIN
        Full instructions for building libexplain may be found in the BUILDING
        file included in this distribution.
 
 COPYRIGHT
-       libexplain version 0.14
-       Copyright (C) 2008, 2009 Peter Miller
+       libexplain version 0.32
+       Copyright (C) 2008, 2009, 2010 Peter Miller
 
        This program is free software; you can redistribute it and/or modify it
        under the terms of the GNU Lesser General Public License as published
@@ -69,73 +78,167 @@ AUTHOR
        Peter Miller   E-Mail:   pmiller@opensource.org.au
        /\/\*             WWW:   http://www.canb.auug.org.au/~millerp/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 RELEASE NOTES
        This section details the various features and bug fixes of the various
        releases.  For excruciating and complete detail, and also credits for
        those of you who have generously sent me suggestions and bug reports,
        see the etc/CHANGES.* files.
+
+       Coverage includes 162 system calls and 444 ioctl requests.
+
+   Version 0.32 (2010-Jun-22)
+       * Explanations are now available for errors reported by the mmap(2),
+         munmap(2) and utimes(2) system calls.
+
+       * A number of false negatives for tests on some less common
+         architectures have been fixed.
+
+       * Some build problems relating to ioctl(2) support have been fixed.
+
+       * A bug has been fixed in the libexplain/output.h file, it was missing
+         the C++ insulation.
+
+   Version 0.31 (2010-May-01)
+       * A number of build problems have been fixed.
+
+   Version 0.30 (2010-Apr-28)
+       * Several test false negatives have been fixed, on various Debian
+       architectures.
+
+   Version 0.29 (2010-Apr-25)
+       * A number of build problems, discovered by the Debian build farm, have
+       been fixed.  Who would of thought that there could be some much
+       inconsistency between Linux architectures?
+
+   Version 0.28 (2010-Apr-19)
+       * Several architecture-specific build problems, found by the Debian
+       build farm, have been fixed.
+
+   Version 0.27 (2010-Apr-17)
+       * Several architecture-specific build problems, found by the Debian
+       build farm, have been fixed.
+
+   Version 0.26 (2010-Apr-06)
+       * A build problem has been fixed on systems where va_list is not
+       compaitible with const void *
+
+       * This change set removes the unused-result warning form
+       explain_lseek_or_die, because it is very common to ignore the result.
+
+       * Explaiantions are now available for errors reported by the
+       socketpair(2) system call.
+
+   Version 0.25 (2010-Mar-22)
+       * Portability of the code has been improved.
+
+       * The explain(3) man page now mentions AC_SYS_LARGEFILE in the building
+       requirements.
+
+       * Coverage now includes the fprintf(3), printf(3), snprintf(3),
+       sprintf(3), vfprintf(3), vprintf(3), vsnprintf(3) and vsprintf(3)
+       system calls.
+
+   Version 0.24 (2010-Mar-03)
+       * It is now possible to redirected libexplain output.  For example, it
+       is now possible to redirect all output to syslog(3).
+
+       * Coverage now includes the fstatvfs(2) and statvfs(2) system call.
+
+       * A number of problems found while building and testing on Solaris have
+       been fixed.
+
+   Version 0.23 (2010-Feb-21)
+       * This change set fixes a problem discovered by the Debian build farm.
+       It turns out that on alpha architecture, you can't disambiguate the
+       FIBMAP vs BMP_IOCTL case in the pre-processor.  The code now uses a
+       disambiguate function.
+       Debian: Closes: 570671
+
+       * This change set modifies explain_string_buffer_putc_quoted to build
+       the octal representation itself, because too many system get %03o and
+       %3.3o wrong, and inconsistently.
+
+   Version 0.22 (2010-Feb-12)
+       * This change set fixes a false negative found by the Debian automated
+       build system.
+
+   Version 0.21 (2010-Feb-09)
+       * Explanations are now availaible for errors reported by the fpurge(3),
+       getw(3) and putw(3) system calls.
+
+       * Some build problems have been fixed.
+
+   Version 0.20 (2010-Jan-20)
+       * Several lintian warnings relating to the man pages have been fixed.
+
+       * The LIBEXPLAION_OPTIONS environment variable now inderstands a new
+       symbolic-mode-bits=true option.  It defaults to false, for shorter
+       error explanations.
+
+       * There is a new explain_lca2010(1) man page.  This is a gentle
+       introduction to libexplain, and the paper accompanying my LCA 2010
+       talk.
+
+       * When process ID (pid) values are printed, they are now accompanied by
+       the name of the process executable, when available.
+
+       * Numerous build bugs and niggles have been fixed.
+
+       * Explanations are now available for errors reported by the execlp(3),
+       fdopendir(3), feof(3), fgetpos(3), fputs(3), fseek(3), fsetpos(3),
+       fsync(2), ftell(3), mkdtemp(3), mknod(2), mkostemp(3), mkstemp(3),
+       mktemp(3), putenv(3), puts(3), raise(3), setbuf(3), setbuffer(3),
+       setenv(3), setlinebuf(3), setvbuf(3), stime(2), tempnam(3), tmpfile(3),
+       tmpnam(3), ungetc(3), unsetenv(3) and vfork(2) system calls.
+
+       * The ioctl requests from linux/sockios.h, linux/ext2_fs.h,
+       linux/if_eql.h, PPP, linux/lp.h, and linux/vt.h are now understood.
+       Several of the ioctl explanations have been improved.
+
+   Version 0.19 (2009-Sep-07)
+       * The ioctl requests from linux/hdreg.h are now understood.
+
+       * Some build problems on Debian Lenny have been fixed.
+
+   Version 0.18 (2009-Sep-05)
+       * More ioctl requesrs are un derstood.
+
+       * Explanations are now availaible for errors reported by the
+       tcsendbreak(3), tcsetattr(3), tcgetattr(3), tcflush(3), tcdrain(3),
+       system calls.
+
+   Version 0.17 (2009-Sep-03)
+       * Explanations are now available for errors reported by the telldir(3)
+       system call.
+
+       * A number of Linux build problems have been fixed.
+
+       * Explanations for a number of corner-cases of the open(2) system call
+       have been improved, where flags values interact with file types and
+       mount options.
+
+       * A number of BSD build problems have been fixed.
+
+       * More ioctl(2) commands are understood.
+
+       * A bug has been fixed in the way absolute symbolic links are processed
+       by the path_resolution code.
+
+   Version 0.16 (2009-Aug-03)
+       * The EROFS and ENOMEDIUM explanations now greatly improved.
+
+       * A number of build problems and false negatives have been fixed on
+       x86_64 architecture.
+
+       * The Linux floppy disk and CD-ROM ioctl requests are now supported.
+
+       * Explanations are now available for the errors reported by the
+       getdomainname(2), readv(2), setdomainname(2), ustat(2) and writev(2)
+       system calls.
+
+   Version 0.15 (2009-Jul-26)
+       * A number of build errors and warnings on amd64 have been fixed.  The
+       problems were only detectable on 64-bit systems.
 
    Version 0.14 (2009-Jul-19)
        * Coverage now includes another 29 system calls: accept4(2), acct(2),

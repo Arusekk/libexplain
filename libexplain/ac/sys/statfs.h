@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,17 @@
 #ifndef LIBEXPLAIN_AC_SYS_STATFS_H
 #define LIBEXPLAIN_AC_SYS_STATFS_H
 
-#include <libexplain/config.h>
+/**
+  * @file
+  * @brief Insulate <sys/statfs.h> differences
+  */
+
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_SYS_STATFS_H
 #include <sys/statfs.h>
+#else
+struct statfs; /* forward */
 #endif
 
 #endif /* LIBEXPLAIN_AC_SYS_STATFS_H */

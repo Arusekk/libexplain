@@ -32,11 +32,11 @@
 #include <libexplain/buffer/errno/chmod.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/capability.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
-#include <libexplain/permission_mode.h>
 
 
 static void
@@ -133,7 +133,7 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "chmod");
         break;
     }
 }

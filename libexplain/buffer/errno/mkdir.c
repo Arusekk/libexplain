@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,24 +16,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/assert.h>
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/stat.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/eacces.h>
+#include <libexplain/buffer/eexist.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eloop.h>
+#include <libexplain/buffer/emlink.h>
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enospc.h>
 #include <libexplain/buffer/enotdir.h>
+#include <libexplain/buffer/eperm.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/mkdir.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/dirname.h>
+#include <libexplain/get_link_max.h>
 #include <libexplain/explanation.h>
-#include <libexplain/permission_mode.h>
 
 
 static void
@@ -51,9 +59,9 @@ explain_buffer_errno_mkdir_system_call(explain_string_buffer_t *sb,
 }
 
 
-static void
+void
 explain_buffer_errno_mkdir_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int mode)
+    int errnum, const char *syscall_name, const char *pathname, int mode)
 {
     explain_final_t final_component;
 
@@ -83,14 +91,7 @@ explain_buffer_errno_mkdir_explanation(explain_string_buffer_t *sb,
             )
         )
         {
-            explain_string_buffer_puts
-            (
-                sb,
-                /* FIXME: i18n */
-                "pathname already exists (not necessarily as a "
-                "directory); this includes the case where pathname is a "
-                "symbolic link, dangling or not"
-            );
+            explain_buffer_eexist(sb, pathname);
         }
         break;
 
@@ -98,8 +99,36 @@ explain_buffer_errno_mkdir_explanation(explain_string_buffer_t *sb,
         explain_buffer_efault(sb, "pathname");
         break;
 
+    case EMLINK:
+        {
+            long            link_max;
+            struct stat     parent_st;
+            char            parent[PATH_MAX];
+
+            /*
+             * The containing directory may already have too many links.
+             */
+            explain_dirname(parent, pathname, sizeof(parent));
+            link_max = explain_get_link_max(parent);
+            assert(link_max > 0);
+            if
+            (
+                stat(parent, &parent_st) >= 0
+            &&
+                parent_st.st_nlink >= (unsigned long)link_max
+            )
+            {
+                explain_buffer_emlink_mkdir(sb, parent, "pathname");
+                break;
+            }
+        }
+
+        /*
+         * On BSD an EMLINK error can be returned where Linux would
+         * return ELOOP.  So fall through...
+         */
+
     case ELOOP:
-    case EMLINK: /* BSD */
         explain_buffer_eloop(sb, pathname, "pathname", &final_component);
         break;
 
@@ -122,15 +151,7 @@ explain_buffer_errno_mkdir_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOSPC:
-        /* FIXME: ENOSPC can be caused by quota system, too. */
-        explain_string_buffer_puts
-        (
-            sb,
-            /* FIXME: i18n */
-            "the file system containing pathname has no room for the new "
-            "directory"
-        );
-        explain_buffer_mount_point_dirname(sb, pathname);
+        explain_buffer_enospc(sb, pathname, "pathname");
         break;
 
     case ENOTDIR:
@@ -138,14 +159,7 @@ explain_buffer_errno_mkdir_explanation(explain_string_buffer_t *sb,
         break;
 
     case EPERM:
-        explain_string_buffer_puts
-        (
-            sb,
-            /* FIXME: i18n */
-            "the file system containing pathname does not support the "
-            "creation of directories"
-        );
-        explain_buffer_mount_point_dirname(sb, pathname);
+        explain_buffer_eperm_mknod(sb, pathname, "pathname", S_IFDIR);
         break;
 
     case EROFS:
@@ -153,7 +167,7 @@ explain_buffer_errno_mkdir_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -177,6 +191,7 @@ explain_buffer_errno_mkdir(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "mkdir",
         pathname,
         mode
     );

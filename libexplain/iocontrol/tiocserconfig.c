@@ -19,8 +19,11 @@
 
 #include <libexplain/ac/sys/ioctl.h>
 
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocserconfig.h>
 
+
+#ifdef TIOCSERCONFIG
 
 const explain_iocontrol_t explain_iocontrol_tiocserconfig =
 {
@@ -28,6 +31,28 @@ const explain_iocontrol_t explain_iocontrol_tiocserconfig =
     TIOCSERCONFIG, /* value */
     0, /* disambiguate */
     0, /* print_name */
+    explain_iocontrol_generic_print_data_ignored, /* print_data */
+    0, /* print_explanation */
+    0, /* print_data_returned */
+    NOT_A_POINTER, /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocserconfig =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,10 +20,54 @@
 #include <libexplain/ac/errno.h>
 
 #include <libexplain/access.h>
+#include <libexplain/buffer/errno/access.h>
+#include <libexplain/common_message_buffer.h>
+#include <libexplain/string_buffer.h>
 
 
 const char *
 explain_access(const char *pathname, int mode)
 {
     return explain_errno_access(errno, pathname, mode);
+}
+
+
+const char *
+explain_errno_access(int errnum, const char *pathname, int mode)
+{
+    explain_message_errno_access
+    (
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
+        errnum,
+        pathname,
+        mode
+    );
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_access(char *message, int message_size, const char *pathname,
+    int mode)
+{
+    explain_message_errno_access
+    (
+        message,
+        message_size,
+        errno,
+        pathname,
+        mode
+    );
+}
+
+
+void
+explain_message_errno_access(char *message, int message_size, int errnum,
+    const char *pathname, int mode)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_access(&sb, errnum, pathname, mode);
 }

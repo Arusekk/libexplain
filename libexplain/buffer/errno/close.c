@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include <libexplain/buffer/errno/close.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/explanation.h>
 #include <libexplain/string_buffer.h>
 
@@ -43,7 +44,7 @@ explain_buffer_errno_close_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_close_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes)
+    int errnum, const char *syscall_name, int fildes)
 {
     switch (errnum)
     {
@@ -52,12 +53,7 @@ explain_buffer_errno_close_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINTR:
-        explain_buffer_eintr(sb, "close");
-        explain_string_buffer_puts
-        (
-            sb,
-            "; note that the file descriptor is still open"
-        );
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     case EIO:
@@ -68,16 +64,20 @@ explain_buffer_errno_close_explanation(explain_string_buffer_t *sb,
 #if defined(EWOULDBLOCK) && EWOULDBLOCK != EAGAIN
     case EWOULDBLOCK:
 #endif
-        explain_string_buffer_puts
+        explain_buffer_gettext
         (
             sb,
-            "the O_NONBLOCK flag was specified, and an "
-            "operation has yet to complete"
+            /*
+             * xgettext: This error message is used when trying to close
+             * a non-blocking file descriptor that is stillactive.
+             */
+            i18n("the O_NONBLOCK flag was specified, and an operation "
+                "has yet to complete")
         );
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 
@@ -86,10 +86,15 @@ explain_buffer_errno_close_explanation(explain_string_buffer_t *sb,
      */
     if (fcntl(fildes, F_GETFL) >= 0)
     {
-        explain_string_buffer_puts
+        explain_string_buffer_puts(sb->footnotes, "; ");
+        explain_buffer_gettext
         (
-            sb,
-            "; note the file descriptor is still open"
+            sb->footnotes,
+            /*
+             * xgettext:  This error message is used when a close(2)
+             * system call fails and the file descriptor remains open.
+             */
+            i18n("note that the file descriptor is still open")
         );
     }
 }
@@ -112,6 +117,7 @@ explain_buffer_errno_close(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "close",
         fildes
     );
     explain_explanation_assemble(&exp, sb);

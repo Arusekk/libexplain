@@ -53,7 +53,7 @@ explain_buffer_errno_realloc_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "realloc");
         break;
     }
 }

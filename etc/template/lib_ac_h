@@ -20,6 +20,11 @@
 #ifndef ${ident ${upcase $filename}}
 #define ${ident ${upcase $filename}}
 
+/**
+  * @file
+  * @brief Insulate <${trim_dir ${trim_dir ${filename}}}> differences
+  */
+
 #include <libexplain/config.h>
 
 #ifdef HAVE_${upcase ${ident ${trim_dir ${trim_dir ${filename}}}}}

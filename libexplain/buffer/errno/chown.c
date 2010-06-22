@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,12 +30,14 @@
 #include <libexplain/buffer/enametoolong.h>
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
+#include <libexplain/buffer/enosys.h>
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/eperm.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/chown.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
+#include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/gid.h>
 #include <libexplain/buffer/pointer.h>
@@ -66,7 +68,8 @@ explain_buffer_errno_chown_system_call(explain_string_buffer_t *sb,
 static int
 explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
     const char *pathname, const struct stat *st, int chown_restricted,
-    int owner, int group, const explain_final_t *final_component)
+    int owner, int group, const char *caption,
+    const explain_final_t *final_component)
 {
     uid_t           uid;
 
@@ -85,7 +88,12 @@ explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
         {
             if (chown_restricted)
             {
-                explain_buffer_gettext
+                explain_string_buffer_t euid_sb;
+                char            euid[40];
+
+                explain_string_buffer_init(&euid_sb, euid, sizeof(euid));
+                explain_buffer_uid(&euid_sb, uid);
+                explain_string_buffer_printf_gettext
                 (
                     sb,
                     /*
@@ -94,8 +102,16 @@ explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
                      * system call, in the case where chown is
                      * restricted, i.e. when it is not sufficent to be
                      * the owner of the file to change its ownership.
+                     *
+                     * %1$s => the process effictive UID number and name,
+                     *         already quoted
+                     * %2$s => the name of the offending syscall argument
                      */
-                    i18n("chown is restricted")
+                    i18n("the process effective UID %s is the same as "
+                        "the owner UID of %s but this is not sufficient "
+                        "privilege to change the owner UID"),
+                    euid,
+                    caption
                 );
                 explain_buffer_dac_chown(sb);
             }
@@ -103,11 +119,11 @@ explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
             {
                 if (!pathname)
                 {
-                   explain_buffer_does_not_have_inode_modify_permission_fd_st
+                    explain_buffer_does_not_have_inode_modify_permission_fd_st
                     (
                         sb,
                         st,
-                        "fildes",
+                        caption,
                         &final_component->id
                     );
                 }
@@ -118,7 +134,7 @@ explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
                         sb,
                         pathname,
                         st,
-                        "pathname",
+                        caption,
                         &final_component->id
                     );
                 }
@@ -142,6 +158,7 @@ explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
                 (
                     uid == st->st_uid
                 &&
+                    /* FIXME: watch out for NFS 16 group limit */
                     explain_group_in_groups
                     (
                         group,
@@ -153,55 +170,79 @@ explain_buffer_eperm_chown_st(explain_string_buffer_t *sb,
             );
         if (!may_change_file_group)
         {
-            explain_string_buffer_printf
-            (
-                sb,
-                /* FIXME: i18n */
-                "the process does not have the privileges "
-                "needed to change the group GID of %s",
-                (pathname ? "pathname" : "fildes")
-            );
-
             if (uid != st->st_uid)
             {
-                explain_string_buffer_puts
+                explain_string_buffer_t nuid_sb;
+                explain_string_buffer_t euid_sb;
+                char            nuid[40];
+                char            euid[40];
+
+                explain_string_buffer_init(&euid_sb, euid, sizeof(euid));
+                explain_buffer_uid(&euid_sb, uid);
+                explain_string_buffer_init(&nuid_sb, nuid, sizeof(nuid));
+                explain_buffer_uid(&nuid_sb, st->st_uid);
+
+                explain_string_buffer_puts(sb, ", ");
+                explain_string_buffer_printf_gettext
                 (
                     sb,
-                    " (effective uid is "
+                    /*
+                     * xgettext:  This error message is used to explain
+                     * an EPERM error reported by the chown(2) system
+                     * call, in the case where the process euid does not
+                     * match the file's owner.
+                     *
+                     * %1$s => the process effective UID, already quoted
+                     * %2$s => the name of the offenting syscall argument
+                     * %3$s => the file's UID, already quoted
+                     */
+                    i18n("the process effective UID is %s but the %s owner "
+                        "UID is %s"),
+                    euid,
+                    caption,
+                    nuid
                 );
-                explain_buffer_uid(sb, uid);
-                explain_string_buffer_puts
-                (
-                    sb,
-                    " but needs to be "
-                );
-                explain_buffer_uid(sb, st->st_uid);
-                explain_string_buffer_putc(sb, ')');
             }
-            if
-            (
-                !explain_group_in_groups
-                (
-                    group,
-                    &final_component->id
-                )
-            )
+            else /*if (!explain_group_in_groups(group, &final_component->id)) */
             {
-                explain_string_buffer_puts(sb, " (group ");
-                explain_buffer_uid(sb, group);
-                explain_string_buffer_puts
+                explain_string_buffer_t egid_sb;
+                explain_string_buffer_t ngid_sb;
+                explain_string_buffer_t list_sb;
+                char            ngid[40];
+                char            egid[40];
+                char            list[1000];
+
+                explain_string_buffer_init(&ngid_sb, ngid, sizeof(ngid));
+                explain_buffer_gid(&ngid_sb, group);
+                explain_string_buffer_init(&egid_sb, egid, sizeof(egid));
+                explain_buffer_gid(&egid_sb, getegid());
+                explain_string_buffer_init(&list_sb, list, sizeof(list));
+                explain_buffer_gid_supplementary(&list_sb);
+
+                /* FIXME: watch out for NFS 16 group limit */
+                explain_string_buffer_printf_gettext
                 (
                     sb,
-                    " is not the effective gid "
+                    /*
+                     * xgettext:  This error message is used when the
+                     * chown(2) system call returns an EPERM error, is
+                     * the case where the GID is inappropriate, and the
+                     * process is not priviliged.
+                     *
+                     * %1$s => the name and number of the requested GID,
+                     *         already quoted.
+                     * %2$s => the name and number of the process effective
+                     *         GID, already quoted.
+                     * %3$s => the names and numbers of the supplementary GID
+                     *         list, already quoted.
+                     */
+                    i18n("the requested group GID %s is not the process "
+                        "effective group GID %s and is not in the "
+                        "supplementary GID list %s"),
+                    ngid,
+                    egid,
+                    list
                 );
-                explain_buffer_uid(sb, getegid());
-                explain_string_buffer_puts
-                (
-                    sb,
-                    " and not in the supplementary gid list "
-                );
-                explain_buffer_gid_supplementary(sb);
-                explain_string_buffer_putc(sb, ')');
             }
             explain_buffer_dac_chown(sb);
             return 0;
@@ -280,7 +321,7 @@ explain_buffer_eperm_chown_vague(explain_string_buffer_t *sb, int owner,
 
 static void
 explain_buffer_eperm_chown(explain_string_buffer_t *sb,
-    const char *pathname, int owner, int group,
+    const char *pathname, int owner, int group, const char *pathname_caption,
     explain_final_t *final_component)
 {
     int             chown_restricted;
@@ -311,7 +352,7 @@ explain_buffer_eperm_chown(explain_string_buffer_t *sb,
             sb,
             EPERM,
             pathname,
-            "pathname",
+            pathname_caption,
             final_component
         )
     >=
@@ -338,6 +379,7 @@ explain_buffer_eperm_chown(explain_string_buffer_t *sb,
                     chown_restricted,
                     owner,
                     group,
+                    pathname_caption,
                     final_component
                 )
             >=
@@ -353,7 +395,7 @@ explain_buffer_eperm_chown(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_eperm_chown_fd(explain_string_buffer_t *sb, int fildes,
-    int owner, int group)
+    int owner, int group, const char *fildes_caption)
 {
     int             chown_restricted;
     explain_final_t final_component;
@@ -396,6 +438,7 @@ explain_buffer_eperm_chown_fd(explain_string_buffer_t *sb, int fildes,
                     chown_restricted,
                     owner,
                     group,
+                    fildes_caption,
                     &final_component
                 )
             >=
@@ -410,7 +453,8 @@ explain_buffer_eperm_chown_fd(explain_string_buffer_t *sb, int fildes,
 
 static void
 explain_buffer_errno_chown_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int owner, int group)
+    int errnum, const char *syscall_name, const char *pathname, int owner,
+    int group, const char *pathname_caption)
 {
     explain_final_t final_component;
 
@@ -421,29 +465,48 @@ explain_buffer_errno_chown_explanation(explain_string_buffer_t *sb,
     (
         sb,
         errnum,
+        syscall_name,
         pathname,
         owner,
         group,
+        pathname_caption,
         &final_component
+    );
+}
+
+
+static void
+explain_buffer_einval_chown(explain_string_buffer_t *sb)
+{
+    explain_buffer_gettext
+    (
+        sb,
+        /*
+         * xgettext: This error message is issued to explain an EINVAL error
+         * reported by a chown (or similar) system call, in the case where
+         * either the UID is invalid, the GID is invalid, or both.
+         */
+        i18n("the owner UID or group GID is not a value supported by the "
+        "system")
     );
 }
 
 
 void
 explain_buffer_errno_chown_explanation_fc(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, int owner, int group,
-    explain_final_t *final_component)
+    int errnum, const char *syscall_name, const char *pathname, int owner,
+    int group, const char *pathname_caption, explain_final_t *final_component)
 {
     final_component->want_to_modify_inode = 1;
 
     switch (errnum)
     {
     case EACCES:
-        explain_buffer_eacces(sb, pathname, "pathname", final_component);
+        explain_buffer_eacces(sb, pathname, pathname_caption, final_component);
         break;
 
     case EFAULT:
-        explain_buffer_efault(sb, "pathname");
+        explain_buffer_efault(sb, pathname_caption);
         break;
 
     case EIO:
@@ -451,19 +514,11 @@ explain_buffer_errno_chown_explanation_fc(explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
-        explain_string_buffer_puts
-        (
-            sb,
-            /* FIXME: i18n */
-            "the owner UID or group GID is not a value supported by the "
-            "implementation; or, the fildes argument refers to a pipe or "
-            "socket and the implementation disallows execution of fchown() on "
-            "a pipe"
-        );
+        explain_buffer_einval_chown(sb);
         break;
 
     case ELOOP:
-        explain_buffer_eloop(sb, pathname, "pathname", final_component);
+        explain_buffer_eloop(sb, pathname, pathname_caption, final_component);
         break;
 
     case ENAMETOOLONG:
@@ -471,13 +526,13 @@ explain_buffer_errno_chown_explanation_fc(explain_string_buffer_t *sb,
         (
             sb,
             pathname,
-            "pathname",
+            pathname_caption,
             final_component
         );
         break;
 
     case ENOENT:
-        explain_buffer_enoent(sb, pathname, "pathname", final_component);
+        explain_buffer_enoent(sb, pathname, pathname_caption, final_component);
         break;
 
     case ENOMEM:
@@ -485,7 +540,7 @@ explain_buffer_errno_chown_explanation_fc(explain_string_buffer_t *sb,
         break;
 
     case ENOTDIR:
-        explain_buffer_enotdir(sb, pathname, "pathname", final_component);
+        explain_buffer_enotdir(sb, pathname, pathname_caption, final_component);
         break;
 
     case EPERM:
@@ -495,16 +550,17 @@ explain_buffer_errno_chown_explanation_fc(explain_string_buffer_t *sb,
             pathname,
             owner,
             group,
+            pathname_caption,
             final_component
         );
         break;
 
     case EROFS:
-        explain_buffer_erofs(sb, pathname, "pathname");
+        explain_buffer_erofs(sb, pathname, pathname_caption);
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -512,7 +568,8 @@ explain_buffer_errno_chown_explanation_fc(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, int owner, int group)
+    int errnum, const char *syscall_name, int fildes, int owner, int group,
+    const char *fildes_caption)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/fchown.html
@@ -520,7 +577,7 @@ explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EBADF:
-        explain_buffer_ebadf(sb, fildes, "fildes");
+        explain_buffer_ebadf(sb, fildes, fildes_caption);
         break;
 
     case EIO:
@@ -528,15 +585,33 @@ explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
-        explain_string_buffer_puts
-        (
-            sb,
-            /* FIXME: i18n */
-            "the owner UID or group GID is not a value supported by the "
-            "implementation; or, the fildes argument refers to a pipe or "
-            "socket and the implementation disallows execution of fchown() on "
-            "a pipe"
-        );
+        {
+            struct stat     st;
+
+            if (fstat(fildes, &st) >= 0)
+            {
+                switch (st.st_mode & S_IFMT)
+                {
+#if S_IFREG != 0
+                case 0:
+#endif
+                case S_IFSOCK:
+                case S_IFIFO:
+                    explain_buffer_enosys_fildes
+                    (
+                        sb,
+                        fildes,
+                        fildes_caption,
+                        syscall_name
+                    );
+                    return;
+
+                default:
+                    break;
+                }
+            }
+        }
+        explain_buffer_einval_chown(sb);
         break;
 
     case ENOMEM:
@@ -544,15 +619,15 @@ explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
         break;
 
     case EPERM:
-        explain_buffer_eperm_chown_fd(sb, fildes, owner, group);
+        explain_buffer_eperm_chown_fd(sb, fildes, owner, group, fildes_caption);
         break;
 
     case EROFS:
-        explain_buffer_erofs_fildes(sb, fildes, "fildes");
+        explain_buffer_erofs_fildes(sb, fildes, fildes_caption);
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -577,9 +652,11 @@ explain_buffer_errno_chown(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "chown",
         pathname,
         owner,
-        group
+        group,
+        "pathname"
     );
     explain_explanation_assemble(&exp, sb);
 }

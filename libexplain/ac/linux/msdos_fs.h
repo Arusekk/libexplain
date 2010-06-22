@@ -20,7 +20,7 @@
 #ifndef LIBEXPLAIN_AC_LINUX_MSDOS_FS_H
 #define LIBEXPLAIN_AC_LINUX_MSDOS_FS_H
 
-#include <libexplain/config.h>
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_LINUX_MSDOS_FS_H
 #include <linux/msdos_fs.h>

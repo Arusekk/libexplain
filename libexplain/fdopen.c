@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,10 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/stdio.h>
 
+#include <libexplain/buffer/errno/fdopen.h>
+#include <libexplain/common_message_buffer.h>
 #include <libexplain/fdopen.h>
 
 
@@ -25,4 +28,45 @@ const char *
 explain_fdopen(int fd, const char *mode)
 {
     return explain_errno_fdopen(errno, fd, mode);
+}
+
+
+const char *
+explain_errno_fdopen(int errnum, int fd, const char *mode)
+{
+    explain_message_errno_fdopen
+    (
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
+        errnum,
+        fd,
+        mode
+    );
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_fdopen(char *message, int message_size, int fd,
+    const char *mode)
+{
+    explain_message_errno_fdopen
+    (
+        message,
+        message_size,
+        errno,
+        fd,
+        mode
+    );
+}
+
+
+void
+explain_message_errno_fdopen(char *message, int message_size, int errnum,
+    int fildes, const char *flags)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_fdopen(&sb, errnum, fildes, flags);
 }

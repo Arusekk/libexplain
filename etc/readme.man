@@ -1,7 +1,7 @@
 '\" t
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008, 2009 Peter Miller
+.\" Copyright (C) 2008-2010 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -60,6 +60,15 @@ function, in this case \f[I]explain_open_or_die\fP(3), that includes
 the above code fragment.  Adding good error reporting is as simple as
 using a different, but similarly named, function.
 The library also provides thread safe variants of each explanation function.
+.PP
+.so etc/coverage.so
+.SS Tutorial Documentation
+There is a paper available in PDF format
+(http://libexplain.sourceforge.net/\%lca2010/\%lca2010.pdf)
+that describes the library and
+how to use LibExplain.
+The paper can also be accessed as \f[I]explain_lca2010\fP(1),
+which also appears in the reference manual (see below).
 .br
 .ne 1i
 .SH HOME PAGE
@@ -127,4 +136,6 @@ This section details the various features and bug fixes of the various
 releases.  For excruciating and complete detail, and also credits for
 those of you who have generously sent me suggestions and bug reports,
 see the \fIetc/CHANGES.*\fP files.
+.PP
+.so etc/coverage.so
 .so etc/new.so

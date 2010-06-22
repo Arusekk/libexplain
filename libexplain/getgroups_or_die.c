@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,9 +16,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/errno.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/getgroups.h>
+#include <libexplain/option.h>
+#include <libexplain/output.h>
+
+
+int
+explain_getgroups_on_error(int data_size, gid_t *data)
+{
+    int             result;
+
+    result = getgroups(data_size, data);
+    if (result < 0)
+    {
+        int             hold_errno;
+
+        hold_errno = errno;
+        explain_program_name_assemble_internal(1);
+        explain_output_message(explain_errno_getgroups(hold_errno,
+            data_size, data));
+        errno = hold_errno;
+    }
+    return result;
+}
 
 
 int
@@ -29,7 +52,7 @@ explain_getgroups_or_die(int data_size, gid_t *data)
     result = explain_getgroups_on_error(data_size, data);
     if (result < 0)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return result;
 }

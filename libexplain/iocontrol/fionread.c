@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,29 +18,69 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/sys/stat.h>
 
-#include <libexplain/buffer/int.h>
 #include <libexplain/iocontrol/fionread.h>
+#include <libexplain/iocontrol/generic.h>
 
 
-static void
-print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
-    int errnum, int fildes, int request, const void *data)
+#ifdef FIONREAD
+
+static int
+disambiguate(int fildes, int request, const void *data)
 {
-    (void)p;
-    (void)errnum;
-    (void)fildes;
+    struct stat     st;
+
+    /* success = 0, failure = -1 */
     (void)request;
-    explain_buffer_int_star(sb, data);
+    (void)data;
+    if (fstat(fildes, &st) < 0)
+        return 0; /* "everything else" */
+    switch (st.st_mode & S_IFMT)
+    {
+    case S_IFSOCK:
+    case S_IFCHR:
+        return -1;
+
+    default:
+        return 0;
+    }
 }
 
 
+/*
+ * We have conflicts:
+ * SIOCINQ -- sockets only
+ * TIOCINQ -- terminals only
+ * FIONREAD -- everything else
+ */
 const explain_iocontrol_t explain_iocontrol_fionread =
 {
     "FIONREAD", /* name */
     FIONREAD, /* value */
+    disambiguate,
+    0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    explain_iocontrol_generic_print_data_int_star, /* print_data_returned */
+    sizeof(int), /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_fionread =
+{
+    0, /* name */
+    0, /* value */
     0, /* disambiguate */
     0, /* print_name */
-    print_data,
+    0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+#endif

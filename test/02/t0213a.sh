@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008-2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,10 +21,18 @@
 TEST_SUBJECT="mkdir EPERM"
 . test_prelude
 
-fmt > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 mkdir(pathname = "foobar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed,
 Operation not permitted (EPERM) because the file system containing
-pathname does not support the creation of directories ("/example", 42% full)
+pathname ("/example", 42% full) does not support the creation of
+a directory
+fubar
+test $? -eq 0 || no_result
+
+fmt > test.ok.2 << 'fubar'
+mkdir(pathname = "foobar", mode = S_IRWXU | S_IRWXG | S_IRWXO) failed,
+Operation not permitted (EPERM) because the file system containing
+pathname does not support the creation of a directory
 fubar
 test $? -eq 0 || no_result
 
@@ -40,7 +48,9 @@ test $? -eq 0 || no_result
 fmt test.out2 > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out
+diff test.ok.2 test.out > /dev/null 2> /dev/null && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

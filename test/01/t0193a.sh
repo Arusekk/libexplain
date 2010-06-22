@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="fstat EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fstat(fildes = 42, buf = 0x00002468) failed, Bad file descriptor (EBADF)
+fstat(fildes = 42, data = 0x00002468) failed, Bad file descriptor (EBADF)
 because fildes does not refer to an open file; this is more likely to be a
 software error (a bug) than it is to be a user error
 fubar

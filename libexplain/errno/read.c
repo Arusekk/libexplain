@@ -17,13 +17,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/unistd.h>
+
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/read.h>
 
 
 const char *
 explain_errno_read(int errnum, int fildes, const void *data,
-    long data_size)
+    size_t data_size)
 {
     explain_message_errno_read
     (

@@ -82,26 +82,6 @@ explain_buffer_einval_too_small(explain_string_buffer_t *sb,
 
 
 void
-explain_buffer_einval_too_large(explain_string_buffer_t *sb,
-    const char *caption)
-{
-    explain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used when explaining an EINVAL
-         * error returned by a system call that is complaining about a
-         * size being too large.
-         *
-         * %1$s => the name of the offending system call argument
-         */
-        i18n("the %s argument was incorrectly specified, it was too large"),
-        caption
-    );
-}
-
-
-void
 explain_buffer_einval_vague(explain_string_buffer_t *sb,
     const char *caption)
 {

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -58,6 +58,20 @@ void explain_buffer_einval_too_small(explain_string_buffer_t *sb,
   */
 void explain_buffer_einval_too_large(explain_string_buffer_t *sb,
     const char *caption);
+
+/**
+  * The explain_buffer_einval_too_large2 function may be used to
+  * explain that a system call argument is too large (out of range).
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param caption
+  *    The name of the offending system call argument.
+  * @param max
+  *    The actual upper limit.
+  */
+void explain_buffer_einval_too_large2(explain_string_buffer_t *sb,
+    const char *caption, long max);
 
 /**
   * The explain_buffer_einval_vague function may be used to explain
@@ -119,8 +133,8 @@ void explain_buffer_einval_out_of_range(explain_string_buffer_t *sb,
     const char *caption, long lo, long hi);
 
 /**
-  * The explain_buffer_einval_signalfd function is use to printan
-  * explaiantion of an EINVAL error reported by the signalfd system
+  * The explain_buffer_einval_signalfd function is use to print an
+  * explanation of an EINVAL error reported by the signalfd system
   * call reposrt an EINVAL error, in the case where the file descriptor
   * is actually open, but does not refer to a valid signalfd file
   * descriptor.
@@ -132,5 +146,122 @@ void explain_buffer_einval_out_of_range(explain_string_buffer_t *sb,
   */
 void explain_buffer_einval_signalfd(explain_string_buffer_t *sb,
     const char *caption);
+
+/**
+  * The explain_buffer_einval_multiple function is use to print an
+  * explanation of an EINVAL error, in the case where an argument is
+  * meant to be a multiple of a number (e.g. block sizes).
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param caption
+  *     The name of the offending system call argument.
+  * @param multiple
+  *     The number it must be a multiple of.
+  */
+void explain_buffer_einval_multiple(explain_string_buffer_t *sb,
+    const char *caption, int multiple);
+
+/**
+  * The explain_buffer_einval_multiple function is use to print an
+  * explanation of an EINVAL error, when reported by mknod.
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param mode
+  *     The kind of node the syscall was trying to create.
+  * @param mode_caption
+  *     The name of the offending system call argument.
+  * @param syscall_name
+  *     The name of the offending system call.
+  */
+void explain_buffer_einval_mknod(explain_string_buffer_t *sb, int mode,
+    const char *mode_caption, const char *syscall_name);
+
+/**
+  * The explain_buffer_einval_mkstemp function is use to print an
+  * explanation of an EINVAL error, when reported by mknod.
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param template
+  *     The offending file name template.
+  * @param template_caption
+  *     The offending syscall argument.
+  */
+void explain_buffer_einval_mkstemp(explain_string_buffer_t *sb,
+    const char *template, const char *template_caption);
+
+/**
+  * The explain_buffer_einval_setenv function is use to print an
+  * explanation of an EINVAL error, when reported by setenv.
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param name
+  *     The environment variable name.
+  * @param name_caption
+  *     The name of the syscall argument containing the environment
+  *     variable name.
+  */
+void explain_buffer_einval_setenv(explain_string_buffer_t *sb, const char *name,
+    const char *name_caption);
+
+struct sock_fprog;
+
+/**
+  * The explain_buffer_einval_sock_fprog function is use to print an
+  * explanation of an EINVAL error, when reported by PPP ioctls.
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param data
+  *     The filter with the problem.
+  */
+void explain_buffer_einval_sock_fprog(explain_string_buffer_t *sb,
+    const struct sock_fprog *data);
+
+/**
+  * The explain_buffer_einval_ungetc function is used to report problems
+  * trying to push back EOF onto streams.
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param syscall_name
+  *     The name of the offended system call.
+  */
+void explain_buffer_einval_ungetc(explain_string_buffer_t *sb,
+    const char *syscall_name);
+
+/**
+  * The explain_buffer_einval_format_string function is used to report
+  * problems concerning invalid format strings.
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param argument_name
+  *     The name of the offending system call argument.
+  * @param argument_value
+  *     The value of the offending system call argument (format string).
+  * @param errpos
+  *     The position within the string that the error was discovered.
+  */
+void explain_buffer_einval_format_string(explain_string_buffer_t *sb,
+    const char *argument_name, const char *argument_value, size_t errpos);
+
+/**
+  * The explain_buffer_einval_format_string_hole function is used to report
+  * problems concerning invalid format strings, in the case where %n$
+  * does not appear in the format string when it should.
+  *
+  * @param sb
+  *     The buffer to print into.
+  * @param argument_name
+  *     The name of the offending system call argument.
+  * @param hole_index
+  *     The %n$ argument that has not been used.
+  */
+void explain_buffer_einval_format_string_hole(explain_string_buffer_t *sb,
+    const char *argument_name, int hole_index);
 
 #endif /* LIBEXPLAIN_BUFFER_EINVAL_H */

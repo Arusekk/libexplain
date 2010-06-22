@@ -20,8 +20,8 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/permission_mode.h>
 #include <libexplain/mkdir.h>
-#include <libexplain/permission_mode.h>
 #include <libexplain/version_print.h>
 
 

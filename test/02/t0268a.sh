@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,13 @@ operating system does not support the specified address family
 fubar
 test $? -eq 0 || no_result
 
+cat > test.ok.solaris << 'fubar'
+socket(family = 32767, type = SOCK_STREAM, protocol = IPPROTO_TCP) failed,
+Protocol not supported (EPROTONOSUPPORT) because the protocol type or the
+specified protocol is not supported within this address family
+fubar
+test $? -eq 0 || no_result
+
 test_socket 32767 SOCK_STREAM IPPROTO_TCP > test.out 2>&1
 if test $? -ne 1
 then
@@ -36,6 +43,7 @@ then
     fail
 fi
 
+diff test.ok.solaris test.out > /dev/null 2> /dev/null || \
 diff test.ok test.out
 test $? -eq 0 || fail
 

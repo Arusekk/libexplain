@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdio.h>
 
+#include <libexplain/buffer/errno/fclose.h>
+#include <libexplain/common_message_buffer.h>
 #include <libexplain/fclose.h>
 
 
@@ -27,4 +29,36 @@ const char *
 explain_fclose(FILE *fp)
 {
     return explain_errno_fclose(errno, fp);
+}
+
+
+const char *
+explain_errno_fclose(int errnum, FILE *fp)
+{
+    explain_message_errno_fclose
+    (
+        explain_common_message_buffer,
+        explain_common_message_buffer_size,
+        errnum,
+        fp
+    );
+    return explain_common_message_buffer;
+}
+
+
+void
+explain_message_fclose(char *message, int message_size, FILE *fp)
+{
+    explain_message_errno_fclose(message, message_size, errno, fp);
+}
+
+
+void
+explain_message_errno_fclose(char *message, int message_size, int errnum,
+    FILE *fp)
+{
+    explain_string_buffer_t sb;
+
+    explain_string_buffer_init(&sb, message, message_size);
+    explain_buffer_errno_fclose(&sb, errnum, fp);
 }

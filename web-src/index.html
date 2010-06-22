@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008, 2009 Peter Miller
+.\" Copyright (C) 2008-2010 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -58,13 +58,13 @@ href="doc-external/open_8h.html#7c0bfc9a553438096c19b86dab687b2a"
 .fi
 </pre></blockquote>
 <p>
-<a
-.nf
-href="http://sourceforge.net/community/cca09/nominate/?\
-project_name=libexplain&amp;project_url=http://libexplain.sourceforge.net/"
-.fi
-><img src="http://sourceforge.net/images/cca/cca_nominate.png" border="0"
-align="right" alt="" /></a>
+    <table align="right" width="30%" ><tr bgcolor="#eeeeee" ><td><img
+    src="http://miller.emu.id.au/pmiller/images/kfish-64.png" alt="" ></td><td>
+    <small>&lsquo;I think it's totally awesome, in the category
+    of &ldquo;why hasn't this existed for <i>n</i> years&rdquo;
+    awesome.&rsquo &mdash; <a href="http://www.kfish.org/"
+    >Parker san</a></small></td></tr>
+    </table>
 If, for example, you were to try to open
 .br
 <tt>no-such-dir/some-file</tt>, you would see a message like
@@ -74,7 +74,7 @@ failed, No such file or directory (2, ENOENT) because there is no
 "no-such-dir" directory in the current directory</tt>
 </blockquote>
 <p>
-The good new is that for each of these functions there is a wrapper
+The good news is that for each of these functions there is a wrapper
 function, in this case <a
 href="doc-external/open_8h.html#ef4b43a41f11f51b07aa6a6162ad5bc1"
 ><i>explain_open_or_die</i>(3)</a>,
@@ -86,73 +86,16 @@ The library also provides thread safe variants of each explanation function.
 The coverage for system calls is being improved all the time, as you can
 see from <a href="doc-external/files.html" >this documentation page</a>
 generated from the source code.
-
-<h2> Some Common Explanations </h2>
-    <table align="right" width="30%" ><tr bgcolor="#eeeeee" ><td><img
-    src="http://miller.emu.id.au/pmiller/images/kfish-64.png" alt="" ></td><td>
-    <small>&lsquo;I think it's totally awesome, in the category
-    of &ldquo;why hasn't this existed for <i>n</i> years&rdquo;
-    awesome.&rsquo &mdash; <a href="http://www.kfish.org/">Parker
-    san</a></small></td></tr>
-    </table>
-<dl>
-
-<dt>file descriptors<dd>
-    Where only a file descriptor is passed, the message will include the
-    pathname of the file.
-    <p>
-
-<dt>EACCES<dd>
-    When this is caused by a pathname component, rather than the last
-    component, the name of the problematic component will be included in
-    the message, along with some additional permissions information.
-    <p>
-
-<dt>ENOENT<dd>
-    If this error is caused by a missing path component, rather than the
-    last path component,
-    <ul>
-    <li> the name of the missing component is included
-    in the explanation;
-    <li> if the system call takes more than one path, the
-    message will distinguish which of the paths is at fault;
-    <li> if there is a similarly named file in the directory,
-    the name of the similar file will be included in the message.
-    </ul>
-    <p>
-
-<dt>ENOTDIR<dd>
-    The name of the component which is not a directory will be included
-    in the message, along with its file type.
-    <p>
-
-<dt>ELOOP<dd>
-    <img src="knot1.128.png" alt="" align="right" />
-    The path of the first symbolic link in
-    the loop will be included in the message.
-    Or, if there was too many indirections but no loop,
-    this will be included in the message, along with the actual limit.
-    <p>
-
-<dt>EFAULT<dd>
-    If a system call takes more than one pointer argument, the message
-    will indicate which pointer is at fault.
-    <p>
-
-<dt>EEXIST<dd>
-    If a file should not exists, but does, the message will include the
-    existing file's file type.
-    <p>
-
-<dt><i>etc</i><dd>
-    There are many more.
-    The philosophy is to include as much information as is available.
-</dl>
+.so etc/coverage.so
 
 <h2>
 <img src="watch2.128.png" align="right" alt="" />
 Documentation </h2>
 <ul>
+<li> The LCA 2010 talk, &ldquo;<i>No medium found: when it's time to stop
+trying to read strerror's mind</i>&rdquo; is a available as
+<a href="lca2010/lca2010.pdf" >PDF</a>, and the slides are available as
+<a href="lca2010/index.html" >HTML</a>.
 <li>
 There is <a href="doc-external/index.html"
 >full documentation</a> of all API functions.
@@ -169,7 +112,6 @@ via <a href="http://www.doxygen.org/index.html" >Doxygen</a>.
 in the source code marked &ldquo;FIXME&rdquo;.
 </ul>
 
-.br
 <h2>
 <img src="orrery1.128.png" align="left" alt="" />
 Download </h2>
@@ -198,7 +140,7 @@ The following files are available for download:
 .br
 <tr>
     <td> <a href="debian/" >debian</a> </td>
-    <td> Pre-built debian packages for Ubuntu 8.04 Jaunty i386
+    <td> Pre-built debian packages for Ubuntu 9.10 Karmic x86_64
     </td> </tr>
 </table>
 
@@ -210,14 +152,18 @@ The following files are available for download:
     Mailing list is <a
     href="mailto:libexplain-users@lists.sourceforgeSystem.net"
     >libexplain-users@lists.sourceforgeSystem.net</a>, and you can subscribe <a
+.nf
     href="https://lists.sourceforge.net/lists/listinfo/libexplain-users"
+.fi
     >here</a>.
 <li>
     SourceForge <a href="http://sourceforge.net/projects/libexplain/"
     >project</a> page.
 <li>
     SourceForge <a
+.nf
     href="http://sourceforge.net/project/platformdownload.php?group_id=241772"
+.fi
     >download</a> page.
 <li>
     SourceForge <a href="https://sourceforge.net/tracker/?group_id=241772"
@@ -237,6 +183,14 @@ href="http://sourceforge.net/tracker/?\
 atid=1117299&amp;group_id=241772&amp;func=browse"
 .fi
     >feature requests</a>.
+<li> Debian main <a
+.nf
+href="https://buildd.debian.org/pkg.cgi?pkg=libexplain&amp;dist=unstable"
+>build farm</a>, and the Debian ports <a
+href="http://buildd.debian-ports.org/status/package.php?\
+suite=unstable&amp;p=libexplain"
+.fi
+>build farm</a>.
 </ul>
 
 .\" ------------------------------------------------------------------------

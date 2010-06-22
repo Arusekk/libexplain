@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,9 +17,10 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/efault.h>
@@ -66,6 +67,7 @@ explain_buffer_errno_execve_system_call(explain_string_buffer_t *sb,
     explain_buffer_pathname(sb, pathname);
     if (errnum == EFAULT)
     {
+        /* FIXME: expand this more, print the arguments that you can. */
         explain_string_buffer_puts(sb, ", argv = ");
         explain_buffer_pointer(sb, argv);
         explain_string_buffer_puts(sb, ", envp = ");
@@ -195,7 +197,8 @@ explain_buffer_file1(explain_string_buffer_t *sb, const char *pathname)
 
 void
 explain_buffer_errno_execve_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, char *const *argv, char *const *envp)
+    int errnum, const char *syscall_name, const char *pathname,
+    char *const *argv, char *const *envp)
 {
     explain_final_t final_component;
 
@@ -477,7 +480,7 @@ explain_buffer_errno_execve_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -502,6 +505,7 @@ explain_buffer_errno_execve(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "execve",
         pathname,
         argv,
         envp

@@ -43,7 +43,7 @@ explain_buffer_errno_opendir_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_opendir_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname)
+    int errnum, const char *syscall_name, const char *pathname)
 {
     switch (errnum)
     {
@@ -76,6 +76,7 @@ explain_buffer_errno_opendir_explanation(explain_string_buffer_t *sb,
         (
             sb,
             errnum,
+            syscall_name,
             pathname,
             O_RDONLY + O_DIRECTORY,
             0
@@ -102,6 +103,7 @@ explain_buffer_errno_opendir(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "opendir",
         pathname
     );
     explain_explanation_assemble(&exp, sb);

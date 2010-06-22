@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,26 +31,14 @@ explain_buffer_strerror(explain_string_buffer_t *sb, int errnum)
 {
     const explain_errno_info_t *eip;
     int             first;
-    const char      *s;
-#ifdef HAVE_STRERROR_R
     char            errbuf[1024];
-#endif
 
-#ifdef HAVE_STRERROR_R
-# if STRERROR_R_CHAR_P
-    s = strerror_r(errnum, errbuf, sizeof(errbuf));
-# else
-    if (strerror_r(errnum, errbuf, sizeof(errbuf)) == 0)
-        s = errbuf;
-    else
-        s = 0;
-# endif
-#else
-    s = strerror(errnum);
-#endif
-    if (!s)
+    explain_internal_strerror_r(errnum, errbuf, sizeof(errbuf));
+    if (!errbuf[0])
     {
-        s =
+        const char      *no_idea;
+
+        no_idea =
             explain_gettext
             (
                 /*
@@ -61,8 +49,9 @@ explain_buffer_strerror(explain_string_buffer_t *sb, int errnum)
                  */
                 i18n("unknown system error")
             );
+        explain_strendcpy(errbuf, no_idea, errbuf + sizeof(errbuf));
     }
-    explain_string_buffer_puts(sb, s);
+    explain_string_buffer_puts(sb, errbuf);
     first = 1;
     if (explain_option_numeric_errno())
     {

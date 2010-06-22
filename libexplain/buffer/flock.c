@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,47 +20,55 @@
 #include <libexplain/ac/fcntl.h>
 
 #include <libexplain/buffer/flock.h>
+#include <libexplain/buffer/int.h>
 #include <libexplain/buffer/lseek_whence.h>
+#include <libexplain/buffer/off_t.h>
+#include <libexplain/buffer/pid_t_star.h>
+#include <libexplain/parse_bits.h>
 #include <libexplain/string_buffer.h>
+
+
+static void
+explain_buffer_flock_type(explain_string_buffer_t *sb, int value)
+{
+    static const explain_parse_bits_table_t table[] =
+    {
+        { "F_RDLCK", F_RDLCK },
+        { "F_WRLCK", F_WRLCK },
+        { "F_UNLCK", F_UNLCK },
+#ifdef F_UNLKSYS
+        { "F_UNLKSYS", F_UNLKSYS },
+#endif
+    };
+
+    explain_parse_bits_print_single(sb, value, table, SIZEOF(table));
+}
 
 
 void
 explain_buffer_flock(explain_string_buffer_t *sb, const struct flock *flp)
 {
     explain_string_buffer_puts(sb, "{ l_type = ");
-    switch (flp->l_type)
-    {
-    case F_RDLCK:
-        explain_string_buffer_puts(sb, "F_RDLCK");
-        break;
-
-    case F_WRLCK:
-        explain_string_buffer_puts(sb, "F_WRLCK");
-        break;
-
-    case F_UNLCK:
-        explain_string_buffer_puts(sb, "F_UNLCK");
-        break;
-
-    default:
-        explain_string_buffer_printf(sb, "%d", flp->l_type);
-        break;
-    }
-    explain_string_buffer_puts(sb, "; l_whence = ");
+    explain_buffer_flock_type(sb, flp->l_type);
+    explain_string_buffer_puts(sb, ", l_whence = ");
     explain_buffer_lseek_whence(sb, flp->l_whence);
-    explain_string_buffer_printf
-    (
-        sb,
-        "; l_start = %lld; ",
-        (long long)flp->l_start
-    );
-    explain_string_buffer_printf
-    (
-        sb,
-        "l_len = %lld; ",
-        (long long)flp->l_len
-    );
-    explain_string_buffer_printf(sb, "l_pid = %d }", (int)flp->l_pid);
+    explain_string_buffer_puts(sb, ", l_start = ");
+    explain_buffer_off_t(sb, flp->l_whence);
+    explain_string_buffer_puts(sb, ", l_len = ");
+    explain_buffer_off_t(sb, flp->l_len);
+#ifdef F_UNLKSYS
+    if (flp->l_pid < 0)
+    {
+        explain_string_buffer_puts(sb, ", l_sysid = ");
+        explain_buffer_pid_t(sb, flp->l_sysid);
+    }
+#endif
+    explain_string_buffer_puts(sb, ", l_pid = ");
+    if (flp->l_pid > 0)
+        explain_buffer_pid_t(sb, flp->l_pid);
+    else
+        explain_buffer_int(sb, (int)flp->l_pid);
+    explain_string_buffer_puts(sb, " }");
 }
 
 
@@ -72,39 +80,23 @@ explain_buffer_flock64(explain_string_buffer_t *sb,
     const struct flock64 *flp)
 {
     explain_string_buffer_puts(sb, "{ l_type = ");
-    switch (flp->l_type)
-    {
-    case F_RDLCK:
-        explain_string_buffer_puts(sb, "F_RDLCK");
-        break;
-
-    case F_WRLCK:
-        explain_string_buffer_puts(sb, "F_WRLCK");
-        break;
-
-    case F_UNLCK:
-        explain_string_buffer_puts(sb, "F_UNLCK");
-        break;
-
-    default:
-        explain_string_buffer_printf(sb, "%d", flp->l_type);
-        break;
-    }
-    explain_string_buffer_puts(sb, "; l_whence = ");
+    explain_buffer_flock_type(sb, flp->l_type);
+    explain_string_buffer_puts(sb, ", l_whence = ");
     explain_buffer_lseek_whence(sb, flp->l_whence);
-    explain_string_buffer_printf
-    (
-        sb,
-        "; l_start = %lld; ",
-        (long long)flp->l_start
-    );
-    explain_string_buffer_printf
-    (
-        sb,
-        "l_len = %lld; ",
-        (long long)flp->l_len
-    );
-    explain_string_buffer_printf(sb, "l_pid = %d }", (int)flp->l_pid);
+    explain_string_buffer_puts(sb, ", l_start = ");
+    explain_buffer_off_t(sb, flp->l_whence);
+    explain_string_buffer_puts(sb, ", l_len = ");
+    explain_buffer_off_t(sb, flp->l_len);
+#ifdef F_UNLKSYS
+    explain_string_buffer_puts(sb, ", l_sysid = ");
+    explain_buffer_pid_t(sb, flp->l_sysid);
+#endif
+    explain_string_buffer_puts(sb, ", l_pid = ");
+    if (flp->l_pid > 0)
+        explain_buffer_pid_t(sb, flp->l_pid);
+    else
+        explain_buffer_int(sb, (int)flp->l_pid);
+    explain_string_buffer_puts(sb, " }");
 }
 
 #endif

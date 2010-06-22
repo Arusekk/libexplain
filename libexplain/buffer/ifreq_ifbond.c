@@ -23,6 +23,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef HAVE_LINUX_IF_BONDING_H
+
 static void
 explain_buffer_ifbond(explain_string_buffer_t *sb,
     const struct ifbond *data)
@@ -72,3 +74,14 @@ explain_buffer_ifreq_ifbond(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+#else
+
+void
+explain_buffer_ifreq_ifbond(explain_string_buffer_t *sb,
+    const struct ifreq *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -29,6 +29,7 @@ explain_buffer_sigset_t(explain_string_buffer_t *sb, const sigset_t *data)
 {
     int             j;
     int             first;
+    int             nsig;
 
     if (explain_pointer_is_efault(data, sizeof(*data)))
     {
@@ -37,7 +38,16 @@ explain_buffer_sigset_t(explain_string_buffer_t *sb, const sigset_t *data)
     }
     explain_string_buffer_puts(sb, "{ ");
     first = 1;
-    for (j = 1; j < _NSIG; ++j)
+#if defined(NSIG)
+    nsig = NSIG;
+#elif defined(_NSIG)
+    nsig = _NSIG;
+#elif defined(MAXSIG)
+    nsig = MAXSIG + 1;
+#else
+    nsig = _SIG_MAXSIG + 1;
+#endif
+    for (j = 1; j < nsig; ++j)
     {
         if (sigismember(data, j))
         {

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/dirname.h>
@@ -37,14 +38,14 @@ explain_dirname(char *dir, const char *path, size_t dir_size)
 
     if (0 == strcmp(path, "/"))
     {
-        strendcpy(dir, "/", dir + dir_size);
+        explain_strendcpy(dir, "/", dir + dir_size);
         return;
     }
     if (0 == strcmp(path, "."))
     {
         if (!getcwd(current_directory, sizeof(current_directory)))
         {
-            strendcpy(dir, "..", dir + dir_size);
+            explain_strendcpy(dir, "..", dir + dir_size);
             return;
         }
         path = current_directory;
@@ -58,7 +59,7 @@ explain_dirname(char *dir, const char *path, size_t dir_size)
     }
     if (slash == path)
     {
-        strendcpy(dir, "/", dir + dir_size);
+        explain_strendcpy(dir, "/", dir + dir_size);
         return;
     }
     len = slash - path;
@@ -81,12 +82,12 @@ explain_basename(char *filename, const char *path, size_t filename_size)
     {
         ++slash;
         if (*slash)
-            strendcpy(filename, slash, filename_end);
+            explain_strendcpy(filename, slash, filename_end);
         else
-            strendcpy(filename, ".", filename_end);
+            explain_strendcpy(filename, ".", filename_end);
     }
     else
     {
-        strendcpy(filename, path, filename_end);
+        explain_strendcpy(filename, path, filename_end);
     }
 }

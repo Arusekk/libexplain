@@ -49,6 +49,7 @@ explain_buffer_errno_wait3_explanation(explain_string_buffer_t *sb,
     (
         sb,
         errnum,
+        "wait3",
         -1,
         status,
         options,

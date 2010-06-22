@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
+#include <libexplain/buffer/eperm.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
@@ -39,6 +40,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
+#include <libexplain/pathname_is_a_directory.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -57,7 +59,7 @@ explain_buffer_errno_unlink_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_unlink_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname)
+    int errnum, const char *syscall_name, const char *pathname)
 {
     explain_final_t final_component;
 
@@ -161,7 +163,6 @@ explain_buffer_errno_unlink_explanation(explain_string_buffer_t *sb,
             break;
         }
 #endif
-        /* Linux usually says EACCES in this case */
         if
         (
             explain_buffer_errno_path_resolution
@@ -174,34 +175,18 @@ explain_buffer_errno_unlink_explanation(explain_string_buffer_t *sb,
             )
         )
         {
-            explain_string_buffer_puts
-            (
-                sb,
-                /*
-                 * xgettext:  This error message is used to explain an EPERM
-                 * error reported by the unlink(2) system call, in the case
-                 * where the file system does not allow unlinking of files;
-                 * or, the directory containing pathname has the sticky bit
-                 * (S_ISVTX) set and the process's effective UID is neither
-                 * the UID of the file to be deleted nor that of the directory
-                 * containing it.
-                 */
-                i18n("the file system does not allow unlinking of files; or, "
-                "the directory containing pathname has the sticky bit "
-                "(S_ISVTX) set and the process's effective UID is neither "
-                "the UID of the file to be deleted nor that of the directory "
-                "containing it")
-            );
-            explain_buffer_dac_fowner(sb);
+            explain_buffer_eperm_unlink(sb, pathname, "pathname", syscall_name);
+            break;
         }
-        break;
+        goto generic;
 
     case EROFS:
         explain_buffer_erofs(sb, pathname, "pathname");
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        generic:
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 
@@ -226,6 +211,7 @@ explain_buffer_errno_unlink(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "unlink",
         pathname
     );
     explain_explanation_assemble(&exp, sb);

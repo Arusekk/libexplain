@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,9 +19,10 @@
 
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/read.h>
-#include <libexplain/strtol.h>
+#include <libexplain/string_to_thing.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/syscall/read.h>
@@ -35,24 +36,20 @@ explain_syscall_read(int errnum, int argc, char **argv)
     size_t data_size = 0;
     switch (argc)
     {
-    case 0:
-        fprintf(stderr, "read: no fildes given\n");
-        exit(EXIT_FAILURE);
-
     case 3:
-        data_size = explain_strtol_or_die(argv[2], 0, 0);
+        data_size = explain_string_to_long(argv[2]);
         /* fall through... */
 
     case 2:
-        data = (void *)explain_strtol_or_die(argv[1], 0, 0);
+        data = explain_string_to_pointer(argv[1]);
         /* fall through... */
 
     case 1:
-        fildes = explain_strtol_or_die(argv[0], 0, 0);
+        fildes = explain_string_to_long(argv[0]);
         break;
 
     default:
-        fprintf(stderr, "read: too many arguments given\n");
+        fprintf(stderr, "read: needs 3 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
 

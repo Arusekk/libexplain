@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,14 @@ that newpath exists
 fubar
 test $? -eq 0 || no_result
 
+cat > test.ok.solaris << 'fubar'
+rename(oldpath = "foo", newpath = "bar") failed, File exists (EEXIST)
+because newpath is not an empty directory; that is, it contains entries
+other than "." and ".." (1); note that oldpath still exists; note that
+newpath exists
+fubar
+test $? -eq 0 || no_result
+
 mkdir foo bar
 test $? -eq 0 || no_result
 
@@ -46,7 +54,7 @@ then
     fail
 fi
 
-diff test.ok test.out
+diff test.ok.solaris test.out > /dev/null || diff test.ok test.out
 test $? -eq 0 || fail
 
 #

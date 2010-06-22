@@ -17,14 +17,28 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/mtio.h>
 
+#include <libexplain/buffer/mtget.h>
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/mtiocget.h>
 
 
-#ifndef MTIOCGET
-#define MTIOCGET -1
-#endif
+#ifdef MTIOCGET
+
+static void
+print_data_returned(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_mtget(sb, data);
+}
+
 
 const explain_iocontrol_t explain_iocontrol_mtiocget =
 {
@@ -32,6 +46,28 @@ const explain_iocontrol_t explain_iocontrol_mtiocget =
     MTIOCGET, /* value */
     0, /* disambiguate */
     0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    print_data_returned,
+    sizeof(struct mtget), /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_mtiocget =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

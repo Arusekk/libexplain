@@ -1,15 +1,15 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or (at
  * your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,but
- * WITHOUT ANY WARRANTY; without even the implied warranty
- * ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNULesser
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
  * General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
@@ -17,12 +17,11 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/sys/timerfd.h>
 
 #include <libexplain/timerfd_create.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
 
 
 int
@@ -38,8 +37,13 @@ explain_timerfd_create_on_error(int clockid, int flags)
 #endif
     if (result < 0)
     {
+        int             hold_errno;
+
+        hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, explain_timerfd_create(clockid, flags));
+        explain_output_message(explain_errno_timerfd_create(hold_errno,
+            clockid, flags));
+        errno = hold_errno;
     }
     return result;
 }

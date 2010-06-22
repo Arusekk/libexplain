@@ -22,11 +22,44 @@
 #include <libexplain/buffer/${basename $filename .c}.h>
 #include <${trim_ext $filename}.h>
 
-
 #ifdef ${upcase ${basename $filename .c}}
+
 
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_${basename $filename .c}(sb, data);
+}
+
+
+static void
+print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    switch (errnum)
+    {
+    default:
+        explain_iocontrol_generic_print_explanation
+        (
+            p,
+            sb,
+            errnum,
+            fildes,
+            request,
+            data
+        );
+        break;
+    }
+}
+
+
+static void
+print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
@@ -43,8 +76,12 @@ const explain_iocontrol_t explain_iocontrol_${basename $filename .c} =
     ${upcase ${basename $filename .c}}, /* value */
     0, /* disambiguate */
     0, /* print_name */
-    print_data,
+    0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef ${upcase ${basename $filename .c}} */
@@ -57,6 +94,10 @@ const explain_iocontrol_t explain_iocontrol_${basename $filename .c} =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* ${upcase ${basename $filename .c}} */

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2009 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,8 +24,7 @@ TEST_SUBJECT="fchown EINVAL"
 cat > test.ok << 'fubar'
 fchown(fildes = 42, owner = 0 "root", group = 0 "root") failed, Invalid
 argument (EINVAL) because the owner UID or group GID is not a value
-supported by the implementation; or, the fildes argument refers to a pipe
-or socket and the implementation disallows execution of fchown() on a pipe
+supported by the system
 fubar
 test $? -eq 0 || no_result
 

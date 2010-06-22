@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,16 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
-
+#include <libexplain/output.h>
 #include <libexplain/stat.h>
 
 
 void
-explain_stat_or_die(const char *pathname, struct stat *buf)
+explain_stat_or_die(const char *pathname, struct stat *data)
 {
-    if (explain_stat_on_error(pathname, buf) < 0)
+    if (explain_stat_on_error(pathname, data) < 0)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
 }

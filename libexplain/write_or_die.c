@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,20 +16,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/unistd.h>
 
+#include <libexplain/output.h>
 #include <libexplain/write.h>
 
 
-long
-explain_write_or_die(int fildes, const void *data, long data_size)
+ssize_t
+explain_write_or_die(int fildes, const void *data, size_t data_size)
 {
-    long            result;
+    ssize_t         result;
 
     result = explain_write_on_error(fildes, data, data_size);
     if (result < 0)
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
     return result;
 }

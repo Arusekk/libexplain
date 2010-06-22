@@ -110,7 +110,7 @@ explain_buffer_errno_chroot_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "chroot");
         break;
     }
 }

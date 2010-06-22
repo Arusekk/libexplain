@@ -60,6 +60,8 @@ void explain_buffer_errno_waitpid(explain_string_buffer_t *sb, int errnum,
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param pid
   *     The original pid, exactly as passed to the waitpid(2) system call.
   * @param status
@@ -68,6 +70,6 @@ void explain_buffer_errno_waitpid(explain_string_buffer_t *sb, int errnum,
   *     The original options, exactly as passed to the waitpid(2) system call.
   */
 void explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
-    int errnum, int pid, int *status, int options);
+    int errnum, const char *syscall_name, int pid, int *status, int options);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WAITPID_H */

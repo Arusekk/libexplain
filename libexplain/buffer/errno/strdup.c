@@ -38,7 +38,7 @@ explain_buffer_errno_strdup_explanation(explain_string_buffer_t *sb, int errnum,
     const char *data)
 {
     (void)data;
-    explain_buffer_errno_malloc_explanation(sb, errnum, 1);
+    explain_buffer_errno_malloc_explanation(sb, errnum, "strdup", 1);
 }
 
 

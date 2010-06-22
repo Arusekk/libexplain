@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,14 @@
 TEST_SUBJECT="close vs EWOULDBLOCK"
 . test_prelude
 
-cat > test.ok << 'fubar'
+cat > test.ok.1 << 'fubar'
+close(fildes = 42) failed, Resource temporarily unavailable (EWOULDBLOCK)
+because the O_NONBLOCK flag was specified, and an operation has yet to
+complete
+fubar
+test $? -eq 0 || no_result
+
+cat > test.ok.2 << 'fubar'
 close(fildes = 42) failed, Resource temporarily unavailable (EAGAIN)
 because the O_NONBLOCK flag was specified, and an operation has yet to
 complete
@@ -31,7 +38,9 @@ test $? -eq 0 || no_result
 explain -e EWOULDBLOCK -o test.out close 42
 test $? -eq 0 || fail
 
-diff test.ok test.out
+diff test.ok.1 test.out > /dev/null 2> /dev/null && pass
+
+diff test.ok.2 test.out
 test $? -eq 0 || fail
 
 #

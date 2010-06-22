@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,19 +21,28 @@
 TEST_SUBJECT="chown EPERM"
 . test_prelude
 
-cat > test.ok << 'fubar'
-chown(pathname = "foobar", owner = 0 "root", group = 0) failed,
-Operation not permitted (EPERM) because chown is restricted, and the
-process is not privileged
+fmt > test.ok << 'fubar'
+chown(pathname = "foobar", owner = 0 "root", group = 0) failed, Operation
+not permitted (EPERM) because the process effective UID nnn is the same
+as the owner UID of pathname but this is not sufficient privilege to
+change the owner UID, and the process is not privileged
 fubar
 
 touch foobar
 test $? -eq 0 || no_result
 
-explain -eEPERM chown foobar 0 0 > test.out2
+explain -eEPERM chown foobar 0 0 > test.out4
 test $? -eq 0 || fail
 
-sed 's|group = 0 "[^"]*"|group = 0|' test.out2 > test.out
+fmt -w700 < test.out4 > test.out3
+test $? -eq 0 || no_result
+
+sed -e 's|group = 0 "[^"]*"|group = 0|' \
+    -e 's|UID [0-9][0-9]* *"[^"]*"|UID nnn|' \
+     < test.out3 > test.out2
+test $? -eq 0 || no_result
+
+fmt < test.out2 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

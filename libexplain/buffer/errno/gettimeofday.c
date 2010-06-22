@@ -66,7 +66,7 @@ explain_buffer_errno_gettimeofday_explanation(
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "gettimeofday");
         break;
     }
 }

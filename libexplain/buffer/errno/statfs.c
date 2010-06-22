@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,7 @@
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
+#include <libexplain/path_is_efault.h>
 
 
 static void
@@ -52,7 +53,7 @@ explain_buffer_errno_statfs_system_call(explain_string_buffer_t *sb, int errnum,
 
 static void
 explain_buffer_errno_statfs_explanation(explain_string_buffer_t *sb, int errnum,
-    const char *pathname, struct statfs *data)
+    const char *syscall_name, const char *pathname, struct statfs *data)
 {
     explain_final_t final_component;
 
@@ -68,11 +69,14 @@ explain_buffer_errno_statfs_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     case EFAULT:
-        explain_buffer_efault(sb, "data");
+        if (explain_path_is_efault(pathname))
+            explain_buffer_efault(sb, "pathname");
+        else
+            explain_buffer_efault(sb, "data");
         break;
 
     case EINTR:
-        explain_buffer_eintr(sb, "statfs");
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     case EIO:
@@ -99,7 +103,7 @@ explain_buffer_errno_statfs_explanation(explain_string_buffer_t *sb, int errnum,
 #if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
     case EOPNOTSUPP:
 #endif
-        explain_buffer_enosys_pathname(sb, pathname, "pathname", "statfs");
+        explain_buffer_enosys_pathname(sb, pathname, "pathname", syscall_name);
         break;
 
     case ENOTDIR:
@@ -111,7 +115,7 @@ explain_buffer_errno_statfs_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -124,10 +128,21 @@ explain_buffer_errno_statfs(explain_string_buffer_t *sb, int errnum,
     explain_explanation_t exp;
 
     explain_explanation_init(&exp, errnum);
-    explain_buffer_errno_statfs_system_call(&exp.system_call_sb, errnum,
-        pathname, data);
-    explain_buffer_errno_statfs_explanation(&exp.explanation_sb, errnum,
-        pathname, data);
+    explain_buffer_errno_statfs_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        pathname,
+        data
+    );
+    explain_buffer_errno_statfs_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        "statfs",
+        pathname,
+        data
+    );
     explain_explanation_assemble(&exp, sb);
 }
 

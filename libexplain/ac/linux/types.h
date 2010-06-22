@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,15 @@
 
 #ifdef HAVE_LINUX_TYPES_H
 #include <linux/types.h>
+#endif
+
+/*
+ * This is in the kernel's <linux/types.h> but inside #ifdef __KERNEL__
+ * bracketing, which is stripped out to make the user-space <linux/types.h>,
+ * but some ding-bat used the type in a user-space struct.
+ */
+#ifndef aligned_u64
+#define aligned_u64 __u64 __attribute__((aligned(8)))
 #endif
 
 #endif /* LIBEXPLAIN_AC_LINUX_TYPES_H */

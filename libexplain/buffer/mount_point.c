@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,9 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/mntent.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/stat.h>
+#include <libexplain/ac/sys/statvfs.h>
 #include <libexplain/ac/sys/vfs.h>
 
 #include <libexplain/buffer/mount_point.h>
@@ -27,8 +29,7 @@
 
 
 int
-explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
-    const struct stat *st1)
+explain_buffer_mount_point_dev(explain_string_buffer_t *sb, dev_t dev)
 {
     FILE            *fp;
 
@@ -37,30 +38,40 @@ explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
         return -1;
     for (;;)
     {
-        struct mntent   *mnt;
+        const char      *dir;
         struct stat     st2;
+#if GETMNTENT_NARGS == 2
+        struct mnttab   mdata;
+
+        if (getmntent(fp, &mdata) != 0)
+            break;
+        dir = mdata.mnt_mountp;
+#else
+        struct mntent   *mnt;
 
         /* FIXME: use getmntent_r if available */
         mnt = getmntent(fp);
         if (!mnt)
             break;
-        if (lstat(mnt->mnt_dir, &st2) == 0)
+        dir = mnt->mnt_dir;
+#endif
+        if (lstat(dir, &st2) == 0)
         {
-            if (st1->st_dev == st2.st_dev)
+            if (dev == st2.st_dev)
             {
-                struct statfs   f;
+                struct statvfs  f;
 
                 /*
                  * Insert the name of the mount point.
                  */
                 explain_string_buffer_puts(sb, " (");
-                explain_string_buffer_puts_quoted(sb, mnt->mnt_dir);
+                explain_string_buffer_puts_quoted(sb, dir);
 
                 /*
                  * If possible, insert the percentage used of the file
                  * system, similar to how df(1) has a %used column.
                  */
-                if (statfs(mnt->mnt_dir, &f) == 0)
+                if (statvfs(dir, &f) == 0)
                 {
                     long            reserved;
                     long            blocks;
@@ -94,6 +105,14 @@ explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
 
 
 int
+explain_buffer_mount_point_stat(explain_string_buffer_t *sb,
+    const struct stat *st1)
+{
+    return explain_buffer_mount_point_dev(sb, st1->st_dev);
+}
+
+
+int
 explain_buffer_mount_point_fd(explain_string_buffer_t *sb, int fildes)
 {
     struct stat     st;
@@ -109,7 +128,7 @@ explain_buffer_mount_point(explain_string_buffer_t *sb, const char *path)
 {
     struct stat     st;
 
-    if (lstat(path, &st) < 0)
+    if (stat(path, &st) < 0)
         return -1;
     return explain_buffer_mount_point_stat(sb, &st);
 }
@@ -127,28 +146,37 @@ explain_buffer_mount_point_dirname(explain_string_buffer_t *sb,
 
 
 static int
-explain_mount_point_option(const char *pathname, const char *option)
+explain_mount_point_dev_option(int st_dev, const char *option)
 {
     FILE            *fp;
-    struct stat     st1;
 
-    if (lstat(pathname, &st1) < 0)
-        return 0;
     fp = setmntent(MOUNTED, "r");
     if (!fp)
         return 0;
     for (;;)
     {
-        struct mntent   *mnt;
+        const char      *dir;
         struct stat     st2;
+#if GETMNTENT_NARGS == 2
+        struct mnttab   mdata;
+        struct mnttab   *mnt;
+
+        if (getmntent(fp, &mdata) != 0)
+            break;
+        mnt = &mdata;
+        dir = mnt->mnt_mountp;
+#else
+        struct mntent   *mnt;
 
         /* FIXME: use getmntent_r if available */
         mnt = getmntent(fp);
         if (!mnt)
             break;
-        if (lstat(mnt->mnt_dir, &st2) == 0)
+        dir = mnt->mnt_dir;
+#endif
+        if (stat(dir, &st2) == 0)
         {
-            if (st1.st_dev == st2.st_dev)
+            if (st_dev == (int)st2.st_dev)
             {
                 int             result;
 
@@ -160,8 +188,10 @@ explain_mount_point_option(const char *pathname, const char *option)
                  * device to be mounted at more than one place, and they
                  * could have different options for different mount
                  * points.)
+                 *
+                 * We have to cast away const-ness because Solaris is stupid.
                  */
-                result = !!hasmntopt(mnt, option);
+                result = !!hasmntopt(mnt, (char *)option);
                 endmntent(fp);
                 return result;
             }
@@ -169,6 +199,24 @@ explain_mount_point_option(const char *pathname, const char *option)
     }
     endmntent(fp);
     return 0;
+}
+
+
+static int
+explain_mount_point_stat_option(const struct stat *st, const char *option)
+{
+    return explain_mount_point_dev_option(st->st_dev, option);
+}
+
+
+static int
+explain_mount_point_option(const char *pathname, const char *option)
+{
+    struct stat     st;
+
+    if (stat(pathname, &st) < 0)
+        return 0;
+    return explain_mount_point_stat_option(&st, option);
 }
 
 
@@ -183,4 +231,11 @@ int
 explain_mount_point_nosuid(const char *pathname)
 {
     return explain_mount_point_option(pathname, "nosuid");
+}
+
+
+int
+explain_mount_point_nodev(const struct stat *st)
+{
+    return explain_mount_point_stat_option(st, "nodev");
 }

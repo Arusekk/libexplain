@@ -22,7 +22,7 @@ TEST_SUBJECT="sethostname EPERM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-gethostname(name = "example.com", name_size = 11) failed, Operation not
+sethostname(name = "example.com", name_size = 11) failed, Operation not
 permitted (EPERM) because the process does not have permission to set the
 hostname, and the process is not privileged
 fubar

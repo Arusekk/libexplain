@@ -47,7 +47,8 @@ explain_buffer_errno_pread_system_call(explain_string_buffer_t *sb, int errnum,
 
 static void
 explain_buffer_errno_pread_explanation(explain_string_buffer_t *sb, int errnum,
-    int fildes, void *data, size_t data_size, off_t offset)
+    const char *syscall_name, int fildes, void *data, size_t data_size,
+    off_t offset)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/pread.html
@@ -60,6 +61,7 @@ explain_buffer_errno_pread_explanation(explain_string_buffer_t *sb, int errnum,
         (
             sb,
             errnum,
+            syscall_name,
             fildes,
             data,
             data_size
@@ -77,6 +79,7 @@ explain_buffer_errno_pread_explanation(explain_string_buffer_t *sb, int errnum,
         (
             sb,
             errnum,
+            syscall_name,
             fildes,
             offset,
             SEEK_SET
@@ -98,10 +101,25 @@ explain_buffer_errno_pread(explain_string_buffer_t *sb, int errnum, int fildes,
     explain_explanation_t exp;
 
     explain_explanation_init(&exp, errnum);
-    explain_buffer_errno_pread_system_call(&exp.system_call_sb, errnum, fildes,
-        data, data_size, offset);
-    explain_buffer_errno_pread_explanation(&exp.explanation_sb, errnum, fildes,
-        data, data_size, offset);
+    explain_buffer_errno_pread_system_call
+    (
+        &exp.system_call_sb,
+        errnum,
+        fildes,
+        data,
+        data_size,
+        offset
+    );
+    explain_buffer_errno_pread_explanation
+    (
+        &exp.explanation_sb,
+        errnum,
+        "pread",
+        fildes,
+        data,
+        data_size,
+        offset
+    );
     explain_explanation_assemble(&exp, sb);
 }
 

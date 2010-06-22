@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="lstat ELOOP"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-lstat(pathname = "a/b", buf = xxxxxxxx) failed, Too many levels of
+lstat(pathname = "a/b", data = xxxxxxxx) failed, Too many levels of
 symbolic links (ELOOP) because a symbolic link loop was encountered
 in pathname, starting at "a"
 fubar
@@ -44,7 +44,7 @@ fi
 fmt -w500 test.out1 > test.out2
 test $? -eq 0 || no_result
 
-sed 's|, buf = [^)]*)|, buf = xxxxxxxx)|' test.out2 > test.out3
+sed 's|, data = [^)]*)|, data = xxxxxxxx)|' test.out2 > test.out3
 test $? -eq 0 || no_result
 
 fmt test.out3 > test.out

@@ -42,7 +42,7 @@ explain_buffer_errno_wait_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_wait_explanation(explain_string_buffer_t *sb,
-    int errnum, int *status)
+    int errnum, const char *syscall_name, int *status)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/wait.html
@@ -60,11 +60,11 @@ explain_buffer_errno_wait_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINTR:
-        explain_buffer_eintr(sb, "wait");
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -87,6 +87,7 @@ explain_buffer_errno_wait(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "wait",
         status
     );
     explain_explanation_assemble(&exp, sb);

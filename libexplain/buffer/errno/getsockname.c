@@ -22,6 +22,7 @@
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/enobufs.h>
+#include <libexplain/buffer/enotconn.h>
 #include <libexplain/buffer/enotsock.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/getsockname.h>
@@ -56,6 +57,7 @@ explain_buffer_errno_getsockname_explanation(explain_string_buffer_t *sb,
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/getsockname.html
      */
+    (void)sock_addr;
     switch (errnum)
     {
     case EBADF:
@@ -63,29 +65,11 @@ explain_buffer_errno_getsockname_explanation(explain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if
-        (
-            explain_pointer_is_efault
-            (
-                sock_addr_size,
-                sizeof(*sock_addr_size)
-            )
-        )
-        {
+        if (explain_pointer_is_efault(sock_addr_size, sizeof(*sock_addr_size)))
             explain_buffer_efault(sb, "sock_addr_size");
-            break;
-        }
-        if
-        (
-            *sock_addr_size > 0
-        &&
-            explain_pointer_is_efault(sock_addr, *sock_addr_size)
-        )
-        {
+        else
             explain_buffer_efault(sb, "sock_addr");
-            break;
-        }
-        goto dunno;
+        break;
 
     case EINVAL:
         if
@@ -101,12 +85,16 @@ explain_buffer_errno_getsockname_explanation(explain_string_buffer_t *sb,
         (
             sb,
             "sock_addr_size",
-            *sock_addr_size
+            (int)*sock_addr_size
         );
         break;
 
     case ENOBUFS:
         explain_buffer_enobufs(sb);
+        break;
+
+    case ENOTCONN:
+        explain_buffer_enotconn(sb, "fildes");
         break;
 
     case ENOTSOCK:
@@ -115,7 +103,7 @@ explain_buffer_errno_getsockname_explanation(explain_string_buffer_t *sb,
 
     default:
         dunno:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "getsockname");
         break;
     }
 }

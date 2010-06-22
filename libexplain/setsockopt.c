@@ -17,6 +17,7 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/sys/socket.h>
 
 #include <libexplain/setsockopt.h>
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,14 +23,14 @@ TEST_SUBJECT="getrlimit EFAULT"
 
 
 cat > test.ok << 'fubar'
-getrlimit(resource = RLIMIT_CPU, rlim = 0x00001234) failed, Bad address
+getrlimit(resource = RLIMIT_CPU, rlim = 0x09876543) failed, Bad address
 (EFAULT) because rlim refers to memory that is outside the process's
 accessible address space; this is more likely to be a software error (a
 bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -e EFAULT getrlimit 0 0x1234 > test.out
+explain -e EFAULT getrlimit 0 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

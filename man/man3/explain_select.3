@@ -19,7 +19,9 @@
 .TH explain_select 3
 .SH NAME
 explain_select \- explain select(2) errors
+.if require_index \{
 .XX "explain_select(3)" "explain select(2) errors"
+.\}
 .SH SYNOPSIS
 #include <sys/select.h>
 #include <libexplain/select.h>

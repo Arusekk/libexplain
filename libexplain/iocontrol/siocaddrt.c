@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/net/route.h>
 
 #include <libexplain/buffer/rtentry.h>
 #include <libexplain/iocontrol/siocaddrt.h>
@@ -45,6 +46,10 @@ const explain_iocontrol_t explain_iocontrol_siocaddrt =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(struct rtentry), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else /* ndef SIOCADDRT */
@@ -57,6 +62,10 @@ const explain_iocontrol_t explain_iocontrol_siocaddrt =
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif /* SIOCADDRT */

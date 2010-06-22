@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 
 /**
   * The explain_option_numeric_errno function may be used to obtain
-  * the LIBEXPLAIN_OPTIONS (no-)numeric-errno flag, used to control
+  * the EXPLAIN_OPTIONS (no-)numeric-errno flag, used to control
   * whether or not the numeric value of errno is displayed.  This is
   * commonly turned off for the test suite, to cope with capricious
   * errno numbering on different UNIX dialects.
@@ -36,7 +36,7 @@ int explain_option_numeric_errno(void);
 
 /**
   * The explain_option_dialect_specific function may be used to
-  * obtain the LIBEXPLAIN_OPTIONS (no-)dialect-specific flag, used to
+  * obtain the EXPLAIN_OPTIONS (no-)dialect-specific flag, used to
   * control whether or not informative text that is specific to a given
   * UNIX dialect is to be displayed.  This is commonly turned off for
   * the test suite.
@@ -50,7 +50,7 @@ int explain_option_dialect_specific(void);
 
 /**
   * The explain_option_debug function may be used to obtain the
-  * LIBEXPLAIN_OPTIONS (no-)debug flag, used to control whether or not
+  * EXPLAIN_OPTIONS (no-)debug flag, used to control whether or not
   * debug behaviour is enabled.  Defaults to off.
   *
   * @returns
@@ -75,7 +75,7 @@ int explain_option_assemble_program_name(void);
   * The explain_program_name_assemble_internal function is used
   * to control whether or not the name of the calling process is to
   * be included in error messages issued by the explain_*_or_die
-  * functions.  This will have a precedence below the LIBEXPLAIN_OPTIONS
+  * functions.  This will have a precedence below the EXPLAIN_OPTIONS
   * environment variable, but higher than default.  It is intended for
   * use bu the explain_*_or_die functions.
   *
@@ -84,5 +84,29 @@ int explain_option_assemble_program_name(void);
   *     zero (false) to have program name excluded.
   */
 void explain_program_name_assemble_internal(int yesno);
+
+/**
+  * The explain_option_symbolic_mode_bits function may be used to obtain
+  * the EXPLAIN_OPTIONS (no-)symbolic-mode-bits flag, used to control
+  * whether or not symbolic mode bits are to be used.  Default to false,
+  * meaning print octal mode bits.
+  *
+  * @returns
+  *     true (non-zero) if symbolic mode bits are to be printed (e.g. S_IRUSR),
+  *     false (zero) if octal mode bits are to be printed.
+  */
+int explain_option_symbolic_mode_bits(void);
+
+/**
+  * The explain_option_internal_strerror function may be used to obtain
+  * the "(no-)internal-strerror" flag.  Defaults to false, meaning use
+  * the system strerror.  Useful for avoiding false negatives in the
+  * automatic test suite.
+  *
+  * @returns
+  *     true (non-zero) if are to use internal strerror strings,
+  *     false (zero) if are to use system strerror.
+  */
+int explain_option_internal_strerror(void);
 
 #endif /* LIBEXPLAIN_OPTION_H */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,10 +26,12 @@
 #include <libexplain/buffer/enoent.h>
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/enotdir.h>
+#include <libexplain/buffer/eperm.h>
 #include <libexplain/buffer/erofs.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/errno/rmdir.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/note/still_exists.h>
 #include <libexplain/buffer/path_to_pid.h>
 #include <libexplain/buffer/pointer.h>
@@ -106,7 +108,7 @@ last_component_is_dot(const char *pathname)
 
 void
 explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname)
+    int errnum, const char *syscall_name, const char *pathname)
 {
     explain_final_t final_component;
 
@@ -127,22 +129,30 @@ explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
             /* BSD */
             goto case_einval;
         }
-        explain_string_buffer_puts
+        explain_buffer_gettext
         (
             sb,
-            /* FIXME: i18n */
-            "pathname is currently in use by the system or some process "
-            "that prevents its removal"
+            /*
+             * xgettext: This error message is used when the rmdir(2)
+             * system call returns EBUSY.
+             */
+            i18n("pathname is currently in use by the system or some process "
+            "that prevents its removal")
         );
         explain_buffer_path_to_pid(sb, pathname);
 #ifdef __linux__
         if (explain_option_dialect_specific())
         {
-            explain_string_buffer_puts
+            explain_string_buffer_puts(sb->footnotes, "; ");
+            explain_buffer_gettext
             (
-                sb,
-                "; this means pathname is currently used as a mount point "
-                "or is the root directory of the calling process"
+                sb->footnotes,
+                /*
+                 * xgettext: This error message is used when the rmdir(2)
+                 * system call returns EBUSY, on a Linux system.
+                 */
+                i18n("note that pathname is currently used as a mount point "
+                "or is the root directory of the calling process")
             );
         }
 #endif
@@ -154,11 +164,15 @@ explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
 
     case EINVAL:
         case_einval:
-        explain_string_buffer_puts
+        explain_buffer_gettext
         (
             sb,
-            /* FIXME: i18n */
-            "pathname has \".\" as last component"
+            /*
+             * xgettext:  This error message is used when the rmdir(2)
+             * system call returns EINVAL, in the case where the final
+             * path component is "."
+             */
+            i18n("pathname has \".\" as last component")
         );
         break;
 
@@ -193,23 +207,32 @@ explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
     case ENOTEMPTY:
         if (last_component_is_dotdot(pathname))
         {
-            explain_string_buffer_puts
+            explain_buffer_gettext
             (
                 sb,
-                /* FIXME: i18n */
-                "pathname has \"..\" as its final component"
+                /*
+                 * xgettext:  This error message is used when the rmdir(2)
+                 * system call returns EINVAL, in the case where the final
+                 * path component is ".."
+                 */
+                i18n("pathname has \"..\" as its final component")
             );
         }
         else
         {
             int             count;
 
-            explain_string_buffer_puts
+            explain_buffer_gettext
             (
                 sb,
-                /* FIXME: i18n */
-                "pathname is not an empty directory; that is, it "
-                "contains entries other than \".\" and \"..\""
+                /*
+                 * xgettext:  This error message is used when the
+                 * rmdir(2) system call returns EEXIST or ENOTEMPTY, in
+                 * the case where pathname is not an empty directory;
+                 * that is, it contains entries other than "." and ".."
+                 */
+                i18n("pathname is not an empty directory; that is, it "
+                "contains entries other than \".\" and \"..\"")
             );
             count = explain_count_directory_entries(pathname);
             if (count > 0)
@@ -230,31 +253,7 @@ explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
             )
         )
         {
-            explain_string_buffer_puts
-            (
-                sb,
-                /* FIXME: i18n */
-                "the directory containing pathname has the sticky bit "
-                "(S_ISVTX) set and the process's effective user ID is neither "
-                "the user ID of the file to be deleted nor that of the "
-                "directory containing it, and the process is not privileged"
-            );
-#ifdef HAVE_SYS_CAPABILITY_H
-            if (explain_option_dialect_specific())
-            {
-                explain_string_buffer_puts
-                (
-                    sb,
-                    " (does not have the CAP_FOWNER capability)"
-                );
-            }
-#endif
-            explain_string_buffer_puts
-            (
-                sb,
-                "; or, the file system containing pathname does not "
-                "support the removal of directories"
-            );
+            explain_buffer_eperm_unlink(sb, pathname, "pathname", syscall_name);
         }
         break;
 
@@ -263,7 +262,7 @@ explain_buffer_errno_rmdir_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 
@@ -288,6 +287,7 @@ explain_buffer_errno_rmdir(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "rmdir",
         pathname
     );
     explain_explanation_assemble(&exp, sb);

@@ -38,6 +38,7 @@
  */
 #include <libexplain/large_file_support.h>
 
+#include <time.h>
 #include <sys/timeb.h>
 
 #ifdef __cplusplus

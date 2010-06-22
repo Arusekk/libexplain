@@ -35,9 +35,15 @@ explain_buffer_arpreq_flags(explain_string_buffer_t *sb, int data)
         { "ATF_PERM", ATF_PERM },
         { "ATF_PUBL", ATF_PUBL },
         { "ATF_USETRAILERS", ATF_USETRAILERS },
+#ifdef ATF_NETMASK
         { "ATF_NETMASK", ATF_NETMASK },
+#endif
+#ifdef ATF_DONTPUB
         { "ATF_DONTPUB", ATF_DONTPUB },
+#endif
+#ifdef ATF_MAGIC
         { "ATF_MAGIC", ATF_MAGIC },
+#endif
     };
 
     explain_parse_bits_print(sb, data, table, SIZEOF(table));
@@ -58,6 +64,7 @@ explain_buffer_arpreq(explain_string_buffer_t *sb,
         explain_buffer_sockaddr(sb, &data->arp_ha, sizeof(data->arp_ha));
         explain_string_buffer_puts(sb, ", arp_flags = ");
         explain_buffer_arpreq_flags(sb, data->arp_flags);
+#ifdef ATF_NETMASK
         explain_string_buffer_puts(sb, ", arp_netmask = ");
         explain_buffer_sockaddr
         (
@@ -65,6 +72,7 @@ explain_buffer_arpreq(explain_string_buffer_t *sb,
             &data->arp_netmask,
             sizeof(data->arp_netmask)
         );
+#endif
         explain_string_buffer_puts(sb, " }");
     }
 }

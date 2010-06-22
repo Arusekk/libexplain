@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,11 +28,27 @@ possibly as a result of a preceeding read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result
 
+# This is what the Debian automated build system (FTBFS) bumps into.
+cat > test.ok2 << 'fubar'
+read(fildes = 42, data = 0x00000100, data_size = 100) failed, Input/output
+error (EIO) because the process is in an orphaned process group and tried
+to read from its controlling tty
+fubar
+test $? -eq 0 || no_result
+
 explain -e EIO -o test.out read 42 0x100 100
 test $? -eq 0 || fail
 
-diff test.ok test.out
-test $? -eq 0 || fail
+diff test.ok2 test.out > LOG 2>&1
+if [ $? -ne 0 ]
+then
+    diff test.ok test.out > LOG 2>&1
+    if [ $? -ne 0 ]
+    then
+        cat LOG
+        fail
+    fi
+fi
 
 #
 # Only definite negatives are possible.

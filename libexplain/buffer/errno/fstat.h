@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -44,11 +44,11 @@ struct stat; /* forward */
   *     functions will alter the value of errno.
   * @param fildes
   *     The original fildes, exactly as passed to the fstat(2) system call.
-  * @param buf
-  *     The original buf, exactly as passed to the fstat(2) system call.
+  * @param data
+  *     The original data, exactly as passed to the fstat(2) system call.
   */
 void explain_buffer_errno_fstat(explain_string_buffer_t *sb, int errnum,
-    int fildes, const struct stat *buf);
+    int fildes, const struct stat *data);
 
 /**
   * The explain_buffer_errno_fstat_explanation function is used by
@@ -59,12 +59,14 @@ void explain_buffer_errno_fstat(explain_string_buffer_t *sb, int errnum,
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param fildes
   *     The original fildes, exactly as passed to the fstat(2) system call.
-  * @param buf
-  *     The original buf, exactly as passed to the fstat(2) system call.
+  * @param data
+  *     The original data, exactly as passed to the fstat(2) system call.
   */
 void explain_buffer_errno_fstat_explanation(explain_string_buffer_t *sb,
-    int errnum, int fildes, const struct stat *buf);
+    int errnum, const char *syscall_name, int fildes, const struct stat *data);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FSTAT_H */

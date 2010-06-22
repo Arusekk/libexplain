@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2009 Peter Miller
+# Copyright (C) 2008-2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,11 +21,17 @@
 TEST_SUBJECT="explain_open vs ENOSPC"
 . test_prelude
 
-fmt > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, No space left on device
-(ENOSPC) because the file system containing the file has no room for
-the new directory entry ("/example", 99% full); note that oldpath still
-exists
+(ENOSPC) because the file system containing newpath ("/example", 99% full)
+has no space for a new directory entry; note that oldpath still exists
+fubar
+test $? -eq 0 || no_result
+
+fmt > test.ok.2 << 'fubar'
+rename(oldpath = "foo", newpath = "bar") failed, No space left on device
+(ENOSPC) because the file system containing newpath has no space for a
+new directory entry; note that oldpath still exists
 fubar
 test $? -eq 0 || no_result
 
@@ -44,7 +50,9 @@ test $? -eq 0 || no_result
 fmt test.out2 > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out
+diff test.ok.2 test.out > /dev/null 2> /dev/null && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

@@ -23,6 +23,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef HAVE_LINUX_IF_FRAD_H
+
 void
 explain_buffer_dlci_add(explain_string_buffer_t *sb,
     const struct dlci_add *data)
@@ -41,3 +43,14 @@ explain_buffer_dlci_add(explain_string_buffer_t *sb,
         explain_string_buffer_printf(sb, ", dlci %d }", data->dlci);
     }
 }
+
+#else
+
+void
+explain_buffer_dlci_add(explain_string_buffer_t *sb,
+    const struct dlci_add *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

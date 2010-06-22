@@ -34,4 +34,435 @@
   */
 extern const explain_iocontrol_t explain_iocontrol_generic;
 
+/**
+  * The explain_iocontrol_generic_print_explanation function is used to
+  * print a generic (non-specific) explanation of an error return by an
+  * ioctl system call.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_explanation(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data);
+
+/**
+  * The explain_iocontrol_fake_syscall_name function is used to
+  * synthesize a "sycall name" for use in error messages that take same.
+  *
+  * @param output
+  *     where to write the name
+  * @param output_size
+  *     the available output size, in bytes
+  * @param p
+  *     ioctl descriptor
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_fake_syscall_name(char *output, int output_size,
+    const explain_iocontrol_t *p, int request);
+
+/**
+  * The explain_iocontrol_generic_print_data_int function is used to
+  * print a generic (non-specific) intger value arg (as opposed to some
+  * kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_int(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_uint function is used to
+  * print a generic (non-specific) unsigned intger value arg (as opposed
+  * to some kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_uint(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_int_star function is used to
+  * print a generic (non-specific) intger pointer arg (as opposed to any
+  * other kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_int_star(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_uint_star function is used
+  * to print a generic (non-specific) unsigned intger pointer arg (as
+  * opposed to any other kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_uint_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_long function is used to
+  * print a generic (non-specific) long int value arg (as opposed to some
+  * kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_long(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_ulong function is used
+  * to print a generic (non-specific) unsigned long int value arg (as
+  * opposed to some kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_ulong(const explain_iocontrol_t *p,
+    struct explain_string_buffer_t *sb, int errnum, int fildes, int request,
+    const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_long_star function is used
+  * to print a generic (non-specific) intger pointer arg (as opposed to
+  * any other kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_long_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_ulong_star function is used
+  * to print a generic (non-specific) unsigned intger pointer arg (as
+  * opposed to any other kind of pointer).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_ulong_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_pointer function is used
+  * to print a generic pointer arg.
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_pointer(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_int64_star function is used
+  * to print a the signed 64-bit value pointer to data.
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_int64_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_int64_star function is used
+  * to print a the unsigned 64-bit value pointer to data.
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_uint64_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_ignored function is used
+  * to print a ioctl::data argument in the case where it is ignored (by
+  * convention, should be zero).
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_ignored(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_short_star function is used
+  * to print a the signed short value pointer to data.
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_short_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_short_star function is used
+  * to print a the unsigned short value pointer to data.
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_ushort_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_int8_star function is used
+  * to print a the signed int8 value pointer to data.
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_int8_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_data_int8_star function is used
+  * to print a the unsigned int8 value pointer to data.
+  *
+  * For use in iocontrol definitions, as code common to <i>many</i>
+  * ioctl requests... hence the weird looking argument list.
+  *
+  * @param p
+  *     ioctl descriptor
+  * @param sb
+  *     where to print the explanation
+  * @param errnum
+  *     the errno value to be explained
+  * @param fildes
+  *     original fildes, exactly as passed to the ioctl system call
+  * @param request
+  *     original request, exactly as passed to the ioctl system call
+  * @param data
+  *     original data, exactly as passed to the ioctl system call
+  */
+void explain_iocontrol_generic_print_data_uint8_star(
+    const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data);
+
 #endif /* LIBEXPLAIN_IOCONTROL_GENERIC_H */

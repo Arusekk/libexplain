@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,9 @@
 #ifndef LIBEXPLAIN_EXPLANATION_H
 #define LIBEXPLAIN_EXPLANATION_H
 
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX except Solaris */
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
+
 #include <libexplain/string_buffer.h>
 
 typedef struct explain_explanation_t explain_explanation_t;
@@ -31,10 +33,12 @@ struct explain_explanation_t
     int errnum;
     char explanation[PATH_MAX * 2 + 200];
     explain_string_buffer_t explanation_sb;
+    char footnotes[1000];
+    explain_string_buffer_t footnotes_sb;
 };
 
 /**
-  * The explain_explanation_init function i sused to initialize an
+  * The explain_explanation_init function is used to initialize an
   * explanation struct for use.
   *
   * @param exp

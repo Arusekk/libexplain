@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,5 +35,21 @@
   */
 void explain_buffer_emlink(explain_string_buffer_t *sb,
     const char *oldpath, const char *newpath);
+
+/**
+  * The explain_buffer_emlink_mkdir function may be used to print an
+  * explanation of an EMLINK error, in the case where mkdir cannot
+  * proceed because the parent directory has too many links (would
+  * exceed LINK_MAX).
+  *
+  * @param sb
+  *    The string buffer to print on.
+  * @param parent
+  *    The path of the directory that has too many links.
+  * @param argument_name
+  *    The name of the offending argument.
+  */
+void explain_buffer_emlink_mkdir(explain_string_buffer_t *sb,
+    const char *parent, const char *argument_name);
 
 #endif /* LIBEXPLAIN_BUFFER_EMLINK_H */

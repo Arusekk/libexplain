@@ -54,10 +54,12 @@ void explain_buffer_errno_unlink(explain_string_buffer_t *sb,
   *     The string buffer in which the message is being constructed.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param path
   *     The original path, exactly has passed to the unlink(2) system call.
   */
 void explain_buffer_errno_unlink_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *path);
+    int errnum, const char *syscall_name, const char *path);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_UNLINK_H */

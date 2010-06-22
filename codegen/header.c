@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,13 +18,12 @@
  */
 
 #include <libexplain/ac/ctype.h>
-#include <libexplain/ac/pwd.h>
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/time.h>
 #include <libexplain/ac/unistd.h>
 
 #include <codegen/header.h>
 #include <codegen/wrapper.h>
+#include <codegen/get_user_name.h>
 
 
 void
@@ -55,24 +54,18 @@ gpl_header(FILE *fp, const char *prefix)
         "libexplain - Explain errno values returned by libc functions");
 
     /*
-     * Print th ecopyright notice.
+     * Print the copyright notice.
      */
     {
-        time_t          now;
-        struct tm       *tmp;
-        struct passwd   *pw;
         char            buffer[1000];
 
-        time(&now);
-        tmp = localtime(&now);
-        pw = getpwuid(getuid());
         snprintf
         (
             buffer,
             sizeof(buffer),
             "Copyright (C) %d %s\n",
-            tmp->tm_year + 1900,
-            pw ? pw->pw_gecos : "you"
+            get_year(),
+            get_user_name()
         );
         wrapper_hang(fp, prefix2, buffer);
     }
@@ -86,9 +79,9 @@ gpl_header(FILE *fp, const char *prefix)
     );
     fprintf(fp, "%s\n", prefix1);
     wrapper(fp, prefix2,
-        "This program is distributed in the hope that it will be useful,"
-        "but WITHOUT ANY WARRANTY; without even the implied warranty of"
-        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU"
+        "This program is distributed in the hope that it will be useful, "
+        "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU "
         "Lesser General Public License for more details."
     );
     fprintf(fp, "%s\n", prefix1);
@@ -133,24 +126,18 @@ lgpl_header(FILE *fp, const char *prefix)
         "libexplain - Explain errno values returned by libc functions");
 
     /*
-     * Print th ecopyright notice.
+     * Print the copyright notice.
      */
     {
-        time_t          now;
-        struct tm       *tmp;
-        struct passwd   *pw;
         char            buffer[1000];
 
-        time(&now);
-        tmp = localtime(&now);
-        pw = getpwuid(getuid());
         snprintf
         (
             buffer,
             sizeof(buffer),
             "Copyright (C) %d %s\n",
-            tmp->tm_year + 1900,
-            pw ? pw->pw_gecos : "you"
+            get_year(),
+            get_user_name()
         );
         wrapper(fp, prefix2, buffer);
     }
@@ -164,9 +151,9 @@ lgpl_header(FILE *fp, const char *prefix)
     );
     fprintf(fp, "%s\n", prefix1);
     wrapper(fp, prefix2,
-        "This program is distributed in the hope that it will be useful,"
-        "but WITHOUT ANY WARRANTY; without even the implied warranty of"
-        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU"
+        "This program is distributed in the hope that it will be useful, "
+        "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU "
         "Lesser General Public License for more details."
     );
     fprintf(fp, "%s\n", prefix1);

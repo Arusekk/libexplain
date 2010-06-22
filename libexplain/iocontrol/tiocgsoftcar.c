@@ -19,8 +19,11 @@
 
 #include <libexplain/ac/sys/ioctl.h>
 
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocgsoftcar.h>
 
+
+#ifdef TIOCGSOFTCAR
 
 const explain_iocontrol_t explain_iocontrol_tiocgsoftcar =
 {
@@ -28,6 +31,28 @@ const explain_iocontrol_t explain_iocontrol_tiocgsoftcar =
     TIOCGSOFTCAR, /* value */
     0, /* disambiguate */
     0, /* print_name */
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
+    0, /* print_explanation */
+    explain_iocontrol_generic_print_data_uint_star, /* print_data_returned */
+    sizeof(unsigned int), /* data_size */
+    __FILE__,
+    __LINE__,
+};
+
+#else
+
+const explain_iocontrol_t explain_iocontrol_tiocgsoftcar =
+{
+    0, /* name */
+    0, /* value */
+    0, /* disambiguate */
+    0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
+
+#endif

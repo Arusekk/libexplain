@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@ TEST_SUBJECT="connect EFAULT"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-connect(fildes = 42, serv_addr = 0x00001234, serv_addr_size = NNN) failed,
+connect(fildes = 42, serv_addr = 0x09876543, serv_addr_size = NNN) failed,
 Bad address (EFAULT) because sock_addr refers to memory that is outside
 the process's accessible address space; this is more likely to be a
 software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT connect 42 0x1234 100 > test.out4
+explain -eEFAULT connect 42 0x9876543 100 > test.out4
 test $? -eq 0 || fail
 
 fmt -w700 test.out4 > test.out3

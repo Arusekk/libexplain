@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -144,20 +144,30 @@ static explain_parse_bits_table_t table[] =
     { "_NSIG", _NSIG },
 #endif
 
-#ifdef __SIGRTMIN
-    { "SIGRTMIN", __SIGRTMIN },
-#else
-#ifdef SIGRTMIN
+#if !defined(_SIGRTMIN) && !defined(__SIGRTMIN)
+    /* sometimes this is a non-constant macro: sysconf(_SC_SIGRTMIN) */
     { "SIGRTMIN", SIGRTMIN },
 #endif
+#ifdef __SIGRTMIN
+    { "SIGRTMIN", __SIGRTMIN },
+    { "__SIGRTMIN", __SIGRTMIN },
+#endif
+#ifdef _SIGRTMIN
+    { "SIGRTMIN", _SIGRTMIN },
+    { "_SIGRTMIN", _SIGRTMIN },
 #endif
 
-#ifdef __SIGRTMAX
-    { "SIGRTMAX", __SIGRTMAX },
-#else
-#ifdef SIGRTMAX
+#if !defined(_SIGRTMAX) && !defined(__SIGRTMAX)
+    /* sometimes this is a non-constant macro: sysconf(_SC_SIGRTMAX) */
     { "SIGRTMAX", SIGRTMAX },
 #endif
+#ifdef _SIGRTMAX
+    { "SIGRTMAX", _SIGRTMAX },
+    { "_SIGRTMAX", _SIGRTMAX },
+#endif
+#ifdef __SIGRTMAX
+    { "SIGRTMAX", __SIGRTMAX },
+    { "__SIGRTMAX", __SIGRTMAX },
 #endif
 };
 
@@ -165,9 +175,18 @@ static explain_parse_bits_table_t table[] =
 static void
 fix_real_time_values(void)
 {
-#ifdef __SIGRTMIN
+#if defined(__SIGRTMIN) || defined(_SIGRTMIN)
     explain_parse_bits_table_t *tp;
+    static int      done;
 
+    if (done)
+        return;
+    done = 1;
+
+    /*
+     * This is needed if SIGRTMIN et al are actually macros calling
+     * sysconf(_SC_SIGRTMIN), etc.
+     */
     for (tp = table; tp < ENDOF(table); ++tp)
     {
         if (0 == strcmp(tp->name, "SIGRTMIN"))
@@ -193,15 +212,26 @@ explain_buffer_signal(explain_string_buffer_t *sb, int signum)
     }
 
 #if defined(SIGRTMIN) && defined(SIGRTMAX)
-    if (SIGRTMIN <= signum && signum <= SIGRTMAX)
     {
-        explain_string_buffer_printf
-        (
-            sb,
-            "SIGRTMIN + %d",
-            signum - SIGRTMIN
-        );
-        return;
+        int             rtmin;
+        int             rtmax;
+
+        /*
+         * Don't worry about the SIGRTMIN+0 case being ugly, because the
+         * table already dealt with that case.
+         */
+        rtmin = SIGRTMIN;
+        rtmax = SIGRTMAX;
+        if (rtmin <= signum && signum <= rtmax)
+        {
+            explain_string_buffer_printf
+            (
+                sb,
+                "SIGRTMIN + %d",
+                signum - rtmin
+            );
+            return;
+        }
     }
 #endif
 

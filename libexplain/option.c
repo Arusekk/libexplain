@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,11 +19,12 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/ctype.h>
-#include <libexplain/ac/string.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
 
 #include <libexplain/fstrcmp.h>
 #include <libexplain/option.h>
+#include <libexplain/parse_bits.h>
 #include <libexplain/program_name.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
@@ -55,6 +56,8 @@ static option_t debug = { option_level_default, 0 };
 static option_t numeric_errno = { option_level_default, 1 };
 static option_t dialect_specific = { option_level_default, 1 };
 static option_t assemble_program_name = { option_level_default, 0 };
+static option_t symbolic_mode_bits = { option_level_default, 0 };
+static option_t internal_strerror = { option_level_default, 0 };
 
 typedef struct table_t table_t;
 struct table_t
@@ -68,8 +71,19 @@ static const table_t table[] =
     { "assemble-program-name", &assemble_program_name },
     { "debug", &debug },
     { "dialect-specific", &dialect_specific },
+    { "internal-strerror", &internal_strerror },
     { "numeric-errno", &numeric_errno },
     { "program-name", &assemble_program_name },
+    { "symbolic-mode-bits", &symbolic_mode_bits },
+};
+
+
+static const explain_parse_bits_table_t bool_table[] =
+{
+    { "yes", 1 },
+    { "no", 0 },
+    { "true", 1 },
+    { "false", 0 },
 };
 
 
@@ -79,23 +93,29 @@ process(char *name, option_level_t level)
     const table_t   *tp;
     value_t         value;
     char            *eq;
+    int             invert;
 
     if (!*name)
         return;
+    invert = 0;
     value = 1;
     if (name[0] == 'n' && name[1] == 'o' && name[2] == '-')
     {
-        value = 0;
+        invert = 1;
         name += 3;
     }
     eq = strchr(name, '=');
     if (eq)
     {
-        value = atoi(eq + 1);
+        int n = 0;
+        explain_parse_bits(eq + 1, bool_table, SIZEOF(bool_table), &n);
+        value = n;
         while (eq > name && isspace((unsigned char)eq[-1]))
             --eq;
         *eq = '\0';
     }
+    if (invert)
+        value = !value;
     for (tp = table; tp < ENDOF(table); ++tp)
     {
         if (0 == strcmp(tp->name, name))
@@ -158,7 +178,12 @@ initialise(void)
 
     err = errno;
     initialised = 1;
-    cp = getenv("LIBEXPLAIN_OPTIONS");
+    cp = getenv("EXPLAIN_OPTIONS");
+    if (!cp)
+    {
+        /* for historical compatibility */
+        cp = getenv("LIBEXPLAIN_OPTIONS");
+    }
     if (!cp)
         cp = "";
     for (;;)
@@ -181,15 +206,14 @@ initialise(void)
                     c = tolower(c);
                 *np++ = c;
             }
-            c = *cp++;
+            c = *cp;
             if (!c)
-            {
-                --cp;
                 break;
-            }
+            ++cp;
             if (c == ',')
                 break;
         }
+        /* remove trailing white space */
         while (np > name && isspace((unsigned char)np[-1]))
             --np;
         *np = '\0';
@@ -267,4 +291,22 @@ explain_program_name_assemble_internal(int yesno)
         assemble_program_name.level = option_level_something_or_die;
         assemble_program_name.value = !!yesno;
     }
+}
+
+
+int
+explain_option_symbolic_mode_bits(void)
+{
+    if (!initialised)
+        initialise();
+    return symbolic_mode_bits.value;
+}
+
+
+int
+explain_option_internal_strerror(void)
+{
+    if (!initialised)
+        initialise();
+    return internal_strerror.value;
 }

@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2009 Peter Miller
+# Copyright (C) 2008-2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ project_specific =
     },
     {
         name = "aemakegen:version-info";
-        value = "13:0:4";
+        value = "30:0:0";
     },
     {
         name = "aemakegen:debian:copyright";
@@ -59,6 +59,10 @@ project_specific =
             ;
     },
     {
+        name = "aemakegen:debian:description:libexplain";
+        value = "library of syscall-specific strerror replacements";
+    },
+    {
         name = "aemakegen:debian:extended-description:libexplain";
         value =
             "This package provides a library which may be used to "
@@ -70,7 +74,7 @@ project_specific =
     },
     {
         name = "aemakegen:debian:build-depends";
-        value = "libcap-dev, bison, groff, lsof";
+        value = "libcap-dev, bison, groff, linux-libc-dev, lsof";
     },
     {
         name = "aemakegen:debian:depends";

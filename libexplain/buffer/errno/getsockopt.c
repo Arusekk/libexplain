@@ -100,7 +100,7 @@ explain_buffer_errno_getsockopt_explanation(explain_string_buffer_t *sb,
 
     default:
         dunno:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "getsockopt");
         break;
     }
 }

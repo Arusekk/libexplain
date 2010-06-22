@@ -55,11 +55,13 @@ void explain_buffer_errno_malloc(explain_string_buffer_t *sb, int errnum,
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param size
   *     The original size, exactly as passed to the malloc(3) system call.
   */
 void explain_buffer_errno_malloc_explanation(explain_string_buffer_t *sb,
-    int errnum, size_t size);
+    int errnum, const char *syscall_name, size_t size);
 
 /* vim:ts=8:sw=4:et */
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_MALLOC_H */

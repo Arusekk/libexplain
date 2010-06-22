@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,7 @@
 #include <libexplain/buffer/errno/fflush.h>
 #include <libexplain/buffer/errno/fopen.h>
 #include <libexplain/buffer/errno/freopen.h>
+#include <libexplain/buffer/note/underlying_fildes_open.h>
 #include <libexplain/buffer/stream.h>
 #include <libexplain/explanation.h>
 #include <libexplain/stream_to_fildes.h>
@@ -47,7 +48,8 @@ explain_buffer_errno_freopen_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_freopen_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, const char *flags, FILE *fp)
+    int errnum, const char *syscall_name, const char *pathname,
+    const char *flags, FILE *fp)
 {
     switch (errnum)
     {
@@ -55,7 +57,7 @@ explain_buffer_errno_freopen_explanation(explain_string_buffer_t *sb,
     case EFBIG:
     case ENOSPC:
     case EPIPE:
-        explain_buffer_errno_fflush_explanation(sb, errnum, fp);
+        explain_buffer_errno_fflush_explanation(sb, errnum, syscall_name, fp);
         return;
 
     case EBADF:
@@ -64,20 +66,22 @@ explain_buffer_errno_freopen_explanation(explain_string_buffer_t *sb,
 
     case EINTR:
     case EIO:
-        explain_buffer_errno_fclose_explanation(sb, errnum, fp);
+        explain_buffer_errno_fclose_explanation(sb, errnum, syscall_name, fp);
         return;
 
     default:
-        explain_buffer_errno_fopen_explanation(sb, errnum, pathname, flags);
+        explain_buffer_errno_fopen_explanation
+        (
+            sb,
+            errnum,
+            syscall_name,
+            pathname,
+            flags
+        );
         break;
     }
 
-    explain_string_buffer_puts
-    (
-        sb,
-        "; note that while the FILE stream is no longer valid, the "
-        "underlying file descriptor may still be open"
-    );
+    explain_buffer_note_underlying_fildes_open(sb);
 }
 
 
@@ -100,6 +104,7 @@ explain_buffer_errno_freopen(struct explain_string_buffer_t *sb,
     (
         &exp.explanation_sb,
         errnum,
+        "freopen",
         pathname,
         flags,
         fp

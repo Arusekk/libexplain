@@ -47,15 +47,7 @@ explain_buffer_ifreq_mii(explain_string_buffer_t *sb,
             sizeof(ifr->ifr_name)
         );
         explain_string_buffer_puts(sb, ", mii = ");
-        explain_buffer_mii_ioctl_data
-        (
-            sb,
-            /*
-             * This cast is disgusting, but that's how it's done within
-             * the kernel itself.
-             */
-            (const struct mii_ioctl_data *)&ifr->ifr_ifru
-        );
+        explain_buffer_mii_ioctl_data(sb, (const void *)&ifr->ifr_ifru);
         explain_string_buffer_puts(sb, " }");
     }
 }

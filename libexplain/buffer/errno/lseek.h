@@ -61,6 +61,8 @@ void explain_buffer_errno_lseek(struct explain_string_buffer_t *sb,
   *    The string buffer into which the message is to be written.
   * @param errnum
   *    The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param fildes
   *    The file descriptor to seek on,
   *    exactly as passed to the lseek(2) system call.
@@ -72,6 +74,6 @@ void explain_buffer_errno_lseek(struct explain_string_buffer_t *sb,
   *    Given a suitably thread safe buffer, this function is thread safe.
   */
 void explain_buffer_errno_lseek_explanation(struct explain_string_buffer_t *sb,
-    int errnum, int fildes, off_t offset, int whence);
+    int errnum, const char *syscall_name, int fildes, off_t offset, int whence);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_LSEEK_H */

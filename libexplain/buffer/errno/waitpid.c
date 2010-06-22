@@ -27,10 +27,11 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/waitpid.h>
 #include <libexplain/buffer/gettext.h>
-#include <libexplain/buffer/waitpid_options.h>
 #include <libexplain/buffer/no_outstanding_children.h>
 #include <libexplain/buffer/note/sigchld.h>
+#include <libexplain/buffer/pid_t_star.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/waitpid_options.h>
 #include <libexplain/explanation.h>
 
 
@@ -39,11 +40,18 @@ explain_buffer_errno_waitpid_system_call(explain_string_buffer_t *sb,
     int errnum, int pid, int *status, int options)
 {
     (void)errnum;
-    explain_string_buffer_printf(sb, "waitpid(pid = %d", pid);
+    explain_string_buffer_puts(sb, "waitpid(pid = ");
+    explain_buffer_pid_t(sb, pid);
     if (pid == 0)
-        explain_string_buffer_printf(sb, " = process group %d", getpgrp());
+    {
+        explain_string_buffer_puts(sb, " = process group ");
+        explain_buffer_pid_t(sb, getpgrp());
+    }
     else if (pid < -1)
-        explain_string_buffer_printf(sb, " = process group %d", -pid);
+    {
+        explain_string_buffer_puts(sb, " = process group ");
+        explain_buffer_pid_t(sb, -pid);
+    }
     explain_string_buffer_puts(sb, ", status = ");
     explain_buffer_pointer(sb, status);
     explain_string_buffer_puts(sb, ", options = ");
@@ -61,7 +69,7 @@ process_exists(int pid)
 
 void
 explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
-    int errnum, int pid, int *status, int options)
+    int errnum, const char *syscall_name, int pid, int *status, int options)
 {
     /*
      * http://www.opengroup.org/onlinepubs/009695399/functions/waitpid.html
@@ -162,7 +170,7 @@ explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
          * WNOHANG was not set and an unblocked signal or a SIGCHLD was
          * caught.
          */
-        explain_buffer_eintr(sb, "waitpid");
+        explain_buffer_eintr(sb, syscall_name);
         break;
 
     case EINVAL:
@@ -176,7 +184,7 @@ explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -201,6 +209,7 @@ explain_buffer_errno_waitpid(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "waitpid",
         pid,
         status,
         options

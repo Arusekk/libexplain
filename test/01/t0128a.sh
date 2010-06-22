@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,11 +21,19 @@
 TEST_SUBJECT="creat EROFS"
 . test_prelude
 
-fmt > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 creat(pathname = "fred", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP |
 S_IROTH | S_IWOTH) failed, Read-only file system (EROFS) because
 write access was requested and pathname refers to a file on a read-only
 file system ("/example", 99% full)
+fubar
+test $? -eq 0 || no_result
+
+fmt > test.ok.2 << 'fubar'
+creat(pathname = "fred", mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP |
+S_IROTH | S_IWOTH) failed, Read-only file system (EROFS) because
+write access was requested and pathname refers to a file on a read-only
+file system
 fubar
 test $? -eq 0 || no_result
 
@@ -41,7 +49,9 @@ test $? -eq 0 || no_result
 fmt test.out3 > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out
+diff test.ok.2 test.out > /dev/null 2> /dev/null && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

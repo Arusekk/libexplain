@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,7 +17,8 @@
  */
 
 #include <libexplain/ac/dirent.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris  */
 
 #include <libexplain/buffer/device_name.h>
 #include <libexplain/buffer/pointer.h>
@@ -28,14 +29,14 @@
   * The dev_stat_rec function is used to walk the /dev directory
   * tree, looking for a specific device.
   *
-  * @param device_path
+  * @param dev_path
   *     The is the path recursively constructed as we descend down the
   *     directory tree looking for devices.
   * @param dev
   *     The device beeing searched for.
   * @param st
   *     The details of the device found (output).
-  * @param shortest_device_path
+  * @param shortest_dev_path
   *     The path of the device found.  If nore than one is found, the
   *     shortest device_path is remembered.
   * @returns

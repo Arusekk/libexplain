@@ -58,7 +58,7 @@ explain_buffer_errno_getc_explanation(explain_string_buffer_t *sb,
         return;
     }
 
-    explain_buffer_errno_read_explanation(sb, errnum, fildes, NULL, 0);
+    explain_buffer_errno_read_explanation(sb, errnum, "getc", fildes, NULL, 0);
 }
 
 

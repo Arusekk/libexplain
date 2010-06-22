@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,10 @@ catalogue_t *catalogue_creat(const char *function_name);
 
 const char *catalogue_get(catalogue_t *cp, const char *name);
 int catalogue_get_bool(catalogue_t *cp, const char *name, int dflt);
+int catalogue_get_int(catalogue_t *cp, const char *name, int dflt);
 void catalogue_set(catalogue_t *cp, const char *name, const char *value);
+void catalogue_set_int(catalogue_t *cp, const char *name, int value);
+void catalogue_set_bool(catalogue_t *cp, const char *name, int value);
 void catalogue_close(catalogue_t *cp);
 void catalogue_save(catalogue_t *cp);
 

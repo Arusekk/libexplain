@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,13 @@
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/read.h>
 
 
 const char *
-explain_read(int fildes, const void *data, long data_size)
+explain_read(int fildes, const void *data, size_t data_size)
 {
     return explain_errno_read(errno, fildes, data, data_size);
 }

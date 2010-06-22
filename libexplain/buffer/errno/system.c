@@ -43,7 +43,7 @@ explain_buffer_errno_system_system_call(explain_string_buffer_t *sb,
 
 static void
 explain_buffer_errno_system_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *command)
+    int errnum, const char *syscall_name, const char *command)
 {
     int             junk;
 
@@ -56,17 +56,17 @@ explain_buffer_errno_system_explanation(explain_string_buffer_t *sb,
     {
     case EAGAIN:
     case ENOMEM:
-        explain_buffer_errno_fork_explanation(sb, errnum);
+        explain_buffer_errno_fork_explanation(sb, errnum, syscall_name);
         break;
 
     case ECHILD:
     case EINTR:
     case EINVAL:
-        explain_buffer_errno_wait_explanation(sb, errnum, &junk);
+        explain_buffer_errno_wait_explanation(sb, errnum, syscall_name, &junk);
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -89,6 +89,7 @@ explain_buffer_errno_system(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "system",
         command
     );
     explain_explanation_assemble(&exp, sb);

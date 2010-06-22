@@ -158,9 +158,11 @@ explain_buffer_errno_accept_explanation(explain_string_buffer_t *sb,
         explain_buffer_enomem_kernel(sb);
         break;
 
+#ifdef ENONET
     case ENONET:
         explain_buffer_enonet(sb);
         break;
+#endif
 
     case ENOPROTOOPT:
         explain_buffer_enoprotoopt(sb, "fildes");
@@ -177,25 +179,31 @@ explain_buffer_errno_accept_explanation(explain_string_buffer_t *sb,
         explain_buffer_enosys_socket(sb, "accept", fildes);
         break;
 
+#ifdef ENOSR
     case ENOSR:
         explain_buffer_enosr(sb);
         break;
+#endif
 
     case EPERM:
         explain_buffer_eperm_accept(sb);
         break;
 
+#ifdef EPROTO
     case EPROTO:
         explain_buffer_eproto_accept(sb, fildes);
         break;
+#endif
 
     case EPROTONOSUPPORT:
         explain_buffer_eprotonosupport(sb);
         break;
 
+#ifdef ERESTART
     case ERESTART:
         explain_buffer_erestart(sb, "accept");
         break;
+#endif
 
     case ESOCKTNOSUPPORT:
         explain_buffer_esocktnosupport(sb, "accept", fildes);
@@ -206,7 +214,7 @@ explain_buffer_errno_accept_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "accept");
         break;
     }
 }

@@ -55,10 +55,12 @@ void explain_buffer_errno_wait(explain_string_buffer_t *sb, int errnum,
   *     The string buffer to print the message into.
   * @param errnum
   *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
   * @param status
   *     The original status, exactly as passed to the wait(2) system call.
   */
 void explain_buffer_errno_wait_explanation(explain_string_buffer_t *sb,
-    int errnum, int *status);
+    int errnum, const char *syscall_name, int *status);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_WAIT_H */

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,9 +23,8 @@ TEST_SUBJECT="getsockname ENOTCONN"
 
 fmt > test.ok << 'fubar'
 getsockname(fildes = 42, sock_addr = 0xNNNNNNNN, sock_addr_size = {
-128 }) failed, Transport endpoint is not connected (ENOTCONN) because
-(this error is unknown for this system call, you could improve libexplain
-by contributing code to explain this error)
+XXX }) failed, Transport endpoint is not connected (ENOTCONN) because
+the fildes argument refers to a socket that is not connected
 fubar
 test $? -eq 0 || no_result
 
@@ -35,7 +34,9 @@ test $? -eq 0 || fail
 fmt -w700 test.out.4 > test.out.3
 test $? -eq 0 || no_result
 
-sed 's|sock_addr = [^,)]*|sock_addr = 0xNNNNNNNN|' < test.out.3 > test.out.2
+sed -e 's|0x[0-9a-fA-F][0-9a-fA-F]*|0xNNNNNNNN|g' \
+    -e 's|size = { [0-9]* }|size = { XXX }|g' \
+    test.out.3 > test.out.2
 test $? -eq 0 || no_result
 
 fmt test.out.2 > test.out

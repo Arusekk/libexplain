@@ -31,8 +31,11 @@
   *    The string bufferto print into.
   * @param errnum
   *    The errno value to explain
+  * @param syscall_name
+  *    The name of the problematic system call, for improving error
+  *    messages.
   */
 void explain_buffer_errno_generic(explain_string_buffer_t *sb,
-    int errnum);
+    int errnum, const char *syscall_name);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_GENERIC_H */

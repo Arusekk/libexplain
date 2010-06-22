@@ -23,6 +23,7 @@
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/errno/wait4.h>
 #include <libexplain/buffer/errno/waitpid.h>
+#include <libexplain/buffer/pid_t_star.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/waitpid_options.h>
 #include <libexplain/explanation.h>
@@ -34,11 +35,18 @@ explain_buffer_errno_wait4_system_call(explain_string_buffer_t *sb,
     int errnum, int pid, int *status, int options, struct rusage *rusage)
 {
     (void)errnum;
-    explain_string_buffer_printf(sb, "wait4(pid = %d", pid);
+    explain_string_buffer_puts(sb, "wait4(pid = ");
+    explain_buffer_pid_t(sb, pid);
     if (pid == 0)
-        explain_string_buffer_printf(sb, " = process group %d", getpgrp());
+    {
+        explain_string_buffer_puts(sb, " = process group ");
+        explain_buffer_pid_t(sb, getpgrp());
+    }
     else if (pid < -1)
-        explain_string_buffer_printf(sb, " = process group %d", -pid);
+    {
+        explain_string_buffer_puts(sb, " = process group ");
+        explain_buffer_pid_t(sb, -pid);
+    }
     explain_string_buffer_puts(sb, ", status = ");
     explain_buffer_pointer(sb, status);
     explain_string_buffer_puts(sb, ", options = ");
@@ -51,7 +59,8 @@ explain_buffer_errno_wait4_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_wait4_explanation(explain_string_buffer_t *sb,
-    int errnum, int pid, int *status, int options, struct rusage *rusage)
+    int errnum, const char *syscall_name, int pid, int *status, int options,
+    struct rusage *rusage)
 {
     switch (errnum)
     {
@@ -73,6 +82,7 @@ explain_buffer_errno_wait4_explanation(explain_string_buffer_t *sb,
         (
             sb,
             errnum,
+            syscall_name,
             pid,
             status,
             options
@@ -102,6 +112,7 @@ explain_buffer_errno_wait4(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "wait4",
         pid,
         status,
         options,

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@ n_callback(explain_lsof_t *context, const char *name)
         adapter         *a;
 
         a = (adapter *)context;
-        strendcpy(a->data, name, a->data + a->data_size);
+        explain_strendcpy(a->data, name, a->data + a->data_size);
         a->count++;
     }
 }

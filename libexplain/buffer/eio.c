@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,14 +20,15 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/dirent.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on solaris */
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/sys/param.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except solaris */
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/ac/sys/mtio.h>
 #ifdef __linux__
-#include <linux/hdreg.h>
+#include <libexplain/ac/linux/hdreg.h>
 #endif
 #include <libexplain/ac/termios.h>
 
@@ -187,7 +188,7 @@ explain_buffer_eio_stat(explain_string_buffer_t *sb, int fildes,
     case S_IFCHR:
         a_low_level_io_error_occurred(sb, dev_path, st);
         possibly_as_a_result_of_a_preceeding(sb, fildes);
-        break;;
+        break;
 
     default:
         explain_buffer_eio_generic(sb, fildes);

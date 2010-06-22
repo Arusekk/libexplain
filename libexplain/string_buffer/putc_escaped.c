@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/ctype.h>
+#include <libexplain/ac/limits.h>
 
 #include <libexplain/string_buffer.h>
 
@@ -165,7 +166,20 @@ explain_string_buffer_putc_escaped(explain_string_buffer_t *sb, int c,
         /* this test will be locale specific */
         if (isprint((unsigned char)c))
             goto printable;
-        explain_string_buffer_printf(sb, "\\%03o", (unsigned char)c);
+
+        /*
+         * We can't use "\\%03o" or "\\%3.3o" or "\\%03.3o" here because
+         * different systems interpret them differently.  One or the
+         * other is often space padded rather than zero padded.
+         * So we convert the value ourselves.
+         */
+        explain_string_buffer_putc(sb, '\\');
+        if (CHAR_BIT > 8)
+            explain_string_buffer_putc(sb, ((c >> 6) & 7) + '0');
+        else
+            explain_string_buffer_putc(sb, ((c >> 6) & 3) + '0');
+        explain_string_buffer_putc(sb, ((c >> 3) & 7) + '0');
+        explain_string_buffer_putc(sb, (c & 7) + '0');
         break;
     }
 }

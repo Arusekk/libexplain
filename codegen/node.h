@@ -46,7 +46,7 @@ int node_is(const node_t *np, const char *name);
 int node_is_literal(const node_t *np, const char *text);
 int node_is_a_literal(const node_t *np);
 
-struct string_buffer_t; /* forward */
+struct elastic_buffer_t; /* forward */
 
 enum node_print_style_t
 {
@@ -56,7 +56,7 @@ enum node_print_style_t
 };
 typedef enum node_print_style_t node_print_style_t;
 
-void node_print_sb(const node_t *np, struct string_buffer_t *sb,
+void node_print_sb(const node_t *np, struct elastic_buffer_t *sb,
     node_print_style_t style);
 
 /**

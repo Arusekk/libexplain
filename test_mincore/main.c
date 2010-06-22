@@ -45,7 +45,7 @@ mincore_says_is_in_core(void *data, size_t data_size)
     vec_bytes = hi_pages - lo_pages;
     if (vec_bytes > sizeof(vec))
         return 0;
-    return (mincore(lo, bsize, vec) >= 0);
+    return (mincore(lo, bsize, (void *)vec) >= 0);
 }
 
 

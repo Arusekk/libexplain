@@ -22,9 +22,8 @@ TEST_SUBJECT="sethostname EINVAL"
 . test_prelude
 
 cat > test.ok << 'fubar'
-gethostname(name = "hello", name_size = 5) failed, Invalid argument
-(EINVAL) because (this error is unknown for this system call, you could
-improve libexplain by contributing code to explain this error)
+sethostname(name = "hello", name_size = 5) failed, Invalid argument
+(EINVAL) because the hostname specified is too long
 fubar
 test $? -eq 0 || no_result
 

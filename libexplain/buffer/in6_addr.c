@@ -23,6 +23,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef AF_INET6
+
 void
 explain_buffer_in6_addr(explain_string_buffer_t *sb,
     const struct in6_addr *data)
@@ -37,3 +39,14 @@ explain_buffer_in6_addr(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, straddr);
     }
 }
+
+#else
+
+void
+explain_buffer_in6_addr(explain_string_buffer_t *sb,
+    const struct in6_addr *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

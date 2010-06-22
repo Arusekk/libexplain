@@ -122,7 +122,7 @@ explain_buffer_errno_acct_explanation(explain_string_buffer_t *sb, int errnum,
         );
         break;
 #else
-        explain_buffer_enosys_pathname(sb, pathname, "acct");
+        explain_buffer_enosys_pathname(sb, pathname, "pathname", "acct");
         break;
 #endif
 
@@ -151,7 +151,7 @@ explain_buffer_errno_acct_explanation(explain_string_buffer_t *sb, int errnum,
 
     default:
         generic:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "acct");
         break;
     }
 }

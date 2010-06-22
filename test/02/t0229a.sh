@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,14 +22,14 @@ TEST_SUBJECT="getc EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
-getc(fp = 0x00000123) failed, Bad file descriptor (EBADF) because fp is
+getc(fp = 0x09876543) failed, Bad file descriptor (EBADF) because fp is
 outside the allowed range for file descriptors, fp does not refer to an
 open file; this is more likely to be a software error (a bug) than it is to
 be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -e EBADF getc 0x123 > test.out
+explain -e EBADF getc 0x9876543 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

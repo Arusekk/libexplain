@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,11 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/errno.h>
+#include <libexplain/ac/stdio.h>
 
 #include <libexplain/freopen.h>
 #include <libexplain/option.h>
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/output.h>
+
+
+FILE *
+explain_freopen_on_error(const char *pathname, const char *flags, FILE *fp)
+{
+    FILE            *result;
+
+    result = freopen(pathname, flags, fp);
+    if (!result)
+    {
+        int             hold_errno;
+
+        hold_errno = errno;
+        explain_program_name_assemble_internal(1);
+        explain_output_message(explain_errno_freopen(hold_errno,
+            pathname, flags, fp));
+        errno = hold_errno;
+    }
+    return result;
+}
 
 
 void
@@ -29,6 +50,9 @@ explain_freopen_or_die(const char *pathname, const char *flags, FILE *fp)
 {
     if (!explain_freopen_on_error(pathname, flags, fp))
     {
-        exit(EXIT_FAILURE);
+        explain_output_exit_failure();
     }
 }
+
+
+/* vim: set ts=8 sw=4 et */

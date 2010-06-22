@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,6 +43,125 @@ explain_explanation_init(explain_explanation_t *exp, int errnum)
         exp->explanation,
         sizeof(exp->explanation)
     );
+    explain_string_buffer_init
+    (
+        &exp->footnotes_sb,
+        exp->footnotes,
+        sizeof(exp->footnotes)
+    );
+    exp->explanation_sb.footnotes = &exp->footnotes_sb;
+    exp->system_call_sb.footnotes = &exp->footnotes_sb;
+}
+
+
+static long
+count_non_format_bytes(const char *msgid)
+{
+    const char      *msgstr;
+    long            result;
+
+    msgstr = explain_gettext(msgid);
+    result = 0;
+    for (;;)
+    {
+        unsigned char   c;
+
+        c = *msgstr++;
+        if (c == '\0')
+            return result;
+        if (c != '%')
+        {
+            ++result;
+            continue;
+        }
+
+        for (;;)
+        {
+            c = *msgstr++;
+            switch (c)
+            {
+            case '\0': /*  oops, end of string */
+                return result;
+
+            case ' ': /* positive prefix request */
+            case '#': /* alternate format request */
+            case '$': /* poisition introducer */
+            case '\'': /* SUSv2 only: use thousands separator */
+                continue;
+
+            case '%': /* literal */
+                ++result;
+                break;
+
+            case '+': /* positive prefix request */
+            case '-': /* left aligned */
+            case '.': /* precision intriducer */
+            case '0': /* position, width or precision */
+            case '1': /* position, width or precision */
+            case '2': /* position, width or precision */
+            case '3': /* position, width or precision */
+            case '4': /* position, width or precision */
+            case '5': /* position, width or precision */
+            case '6': /* position, width or precision */
+            case '7': /* position, width or precision */
+            case '8': /* position, width or precision */
+            case '9': /* position, width or precision */
+                continue;
+
+            case 'A': /* floating point format, hex notation */
+            case 'a': /* floating point format, hex notation */
+            case 'C': /* SUSv2 only: synonly for %lc */
+            case 'c': /* character format */
+            case 'd': /* integer format */
+            case 'E': /* floating point format */
+            case 'e': /* floating point format */
+            case 'F': /* floating point format */
+            case 'f': /* floating point format */
+            case 'G': /* floating point format */
+            case 'g': /* floating point format */
+                break;
+
+            case 'h': /* short size */
+            case 'I': /* use alternate locale digits */
+                continue;
+
+            case 'i': /* integer format */
+                break;
+
+            case 'j': /* uintmax_t size */
+            case 'L': /* long size */
+            case 'l': /* long size */
+                continue;
+
+            case 'm': /* strerror(errno).  Glibc only */
+            case 'n': /* num chars so far */
+            case 'o': /* octal format */
+            case 'p': /* pointer format */
+                break;
+
+            case 'q':
+                continue;
+
+            case 's': /* string format */
+                break;
+
+            case 't': /* ptrdiff_t size */
+                continue;
+
+            case 'X': /* hex format */
+            case 'x': /* hex format */
+                break;
+
+            case 'z': /* size_t size */
+                continue;
+
+            default:
+                break;
+            }
+            break;
+        }
+    }
+    return result;
 }
 
 
@@ -50,7 +169,7 @@ static void
 explain_explanation_assemble_common(explain_explanation_t *exp,
     const char *strerror_text, explain_string_buffer_t *result)
 {
-    long            fmt_len;
+    long            overhead;
     long            prob_len;
     long            exp_len;
     int             err_len;
@@ -81,6 +200,7 @@ explain_explanation_assemble_common(explain_explanation_t *exp,
             i18n("%s: success"),
             exp->system_call
         );
+        explain_string_buffer_puts(result, exp->footnotes);
         return;
     }
 
@@ -92,10 +212,16 @@ explain_explanation_assemble_common(explain_explanation_t *exp,
     err_len = strlen(strerror_text);
     if (exp->explanation_sb.position == 0)
     {
+        /*
+         * NOTE: this string MUST be exactly the same as the one used,
+         * below, to glue the explanation parts together.
+         */
         use_short_form:
-        if (prob_len + err_len + 20 > (long)result->maximum)
+        overhead = count_non_format_bytes("%s failed, %s");
+
+        if (prob_len + err_len + overhead > (long)result->maximum)
         {
-            long new_len = (long)result->maximum - (fmt_len + err_len);
+            long new_len = (long)result->maximum - (prob_len + overhead);
             explain_string_buffer_truncate(&exp->explanation_sb, new_len);
         }
 
@@ -128,14 +254,21 @@ explain_explanation_assemble_common(explain_explanation_t *exp,
             exp->system_call,
             strerror_text
         );
+        explain_string_buffer_puts(result, exp->footnotes);
         return;
     }
 
+    /*
+     * NOTE: this string MUST be exactly the same as the one used
+     * below, to glue the explanation parts together.
+     */
+    overhead = count_non_format_bytes("%s failed, %s because %s");
+
     exp_len = exp->explanation_sb.position;
-    if (prob_len + err_len + exp_len + 20 > (long)result->maximum)
+    if (prob_len + err_len + exp_len + overhead > (long)result->maximum)
     {
         long new_exp_len =
-            (long)result->maximum - (prob_len + fmt_len + err_len);
+            (long)result->maximum - (prob_len + err_len + overhead);
         if (new_exp_len <= 0)
         {
             goto use_short_form;
@@ -184,6 +317,7 @@ explain_explanation_assemble_common(explain_explanation_t *exp,
         strerror_text,
         exp->explanation
     );
+    explain_string_buffer_puts(result, exp->footnotes);
 }
 
 

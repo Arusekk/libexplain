@@ -20,7 +20,12 @@
 #ifndef LIBEXPLAIN_AC_SYS_TIMEX_H
 #define LIBEXPLAIN_AC_SYS_TIMEX_H
 
-#include <libexplain/config.h>
+/**
+  * @file
+  * @brief Insulate <sys/timex.h> differences
+  */
+
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_SYS_TIMEX_H
 #include <sys/timex.h>

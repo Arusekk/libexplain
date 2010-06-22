@@ -17,12 +17,12 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 13 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
+.PP
+.if n *
+.if t \(bu
+.\" Change 10, 12, 15
+A number of build errors and warnings on amd64 have been fixed.
+The problems were only detectable on 64-bit systems.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

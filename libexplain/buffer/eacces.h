@@ -31,12 +31,24 @@ struct explain_final_t; /* forward */
   * @param pathname
   *    The problematic pathname
   * @param caption
-  *    The name of the system call argument containing the problematic pathname.
+  *    The name of the offending system call argument.
   * @param final_component
   *    The desired properties of the final component
   */
 void explain_buffer_eacces(explain_string_buffer_t *sb,
     const char *pathname, const char *caption,
     const struct explain_final_t *final_component);
+
+/**
+  * The explain_buffer_eacces_syscall function may be used to
+  * explan an EACCES error returned from a given system call.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param syscall_name
+  *    The name of the offending system call argument.
+  */
+void explain_buffer_eacces_syscall(explain_string_buffer_t *sb,
+    const char *syscall_name);
 
 #endif /* LIBEXPLAIN_BUFFER_EACCES_H */

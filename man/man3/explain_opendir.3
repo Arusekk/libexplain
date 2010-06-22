@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008, 2009 Peter Miller
+.\" Copyright (C) 2008-2010 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -16,10 +16,12 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH \*(n) 3
+.TH explain_opendir 3
 .SH NAME
 explain_opendir \- explain opendir(3) errors
+.if require_index \{
 .XX "explain_opendir(3)" "explain opendir(3) errors"
+.\}
 .SH SYNOPSIS
 const char *explain_opendir(const char *pathname);
 .br
@@ -62,7 +64,7 @@ if (!dp)
 \f[I]pathname\fP
 The original pathname,
 exactly as passed to the \f[I]opendir\fP(3) system call.
-.tP 8n
+.TP 8n
 Returns:
 The message explaining the error.  This message buffer is shared by all
 libexplain functions which do not supply a buffer in their argument
@@ -148,7 +150,7 @@ if (!dp)
 .ft R
 .fi
 .RE
-.tp 8n
+.TP 8n
 \f[I]message\fP
 The location in which to store the returned message.  Because a message
 return buffer has been supplied, this function is thread safe if the
@@ -187,7 +189,7 @@ if (!dp);
 }
 .ft R
 .fi
-.rE
+.RE
 .TP 8n
 \f[I]message\fP
 The location in which to store the returned message.  Because a message
@@ -208,6 +210,7 @@ value of \f[I]errno\fP.
 The original pathname, exactly as passed to the \f[I]opendir\fP(3) system call.
 .\" ------------------------------------------------------------------------
 .SH COPYRIGHT
+.so etc/version.so
 .if n .ds C) (C)
 .if t .ds C) \(co
 libexplain version \*(v)

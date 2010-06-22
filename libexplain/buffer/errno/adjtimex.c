@@ -62,6 +62,7 @@ explain_buffer_errno_adjtimex_explanation(explain_string_buffer_t *sb, int
             explain_buffer_einval_vague(sb, "data");
             break;
         }
+#ifdef ADJ_OFFSET
         if (data->modes & ADJ_OFFSET)
         {
             long lo = -131071;
@@ -72,6 +73,8 @@ explain_buffer_errno_adjtimex_explanation(explain_string_buffer_t *sb, int
                 break;
             }
         }
+#endif
+#ifdef ADJ_STATUS
         if (data->modes & ADJ_STATUS)
         {
             switch (data->status)
@@ -81,7 +84,9 @@ explain_buffer_errno_adjtimex_explanation(explain_string_buffer_t *sb, int
             case TIME_DEL:
             case TIME_OOP:
             case TIME_WAIT:
+#ifdef TIME_BAD
             case TIME_BAD:
+#endif
                 break;
 
             default:
@@ -89,6 +94,8 @@ explain_buffer_errno_adjtimex_explanation(explain_string_buffer_t *sb, int
                 return;
             }
         }
+#endif
+#ifdef ADJ_TICK
         if (data->modes & ADJ_TICK)
         {
             long lo = 900000/HZ;
@@ -99,6 +106,7 @@ explain_buffer_errno_adjtimex_explanation(explain_string_buffer_t *sb, int
                 break;
             }
         }
+#endif
 #endif
         explain_buffer_einval_vague(sb, "data");
         break;
@@ -112,7 +120,7 @@ explain_buffer_errno_adjtimex_explanation(explain_string_buffer_t *sb, int
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum);
+        explain_buffer_errno_generic(sb, errnum, "adjtimex");
         break;
     }
 }

@@ -33,4 +33,11 @@ typedef void (*func_t)(int err, int argc, char **argv);
   */
 func_t find_function(const char *name);
 
+/**
+  * The syscall_statistics function is used to obtain statistics about
+  * the number of supported system calls.  Only useful for bragging,
+  * really, because it give no indication of the number left to be done.
+  */
+void syscall_statistics(int *total);
+
 #endif /* EXPLAIN_SYSCALL_H */

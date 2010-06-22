@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/linux/tiocl.h>
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/tioclinux.h>
@@ -37,6 +38,28 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 }
 
 
+/*
+ * Bletch!
+ *
+ * This should have been about a dozen separate ioctl requests.
+ * Someone needs to read Rusty's hierarchy of API goodness.
+ * http://ozlabs.org/~rusty/index.cgi/tech/2008-03-30.html
+ * http://www.pointy-stick.com/blog/2008/01/09/api-design-rusty-levels/
+ * http://ozlabs.org/~rusty/ols-2003-keynote/ols-keynote-2003.html
+ */
+union foo
+{
+    char a[1 + sizeof(struct tiocl_selection)];
+    char b[4 + sizeof(struct { long dummy[8]; })];
+    char c[1 + sizeof(char *)];
+};
+
+/*
+ * There are several cases that return data BUT they overwrite the
+ * control bytes, so we don't know at print_data_returned time which
+ * code it was, and thuis can't print a representation.  Sigh.
+ */
+
 const explain_iocontrol_t explain_iocontrol_tioclinux =
 {
     "TIOCLINUX", /* name */
@@ -45,6 +68,10 @@ const explain_iocontrol_t explain_iocontrol_tioclinux =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
+    0, /* print_data_returned */
+    sizeof(union foo), /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #else
@@ -52,11 +79,15 @@ const explain_iocontrol_t explain_iocontrol_tioclinux =
 const explain_iocontrol_t explain_iocontrol_tioclinux =
 {
     0, /* name */
-    -1, /* value */
+    0, /* value */
     0, /* disambiguate */
     0, /* print_name */
     0, /* print_data */
     0, /* print_explanation */
+    0, /* print_data_returned */
+    0, /* data_size */
+    __FILE__,
+    __LINE__,
 };
 
 #endif

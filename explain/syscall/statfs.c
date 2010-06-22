@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/sys/mount.h>
 
 #include <libexplain/statfs.h>
 #include <libexplain/string_to_thing.h>
