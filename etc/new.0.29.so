@@ -17,7 +17,7 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 12, 13, 14, 15, 16
@@ -25,5 +25,5 @@ Several test false negatives have been fixed, on various Debian architectures.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.29 (2010-Apr-25)
+.SS Version 0.29 (2010\[hy]Apr\[hy]25)
 .\" vim: set ts=8 sw=4 et

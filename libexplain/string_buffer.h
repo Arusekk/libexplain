@@ -23,7 +23,7 @@
 #include <libexplain/ac/stdarg.h>
 #include <libexplain/ac/stddef.h>
 
-#include <libexplain/format_printf.h>
+#include <libexplain/gcc_attributes.h>
 
 #ifndef i18n
 #define i18n(x) x

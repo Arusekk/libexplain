@@ -3,21 +3,22 @@
  * Copyright (C) 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/linux/net_tstamp.h>
 #include <libexplain/ac/linux/sockios.h>
 #include <libexplain/ac/net/if.h>
 #include <libexplain/ac/sys/ioctl.h>
@@ -29,6 +30,7 @@
 #include <libexplain/capability.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/siocshwtstamp.h>
+#include <libexplain/path_is_efault.h>
 
 #ifdef SIOCSHWTSTAMP
 
@@ -62,7 +64,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 
 #ifdef HAVE_LINUX_NET_TSTAMP_H
     case EINVAL:
-         {
+        {
             const struct ifreq *rq;
 
             rq = data;
@@ -70,7 +72,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
             {
                 const struct hwtstamp_config *cfg;
 
-                cfg = rq->ifr_data;
+                cfg = (void *)rq->ifr_data;
                 if
                 (
                     !explain_pointer_is_efault(cfg, sizeof(*cfg))
@@ -82,11 +84,11 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
                     break;
                 }
             }
-         }
-         goto generic;
+        }
+        goto generic;
 
-    case ERANGE
-         {
+    case ERANGE:
+        {
             const struct ifreq *rq;
 
             rq = data;
@@ -94,7 +96,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
             {
                 const struct hwtstamp_config *cfg;
 
-                cfg = rq->ifr_data;
+                cfg = (void *)rq->ifr_data;
                 if (!explain_pointer_is_efault(cfg, sizeof(*cfg)))
                 {
                     int             ok;
@@ -121,7 +123,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 
                     }
 
-                    switch (cf->rx_filter)
+                    switch (cfg->rx_filter)
                     {
                     case HWTSTAMP_FILTER_NONE:
                     case HWTSTAMP_FILTER_ALL:

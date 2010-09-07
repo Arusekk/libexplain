@@ -24,6 +24,7 @@
 
 #include <libexplain/fstrcmp.h>
 #include <libexplain/option.h>
+#include <libexplain/output.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/program_name.h>
 #include <libexplain/sizeof.h>
@@ -40,24 +41,40 @@ enum option_level_t
     option_level_client,
 };
 
-typedef char option_value_t;
+typedef int option_value_t;
+
+typedef enum option_type_t option_type_t;
+enum option_type_t
+{
+    option_type_bool,
+    option_type_int
+};
 
 typedef struct option_t option_t;
 struct option_t
 {
     option_level_t level;
     option_value_t value;
+    option_type_t type;
 };
 
 typedef char value_t;
 
 static int initialised;
-static option_t debug = { option_level_default, 0 };
-static option_t numeric_errno = { option_level_default, 1 };
-static option_t dialect_specific = { option_level_default, 1 };
-static option_t assemble_program_name = { option_level_default, 0 };
-static option_t symbolic_mode_bits = { option_level_default, 0 };
-static option_t internal_strerror = { option_level_default, 0 };
+static option_t debug =
+    { option_level_default, 0, option_type_bool };
+static option_t numeric_errno =
+    { option_level_default, 1, option_type_bool };
+static option_t dialect_specific =
+    { option_level_default, 1, option_type_bool };
+static option_t assemble_program_name =
+    { option_level_default, 0, option_type_bool };
+static option_t symbolic_mode_bits =
+    { option_level_default, 0, option_type_bool };
+static option_t internal_strerror =
+    { option_level_default, 0, option_type_bool };
+static option_t hanging_indent =
+    { option_level_default, 0, option_type_int };
 
 typedef struct table_t table_t;
 struct table_t
@@ -71,6 +88,7 @@ static const table_t table[] =
     { "assemble-program-name", &assemble_program_name },
     { "debug", &debug },
     { "dialect-specific", &dialect_specific },
+    { "hanging-indent", &hanging_indent },
     { "internal-strerror", &internal_strerror },
     { "numeric-errno", &numeric_errno },
     { "program-name", &assemble_program_name },
@@ -309,4 +327,39 @@ explain_option_internal_strerror(void)
     if (!initialised)
         initialise();
     return internal_strerror.value;
+}
+
+
+int
+explain_option_hanging_indent(int width)
+{
+    int             max;
+    int             n;
+
+    if (!initialised)
+        initialise();
+    if (width <= 0 || width >= 65536)
+        width = 80;
+    max = width / 10;
+    n = hanging_indent.value;
+    if (n <= 0)
+        return 0;
+    if (n > max)
+        return max;
+    return n;
+}
+
+
+void
+explain_option_hanging_indent_set(int columns)
+{
+    if (!initialised)
+        initialise();
+    if (hanging_indent.level <= option_level_client)
+    {
+        if (columns < 0)
+            columns = 0;
+        hanging_indent.value = columns;
+        hanging_indent.level = option_level_client;
+    }
 }

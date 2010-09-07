@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009 Peter Miller
+.\" Copyright (C) 2009, 2010 Peter Miller
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 11, 23, 24, 25, 26, 27, 28
@@ -29,7 +29,7 @@ Coverage has been extended to include
 \f[I]popen\fP(3) and
 \f[I]realloc\fP(3)
 system calls.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 13, 14, 20, 22
@@ -38,7 +38,7 @@ linux console controls,
 magnetic tape controls,
 socket controls, and
 terminal controls.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 18
@@ -46,5 +46,5 @@ A false negative from test 31 has been fixed.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.5 (2009-Jan-03)
+.SS Version 0.5 (2009\[hy]Jan\[hy]03)
 .\" vim:ts=8:sw=4:et

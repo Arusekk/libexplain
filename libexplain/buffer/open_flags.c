@@ -39,8 +39,14 @@
 #ifndef O_CLOEXEC
 #define O_CLOEXEC 0
 #endif
+
 #ifndef O_LARGEFILE
+#if defined(__linux__) && defined(__sparc__) && defined(__arch64__)
+/* It is difficult to see just how this could ever come to pass.  Oh well. */
+#define O_LARGEFILE 0x40000
+#else
 #define O_LARGEFILE 0
+#endif
 #endif
 
 static const explain_parse_bits_table_t table[] =
@@ -75,7 +81,7 @@ static const explain_parse_bits_table_t table[] =
 #endif
 
     /*
-     * No, this isn't a mistake.  On debian sparc there is a
+     * No, this isn't a mistake.  On Linux sparc there is a
      *
      *     #define FFSYNC O_FSYNC
      *

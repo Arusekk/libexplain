@@ -24,6 +24,7 @@
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/output.h>
 #include <libexplain/version_print.h>
 
 #include <codegen/catalogue.h>
@@ -106,8 +107,7 @@ main(int argc, char **argv)
 
         if (strchr(decl, '/'))
         {
-            fprintf(stderr, "did you mean \"-g %s\" ?!?\n", decl);
-            exit(1);
+            explain_output_error_and_die("did you mean \"-g %s\" ?!?", decl);
         }
         snprintf(catpath, sizeof(catpath), "catalogue/%s", decl);
         /* using prototype from message catalogue */
@@ -115,8 +115,7 @@ main(int argc, char **argv)
         decl = catalogue_get(cp, "Prototype");
         if (!decl)
         {
-            fprintf(stderr, "catalogue has no Prototype\n");
-            exit(1);
+            explain_output_error_and_die("catalogue has no Prototype");
         }
         np = grammar(decl);
         if (lisp)
@@ -145,15 +144,13 @@ main(int argc, char **argv)
         assert(np->nchild >= 1);
         if (np->nchild != 3)
         {
-            fprintf(stderr, "no names declared\n");
-            exit(EXIT_FAILURE);
+            explain_output_error_and_die("no names declared");
         }
         assert(node_is(np->child[0], "declaration_specifiers"));
         assert(node_is(np->child[1], "init_declarator_list"));
         if (np->child[1]->nchild != 1)
         {
-            fprintf(stderr, "too many names declared\n");
-            exit(EXIT_FAILURE);
+            explain_output_error_and_die("too many names declared");
         }
 
         snprintf

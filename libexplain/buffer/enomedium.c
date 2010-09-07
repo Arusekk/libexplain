@@ -24,6 +24,7 @@
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/mtio.h>
+#include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/enomedium.h>

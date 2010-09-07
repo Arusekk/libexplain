@@ -17,16 +17,16 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 21, 24, 26
-Explanations are now availaible for errors reported by the
+Explanations are now available for errors reported by the
 \f[I]fpurge\fP(3),
 \f[I]getw\fP(3) and
 \f[I]putw\fP(3)
 system calls.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 35, 42
@@ -34,5 +34,5 @@ Some build problems have been fixed.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.20 (2010-Jan-20)
+.SS Version 0.20 (2010\[hy]Jan\[hy]20)
 .\" vim: set ts=8 sw=4 et

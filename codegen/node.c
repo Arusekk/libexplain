@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include <libexplain/ac/string.h>
 
 #include <libexplain/malloc.h>
+#include <libexplain/output.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/strdup.h>
 
@@ -1725,8 +1726,7 @@ find_function_name(node_t *np)
     if (np->nchild != 4 || !node_is_literal(np->child[1], "("))
     {
         not_a_func:
-        fprintf(stderr, "not a function declaration\n");
-        exit(EXIT_FAILURE);
+        explain_output_error_and_die("not a function declaration");
     }
     assert(node_is_literal(np->child[3], ")"));
 

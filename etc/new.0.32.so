@@ -17,14 +17,28 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 32 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 14, 15, 16, 17
+A number of testing false negatives (found by the Debian build farm) have
+been fixed.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 12, 13
+There are new
+\f[I]explain_output_error\fP(3) and
+\f[I]explain_output_error_and_die\fP(3)
+functions for printing formatted error messages.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 11
+Some systems have \f[I]mmap\fP(2) report \f[CW](void*)(\-1)\fP instead
+of NULL for errors.  This is now understood.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.32 (2010-Jun-22)
+.SS Version 0.32 (2010\[hy]Jun\[hy]22)
 .\" vim: set ts=8 sw=4 et

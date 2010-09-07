@@ -29,6 +29,7 @@
 #include <libexplain/fopen.h>
 #include <libexplain/fclose.h>
 #include <libexplain/malloc.h>
+#include <libexplain/output.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/strdup.h>
 #include <libexplain/string_list.h>
@@ -301,8 +302,12 @@ extract_name_from_declarator(const node_t *np)
 static void
 name_should_be_different(const char *name1, const char *name2)
 {
-    fprintf(stderr, "argument \"%s\" should be called \"%s\"\n", name1, name2);
-    exit(EXIT_FAILURE);
+    explain_output_error_and_die
+    (
+        "argument \"%s\" should be called \"%s\"",
+        name1,
+        name2
+    );
 }
 
 
@@ -942,8 +947,8 @@ libexplain_fubar_h(node_t *declaration)
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the #explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre\\-packaged as the #explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die function.");
     wrapper(fp, "  * ", elastic_buffer_get(&sb));
@@ -995,8 +1000,8 @@ libexplain_fubar_h(node_t *declaration)
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the #explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre-packaged as the #explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die function.");
     wrapper(fp, "  * ", elastic_buffer_get(&sb));
@@ -1049,8 +1054,8 @@ libexplain_fubar_h(node_t *declaration)
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the #explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre-packaged as the #explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die function.");
     wrapper(fp, "  * ", elastic_buffer_get(&sb));
@@ -1103,8 +1108,8 @@ libexplain_fubar_h(node_t *declaration)
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the #explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre-packaged as the #explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die function.");
     wrapper(fp, "  * ", elastic_buffer_get(&sb));
@@ -1297,8 +1302,8 @@ man_man3_explain_fubar_3(void)
     fprintf(fp, ".RE\n");
     fprintf(fp, ".PP\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the \\f[I]explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre\\-packaged as the \\f[I]explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die\\fP(3) function.");
     wrapper(fp, "", elastic_buffer_get(&sb));
@@ -1357,8 +1362,8 @@ man_man3_explain_fubar_3(void)
     fprintf(fp, ".RE\n");
     fprintf(fp, ".PP\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the \\f[I]explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre\\-packaged as the \\f[I]explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die\\fP(3) function.");
     wrapper(fp, "", elastic_buffer_get(&sb));
@@ -1419,8 +1424,8 @@ man_man3_explain_fubar_3(void)
     fprintf(fp, ".RE\n");
     fprintf(fp, ".PP\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the \\f[I]explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre\\-packaged as the \\f[I]explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die\\fP(3) function.");
     wrapper(fp, "", elastic_buffer_get(&sb));
@@ -1481,8 +1486,8 @@ man_man3_explain_fubar_3(void)
     fprintf(fp, ".RE\n");
     fprintf(fp, ".PP\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "The above code example is available pre-packaged "
-        "as the \\f[I]explain_");
+    elastic_buffer_puts(&sb, "The above code example is available "
+        "pre\\-packaged as the \\f[I]explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "_or_die\\fP(3) function.");
     wrapper(fp, "", elastic_buffer_get(&sb));

@@ -23,12 +23,15 @@ TEST_SUBJECT="munmap EINVAL"
 
 cat > test.ok << 'fubar'
 munmap(data = 0x00040001, data_size = 4096) failed, Invalid argument
-(EINVAL) because the data must be a multiple of the page size (4096)
+(EINVAL) because the data must be a multiple of the page size (NNN)
 fubar
 test $? -eq 0 || no_result
 
-explain -eEINVAL munmap 0x40001 0x1000 > test.out
+explain -eEINVAL munmap 0x40001 0x1000 > test.out2
 test $? -eq 0 || fail
+
+sed 's|([1-9][0-9]*)|(NNN)|g' test.out2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

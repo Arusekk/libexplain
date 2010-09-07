@@ -23,7 +23,7 @@
 #include <libexplain/ac/stddef.h>
 #include <libexplain/ac/stdio.h>
 
-#include <libexplain/format_printf.h>
+#include <libexplain/gcc_attributes.h>
 
 typedef struct elastic_buffer_t elastic_buffer_t;
 struct elastic_buffer_t

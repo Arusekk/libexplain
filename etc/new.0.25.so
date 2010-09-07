@@ -17,27 +17,27 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 14
-A build problem has been fixed on systems where va_list is not
-compaitible with const void *
-.PP
+A build problem has been fixed on systems where \f[CW]va_list\fP is not
+compatible with \f[CW]const void *\fP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 13
-This change set removes the unused-result warning form
-explain_lseek_or_die, because it is very common to ignore the
+This change set removes the unused\[hy]result warning form
+\f[I]explain_lseek_or_die\fP(3), because it is very common to ignore the
 result.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 12
-Explaiantions are now available for errors reported by the
-socketpair(2) system call.
+Explanations are now available for errors reported by the
+\f[I]socketpair\fP(2) system call.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.25 (2010-Mar-22)
+.SS Version 0.25 (2010\[hy]Mar\[hy]22)
 .\" vim: set ts=8 sw=4 et

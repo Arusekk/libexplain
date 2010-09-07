@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009 Peter Miller
+.\" Copyright (C) 2009, 2010 Peter Miller
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 explain_strtod_or_die \- convert string to number and report errors
 .if require_index \{
 .XX "explain_strtod_or_die(3)" \
-    "convert ASCII string to floating-point number and report errors"
+    "convert ASCII string to floating\[hy]point number and report errors"
 .\}
 .SH SYNOPSIS
 #include <libexplain/strtod.h>
@@ -68,7 +68,7 @@ double result = explain_strtod_or_die(nptr, endptr);
 .SH SEE ALSO
 .TP 8n
 \f[I]strtod\fP(3)
-convert ASCII string to floating-point number
+convert ASCII string to floating\[hy]point number
 .TP 8n
 \f[I]explain_strtod\fP(3)
 explain \f[I]strtod\fP(3) errors

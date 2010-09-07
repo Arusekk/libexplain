@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009 Peter Miller
+.\" Copyright (C) 2009, 2010 Peter Miller
 .\"
 .\" This program is free software; you can redistribute it and/or modify it
 .\" under the terms of the GNU General Public License as published by the
@@ -21,7 +21,7 @@
 explain_fsync_or_die \- synchronize a file with storage device and report errors
 .if require_index \{
 .XX "explain_fsync_or_die(3)" \
-    "synchronize a file's in-core state with storage device and report errors"
+  "synchronize a file's in\[hy]core state with storage device and report errors"
 .\}
 .SH SYNOPSIS
 #include <libexplain/fsync.h>
@@ -65,7 +65,7 @@ explain_fsync_or_die(fildes);
 .SH SEE ALSO
 .TP 8n
 \f[I]fsync\fP(2)
-synchronize a file's in-core state with storage device
+synchronize a file's in\[hy]core state with storage device
 .TP 8n
 \f[I]explain_fsync\fP(3)
 explain \f[I]fsync\fP(2) errors

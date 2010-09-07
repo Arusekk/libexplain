@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 
 /**
   * @file
-  * @brief explain program_name(2) errors
+  * @brief obtain the name of the program
   */
 
 #ifdef __cplusplus
@@ -32,7 +32,7 @@ extern "C" {
 /**
   * The explain_program_name_get function may be used to obtain the
   * command name of the process.  Depending on how capable /proc is
-  * on your system, or, failing that, how capanle lsof(1) is on your
+  * on your system, or, failing that, how capable lsof(1) is on your
   * system, this may or may not produce a sensable result.  It works
   * well on Linux.
   *

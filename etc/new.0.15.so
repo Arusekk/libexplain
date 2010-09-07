@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009 Peter Miller
+.\" Copyright (C) 2009, 2010 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -17,23 +17,23 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 22, 19, 17
 The EROFS and ENOMEDIUM explanations now greatly improved.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 24
 A number of build problems and false negatives have been fixed
 on x86_64 architecture.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 21, 20
-The Linux floppy disk and CD-ROM ioctl requests are now supported.
-.PP
+The Linux floppy disk and CD\[hy]ROM ioctl requests are now supported.
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 16, 15, 14, 13, 12
@@ -43,5 +43,5 @@ Explanations are now available for the errors reported by the
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.15 (2009-Jul-26)
+.SS Version 0.15 (2009\[hy]Jul\[hy]26)
 .\" vim: set ts=8 sw=4 et

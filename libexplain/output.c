@@ -81,8 +81,8 @@ explain_output_method_exit(explain_output_t *op, int status)
         op->vtable->exit(op, status);
     /*
      * 1. We call ::exit if they didn't supply an exit method.
-     * 2. We ::exit of their exit method returns, because the code assumes
-     *    that exit means ::exit.
+     * 2. We ::exit if their exit method returns, because the rest of
+     *    the libexplain code assumes that exit means ::exit.
      */
     exit(status);
 }

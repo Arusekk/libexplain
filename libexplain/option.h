@@ -109,4 +109,14 @@ int explain_option_symbolic_mode_bits(void);
   */
 int explain_option_internal_strerror(void);
 
+/**
+  * The explain_option_hanging_indent function may be used to obtain
+  * the "hanging-indent" option value.
+  *
+  * @param width
+  *     The width of the output line.  The hanging indent must be less
+  *     than 10% of this.
+  */
+int explain_option_hanging_indent(int width);
+
 #endif /* LIBEXPLAIN_OPTION_H */

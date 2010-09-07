@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -74,6 +74,8 @@ explain_pointer_is_efault(const void *data, size_t data_size)
      */
     unsigned char   stack_vec[512];
 
+    if (!data)
+        return 1;
     if (!page_size)
     {
 #ifdef HAVE_GETPAGESIZE
@@ -128,6 +130,8 @@ explain_pointer_is_efault(const void *data, size_t data_size)
 
 #else
     (void)data_size;
+    if (!data)
+        return 1;
     return explain_path_is_efault((const char *)data);
 #endif
 }

@@ -17,7 +17,7 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 11, 12, 13, 14, 15, 16, 17
@@ -27,5 +27,5 @@ inconsistency between Linux architectures?
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.28 (2010-Apr-19)
+.SS Version 0.28 (2010\[hy]Apr\[hy]19)
 .\" vim: set ts=8 sw=4 et

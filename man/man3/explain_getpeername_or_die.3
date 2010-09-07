@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009 Peter Miller
+.\" Copyright (C) 2009, 2010 Peter Miller
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ similar to the following example:
 .ft CW
 .nf
 struct sockadd sock_addr;
-socklen_t sock-addr_size = sizeof(sock_addr);
+socklen_t sock_addr_size = sizeof(sock_addr);
 explain_getpeername_or_die(fildes, &sock_addr, &sock_addr_size);
 .fi
 .ft R

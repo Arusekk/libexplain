@@ -44,7 +44,7 @@ it is possible that the cause is no longer present.
 .SS Compiling
 Assuming the library header files has been installed into \f[CW]/usr/include\fP,
 and the library files have been installed into \f[CW]/usr/lib\fP,
-compiling against libexplain requires no special \f[CW]-I\fP options.
+compiling against libexplain requires no special \f[CW]\-I\fP options.
 .PP
 When linking your pograms, add \f[CW]\-lexplain\fP to the list of
 libraries at the end of your link line.
@@ -63,10 +63,10 @@ AC_SYS_LARGEFILE
 If you aren't using GNU Autoconf, you will have to work out the needed
 large file support requirements yourdelf.
 .PP
-There is a \f[I]pkg-config\fP(1) package for you to use, too:
+There is a \f[I]pkg\[hy]config\fP(1) package for you to use, too:
 .RS
-CFLAGS="$CFLAGS `pkg-config libexplain --cflags`"
-LIBS="$LIBS `pkg-config libexplain --libs`"
+CFLAGS="$CFLAGS `pkg\-config libexplain \-\-cflags`"
+LIBS="$LIBS `pkg\-config libexplain \-\-libs`"
 .RE
 This can make figuring out the command line requirements
 much easier.
@@ -106,13 +106,26 @@ prevent UNIX dialect differences from producing false negatives.
 Default: true
 .TP 8n
 dialect\[hy]specific
-The controls the presence of explanatory text specific to a particular
+This controls the presence of explanatory text specific to a particular
 UNIX dialect.
 It also suppresses printing system specific maximums.
 Disabling this option is generally of use in automated testing, to
 prevent UNIX dialect differences from producing false negatives.
 .br
 Default: true.
+.TP 8n
+hanging\[hy]indent
+This controls the hanging indent depth used for error message wrapping.
+By default no hanging indent is used, but this can sometimes obfuscate
+the end of one error message and the beginning of another.  A hanging
+indent results in continuation lines starting with white spoace, similar
+to RFC822 headers.  A value of 0 means no hanging indent (all lines
+flush with left margin).  A common value to use is 4: it doesn't consume
+to much of each line, and it is a clear indent.
+The program may choose to override the environment variable using the
+\f[I]explain_option_hanging_indent_set\fP(3) function.
+.br
+Default: 0
 .TP 8n
 internal\[hy]strerror
 This option controls the source of

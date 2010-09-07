@@ -29,7 +29,7 @@
 2. The results need to be signed
 
    mkdir /tmp/d
-   cp /var/cache/pbuilder/result/*explain*D001* /tmp/b
+   cp /var/cache/pbuilder/result/*explain*D001* /tmp/d
    # watch out for previous releases
    cd /tmp/d
    debsign *.changes

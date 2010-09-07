@@ -29,7 +29,7 @@
 
 #include <libexplain/warn_unused_result.h>
 #include <libexplain/large_file_support.h>
-#include <libexplain/format_printf.h>
+#include <libexplain/gcc_attributes.h>
 
 #include <stdio.h>
 
@@ -66,7 +66,7 @@ extern "C" {
   * @endcode
   */
 void explain_vfprintf_or_die(FILE *fp, const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(2, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(2);
 
 /**
   * The explain_vfprintf_on_error function is used to call the
@@ -98,7 +98,7 @@ void explain_vfprintf_or_die(FILE *fp, const char *format, va_list ap)
   * @endcode
   */
 int explain_vfprintf_on_error(FILE *fp, const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(2, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(2);
 
 /**
   * The explain_vfprintf function is used to obtain an explanation of an
@@ -146,7 +146,8 @@ int explain_vfprintf_on_error(FILE *fp, const char *format, va_list ap)
   * #explain_vfprintf_or_die function.
   */
 const char *explain_vfprintf(FILE *fp, const char *format, va_list ap)
-                   LIBEXPLAIN_FORMAT_PRINTF(2, 0) LIBEXPLAIN_WARN_UNUSED_RESULT;
+                                                    LIBEXPLAIN_FORMAT_VPRINTF(2)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The explain_errno_vfprintf function is used to obtain an explanation of
@@ -199,7 +200,8 @@ const char *explain_vfprintf(FILE *fp, const char *format, va_list ap)
   */
 const char *explain_errno_vfprintf(int errnum, FILE *fp, const char *format,
     va_list ap)
-                   LIBEXPLAIN_FORMAT_PRINTF(3, 0) LIBEXPLAIN_WARN_UNUSED_RESULT;
+                                                    LIBEXPLAIN_FORMAT_VPRINTF(3)
+                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The explain_message_vfprintf function is used to obtain an explanation
@@ -246,7 +248,7 @@ const char *explain_errno_vfprintf(int errnum, FILE *fp, const char *format,
   */
 void explain_message_vfprintf(char *message, int message_size, FILE *fp, const
     char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(4, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(4);
 
 /**
   * The explain_message_errno_vfprintf function is used to obtain an
@@ -298,7 +300,7 @@ void explain_message_vfprintf(char *message, int message_size, FILE *fp, const
   */
 void explain_message_errno_vfprintf(char *message, int message_size, int errnum,
     FILE *fp, const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(5, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(5);
 
 #ifdef __cplusplus
 }

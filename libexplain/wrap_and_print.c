@@ -31,15 +31,16 @@
 #include <libexplain/ac/sys/ioctl.h>
 #endif
 
-#include <libexplain/wrap_and_print.h>
+#include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
+#include <libexplain/wrap_and_print.h>
 
 #define DEFAULT_LINE_WIDTH 75
 
 #define MAX_LINE_LENGTH (PATH_MAX + 10)
 
 
-#if HAVE_MBRTOWC && HAVE_WCWIDTH
+#if defined(HAVE_MBRTOWC) && defined(HAVE_WCWIDTH)
 
 void
 explain_wrap_and_print_width(FILE *fp, const char *text, int width)
@@ -54,12 +55,15 @@ explain_wrap_and_print_width(FILE *fp, const char *text, int width)
     mbstate_t       state;
     int             width_of_line;
     int             width_of_word;
+    int             hanging_indent;
+    int             first_line;
 
     assert(width > 0);
     if (width <= 0)
         width = DEFAULT_LINE_WIDTH ;
     if (width > MAX_LINE_LENGTH)
         width = MAX_LINE_LENGTH;
+    hanging_indent = explain_option_hanging_indent(width);
     assert(sizeof(word_string) <= sizeof(line_string));
     cp = text;
     end = text + strlen(text);
@@ -68,6 +72,7 @@ explain_wrap_and_print_width(FILE *fp, const char *text, int width)
     state = mbz;
     width_of_line = 0;
     width_of_word = 0;
+    first_line = 1;
     for (;;)
     {
         const char      *starts_here;
@@ -142,7 +147,11 @@ explain_wrap_and_print_width(FILE *fp, const char *text, int width)
         {
             /* do nothing */
         }
-        else if (width_of_line + 1 + width_of_word <= width)
+        else if
+        (
+            width_of_line + 1 + width_of_word
+        <=
+            width - (first_line ? 0 : hanging_indent))
         {
             explain_string_buffer_putc(&line_buf, ' ');
             ++width_of_line;
@@ -154,6 +163,16 @@ explain_wrap_and_print_width(FILE *fp, const char *text, int width)
             putc('\n', fp);
             line_buf.position = 0;
             width_of_line = 0;
+            first_line = 0;
+        }
+        if (line_buf.position == 0 && !first_line && hanging_indent)
+        {
+            for (;;)
+            {
+                explain_string_buffer_putc(&line_buf, ' ');
+                if (line_buf.position >= (size_t)hanging_indent)
+                    break;
+            }
         }
         explain_string_buffer_puts(&line_buf, word_string);
         width_of_line += width_of_word;
@@ -178,16 +197,20 @@ explain_wrap_and_print_width(FILE *fp, const char *text, int width)
     explain_string_buffer_t line_buf;
     char            word_string[MAX_LINE_LENGTH + 1];
     explain_string_buffer_t word_buf;
+    unsigned        hanging_indent;
+    int             first_line;
 
     assert(width > 0);
     if (width <= 0)
         width = DEFAULT_LINE_WIDTH ;
     if (width > MAX_LINE_LENGTH)
         width = MAX_LINE_LENGTH;
+    hanging_indent = explain_option_hanging_indent(width);
     assert(sizeof(word_string) <= sizeof(line_string));
     cp = text;
     explain_string_buffer_init(&line_buf, line_string, sizeof(line_string));
     explain_string_buffer_init(&word_buf, word_string, sizeof(word_string));
+    first_line = 1;
     for (;;)
     {
         unsigned char c = *cp++;
@@ -226,7 +249,12 @@ explain_wrap_and_print_width(FILE *fp, const char *text, int width)
         {
             /* do nothing */
         }
-        else if (line_buf.position + 1 + word_buf.position <= (size_t)width)
+        else if
+        (
+            line_buf.position + 1 + word_buf.position
+        <=
+            (size_t)(width - (first_line ? 0 : hanging_indent))
+        )
         {
             explain_string_buffer_putc(&line_buf, ' ');
         }
@@ -236,6 +264,16 @@ explain_wrap_and_print_width(FILE *fp, const char *text, int width)
                 return;
             putc('\n', fp);
             line_buf.position = 0;
+            first_line = 0;
+        }
+        if (line_buf.position == 0 && !first_line && hanging_indent)
+        {
+            for (;;)
+            {
+                explain_string_buffer_putc(&line_buf, ' ');
+                if (line_buf.position >= hanging_indent)
+                    break;
+            }
         }
         explain_string_buffer_puts(&line_buf, word_string);
         /*

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/utime.h>
 
-#include <libexplain/strtol.h>
+#include <libexplain/string_to_thing.h>
 #include <libexplain/utime.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -31,14 +31,16 @@ void
 explain_syscall_utime(int errnum, int argc, char **argv)
 {
     const char      *pathname;
+    static struct utimbuf  times_zero;
     struct utimbuf  times_dummy;
     struct utimbuf  *times;
 
+    times_dummy = times_zero;
     times = &times_dummy;
     switch (argc)
     {
     case 2:
-        times = (struct utimbuf *)explain_strtol_or_die(argv[1], 0, 0);
+        times = explain_string_to_pointer(argv[1]);
         /* fall through... */
 
     case 1:

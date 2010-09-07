@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008, 2009 Peter Miller
+.\" Copyright (C) 2008-2010 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH New-System-Call libexplain
+.TH New\[hy]System\[hy]Call libexplain
 .SH NAME
 new system call \- How to add a new system call to libexplain
 .XX "" "How to add a new system call to libexplain"
@@ -136,13 +136,13 @@ Next comes a switch on the errnum value,
 and additional explanation is given for each errno value documented (or
 sometimes undocumented)
 for that system call.
-Copy-and-paste of the man page is often useful as a basis for the text
+Copy\[hy]and\[hy]paste of the man page is often useful as a basis for the text
 of the explanation, but be sure it is open source documentation, and
 not Copyright proprietary text.
 .PP
 Don't forget to check the existing \f[CW]libexplain/buffer/e*.h\fP
-files for pre-canned explanations for common errors.
-Some pre-canned explanations include
+files for pre\[hy]canned explanations for common errors.
+Some pre\[hy]canned explanations include
 .TS
 tab(;);
 l l.
@@ -286,18 +286,18 @@ Write at least one separate test for each case in the errnum switch.
 You can check that the Debian stuff builds by using
 .RS
 .nf
-apt-get install pbuilder
+apt\[hy]get install pbuilder
 pbuiler create
 pbuilder login
 .fi
 .RE
-now copy the files from \f[I]web-site/debian/\fP into the chroot
+now copy the files from \f[I]web\[hy]site/debian/\fP into the chroot
 .RS
 .nf
-cd libexplain-*
-dpkg-checkbuilddeps
-apt-get install \f[I]what dpkg-checkbuilddeps said\fP
-apt-get install devscripts
+cd libexplain\-*
+dpkg\-checkbuilddeps
+apt\-get install \f[I]what dpkg\-checkbuilddeps said\fP
+apt\-get install devscripts
 debuild
 .fi
 .RE

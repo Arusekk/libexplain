@@ -21,7 +21,7 @@
 TEST_SUBJECT="strtoull ERANGE"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 strtoull(nptr = "0x10000000000000000", endptr = 0xNNNNNNNN, base = 0)
 failed, Numerical result out of range (ERANGE) because the resulting value
 would have been too large to store
@@ -31,7 +31,11 @@ test $? -eq 0 || no_result
 test_strtoull 0x10000000000000000 0 > test.out.2 2>&1
 test $? -eq 1 || fail
 
-sed 's|endptr = 0x[0-9a-fA-F][0-9a-fA-F]*|endptr = 0xNNNNNNNN|' test.out.2 > test.out
+sed 's|endptr = 0x[0-9a-fA-F][0-9a-fA-F]*|endptr = 0xNNNNNNNN|' \
+    test.out.2 > test.out.1
+test $? -eq 0 || no_result
+
+fmt test.out.1 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

@@ -29,6 +29,7 @@
 
 #include <libexplain/warn_unused_result.h>
 #include <libexplain/large_file_support.h>
+#include <libexplain/gcc_attributes.h>
 
 #include <stdio.h>
 
@@ -57,7 +58,8 @@ extern "C" {
   * int result = explain_printf_or_die(format, ...);
   * @endcode
   */
-int explain_printf_or_die(const char *format, ...);
+int explain_printf_or_die(const char *format, ...)
+                                                 LIBEXPLAIN_FORMAT_PRINTF(1, 2);
 
 /**
   * The explain_printf_on_error function is used to call the
@@ -83,7 +85,8 @@ int explain_printf_or_die(const char *format, ...);
   * }
   * @endcode
   */
-int explain_printf_on_error(const char *format, ...);
+int explain_printf_on_error(const char *format, ...)
+                                                 LIBEXPLAIN_FORMAT_PRINTF(1, 2);
 
 /**
   * The explain_printf function is used to obtain an explanation of an
@@ -126,6 +129,7 @@ int explain_printf_on_error(const char *format, ...);
   * #explain_printf_or_die function.
   */
 const char *explain_printf(const char *format, ...)
+                                                  LIBEXPLAIN_FORMAT_PRINTF(1, 2)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -173,6 +177,7 @@ const char *explain_printf(const char *format, ...)
   * #explain_printf_or_die function.
   */
 const char *explain_errno_printf(int errnum, const char *format, ...)
+                                                  LIBEXPLAIN_FORMAT_PRINTF(2, 3)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -214,7 +219,8 @@ const char *explain_errno_printf(int errnum, const char *format, ...)
   * #explain_printf_or_die function.
   */
 void explain_message_printf(char *message, int message_size,
-    const char *format, ...);
+    const char *format, ...)
+                                                 LIBEXPLAIN_FORMAT_PRINTF(3, 4);
 
 /**
   * The explain_message_errno_printf function is used to obtain an
@@ -259,7 +265,8 @@ void explain_message_printf(char *message, int message_size,
   * #explain_printf_or_die function.
   */
 void explain_message_errno_printf(char *message, int message_size, int errnum,
-    const char *format, ...);
+    const char *format, ...)
+                                                 LIBEXPLAIN_FORMAT_PRINTF(4, 5);
 
 #ifdef __cplusplus
 }

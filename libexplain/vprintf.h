@@ -29,7 +29,7 @@
 
 #include <libexplain/warn_unused_result.h>
 #include <libexplain/large_file_support.h>
-#include <libexplain/format_printf.h>
+#include <libexplain/gcc_attributes.h>
 
 #include <stdio.h>
 
@@ -63,7 +63,7 @@ extern "C" {
   * @endcode
   */
 int explain_vprintf_or_die(const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(1, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(1);
 
 /**
   * The explain_vprintf_on_error function is used to call the
@@ -94,7 +94,7 @@ int explain_vprintf_or_die(const char *format, va_list ap)
   * @endcode
   */
 int explain_vprintf_on_error(const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(1, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(1);
 
 /**
   * The explain_vprintf function is used to obtain an explanation of an
@@ -140,7 +140,7 @@ int explain_vprintf_on_error(const char *format, va_list ap)
   * #explain_vprintf_or_die function.
   */
 const char *explain_vprintf(const char *format, va_list ap)
-                   LIBEXPLAIN_FORMAT_PRINTF(1, 0) LIBEXPLAIN_WARN_UNUSED_RESULT;
+                     LIBEXPLAIN_FORMAT_VPRINTF(1) LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The explain_errno_vprintf function is used to obtain an explanation of
@@ -190,7 +190,7 @@ const char *explain_vprintf(const char *format, va_list ap)
   * #explain_vprintf_or_die function.
   */
 const char *explain_errno_vprintf(int errnum, const char *format, va_list ap)
-                   LIBEXPLAIN_FORMAT_PRINTF(2, 0) LIBEXPLAIN_WARN_UNUSED_RESULT;
+                     LIBEXPLAIN_FORMAT_VPRINTF(2) LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
   * The explain_message_vprintf function is used to obtain an explanation
@@ -235,7 +235,7 @@ const char *explain_errno_vprintf(int errnum, const char *format, va_list ap)
   */
 void explain_message_vprintf(char *message, int message_size, const char
     *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(3, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(3);
 
 /**
   * The explain_message_errno_vprintf function is used to obtain an
@@ -285,7 +285,7 @@ void explain_message_vprintf(char *message, int message_size, const char
   */
 void explain_message_errno_vprintf(char *message, int message_size, int errnum,
     const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(4, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(4);
 
 #ifdef __cplusplus
 }

@@ -37,9 +37,13 @@ explain_mmap_or_die(void *data, size_t data_size, int prot, int flags, int
         offset);
     if
     (
-        !result
-    &&
-        (data != 0 || !(flags & MAP_FIXED) || errno)
+        result == (void *)(-1)
+    ||
+        (
+            !result
+        &&
+            (data != 0 || !(flags & MAP_FIXED) || errno)
+        )
     )
     {
         explain_output_exit_failure();

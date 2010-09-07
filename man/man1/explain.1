@@ -74,7 +74,7 @@ The \f[I]bind\fP(2) system call.
 chdir \f[I]pathname\fP
 The \f[I]chdir\fP(2) system call.
 .TP 8n
-chmod \f[I]pathname\fP \f[I]permission-mode\fP
+chmod \f[I]pathname\fP \f[I]permission\[hy]mode\fP
 The \f[I]chmod\fP(2) system call.
 .TP 8n
 chown \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP
@@ -92,7 +92,7 @@ The \f[I]closedir\fP(3) system call.
 connect \f[I]fildes\fP \f[I]serv_addr\fP \f[I]serv_addr_size\fP
 The \f[I]connect\fP(2) system call.
 .TP 8n
-creat \f[I]pathname\fP [ \f[I]permission-mode\fP
+creat \f[I]pathname\fP [ \f[I]permission\[hy]mode\fP
 The \f[I]creat\fP(2) system call.
 .\" ----------  D  ---------------------------------------------------------
 .TP 8n
@@ -374,7 +374,7 @@ The \f[I]pwrite\fP(2) system call.
 raise \f[I]sig\fP
 The \f[I]raise\fP(3) system call.
 .TP 8n
-read \f[I]fildes\fP \f[I]data\fP \f[I]data-size\fP
+read \f[I]fildes\fP \f[I]data\fP \f[I]data\[hy]size\fP
 The \f[I]read\fP(2) system call.
 .TP 8n
 realloc \f[I]ptr\fP \f[I]size\fP
@@ -545,10 +545,10 @@ The \f[I]wait4\fP(2) system call.
 waitpid \f[I]pid\fP \f[I]status\fP \f[I]options\fP
 The \f[I]waitpid\fP(2) system call.
 .TP 8n
-write \f[I]fildes\fP \f[I]data\fP \f[I]data-size\fP
+write \f[I]fildes\fP \f[I]data\fP \f[I]data\[hy]size\fP
 The \f[I]write\fP(2) system call.
 .TP 8n
-writev \f[I]fildes\fP \f[I]data\fP \f[I]data_size\fP
+writev \f[I]fildes\fP \f[I]data\fP \f[I]data\[hy]size\fP
 The \f[I]writev\fP(2) system call.
 .\" ----------  X  ---------------------------------------------------------
 .\" ----------  Y  ---------------------------------------------------------

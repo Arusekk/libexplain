@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_OUTPUT_H
 #define LIBEXPLAIN_OUTPUT_H
 
+#include <libexplain/gcc_attributes.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -147,7 +149,7 @@ struct explain_output_vtable_t
       *
       * @note
       *     The "exit" method shall not return. if it does, exit(status)
-      *     will be called anyway.  This is becaiuse the rest of the
+      *     will be called anyway.  This is because the rest of the
       *     libexplain code assumes that "exit" means ::exit.
       */
     void (*exit)(explain_output_t *op, int status);
@@ -162,7 +164,7 @@ struct explain_output_vtable_t
 
 /**
   * The explain_output_new function may be used to create a new
-  * dynaically allocated instance of explain_output_t.
+  * dynamically allocated instance of explain_output_t.
   *
   * @param vtable
   *     The struct containing the pointers to the methods of the derived
@@ -175,7 +177,7 @@ explain_output_t *explain_output_new(const explain_output_vtable_t *vtable);
 
 /**
   * The explain_output_stderr_new function may be used to create a new
-  * dynaically allocated instance of an explain_output_t
+  * dynamically allocated instance of an explain_output_t
   * class that writes to stderr, and exits via exit(2);
   *
   * This is the default output handler.
@@ -188,7 +190,7 @@ explain_output_t *explain_output_stderr_new(void);
 
 /**
   * The explain_output_syslog_new function may be used to create a new
-  * dynaically allocated instance of an explain_output_t
+  * dynamically allocated instance of an explain_output_t
   * class that writes to syslog, and exits via exit(2);
   *
   * The following values are used:                                          <br>
@@ -205,7 +207,7 @@ explain_output_t *explain_output_syslog_new(void);
 
 /**
   * The explain_output_syslog_new1 function may be used to create a new
-  * dynaically allocated instance of an explain_output_t class that
+  * dynamically allocated instance of an explain_output_t class that
   * writes to syslog, and exits via exit(2);
   *
   * The following values are used:                                          <br>
@@ -223,7 +225,7 @@ explain_output_t *explain_output_syslog_new1(int level);
 
 /**
   * The explain_output_syslog_new3 function may be used to create a new
-  * dynaically allocated instance of an explain_output_t class that
+  * dynamically allocated instance of an explain_output_t class that
   * writes to syslog, and exits via exit(2);
   *
   * If you want different facilities or levels, create multiple instances.
@@ -243,7 +245,7 @@ explain_output_t *explain_output_syslog_new3(int option, int facility,
 
 /**
   * The explain_output_file_new function may be used to create a new
-  * dynaically allocated instance of an explain_output_t class that
+  * dynamically allocated instance of an explain_output_t class that
   * writes to a file, and exits via exit(2).
   *
   * @param filename
@@ -259,7 +261,7 @@ explain_output_t *explain_output_file_new(const char *filename, int append);
 
 /**
   * The explain_output_tee_new function may be used to create a new
-  * dynaically allocated instance of an explain_output_t class that
+  * dynamically allocated instance of an explain_output_t class that
   * writes to <b>two</b> other output classes.
   *
   * @param first
@@ -271,7 +273,7 @@ explain_output_t *explain_output_file_new(const char *filename, int append);
   *     dynamically allocated instance of the syslog class.
   *
   * @note
-  *     The output subsystem will "own" the first and seconf objects
+  *     The output subsystem will "own" the first and second objects
   *     after this call.  You may not make any reference to these
   *     pointers ever again.  The output subsystem will destroy these
   *     objects and free the memory when it feels like it.
@@ -289,6 +291,43 @@ explain_output_t *explain_output_tee_new(explain_output_t *first,
   *     It has not been wrapped.
   */
 void explain_output_message(const char *text);
+
+/**
+  * The explain_output_error function is used to print a formatted error
+  * message.  The printing is done via the #explain_output_message
+  * function.
+  *
+  * @param fmt
+  *     The format text of the message to be printed.
+  *     See printf(3) for more information.
+  */
+void explain_output_error(const char *fmt, ...)
+                                                 LIBEXPLAIN_FORMAT_PRINTF(1, 2);
+
+/**
+  * The explain_output_error_and_die function is used to print text,
+  * and then terminate immediately.  The printing is done via the
+  * #explain_output_message function, #explain_output_exit function.
+  *
+  * @param fmt
+  *     The format text of the message to be printed.
+  *     See printf(3) for more information.
+  */
+void explain_output_error_and_die(const char *fmt, ...)
+                                                  LIBEXPLAIN_FORMAT_PRINTF(1, 2)
+                                                            LIBEXPLAIN_NORETURN;
+
+/**
+  * The explain_output_warning function is used to print a formatted
+  * error message, including the word "warning".  The printing is done
+  * via the #explain_output_message function.
+  *
+  * @param fmt
+  *     The format text of the message to be printed.
+  *     See printf(3) for more information.
+  */
+void explain_output_warning(const char *fmt, ...)
+                                                 LIBEXPLAIN_FORMAT_PRINTF(1, 2);
 
 /**
   * The explain_output_method_message function is used to print text.
@@ -310,14 +349,14 @@ void explain_output_method_message(explain_output_t *op, const char *text);
   * @param status
   *     The exist status requested.
   */
-void explain_output_exit(int status);
+void explain_output_exit(int status)                        LIBEXPLAIN_NORETURN;
 
 /**
   * The explain_output_exit_failure function is used to terminate
   * execution, with exit status EXIT_FAILURE.  It is executed via the
   * registered output class, #explain_output_register for how.
   */
-void explain_output_exit_failure(void);
+void explain_output_exit_failure(void)                      LIBEXPLAIN_NORETURN;
 
 /**
   * The explain_output_method_exit function is used to terminate
@@ -328,12 +367,13 @@ void explain_output_exit_failure(void);
   * @param status
   *     The exist status requested.
   */
-void explain_output_method_exit(explain_output_t *op, int status);
+void explain_output_method_exit(explain_output_t *op, int status)
+                                                            LIBEXPLAIN_NORETURN;
 
 /**
   * The explain_output_register function is used to change libexplain's
   * default output handling facilities with something else.  The NULL
-  * pointer restores libexplain's defualt processing.
+  * pointer restores libexplain's default processing.
   *
   * If no output class is registered, the default is to wrap and print
   * to stderr, and to exit via the exit(2) system call.
@@ -362,6 +402,27 @@ void explain_output_register(explain_output_t *op);
   *     Pointer to the explain_output_t instance to be operated on.
   */
 void explain_output_method_destructor(explain_output_t *op);
+
+/**
+  * The explain_option_hanging_indent_set function is used to cause
+  * the output wrapping to use hanging indents.  By default no hanging
+  * indent is used, but this can sometimes obfuscate the end of one
+  * error message and the beginning of another.  A hanging indent
+  * results in continuation lines starting with white spoace, similar to
+  * RFC822 headers.
+  *
+  * This can be set using the "hanging-indent=N" string in the
+  * EXPLAIN_OPTIONS environment variable.
+  *
+  * Using this function will override any environment variable setting.
+  *
+  * @param columns
+  *     The number of columns of hanging indent to be used.  A value of
+  *     0 means no hanging indent (all lines flush with left margin).
+  *     A common value to use is 4: it doesn't consume to much of each
+  *     line, and it is a clear indent.
+  */
+void explain_option_hanging_indent_set(int columns);
 
 #ifdef __cplusplus
 }

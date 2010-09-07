@@ -34,7 +34,7 @@ test $? -eq 0 || fail
 fmt -w700 test.out4 > test.out3
 test $? -eq 0 || no_result
 
-sed -e 's|0x........|0xNNNNNNNN|g' \
+sed -e 's|0x[0-9A-Fa-f][0-9A-Fa-f]*|0xNNNNNNNN|g' \
     -e 's|size = { [0-9]* }|size = { X }|g' \
     test.out3 > test.out2
 test $? -eq 0 || no_result

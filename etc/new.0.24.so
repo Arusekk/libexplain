@@ -17,20 +17,20 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 19, 21, 22, 24, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
 .\" 35, 36, 37, 38, 39, 40, 41, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
 .\" 65, 66, 67, 68, 69
 Portability of the code has been improved.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 18
 The \f[I]explain\fP(3) man page now mentions AC_SYS_LARGEFILE in the
 building requirements.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 11, 13, 14, 48, 51, 53, 55
@@ -47,5 +47,5 @@ system calls.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.24 (2010-Mar-03)
+.SS Version 0.24 (2010\[hy]Mar\[hy]03)
 .\" vim: set ts=8 sw=4 et

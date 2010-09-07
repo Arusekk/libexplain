@@ -27,6 +27,7 @@
 #include <libexplain/fgets.h>
 #include <libexplain/fopen.h>
 #include <libexplain/malloc.h>
+#include <libexplain/output.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_list.h>
 
@@ -49,8 +50,7 @@ regcomp_or_die(regex_t *preg, const char *regex, int cflags)
         char            errbuf[1000];
 
         regerror(errcode, preg, errbuf, sizeof(errbuf));
-        fprintf(stderr, "regcomp(\"%s\"): %s\n", regex, errbuf);
-        exit(1);
+        explain_output_error_and_die("regcomp(\"%s\"): %s", regex, errbuf);
     }
 }
 
@@ -75,8 +75,7 @@ regexec_or_die(const regex_t *preg, const char *string, size_t nmatch,
             char            errbuf[1000];
 
             regerror(errcode, preg, errbuf, sizeof(errbuf));
-            fprintf(stderr, "regexec: %s\n", errbuf);
-            exit(1);
+            explain_output_error_and_die("regexec: %s", errbuf);
         }
     }
 }
@@ -131,8 +130,7 @@ ioctl_scan_include(const char *pathname)
     p = pathname;
     if (0 != memcmp(pathname, "/usr/include/", 13))
     {
-        fprintf(stderr, "must be a system include file\n");
-        exit(1);
+        explain_output_error_and_die("must be a system include file");
     }
     p += 13;
     mangled = mangle_include_file_name(p);
@@ -302,8 +300,7 @@ ioctl_scan_generate(const char *pathname)
     include_file_name = catalogue_get(cat, "include");
     if (!include_file_name || !*include_file_name)
     {
-        fprintf(stderr, "%s: no \"Include\" field\n", pathname);
-        exit(1);
+        explain_output_error_and_die("%s: no \"Include\" field\n", pathname);
     }
     func = mangle_include_file_name(include_file_name);
     elastic_buffer_constructor(&buf);

@@ -29,9 +29,23 @@ fubar
 test $? -eq 0 || no_result
 
 fmt > test.ok.2 << 'fubar'
+write(fildes = 1, data = 0x09876543, data_size = 1110) failed, No
+space left on device (ENOSPC) because the file system containing fildes
+("/example", 99% full) has no more space for a new directory entry
+fubar
+test $? -eq 0 || no_result
+
+fmt > test.ok.3 << 'fubar'
 write(fildes = 1, data = 0x09876543, data_size = 1110) failed, No space
 left on device (ENOSPC) because the file system containing fildes has
 no more space for data
+fubar
+test $? -eq 0 || no_result
+
+fmt > test.ok.4 << 'fubar'
+write(fildes = 1, data = 0x09876543, data_size = 1110) failed, No space
+left on device (ENOSPC) because the file system containing fildes has
+no more space for a new directory entry
 fubar
 test $? -eq 0 || no_result
 
@@ -50,8 +64,10 @@ fmt test.out.cooked > test.out
 test $? -eq 0 || no_result
 
 diff test.ok.1 test.out > /dev/null 2>/dev/null && pass
+diff test.ok.2 test.out > /dev/null 2>/dev/null && pass
+diff test.ok.3 test.out > /dev/null 2>/dev/null && pass
 
-diff test.ok.2 test.out
+diff test.ok.4 test.out
 test $? -eq 0 || fail
 
 #

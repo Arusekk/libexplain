@@ -21,7 +21,7 @@
 TEST_SUBJECT="strtof EINVAL"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 strtof(nptr = "penguin", endptr = 0xNNNNNNNN) failed, Invalid argument
 (EINVAL) because the nptr argument does not appear to be a number
 fubar
@@ -30,7 +30,10 @@ test $? -eq 0 || no_result
 test_strtof penguin > test.out.2 2>&1
 test $? -eq 1 || fail
 
-sed 's|0x[0-9a-fA-F][0-9a-zA-Z]*|0xNNNNNNNN|' test.out.2 > test.out
+sed 's|0x[0-9a-fA-F][0-9a-zA-Z]*|0xNNNNNNNN|' test.out.2 > test.out.1
+test $? -eq 0 || no_result
+
+fmt test.out.1 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

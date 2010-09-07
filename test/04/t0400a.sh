@@ -21,7 +21,7 @@
 TEST_SUBJECT="strtoull EINVAL"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 strtoull(nptr = "0", endptr = 0xNNNNNNNN, base = 65) failed, Invalid
 argument (EINVAL) because the base argument was incorrectly specified
 fubar
@@ -30,7 +30,11 @@ test $? -eq 0 || no_result
 test_strtoull 0 65 > test.out.2 2>&1
 test $? -eq 1 || fail
 
-sed 's|endptr = 0x[0-9a-fA-F][0-9a-fA-F]*|endptr = 0xNNNNNNNN|' test.out.2 > test.out
+sed 's|endptr = 0x[0-9a-fA-F][0-9a-fA-F]*|endptr = 0xNNNNNNNN|' \
+    test.out.2 > test.out.1
+test $? -eq 0 || no_result
+
+fmt test.out.1 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

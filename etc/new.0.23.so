@@ -17,14 +17,14 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 24, 25
 It is now possible to redirected libexplain output.
 For example,
 it is now possible to redirect all output to \f[I]syslog\fP(3).
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 16, 21
@@ -33,7 +33,7 @@ Coverage now includes the
 and
 \f[I]statvfs\fP(2)
 system call.
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 11, 12, 13, 14, 15, 17, 18, 19
@@ -42,5 +42,5 @@ been fixed.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.23 (2010-Feb-21)
+.SS Version 0.23 (2010\[hy]Feb\[hy]21)
 .\" vim: set ts=8 sw=4 et

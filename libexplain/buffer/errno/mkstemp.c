@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/sys/stat.h>
 
 #include <libexplain/buffer/eexist.h>
 #include <libexplain/buffer/efault.h>

@@ -29,7 +29,7 @@
 
 #include <libexplain/warn_unused_result.h>
 #include <libexplain/large_file_support.h>
-#include <libexplain/format_printf.h>
+#include <libexplain/gcc_attributes.h>
 
 #include <stdio.h>
 

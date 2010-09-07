@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,14 @@
 #include <libexplain/config.h>
 
 #ifdef HAVE_FCNTL_H
+#if defined(__alpha__) && defined(HAVE_LINUX_FCNTL_H)
+/* This is very strange, but numerous tests fail if we use <fcntl.h>
+   because is appears to have several incorrect defined. */
+#include <sys/types.h>
+#include <linux/fcntl.h>
+#else
 #include <fcntl.h>
+#endif
 #else
 #include <sys/file.h>
 #endif

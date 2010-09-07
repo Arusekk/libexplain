@@ -17,7 +17,7 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
+.TP 2n
 .if n *
 .if t \(bu
 .\" Change 26
@@ -26,5 +26,5 @@ automated build system.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.21 (2010-Feb-09)
+.SS Version 0.21 (2010\[hy]Feb\[hy]09)
 .\" vim: set ts=8 sw=4 et

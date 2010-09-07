@@ -22,20 +22,20 @@ TEST_SUBJECT="utime EROFS"
 . test_prelude
 
 fmt > test.ok.1 << 'fubar'
-utime(pathname = "foobar", times = 0x00001000) failed, Read-only file
+utime(pathname = "foobar", times = NULL) failed, Read-only file
 system (EROFS) because write access was requested and pathname refers to a
 file on a read-only file system ("/example", 42% full)
 fubar
 test $? -eq 0 || no_result
 
 fmt > test.ok.2 << 'fubar'
-utime(pathname = "foobar", times = 0x00001000) failed, Read-only file
+utime(pathname = "foobar", times = NULL) failed, Read-only file
 system (EROFS) because write access was requested and pathname refers to a
 file on a read-only file system
 fubar
 test $? -eq 0 || no_result
 
-explain -eEROFS utime foobar 0x1000 > test.out4
+explain -eEROFS utime foobar 0 > test.out4
 test $? -eq 0 || fail
 
 fmt -w700 test.out4 > test.out3

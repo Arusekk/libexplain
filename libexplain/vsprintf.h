@@ -29,7 +29,7 @@
 
 #include <libexplain/warn_unused_result.h>
 #include <libexplain/large_file_support.h>
-#include <libexplain/format_printf.h>
+#include <libexplain/gcc_attributes.h>
 
 #include <stdio.h>
 
@@ -66,7 +66,7 @@ extern "C" {
   * @endcode
   */
 int explain_vsprintf_or_die(char *data, const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(2, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(2);
 
 /**
   * The explain_vsprintf_on_error function is used to call the
@@ -100,7 +100,7 @@ int explain_vsprintf_or_die(char *data, const char *format, va_list ap)
   * @endcode
   */
 int explain_vsprintf_on_error(char *data, const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(2, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(2);
 
 /**
   * The explain_vsprintf function is used to obtain an explanation of an
@@ -149,7 +149,7 @@ int explain_vsprintf_on_error(char *data, const char *format, va_list ap)
   * #explain_vsprintf_or_die function.
   */
 const char *explain_vsprintf(char *data, const char *format, va_list ap)
-                                                  LIBEXPLAIN_FORMAT_PRINTF(2, 0)
+                                                    LIBEXPLAIN_FORMAT_VPRINTF(2)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -204,7 +204,7 @@ const char *explain_vsprintf(char *data, const char *format, va_list ap)
   */
 const char *explain_errno_vsprintf(int errnum, char *data, const char *format,
     va_list ap)
-                                                  LIBEXPLAIN_FORMAT_PRINTF(3, 0)
+                                                    LIBEXPLAIN_FORMAT_VPRINTF(3)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -253,7 +253,7 @@ const char *explain_errno_vsprintf(int errnum, char *data, const char *format,
   */
 void explain_message_vsprintf(char *message, int message_size, char *data,
     const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(4, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(4);
 
 /**
   * The explain_message_errno_vsprintf function is used to obtain an
@@ -306,7 +306,7 @@ void explain_message_vsprintf(char *message, int message_size, char *data,
   */
 void explain_message_errno_vsprintf(char *message, int message_size, int errnum,
     char *data, const char *format, va_list ap)
-                                                 LIBEXPLAIN_FORMAT_PRINTF(5, 0);
+                                                   LIBEXPLAIN_FORMAT_VPRINTF(5);
 
 #ifdef __cplusplus
 }
