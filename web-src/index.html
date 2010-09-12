@@ -18,19 +18,18 @@
 .\"
 .ad l
 .hy 0
+.nf
 .so etc/version.so
 <!DOCTYPE HTML PUBLIC
     "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd"
     >
-.br
 <html>
 <head>
 <title>
 libexplain \*(v)
 </title>
 </head>
-.br
 <body background="bg.png">
 <img src="libexplain.128.png" align="left" alt="" />
 <img src="libexplain.128.png" align="right" alt="" />
@@ -46,7 +45,6 @@ The library is not quite a drop-in replacement for strerror, but it
 comes close.
 Each system call has a dedicated libexplain function, for example
 <blockquote><pre>
-.nf
 fd = open(path, flags, mode);
 if (fd < 0)
 {
@@ -55,7 +53,6 @@ href="doc-external/open_8h.html#7c0bfc9a553438096c19b86dab687b2a"
 >explain_open</a>(path, flags, mode));
     exit(EXIT_FAILURE);
 }
-.fi
 </pre></blockquote>
 <p>
     <table align="right" width="30%" ><tr bgcolor="#eeeebb" ><td><img
@@ -66,7 +63,6 @@ href="doc-external/open_8h.html#7c0bfc9a553438096c19b86dab687b2a"
     >Parker san</a></small></td></tr>
     </table>
 If, for example, you were to try to open
-.br
 <tt>no-such-dir/some-file</tt>, you would see a message like
 <blockquote>
 <tt>open(pathname = "no-such-dir/some-file", flags = O_RDONLY)
@@ -111,37 +107,82 @@ via <a href="http://www.doxygen.org/index.html" >Doxygen</a>.
 <li> Want to help?  <a href="fixme.html" >Here is a list of places</a>
 in the source code marked &ldquo;FIXME&rdquo;.
 </ul>
+<br clear="right" />
 
 <h2>
-<img src="orrery1.128.png" align="left" alt="" />
+<img src="orrery1.128.png" align="right" alt="" />
 Download </h2>
-The following files are available for download:
-<p>
-<table align="center">
-<tr> <th> File </th><th> Description </th> </tr>
-.br
+<table>
 <tr>
-    <td> <a href="libexplain-\*(V).README" >libexplain-\*(V).README</a> </td>
-    <td> The README file form the tarball. </td> </tr>
-.br
+    <td valign="top" align="center" ><img src="libexplain.64.png" alt="[]"
+        /></td>
+    <td valign="top" >
+    The following files are available for download from this web site:
+    <p>
+    <table align="center">
+    <tr>
+        <th>File</th><th>Description</th></tr>
+    <tr>
+        <td nowrap><a href="libexplain-\*(V).README"
+            >libexplain-\*(V).README</a></td>
+        <td>The README file form the tarball.</td>
+        </tr>
+    <tr>
+        <td nowrap><a href="libexplain-\*(V).tar.gz"
+            >libexplain-\*(V).tar.gz</a></td>
+        <td>The complete source.</td>
+        </tr>
+    <tr>
+        <td nowrap><a href="libexplain-\*(V).ae" >libexplain-\*(V).ae</a></td>
+        <td>The complete source, in <a href="http://aegis.sourceforge.net/"
+            >aedist</a> format.</td>
+        </tr>
+    <tr>
+        <td nowrap><a href="libexplain-\*(V).pdf" >libexplain-\*(V).pdf</a></td>
+        <td>The reference manual, in PDF format.</td>
+        </tr>
+    <tr>
+        <td nowrap valign="top" ><tt><a href="debian/" >debian</a>/</tt></td>
+        <td>Pre-built debian packages for Ubuntu 9.10 Karmic x86_64</td>
+        </tr>
+    </table>
+
 <tr>
-    <td> <a href="libexplain-\*(V).tar.gz" >libexplain-\*(V).tar.gz</a> </td>
-    <td> The complete source. </td> </tr>
-.br
+    <td valign="top" align="center" ><a
+        href="https://launchpad.net/~pmiller-opensource/+archive/ppa" ><img
+        src="https://launchpad.net/@@/launchpad-logo.png" border=0 alt="[]"
+        /></a></td>
+    <td valign="top" >
+        If you use Ubuntu Linux, there are pre-built packages available for
+        installation using the normal <tt>sudo apt-get install</tt> method,
+        from <a href="https://launchpad.net/~pmiller-opensource/+archive/ppa"
+        >this package archive</a> (<a
+        href="https://help.launchpad.net/Packaging/PPA" >PPA</a>).
+        <p>
+        Instructions are available there for how to manually add the PPA to your
+        <tt>/etc/apt/sources.list</tt> file, but the following commands are
+        sufficient on recent versions of Ubuntu:
+        <blockquote>
+<pre>sudo add-apt-repository ppa:pmiller-opensource/ppa
+sudo apt-get update
+sudo apt-get install libexplain-dev</pre>
+        </blockquote>
+        </td>
+    </tr>
+
 <tr>
-    <td> <a href="libexplain-\*(V).ae" >libexplain-\*(V).ae</a> </td>
-    <td> The complete source, in <a href="http://aegis.sourceforge.net/"
-    >aedist</a> format. </td> </tr>
-.br
-<tr>
-    <td> <a href="libexplain-\*(V).pdf" >libexplain-\*(V).pdf</a> </td>
-    <td> The reference manual, in PDF format.
-    </td> </tr>
-.br
-<tr>
-    <td> <a href="debian/" >debian</a> </td>
-    <td> Pre-built debian packages for Ubuntu 9.10 Karmic x86_64
-    </td> </tr>
+    <td valign="top" align="center" > <a
+        href="https://sourceforge.net/projects/libexplain/files/" ><img
+        src="sf.png" border=0 alt="[]" /></a></td>
+    <td valign="top" >
+        The best possible download speed for the source tarball will be
+        from the <a href="https://sourceforge.net/projects/libexplain/files/"
+        >SourceForge download pages</a>, and here is the <a
+      href="http://sourceforge.net/project/platformdownload.php?group_id=241772"
+        >most recent tarball</a> from there.
+        </td>
+    </tr>
+
 </table>
 
 .\" ------------------------------------------------------------------------
@@ -150,124 +191,97 @@ The following files are available for download:
 <ul>
 <li>
     Mailing list is <a
-    href="mailto:libexplain-users@lists.sourceforgeSystem.net"
-    >libexplain-users@lists.sourceforgeSystem.net</a>, and you can subscribe <a
-.nf
+    href="mailto:libexplain-users@lists.sourceforge.net"
+    >libexplain-users@lists.sourceforge.net</a>, and you can subscribe <a
     href="https://lists.sourceforge.net/lists/listinfo/libexplain-users"
-.fi
     >here</a>.
 <li>
     SourceForge <a href="http://sourceforge.net/projects/libexplain/"
     >project</a> page.
 <li>
     SourceForge <a
-.nf
+    href="http://sourceforge.net/projects/libexplain/files/" >download</a> page,
+    and most recent <a
     href="http://sourceforge.net/project/platformdownload.php?group_id=241772"
-.fi
-    >download</a> page.
+    >tarball</a> link.
 <li>
     SourceForge <a href="https://sourceforge.net/tracker/?group_id=241772"
     >trackers</a> page: the <a
-.nf
 href="https://sourceforge.net/tracker/?\
 atid=1117296&amp;group_id=241772&amp;func=browse"
-.fi
     >bug tracker</a>, the <a
-.nf
 href="http://sourceforge.net/tracker/?\
 atid=1117298&amp;group_id=241772&amp;func=browse"
-.fi
     >patch tracker</a>, and <a
-.nf
 href="http://sourceforge.net/tracker/?\
 atid=1117299&amp;group_id=241772&amp;func=browse"
-.fi
     >feature requests</a>.
+</ul>
+
+<h2> Services provided by Debian </h2>
+<ul>
 <li> Debian main <a
-.nf
 href="https://buildd.debian.org/pkg.cgi?pkg=libexplain&amp;dist=unstable"
->build farm</a>, and the Debian ports <a
+>build farm</a>
+<li> Debian ports <a
 href="http://buildd.debian-ports.org/status/package.php?\
 suite=unstable&amp;p=libexplain"
-.fi
 >build farm</a>.
 </ul>
 
 .\" ------------------------------------------------------------------------
-.br
 <hr>
 <table border=0><tr><td valign="top">
 <a href="http://www.fsf.org/">
 <img
-.br
 src="http://upload.wikimedia.org/wikipedia/commons/b/bf/\
 GNU-FDL-ic%C3%B4ne-Transparente.PNG"
 border=0 width=129 height=122 alt="" /></a>
-.br
 </td><td valign="top" width="15%">
-.br
 Libexplain is written and owned by
 <a href="mailto:pmiller@opensource.org.au"
 >Peter Miller &lt;pmiller@opensource.org.au&gt;</a>
 and is freely distributable under the terms and conditions of the
 <a href="http://www.gnu.org/licenses/lgpl.txt">GNU LGPL</a>,
 so you may use libexplain with proprietary programs.
-.br
 </td><td valign="top">
-.br
 <a href="http://www.opensource.org/docs/definition.php">
 <img
-.nf
 src="http://www.opensource.org/trademarks/opensource/web/transparent/\
 opensource-110x95-t.png"
 border="0" width="110" height="95" alt="" /></a>
-.fi
 </td><td valign="top" align="right">
 Libexplain is developed using <a
-href="http://aegis.sourceforge.net/">Aegis</a>, a transaction based
+href="http://aegis.sourceforge.net/" >Aegis</a>, a transaction based
 software configuration management system.
 The Aegis <a
-.nf
 href="http://aegis.sourceforge.net/cgi-bin/aeget/libexplain.\*(v)?menu"
-.fi
 >repository</a> for this project is available.
-.br
 </td><td valign="top">
-.br
 <a href="http://aegis.sourceforge.net/" ><img
 src="http://aegis.sourceforge.net/aegis.png"
 border=0 alt="" /></a>
-.br
 </td><td valign="top" align="right">
-.br
 There is more <a
 href="http://miller.emu.id.au/pmiller/software/"
 >Software by Peter Miller</a>
 at his home page.
 </td><td valign="top">
-.br
 <a href="http://miller.emu.id.au/pmiller/" ><img
-.nf
 src="http://miller.emu.id.au/pmiller/pmiller_2003_colour.64.png"
-.fi
 border=0 alt="" /></a>
 </td></tr></table>
 .\" ------------------------------------------------------------------------
-.br
-<hr>
+<hr/>
 <a href="http://sourceforge.net/"><img
-.nf
 src="http://sourceforge.net/sflogo.php?group_id=237324&amp;type=5"
-.fi
 width="210" height="62" border="0" alt="SourceForge.net Logo"
 align="right"></a>
 This page is hosted by <a href="http://sourceforge.net/">SourceForge</a>.
 <br>
 This page has been accessed approximately
 <img
-.nf
 src="http://miller.emu.id.au/cgi-bin/web_hit_counter?pmiller_libexplain_\*(v)"
-.fi
 alt="number" /> times since
 .ds MO1 Jan
 .ds MO2 Feb

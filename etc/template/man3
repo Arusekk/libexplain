@@ -20,10 +20,12 @@
 .TH ${basename ${trim_ext $filename}} 3
 .SH NAME
 ${basename ${trim_ext $filename}} \- insert description here
+.if require_index \{
 .XX "${basename ${trim_ext $filename}}(3)" "insert description here"
+.\}
 .SH SYNOPSIS
 #include <libexplain/libexplain.h>
-.br
+.sp 0.3
 void ${basename ${trim_ext $filename}}(void);
 .SH DESCRIPTION
 The ${basename ${trim_ext $filename}} function may be used to

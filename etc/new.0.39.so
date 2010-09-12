@@ -17,22 +17,14 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.TP 2n
-.if n *
-.if t \(bu
-.\" Change 14
-A build problem has been fixed on Ubuntu Hardy,
-a number of symbols are absent from older versions of
-<linux/cdrom.h>, conditional code has been added for them.
-.TP 2n
-.if n *
-.if t \(bu
-.\" Change 12
-A bug has been fixed in one of the documentation files, it was
-missing the conditional around the \f[CW]\&.XX\fP macro, causing
-\f[I]rpmlint\fP(1) and \f[I]lintian\fP(1) to complain.
+.\"
+.\" you can create the initial cut of this file using the
+.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
+.\"             -p libexplain.0 -c 39 -unf
+.\" command, and then editing it to be more appropriate.
+.\"
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.38 (2010\[hy]Sep\[hy]08)
+.SS Version 0.39 (2010\[hy]Sep\[hy]12)
 .\" vim: set ts=8 sw=4 et

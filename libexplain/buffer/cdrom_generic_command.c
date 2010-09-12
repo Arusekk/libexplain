@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -71,7 +71,9 @@ explain_buffer_gpcmd(explain_string_buffer_t *sb, int cmd)
             GPCMD_PREVENT_ALLOW_MEDIUM_REMOVAL },
         { "GPCMD_READ_10", GPCMD_READ_10 },
         { "GPCMD_READ_12", GPCMD_READ_12 },
+#ifdef GPCMD_READ_BUFFER
         { "GPCMD_READ_BUFFER", GPCMD_READ_BUFFER },
+#endif
         { "GPCMD_READ_BUFFER_CAPACITY", GPCMD_READ_BUFFER_CAPACITY },
         { "GPCMD_READ_CDVD_CAPACITY", GPCMD_READ_CDVD_CAPACITY },
         { "GPCMD_READ_CD", GPCMD_READ_CD },
@@ -101,9 +103,13 @@ explain_buffer_gpcmd(explain_string_buffer_t *sb, int cmd)
         { "GPCMD_TEST_UNIT_READY", GPCMD_TEST_UNIT_READY },
         { "GPCMD_VERIFY_10", GPCMD_VERIFY_10 },
         { "GPCMD_WRITE_10", GPCMD_WRITE_10 },
+#ifdef GPCMD_WRITE_12
         { "GPCMD_WRITE_12", GPCMD_WRITE_12 },
+#endif
         { "GPCMD_WRITE_AND_VERIFY_10", GPCMD_WRITE_AND_VERIFY_10 },
+#ifdef GPCMD_WRITE_BUFFER
         { "GPCMD_WRITE_BUFFER", GPCMD_WRITE_BUFFER },
+#endif
         { "GPCMD_SET_SPEED", GPCMD_SET_SPEED },
         { "GPCMD_PLAYAUDIO_TI", GPCMD_PLAYAUDIO_TI },
         { "GPCMD_GET_MEDIA_STATUS", GPCMD_GET_MEDIA_STATUS },
