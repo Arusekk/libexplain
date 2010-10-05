@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,17 @@
 
 TEST_SUBJECT="accept4 ENOSR"
 . test_prelude
+
+if explain -eENOSR strerror >/dev/null 2>&1
+then
+    : ok
+else
+    echo
+    echo "    Your system doesn't have ENOSR."
+    echo "    This test is declared to pass by default."
+    echo
+    pass
+fi
 
 cat > test.ok << 'fubar'
 accept4(fildes = 42, sock_addr = 0x12340000, sock_addr_size = 0x12345000,

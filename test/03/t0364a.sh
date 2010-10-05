@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 TEST_SUBJECT="execvp EACCES"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 execvp(pathname = "yuck", argv = ["yuck"]) failed, Permission denied
 (EACCES) because the process does not have execute permission to the
 "yuck" regular file in the pathname "ugly" directory

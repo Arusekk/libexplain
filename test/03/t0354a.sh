@@ -21,14 +21,18 @@
 TEST_SUBJECT="ioctl MTIOCGETCONFIG"
 . test_prelude
 
-if test `uname -s` = "SunOS"
-then
+sys=`uname -s`
+case "$sys" in
+SunOS | FreeBSD)
     echo
-    echo "    Solaris does not have ioctl MTIOCGETCONFIG."
-    echo "    This test is declared to pass by default."
+    echo "      $sys does not have ioctl MTIOCGETCONFIG."
+    echo "      This test is declared to pass by default."
     echo
     pass
-fi
+    ;;
+*)
+    ;;
+esac
 
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = MTIOCGETCONFIG, data = 0x00001000) failed,

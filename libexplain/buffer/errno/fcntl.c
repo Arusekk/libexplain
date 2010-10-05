@@ -22,6 +22,7 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/check_fildes_range.h>
+#include <libexplain/buffer/check_fildes_range.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/efault.h>
@@ -369,7 +370,8 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
 #ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
 #endif
-            explain_buffer_emfile(sb);
+            if (explain_buffer_check_fildes_range(sb, data, "data"))
+                explain_buffer_emfile(sb);
             break;
 
         default:

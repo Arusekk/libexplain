@@ -24,7 +24,7 @@
 #include <libexplain/iocontrol/siocgifconf.h>
 
 
-#ifdef SIOCGIFCONF
+#if defined(SIOCGIFCONF) && defined(HAVE_STRUCT_IFCONF)
 
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,

@@ -32,6 +32,7 @@
 #include <explain/syscall/adjtime.h>
 #include <explain/syscall/adjtimex.h>
 #include <explain/syscall/bind.h>
+#include <explain/syscall/calloc.h>
 #include <explain/syscall/chdir.h>
 #include <explain/syscall/chmod.h>
 #include <explain/syscall/chown.h>
@@ -115,6 +116,7 @@
 #include <explain/syscall/pathconf.h>
 #include <explain/syscall/pclose.h>
 #include <explain/syscall/pipe.h>
+#include <explain/syscall/poll.h>
 #include <explain/syscall/popen.h>
 #include <explain/syscall/pread.h>
 #include <explain/syscall/putc.h>
@@ -215,6 +217,7 @@ static const table_t table[] =
     /* FIXME: add support for brk */
     /* ----------  C  ------------------------------------------------------- */
     /* FIXME: add support for cacheflush */
+    { "calloc", explain_syscall_calloc },
     /* FIXME: add support for capget */
     /* FIXME: add support for capset */
     { "chdir", explain_syscall_chdir },
@@ -420,7 +423,7 @@ static const table_t table[] =
     /* FIXME: add support for phys */
     { "pipe", explain_syscall_pipe },
     /* FIXME: add support for pivot_root */
-    /* FIXME: add support for poll */
+    { "poll", explain_syscall_poll },
     { "popen", explain_syscall_popen },
     /* FIXME: add support for ppoll */
     /* FIXME: add support for prctl */

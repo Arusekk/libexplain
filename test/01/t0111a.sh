@@ -21,14 +21,16 @@
 TEST_SUBJECT="symlink ENOENT"
 . test_prelude
 
-if test `uname -s` = SunOS
-then
+sys=`uname -s`
+case "$sys" in
+SunOS | FreeBSD)
     echo
-    echo "    Solaris has non-POSIX semantics for empthy paths."
+    echo "    $sys has non-POSIX semantics for empty paths."
     echo "    This test is declared to pass by default."
     echo
     pass
-fi
+    ;;
+esac
 
 cat > test.ok << 'fubar'
 symlink(oldpath = "", newpath = "foobar") failed, No such file or directory

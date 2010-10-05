@@ -95,12 +95,14 @@ figure_out_error(const char *text)
         explain_string_buffer_puts
         (
             &sb,
-            " doesn't match any known symbol, guessing you meant "
+            " doesn't match any known symbol, closest is the "
         );
         explain_string_buffer_puts_quoted(&sb, eip->name);
-        explain_string_buffer_puts(&sb, " instead");
+        explain_string_buffer_puts(&sb, " symbol");
         explain_wrap_and_print(stderr, message);
         exit_status = EXIT_FAILURE;
+        exit(EXIT_FAILURE);
+        /* NOTREACHED */
         return eip->error_number;
     }
 
@@ -113,16 +115,18 @@ figure_out_error(const char *text)
         explain_string_buffer_puts
         (
             &sb,
-            " doesn't match any known symbol, guessing you meant "
+            " doesn't match any known symbol, closest is the "
         );
         explain_string_buffer_puts_quoted
         (
             &sb,
             explain_internal_strerror(eip->error_number)
         );
-        explain_string_buffer_puts(&sb, " instead");
+        explain_string_buffer_puts(&sb, " message");
         explain_wrap_and_print(stderr, message);
         exit_status = EXIT_FAILURE;
+        exit(EXIT_FAILURE);
+        /* NOTREACHED */
         return eip->error_number;
     }
 

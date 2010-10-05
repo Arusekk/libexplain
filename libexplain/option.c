@@ -340,7 +340,7 @@ explain_option_hanging_indent(int width)
         initialise();
     if (width <= 0 || width >= 65536)
         width = 80;
-    max = width / 10;
+    max = (width + 5) / 10;
     n = hanging_indent.value;
     if (n <= 0)
         return 0;

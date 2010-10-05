@@ -64,9 +64,16 @@ explain_buffer_errno_mmap_system_call(explain_string_buffer_t *sb, int errnum,
     explain_string_buffer_puts(sb, ", flags = ");
     explain_buffer_mmap_flags(sb, flags);
     explain_string_buffer_puts(sb, ", fildes = ");
+#ifdef MAP_ANONYMOUS
     if (flags & MAP_ANONYMOUS)
         explain_buffer_int(sb, fildes);
     else
+#endif
+#ifdef MAP_ANON
+    if (flags & MAP_ANON)
+        explain_buffer_int(sb, fildes);
+    else
+#endif
         explain_buffer_fildes(sb, fildes);
     explain_string_buffer_puts(sb, ", offset = ");
     explain_buffer_off_t(sb, offset);

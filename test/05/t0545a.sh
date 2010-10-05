@@ -21,15 +21,22 @@
 TEST_SUBJECT="mmap vs EINVAL"
 . test_prelude
 
-cat > test.ok << 'fubar'
-mmap(data = NULL, data_size = 0, prot = 0, flags = MAP_ANONYMOUS, fildes =
-0, offset = 0) failed, Invalid argument (EINVAL) because the data_size
+fmt > test.ok << 'fubar'
+mmap(data = NULL, data_size = 0, prot = 0, flags = MAP_ANON, fildes = 0,
+offset = 0) failed, Invalid argument (EINVAL) because the data_size
 argument was incorrectly specified, it was too small
 fubar
 test $? -eq 0 || no_result
 
-explain -eEINVAL mmap 0 0 0 MAP_ANONYMOUS 0 > test.out
+explain -eEINVAL mmap 0 0 0 MAP_ANON 0 > test.out.4
 test $? -eq 0 || fail
+
+fmt -w700 test.out.4 > test.out.3
+test $? -eq 0 || no_result
+sed 's|ANONYMOUS|ANON|' test.out.3 > test.out.2
+test $? -eq 0 || no_result
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,17 +21,34 @@
 TEST_SUBJECT="getcwd ENOMEM"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 getcwd(data = 0x00001000, data_size = 1000) failed, Cannot allocate memory
 (ENOMEM) because insufficient user-space memory was available, probably by
 exhausting swap space
 fubar
 test $? -eq 0 || no_result
 
-explain -e ENOMEM getcwd 0x1000 1000 > test.out
+fmt > test.ok2 << 'fubar'
+getcwd(data = 0x00001000, data_size = 1000) failed, Cannot allocate memory
+(ENOMEM) because insufficient user-space memory was available { rlim_cur = NNN }
+fubar
+test $? -eq 0 || no_result
+
+explain -e ENOMEM getcwd 0x1000 1000 > test.out4
 test $? -eq 0 || fail
 
-diff test.ok test.out
+fmt -w700 test.out4 > test.out3
+test $? -eq 0 || no_result
+
+sed 's|{ rlim_cur = [0-9]* }|{ rlim_cur = NNN }|g' test.out3 > test.out2
+test $? -eq 0 || no_result
+
+fmt test.out2 > test.out
+test $? -eq 0 || no_result
+
+diff test.ok test.out >/dev/null 2>/dev/null && pass
+
+diff test.ok2 test.out
 test $? -eq 0 || fail
 
 #

@@ -17,12 +17,19 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 39 -unf
-.\" command, and then editing it to be more appropriate.
-.\"
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 19, 20, 21, 22
+The code now builds and tests successfully on FreeBSD.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 15, 16
+Explanations are now available for errors reported by the
+\f[I]calloc\fP(3) and
+\f[I]poll\fP(2)
+system calls.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

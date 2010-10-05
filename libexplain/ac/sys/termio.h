@@ -29,6 +29,10 @@
 
 #ifdef HAVE_SYS_TERMIO_H
 #include <sys/termio.h>
+#else
+#ifdef HAVE_SYS_TERMIOS_H
+#include <sys/termios.h>
+#endif
 #endif
 
 #endif /* LIBEXPLAIN_AC_SYS_TERMIO_H */

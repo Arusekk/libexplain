@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,10 +31,18 @@ explain_buffer_arpreq_flags(explain_string_buffer_t *sb, int data)
 {
     static const explain_parse_bits_table_t table[] =
     {
+#ifdef ATF_COM
         { "ATF_COM", ATF_COM },
-        { "ATF_PERM", ATF_PERM },
-        { "ATF_PUBL", ATF_PUBL },
-        { "ATF_USETRAILERS", ATF_USETRAILERS },
+#endif
+#ifdef ATF_PERM
+    { "ATF_PERM", ATF_PERM },
+#endif
+#ifdef ATF_PUBL
+    { "ATF_PUBL", ATF_PUBL },
+#endif
+#ifdef ATF_USETRAILERS
+    { "ATF_USETRAILERS", ATF_USETRAILERS },
+#endif
 #ifdef ATF_NETMASK
         { "ATF_NETMASK", ATF_NETMASK },
 #endif

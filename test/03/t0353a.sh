@@ -21,14 +21,18 @@
 TEST_SUBJECT="ioctl MTIOCPOS"
 . test_prelude
 
-if test `uname -s` = SunOS
-then
+sys=`uname -s`
+case "$sys" in
+SunOS | FreeBSD)
     echo
-    echo "    Solaris does not have ioctl MTIOCPOS."
-    echo "    This test is declared to pass by default."
+    echo "      $sys does not have MTIOCPOS."
+    echo "      This test is declared to pass by default."
     echo
     pass
-fi
+    ;;
+*)
+    ;;
+esac
 
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = MTIOCPOS, data = 0x00001000) failed,

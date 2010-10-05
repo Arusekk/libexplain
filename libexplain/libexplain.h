@@ -38,6 +38,7 @@
 #include <libexplain/adjtime.h>
 #include <libexplain/adjtimex.h>
 #include <libexplain/bind.h>
+#include <libexplain/calloc.h>
 #include <libexplain/chdir.h>
 #include <libexplain/chmod.h>
 #include <libexplain/chown.h>
@@ -125,6 +126,7 @@
 #include <libexplain/pathconf.h>
 #include <libexplain/pclose.h>
 #include <libexplain/pipe.h>
+#include <libexplain/poll.h>
 #include <libexplain/popen.h>
 #include <libexplain/pread.h>
 #include <libexplain/printf.h>

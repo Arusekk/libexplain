@@ -26,20 +26,40 @@
 file_template =
 [
     {
+        pattern = [ "libexplain/ac/*.h" ];
+        body = "${read_file ${source etc/template/lib_ac_h abs}}";
+    },
+    {
         pattern = [ "libexplain/buffer/e*.c" ];
         body = "${read_file ${source etc/template/lib_buf_ec abs}}";
+    },
+    {
+        pattern = [ "libexplain/buffer/e*.h" ];
+        body = "${read_file ${source etc/template/lib_buf_eh abs}}";
     },
     {
         pattern = [ "libexplain/buffer/*.c", "libexplain/string_buffer/*.c" ];
         body = "${read_file ${source etc/template/lib_buf_c abs}}";
     },
     {
+        pattern = [ "libexplain/buffer/*.h", "libexplain/string_buffer/*.h" ];
+        body = "${read_file ${source etc/template/lib_buf_h abs}}";
+    },
+    {
         pattern = [ "libexplain/iocontrol/*.c" ];
         body = "${read_file ${source etc/template/lib_ioc_c abs}}";
     },
     {
+        pattern = [ "libexplain/iocontrol/*.h" ];
+        body = "${read_file ${source etc/template/lib_ioc_h abs}}";
+    },
+    {
         pattern = [ "lib*/*.c" ];
         body = "${read_file ${source etc/template/lib_c abs}}";
+    },
+    {
+        pattern = [ "lib*/*.h" ];
+        body = "${read_file ${source etc/template/lib_h abs}}";
     },
     {
         pattern = [ "lib*" ];
@@ -112,5 +132,6 @@ filename_pattern_reject =
     "*[A-Z]*",
     "*.cc",
     "*.cxx",
+    "*.cpp",
     "*.c++"
 ];

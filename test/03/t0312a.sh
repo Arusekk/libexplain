@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,12 @@ exhausting swap space
 fubar
 test $? -eq 0 || no_result
 
+fmt > test.ok2 << 'fubar'
+fdopen(fildes = 1, flags = "w") failed, Cannot allocate memory (ENOMEM)
+because insufficient user-space memory was available { rlim_cur = NNN }
+fubar
+test $? -eq 0 || no_result
+
 explain -e ENOMEM fdopen 1 "w" > test.out4
 test $? -eq 0 || fail
 
@@ -36,11 +42,14 @@ test $? -eq 0 || no_result
 
 sed -e 's|1 "[^"]*"|1|' \
     -e 's@ | O_LARGEFILE@@g' \
+    -e 's|{ rlim_cur = [0-9]* }|{ rlim_cur = NNN }|' \
     test.out3 > test.out2
 test $? -eq 0 || no_result
 
 fmt test.out2 > test.out
 test $? -eq 0 || no_result
+
+diff test.ok2 test.out >/dev/null 2>/dev/null && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail

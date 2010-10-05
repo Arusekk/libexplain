@@ -21,7 +21,7 @@
 TEST_SUBJECT="getcwd EACCES"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 getcwd(data = 0xNNNNNNNN, data = NNN) failed, Permission denied (EACCES)
 because read or search permission was denied for a component of the
 pathname

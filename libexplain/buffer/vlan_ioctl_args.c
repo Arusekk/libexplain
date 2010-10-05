@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -56,7 +56,9 @@ explain_buffer_vlan_ioctl_flag(explain_string_buffer_t *sb, int value)
     static const explain_parse_bits_table_t table[] =
     {
         { "VLAN_FLAG_REORDER_HDR", VLAN_FLAG_REORDER_HDR },
+#ifdef VLAN_FLAG_GVRP
         { "VLAN_FLAG_GVRP", VLAN_FLAG_GVRP },
+#endif
     };
 
     explain_parse_bits_print(sb, value, table, SIZEOF(table));

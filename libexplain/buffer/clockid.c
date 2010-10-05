@@ -26,12 +26,8 @@
 
 static const explain_parse_bits_table_t table[] =
 {
-#ifdef CLOCK_MONOTONIC
     { "CLOCK_MONOTONIC", CLOCK_MONOTONIC },
-#endif
-#ifdef CLOCK_REALTIME
     { "CLOCK_REALTIME", CLOCK_REALTIME },
-#endif
 };
 
 

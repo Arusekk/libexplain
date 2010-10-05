@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,17 @@
 
 TEST_SUBJECT="execve ELIBBAD"
 . test_prelude
+
+if explain -eELIBBAD strerror  >/dev/null 2>&1
+then
+    : ok
+else
+    echo
+    echo "    Your system does not have ELIBBAD."
+    echo "    The test is declared to pass by default."
+    echo
+    pass
+fi
 
 cat > test.ok << 'fubar'
 execve(pathname = "foobar", argv = ["foobar"], envp = [/* vars */]) failed,

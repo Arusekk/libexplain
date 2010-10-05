@@ -1811,6 +1811,14 @@ msgstr  "the connection attempt took to long; the server may be too busy "
         "discarding your packets"
 
 #.
+#. This error message is used to explain an EINVAL
+#. error reported by the poll(2) system call, in the case where
+#. the data_size value exceeds the RLIMIT_NOFILE value.
+#.
+msgid   "the data_size value exceeds the RLIMIT_NOFILE value"
+msgstr  "the data_size value exceeds the RLIMIT_NOFILE value"
+
+#.
 #. This error message is used to explain an
 #. ENOSPC error, in the case where more specific information
 #. is not available.

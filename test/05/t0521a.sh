@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,16 +21,22 @@
 TEST_SUBJECT="mkostemp EINVAL"
 . test_prelude
 
-cat > test.ok << 'fubar'
-mkostemp(pathname = "oops", flags = O_RDONLY | O_LARGEFILE) failed, Invalid
-argument (EINVAL) because the pathname is too small, it must be at least
-six characters; this is more likely to be a software error (a bug) than it
+fmt > test.ok << 'fubar'
+mkostemp(pathname = "oops", flags = O_RDONLY) failed, Invalid argument
+(EINVAL) because the pathname is too small, it must be at least six
+characters; this is more likely to be a software error (a bug) than it
 is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEINVAL mkostemp oops O_LARGEFILE > test.out 2>&1
+explain -eEINVAL mkostemp oops O_LARGEFILE > test.out.3 2>&1
 test $? -eq 0 || fail
+
+sed 's@ | O_LARGEFILE@@' test.out.3 > test.out.2
+test $? -eq 0 || no_result
+
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

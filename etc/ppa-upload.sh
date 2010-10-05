@@ -32,7 +32,7 @@ PPA=ppa:pmiller-opensource/ppa
 #find the project baseline
 bl=`aegis -cd -bl`
 dir=$bl/$wwwdir
-f=`( cd $dir && ls *.tar.gz ) | head -1`
+f=`( cd $dir && ls *.tar.gz ) | tail -1`
 if [ -z "$f" ]
 then
     echo "can't find tarball" 1>&2

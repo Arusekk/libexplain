@@ -21,6 +21,19 @@
 TEST_SUBJECT="ioctl ENOTTY"
 . test_prelude
 
+sys=`uname -s`
+case "$sys" in
+FreeBSD)
+    echo
+    echo "      $sys does not have TCGETS."
+    echo "      This test is declared to pass by default."
+    echo
+    pass
+    ;;
+*)
+    ;;
+esac
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = TCGETS, data = 0x09876543) failed,
 Inappropriate ioctl for device (ENOTTY) because fildes is not associated

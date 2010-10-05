@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008-2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,8 @@ void
 explain_buffer_strsignal(explain_string_buffer_t *sb, int signum)
 {
     const char      *cp;
+    size_t          len;
+    const char      *colon;
 
     /*
      * On some systems (but not on Linux), a NULL pointer may be
@@ -36,12 +38,21 @@ explain_buffer_strsignal(explain_string_buffer_t *sb, int signum)
     cp = strsignal(signum);
     if (!cp)
         cp = "unknown";
-    explain_string_buffer_puts(sb, cp);
+
+    /*
+     * FreeDSB (and probably other systems) add the signal number to the string
+     * return by strsignal.  If present, do not print it, we have our own way;
+     * and it also caled false negatives in the test suite.
+     */
+    len = strlen(cp);
+    colon = memchr(cp, ':', len);
+    if (colon)
+        len = colon - cp;
+
+    explain_string_buffer_write(sb, cp, len);
 
     if (explain_option_dialect_specific())
     {
-        explain_string_buffer_puts(sb, " (");
-        explain_buffer_signal(sb, signum);
-        explain_string_buffer_putc(sb, ')');
+        explain_string_buffer_printf(sb, " (%d)", signum);
     }
 }

@@ -367,7 +367,6 @@ AC_CHECK_HEADERS([         \
     linux/pmu.h            \
     linux/ppdev.h          \
     linux/ppp-comp.h       \
-    linux/ppp_defs.h       \
     linux/radeonfb.h       \
     linux/random.h         \
     linux/raw.h            \
@@ -399,12 +398,9 @@ AC_CHECK_HEADERS([         \
     linux/watchdog.h       \
     mntent.h               \
     net/ethernet.h         \
-    net/if.h               \
-    net/if_arp.h           \
     net/if_ppp.h           \
     net/ppp-comp.h         \
     net/ppp_defs.h         \
-    net/route.h            \
     netash/ash.h           \
     netax25/ax25.h         \
     netdb.h                \
@@ -414,6 +410,7 @@ AC_CHECK_HEADERS([         \
     netiucv/iucv.h         \
     netpacket/packet.h     \
     netrom/netrom.h        \
+    poll.h                 \
     pwd.h                  \
     regex.h                \
     stddef.h               \
@@ -443,6 +440,7 @@ AC_CHECK_HEADERS([         \
     sys/statvfs.h          \
     sys/sysmacros.h        \
     sys/termio.h           \
+    sys/termios.h          \
     sys/time.h             \
     sys/timeb.h            \
     sys/timerfd.h          \
@@ -468,6 +466,33 @@ dnl! =======================================================================
 dnl!
 dnl!  Headers that need special handling.
 dnl!
+
+AC_CHECK_HEADERS([net/if.h], [], [], [[
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([net/if_arp.h], [], [], [[
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
+
+AC_CHECK_HEADERS([net/route.h], [], [], [[
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+]])
 
 AC_CHECK_HEADERS([linux/atalk.h], [], [], [[
 #ifdef HAVE_SYS_SOCKET_H
@@ -552,6 +577,10 @@ AC_CHECK_HEADERS([linux/netlink.h], [], [], [[
 #endif
 ]])
 
+AC_CHECK_HEADERS([linux/ppp_defs.h], [], [], [[
+#include <linux/types.h>
+]])
+
 AC_CHECK_HEADERS([linux/x25.h], [], [], [[
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
@@ -562,6 +591,51 @@ AC_CHECK_HEADERS([netrose/rose.h], [], [], [[
 #ifdef HAVE_NETAX25_AX25_H
 #include <netax25/ax25.h>
 #endif
+]])
+
+dnl! this is from FreeBSD, and it's a right PITA
+AC_CHECK_HEADERS([net/if_var.h], [], [], [[
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#ifdef HAVE_NET_IF_H
+#include <net/if.h>
+#endif
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+
+#include <net/if_var.h>
+]])
+
+dnl! this is from FreeBSD, and it's a right PITA
+AC_CHECK_HEADERS([netinet/in_var.h], [], [], [[
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#ifdef HAVE_NET_IF_H
+#include <net/if.h>
+#endif
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+#ifdef HAVE_NET_IF_VAR_H
+#include <net/if_var.h>
+#endif
+
+#include <netinet/in_var.h>
 ]])
 
 dnl! =======================================================================
@@ -692,7 +766,7 @@ AC_C_INLINE
 if test "$ac_cv_c_inline" != "no"
 then
     AC_DEFINE(HAVE_INLINE,1,
-    [Define this symbol if your C compiler as the inline keyword])
+    [Define this symbol if your C compiler has the inline keyword])
 fi
 
 AC_SYS_LONG_FILE_NAMES
@@ -718,6 +792,7 @@ AC_CHECK_FUNCS(    \
     getdomainname  \
     gethostname    \
     getmntent      \
+    getmntinfo     \
     getpagesize    \
     gettext        \
     hasmntopt      \
@@ -727,6 +802,7 @@ AC_CHECK_FUNCS(    \
     mmap           \
     munmap         \
     on_exit        \
+    poll           \
     readv          \
     remove         \
     setdomainname  \
@@ -735,6 +811,7 @@ AC_CHECK_FUNCS(    \
     signalfd       \
     snprintf       \
     statfs         \
+    stime          \
     strcasecmp     \
     strerror       \
     strncasecmp    \
@@ -801,6 +878,36 @@ AC_DEFINE([HAVE_MINCORE], [1],
   [Define if mincore exists and also works for non-mmap memory.])
 ], [
 AC_MSG_RESULT([broken])
+])
+
+dnl!
+dnl! Does the system have struct ifconf defined?
+dnl!
+AC_MSG_CHECKING([struct ifconf])
+AC_RUN_IFELSE([
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#if HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#if HAVE_NET_IF_H
+#include <net/if.h>
+#endif
+
+int
+main(int argc, char **argv)
+{
+    struct ifconf x;
+    return 0;
+}
+
+], [
+AC_MSG_RESULT([yes])
+AC_DEFINE([HAVE_STRUCT_IFCONF], [1],
+  [Define this symbol if your system declares struct ifconf.])
+], [
+AC_MSG_RESULT([no])
 ])
 
 dnl

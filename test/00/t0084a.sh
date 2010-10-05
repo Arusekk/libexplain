@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@ TEST_SUBJECT="link EMLINK"
 
 fmt > test.ok << 'fubar'
 link(oldpath = "foo", newpath = "bar") failed, Too many links (EMLINK)
-because oldpath is a regular file and already has the maximum number of
-links
+because oldpath is a regular file and already has the maximum number
+of links
 fubar
 test $? -eq 0 || no_result
 

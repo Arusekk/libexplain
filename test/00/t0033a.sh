@@ -55,7 +55,7 @@ test $? -eq 0 || fail
 fmt -w300 test.out.narrow > test.out.wide
 test $? -eq 0 || no_result
 
-sed -e 's|= 1 "[^",)]*",|= 1,|' \
+sed -e 's|= 1 "[^"]*",|= 1,|' \
     -e 's|(".*", .*% full)|("/example", 99% full)|' \
         test.out.wide > test.out.cooked
 test $? -eq 0 || no_result

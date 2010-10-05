@@ -18,16 +18,18 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/check_fildes_range.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/emfile.h>
-#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/dup2.h>
+#include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/explanation.h>
+#include <libexplain/option.h>
 
 
 static void
@@ -86,7 +88,8 @@ explain_buffer_errno_dup2_explanation(explain_string_buffer_t *sb,
         break;
 
     case EMFILE:
-        explain_buffer_emfile(sb);
+        if (explain_buffer_check_fildes_range(sb, newfd, "newfd"))
+            explain_buffer_emfile(sb);
         break;
 
     default:

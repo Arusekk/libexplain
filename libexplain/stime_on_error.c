@@ -30,7 +30,12 @@ explain_stime_on_error(time_t *t)
 {
     int             result;
 
+#ifdef HAVE_STIME
     result = stime(t);
+#else
+    errno = ENOSYS;
+    result = -1;
+#endif
     if (result < 0)
     {
         int             hold_errno;

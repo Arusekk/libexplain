@@ -29,12 +29,28 @@
 
 #if HAVE_MNTENT_H
 #include <mntent.h>
-#endif
-#if HAVE_SYS_MNTENT_H
+#elif defined(HAVE_SYS_MNTENT_H)
 #include <sys/mntent.h>
-#endif
-#if HAVE_SYS_MNTTAB_H
+#elif defined(HAVE_SYS_MNTTAB_H)
 #include <sys/mnttab.h>
+#else
+
+struct mntent
+{
+    char            *mnt_fsname;    /* Device or server for filesystem.  */
+    char            *mnt_dir;       /* Directory mounted on.  */
+    char            *mnt_type;      /* Type of filesystem: ufs, nfs, etc.  */
+    char            *mnt_opts;      /* Comma-separated options for fs.  */
+    int             mnt_freq;       /* Dump frequency (in days).  */
+    int             mnt_passno;     /* Pass number for `fsck'.  */
+};
+
+#include <libexplain/ac/stdio.h>
+
+FILE *setmntent(const char *filename, const char *mode);
+struct mntent *getmntent(FILE *fp);
+int endmntent(FILE *fp);
+
 #endif
 
 #ifndef MOUNTED

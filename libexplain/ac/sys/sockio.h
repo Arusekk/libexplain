@@ -31,4 +31,8 @@
 #include <sys/sockio.h>
 #endif
 
+#ifdef __FreeBSD__
+#undef SIOCGIFCONF
+#endif
+
 #endif /* LIBEXPLAIN_AC_SYS_SOCKIO_H */

@@ -24,20 +24,76 @@
 #include <libexplain/gcc_attributes.h>
 
 
-#if !defined(HAVE_SETMNTENT) && \
-    !defined(HAVE_GETMNTENT) && \
-    !defined(HAVE_ENDMNTENT)
+#ifdef HAVE_GETMNTINFO
+#include <stdio.h>
+#include <sys/mount.h>
+
+/* FreeBSD, and probably others */
+
+static struct statfs *data;
+static int      data_size;
+static int      data_pos;
+
+
+FILE *
+setmntent(const char *filename, const char *mode)
+{
+    static FILE junk;
+
+    (void)filename;
+    (void)mode;
+    int flags = 0; /* do not hang on broken mounts */
+    data_size = getmntinfo(&data, flags);
+    data_pos = 0;
+    return &junk;
+}
+
+
+struct mntent *
+getmntent(FILE *fp)
+{
+    static struct mntent fudge;
+    struct statfs   *p;
+
+    (void)fp;
+    if (data_pos >= data_size)
+        return 0;
+    p = data + data_pos++;
+    fudge.mnt_fsname = p->f_mntfromname;
+    fudge.mnt_dir = p->f_mntonname;
+    fudge.mnt_type = p->f_fstypename;
+    fudge.mnt_opts = "";
+    fudge.mnt_freq = 0;
+    fudge.mnt_passno = 0;
+    return &fudge;
+}
+
+
+int
+endmntent(FILE *fp)
+{
+    (void)fp;
+    data = 0;
+    data_size = 0;
+    data_pos = 0;
+    return 0;
+}
+
+#elif !defined(HAVE_SETMNTENT) && \
+      !defined(HAVE_GETMNTENT) && \
+      !defined(HAVE_ENDMNTENT)
+
 
 typedef struct bogus_t bogus_t;
 struct bogus_t
 {
     FILE            *fp;
     char            line[1000];
-    struct          mntent data;
+    struct mntent   data;
 };
 
 
-LINKAGE_HIDDEN
+LIBEXPLAIN_LINKAGE_HIDDEN
 FILE *
 setmntent(const char *filename, const char *mode)
 {
@@ -51,7 +107,7 @@ setmntent(const char *filename, const char *mode)
 }
 
 
-LINKAGE_HIDDEN
+LIBEXPLAIN_LINKAGE_HIDDEN
 struct mntent *
 getmntent(FILE *p)
 {
@@ -118,7 +174,7 @@ getmntent(FILE *p)
 }
 
 
-LINKAGE_HIDDEN
+LIBEXPLAIN_LINKAGE_HIDDEN
 int
 endmntent(FILE *p)
 {
@@ -143,7 +199,7 @@ endmntent(FILE *p)
 
 #include <libexplain/ac/string.h>
 
-LINKAGE_HIDDEN
+LIBEXPLAIN_LINKAGE_HIDDEN
 char *
 hasmntopt(const struct mntent *mnt, const char *opt)
 {

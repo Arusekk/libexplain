@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,8 +29,18 @@ privileged
 fubar
 test $? -eq 0 || no_result
 
+cat > test.ok2 << 'fubar'
+fchown(fildes = 42, owner = 0 "root", group = 0 "wheel") failed, Operation
+not permitted (EPERM) because the process did not have the required
+permissions to change the owner UID and group GID, and the process is not
+privileged
+fubar
+test $? -eq 0 || no_result
+
 explain -e EPERM fchown 42 0 0 > test.out
 test $? -eq 0 || fail
+
+diff test.ok2 test.out >/dev/null 2>&1 && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail

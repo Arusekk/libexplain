@@ -21,7 +21,7 @@
 TEST_SUBJECT="vfprintf EINVAL"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 
 vfprintf(fp = 0xNNNNNNNN "/dev/null", format = NULL, ap = 0xNNNNNNNN) failed,
 Invalid argument (EINVAL) because format is the NULL pointer
@@ -55,7 +55,7 @@ sed -e "s|0x[0-9A-Fa-f][0-9A-Fa-f]*|0xNNNNNNNN|g" \
     < test.out3 > test.out2
 test $? -eq 0 || no_result
 
-fmt -w80 < test.out2 > test.out
+fmt < test.out2 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

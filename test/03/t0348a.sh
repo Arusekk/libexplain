@@ -21,14 +21,18 @@
 TEST_SUBJECT="ioctl EFAULT"
 . test_prelude
 
-if test `uname -s` = SunOS
-then
+sys=`uname -s`
+case "$sys" in
+SunOS | FreeBSD)
     echo
-    echo "    Solaris doen't have TIOCCONS."
+    echo "    $sys doen't have TIOCINQ."
     echo "    This test is declared to pass by default."
     echo
     pass
-fi
+    ;;
+*)
+    ;;
+esac
 
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = FIONREAD, data = 0x09876543) failed, Bad

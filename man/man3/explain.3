@@ -124,6 +124,7 @@ flush with left margin).  A common value to use is 4: it doesn't consume
 to much of each line, and it is a clear indent.
 The program may choose to override the environment variable using the
 \f[I]explain_option_hanging_indent_set\fP(3) function.
+The hanging indent is limited to 10% of the terminal width.
 .br
 Default: 0
 .TP 8n
@@ -209,6 +210,12 @@ Explain \f[I]bind\fP(2) errors
 \f[I]explain_bind_or_die\fP(3)
 bind a name to a socket and report errors
 .\" ----------  C  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_calloc\fP(3)
+Explain \f[I]calloc\fP(3) errors
+.TP 8n
+\f[I]explain_calloc_or_die\fP(3)
+Allocate and clear memory and report errors
 .TP 8n
 \f[I]explain_chdir\fP(3)
 Explain \f[I]chdir\fP(2) errors
@@ -731,6 +738,12 @@ Explain \f[I]pipe\fP(2) errors
 .TP 8n
 \f[I]explain_pipe_or_die\fP(3)
 Execute \f[I]pipe\fP(2) and report errors
+.TP 8n
+\f[I]explain_poll\fP(3)
+Explain \f[I]poll\fP(2) errors
+.TP 8n
+\f[I]explain_poll_or_die\fP(3)
+wait for some event on a file descriptor and report errors
 .TP 8n
 \f[I]explain_popen\fP(3)
 Explain \f[I]popen\fP(3) errors

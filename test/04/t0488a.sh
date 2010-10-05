@@ -21,10 +21,12 @@
 TEST_SUBJECT="open ENOMEDIUM"
 . test_prelude
 
-if test `uname -s` = "SunOS"
+if explain -eENOMEDIUM strerror >/dev/null 2>&1
 then
+    : ok
+else
     echo
-    echo "    Solaris does not have the ENOMEDIUM error."
+    echo "    Your system does not have the ENOMEDIUM error."
     echo "    This test is declared to pass by default."
     echo
     pass

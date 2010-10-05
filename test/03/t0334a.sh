@@ -38,7 +38,7 @@ fi
 fmt -w500 < test.out4 > test.out3
 test $? -eq 0 || no_result
 
-sed -e 's|fildes = 1[^,)]*|fildes = 1|' < test.out3 > test.out2
+sed -e 's|fildes = 1[^,]*|fildes = 1|' < test.out3 > test.out2
 test $? -eq 0 || no_result
 
 fmt -w75 < test.out2 > test.out

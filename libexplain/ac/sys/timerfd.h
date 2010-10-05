@@ -31,4 +31,11 @@
 #include <sys/timerfd.h>
 #endif
 
+#ifndef CLOCK_MONOTONIC
+#define CLOCK_MONOTONIC 0
+#endif
+#ifndef CLOCK_REALTIME
+#define CLOCK_REALTIME (CLOCK_MONOTONIC + 1)
+#endif
+
 #endif /* LIBEXPLAIN_AC_SYS_TIMERFD_H */

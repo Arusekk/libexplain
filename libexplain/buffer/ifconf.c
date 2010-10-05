@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2010 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,6 +23,8 @@
 #include <libexplain/path_is_efault.h>
 
 
+#ifdef HAVE_STRUCT_IFCONF
+
 void
 explain_buffer_ifconf(explain_string_buffer_t *sb,
     const struct ifconf *data)
@@ -44,3 +46,14 @@ explain_buffer_ifconf(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, " }");
     }
 }
+
+#else
+
+void
+explain_buffer_ifconf(explain_string_buffer_t *sb,
+    const struct ifconf *data)
+{
+    explain_buffer_pointer(sb, data);
+}
+
+#endif

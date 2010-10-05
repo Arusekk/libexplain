@@ -22,6 +22,14 @@
 #include <libexplain/ac/net/if.h>
 #include <libexplain/ac/sys/ioctl.h>
 
+#ifndef HAVE_LINUX_IPV6_H
+/* This problem observed on FreeBSD */
+#include <libexplain/ac/arpa/inet.h>
+#include <libexplain/ac/netinet/in.h>
+#include <libexplain/ac/net/if_var.h>
+#include <libexplain/ac/netinet/in_var.h>
+#endif
+
 #include <libexplain/buffer/in6_ifreq.h>
 #include <libexplain/iocontrol/siocdifaddr.h>
 
