@@ -25,7 +25,8 @@ wwwdir=web-site
 AEGIS_PROJECT=${project}.cur
 export AEGIS_PROJECT
 
-RELEASES="hardy karmic lucid maverick"
+RELEASES="$*"
+test -z "$RELEASES" && RELEASES="hardy karmic lucid maverick natty"
 
 PPA=ppa:pmiller-opensource/ppa
 

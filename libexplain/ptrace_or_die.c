@@ -17,30 +17,41 @@
  */
 
 #include <libexplain/ac/errno.h>
-#include <libexplain/ac/fcntl.h>
-#include <libexplain/ac/sys/types.h>
-#include <libexplain/ac/sys/stat.h>
-#include <libexplain/ac/unistd.h>
+#include <libexplain/ac/sys/ptrace.h>
 
-#include <libexplain/mknod.h>
 #include <libexplain/option.h>
 #include <libexplain/output.h>
+#include <libexplain/ptrace.h>
 
 
-int
-explain_mknod_on_error(const char *pathname, mode_t mode, dev_t dev)
+long
+explain_ptrace_or_die(int request, pid_t pid, void *addr, void *data)
 {
-    int             result;
+    long            result;
 
-    result = mknod(pathname, mode, dev);
+    result = explain_ptrace_on_error(request, pid, addr, data);
+    if (result < 0)
+    {
+        explain_output_exit_failure();
+    }
+    return result;
+}
+
+
+long
+explain_ptrace_on_error(int request, pid_t pid, void *addr, void *data)
+{
+    long            result;
+
+    result = ptrace(request, pid, addr, data);
     if (result < 0)
     {
         int             hold_errno;
 
         hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_mknod(hold_errno, pathname,
-            mode, dev));
+        explain_output_message(explain_errno_ptrace(hold_errno, request, pid,
+            addr, data));
         errno = hold_errno;
     }
     return result;

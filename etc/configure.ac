@@ -429,6 +429,7 @@ AC_CHECK_HEADERS([         \
     sys/mount.h            \
     sys/mtio.h             \
     sys/param.h            \
+    sys/ptrace.h           \
     sys/raw.h              \
     sys/resource.h         \
     sys/select.h           \
@@ -448,6 +449,7 @@ AC_CHECK_HEADERS([         \
     sys/ttycom.h           \
     sys/types.h            \
     sys/uio.h              \
+    sys/user.h             \
     sys/un.h               \
     sys/vfs.h              \
     sys/wait.h             \

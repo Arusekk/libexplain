@@ -87,6 +87,12 @@ etc/manually-confirmed.merge: po/libexplain.pot etc/manually-confirmed.po
         [resolve po/libexplain.pot]
         ;
 
+    if [defined baseline] then
+    {
+        /* check ordering and formatting as well */
+        diff etc/manually-confirmed.po [target] set nosilent;
+    }
+
     /*
      * Only need the timestamp, discard the file contents.
      */

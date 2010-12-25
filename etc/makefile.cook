@@ -76,7 +76,7 @@ source_file_order =
     po/libexplain.pot
     ;
 
-web-site/%.tar.gz: [source_file_order] debian/control
+web-site/%.tar.gz: [source_file_order] debian/control debian/changelog
     set shallow ingredients-fingerprint
 {
     if [not [verbose]] then
@@ -158,6 +158,7 @@ etc/version.so:
 }
 
 debian/control
+debian/changelog
 debian/explain.install
 debian/libexplain-dev.install
 debian/changelog: [source_files]
@@ -180,7 +181,7 @@ debian/changelog: [source_files]
  *     [collect "set +e; on_ac_power; expr 1 - $?; exit 0" ]
  * ] then
  */
-if [in [fromto %1D%2 %2 [version]] 001 002 003 004] then
+if [in [fromto %1D%2 %2 [version]] 001 002 003 004 005] then
 {
     integration-build-targets += debian-package;
 }

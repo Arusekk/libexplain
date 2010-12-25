@@ -19,6 +19,7 @@
 
 %{
 
+#include <libexplain/ac/ctype.h>
 #include <libexplain/ac/dlfcn.h>
 #include <libexplain/ac/stdarg.h>
 #include <libexplain/ac/stdio.h>
@@ -36,6 +37,7 @@
 #include <libexplain/wrap_and_print.h>
 
 #define YYDEBUG 0
+#define YYERROR_VERBOSE 1
 
 #if YYDEBUG
 extern int yydebug;
@@ -49,6 +51,7 @@ extern int yydebug;
 %token JUNK
 %token LP
 %token MINUS
+%token NAME
 %token NUMBER
 %token PLUS
 %token RP
@@ -67,6 +70,7 @@ extern int yydebug;
     int lv_number;
 }
 
+%type <lv_number> NAME
 %type <lv_number> NUMBER
 %type <lv_number> expression
 
@@ -88,10 +92,27 @@ extern YYSTYPE yylval;
 extern int yyparse(void);
 
 
-static void yyerror(const char *fmt, ...) LIBEXPLAIN_FORMAT_PRINTF(1, 2);
+static void
+yyerror(const char *msg)
+{
+    if (error_buffer.position > 0)
+        explain_string_buffer_puts(&error_buffer, ", ");
+    explain_string_buffer_puts(&error_buffer, msg);
+    if
+    (
+        error_buffer.position > 0
+    &&
+        error_buffer.message[error_buffer.position - 1] == '\n'
+    )
+        error_buffer.position--;
+    ++error_count;
+}
+
+
+static void yyerrorf(const char *fmt, ...) LIBEXPLAIN_FORMAT_PRINTF(1, 2);
 
 static void
-yyerror(const char *fmt, ...)
+yyerrorf(const char *fmt, ...)
 {
     va_list         ap;
 
@@ -258,6 +279,10 @@ yylex(void)
                 return JUNK;
             /* FIXME: parse C escape sequences */
             ++lex_cp;
+#if YYDEBUG
+            fprintf(stderr, "%s: %d: character %d\n", __FILE__, __LINE__,
+                yylval.lv_number);
+#endif
             return NUMBER;
 
         case '_':
@@ -312,7 +337,11 @@ yylex(void)
                 if (tp)
                 {
                     yylval.lv_number = tp->value;
-                    return NUMBER;
+#if YYDEBUG
+                    fprintf(stderr, "%s: %d: symbol \"%s\" => %d\n", __FILE__,
+                        __LINE__, name, yylval.lv_number);
+#endif
+                    return NAME;
                 }
                 tp =
                     explain_parse_bits_find_by_name
@@ -324,7 +353,11 @@ yylex(void)
                 if (tp)
                 {
                     yylval.lv_number = tp->value;
-                    return NUMBER;
+#if YYDEBUG
+                    fprintf(stderr, "%s: %d: constant \"%s\" => %d\n", __FILE__,
+                        __LINE__, name, yylval.lv_number);
+#endif
+                    return NAME;
                 }
                 tp =
                     explain_parse_bits_find_by_name
@@ -344,14 +377,18 @@ yylex(void)
                     );
                 if (tp)
                 {
-                    yyerror
+                    yyerrorf
                     (
                         "name \"%s\" unknown, did you mean \"%s\" instead?",
                         name,
                         tp->name
                     );
                     yylval.lv_number = tp->value;
-                    return NUMBER;
+#if YYDEBUG
+                    fprintf(stderr, "%s: %d: symbol \"%s\" => %d\n", __FILE__,
+                        __LINE__, name, yylval.lv_number);
+#endif
+                    return NAME;
                 }
 
 #ifdef HAVE_DLSYM
@@ -371,16 +408,21 @@ yylex(void)
                         {
                             yylval.lv_number = (long)p;
                             dlclose(handle);
-                            return NUMBER;
+#if YYDEBUG
+                            fprintf(stderr, "%s: %d: exe symbol \"%s\" => %d\n",
+                                __FILE__, __LINE__, name, yylval.lv_number);
+#endif
+                            return NAME;
                         }
                         dlclose(handle);
                     }
                 }
 #endif
 
-                yyerror("name \"%s\" unknown", name);
+                yyerrorf("name \"%s\" unknown", name);
+                yylval.lv_number = 0;
             }
-            return JUNK;
+            return NAME;
 
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
@@ -413,11 +455,17 @@ yylex(void)
                 ep = 0;
                 yylval.lv_number = strtol(number, &ep, 0);
                 if (ep == number || *ep)
-                    yyerror("number \"%s\" malformed", number);
+                    yyerrorf("number \"%s\" malformed", number);
+#if YYDEBUG
+                fprintf(stderr, "%s: %d: number \"%s\" => %d\n", __FILE__,
+                    __LINE__, number, yylval.lv_number);
+#endif
             }
             return NUMBER;
 
         default:
+            if (isprint(c))
+                return c;
             return JUNK;
         }
     }
@@ -431,6 +479,17 @@ explain_parse_bits(const char *text,
 {
 #if YYDEBUG
     yydebug = 1;
+    fprintf(stderr, "%s: %d: text = \"%s\"\n", __FILE__, __LINE__, text);
+    {
+        size_t j;
+        fprintf(stderr, "%s: %d: table_size = %d\n", __FILE__, __LINE__,
+            (int)table_size);
+        for (j = 0; j < table_size; ++j)
+        {
+            fprintf(stderr, "%s: %d: \"%s\" => %d\n", __FILE__, __LINE__,
+                table[j].name, table[j].value);
+        }
+    }
 #endif
     explain_string_buffer_init
     (
@@ -471,6 +530,8 @@ result
 
 expression
     : NUMBER
+        { $$ = $1; }
+    | NAME
         { $$ = $1; }
     | LP expression RP
         { $$ = $2; }

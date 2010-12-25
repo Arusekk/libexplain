@@ -472,6 +472,10 @@ string_exceptions =
     test_mincore/main.c
     ;
 
+sys/ptrace_exceptions =
+    libexplain/ptrace.h
+    ;
+
 sys/select_exceptions =
     libexplain/select.h
     ;
@@ -576,6 +580,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=string.h"];
         if [in %0%.c [sys/mman_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/mman.h"];
+        if [in %0%.c [sys/ptrace_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/ptrace.h"];
         if [in %0%.c [sys/select_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/select.h"];
         if [in %0%.c [sys/timeb_exceptions]] then
@@ -634,6 +640,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=string.h"];
         if [in %0%.h [sys/mman_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/mman.h"];
+        if [in %0%.h [sys/ptrace_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/ptrace.h"];
         if [in %0%.h [sys/select_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/select.h"];
         if [in %0%.h [sys/socket_exceptions]] then

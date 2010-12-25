@@ -150,7 +150,7 @@ struct explain_output_vtable_t
       * @note
       *     The "exit" method shall not return. if it does, exit(status)
       *     will be called anyway.  This is because the rest of the
-      *     libexplain code assumes that "exit" means ::exit.
+      *     libexplain code assumes that "exit" means "::exit".
       */
     void (*exit)(explain_output_t *op, int status);
 

@@ -24,16 +24,16 @@ TEST_SUBJECT="fchown EIO"
 cat > test.ok << 'fubar'
 fchown(fildes = 42, owner = 0 "root", group = 0 "root") failed,
 Input/output error (EIO) because a low-level I/O error occurred, probably
-in hardware, possibly as a result of a preceeding read(2) or write(2)
-system call
+in hardware, possibly as a result of a preceding read(2) or write(2) system
+call
 fubar
 test $? -eq 0 || no_result
 
 cat > test.ok2 << 'fubar'
 fchown(fildes = 42, owner = 0 "root", group = 0 "wheel") failed,
 Input/output error (EIO) because a low-level I/O error occurred, probably
-in hardware, possibly as a result of a preceeding read(2) or write(2)
-system call
+in hardware, possibly as a result of a preceding read(2) or write(2) system
+call
 fubar
 test $? -eq 0 || no_result
 

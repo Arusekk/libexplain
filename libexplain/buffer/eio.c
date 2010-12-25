@@ -40,7 +40,7 @@
 
 
 static void
-possibly_as_a_result_of_a_preceeding(explain_string_buffer_t *sb, int fildes)
+possibly_as_a_result_of_a_preceding(explain_string_buffer_t *sb, int fildes)
 {
     int             flags;
 
@@ -58,7 +58,7 @@ possibly_as_a_result_of_a_preceeding(explain_string_buffer_t *sb, int fildes)
              * xgettext: This message is used when explaining an EIO
              * error, for a file open only for reading.
              */
-            i18n("possibly as a result of a preceeding read(2) system call")
+            i18n("possibly as a result of a preceding read(2) system call")
         );
         break;
 
@@ -70,7 +70,7 @@ possibly_as_a_result_of_a_preceeding(explain_string_buffer_t *sb, int fildes)
              * xgettext: This message is used when explaining an EIO
              * error, for a file open only for writing.
              */
-            i18n("possibly as a result of a preceeding write(2) system call")
+            i18n("possibly as a result of a preceding write(2) system call")
         );
         break;
 
@@ -82,7 +82,7 @@ possibly_as_a_result_of_a_preceeding(explain_string_buffer_t *sb, int fildes)
              * xgettext: This message is used when explaining an EIO
              * error, for a file open for both reading and writing.
              */
-            i18n("possibly as a result of a preceeding read(2) or "
+            i18n("possibly as a result of a preceding read(2) or "
             "write(2) system call")
         );
         break;
@@ -104,7 +104,7 @@ explain_buffer_eio_generic(explain_string_buffer_t *sb, int fildes)
          */
         i18n("a low-level I/O error occurred, probably in hardware")
     );
-    possibly_as_a_result_of_a_preceeding(sb, fildes);
+    possibly_as_a_result_of_a_preceding(sb, fildes);
 }
 
 
@@ -187,7 +187,7 @@ explain_buffer_eio_stat(explain_string_buffer_t *sb, int fildes,
     case S_IFBLK:
     case S_IFCHR:
         a_low_level_io_error_occurred(sb, dev_path, st);
-        possibly_as_a_result_of_a_preceeding(sb, fildes);
+        possibly_as_a_result_of_a_preceding(sb, fildes);
         break;
 
     default:

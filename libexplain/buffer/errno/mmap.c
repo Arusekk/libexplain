@@ -429,7 +429,7 @@ explain_buffer_errno_mmap_explanation(explain_string_buffer_t *sb, int errnum,
                           * by the file descriptor is open for writing.
                           * The file's open mode is printed separately.
                           */
-                        i18n("the mapping flag MAP_DENYWRITE is incompatable "
+                        i18n("the mapping flag MAP_DENYWRITE is incompatible "
                             "with the open mode of the file descriptor")
                     );
                     explain_string_buffer_puts(sb, " (");

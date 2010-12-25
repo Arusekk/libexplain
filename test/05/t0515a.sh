@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2010 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ TEST_SUBJECT="fsync EIO"
 
 cat > test.ok << 'fubar'
 fsync(fildes = 42) failed, Input/output error (EIO) because a low-level I/O
-error occurred, probably in hardware, possibly as a result of a preceeding
+error occurred, probably in hardware, possibly as a result of a preceding
 read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result

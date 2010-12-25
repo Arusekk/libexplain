@@ -24,21 +24,21 @@ TEST_SUBJECT="truncate EIO"
 fmt > test.ok << 'fubar'
 truncate(pathname = "foobar", length = 123) failed, Input/output error
 (EIO) because a low-level I/O error occurred in the block special device,
-possibly as a result of a preceeding read(2) or write(2) system call
+possibly as a result of a preceding read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result
 
 fmt > test.ok2 << 'fubar'
 truncate(pathname = "foobar", length = 123) failed, Input/output error
 (EIO) because a low-level I/O error occurred in the character special device,
-possibly as a result of a preceeding read(2) or write(2) system call
+possibly as a result of a preceding read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result
 
 fmt > test.ok3 << 'fubar'
 truncate(pathname = "foobar", length = 123) failed, Input/output error
 (EIO) because a low-level I/O error occurred, probably in hardware,
-possibly as a result of a preceeding read(2) or write(2) system call
+possibly as a result of a preceding read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result
 

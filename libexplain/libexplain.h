@@ -131,6 +131,7 @@
 #include <libexplain/pread.h>
 #include <libexplain/printf.h>
 #include <libexplain/program_name.h>
+#include <libexplain/ptrace.h>
 #include <libexplain/public_config.h>
 #include <libexplain/putc.h>
 #include <libexplain/putchar.h>

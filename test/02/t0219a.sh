@@ -24,8 +24,8 @@ TEST_SUBJECT="readlink EIO"
 cat > test.ok << 'fubar'
 readlink(pathname = "foobar", data = 0x09876543, data_size = 1000) failed,
 Input/output error (EIO) because a low-level I/O error occurred, probably
-in hardware, possibly as a result of a preceeding read(2) or write(2)
-system call
+in hardware, possibly as a result of a preceding read(2) or write(2) system
+call
 fubar
 test $? -eq 0 || no_result
 

@@ -1,6 +1,6 @@
 /*
- * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * libexplain - a library of system-call-specific strerror replacements
+ * Copyright (C) 2010 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,14 +17,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBEXPLAIN_AC_LINUX_FS_H
-#define LIBEXPLAIN_AC_LINUX_FS_H
+#ifndef LIBEXPLAIN_AC_SYS_USER_H
+#define LIBEXPLAIN_AC_SYS_USER_H
 
-#include <libexplain/ac/sys/types.h> /* for size_t */
-#include <libexplain/ac/stdint.h> /* for unit64_t */
+/**
+  * @file
+  * @brief Insulate <sys/user.h> differences
+  */
 
-#ifdef HAVE_LINUX_FS_H
-#include <linux/fs.h>
+#include <libexplain/config.h>
+
+#ifdef HAVE_SYS_USER_H
+#include <sys/user.h>
 #endif
 
-#endif /* LIBEXPLAIN_AC_LINUX_FS_H */
+#endif /* LIBEXPLAIN_AC_SYS_USER_H */

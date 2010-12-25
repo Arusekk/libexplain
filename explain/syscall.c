@@ -119,6 +119,7 @@
 #include <explain/syscall/poll.h>
 #include <explain/syscall/popen.h>
 #include <explain/syscall/pread.h>
+#include <explain/syscall/ptrace.h>
 #include <explain/syscall/putc.h>
 #include <explain/syscall/putchar.h>
 #include <explain/syscall/putenv.h>
@@ -431,7 +432,7 @@ static const table_t table[] =
     /* FIXME: add support for prof */
     /* FIXME: add support for profil */
     /* FIXME: add support for pselect6 */
-    /* FIXME: add support for ptrace */
+    { "ptrace", explain_syscall_ptrace },
     { "putc", explain_syscall_putc },
     { "putchar", explain_syscall_putchar },
     { "putenv", explain_syscall_putenv },

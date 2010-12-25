@@ -18,8 +18,8 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2010-03-08 13:33+1100\n"
-        "PO-Revision-Date: 2010-03-08\n"
+        "POT-Creation-Date: 2010-12-25 20:38+1100\n"
+        "PO-Revision-Date: 2010-12-25\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -566,6 +566,14 @@ msgid   "an ELF interpreter was a directory"
 msgstr  "an ELF interpreter was a directory"
 
 #.
+#. This error message is issued to explain an EINVAL
+#. error reported by the ptrace(2) system call, in the case
+#. where an attempt was made to set an invalid option.
+#.
+msgid   "an attempt was made to set an invalid option"
+msgstr  "an attempt was made to set an invalid option"
+
+#.
 #. This message is used to explan an ECONNABORTED error
 #. reported by the accept(2) system call, in the case where an incoming
 #. connection has been aborted by the remote host.
@@ -580,6 +588,15 @@ msgstr  "an incoming connection has been aborted by the remote host"
 #.
 msgid   "an interface of that name already exists"
 msgstr  "an interface of that name already exists"
+
+#.
+#. This error message is issued to explain an EIO
+#. error reported by the ptrace(2) system call, in the case
+#. where an invalid signal was specified during a restart
+#. request.
+#.
+msgid   "an invalid signal was specified during a restart request"
+msgstr  "an invalid signal was specified during a restart request"
 
 #.
 #. This message is used when explaining why file
@@ -1154,24 +1171,24 @@ msgstr  "pathname refers to a %s %s and no corresponding device exists"
 #. This message is used when explaining an EIO
 #. error, for a file open for both reading and writing.
 #.
-msgid   "possibly as a result of a preceeding read(2) or write(2) system "
+msgid   "possibly as a result of a preceding read(2) or write(2) system "
         "call"
-msgstr  "possibly as a result of a preceeding read(2) or write(2) system "
+msgstr  "possibly as a result of a preceding read(2) or write(2) system "
         "call"
 
 #.
 #. This message is used when explaining an EIO
 #. error, for a file open only for reading.
 #.
-msgid   "possibly as a result of a preceeding read(2) system call"
-msgstr  "possibly as a result of a preceeding read(2) system call"
+msgid   "possibly as a result of a preceding read(2) system call"
+msgstr  "possibly as a result of a preceding read(2) system call"
 
 #.
 #. This message is used when explaining an EIO
 #. error, for a file open only for writing.
 #.
-msgid   "possibly as a result of a preceeding write(2) system call"
-msgstr  "possibly as a result of a preceeding write(2) system call"
+msgid   "possibly as a result of a preceding write(2) system call"
+msgstr  "possibly as a result of a preceding write(2) system call"
 
 #.
 #. This message is used when supplementing
@@ -1594,6 +1611,14 @@ msgid   "the %s is too small, it must be at least six characters"
 msgstr  "the %s is too small, it must be at least six characters"
 
 #.
+#. This message is used to explain when a system call
+#. argument is required to be a multipe of the page size, but is not.
+#.
+#, c-format
+msgid   "the %s must be a multiple of the page size"
+msgstr  "the %s must be a multiple of the page size"
+
+#.
 #. This message is used when explaining an EMLINK
 #. error, in the case where mkdir fails because a directory
 #. already has too many hand links.
@@ -1937,12 +1962,38 @@ msgstr  "the executable is on a file system that is mounted with the "
         "\"nosuid\" option"
 
 #.
+#. This message is used when an attempt is
+#. made to mmap shared access to a file descriptor
+#. that was not opened for both reading and writing.
+#. The actual open mode will be printed separately.
+#.
+msgid   "the file descriptor is not open for both reading and writing"
+msgstr  "the file descriptor is not open for both reading and writing"
+
+#.
 #. This message is used when an attempt is made to read from
 #. a file descriptor that was not opened for reading.  The actual open
 #. mode will be printed separately.
 #.
 msgid   "the file descriptor is not open for reading"
 msgstr  "the file descriptor is not open for reading"
+
+#.
+#. This message is used when an attempt is
+#. made to mmap write access to a file descriptor that
+#. is opened for append only.  The actual open mode will
+#. be printed separately.
+#.
+msgid   "the file descriptor is open for append"
+msgstr  "the file descriptor is open for append"
+
+#.
+#. This message is used to explain an
+#. EAGAIN error reported by the mmap(2) syatem call,
+#. in the case where the file has been locked.
+#.
+msgid   "the file is locked"
+msgstr  "the file is locked"
 
 #.
 #. this error message is issued to explain
@@ -2090,6 +2141,28 @@ msgid   "the local network cable is not plugged in, or a local network "
         "router or switch or hub is switched off"
 msgstr  "the local network cable is not plugged in, or a local network "
         "router or switch or hub is switched off"
+
+#.
+#. This message is used to explain an
+#. EAGAIN error reported by the mmap(2) syatem call,
+#. in the case where too much memory has been locked.
+#. The relevant getrlimit values will be printed
+#. separately.
+#.
+msgid   "the locked memory size of the process would have been exceeded"
+msgstr  "the locked memory size of the process would have been exceeded"
+
+#.
+#. This message is used to explain an ETXTBSY
+#. error reported by a mmap(2) system call, in the case
+#. where MAP_DENYWRITE was set but the object specified
+#. by the file descriptor is open for writing.
+#. The file's open mode is printed separately.
+#.
+msgid   "the mapping flag MAP_DENYWRITE is incompatible with the open "
+        "mode of the file descriptor"
+msgstr  "the mapping flag MAP_DENYWRITE is incompatible with the open "
+        "mode of the file descriptor"
 
 #.
 #. This message is used to explain an EISDIR error
@@ -2370,10 +2443,10 @@ msgstr  "the process does not have inode modification permission"
 #.         file type "directory".
 #.
 #, c-format
-msgid   "the process does not have inode modification permission to the %"
-        "s in the %s"
-msgstr  "the process does not have inode modification permission to the %"
-        "s in the %s"
+msgid   "the process does not have inode modification permission to the "
+        "%s in the %s"
+msgstr  "the process does not have inode modification permission to the "
+        "%s in the %s"
 
 #.
 #. This error message is issued when a
@@ -2562,10 +2635,10 @@ msgstr  "the process does not have search permission to the %s in the %s"
 #. %1$s => the name of the offending system call
 #.
 #, c-format
-msgid   "the process does not have the appropriate privileges to use the %"
-        "s system call"
-msgstr  "the process does not have the appropriate privileges to use the %"
-        "s system call"
+msgid   "the process does not have the appropriate privileges to use the "
+        "%s system call"
+msgstr  "the process does not have the appropriate privileges to use the "
+        "%s system call"
 
 #.
 #. This message is used when a process does not have
@@ -2950,6 +3023,14 @@ msgstr  "the socket is not of a type that supports the listen(2) system "
         "call"
 
 #.
+#. This error message is issued to explain an EPERM error
+#. reported by the ptrace(2) system call, in the case where the
+#. specified process cannot be traced.
+#.
+msgid   "the specified process cannot be traced"
+msgstr  "the specified process cannot be traced"
+
+#.
 #. This message is uased to explain an EPERM error
 #. reported by the unlink system call, in the case where the
 #. system does not allow unlinking of directories, or unlinking
@@ -3058,6 +3139,24 @@ msgstr  "the tty is not a master pty or the tty is not the controlling "
         "tty of the process"
 
 #.
+#. This message is used to explain an EPERM error
+#. reported by the mmap(2) system call, in the case where the
+#. prot argument asks for PROT_EXEC but the mapped area belongs
+#. to a file on a file system that was mounted no-exec.
+#.
+msgid   "the underlying file system does not permit execution"
+msgstr  "the underlying file system does not permit execution"
+
+#.
+#. This message is used to explain in ENODEV error
+#. reported by mmap(2), in the case where the underlying
+#. file system of the specified file does not support memory
+#. mapping.
+#.
+msgid   "the underlying file system does not support memory mapping"
+msgstr  "the underlying file system does not support memory mapping"
+
+#.
 #. This error message is issued when a system call
 #. reports a EINVAL error, in the case where an argument's value
 #. is outside the valid range.
@@ -3072,6 +3171,18 @@ msgstr  "the value of the %s argument is outside the valid range"
 #.
 msgid   "the virtual console is still in use"
 msgstr  "the virtual console is still in use"
+
+#.
+#. This message is used to explain an ENOMEM
+#. error reported by the mmap(2) syatem call, in the
+#. case where the virtual memory size of the process
+#. was exceeded.  The relevant getrlimit values will be
+#. printed separately.
+#.
+msgid   "the virtual memory size limit of the process would have been "
+        "exceeded"
+msgstr  "the virtual memory size limit of the process would have been "
+        "exceeded"
 
 #.
 #. This error message is issued to explain an ENOMEDIUM
@@ -3179,6 +3290,36 @@ msgstr  "there is no directory entry in %s that has the same inode number "
 #.
 msgid   "there is no such PPP interface available"
 msgstr  "there is no such PPP interface available"
+
+#.
+#. This error message is issued to explain an EIO error
+#. reported by the ptrace(2) system call, in the case where there
+#. was a word-alignment violation.
+#.
+msgid   "there was a word-alignment violation"
+msgstr  "there was a word-alignment violation"
+
+#.
+#. This error message is issued to explain an EFAULT error
+#. reported by the ptrace(2) system call, in the cases where there
+#. was an attempt to read from or write to an invalid area in the
+#. parent's or child's memory, probably because the area wasn't
+#. mapped or accessible.
+#.
+msgid   "there was an attempt to read from or write to an invalid area in "
+        "the parent's or child's memory, probably because the area wasn't "
+        "mapped or accessible"
+msgstr  "there was an attempt to read from or write to an invalid area in "
+        "the parent's or child's memory, probably because the area wasn't "
+        "mapped or accessible"
+
+#.
+#. This error message is issued to explain an EBUSY error
+#. reported by the ptrace(2) system call, in the case where there
+#. was an error with allocating or freeing a debug register.
+#.
+msgid   "there was an error with allocating or freeing a debug register"
+msgstr  "there was an error with allocating or freeing a debug register"
 
 #.
 #. This message is used to explain an
@@ -3396,98 +3537,9 @@ msgstr  "you cannot use open(2) to open socket files, you must use connect"
         "(2) instead; a named pipe may be what was intended"
 
 #.
-#. This message is used to explain when a system call
-#. argument is required to be a multipe of the page size, but is not.
-#.
-#, c-format
-msgid "the %s must be a multiple of the page size"
-msgstr "the %s must be a multiple of the page size"
-
-#.
-#. This message is used when an attempt is
-#. made to mmap shared access to a file descriptor
-#. that was not opened for both reading and writing.
-#. The actual open mode will be printed separately.
-#.
-msgid "the file descriptor is not open for both reading and writing"
-msgstr "the file descriptor is not open for both reading and writing"
-
-#.
-#. This message is used when an attempt is
-#. made to mmap write access to a file descriptor that
-#. is opened for append only.  The actual open mode will
-#. be printed separately.
-#.
-msgid "the file descriptor is open for append"
-msgstr "the file descriptor is open for append"
-
-#.
-#. This message is used to explain an
-#. EAGAIN error reported by the mmap(2) syatem call,
-#. in the case where too much memory has been locked.
-#. The relevant getrlimit values will be printed
-#. separately.
-#.
-msgid "the locked memory size of the process would have been exceeded"
-msgstr "the locked memory size of the process would have been exceeded"
-
-#.
-#. This message is used to explain an
-#. EAGAIN error reported by the mmap(2) syatem call,
-#. in the case where the file has been locked.
-#.
-msgid "the file is locked"
-msgstr "the file is locked"
-
-#.
-#. This message is used to explain an ETXTBSY
-#. error reported by a mmap(2) system call, in the case
-#. where MAP_DENYWRITE was set but the object specified
-#. by the file descriptor is open for writing.
-#. The file's open mode is printed separately.
-#.
-#: libexplain/buffer/errno/mmap.c:497
-msgid ""
-"the mapping flag MAP_DENYWRITE is incompatable with the open mode of the "
-"file descriptor"
-msgstr ""
-"the mapping flag MAP_DENYWRITE is incompatable with the open mode of the "
-"file descriptor"
-
-#.
-#. This message is used to explain an EPERM error
-#. reported by the mmap(2) system call, in the case where the
-#. prot argument asks for PROT_EXEC but the mapped area belongs
-#. to a file on a file system that was mounted no-exec.
-#.
-msgid "the underlying file system does not permit execution"
-msgstr "the underlying file system does not permit execution"
-
-#.
-#. This message is used to explain in ENODEV error
-#. reported by mmap(2), in the case where the underlying
-#. file system of the specified file does not support memory
-#. mapping.
-#.
-msgid "the underlying file system does not support memory mapping"
-msgstr "the underlying file system does not support memory mapping"
-
-#.
-#. This message is used to explain an ENOMEM
-#. error reported by the mmap(2) syatem call, in the
-#. case where the virtual memory size of the process
-#. was exceeded.  The relevant getrlimit values will be
-#. printed separately.
-#.
-msgid ""
-"the virtual memory size limit of the process would have been exceeded"
-msgstr ""
-"the virtual memory size limit of the process would have been exceeded"
-
-#.
 #. This message is used to explain in EINVAL error
 #. reported by mmap(2), in the case where the flags did not
 #. contain exactly one of MAP_PRIVATE or MAP_SHARED.
 #.
-msgid "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
-msgstr "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
+msgid   "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
+msgstr  "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"

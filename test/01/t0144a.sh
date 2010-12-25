@@ -24,14 +24,14 @@ TEST_SUBJECT="access EIO"
 cat > test.ok << 'fubar'
 access(pathname = "foobar", mode = F_OK) failed, Input/output error
 (EIO) because a low-level I/O error occurred in the block special device,
-possibly as a result of a preceeding read(2) or write(2) system call
+possibly as a result of a preceding read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result
 
 cat > test.ok2 << 'fubar'
 access(pathname = "foobar", mode = F_OK) failed, Input/output error
 (EIO) because a low-level I/O error occurred in the character special
-device, possibly as a result of a preceeding read(2) or write(2)
+device, possibly as a result of a preceding read(2) or write(2)
 system call
 fubar
 test $? -eq 0 || no_result
@@ -39,7 +39,7 @@ test $? -eq 0 || no_result
 cat > test.ok3 << 'fubar'
 access(pathname = "foobar", mode = F_OK) failed, Input/output error
 (EIO) because a low-level I/O error occurred, probably in hardware,
-possibly as a result of a preceeding read(2) or write(2) system call
+possibly as a result of a preceding read(2) or write(2) system call
 fubar
 test $? -eq 0 || no_result
 
