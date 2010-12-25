@@ -66,8 +66,7 @@ extern "C" {
   * long result = explain_ptrace_or_die(request, pid, addr, data);
   * @endcode
   */
-long explain_ptrace_or_die(int request, pid_t pid, void *addr, void *data)
-                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+long explain_ptrace_or_die(int request, pid_t pid, void *addr, void *data);
 
 /**
   * The explain_ptrace_on_error function is used to call the
@@ -101,8 +100,7 @@ long explain_ptrace_or_die(int request, pid_t pid, void *addr, void *data)
   * }
   * @endcode
   */
-long explain_ptrace_on_error(int request, pid_t pid, void *addr, void *data)
-                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+long explain_ptrace_on_error(int request, pid_t pid, void *addr, void *data);
 
 /**
   * The explain_ptrace function is used to obtain an explanation of an
