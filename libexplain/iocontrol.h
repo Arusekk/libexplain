@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -98,7 +98,7 @@ struct explain_iocontrol_t
     expain_iocontrol_print_func_t print_name;
 
     /**
-      * The print_data member is a pointer to a fucntion that is used
+      * The print_data member is a pointer to a function that is used
       * to print a representation of the data argument passed to an
       * ioctl(2) system call.
       */
@@ -143,6 +143,13 @@ struct explain_iocontrol_t
       * is not a pointer (an intptr_t instead).
       */
     unsigned data_size;
+
+    /**
+      * The data_type member is used to remember the type of the data
+      * pointed to by the ioctl data argument.  This is used to improve the
+      * description, but also to provide this to static analysis tools.
+      */
+    const char *data_type;
 
     /**
       * The file member is used to rememebr the name of the file this
@@ -315,6 +322,14 @@ int explain_iocontrol_disambiguate_is_not_a_socket(int fildes, int request,
   * network devices.
   */
 int explain_iocontrol_disambiguate_is_if_eql(int fildes, int request,
+    const void *data);
+
+/**
+  * For use by individual ioctl handlers, a disambiguation that reports
+  * failure (-1) for almost everything, and success (0) for "eql"
+  * network devices.
+  */
+int explain_iocontrol_disambiguate_is_v4l2(int fildes, int request,
     const void *data);
 
 /**

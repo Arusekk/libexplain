@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009 Peter Miller
+.\" Copyright (C) 2009, 2011 Peter Miller
 .\"
 .\" This program is free software; you can redistribute it and/or modify it
 .\" under the terms of the GNU General Public License as published by the
@@ -56,8 +56,8 @@ The \f[B]explain_tcflush_on_error\fP function always returns the value
 return by the wrapped \f[I]tcflush\fP(3) system call.
 .\" ----------------------------------------------------
 .SH EXAMPLE
-The \f[B]explain_tcflush_or_die\fP function is intended to be used in a
-fashion similar to the following example:
+The \f[B]explain_tcflush_or_die\fP function is intended to be used in
+a fashion similar to the following example:
 .RS
 .ft CW
 .nf

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -32,7 +32,7 @@
 #include <libexplain/buffer/iovec.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -65,7 +65,7 @@ explain_buffer_errno_writev_explanation(explain_string_buffer_t *sb, int errnum,
     switch (errnum)
     {
     case EFAULT:
-        if (explain_pointer_is_efault(data, data_size * sizeof(*data)))
+        if (explain_is_efault_pointer(data, data_size * sizeof(*data)))
         {
             explain_buffer_efault(sb, "data");
             return;
@@ -73,7 +73,7 @@ explain_buffer_errno_writev_explanation(explain_string_buffer_t *sb, int errnum,
         for (j = 0; j < data_size; ++j)
         {
             const struct iovec *p = data + j;
-            if (explain_pointer_is_efault(p->iov_base, p->iov_len))
+            if (explain_is_efault_pointer(p->iov_base, p->iov_len))
             {
                 char            buffer[60];
 

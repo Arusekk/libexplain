@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -32,7 +32,7 @@
 #include <libexplain/buffer/sockaddr.h>
 #include <libexplain/fildes_to_address_family.h>
 #include <libexplain/parse_bits.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/sizeof.h>
 
 
@@ -42,7 +42,7 @@ static void
 explain_buffer_ax25_address(explain_string_buffer_t *sb,
     const ax25_address *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -61,7 +61,7 @@ explain_buffer_ax25_routes_struct(explain_string_buffer_t *sb,
 {
     unsigned        j;
 
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -107,7 +107,7 @@ explain_buffer_nr_route_struct(explain_string_buffer_t *sb,
 {
     unsigned        j;
 
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -235,7 +235,7 @@ static void
 explain_buffer_in6_rtmsg(explain_string_buffer_t *sb,
     const struct in6_rtmsg *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -290,7 +290,7 @@ static void
 explain_buffer_rose_address(explain_string_buffer_t *sb,
     const rose_address *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -313,7 +313,7 @@ explain_buffer_rose_route_struct(explain_string_buffer_t *sb,
 {
     unsigned        j;
 
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -364,7 +364,7 @@ static void
 explain_buffer_x25_route_struct(explain_string_buffer_t *sb,
     const struct x25_route_struct *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;

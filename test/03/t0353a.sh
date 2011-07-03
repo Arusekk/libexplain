@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -35,9 +35,9 @@ SunOS | FreeBSD)
 esac
 
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = MTIOCPOS, data = 0x00001000) failed,
-Inappropriate ioctl for device (ENOTTY) because fildes is not associated
-with an object to which ioctl MTIOCPOS can be applied
+ioctl(fildes = 42, request = MTIOCPOS, struct mtpos *data = 0x00001000)
+failed, Inappropriate ioctl for device (ENOTTY) because fildes is not
+associated with an object to which ioctl MTIOCPOS can be applied
 fubar
 test $? -eq 0 || no_result
 

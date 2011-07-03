@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -26,7 +26,7 @@
 #include <libexplain/buffer/sockaddr.h>
 #include <libexplain/buffer/socket_protocol.h>
 #include <libexplain/buffer/socket_type.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/sizeof.h>
 
@@ -35,7 +35,7 @@ void
 explain_buffer_addrinfo(explain_string_buffer_t *sb,
     const struct addrinfo *ai)
 {
-    if (explain_pointer_is_efault(ai, sizeof(*ai)))
+    if (explain_is_efault_pointer(ai, sizeof(*ai)))
     {
         explain_buffer_pointer(sb, ai);
         return;

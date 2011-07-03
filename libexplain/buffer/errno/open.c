@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -106,7 +106,7 @@ no_corresponding_device(explain_string_buffer_t *sb, const struct stat *st)
     explain_string_buffer_t numbers_sb;
 
     explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-    explain_buffer_file_type(&ftype_sb, st->st_mode);
+    explain_buffer_file_type_st(&ftype_sb, st);
 
     explain_string_buffer_init(&numbers_sb, numbers, sizeof(numbers));
     explain_string_buffer_printf
@@ -233,7 +233,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
 
                 explain_string_buffer_init(&file_type_sb, file_type,
                     sizeof(file_type));
-                explain_buffer_file_type(&file_type_sb, st.st_mode);
+                explain_buffer_file_type_st(&file_type_sb, &st);
                 explain_string_buffer_printf_gettext
                 (
                     sb,
@@ -488,7 +488,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_init(&fuid_sb, fuid, sizeof(fuid));
             if (stat(pathname, &st) >= 0)
             {
-                explain_buffer_file_type(&ftype_sb, st.st_mode);
+                explain_buffer_file_type_st(&ftype_sb, &st);
                 explain_buffer_uid(&fuid_sb, st.st_uid);
             }
             else
@@ -636,7 +636,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
 
                 explain_string_buffer_init(&file_type_sb, file_type,
                     sizeof(file_type));
-                explain_buffer_file_type(&file_type_sb, st.st_mode);
+                explain_buffer_file_type_st(&file_type_sb, &st);
 
                 switch (st.st_mode & S_IFMT)
                 {

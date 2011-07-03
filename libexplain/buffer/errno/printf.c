@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/buffer/errno/printf.h>
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/printf_format.h>
 
 
@@ -33,7 +33,7 @@ explain_buffer_errno_printf_system_call(explain_string_buffer_t *sb, int errnum,
     (void)errnum;
     explain_string_buffer_puts(sb, "printf(format = ");
     explain_buffer_pathname(sb, format);
-    if (format && !explain_path_is_efault(format))
+    if (format && !explain_is_efault_string(format))
         explain_printf_format_representation(sb, format, ap);
     explain_string_buffer_putc(sb, ')');
 }

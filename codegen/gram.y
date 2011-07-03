@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -42,6 +42,7 @@
 %token FLOAT
 %token IDENTIFIER
 %token INT
+%token JUNK
 %token LONG
 %token REGISTER
 %token SHORT
@@ -117,6 +118,7 @@ static const res_tab_t res_tab[] =
     { "FILE", TYPE_NAME },
     { "auto", AUTO },
     { "char", CHAR },
+    { "class", JUNK }, // avoid so C++ doesn't barf
     { "const", CONST },
     { "dev_t", TYPE_NAME },
     { "double", DOUBLE },
@@ -130,8 +132,12 @@ static const res_tab_t res_tab[] =
     { "long", LONG },
     { "mode_t", TYPE_NAME },
     { "off_t", TYPE_NAME },
+    { "operator", JUNK }, // avoid so C++ doesn't barf
     { "pid_t", TYPE_NAME },
+    { "private", JUNK }, // avoid so C++ doesn't barf
+    { "protected", JUNK }, // avoid so C++ doesn't barf
     { "ptrdiff_t", TYPE_NAME },
+    { "public", JUNK }, // avoid so C++ doesn't barf
     { "register", REGISTER },
     { "short", SHORT },
     { "signed", SIGNED },
@@ -141,6 +147,7 @@ static const res_tab_t res_tab[] =
     { "ssize_t", TYPE_NAME },
     { "static", STATIC },
     { "struct", STRUCT },
+    { "template", JUNK }, // avoid so C++ doesn't barf
     { "time_t", TYPE_NAME },
     { "typedef", TYPEDEF },
     { "uid_t", TYPE_NAME },

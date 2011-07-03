@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -33,5 +33,19 @@ struct explain_string_buffer_t; /* forward */
   */
 void explain_buffer_file_type(struct explain_string_buffer_t *sb,
     int mode);
+
+struct stat; /* forward */
+
+/**
+  * The explain_buffer_file_type function may be used to turn a file
+  * type from struct stat::st_mode into a human readable string.
+  *
+  * @param sb
+  *    The string buffer to write the file type name to.
+  * @param st
+  *    The file meta-data, exactly as returned by stat(2) et al.
+  */
+void explain_buffer_file_type_st(struct explain_string_buffer_t *sb,
+    const struct stat *st);
 
 #endif /* LIBEXPLAIN_BUFFER_FILE_TYPE_H */

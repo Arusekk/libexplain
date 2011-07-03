@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/sock_fprog.h>
 #include <libexplain/parse_bits.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/sizeof.h>
 
 
@@ -248,7 +248,7 @@ explain_buffer_sock_filter_array(explain_string_buffer_t *sb,
 
     if (len > BPF_MAXINSNS)
         len = BPF_MAXINSNS;
-    if (explain_pointer_is_efault(data, sizeof(*data) * len))
+    if (explain_is_efault_pointer(data, sizeof(*data) * len))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -311,7 +311,7 @@ void
 explain_buffer_sock_fprog(explain_string_buffer_t *sb,
     const struct sock_fprog *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;

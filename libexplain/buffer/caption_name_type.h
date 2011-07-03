@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,7 @@
 
 /**
   * The explain_buffer_caption_name_type function may be used to
+  * print an qualified file name, including the type.
   *
   * @param sb
   *    The string buffer to print into.
@@ -36,5 +37,23 @@
   */
 void explain_buffer_caption_name_type(explain_string_buffer_t *sb,
     const char *caption, const char *name, int st_mode);
+
+struct stat; /* forward */
+
+/**
+  * The explain_buffer_caption_name_type_st function may be used to
+  * print an qualified file name, including the type.
+  *
+  * @param sb
+  *    The string buffer to print into.
+  * @param caption
+  *    The caption "pathname", "oldpath", "newpath", etc, or NULL
+  * @param name
+  *    The name of the file or directory, or NULL
+  * @param st
+  *    The file meta data, including the mode.
+  */
+void explain_buffer_caption_name_type_st(explain_string_buffer_t *sb,
+    const char *caption, const char *name, const struct stat *st);
 
 #endif /* LIBEXPLAIN_BUFFER_CAPTION_NAME_TYPE_H */

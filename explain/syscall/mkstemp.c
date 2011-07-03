@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,16 +29,16 @@
 void
 explain_syscall_mkstemp(int errnum, int argc, char **argv)
 {
-    char            *template;
+    char            *templat;
 
     if (argc != 1)
     {
         fprintf(stderr, "mkstemp: requires 1 argument, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    template = explain_strdup_or_die(argv[0]);
+    templat = explain_strdup_or_die(argv[0]);
 
-    explain_wrap_and_print(stdout, explain_errno_mkstemp(errnum, template));
+    explain_wrap_and_print(stdout, explain_errno_mkstemp(errnum, templat));
 }
 
 

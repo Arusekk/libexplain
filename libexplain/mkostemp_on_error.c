@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -25,12 +25,12 @@
 
 
 int
-explain_mkostemp_on_error(char *template, int flags)
+explain_mkostemp_on_error(char *templat, int flags)
 {
     int             result;
 
 #ifdef HAVE_MKOSTEMP
-    result = mkostemp(template, flags);
+    result = mkostemp(templat, flags);
 #else
     errno = ENOSYS;
     result = -1;
@@ -42,7 +42,7 @@ explain_mkostemp_on_error(char *template, int flags)
         hold_errno = errno;
         explain_program_name_assemble_internal(1);
         explain_output_message(explain_errno_mkostemp(hold_errno,
-            template, flags));
+            templat, flags));
         errno = hold_errno;
     }
     return result;

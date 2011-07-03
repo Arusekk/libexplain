@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +41,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static int
@@ -124,14 +124,14 @@ wonky_pointer(explain_string_buffer_t *sb, char *const *array,
     int             n;
 
     /* This isn't quite right */
-    if (explain_pointer_is_efault(array, sizeof(*array)))
+    if (explain_is_efault_pointer(array, sizeof(*array)))
     {
         explain_buffer_efault(sb, array_caption);
         return 0;
     }
     for (n = 0; array[n]; ++n)
     {
-        if (explain_path_is_efault(array[n]))
+        if (explain_is_efault_path(array[n]))
         {
             char            temp[20];
 
@@ -307,7 +307,7 @@ explain_buffer_errno_execve_explanation(explain_string_buffer_t *sb,
          * non-conforming.  Only add code to handle that case if anyone
          * ever gripes.
          */
-        if (explain_path_is_efault(pathname))
+        if (explain_is_efault_path(pathname))
         {
             explain_buffer_efault(sb, "pathname");
         }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
 #include <libexplain/buffer/errno/gettimeofday.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -53,12 +53,12 @@ explain_buffer_errno_gettimeofday_explanation(
     switch (errnum)
     {
     case EFAULT:
-        if (tv && explain_pointer_is_efault(tv, sizeof(*tv)))
+        if (tv && explain_is_efault_pointer(tv, sizeof(*tv)))
         {
             explain_buffer_efault(sb, "tv");
             break;
         }
-        if (tz && explain_pointer_is_efault(tz, sizeof(*tz)))
+        if (tz && explain_is_efault_pointer(tz, sizeof(*tz)))
         {
             explain_buffer_efault(sb, "tz");
             break;

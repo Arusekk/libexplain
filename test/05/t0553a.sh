@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2010 Peter Miller
+# Copyright (C) 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -22,13 +22,13 @@ TEST_SUBJECT="ptrace EIO"
 . test_prelude
 
 cat > test.ok << 'fubar'
-ptrace(request = PTRACE_CONT, pid = 0, addr = NULL, data = 666) failed,
+ptrace(request = PT_CONTINUE, pid = 0, addr = NULL, data = 666) failed,
 Input/output error (EIO) because an invalid signal was specified during a
 restart request
 fubar
 test $? -eq 0 || no_result
 
-explain -eEIO ptrace PTRACE_CONT 0 0 666 > test.out
+explain -eEIO ptrace PT_CONTINUE 0 0 666 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

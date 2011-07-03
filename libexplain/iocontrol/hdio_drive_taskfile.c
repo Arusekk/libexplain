@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,7 @@
 #include <libexplain/capability.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/hdio_drive_taskfile.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef HDIO_DRIVE_TASKFILE
 
@@ -95,7 +95,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
         goto generic;
 
     case EFAULT:
-        if (explain_pointer_is_efault(data, sizeof(ide_task_request_t)))
+        if (explain_is_efault_pointer(data, sizeof(ide_task_request_t)))
         {
             explain_buffer_efault(sb, "data");
             break;
@@ -107,7 +107,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
             (
                 req_task->out_size
             &&
-                explain_pointer_is_efault
+                explain_is_efault_pointer
                 (
                     buf + sizeof(ide_task_request_t),
                     req_task->out_size
@@ -121,7 +121,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
             (
                 req_task->in_size
             &&
-                explain_pointer_is_efault
+                explain_is_efault_pointer
                 (
                     buf + sizeof(ide_task_request_t),
                     req_task->in_size
@@ -163,6 +163,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_taskfile =
     print_explanation,
     0, /* print_data_returned */
     sizeof(ide_task_request_t), /* data_size */
+    "ide_task_request_t *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -179,6 +180,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_taskfile =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

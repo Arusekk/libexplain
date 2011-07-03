@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,7 @@
 #include <libexplain/buffer/socket_type.h>
 #include <libexplain/buffer/socklen.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -97,7 +97,7 @@ explain_buffer_errno_accept_explanation(explain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (explain_pointer_is_efault(sock_addr_size, sizeof(*sock_addr_size)))
+        if (explain_is_efault_pointer(sock_addr_size, sizeof(*sock_addr_size)))
             explain_buffer_efault(sb, "sock_addr_size");
         else
             explain_buffer_efault(sb, "sock_addr");
@@ -118,7 +118,7 @@ explain_buffer_errno_accept_explanation(explain_string_buffer_t *sb,
     case EINVAL:
         if
         (
-            !explain_pointer_is_efault(sock_addr_size, sizeof(*sock_addr_size))
+            !explain_is_efault_pointer(sock_addr_size, sizeof(*sock_addr_size))
         &&
             *sock_addr_size <= 0
         )

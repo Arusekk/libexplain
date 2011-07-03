@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,7 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
 static void
 print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     0, /* data_size */
+    0, /* data_type */
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
@@ -62,6 +63,7 @@ const explain_iocontrol_t explain_iocontrol_lpgetstats =
     0, /* print_explanation */
     print_data_returned,
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -78,6 +80,7 @@ const explain_iocontrol_t explain_iocontrol_lpgetstats =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

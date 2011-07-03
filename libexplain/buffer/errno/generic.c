@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/ctype.h>
 #include <libexplain/ac/errno.h>
+#include <libexplain/ac/stdio.h>
+#include <libexplain/ac/string.h>
 
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/emfile.h>
@@ -34,12 +37,42 @@
 #include <libexplain/option.h>
 
 
+static void
+downcase(char *dst, size_t dst_size, const char *src)
+{
+    if (dst_size == 0)
+        return;
+    while (dst_size > 1)
+    {
+        unsigned char c = *src++;
+        if (!c)
+            break;
+        if (isupper(c))
+            c = tolower(c);
+        *dst++ = c;
+        --dst_size;
+    }
+    *dst = '\0';
+}
+
+
+static int
+is_alpha(int c)
+{
+    return isalpha((unsigned char)c);
+}
+
+
 void
 explain_buffer_errno_generic(explain_string_buffer_t *sb, int errnum,
     const char *syscall_name)
 {
     switch (errnum)
     {
+    case 0:
+        /* no error */
+        break;
+
     case EAGAIN:
 #if defined(EWOULDBLOCK) && EWOULDBLOCK != EAGAIN
     case EWOULDBLOCK:
@@ -118,15 +151,69 @@ explain_buffer_errno_generic(explain_string_buffer_t *sb, int errnum,
          */
         if (explain_option_debug())
         {
+            char            src[100];
+
             explain_string_buffer_printf
             (
                 sb,
-                "something weird happened, cause unknown (this error is "
-                    "undocumented for the %s system call, you could improve "
-                    "libexplain by contributing code to explain this error, "
-                    "see the libexplain/buffer/errno/%s.c source file)",
+                /* FIXME: i18n */
+                "something weird happened, cause unknown"
+            );
+
+            /*
+             * Figure out a suitable source file name to direct the user to.
+             */
+            if (0 == memcmp(syscall_name, "ioctl ", 6))
+            {
+                char              ioctl_name[100];
+
+                /*
+                 * This is supposed to the the inverse of
+                 * explain_iocontrol_fake_syscall_name so that we can extract
+                 * the ioctl request name.
+                 */
+                downcase(ioctl_name, sizeof(ioctl_name), syscall_name + 6);
+                if (strchr(ioctl_name, '(') || !is_alpha(ioctl_name[0]))
+                {
+                    snprintf(src, sizeof(src), "libexplain/iocontrol/*.c");
+                }
+                else
+                {
+                    snprintf
+                    (
+                        src,
+                        sizeof(src),
+                        "libexplain/iocontrol/%s.c",
+                        ioctl_name
+                    );
+                }
+            }
+            else
+            {
+                snprintf
+                (
+                    src,
+                    sizeof(src),
+                    "libexplain/buffer/errno/%s.c",
+                    syscall_name
+                );
+            }
+
+            /*
+             * Suggest a file that the user could improve.  We think the
+             * user is a developer, and thus capable of contributing,
+             * because they deliberately turned on the "debug" flag.
+             */
+            explain_string_buffer_puts(sb->footnotes, "; ");
+            explain_string_buffer_printf
+            (
+                sb->footnotes,
+                /* FIXME: i18n */
+                "this error is undocumented for the %s system call, you could "
+                    "improve libexplain by contributing code to explain this "
+                    "error, see the %s source file",
                 syscall_name,
-                syscall_name
+                src
             );
         }
         break;

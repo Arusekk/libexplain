@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -36,7 +36,7 @@ void explain_buffer_eexist(explain_string_buffer_t *sb, const char *pathname);
 /**
   * The explain_buffer_eexist5 function may be used to print an
   * explanation of an EEXIST error, reported by the open system call
-  * (and indirectly by others via the explain_buffer_eexist fucntion).
+  * (and indirectly by others via the explain_buffer_eexist function).
   *
   * @param sb
   *     The string buffer to print into.

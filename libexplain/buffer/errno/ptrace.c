@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -36,9 +36,11 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/ptrace_options.h>
 #include <libexplain/buffer/ptrace_request.h>
+#include <libexplain/buffer/ptrace_vm_entry.h>
 #include <libexplain/buffer/signal.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
+#include <libexplain/process_exists.h>
 
 
 static void
@@ -55,31 +57,55 @@ explain_buffer_errno_ptrace_system_call(explain_string_buffer_t *sb, int errnum,
     explain_string_buffer_puts(sb, ", data = ");
     switch (request)
     {
-    case PTRACE_CONT:
-    case PTRACE_SYSCALL:
-    case PTRACE_SINGLESTEP:
+#ifdef PT_CONTINUE
+    case PT_CONTINUE:
+#endif
+#ifdef PT_SYSCALL
+    case PT_SYSCALL:
+#endif
+#ifdef PT_STEP
+    case PT_STEP:
+#endif
 #ifdef PT_SYSEMU
-    case PTRACE_SYSEMU:
+    case PT_SYSEMU:
 #endif
 #ifdef PT_SYSEMU_SINGLESTEP
-    case PTRACE_SYSEMU_SINGLESTEP:
+    case PT_SYSEMU_SINGLESTEP:
 #endif
-    case PTRACE_DETACH:
+#ifdef PT_DETACH
+    case PT_DETACH:
+#endif
         explain_buffer_signal(sb, (intptr_t)data);
         break;
 
-    case PTRACE_SETOPTIONS:
+#ifdef PT_SETOPTIONS
+    case PT_SETOPTIONS:
+#endif
 #ifdef PT_OLDSETOPTIONS
-    case PTRACE_OLDSETOPTIONS:
+    case PT_OLDSETOPTIONS:
 #endif
         explain_buffer_ptrace_options(sb, (intptr_t)data);
         break;
 
-    case PTRACE_POKETEXT:
-    case PTRACE_POKEDATA:
-    case PTRACE_POKEUSER:
+#ifdef PT_WRITE_I
+    case PT_WRITE_I:
+#endif
+#ifdef PT_WRITE_D
+    case PT_WRITE_D:
+#endif
+#ifdef PT_WRITE_U
+    case PT_WRITE_U:
+#endif
         explain_buffer_long(sb, (intptr_t)data);
         break;
+
+#ifdef PT_VM_ENTRY
+    case PT_VM_ENTRY:
+        explain_buffer_ptrace_vm_entry(sb, data);
+        break;
+#endif
+
+    /* FIXME: FreeBSD's PT_IO uses struct ptrace_io_desc */
 
     default:
         explain_buffer_pointer(sb, data);
@@ -89,90 +115,130 @@ explain_buffer_errno_ptrace_system_call(explain_string_buffer_t *sb, int errnum,
 }
 
 
-#include <libexplain/ac/stdio.h> /* HACK */
-
 static int
 request_is_known(int request)
 {
     switch (request)
     {
 #ifdef PT_TRACE_ME
-    case PTRACE_TRACEME:
+    case PT_TRACE_ME:
 #endif
 #ifdef PT_READ_I
-    case PTRACE_PEEKTEXT:
+    case PT_READ_I:
 #endif
 #ifdef PT_READ_D
-    case PTRACE_PEEKDATA:
+    case PT_READ_D:
 #endif
 #ifdef PT_READ_U
-    case PTRACE_PEEKUSER:
+    case PT_READ_U:
 #endif
 #ifdef PT_WRITE_I
-    case PTRACE_POKETEXT:
+    case PT_WRITE_I:
 #endif
 #ifdef PT_WRITE_D
-    case PTRACE_POKEDATA:
+    case PT_WRITE_D:
 #endif
 #ifdef PT_WRITE_U
-    case PTRACE_POKEUSER:
+    case PT_WRITE_U:
 #endif
 #ifdef PT_CONTINUE
-    case PTRACE_CONT:
+    case PT_CONTINUE:
 #endif
 #ifdef PT_KILL
-    case PTRACE_KILL:
+    case PT_KILL:
 #endif
 #ifdef PT_SINGLESTEP
-    case PTRACE_SINGLESTEP:
+    case PT_SINGLESTEP:
 #endif
 #ifdef PT_GETREGS
-    case PTRACE_GETREGS:
+    case PT_GETREGS:
 #endif
 #ifdef PT_SETREGS
-    case PTRACE_SETREGS:
+    case PT_SETREGS:
 #endif
 #ifdef PT_GETFPREGS
-    case PTRACE_GETFPREGS:
+    case PT_GETFPREGS:
 #endif
 #ifdef PT_SETFPREGS
-    case PTRACE_SETFPREGS:
+    case PT_SETFPREGS:
 #endif
 #ifdef PT_ATTACH
-    case PTRACE_ATTACH:
+    case PT_ATTACH:
 #endif
 #ifdef PT_DETACH
-    case PTRACE_DETACH:
+    case PT_DETACH:
 #endif
 #ifdef PT_GETFPXREGS
-    case PTRACE_GETFPXREGS:
+    case PT_GETFPXREGS:
 #endif
 #ifdef PT_SETFPXREGS
-    case PTRACE_SETFPXREGS:
+    case PT_SETFPXREGS:
 #endif
 #ifdef PT_SYSCALL
-    case PTRACE_SYSCALL:
+    case PT_SYSCALL:
 #endif
 #ifdef PT_SETOPTIONS
-    case PTRACE_SETOPTIONS:
+    case PT_SETOPTIONS:
 #endif
 #ifdef PT_OLDSETOPTIONS
-    case PTRACE_OLDSETOPTIONS:
+    case PT_OLDSETOPTIONS:
 #endif
 #ifdef PT_GETEVENTMSG
-    case PTRACE_GETEVENTMSG:
+    case PT_GETEVENTMSG:
 #endif
 #ifdef PT_GETSIGINFO
-    case PTRACE_GETSIGINFO:
+    case PT_GETSIGINFO:
 #endif
 #ifdef PT_SETSIGINFO
-    case PTRACE_SETSIGINFO:
+    case PT_SETSIGINFO:
 #endif
 #ifdef PT_SYSEMU
-    case PTRACE_SYSEMU:
+    case PT_SYSEMU:
 #endif
 #ifdef PT_SYSEMU_SINGLESTEP
-    case PTRACE_SYSEMU_SINGLESTEP:
+    case PT_SYSEMU_SINGLESTEP:
+#endif
+#ifdef PT_IO
+    case PT_IO:
+#endif
+#ifdef PT_LWPINFO
+    case PT_LWPINFO:
+#endif
+#ifdef PT_GETNUMLWPS
+    case PT_GETNUMLWPS:
+#endif
+#ifdef PT_GETLWPLIST
+    case PT_GETLWPLIST:
+#endif
+#ifdef PT_CLEARSTEP
+    case PT_CLEARSTEP:
+#endif
+#ifdef PT_SETSTEP
+    case PT_SETSTEP:
+#endif
+#ifdef PT_SUSPEND
+    case PT_SUSPEND:
+#endif
+#ifdef PT_RESUME
+    case PT_RESUME:
+#endif
+#ifdef PT_TO_SCE
+    case PT_TO_SCE:
+#endif
+#ifdef PT_TO_SCX
+    case PT_TO_SCX :
+#endif
+#ifdef PT_GETDBREGS
+    case PT_GETDBREGS:
+#endif
+#ifdef PT_SETDBREGS
+    case PT_SETDBREGS:
+#endif
+#ifdef PT_VM_TIMESTAMP
+    case PT_VM_TIMESTAMP:
+#endif
+#ifdef PT_VM_ENTRY
+    case PT_VM_ENTRY:
 #endif
         return 1;
 
@@ -189,16 +255,16 @@ calculate_addr_size(int request)
     switch (request)
     {
 #ifdef PT_READ_U
-    case PTRACE_PEEKUSER:
+    case PT_READ_U:
 #endif
 #ifdef PT_WRITE_I
-    case PTRACE_POKETEXT:
+    case PT_WRITE_I:
 #endif
 #ifdef PT_WRITE_D
-    case PTRACE_POKEDATA:
+    case PT_WRITE_D:
 #endif
 #ifdef PT_WRITE_U
-    case PTRACE_POKEUSER:
+    case PT_WRITE_U:
 #endif
         return sizeof(int);
 
@@ -212,53 +278,84 @@ calculate_addr_size(int request)
 static int
 calculate_data_size(int request)
 {
+#ifdef __linux__
+    /*
+     * The following structs are all defined in <sys/user.h> (on Linux,
+     * anyway), so if your system doesn't have them, we can't give
+     * useful answers.
+     *
+     * FIXME: need a better ./configure test for this.
+     */
     switch (request)
     {
 #ifdef PT_GETREGS
-    case PTRACE_GETREGS:
+    case PT_GETREGS:
         return sizeof(struct user_regs_struct);
 #endif
 #ifdef PT_SETREGS
-    case PTRACE_SETREGS:
+    case PT_SETREGS:
         return sizeof(struct user_regs_struct);
 #endif
 #ifdef PT_GETFPREGS
-    case PTRACE_GETFPREGS:
+    case PT_GETFPREGS:
         return sizeof(struct user_fpregs_struct);
 #endif
 #ifdef PT_SETFPREGS
-    case PTRACE_SETFPREGS:
+    case PT_SETFPREGS:
         return sizeof(struct user_fpregs_struct);
 #endif
 
 #if defined(linux) && (__WORDSIZE < 64)
 #ifdef PT_GETFPXREGS
-    case PTRACE_GETFPXREGS:
+    case PT_GETFPXREGS:
         return sizeof(struct user_fpxregs_struct);
 #endif
 #ifdef PT_SETFPXREGS
-    case PTRACE_SETFPXREGS:
+    case PT_SETFPXREGS:
         return sizeof(struct user_fpxregs_struct);
 #endif
 #endif
 
 #ifdef PT_GETEVENTMSG
-    case PTRACE_GETEVENTMSG:
+    case PT_GETEVENTMSG:
         return sizeof(unsigned long);
 #endif
 #ifdef PT_GETSIGINFO
-    case PTRACE_GETSIGINFO:
+    case PT_GETSIGINFO:
         return sizeof(siginfo_t);
 #endif
 #ifdef PT_SETSIGINFO
-    case PTRACE_SETSIGINFO:
+    case PT_SETSIGINFO:
         return sizeof(siginfo_t);
+#endif
+
+#ifdef PT_VM_ENTRY
+    case PT_VM_ENTRY:
+        /* FreeBSD, not Linux */
+        return sizeof(struct ptrace_vm_entry);
 #endif
 
     default:
         break;
     }
+#endif
     return 0;
+}
+
+
+static void
+setting_an_invalid_option(explain_string_buffer_t *sb)
+{
+    explain_buffer_gettext
+    (
+        sb,
+        /*
+         * xgettext: This error message is issued to explain an EINVAL
+         * error reported by the ptrace(2) system call, in the case
+         * where an attempt was made to set an invalid option.
+         */
+        i18n("an attempt was made to set an invalid option")
+    );
 }
 
 
@@ -289,12 +386,12 @@ explain_buffer_errno_ptrace_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     case EFAULT:
-        if (addr_size && explain_pointer_is_efault(addr, addr_size))
+        if (addr_size && explain_is_efault_pointer(addr, addr_size))
         {
             explain_buffer_efault(sb, "addr");
             break;
         }
-        if (data_size && explain_pointer_is_efault(data, data_size))
+        if (data_size && explain_is_efault_pointer(data, data_size))
         {
             explain_buffer_efault(sb, "data");
             break;
@@ -325,27 +422,20 @@ explain_buffer_errno_ptrace_explanation(explain_string_buffer_t *sb, int errnum,
             explain_buffer_einval_vague(sb, "request");
             return;
         }
-        if
-        (
-            request == PTRACE_SETOPTIONS
-#ifdef PT_OLDSETOPTIONS
-        ||
-            request == PTRACE_OLDSETOPTIONS
-#endif
-        )
+#ifdef PT_SETOPTIONS
+        if (request == PT_SETOPTIONS)
         {
-            explain_buffer_gettext
-            (
-                sb,
-                /*
-                 * xgettext: This error message is issued to explain an EINVAL
-                 * error reported by the ptrace(2) system call, in the case
-                 * where an attempt was made to set an invalid option.
-                 */
-                i18n("an attempt was made to set an invalid option")
-            );
+            setting_an_invalid_option(sb);
             break;
         }
+#endif
+#ifdef PT_OLDSETOPTIONS
+        if (request == PT_OLDSETOPTIONS)
+        {
+            setting_an_invalid_option(sb);
+            break;
+        }
+#endif
         goto generic;
 
     case EIO:
@@ -354,28 +444,28 @@ explain_buffer_errno_ptrace_explanation(explain_string_buffer_t *sb, int errnum,
             explain_buffer_einval_vague(sb, "request");
             return;
         }
-        if (addr_size && explain_pointer_is_efault(addr, addr_size))
+        if (addr_size && explain_is_efault_pointer(addr, addr_size))
         {
             explain_buffer_efault(sb, "addr");
             break;
         }
-        if (data_size && explain_pointer_is_efault(data, data_size))
+        if (data_size && explain_is_efault_pointer(data, data_size))
         {
             explain_buffer_efault(sb, "data");
             break;
         }
         switch (request)
         {
-        case PTRACE_CONT:
-        case PTRACE_SYSCALL:
-        case PTRACE_SINGLESTEP:
+        case PT_CONTINUE:
+        case PT_SYSCALL:
+        case PT_STEP:
 #ifdef PT_SYSEMU
-        case PTRACE_SYSEMU:
+        case PT_SYSEMU:
 #endif
 #ifdef PT_SYSEMU_SINGLESTEP
-        case PTRACE_SYSEMU_SINGLESTEP:
+        case PT_SYSEMU_SINGLESTEP:
 #endif
-        case PTRACE_DETACH:
+        case PT_DETACH:
             explain_buffer_gettext
             (
                 sb,
@@ -405,7 +495,7 @@ explain_buffer_errno_ptrace_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     case EPERM:
-        if (pid <= 0 || kill(pid, 0) < 0)
+        if (!explain_process_exists(pid))
         {
             explain_buffer_eperm_kill(sb);
             break;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,7 @@
 #include <libexplain/explanation.h>
 #include <libexplain/have_permission.h>
 #include <libexplain/name_max.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/sizeof.h>
 
 
@@ -58,7 +58,7 @@ explain_buffer_errno_execvp_system_call(explain_string_buffer_t *sb,
     explain_string_buffer_puts(sb, "execvp(pathname = ");
     explain_buffer_pathname(sb, pathname);
     explain_string_buffer_puts(sb, ", argv = ");
-    if (explain_pointer_is_efault(argv, sizeof(argv[0])))
+    if (explain_is_efault_pointer(argv, sizeof(argv[0])))
         explain_buffer_pointer(sb, argv);
     else
     {
@@ -79,7 +79,7 @@ explain_buffer_errno_execvp_system_call(explain_string_buffer_t *sb,
             if (n)
                 explain_string_buffer_puts(sb, ", ");
             s = argv[n];
-            if (explain_path_is_efault(s))
+            if (explain_is_efault_path(s))
             {
                 explain_buffer_pointer(sb, s);
                 argsize += 8;
@@ -134,7 +134,7 @@ explain_buffer_errno_execvp_explanation(explain_string_buffer_t *sb,
     char            *full_pathname;
     char            *start_of_name;
 
-    if (explain_path_is_efault(pathname))
+    if (explain_is_efault_path(pathname))
     {
         explain_buffer_efault(sb, "pathname");
         return;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -64,9 +64,9 @@ look_for_similar(explain_string_buffer_t *sb, const char *lookup_directory,
     DIR             *dp;
     char            best_name[NAME_MAX + 1];
     double          best_weight;
-    int             st_mode;
     char            subject[NAME_MAX * 4 + 3];
     explain_string_buffer_t subject_sb;
+    struct stat     st;
 
     dp = opendir(lookup_directory);
     if (!dp)
@@ -103,12 +103,11 @@ look_for_similar(explain_string_buffer_t *sb, const char *lookup_directory,
     if (best_name[0] == '\0')
         return;
 
-    st_mode = -1;
+    memset(&st, 0, sizeof(st));
     {
         /*
          * see if we can say what kind of file it is
          */
-        struct stat     st;
         char            ipath[PATH_MAX + 1];
         char            *ipath_end;
         char            *ip;
@@ -118,17 +117,19 @@ look_for_similar(explain_string_buffer_t *sb, const char *lookup_directory,
         ip = explain_strendcpy(ip, lookup_directory, ipath_end);
         ip = explain_strendcpy(ip, "/", ipath_end);
         ip = explain_strendcpy(ip, best_name, ipath_end);
-        if (lstat(ipath, &st) == 0)
-            st_mode = st.st_mode;
+        lstat(ipath, &st);
     }
 
     explain_string_buffer_init(&subject_sb, subject, sizeof(subject));
-    explain_buffer_caption_name_type(&subject_sb, 0, best_name, st_mode);
+    if (st.st_dev)
+        explain_buffer_caption_name_type_st(&subject_sb, 0, best_name, &st);
+    else
+        explain_buffer_caption_name_type(&subject_sb, 0, best_name, -1);
 
-    explain_string_buffer_puts(sb, ", ");
+    explain_string_buffer_puts(sb->footnotes, "; ");
     explain_string_buffer_printf_gettext
     (
-        sb,
+        sb->footnotes,
         /*
          * xgettext: This message is issued when a file (or directory
          * component) could not be found, but a sufficiently similar
@@ -370,14 +371,14 @@ does_not_have_search_permission(explain_string_buffer_t *sb,
     explain_string_buffer_t part2_sb;
 
     explain_string_buffer_init(&part1_sb, part1, sizeof(part1));
-    explain_buffer_caption_name_type(&part1_sb, 0, comp, comp_st->st_mode);
+    explain_buffer_caption_name_type_st(&part1_sb, 0, comp, comp_st);
     explain_string_buffer_init(&part2_sb, part2, sizeof(part2));
-    explain_buffer_caption_name_type
+    explain_buffer_caption_name_type_st
     (
         &part2_sb,
         caption,
         dir,
-        dir_st->st_mode
+        dir_st
     );
 
     explain_string_buffer_printf_gettext
@@ -414,12 +415,12 @@ does_not_have_search_permission1(explain_string_buffer_t *sb,
     explain_string_buffer_t dir_part_sb;
 
     explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    explain_buffer_caption_name_type
+    explain_buffer_caption_name_type_st
     (
         &dir_part_sb,
         caption,
         dir,
-        dir_st->st_mode
+        dir_st
     );
 
     explain_string_buffer_printf_gettext
@@ -459,21 +460,9 @@ does_not_have_execute_permission(explain_string_buffer_t *sb,
         final_part,
         sizeof(final_part)
     );
-    explain_buffer_caption_name_type
-    (
-        &final_part_sb,
-        0,
-        comp,
-        comp_st->st_mode
-    );
+    explain_buffer_caption_name_type_st(&final_part_sb, 0, comp, comp_st);
     explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    explain_buffer_caption_name_type
-    (
-        &dir_part_sb,
-        caption,
-        dir,
-        dir_st->st_mode
-    );
+    explain_buffer_caption_name_type_st(&dir_part_sb, caption, dir, dir_st);
 
     explain_string_buffer_printf_gettext
     (
@@ -519,21 +508,9 @@ does_not_have_read_permission(explain_string_buffer_t *sb, const char *comp,
         final_part,
         sizeof(final_part)
     );
-    explain_buffer_caption_name_type
-    (
-        &final_part_sb,
-        0,
-        comp,
-        comp_st->st_mode
-    );
+    explain_buffer_caption_name_type_st(&final_part_sb, 0, comp, comp_st);
     explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    explain_buffer_caption_name_type
-    (
-        &dir_part_sb,
-        caption,
-        dir,
-        dir_st->st_mode
-    );
+    explain_buffer_caption_name_type_st(&dir_part_sb, caption, dir, dir_st);
 
     explain_string_buffer_printf_gettext
     (
@@ -578,21 +555,9 @@ does_not_have_write_permission(explain_string_buffer_t *sb, const char *comp,
         final_part,
         sizeof(final_part)
     );
-    explain_buffer_caption_name_type
-    (
-        &final_part_sb,
-        0,
-        comp,
-        comp_st->st_mode
-    );
+    explain_buffer_caption_name_type_st(&final_part_sb, 0, comp, comp_st);
     explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    explain_buffer_caption_name_type
-    (
-        &dir_part_sb,
-        caption,
-        dir,
-        dir_st->st_mode
-    );
+    explain_buffer_caption_name_type_st(&dir_part_sb, caption, dir, dir_st);
 
     explain_string_buffer_printf_gettext
     (
@@ -632,13 +597,7 @@ does_not_have_new_directory_entry_permission(explain_string_buffer_t *sb,
     explain_string_buffer_t final_part_sb;
 
     explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    explain_buffer_caption_name_type
-    (
-        &dir_part_sb,
-        caption,
-        dir,
-        dir_st->st_mode
-    );
+    explain_buffer_caption_name_type_st(&dir_part_sb, caption, dir, dir_st);
     explain_string_buffer_init
     (
         &final_part_sb,
@@ -912,7 +871,7 @@ explain_sticky_bit_vs_unlink(explain_string_buffer_t *sb,
     explain_buffer_uid(&proc_part_sb, hip->uid);
     explain_buffer_uid(&dir_part_sb, dir_st->st_uid);
     explain_buffer_uid(&file_part_sb, file_st->st_uid);
-    explain_buffer_file_type(&ftype_sb, file_st->st_mode);
+    explain_buffer_file_type_st(&ftype_sb, file_st);
 
     explain_string_buffer_puts(sb, ", ");
     explain_string_buffer_printf_gettext

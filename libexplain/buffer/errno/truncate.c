@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -97,7 +97,7 @@ explain_buffer_errno_truncate_explanation(explain_string_buffer_t *sb,
             if (stat(pathname, &st) >= 0 && !S_ISREG(st.st_mode))
             {
                 explain_string_buffer_puts(sb, "pathname is a ");
-                explain_buffer_file_type(sb, st.st_mode);
+                explain_buffer_file_type_st(sb, &st);
                 explain_string_buffer_puts(sb, ", not a ");
                 explain_buffer_file_type(sb, S_IFREG);
                 break;

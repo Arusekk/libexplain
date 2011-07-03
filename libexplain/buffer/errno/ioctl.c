@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -16,10 +16,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/ctype.h>
+
 #include <libexplain/buffer/errno/ioctl.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/iocontrol.h>
 #include <libexplain/explanation.h>
+
+
+static int
+last_char(const char *s)
+{
+    if (!s || !*s)
+        return 0;
+    while (s[1])
+        ++s;
+    return (unsigned char)*s;
+}
 
 
 static void
@@ -31,7 +44,14 @@ system_call(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     explain_buffer_fildes_to_pathname(sb, fildes);
     explain_string_buffer_puts(sb, ", request = ");
     explain_iocontrol_print_name(p, sb, errnum, fildes, request, data);
-    explain_string_buffer_puts(sb, ", data = ");
+    explain_string_buffer_puts(sb, ", ");
+    if (data && p->data_type)
+    {
+        explain_string_buffer_puts(sb, p->data_type);
+        if (isalpha(last_char(p->data_type)))
+            explain_string_buffer_putc(sb, ' ');
+    }
+    explain_string_buffer_puts(sb, "data = ");
     explain_iocontrol_print_data(p, sb, errnum, fildes, request, data);
     explain_string_buffer_putc(sb, ')');
 }

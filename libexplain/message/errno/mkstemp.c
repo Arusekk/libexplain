@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,13 +21,13 @@
 
 
 void
-explain_message_errno_mkstemp(char *message, int message_size, int errnum, char
-    *template)
+explain_message_errno_mkstemp(char *message, int message_size, int errnum,
+    char *templat)
 {
     explain_string_buffer_t sb;
 
     explain_string_buffer_init(&sb, message, message_size);
-    explain_buffer_errno_mkstemp(&sb, errnum, template);
+    explain_buffer_errno_mkstemp(&sb, errnum, templat);
 }
 
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -56,14 +56,11 @@ struct adapter
 static void
 n_callback(explain_lsof_t *context, const char *name)
 {
-    if (context->fildes == LIBEXPLAIN_LSOF_FD_cwd)
-    {
-        adapter         *a;
+    adapter         *a;
 
-        a = (adapter *)context;
-        explain_strendcpy(a->data, name, a->data + a->data_size);
-        a->count++;
-    }
+    a = (adapter *)context;
+    explain_strendcpy(a->data, name, a->data + a->data_size);
+    a->count++;
 }
 
 
@@ -72,12 +69,12 @@ explain_getppcwd(char *data, size_t data_size)
 {
     int             ppid;
     adapter         obj;
-    char            options[20];
+    char            options[40];
 
     ppid = getppid();
     if (ppid <= 0)
         return 0;
-    snprintf(options, sizeof(options), "-p%d", ppid);
+    snprintf(options, sizeof(options), "-a -p%d -dcwd", ppid);
     obj.inherited.n_callback = n_callback;
     obj.data = data;
     obj.data_size = data_size;

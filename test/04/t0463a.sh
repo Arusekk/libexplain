@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ TEST_SUBJECT="kill ESRCH"
 
 cat > test.ok << 'fubar'
 kill(pid = 42, sig = SIGKILL) failed, No such process (ESRCH) because the
-process does not exist
+pid process does not exist
 fubar
 test $? -eq 0 || no_result
 

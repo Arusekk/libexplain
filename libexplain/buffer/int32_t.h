@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -49,6 +49,17 @@ void explain_buffer_int32_array(explain_string_buffer_t *sb,
     const int32_t *data, size_t data_size);
 
 /**
+  * The explain_int32_array_all_zero function may be used to
+  * test an int32_t array, to see if all the values are zero.
+  *
+  * @param data
+  *     The int32_t array to be tested.
+  * @param data_size
+  *     The number of elements in the array to be tested.
+  */
+int explain_int32_array_all_zero(const int32_t *data, size_t data_size);
+
+/**
   * The explain_buffer_uint32_t function may be used
   * to print a representation of a uint32_t value.
   *
@@ -72,5 +83,16 @@ void explain_buffer_uint32_t(explain_string_buffer_t *sb, uint32_t data);
   */
 void explain_buffer_uint32_array(explain_string_buffer_t *sb,
     const uint32_t *data, size_t data_size);
+
+/**
+  * The explain_uint32_array_all_zero function may be used to
+  * test an uint32_t array, to see if all the values are zero.
+  *
+  * @param data
+  *     The uint32_t array to be tested.
+  * @param data_size
+  *     The number of elements in the array to be tested.
+  */
+int explain_uint32_array_all_zero(const uint32_t *data, size_t data_size);
 
 #endif /* LIBEXPLAIN_BUFFER_INT32_T_H */

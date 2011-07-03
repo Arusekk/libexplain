@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ TEST_SUBJECT="path_resolution+fstrcmp"
 cat > test.ok << 'fubar'
 open(pathname = "somwhere/here", flags = O_RDONLY) failed, No such file or
 directory (ENOENT) because there is no "somwhere" directory in the current
-directory, did you mean the "somewhere" directory instead?
+directory; did you mean the "somewhere" directory instead?
 fubar
 test $? -eq 0 || no_result
 

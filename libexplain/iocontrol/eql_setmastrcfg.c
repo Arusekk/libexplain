@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,7 @@
 #include <libexplain/capability.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/eql_setmastrcfg.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef EQL_SETMASTRCFG
 
@@ -65,13 +65,13 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
             const struct slaving_request *srqp;
 
             q = data;
-            if (explain_pointer_is_efault(q, sizeof(*q)))
+            if (explain_is_efault_pointer(q, sizeof(*q)))
             {
                 explain_buffer_efault(sb, "data");
                 break;
             }
             srqp = (const struct slaving_request *)q->ifr_data;
-            if (explain_pointer_is_efault(srqp, sizeof(*srqp)))
+            if (explain_is_efault_pointer(srqp, sizeof(*srqp)))
             {
                 explain_buffer_efault(sb, "data->ifr_data");
                 break;
@@ -111,6 +111,7 @@ const explain_iocontrol_t explain_iocontrol_eql_setmastrcfg =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct ifreq), /* data_size */
+    "struct ifreq *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -127,6 +128,7 @@ const explain_iocontrol_t explain_iocontrol_eql_setmastrcfg =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

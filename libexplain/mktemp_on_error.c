@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -25,7 +25,7 @@
 
 
 char *
-explain_mktemp_on_error(char *template)
+explain_mktemp_on_error(char *templat)
 {
     char            first;
     char            *result;
@@ -43,20 +43,19 @@ explain_mktemp_on_error(char *template)
      * functions, this one returns the orginal string, but sets the first byte
      * to '\0'.  Sheesh!  This makes our job much harder.
      */
-    first = template[0];
-    result = mktemp(template);
-    /* assert(result == template); */
+    first = templat[0];
+    result = mktemp(templat);
+    /* assert(result == templat); */
     if (result[0] == '\0')
     {
         int             hold_errno;
 
         hold_errno = errno;
-        /* assert(template[0] == '\0'); */
-        template[0] = first;
+        /* assert(templat[0] == '\0'); */
+        templat[0] = first;
         explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_mktemp(hold_errno,
-            template));
-        template[0] = '\0';
+        explain_output_message(explain_errno_mktemp(hold_errno, templat));
+        templat[0] = '\0';
         errno = hold_errno;
     }
     return result;

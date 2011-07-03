@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,7 +26,7 @@
 #include <libexplain/iocontrol/disambiguate/if_ppp.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/siocgpppcstats.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef SIOCGPPPCSTATS
 
@@ -54,7 +54,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
             const struct ifreq *dp;
 
             dp = data;
-            if (explain_pointer_is_efault(dp, sizeof(*dp)))
+            if (explain_is_efault_pointer(dp, sizeof(*dp)))
                 explain_buffer_efault(sb, "data");
             else
                 explain_buffer_efault(sb, "data->ifr_data");
@@ -98,6 +98,7 @@ const explain_iocontrol_t explain_iocontrol_siocgpppcstats =
     print_explanation,
     print_data_returned,
     sizeof(struct ifreq), /* data_size */
+    "struct ifreq *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -114,6 +115,7 @@ const explain_iocontrol_t explain_iocontrol_siocgpppcstats =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

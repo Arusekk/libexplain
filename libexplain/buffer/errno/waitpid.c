@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -33,6 +33,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/waitpid_options.h>
 #include <libexplain/explanation.h>
+#include <libexplain/process_exists.h>
 
 
 static void
@@ -60,13 +61,6 @@ explain_buffer_errno_waitpid_system_call(explain_string_buffer_t *sb,
 }
 
 
-static int
-process_exists(int pid)
-{
-    return (kill(pid, 0) >= 0 || errno != ESRCH);
-}
-
-
 void
 explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
     int errnum, const char *syscall_name, int pid, int *status, int options)
@@ -80,7 +74,7 @@ explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
     case ECHILD:
         if (pid > 0)
         {
-            if (process_exists(pid))
+            if (explain_process_exists(pid))
             {
                 explain_string_buffer_printf_gettext
                 (
@@ -123,7 +117,7 @@ explain_buffer_errno_waitpid_explanation(explain_string_buffer_t *sb,
             int             pgid;
 
             pgid = pid ? -pid : getpgrp();
-            if (process_exists(pid))
+            if (explain_process_exists(pid))
             {
                 explain_string_buffer_printf_gettext
                 (

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@ SunOS | FreeBSD)
 esac
 
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = FIONREAD, data = 0x09876543) failed, Bad
+ioctl(fildes = 42, request = FIONREAD, int *data = 0x09876543) failed, Bad
 address (EFAULT) because data refers to memory that is outside the
 process's accessible address space; this is more likely to be a software
 error (a bug) than it is to be a user error

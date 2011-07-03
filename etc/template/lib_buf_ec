@@ -34,3 +34,6 @@ explain_${ident ${trim_ext ${trim_dir $filename}}}(explain_string_buffer_t *sb)
         i18n("...explain the error here...")
     );
 }
+
+
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -118,5 +118,7 @@ int explain_option_internal_strerror(void);
   *     than 10% of this.
   */
 int explain_option_hanging_indent(int width);
+
+int explain_option_extra_device_info(void);
 
 #endif /* LIBEXPLAIN_OPTION_H */

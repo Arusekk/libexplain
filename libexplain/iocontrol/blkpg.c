@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -53,13 +53,13 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
             const struct blkpg_partition *pp;
 
             ap = data;
-            if (explain_pointer_is_efault(ap, sizeof(*ap)))
+            if (explain_is_efault_pointer(ap, sizeof(*ap)))
             {
                 explain_buffer_efault(sb, "data");
                 break;
             }
             pp = ap->data;
-            if (explain_pointer_is_efault(pp, sizeof(*pp)))
+            if (explain_is_efault_pointer(pp, sizeof(*pp)))
             {
                 explain_buffer_efault(sb, "data->data");
                 break;
@@ -155,6 +155,7 @@ const explain_iocontrol_t explain_iocontrol_blkpg =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct blkpg_ioctl_arg), /* data_size */
+    "struct blkpg_ioctl_arg *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -171,6 +172,7 @@ const explain_iocontrol_t explain_iocontrol_blkpg =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

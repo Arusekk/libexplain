@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -89,6 +89,8 @@
 #include <explain/syscall/getgroups.h>
 #include <explain/syscall/gethostname.h>
 #include <explain/syscall/getpeername.h>
+#include <explain/syscall/getpgid.h>
+#include <explain/syscall/getpgrp.h>
 #include <explain/syscall/getrlimit.h>
 #include <explain/syscall/getsockname.h>
 #include <explain/syscall/getsockopt.h>
@@ -143,6 +145,8 @@
 #include <explain/syscall/setgroups.h>
 #include <explain/syscall/sethostname.h>
 #include <explain/syscall/setlinebuf.h>
+#include <explain/syscall/setpgid.h>
+#include <explain/syscall/setpgrp.h>
 #include <explain/syscall/setsockopt.h>
 #include <explain/syscall/setvbuf.h>
 #include <explain/syscall/signalfd.h>
@@ -311,11 +315,9 @@ static const table_t table[] =
     /* FIXME: add support for get_mempolicy */
     /* FIXME: add support for getpagesize */
     { "getpeername", explain_syscall_getpeername },
-    /* FIXME: add support for getpgid */
-    /* FIXME: add support for getpgrp */
-    /* FIXME: add support for getpid */
+    { "getpgid", explain_syscall_getpgid },
+    { "getpgrp", explain_syscall_getpgrp },
     /* FIXME: add support for getpmsg */
-    /* FIXME: add support for getppid */
     /* FIXME: add support for getpriority */
     /* FIXME: add support for getresgid */
     /* FIXME: add support for getresuid */
@@ -505,7 +507,8 @@ static const table_t table[] =
     /* FIXME: add support for setitimer */
     { "setlinebuf", explain_syscall_setlinebuf },
     /* FIXME: add support for set_mempolicy */
-    /* FIXME: add support for setpgid */
+    { "setpgid", explain_syscall_setpgid },
+    { "setpgrp", explain_syscall_setpgrp },
     /* FIXME: add support for setpriority */
     /* FIXME: add support for setregid */
     /* FIXME: add support for setresgid */

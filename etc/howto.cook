@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -524,6 +524,8 @@ unistd_exceptions =
     libexplain/getdomainname.h
     libexplain/getgroups.h
     libexplain/gethostname.h
+    libexplain/getpgid.h
+    libexplain/getpgrp.h
     libexplain/lseek.h
     libexplain/pread.h
     libexplain/pwrite.h
@@ -532,6 +534,8 @@ unistd_exceptions =
     libexplain/setdomainname.h
     libexplain/setgroups.h
     libexplain/sethostname.h
+    libexplain/setpgid.h
+    libexplain/setpgrp.h
     libexplain/truncate.h
     libexplain/vfork.h
     libexplain/write.h
@@ -761,6 +765,20 @@ all = .explain-iocontrol-check-conflicts [all];
         set silent;
 }
 
+all += .explain-iocontrol-check-types;
+
+.explain-iocontrol-check-types: etc/check_ioctl_data_type.awk
+    [match_mask "libexplain/iocontrol/%.c" [source_files]]
+{
+    if [not [verbose]] then
+        function print CHK ioctl types;
+    awk -f [resolve etc/check_ioctl_data_type.awk]
+        [resolve [match_mask "libexplain/iocontrol/%.c" [source_files]]]
+        ;
+    date > [target]
+        set silent;
+}
+
 all += .include.gotchas;
 
 .include.gotchas: bin/test_include_gotchas [source_files]
@@ -775,6 +793,29 @@ all += .include.gotchas;
         set silent;
 }
 
+/* ---------------------------------------------------------------------- */
+
+libexplain/v4l2-chip-ident.h : etc/v4l2-chip-ident.sh
+{
+    if [not [verbose]] then
+        function print GEN [target];
+    sh [resolve etc/v4l2-chip-ident.sh] > [target];
+}
+
+cascade libexplain/buffer/v4l2_chip_ident.c = libexplain/v4l2-chip-ident.h;
+
+/* ----------------------------------------------------------------------
+ * Some stuff to make tests easier to make conditional.
+ */
+
+test_config/configured.h: etc/configured.awk libexplain/config.h.in
+{
+    if [not [verbose]] then
+        function print GEN [target];
+    awk -f [resolve etc/configured.awk libexplain/config.h.in] > [target];
+}
+
+cascade test_config/main.c = test_config/configured.h;
 
 /* ---------------------------------------------------------------------- */
 #include-cooked etc/autoconf.cook

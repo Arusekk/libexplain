@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,7 +21,7 @@
 #include <libexplain/buffer/kbdiacrsuc.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/sizeof.h>
 
 
@@ -30,7 +30,7 @@ explain_buffer_kbdiacrsuc(explain_string_buffer_t *sb,
     const struct kbdiacrsuc *value, int extra)
 {
 #if defined(HAVE_LINUX_KD_H) && defined(KBDIACRSUC)
-    if (explain_pointer_is_efault(value, sizeof(*value)))
+    if (explain_is_efault_pointer(value, sizeof(*value)))
         explain_buffer_pointer(sb, value);
     else
     {

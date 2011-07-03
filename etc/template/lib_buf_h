@@ -36,4 +36,5 @@ void explain_${ident ${trim_ext ${trim_dir
 $filename}}}(explain_string_buffer_t *sb,
     const struct ${basename $filename .h} *data);
 
+/* vim: set ts=8 sw=4 et : */
 #endif /* ${ident ${upcase $filename}} */

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2010 Peter Miller
+# Copyright (C) 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -22,13 +22,13 @@ TEST_SUBJECT="ptrace EBUSY"
 . test_prelude
 
 cat > test.ok << 'fubar'
-ptrace(request = PTRACE_TRACEME, pid = 0, addr = NULL, data = NULL) failed,
+ptrace(request = PT_TRACE_ME, pid = 0, addr = NULL, data = NULL) failed,
 Device or resource busy (EBUSY) because there was an error with allocating
 or freeing a debug register
 fubar
 test $? -eq 0 || no_result
 
-explain -eEBUSY ptrace PTRACE_TRACEME 0 0 0 > test.out
+explain -eEBUSY ptrace PT_TRACE_ME 0 0 0 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

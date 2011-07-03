@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -400,10 +400,18 @@ explain_iocontrol_generic_print_explanation(const explain_iocontrol_t *p,
             sb,
             /*
              * xgettext:  This message is used to explain an EINVAL
-             * error reorted by an ioctl(2) system call, when a more
+             * error reported by an ioctl(2) system call, when a more
              * specific explanation is not availble.
              */
             i18n("ioctl request or ioctl data is not valid")
+            /*
+             * We can't exclude "ioctl request or" from the text, because Linux
+             * is somewhat schitzophrenic is this regard, and annoyingly returns
+             * EINVAL in many situtions where ENOTTY is patently more suitable.
+             *
+             * We could, of course, put #ifdef __linux__ around it, since this
+             * brain damage is mostly limited to Linux.
+             */
         );
         break;
 
@@ -418,11 +426,21 @@ explain_iocontrol_generic_print_explanation(const explain_iocontrol_t *p,
 #if defined(EOPNOTSUPP) && EOPNOTSUPP != ENOSYS
     case EOPNOTSUPP:
 #endif
-#ifdef ENOIOCTLCMD
+#if defined(ENOIOCTLCMD) && ENOIOCTLCMD != ENOTTY
+        /*
+         * The Linux kernel (well, parts of it) annoyingly returns EINVAL
+         * in many situtions where ENOTTY is patently more suitable.
+         * Linus Torvalds suggested that the correct course of action is
+         *
+         *     #define ENOIOCTLCMD ENOTTY
+         *
+         * and return this value to user space.
+         * http://article.gmane.org/gmane.linux.kernel/1160917
+         */
     case ENOIOCTLCMD:
 #endif
-#ifdef ENOIOCTL
-    case ENONOIOCTL:
+#if defined(ENOIOCTL) && ENOIOCTL != ENOTTY
+    case ENOIOCTL:
 #endif
         explain_iocontrol_fake_syscall_name(name, sizeof(name), p, request);
         explain_buffer_enosys_fildes(sb, fildes, "fildes", name);
@@ -456,6 +474,7 @@ const explain_iocontrol_t explain_iocontrol_generic =
     explain_iocontrol_generic_print_explanation,
     0, /* print_data_returned */
     NOT_A_POINTER, /* data_size */
+    "intptr_t", /* data_type */
     __FILE__,
     __LINE__,
 };

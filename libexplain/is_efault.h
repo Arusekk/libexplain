@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <libexplain/ac/stddef.h>
 
 /**
-  * The explain_path_is_efault function may be used to determine whether
+  * The explain_is_efault_path function may be used to determine whether
   * or not a path pointer is a valid pointer.  Typically this is used
   * when handling ambiguous EFAULT situations.
   *
@@ -33,10 +33,10 @@
   *    int; 1 if the path is bad (points outside the process address
   *    space), or 0 if the path is OK.
   */
-int explain_path_is_efault(const char *path);
+int explain_is_efault_path(const char *path);
 
 /**
-  * The explain_pointer_is_efault function may be used to determine
+  * The explain_is_efault_pointer function may be used to determine
   * whether or not a pointer is valid.  Typically this is used when
   * handling ambiguous EFAULT situations.
   *
@@ -49,6 +49,19 @@ int explain_path_is_efault(const char *path);
   *    int; 1 if the pointer is bad (points outside the process address
   *    space), or 0 if the pointer is OK.
   */
-int explain_pointer_is_efault(const void *data, size_t data_size);
+int explain_is_efault_pointer(const void *data, size_t data_size);
+
+/**
+  * The explain_is_efault_string function may be used to determine
+  * whether or not a C string is valid.  Typically this is used when
+  * handling ambiguous EFAULT situations.
+  *
+  * @param data
+  *    Pointer to the base address of the memory to be checked.
+  * @returns
+  *    int; 1 if the C string is bad (points outside the process address
+  *    space), or 0 if the C string is OK.
+  */
+int explain_is_efault_string(const char *data);
 
 #endif /* LIBEXPLAIN_PATH_IS_EFAULT_H */

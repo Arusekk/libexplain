@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/buffer/hexdump.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 #ifdef HAVE_LINUX_KD_H
@@ -31,7 +31,7 @@ void
 explain_buffer_consolefontdesc(explain_string_buffer_t *sb,
     const struct consolefontdesc *value, int extra)
 {
-    if (explain_pointer_is_efault(value, sizeof(*value)))
+    if (explain_is_efault_pointer(value, sizeof(*value)))
     {
         explain_buffer_pointer(sb, value);
         return;
@@ -59,7 +59,7 @@ explain_buffer_consolefontdesc(explain_string_buffer_t *sb,
         size_t          size;
 
         size = value->charcount * value->charheight;
-        if (!explain_pointer_is_efault(value->chardata, size))
+        if (!explain_is_efault_pointer(value->chardata, size))
         {
             explain_string_buffer_putc(sb, '{');
             explain_buffer_hexdump(sb, value->chardata, size);

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,7 @@
 #include <libexplain/buffer/timeval.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/lpsettimeout.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef LPSETTIMEOUT
 
@@ -60,7 +60,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
             explain_buffer_is_the_null_pointer(sb, "data");
             break;
         }
-        if (!explain_pointer_is_efault(data, sizeof(struct timeval)))
+        if (!explain_is_efault_pointer(data, sizeof(struct timeval)))
         {
             struct timeval tv = *(const struct timeval *)data;
             if (tv.tv_sec < 0 || tv.tv_usec < 0)
@@ -101,6 +101,7 @@ const explain_iocontrol_t explain_iocontrol_lpsettimeout =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct timeval), /* data_size */
+    "struct timeval *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -117,6 +118,7 @@ const explain_iocontrol_t explain_iocontrol_lpsettimeout =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

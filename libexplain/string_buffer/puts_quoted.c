@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -42,4 +42,12 @@ explain_string_buffer_puts_quoted(explain_string_buffer_t *sb,
         }
         explain_string_buffer_putc_escaped(sb, c, '"');
     }
+}
+
+
+void
+explain_string_buffer_putsu_quoted(explain_string_buffer_t *sb,
+    const unsigned char *s)
+{
+    explain_string_buffer_puts_quoted(sb, (const char *)s);
 }

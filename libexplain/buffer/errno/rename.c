@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@
 #include <libexplain/explanation.h>
 #include <libexplain/have_permission.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/pathname_is_a_directory.h>
 #include <libexplain/string_buffer.h>
 
@@ -85,7 +85,7 @@ dir_vs_not_dir(explain_string_buffer_t *sb, const char *dir_caption,
     char            ftype[40];
 
     explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-    explain_buffer_file_type(&ftype_sb, not_dir_st->st_mode);
+    explain_buffer_file_type_st(&ftype_sb, not_dir_st);
     explain_string_buffer_printf_gettext
     (
         sb,
@@ -271,12 +271,12 @@ explain_buffer_errno_rename_explanation(explain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (explain_path_is_efault(oldpath))
+        if (explain_is_efault_path(oldpath))
         {
             explain_buffer_efault(sb, "oldpath");
             break;
         }
-        if (explain_path_is_efault(newpath))
+        if (explain_is_efault_path(newpath))
         {
             explain_buffer_efault(sb, "newpath");
             break;

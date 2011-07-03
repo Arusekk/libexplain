@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,7 +35,7 @@ explain_buffer_wrong_file_type_st(explain_string_buffer_t *sb,
         char right[100];
 
         explain_string_buffer_init(&wrong_sb, wrong, sizeof(wrong));
-        explain_buffer_file_type(&wrong_sb, st->st_mode);
+        explain_buffer_file_type_st(&wrong_sb, st);
         explain_string_buffer_init(&right_sb, right, sizeof(right));
         explain_buffer_file_type(&right_sb, required_file_type);
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,8 +32,8 @@
 static void
 usage(void)
 {
-    fprintf(stderr, "Usage: ioctl-probe --block <device>\n");
-    fprintf(stderr, "       ioctl-probe -V\n");
+    fprintf(stderr, "Usage: ioctl-scan --block <device>\n");
+    fprintf(stderr, "       ioctl-scan -V\n");
     exit(EXIT_FAILURE);
 }
 

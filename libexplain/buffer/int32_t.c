@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,7 +18,7 @@
 
 #include <libexplain/buffer/int32_t.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 void
@@ -34,7 +34,7 @@ explain_buffer_int32_array(explain_string_buffer_t *sb, const int32_t *data,
 {
     size_t          j;
 
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -51,6 +51,20 @@ explain_buffer_int32_array(explain_string_buffer_t *sb, const int32_t *data,
 }
 
 
+int
+explain_int32_array_all_zero(const int32_t *data, size_t data_size)
+{
+    while (data_size > 0)
+    {
+        if (*data)
+            return 0;
+        ++data;
+        --data_size;
+    }
+    return 1;
+}
+
+
 void
 explain_buffer_uint32_t(explain_string_buffer_t *sb, uint32_t data)
 {
@@ -64,7 +78,7 @@ explain_buffer_uint32_array(explain_string_buffer_t *sb, const uint32_t *data,
 {
     size_t          j;
 
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -78,4 +92,18 @@ explain_buffer_uint32_array(explain_string_buffer_t *sb, const uint32_t *data,
         explain_buffer_uint32_t(sb, data[j]);
     }
     explain_string_buffer_puts(sb, " }");
+}
+
+
+int
+explain_uint32_array_all_zero(const uint32_t *data, size_t data_size)
+{
+    while (data_size > 0)
+    {
+        if (*data)
+            return 0;
+        ++data;
+        --data_size;
+    }
+    return 1;
 }

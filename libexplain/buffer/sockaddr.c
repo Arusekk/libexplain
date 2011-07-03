@@ -1,7 +1,7 @@
 
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -41,7 +41,7 @@
 #include <libexplain/buffer/sockaddr.h>
 #include <libexplain/buffer/address_family.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 /*
@@ -650,7 +650,7 @@ void
 explain_buffer_sockaddr(explain_string_buffer_t *sb,
     const struct sockaddr *sa, int sa_len)
 {
-    if (explain_pointer_is_efault(sa, sizeof(*sa)))
+    if (explain_is_efault_pointer(sa, sizeof(*sa)))
     {
         explain_buffer_pointer(sb, sa);
         return;

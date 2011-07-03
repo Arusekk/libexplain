@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2010 Peter Miller
+.\" Copyright (C) 2008-2011 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -95,6 +95,12 @@ Additional debugging messages for libexplain developers.
 Not generally useful to clients of the library.
 .br
 Default: false.
+.TP 8n
+extra\[hy]device\[hy]info
+Additional information for block and character special devices is printed
+when naming a file and its type.
+.br
+Default: true
 .TP 8n
 numeric\[hy]errno
 This option includes the numeric \f[I]errno\fP value
@@ -569,6 +575,18 @@ Explain \f[I]getpeername\fP(2) errors
 \f[I]explain_getpeername_or_die\fP(3)
 Execute\f[I]getpeername\fP(2) and report errors
 .TP 8n
+\f[I]explain_getpgid\fP(3)
+Explain \f[I]getpgid\fP(2) errors
+.TP 8n
+\f[I]explain_getpgid_or_die\fP(3)
+get process group and report errors
+.TP 8n
+\f[I]explain_getpgrp\fP(3)
+Explain \f[I]getpgrp\fP(2) errors
+.TP 8n
+\f[I]explain_getpgrp_or_die\fP(3)
+get process group and report errors
+.TP 8n
 \f[I]explain_getrlimit\fP(3)
 Explain \f[I]getrlimit\fP(2) errors
 .TP 8n
@@ -903,6 +921,18 @@ Explain \f[I]setlinebuf\fP(3) errors
 .TP 8n
 \f[I]explain_setlinebuf_or_die\fP(3)
 stream buffering operations and report errors
+.TP 8n
+\f[I]explain_setpgid\fP(3)
+Explain \f[I]setpgid\fP(2) errors
+.TP 8n
+\f[I]explain_setpgid_or_die\fP(3)
+set process group and report errors
+.TP 8n
+\f[I]explain_setpgrp\fP(3)
+Explain \f[I]setpgrp\fP(2) errors
+.TP 8n
+\f[I]explain_setpgrp_or_die\fP(3)
+set process group and report errors
 .TP 8n
 \f[I]explain_setsockopt\fP(3)
 Explain \f[I]setsockopt\fP(2) errors

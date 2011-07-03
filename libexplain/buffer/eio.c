@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -137,7 +137,7 @@ a_low_level_io_error_occurred(explain_string_buffer_t *sb,
         explain_string_buffer_puts_quoted(&ftype_sb, device_path);
         explain_string_buffer_putc(&ftype_sb, ' ');
     }
-    explain_buffer_file_type(&ftype_sb, st->st_mode);
+    explain_buffer_file_type_st(&ftype_sb, st);
 
     explain_string_buffer_printf_gettext
     (

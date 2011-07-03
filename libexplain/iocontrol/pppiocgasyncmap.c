@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -91,6 +91,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocgasyncmap =
     print_explanation,
     print_data_returned,
     sizeof(int), /* data_size */
+    "int *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -107,6 +108,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocgasyncmap =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

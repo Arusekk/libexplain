@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2010 Peter Miller
+# Copyright (C) 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -27,7 +27,6 @@ argument (EINVAL) because the request argument was incorrectly specified
 fubar
 test $? -eq 0 || no_result
 
-set -x
 explain -eEINVAL ptrace 54321 0 0 0 > test.out
 test $? -eq 0 || fail
 

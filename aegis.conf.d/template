@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -112,6 +112,10 @@ file_template =
     {
         pattern = [ "*.man", "*.[12345678]" ];
         body = "${read_file ${source etc/template/man abs}}";
+    },
+    {
+        pattern = [ "etc/new*.so" ];
+        body = "${read_file ${source etc/template/etc_so abs}}";
     },
     {
         pattern = [ "*.so", "*.ms", "*.me" ];

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,14 +20,14 @@
 
 #include <libexplain/buffer/ifreq_newname.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 void
 explain_buffer_ifreq_newname(explain_string_buffer_t *sb,
     const struct ifreq *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
         explain_buffer_pointer(sb, data);
     else
     {

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,7 +21,7 @@
 #include <libexplain/buffer/cdrom_addr.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/int.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 #ifdef HAVE_LINUX_CDROM_H
@@ -30,7 +30,7 @@ void
 explain_buffer_cdrom_addr(explain_string_buffer_t *sb,
     const union cdrom_addr *addr, int fmt)
 {
-    if (explain_pointer_is_efault(addr, sizeof(*addr)))
+    if (explain_is_efault_pointer(addr, sizeof(*addr)))
     {
         explain_buffer_pointer(sb, addr);
         return;

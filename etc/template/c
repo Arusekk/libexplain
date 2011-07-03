@@ -24,3 +24,6 @@ void
 ${ident ${trim_ext $filename}}(void)
 {
 }
+
+
+/* vim: set ts=8 sw=4 et : */

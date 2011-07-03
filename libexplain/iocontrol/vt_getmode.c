@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,8 @@ const explain_iocontrol_t explain_iocontrol_vt_getmode =
     explain_iocontrol_generic_print_data_pointer, /* print_data */
     explain_iocontrol_generic_print_explanation, /* print_explanation */
     print_data_returned,
-    sizeof(struct vt_mode),
+    sizeof(struct vt_mode), /* data_size */
+    "struct vt_mode *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -64,6 +65,7 @@ const explain_iocontrol_t explain_iocontrol_vt_getmode =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

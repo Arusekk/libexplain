@@ -18,14 +18,14 @@
 
 #include <${trim_ext $filename}.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 void
 explain_${ident ${trim_ext ${trim_dir $filename}}}(explain_string_buffer_t *sb,
     const struct ${basename $filename .c} *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -35,3 +35,6 @@ explain_${ident ${trim_ext ${trim_dir $filename}}}(explain_string_buffer_t *sb,
     ...
     explain_string_buffer_puts(sb, " }");
 }
+
+
+/* vim: set ts=8 sw=4 et : */

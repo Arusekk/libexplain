@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -35,12 +35,13 @@ SunOS | FreeBSD)
 esac
 
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = MTIOCSETCONFIG, data = { mt_type = 0, ifc_type
-= 0, irqnr = 0, dmanr = 0, port = 0, debug = 0, have_dens = 0, have_bsf =
-0, have_fsr = 0, have_bsr = 0, have_eod = 0, have_seek = 0, have_tell = 0,
-have_ras1 = 0, have_ras2 = 0, have_ras3 = 0, have_qfa = 0, }) failed,
-Inappropriate ioctl for device (ENOTTY) because fildes is not associated
-with an object to which ioctl MTIOCSETCONFIG can be applied
+ioctl(fildes = 42, request = MTIOCSETCONFIG, struct mtconfiginfo *data = {
+mt_type = 0, ifc_type = 0, irqnr = 0, dmanr = 0, port = 0, debug = 0,
+have_dens = 0, have_bsf = 0, have_fsr = 0, have_bsr = 0, have_eod = 0,
+have_seek = 0, have_tell = 0, have_ras1 = 0, have_ras2 = 0, have_ras3 = 0,
+have_qfa = 0, }) failed, Inappropriate ioctl for device (ENOTTY) because
+fildes is not associated with an object to which ioctl MTIOCSETCONFIG can
+be applied
 fubar
 test $? -eq 0 || no_result
 

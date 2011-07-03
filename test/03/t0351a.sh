@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,9 +22,9 @@ TEST_SUBJECT="ioctl MTIOCTOP"
 . test_prelude
 
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = MTIOCTOP, data = { mt_top = MTFSF, mt_count =
-0 }) failed, Invalid argument (EINVAL) because ioctl request or ioctl data
-is not valid
+ioctl(fildes = 42, request = MTIOCTOP, struct mtop *data = { mt_top =
+MTFSF, mt_count = 0 }) failed, Invalid argument (EINVAL) because ioctl
+request or ioctl data is not valid
 fubar
 test $? -eq 0 || no_result
 

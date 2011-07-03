@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -103,6 +103,18 @@ void explain_string_buffer_puts(explain_string_buffer_t *sb,
     const char *s);
 
 /*
+ * The explain_string_buffer_putsu function is used to print a string
+ * into the string buffer.
+ *
+ * @param sb
+ *     The string buffer to print into.
+ * @param s
+ *     The string to print into the string buffer.
+ */
+void explain_string_buffer_putsu(explain_string_buffer_t *sb,
+    const unsigned char *s);
+
+/*
  * The explain_string_buffer_puts_quoted function is used to print
  * a C string into the string buffer, complete with double quotes and
  * escape sequences if necessary.
@@ -114,6 +126,19 @@ void explain_string_buffer_puts(explain_string_buffer_t *sb,
  */
 void explain_string_buffer_puts_quoted(explain_string_buffer_t *sb,
     const char *s);
+
+/*
+ * The explain_string_buffer_putsu_quoted function is used to print
+ * a C string into the string buffer, complete with double quotes and
+ * escape sequences if necessary.
+ *
+ * @param sb
+ *     The string buffer to print into.
+ * @param s
+ *     The string to print into the string buffer.
+ */
+void explain_string_buffer_putsu_quoted(explain_string_buffer_t *sb,
+    const unsigned char *s);
 
 /*
  * The explain_string_buffer_puts_quoted_n function is used to print
@@ -130,6 +155,22 @@ void explain_string_buffer_puts_quoted(explain_string_buffer_t *sb,
  */
 void explain_string_buffer_puts_quoted_n(explain_string_buffer_t *sb,
     const char *s, size_t n);
+
+/*
+ * The explain_string_buffer_putsu_quoted_n function is used to print
+ * a C string into the string buffer, complete with double quotes and
+ * escape sequences if necessary.  The length is limited to that given,
+ * unless a NUL is seen earlier.
+ *
+ * @param sb
+ *     The string buffer to print into.
+ * @param s
+ *     The string to print into the string buffer.
+ * @param n
+ *     The maximum length of the string.
+ */
+void explain_string_buffer_putsu_quoted_n(explain_string_buffer_t *sb,
+    const unsigned char *s, size_t n);
 
 /**
   * The explain_string_buffer_printf function is used to print a

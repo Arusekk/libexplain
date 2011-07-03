@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -27,7 +27,7 @@
 #include <libexplain/buffer/sock_fprog.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/pppiocsactive.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef PPPIOCSACTIVE
 
@@ -55,7 +55,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EFAULT:
-        if (explain_pointer_is_efault(uprog, sizeof(*uprog)))
+        if (explain_is_efault_pointer(uprog, sizeof(*uprog)))
             explain_buffer_efault(sb, "data");
         else
             explain_buffer_efault(sb, "data->filter");
@@ -90,6 +90,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocsactive =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct ifreq), /* data_size */
+    "struct ifreq *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -106,6 +107,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocsactive =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

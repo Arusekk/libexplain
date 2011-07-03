@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -29,7 +29,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/dir_to_fildes.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -69,7 +69,7 @@ explain_buffer_errno_readdir_explanation(explain_string_buffer_t *sb,
          * DIR is an opaque type, so we don't really know how big
          * is actually is.  So guess.
          */
-        if (explain_pointer_is_efault(dir, sizeof(int)))
+        if (explain_is_efault_pointer(dir, sizeof(int)))
             explain_buffer_efault(sb, "dir");
         else
             explain_buffer_efault(sb, "internal buffer");

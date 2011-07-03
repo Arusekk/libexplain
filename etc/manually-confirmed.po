@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008-2010 Peter Miller
+# Copyright (C) 2008-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2010-12-25 20:38+1100\n"
-        "PO-Revision-Date: 2010-12-25\n"
+        "POT-Creation-Date: 2011-02-01 17:05+1100\n"
+        "PO-Revision-Date: 2011-02-01\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -566,6 +566,62 @@ msgid   "an ELF interpreter was a directory"
 msgstr  "an ELF interpreter was a directory"
 
 #.
+#. This error message is used to explain an ESRCH
+#. error reported by a setpgid system call, in the case
+#. where an attempt was made to change the process group ID
+#. of a session leader
+#.
+msgid   "an attempt was made to change the process group ID of a session "
+        "leader"
+msgstr  "an attempt was made to change the process group ID of a session "
+        "leader"
+
+#.
+#. This error message is used to explain an EACCES
+#. error reported by the setpgid(2) system call, in the case where
+#. an attempt was made to change the process group ID of one of
+#. the children of the calling process and the child had already
+#. performed an execve(2).
+#.
+msgid   "an attempt was made to change the process group ID of one of the "
+        "children of the calling process and the child had already "
+        "performed an execve(2)"
+msgstr  "an attempt was made to change the process group ID of one of the "
+        "children of the calling process and the child had already "
+        "performed an execve(2)"
+
+#.
+#. This error message is used to explain an
+#. ESRCH error reported by a setpgid system call, in the
+#. case where an attempt was made to move a process into a
+#. process group in a different session.
+#.
+msgid   "an attempt was made to move a process into a process group in a "
+        "different session"
+msgstr  "an attempt was made to move a process into a process group in a "
+        "different session"
+
+#.
+#. This error message is used to explain an ESRCH
+#. error reported by a setpgid system call, in the case where an
+#. attempt was made to move a process into a process group in a
+#. different session, or to change the process group ID of one
+#. of the children of the calling process and the child was in
+#. a different session, or to change the process group ID of a
+#. session leader
+#.
+msgid   "an attempt was made to move a process into a process group in a "
+        "different session, or to change the process group ID of one of "
+        "the children of the calling process and the child was in a "
+        "different session, or to change the process group ID of a "
+        "session leader"
+msgstr  "an attempt was made to move a process into a process group in a "
+        "different session, or to change the process group ID of one of "
+        "the children of the calling process and the child was in a "
+        "different session, or to change the process group ID of a "
+        "session leader"
+
+#.
 #. This error message is issued to explain an EINVAL
 #. error reported by the ptrace(2) system call, in the case
 #. where an attempt was made to set an invalid option.
@@ -863,6 +919,14 @@ msgid   "no more free local ports or insufficient entries in the routing "
         "cache"
 msgstr  "no more free local ports or insufficient entries in the routing "
         "cache"
+
+#.
+#. This error message is issued when a system call
+#. reports an EINVAL error, in the case where a video device
+#. does not support and video output standards.
+#.
+msgid   "no output video standards are supported"
+msgstr  "no output video standards are supported"
 
 #.
 #. This message is used to supplement a
@@ -1168,6 +1232,17 @@ msgid   "pathname refers to a %s %s and no corresponding device exists"
 msgstr  "pathname refers to a %s %s and no corresponding device exists"
 
 #.
+#. This error message is used to explain an ESRCH
+#. error reported by the setpgid system call, in the case where
+#. pid is not the calling process and not a child of the calling
+#. process.
+#.
+msgid   "pid is not the calling process and not a child of the calling "
+        "process"
+msgstr  "pid is not the calling process and not a child of the calling "
+        "process"
+
+#.
 #. This message is used when explaining an EIO
 #. error, for a file open for both reading and writing.
 #.
@@ -1417,6 +1492,21 @@ msgid   "the %s argument is not a multiple of %d"
 msgstr  "the %s argument is not a multiple of %d"
 
 #.
+#. This error message is issued when a system call
+#. reports an ENOTSUP error, in the case where a value (usually
+#. something to do with an ioctl's data argument) is not
+#. supported by the device.
+#.
+#. %1$s => The name of the offentding argument, with suffiucient
+#.         detail about the data->member that a programmer would
+#.         find it unambiguous.
+#.
+#.
+#, c-format
+msgid   "the %s argument is not supported by the device"
+msgstr  "the %s argument is not supported by the device"
+
+#.
 #. This message is used to explain an ENOTCONN
 #. error reported by the getpeername system call, and others.
 #.
@@ -1636,6 +1726,28 @@ msgid   "the %s parent directory %s already has the maximum number of "
         "links"
 msgstr  "the %s parent directory %s already has the maximum number of "
         "links"
+
+#.
+#. This error message is issued when a system call
+#. reports an ESRCH error, in the case where the pid was
+#. positive.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "the %s process does not exist"
+msgstr  "the %s process does not exist"
+
+#.
+#. This error message is issued when a system call
+#. reports an ESRCH error, in the case where the pid was
+#. negative.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "the %s process group does not exist"
+msgstr  "the %s process group does not exist"
 
 #.
 #. This error message is issued when a system call
@@ -2383,14 +2495,6 @@ msgstr  "the process did not have the required permissions to change the "
         "owner UID or group GID"
 
 #.
-#. This error message is issued when a system call
-#. reports an ESRCH error, in the case where the pid was
-#. positive.
-#.
-msgid   "the process does not exist"
-msgstr  "the process does not exist"
-
-#.
 #. This message is used when wait(2) is called and
 #. the process does not have any unwaited-for child
 #. processes.
@@ -2727,14 +2831,6 @@ msgstr  "the process effective UID %s is the same as the owner UID of %s "
 #, c-format
 msgid   "the process effective UID is %s but the %s owner UID is %s"
 msgstr  "the process effective UID is %s but the %s owner UID is %s"
-
-#.
-#. This error message is issued when a system call
-#. reports an ESRCH error, in the case where the pid was
-#. negative.
-#.
-msgid   "the process group does not exist"
-msgstr  "the process group does not exist"
 
 #.
 #. This error message is issued when a process

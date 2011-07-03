@@ -1,6 +1,6 @@
 dnl!
 dnl! libexplain - Explain errno values returned by libc functions
-dnl! Copyright (C) 2008-2010 Peter Miller
+dnl! Copyright (C) 2008-2011 Peter Miller
 dnl! Written by Peter Miller <pmiller@opensource.org.au>
 dnl!
 dnl! This program is free software; you can redistribute it and/or
@@ -135,7 +135,14 @@ AC_CHECK_LIB(intl, gettext, ,
       unset ac_cv_func_gettext)
   ]
 )
-AC_CHECK_LIB(compat, ftime)
+
+dnl!
+dnl!     On some BSD flavours, ftime() is defined in the -lcompat
+dnl!     library.  The problem is, on some BSD flavours, the -lcompat
+dnl!     library is not suitable for use by shared libraries, like
+dnl!     libexplain.  So we leave it alone.
+dnl!
+dnl! AC_CHECK_LIB(compat, ftime)
 
 AC_CHECK_PROGS(LIBTOOL, libtool)
 
@@ -288,6 +295,7 @@ AC_CHECK_HEADERS([         \
     float.h                \
     getopt.h               \
     libintl.h              \
+    libv4l1-videodev.h     \
     limits.h               \
     linux/apm_bios.h       \
     linux/arcfb.h          \
@@ -932,6 +940,105 @@ AC_MSG_RESULT([sys/ioctl.h]),
 AC_MSG_RESULT([not found]),
 AC_MSG_RESULT(cross))
 
+dnl!
+dnl!    Test to see if struct v4l2_hw_freq_seek has a member called "spacing".
+dnl!
+AC_MSG_CHECKING([struct v4l2_hw_freq_seek])
+AC_TRY_RUN([
+#include <linux/videodev2.h>
+int main(argc, argv)int argc; char **argv;{
+struct v4l2_hw_freq_seek x;
+x.spacing = 0;
+return 0;
+}]
+, AC_DEFINE(HAVE_v4l2_hw_freq_seek_spacing,1,
+[Define this symbol if your system as <linux/videodev2.h> AND it
+defines struct v4l2_hw_freq_seek to have a member called spacing.])
+AC_MSG_RESULT([has spacing]),
+AC_MSG_RESULT([does not have spacing]),
+AC_MSG_RESULT(cross))
+
+dnl!
+dnl!    Test to see if V4L2_CTRL_TYPE_STRING is defined
+dnl!    (we can't use #ifdef, it's an enum).
+dnl!
+AC_MSG_CHECKING([have V4L2_CTRL_TYPE_STRING])
+AC_TRY_RUN([
+#include <linux/videodev2.h>
+int main(argc, argv)int argc; char **argv;{
+int x = V4L2_CTRL_TYPE_STRING;
+return 0;
+}]
+, AC_DEFINE(HAVE_V4L2_CTRL_TYPE_STRING,1,
+[Define this symbol if your system as <linux/videodev2.h> AND it
+defines enum member V4L2_CTRL_TYPE_STRING.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+dnl!
+dnl!    Test to see if struct v4l2_dbg_register defined
+dnl!
+AC_MSG_CHECKING([have struct v4l2_dbg_register])
+AC_TRY_RUN([
+#include <linux/videodev2.h>
+int main(argc, argv)int argc; char **argv;{
+struct v4l2_dbg_register x;
+return 0;
+}]
+, AC_DEFINE(HAVE_V4L2_DBG_REGISTER,1,
+[Define this symbol if your system as <linux/videodev2.h> AND it
+defines struct v4l2_dbg_register.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+dnl!
+dnl! Does getpgrp need an argument?
+dnl! BSD = yes
+dnl! Posix = no
+dnl!
+AC_MSG_CHECKING([number of arguments to getpgrp])
+AC_TRY_COMPILE([
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+], [
+    getpgrp(0);
+], [
+    ac_av_getpgrp_nargs=1
+    AC_MSG_RESULT([1])
+], [
+    ac_av_getpgrp_nargs=0
+    AC_MSG_RESULT([0])
+])
+AC_DEFINE_UNQUOTED([GETPGRP_NARGS], $ac_av_getpgrp_nargs,
+[Define this symbol to be the number of arguments required by the
+getpgrp function.])
+
+dnl!
+dnl! Does setpgrp need two arguments?
+dnl! BSD = yes
+dnl! SysV = no
+dnl!
+AC_MSG_CHECKING([number of arguments to setpgrp])
+AC_TRY_COMPILE([
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+], [
+    setpgrp(0, 0);
+], [
+    ac_av_setpgrp_nargs=2
+    AC_MSG_RESULT([1])
+], [
+    ac_av_setpgrp_nargs=0
+    AC_MSG_RESULT([0])
+])
+AC_DEFINE_UNQUOTED([SETPGRP_NARGS], $ac_av_setpgrp_nargs,
+[Define this symbol to be the number of arguments required by the
+setpgrp function.])
+
 dnl the strsignal function is usually defined in <string.h>
 dnl but is sometimes defined in <unistd.h>
 AC_CHECK_DECLS([strsignal,ustat,strverscmp],,, [
@@ -964,6 +1071,8 @@ then
         system does not have a native NAME_MAX symbol defined in the <limits.h>
         or <sys/param.h> system include files.])
 fi
+
+dnl! "
 
 dnl!
 dnl!    Do not do this until after all of the compiler and symbol tests
@@ -1100,6 +1209,55 @@ then
 fi
 AC_SUBST(po_files)
 
+dnl!
+dnl!   libexplain doesn't *require* lsof,
+dnl!   but it helps give better error messages.
+dnl!
+if test -z "$LSOF"
+then
+  AC_MSG_RESULT([
+        Libexplain will emit much more useful error messages if
+        you install lsof and then re-run this ./configure script.
+        Remember to use \`\`rm config.cache'' before you do.
+        Homepage: http://people.freebsd.org/~abe/
+  ])
+  OK=no
+  if apt-get --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo apt-get install lsof
+    ])
+    OK=yes
+  fi
+  if yum --version > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo yum install lsof
+    ])
+    OK=yes
+  fi
+  if pkg_info -a > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg_add -r lsof
+    ])
+    OK=yes
+  fi
+  if pkg --help > /dev/null 2> /dev/null; then
+    AC_MSG_RESULT([
+        The following command may be used to install it:
+        sudo pkg install CSWlsof
+    ])
+    OK=yes
+  fi
+  if test "$OK" != "yes"; then
+    AC_MSG_RESULT([
+        If you are using a package based install, you will need the
+        lsof package.
+    ])
+  fi
+fi
+
 dnl
 dnl     If the soelim program exists, and understands the -I option,
 dnl     arrange for the Makefile to install the .ps files from the
@@ -1187,7 +1345,7 @@ AC_SUBST(PROGRAM_SUFFIX)
 AH_TOP(
 [/*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by

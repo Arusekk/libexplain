@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,7 @@
   *     necessary if you need to call <b>any</b> code between the system
   *     call to be explained and this function, because many libc functions
   *     will alter the value of errno.
-  * @param template
+  * @param templat
   *     The original template, exactly as passed to the <i>mkostemp</i>(3)
   *     system call.
   * @param flags
@@ -45,7 +45,7 @@
   *     system call.
   */
 void explain_buffer_errno_mkostemp(explain_string_buffer_t *sb, int errnum,
-    const char *template, int flags);
+    const char *templat, int flags);
 
 /**
   * The explain_buffer_errno_mkostemp_explanation function is used to
@@ -63,7 +63,7 @@ void explain_buffer_errno_mkostemp(explain_string_buffer_t *sb, int errnum,
   *     will alter the value of errno.
   * @param syscall_name
   *     The name of the offending system call.
-  * @param template
+  * @param templat
   *     The original template, exactly as passed to the <i>mkostemp</i>(3)
   *     system call.
   * @param flags
@@ -71,7 +71,7 @@ void explain_buffer_errno_mkostemp(explain_string_buffer_t *sb, int errnum,
   *     system call.
   */
 void explain_buffer_errno_mkostemp_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *syscall_name, const char *template, int flags);
+    int errnum, const char *syscall_name, const char *templat, int flags);
 
 /* vim: set ts=8 sw=4 et */
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_MKOSTEMP_H */

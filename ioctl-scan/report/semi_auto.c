@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,7 +52,7 @@ report_semi_auto(int fildes, int request)
         {
             assert(p->file);
             assert(p->line);
-            fprintf(stderr, "%s: %d: print_data_returned shoudl not be zero\n",
+            fprintf(stderr, "%s: %d: print_data_returned should not be zero\n",
                 p->file, p->line - 2);
             assert(!"oops");
         }

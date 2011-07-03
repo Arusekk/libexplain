@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
@@ -47,6 +48,13 @@ explain_syscall_ioctl(int errnum, int argc, char **argv)
 
     case 2:
         request = explain_parse_ioctl_request_or_die(argv[1]);
+        if (argv[0][0] == '/')
+        {
+            /* it could be a file, specifically a relevant device */
+            fildes = open(argv[0], O_RDWR, 0);
+            if (fildes >= 0)
+                break;
+        }
         fildes = explain_strtol_or_die(argv[0], 0, 0);
         break;
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/dirname.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -125,12 +125,12 @@ explain_buffer_errno_link_explanation(explain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (explain_path_is_efault(oldpath))
+        if (explain_is_efault_path(oldpath))
         {
             explain_buffer_efault(sb, "oldpath");
             break;
         }
-        if (explain_path_is_efault(newpath))
+        if (explain_is_efault_path(newpath))
         {
             explain_buffer_efault(sb, "newpath");
             break;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -24,6 +24,10 @@
 
 #ifdef HAVE_LINUX_VIDEODEV_H
 #include <linux/videodev.h>
+#else
+#ifdef HAVE_LIBV4L1_VIDEODEV_H
+#include <libv4l1-videodev.h>
+#endif
 #endif
 
 #endif /* LIBEXPLAIN_AC_LINUX_VIDEODEV_H */

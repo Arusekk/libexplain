@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -134,6 +134,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_cmd =
     print_explanation,
     print_data_returned,
     4 + 255 * SECTOR_SIZE, /* data_size */
+    "4 + 255 * SECTOR_SIZE *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -150,6 +151,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_cmd =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

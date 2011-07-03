@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,7 +18,7 @@
 
 #include <libexplain/buffer/int8.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 void
@@ -37,7 +37,7 @@ explain_buffer_int8_star(explain_string_buffer_t *sb, const signed char *data,
 {
     size_t          j;
 
-    if (explain_pointer_is_efault(data, data_size))
+    if (explain_is_efault_pointer(data, data_size))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -72,7 +72,7 @@ explain_buffer_uint8_star(explain_string_buffer_t *sb,
 {
     size_t          j;
 
-    if (explain_pointer_is_efault(data, data_size))
+    if (explain_is_efault_pointer(data, data_size))
     {
         explain_buffer_pointer(sb, data);
         return;

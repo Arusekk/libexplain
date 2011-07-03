@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009, 2010 Peter Miller
+.\" Copyright (C) 2009-2011 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -43,7 +43,7 @@ before it terminates, if that exit status is not EXIT_SUCCESS.
 .PP
 The \f[I]explain_exit_cancel\fP function may be used to
 cancel the effect of the \f[I]explain_exit_on_exit\fP or
-\f[I]explain_exit_on_error\fP fucntion.
+\f[I]explain_exit_on_error\fP function.
 .PP
 These functions may be called multiple times, and in any order.  The
 last called has precedence.  The explanation will never be printed more

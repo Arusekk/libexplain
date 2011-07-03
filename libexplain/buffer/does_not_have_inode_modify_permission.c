@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -161,12 +161,12 @@ explain_buffer_does_not_have_inode_modify_permission_fd_st(
     explain_buffer_uid(&puid_sb, hip->uid);
 
     explain_string_buffer_init(&caption_sb, caption, sizeof(caption));
-    explain_buffer_caption_name_type
+    explain_buffer_caption_name_type_st
     (
         &caption_sb,
         fildes_caption,
         0,
-        fildes_st->st_mode
+        fildes_st
     );
 
     explain_string_buffer_puts(sb, ", ");
@@ -201,20 +201,20 @@ explain_buffer_does_not_have_inode_modify_permission(
         final_part,
         sizeof(final_part)
     );
-    explain_buffer_caption_name_type
+    explain_buffer_caption_name_type_st
     (
         &final_part_sb,
         0,
         comp,
-        comp_st->st_mode
+        comp_st
     );
     explain_string_buffer_init(&dir_part_sb, dir_part, sizeof(dir_part));
-    explain_buffer_caption_name_type
+    explain_buffer_caption_name_type_st
     (
         &dir_part_sb,
         caption,
         dir,
-        dir_st->st_mode
+        dir_st
     );
 
     explain_string_buffer_printf_gettext
@@ -257,7 +257,7 @@ explain_buffer_does_not_have_inode_modify_permission(
         final_part,
         sizeof(final_part)
     );
-    explain_buffer_file_type(&final_part_sb, comp_st->st_mode);
+    explain_buffer_file_type_st(&final_part_sb, comp_st);
 
     explain_string_buffer_puts(sb, ", ");
     process_does_not_match_the_owner_uid

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -449,6 +449,75 @@
 #include <libexplain/iocontrol/tiocstop.h>
 #include <libexplain/iocontrol/tiocswinsz.h>
 #include <libexplain/iocontrol/tiocttygstruct.h>
+#include <libexplain/iocontrol/vidioc_dbg_g_chip_ident.h>
+#include <libexplain/iocontrol/vidioc_dbg_g_register.h>
+#include <libexplain/iocontrol/vidioc_dbg_s_register.h>
+#include <libexplain/iocontrol/vidioc_cropcap.h>
+#include <libexplain/iocontrol/vidioc_dqbuf.h>
+#include <libexplain/iocontrol/vidioc_dqevent.h>
+#include <libexplain/iocontrol/vidioc_encoder_cmd.h>
+#include <libexplain/iocontrol/vidioc_enumaudio.h>
+#include <libexplain/iocontrol/vidioc_enumaudout.h>
+#include <libexplain/iocontrol/vidioc_enum_dv_presets.h>
+#include <libexplain/iocontrol/vidioc_enum_fmt.h>
+#include <libexplain/iocontrol/vidioc_enum_frameintervals.h>
+#include <libexplain/iocontrol/vidioc_enum_framesizes.h>
+#include <libexplain/iocontrol/vidioc_enuminput.h>
+#include <libexplain/iocontrol/vidioc_enumoutput.h>
+#include <libexplain/iocontrol/vidioc_enumstd.h>
+#include <libexplain/iocontrol/vidioc_g_audio.h>
+#include <libexplain/iocontrol/vidioc_g_audout.h>
+#include <libexplain/iocontrol/vidioc_g_crop.h>
+#include <libexplain/iocontrol/vidioc_g_ctrl.h>
+#include <libexplain/iocontrol/vidioc_g_dv_preset.h>
+#include <libexplain/iocontrol/vidioc_g_dv_timings.h>
+#include <libexplain/iocontrol/vidioc_g_enc_index.h>
+#include <libexplain/iocontrol/vidioc_g_ext_ctrls.h>
+#include <libexplain/iocontrol/vidioc_g_fbuf.h>
+#include <libexplain/iocontrol/vidioc_g_fmt.h>
+#include <libexplain/iocontrol/vidioc_g_frequency.h>
+#include <libexplain/iocontrol/vidioc_g_input.h>
+#include <libexplain/iocontrol/vidioc_g_jpegcomp.h>
+#include <libexplain/iocontrol/vidioc_g_modulator.h>
+#include <libexplain/iocontrol/vidioc_g_output.h>
+#include <libexplain/iocontrol/vidioc_g_parm.h>
+#include <libexplain/iocontrol/vidioc_g_priority.h>
+#include <libexplain/iocontrol/vidioc_g_sliced_vbi_cap.h>
+#include <libexplain/iocontrol/vidioc_g_std.h>
+#include <libexplain/iocontrol/vidioc_g_tuner.h>
+#include <libexplain/iocontrol/vidioc_log_status.h>
+#include <libexplain/iocontrol/vidioc_overlay.h>
+#include <libexplain/iocontrol/vidioc_qbuf.h>
+#include <libexplain/iocontrol/vidioc_querybuf.h>
+#include <libexplain/iocontrol/vidioc_querycap.h>
+#include <libexplain/iocontrol/vidioc_queryctrl.h>
+#include <libexplain/iocontrol/vidioc_query_dv_preset.h>
+#include <libexplain/iocontrol/vidioc_querymenu.h>
+#include <libexplain/iocontrol/vidioc_querystd.h>
+#include <libexplain/iocontrol/vidioc_reqbufs.h>
+#include <libexplain/iocontrol/vidioc_s_audio.h>
+#include <libexplain/iocontrol/vidioc_s_audout.h>
+#include <libexplain/iocontrol/vidioc_s_crop.h>
+#include <libexplain/iocontrol/vidioc_s_ctrl.h>
+#include <libexplain/iocontrol/vidioc_s_dv_preset.h>
+#include <libexplain/iocontrol/vidioc_s_dv_timings.h>
+#include <libexplain/iocontrol/vidioc_s_ext_ctrls.h>
+#include <libexplain/iocontrol/vidioc_s_fbuf.h>
+#include <libexplain/iocontrol/vidioc_s_fmt.h>
+#include <libexplain/iocontrol/vidioc_s_frequency.h>
+#include <libexplain/iocontrol/vidioc_s_hw_freq_seek.h>
+#include <libexplain/iocontrol/vidioc_s_input.h>
+#include <libexplain/iocontrol/vidioc_s_jpegcomp.h>
+#include <libexplain/iocontrol/vidioc_s_modulator.h>
+#include <libexplain/iocontrol/vidioc_s_output.h>
+#include <libexplain/iocontrol/vidioc_s_parm.h>
+#include <libexplain/iocontrol/vidioc_s_priority.h>
+#include <libexplain/iocontrol/vidioc_s_std.h>
+#include <libexplain/iocontrol/vidioc_s_tuner.h>
+#include <libexplain/iocontrol/vidioc_streamoff.h>
+#include <libexplain/iocontrol/vidioc_streamon.h>
+#include <libexplain/iocontrol/vidioc_subscribe_event.h>
+#include <libexplain/iocontrol/vidioc_try_fmt.h>
 #include <libexplain/iocontrol/vt_activate.h>
 #include <libexplain/iocontrol/vt_disallocate.h>
 #include <libexplain/iocontrol/vt_gethifontmask.h>
@@ -912,6 +981,78 @@ const explain_iocontrol_t *const explain_iocontrol_table[] =
     &explain_iocontrol_tiocstop,
     &explain_iocontrol_tiocswinsz,
     &explain_iocontrol_tiocttygstruct,
+    &explain_iocontrol_vidioc_dbg_g_chip_ident,
+    &explain_iocontrol_vidioc_dbg_g_register,
+    &explain_iocontrol_vidioc_dbg_s_register,
+    &explain_iocontrol_vidioc_cropcap,
+    &explain_iocontrol_vidioc_dqbuf,
+    &explain_iocontrol_vidioc_dqevent,
+    &explain_iocontrol_vidioc_encoder_cmd,
+    &explain_iocontrol_vidioc_enumaudio,
+    &explain_iocontrol_vidioc_enumaudout,
+    &explain_iocontrol_vidioc_enum_dv_presets,
+    &explain_iocontrol_vidioc_enum_fmt,
+    &explain_iocontrol_vidioc_enum_frameintervals,
+    &explain_iocontrol_vidioc_enum_framesizes,
+    &explain_iocontrol_vidioc_enuminput,
+    &explain_iocontrol_vidioc_enumoutput,
+    &explain_iocontrol_vidioc_enumstd,
+    &explain_iocontrol_vidioc_g_audio,
+    &explain_iocontrol_vidioc_g_audout,
+    &explain_iocontrol_vidioc_g_crop,
+    &explain_iocontrol_vidioc_g_ctrl,
+    &explain_iocontrol_vidioc_g_dv_preset,
+    &explain_iocontrol_vidioc_g_dv_timings,
+    &explain_iocontrol_vidioc_g_enc_index,
+    &explain_iocontrol_vidioc_g_ext_ctrls,
+    &explain_iocontrol_vidioc_g_fbuf,
+    &explain_iocontrol_vidioc_g_fmt,
+    &explain_iocontrol_vidioc_g_frequency,
+    &explain_iocontrol_vidioc_g_input,
+    &explain_iocontrol_vidioc_g_jpegcomp,
+    &explain_iocontrol_vidioc_g_modulator,
+    &explain_iocontrol_vidioc_g_output,
+    &explain_iocontrol_vidioc_g_parm,
+    &explain_iocontrol_vidioc_g_priority,
+    &explain_iocontrol_vidioc_g_std,
+    &explain_iocontrol_vidioc_g_sliced_vbi_cap,
+    &explain_iocontrol_vidioc_g_tuner,
+    &explain_iocontrol_vidioc_log_status,
+    &explain_iocontrol_vidioc_overlay,
+    &explain_iocontrol_vidioc_qbuf,
+    &explain_iocontrol_vidioc_querybuf,
+    &explain_iocontrol_vidioc_querycap,
+    &explain_iocontrol_vidioc_queryctrl,
+    &explain_iocontrol_vidioc_query_dv_preset,
+    &explain_iocontrol_vidioc_querymenu,
+    &explain_iocontrol_vidioc_querystd,
+    &explain_iocontrol_vidioc_reqbufs,
+    &explain_iocontrol_vidioc_s_audio,
+    &explain_iocontrol_vidioc_s_audout,
+    &explain_iocontrol_vidioc_s_crop,
+    &explain_iocontrol_vidioc_s_ctrl,
+    &explain_iocontrol_vidioc_s_dv_preset,
+    &explain_iocontrol_vidioc_s_dv_timings,
+    &explain_iocontrol_vidioc_s_ext_ctrls,
+    &explain_iocontrol_vidioc_s_fbuf,
+    &explain_iocontrol_vidioc_s_fmt,
+    &explain_iocontrol_vidioc_s_frequency,
+    &explain_iocontrol_vidioc_s_hw_freq_seek,
+    &explain_iocontrol_vidioc_s_input,
+    &explain_iocontrol_vidioc_s_jpegcomp,
+    &explain_iocontrol_vidioc_s_modulator,
+    &explain_iocontrol_vidioc_s_output,
+    &explain_iocontrol_vidioc_s_parm,
+    &explain_iocontrol_vidioc_s_priority,
+    &explain_iocontrol_vidioc_s_std,
+    &explain_iocontrol_vidioc_s_tuner,
+    &explain_iocontrol_vidioc_streamoff,
+    &explain_iocontrol_vidioc_streamon,
+    &explain_iocontrol_vidioc_subscribe_event,
+    &explain_iocontrol_vidioc_try_ext_ctrls,
+    &explain_iocontrol_vidioc_try_encoder_cmd,
+    &explain_iocontrol_vidioc_try_fmt,
+    &explain_iocontrol_vidioc_unsubscribe_event,
     &explain_iocontrol_vt_activate,
     &explain_iocontrol_vt_disallocate,
     &explain_iocontrol_vt_gethifontmask,

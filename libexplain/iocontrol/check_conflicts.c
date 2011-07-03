@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/net/if.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/iocontrol/generic.h>
@@ -36,6 +37,17 @@ bogus_request_number(int request)
 #else
     return (request == -1);
 #endif
+}
+
+
+static int
+last_char(const char *s)
+{
+    if (!s || !*s)
+        return 0;
+    while (s[1])
+        ++s;
+    return *s;
 }
 
 
@@ -65,7 +77,7 @@ explain_iocontrol_check_conflicts(void)
                     stderr,
                     "%s: %d: request number not zero\n",
                     tp1->file,
-                    tp1->line - 6
+                    tp1->line - 8
                 );
                 ++number_of_errors;
             }
@@ -78,8 +90,20 @@ explain_iocontrol_check_conflicts(void)
                 stderr,
                 "%s: %d: bogus request number 0x%04X\n",
                 tp1->file,
-                tp1->line - 6,
+                tp1->line - 8,
                 tp1->number
+            );
+            ++number_of_errors;
+            continue;
+        }
+        if (!tp1->data_type || !*tp1->data_type)
+        {
+            fprintf
+            (
+                stderr,
+                "%s: %d: must set the data_type\n",
+                tp1->file,
+                tp1->line - 2
             );
             ++number_of_errors;
             continue;
@@ -91,18 +115,30 @@ explain_iocontrol_check_conflicts(void)
             tp1->number >= SIOCDEVPRIVATE
         &&
             tp1->number < SIOCDEVPRIVATE + 16
-        &&
-            tp1->data_size != sizeof(struct ifreq)
         )
         {
-            fprintf
-            (
-                stderr,
-                "%s: %d: the data_size must be sizeof(struct ifreq)\n",
-                tp1->file,
-                tp1->line - 2
-            );
-            ++number_of_errors;
+            if (tp1->data_size != sizeof(struct ifreq))
+            {
+                fprintf
+                (
+                    stderr,
+                    "%s: %d: the data_size must be sizeof(struct ifreq)\n",
+                    tp1->file,
+                    tp1->line - 3
+                );
+                ++number_of_errors;
+            }
+            if (0 != strcmp(tp1->data_type, "struct ifreq *"))
+            {
+                fprintf
+                (
+                    stderr,
+                    "%s: %d: the data_type must be \"struct ifreq *\"\n",
+                    tp1->file,
+                    tp1->line - 2
+                );
+                ++number_of_errors;
+            }
         }
 #endif
 
@@ -114,7 +150,7 @@ explain_iocontrol_check_conflicts(void)
                 "%s: %d: you must define data_size, "
                     "or set it to NOT_A_POINTER\n",
                 tp1->file,
-                tp1->line - 2
+                tp1->line - 3
             );
             ++number_of_errors;
         }
@@ -132,7 +168,7 @@ explain_iocontrol_check_conflicts(void)
                     "%s: %d: you must define print_data, "
                         "e.g. explain_iocontrol_generic_print_data_int\n",
                     tp1->file,
-                    tp1->line - 5
+                    tp1->line - 6
                 );
                 ++number_of_errors;
             }
@@ -155,7 +191,7 @@ explain_iocontrol_check_conflicts(void)
                     "%s: %d: weird value for print_data, did you mean"
                         "explain_iocontrol_generic_print_data_int\n",
                     tp1->file,
-                    tp1->line - 5
+                    tp1->line - 6
                 );
                 ++number_of_errors;
             }
@@ -166,15 +202,45 @@ explain_iocontrol_check_conflicts(void)
                 fprintf
                 (
                     stderr,
-                    "%s: %d: you must define not print_data_returned\n",
+                    "%s: %d: you must not define print_data_returned\n",
                     tp1->file,
-                    tp1->line - 3
+                    tp1->line - 4
+                );
+                ++number_of_errors;
+            }
+
+            if (0 != strcmp(tp1->data_type, "intptr_t"))
+            {
+                /*
+                 * It must be an integer type that is exactly the same
+                 * size as a void*, and the C99 standard only defines
+                 * one type with that property: intptr_t
+                 *
+                 * Many folks wrongly think "int" has this property.
+                 */
+                fprintf
+                (
+                    stderr,
+                    "%s: %d: you must use \"intptr_t\" for the data_type\n",
+                    tp1->file,
+                    tp1->line - 2
                 );
                 ++number_of_errors;
             }
         }
         else
         {
+            if (last_char(tp1->data_type) != '*')
+            {
+                fprintf
+                (
+                    stderr,
+                    "%s: %d: the data_type must be a pointer\n",
+                    tp1->file,
+                    tp1->line - 3
+                );
+                ++number_of_errors;
+            }
             if (tp1->print_data == explain_iocontrol_generic_print_data_ignored)
             {
                 if (tp1->print_data_returned)
@@ -185,7 +251,7 @@ explain_iocontrol_check_conflicts(void)
                         "%s: %d: should be "
                             "explain_iocontrol_generic_print_data_pointer\n",
                         tp1->file,
-                        tp1->line - 5
+                        tp1->line - 6
                     );
                 }
                 else
@@ -195,7 +261,7 @@ explain_iocontrol_check_conflicts(void)
                         stderr,
                         "%s: %d: ignored data should be NOT_A_POINTER\n",
                         tp1->file,
-                        tp1->line - 2
+                        tp1->line - 3
                     );
                 }
                 ++number_of_errors;
@@ -207,7 +273,7 @@ explain_iocontrol_check_conflicts(void)
                     stderr,
                     "%s: %d: you must define print_data\n",
                     tp1->file,
-                    tp1->line - 5
+                    tp1->line - 6
                 );
                 ++number_of_errors;
             }
@@ -237,7 +303,7 @@ explain_iocontrol_check_conflicts(void)
                         "%s: %d: print_data must be a pointer, did you mean "
                             "explain_iocontrol_generic_print_data_pointer\n",
                         tp1->file,
-                        tp1->line - 5
+                        tp1->line - 6
                     );
                     ++number_of_errors;
                 }
@@ -276,7 +342,7 @@ explain_iocontrol_check_conflicts(void)
                             stderr,
                             "%s: %d: %s has no disambiguate function\n",
                             tp1->file,
-                            tp1->line - 5,
+                            tp1->line - 6,
                             tp1->name
                         );
                     }
@@ -287,7 +353,7 @@ explain_iocontrol_check_conflicts(void)
                             stderr,
                             "%s: %d: %s has no disambiguate function\n",
                             tp2->file,
-                            tp2->line - 5,
+                            tp2->line - 6,
                             tp2->name
                         );
                     }

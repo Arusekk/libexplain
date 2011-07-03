@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/timeval.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -53,14 +53,14 @@ explain_buffer_errno_adjtime_explanation(explain_string_buffer_t *sb, int
     switch (errnum)
     {
     case EFAULT:
-        if (explain_pointer_is_efault(delta, sizeof(*delta)))
+        if (explain_is_efault_pointer(delta, sizeof(*delta)))
             explain_buffer_efault(sb, "delta");
-        if (olddelta && explain_pointer_is_efault(olddelta, sizeof(*olddelta)))
+        if (olddelta && explain_is_efault_pointer(olddelta, sizeof(*olddelta)))
             explain_buffer_efault(sb, "olddelta");
         break;
 
     case EINVAL:
-        if (!explain_pointer_is_efault(delta, sizeof(*delta)))
+        if (!explain_is_efault_pointer(delta, sizeof(*delta)))
         {
             long lo = (INT_MIN / 1000000 + 2);
             long hi = (INT_MAX / 1000000 - 2);

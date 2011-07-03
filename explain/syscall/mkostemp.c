@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@
 void
 explain_syscall_mkostemp(int errnum, int argc, char **argv)
 {
-    char            *template;
+    char            *templat;
     int             flags;
 
     if (argc != 2)
@@ -38,12 +38,12 @@ explain_syscall_mkostemp(int errnum, int argc, char **argv)
         fprintf(stderr, "mkostemp: requires 2 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    template = explain_strdup_or_die(argv[0]);
+    templat = explain_strdup_or_die(argv[0]);
     flags = explain_open_flags_parse_or_die(argv[1], "arg 2");
     explain_wrap_and_print
     (
         stdout,
-        explain_errno_mkostemp(errnum, template, flags)
+        explain_errno_mkostemp(errnum, templat, flags)
     );
 }
 

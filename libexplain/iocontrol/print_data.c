@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,7 +20,7 @@
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/iocontrol.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -31,7 +31,7 @@ explain_iocontrol_print_data(const explain_iocontrol_t *p,
 {
     /*
      * It is tempting to check that data is a valid pointer, using
-     * !explain_pointer_is_efault(data), at this point.  This is
+     * !explain_is_efault_pointer(data), at this point.  This is
      * undesiable in the general case because there are some ioctl
      * requests that actually pass an integer value as data, rather than
      * a pointer value.  Yes, it stinks; no, it can't be changed.

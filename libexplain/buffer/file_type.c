@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,10 +17,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
+#include <libexplain/ac/stdio.h>
+#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/stat.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/option.h>
 
 
 void
@@ -80,6 +87,7 @@ explain_buffer_file_type(explain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFBLK:
+        /* FIXME: on :inux, use /proc/devices to be more specific */
         explain_buffer_gettext
         (
             sb,
@@ -105,6 +113,7 @@ explain_buffer_file_type(explain_string_buffer_t *sb, int mode)
         break;
 
     case S_IFCHR:
+        /* FIXME: on Linux, use /proc/devices to be more specific */
         explain_buffer_gettext
         (
             sb,
@@ -254,6 +263,183 @@ explain_buffer_file_type(explain_string_buffer_t *sb, int mode)
             i18n("unknown file type")
         );
         explain_string_buffer_printf(sb, " (%#o)", mode);
+        break;
+    }
+}
+
+
+static int
+proc_devices(char *buffer, size_t buffer_size, dev_t st_rdev, int pref)
+{
+    int             dev_major;
+    FILE            *fp;
+    char            line[100];
+
+    if (buffer_size < 2)
+        return 0;
+    dev_major = major(st_rdev);
+    fp = fopen("/proc/devices", "r");
+    if (!fp)
+        return 0;
+
+    for (;;)
+    {
+        if (!fgets(line, sizeof(line), fp))
+        {
+            fclose(fp);
+            return 0;
+        }
+        if (line[0] == pref)
+            break;
+    }
+    for (;;)
+    {
+        char            *ep;
+        long            n;
+
+        if (!fgets(line, sizeof(line), fp) || line[0] == '\n')
+        {
+            fclose(fp);
+            return 0;
+        }
+        ep = 0;
+        n = strtol(line, &ep, 10);
+        if (ep > line && n == dev_major)
+        {
+            while (*ep == ' ')
+                ++ep;
+            if (*ep != '/')
+            {
+                char *end = ep;
+                while (*end && *end != '\n')
+                    ++end;
+                if (end > ep)
+                {
+                    size_t len = end - ep;
+                    if (len > buffer_size - 1)
+                        len = buffer_size - 1;
+                    memcpy(buffer, ep, len);
+                    buffer[len] = '\0';
+                    fclose(fp);
+                    return 1;
+                }
+            }
+        }
+    }
+}
+
+
+static int
+proc_devices_blk(char *buffer, size_t buffer_size, dev_t st_rdev)
+{
+    return proc_devices(buffer, buffer_size, st_rdev, 'B');
+}
+
+
+static int
+proc_devices_chr(char *buffer, size_t buffer_size, dev_t st_rdev)
+{
+    return proc_devices(buffer, buffer_size, st_rdev, 'C');
+}
+
+
+static int
+usb_in_dev_symlink(const char *kind, dev_t st_rdev)
+{
+    int             n;
+    char            path[100];
+    char            slink[PATH_MAX];
+
+    snprintf
+    (
+        path,
+        sizeof(path),
+        "/sys/dev/%s/%d:%d",
+        kind,
+        major(st_rdev),
+        minor(st_rdev)
+    );
+    n = readlink(path, slink, sizeof(slink) - 1);
+    if (n <= 0)
+        return 0;
+    slink[n] = '\0';
+    return (0 != strstr(slink, "usb"));
+}
+
+
+void
+explain_buffer_file_type_st(explain_string_buffer_t *sb, const struct stat *st)
+{
+    if (!st)
+    {
+        explain_buffer_file_type(sb, -1);
+        return;
+    }
+    if (!explain_option_extra_device_info())
+    {
+        explain_buffer_file_type(sb, st->st_mode);
+        return;
+    }
+
+    switch (st->st_mode & S_IFMT)
+    {
+    case S_IFBLK:
+        {
+            char            buffer[100];
+
+            if (usb_in_dev_symlink("block", st->st_rdev))
+            {
+                explain_string_buffer_puts(sb, "usb ");
+            }
+            if (proc_devices_blk(buffer, sizeof(buffer), st->st_rdev))
+            {
+                explain_string_buffer_puts(sb, buffer);
+                explain_string_buffer_putc(sb, ' ');
+            }
+            explain_buffer_file_type(sb, st->st_mode);
+        }
+        break;
+
+    case S_IFCHR:
+        {
+            char            buffer[100];
+
+            if (usb_in_dev_symlink("char", st->st_rdev))
+            {
+                explain_string_buffer_puts(sb, "usb ");
+            }
+            if (proc_devices_chr(buffer, sizeof(buffer), st->st_rdev))
+            {
+                explain_string_buffer_puts(sb, buffer);
+                explain_string_buffer_putc(sb, ' ');
+            }
+            explain_buffer_file_type(sb, st->st_mode);
+        }
+        break;
+
+#ifdef S_IFNAM
+    case S_IFNAM:
+        switch (st->st_rdev)
+        {
+        default:
+            explain_buffer_file_type(sb, st->mode);
+            break;
+
+        case S_INSEM:
+            /* FIXME: i18n */
+            explain_string_buffer_puts(sb, "semaphore named special file");
+            break;
+
+        case S_INSHD:
+            /* FIXME: i18n */
+            explain_string_buffer_puts(sb, "shared data named special file");
+            break;
+        }
+        break;
+#endif
+
+    default:
+        explain_buffer_file_type(sb, st->st_mode);
         break;
     }
 }

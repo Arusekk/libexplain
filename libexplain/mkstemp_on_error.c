@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -25,19 +25,18 @@
 
 
 int
-explain_mkstemp_on_error(char *template)
+explain_mkstemp_on_error(char *templat)
 {
     int             result;
 
-    result = mkstemp(template);
+    result = mkstemp(templat);
     if (result < 0)
     {
         int             hold_errno;
 
         hold_errno = errno;
         explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_mkstemp(hold_errno,
-            template));
+        explain_output_message(explain_errno_mkstemp(hold_errno, templat));
         errno = hold_errno;
     }
     return result;

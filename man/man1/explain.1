@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2010 Peter Miller
+.\" Copyright (C) 2008-2011 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -239,18 +239,17 @@ The \f[I]getdomainname\fP(2) system call.
 getgroups \f[I]data_size\fP \f[I]data\fP
 The \f[I]getgroups\fP(2) system call.
 .TP 8n
-getpeername \f[I]fildes\fP \f[I]sock_addr\fP \f[I]sock_addr_size\fP
-The \f[I]getpeername\fP(2) system call.
-.TP 8n
 gethostname [ \f[I]data\fP \f[I]data_size\fP ]
 The \f[I]gethostname\fP(2) system call.
 .TP 8n
-setsockopt \f[I]fildes\fP \f[I]level\fP \f[I]name\fP \f[I]data\fP \
-\f[I]data_size\fP
-The \f[I]setsockopt\fP(2) system call.
+getpeername \f[I]fildes\fP \f[I]sock_addr\fP \f[I]sock_addr_size\fP
+The \f[I]getpeername\fP(2) system call.
 .TP 8n
-setvbuf \f[I]fp\fP \f[I]data\fP \f[I]mode\fP \f[I]size\fP
-The \f[I]setvbuf\fP(3) system call.
+getpgid \f[I]pid\fP
+The \f[I]getpgid\fP(2) system call.
+.TP 8n
+getpgrp \f[I]pid\fP
+The \f[I]getpgrp\fP(2) system call.
 .TP 8n
 getrlimit \f[I]resource\fP \f[I]rlim\fP
 The \f[I]getrlimit\fP(2) system call.
@@ -307,10 +306,10 @@ The \f[I]mkdtemp\fP(3) system call.
 mknod \f[I]pathname\fP \f[I]mode\fP \f[I]dev\fP
 The \f[I]mknod\fP(2) system call.
 .TP 8n
-mkostemp \f[I]template\fP \f[I]flags\fP
+mkostemp \f[I]templat\fP \f[I]flags\fP
 The \f[I]mkostemp\fP(3) system call.
 .TP 8n
-mkstemp \f[I]template\fP
+mkstemp \f[I]templat\fP
 The \f[I]mkstemp\fP(3) system call.
 .TP 8n
 mktemp \f[I]pathname\fP
@@ -420,6 +419,19 @@ The \f[I]sethostname\fP(2) system call.
 .TP 8n
 setlinebuf \f[I]fp\fP
 The \f[I]setlinebuf\fP(3) system call.
+.TP 8n
+setpgid [ \f[I]pid\fP [ \f[I]pgid\fP ]]
+The \f[I]setpgid\fP(2) system call.
+.TP 8n
+setpgrp \f[I]pid\fP \f[I]pgid\fP
+The \f[I]setpgrp\fP(2) system call.
+.TP 8n
+setsockopt \f[I]fildes\fP \f[I]level\fP \f[I]name\fP \f[I]data\fP \
+\f[I]data_size\fP
+The \f[I]setsockopt\fP(2) system call.
+.TP 8n
+setvbuf \f[I]fp\fP \f[I]data\fP \f[I]mode\fP \f[I]size\fP
+The \f[I]setvbuf\fP(3) system call.
 .TP 8n
 signalfd \f[I]fildes\fP \f[I]mask\fP \f[I]flags\fP
 The \f[I]signalfd\fP(2) system call.

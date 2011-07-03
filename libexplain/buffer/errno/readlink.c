@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/size_t.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -92,7 +92,7 @@ explain_buffer_errno_readlink_explanation(explain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (explain_path_is_efault(pathname))
+        if (explain_is_efault_path(pathname))
         {
             explain_buffer_efault(sb, "pathname");
             break;
@@ -118,7 +118,7 @@ explain_buffer_errno_readlink_explanation(explain_string_buffer_t *sb,
             if (lstat(pathname, &st) >= 0)
             {
                 explain_string_buffer_puts(sb, "pathname is a ");
-                explain_buffer_file_type(sb, st.st_mode);
+                explain_buffer_file_type_st(sb, &st);
                 explain_string_buffer_puts(sb, ", not a ");
                 explain_buffer_file_type(sb, S_IFLNK);
             }

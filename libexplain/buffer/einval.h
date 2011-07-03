@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -184,13 +184,13 @@ void explain_buffer_einval_mknod(explain_string_buffer_t *sb, int mode,
   *
   * @param sb
   *     The buffer to print into.
-  * @param template
+  * @param templat
   *     The offending file name template.
-  * @param template_caption
+  * @param templat_caption
   *     The offending syscall argument.
   */
 void explain_buffer_einval_mkstemp(explain_string_buffer_t *sb,
-    const char *template, const char *template_caption);
+    const char *templat, const char *templat_caption);
 
 /**
   * The explain_buffer_einval_setenv function is use to print an
@@ -263,5 +263,15 @@ void explain_buffer_einval_format_string(explain_string_buffer_t *sb,
   */
 void explain_buffer_einval_format_string_hole(explain_string_buffer_t *sb,
     const char *argument_name, int hole_index);
+
+/**
+  * The explain_buffer_einval_no_vid_std function is used to report
+  * problems with a V4L2 ioctl, in the case where no output video
+  * standards are supported.
+  *
+  * @param sb
+  *     The buffer to print into.
+  */
+void explain_buffer_einval_no_vid_std(explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_EINVAL_H */

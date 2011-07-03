@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,7 +30,7 @@
 #include <libexplain/buffer/string_n.h>
 #include <libexplain/explanation.h>
 #include <libexplain/host_name_max.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -280,7 +280,7 @@ explain_buffer_errno_sethostname_explanation(explain_string_buffer_t *sb,
         (
             name_size
         &&
-            !explain_pointer_is_efault(name, name_size)
+            !explain_is_efault_pointer(name, name_size)
         &&
             !name_is_ok(name, name_size)
         )

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -134,7 +134,7 @@ explain_buffer_ata_identity(explain_string_buffer_t *sb, int data)
 static void
 explain_buffer_ata_identity(explain_string_buffer_t *sb, const short *data)
 {
-    if (explain_pointer_is_efault(data, ATA_ID_WORDS * sizeof(*data)))
+    if (explain_is_efault_pointer(data, ATA_ID_WORDS * sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -153,28 +153,28 @@ explain_buffer_ata_identity(explain_string_buffer_t *sb, const short *data)
             switch (j)
             {
             case ATA_ID_SERNO:
-                explain_string_buffer_puts_quoted_n
+                explain_string_buffer_putsu_quoted_n
                 (
                     sb,
-                    (const char *)&data[j],
+                    &data[j],
                     ATA_ID_SERNO_LEN
                 );
                 break;
 
             case ATA_ID_FW_REV:
-                explain_string_buffer_puts_quoted_n
+                explain_string_buffer_putsu_quoted_n
                 (
                     sb,
-                    (const char *)&data[j],
+                    &data[j],
                     ATA_FW_REV_LEN
                 );
                 break;
 
             case ATA_ID_PROD:
-                explain_string_buffer_puts_quoted_n
+                explain_string_buffer_putsu_quoted_n
                 (
                     sb,
-                    (const char *)&data[j],
+                    &data[j],
                     ATA_ID_PROD_LEN
                 );
                 break;
@@ -243,8 +243,10 @@ const explain_iocontrol_t explain_iocontrol_hdio_get_identity =
     print_data_returned,
 #ifdef HAVE_LINUX_ATA_H
     sizeof(short[ATA_ID_WORDS]), /* data_size */
+    "short[ATA_ID_WORDS] *", /* data_type */
 #else
     sizeof(short[256]), /* data_size */
+    "short[256] *", /* data_type */
 #endif
     __FILE__,
     __LINE__,
@@ -262,6 +264,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_get_identity =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -77,7 +77,7 @@ node_t *node_synth_on_error(node_t *np);
 node_t *node_synth_result_variable(node_t *np);
 
 /**
-  * The function_returns_pointer fucntion is used to determine whether
+  * The function_returns_pointer function is used to determine whether
   * or not a declaration AST is of a function that returns a pointer.
   *
   * @param np

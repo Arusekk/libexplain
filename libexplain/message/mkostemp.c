@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +22,10 @@
 
 
 void
-explain_message_mkostemp(char *message, int message_size, const char *template,
+explain_message_mkostemp(char *message, int message_size, const char *templat,
     int flags)
 {
-    explain_message_errno_mkostemp(message, message_size, errno, template,
+    explain_message_errno_mkostemp(message, message_size, errno, templat,
         flags);
 }
 

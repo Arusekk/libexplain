@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -30,7 +30,7 @@
 #include <libexplain/capability.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/siocshwtstamp.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef SIOCSHWTSTAMP
 
@@ -56,7 +56,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     case EPERM:
         if (!explain_capability_net_admin())
         {
-            explain_buffer_eperm_net_admin(sb, "ioctl ...");
+            explain_buffer_eperm_net_admin(sb, "ioctl SIOCSHWTSTAMP");
             explain_buffer_dac_net_admin(sb);
             break;
         }
@@ -68,14 +68,14 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
             const struct ifreq *rq;
 
             rq = data;
-            if (!explain_pointer_is_efault(rq, sizeof(*rq)))
+            if (!explain_is_efault_pointer(rq, sizeof(*rq)))
             {
                 const struct hwtstamp_config *cfg;
 
                 cfg = (void *)rq->ifr_data;
                 if
                 (
-                    !explain_pointer_is_efault(cfg, sizeof(*cfg))
+                    !explain_is_efault_pointer(cfg, sizeof(*cfg))
                 &&
                     cfg->flags != 0
                 )
@@ -92,12 +92,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
             const struct ifreq *rq;
 
             rq = data;
-            if (!explain_pointer_is_efault(rq, sizeof(*rq)))
+            if (!explain_is_efault_pointer(rq, sizeof(*rq)))
             {
                 const struct hwtstamp_config *cfg;
 
                 cfg = (void *)rq->ifr_data;
-                if (!explain_pointer_is_efault(cfg, sizeof(*cfg)))
+                if (!explain_is_efault_pointer(cfg, sizeof(*cfg)))
                 {
                     int             ok;
 
@@ -188,6 +188,7 @@ const explain_iocontrol_t explain_iocontrol_siocshwtstamp =
     print_explanation,
     print_data, /* print_data_returned */
     sizeof(struct ifreq), /* data_size */
+    "struct ifreq *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -204,6 +205,7 @@ const explain_iocontrol_t explain_iocontrol_siocshwtstamp =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -58,6 +58,7 @@ const explain_iocontrol_t explain_iocontrol_siocdifaddr =
     0, /* print_explanation */
     0, /* print_data_returned */
     sizeof(struct in6_ifreq), /* data_size */
+    "struct in6_ifreq *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -74,6 +75,7 @@ const explain_iocontrol_t explain_iocontrol_siocdifaddr =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

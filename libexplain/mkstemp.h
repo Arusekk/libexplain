@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,7 @@ extern "C" {
   * function, and then the process terminates by calling
   * <tt>exit(EXIT_FAILURE)</tt>.
   *
-  * @param template
+  * @param templat
   *     The template, exactly as to be passed to the <i>mkstemp</i>(3)
   *     system call.
   *     The  last  six  characters  of  template must be "XXXXXX" and these are
@@ -56,10 +56,10 @@ extern "C" {
   * This function is intended to be used in a fashion similar to the
   * following example:
   * @code
-  * int result = explain_mkstemp_or_die(template);
+  * int result = explain_mkstemp_or_die(templat);
   * @endcode
   */
-int explain_mkstemp_or_die(char *template);
+int explain_mkstemp_or_die(char *templat);
 
 /**
   * The explain_mkstemp_on_error function is used to call the
@@ -67,7 +67,7 @@ int explain_mkstemp_or_die(char *template);
   * printed to stderr, obtained from the <i>#explain_mkstemp</i>(3)
   * function.
   *
-  * @param template
+  * @param templat
   *     The template, exactly as to be passed to the <i>mkstemp</i>(3)
   *     system call.
   *     The  last  six  characters  of  template must be "XXXXXX" and these are
@@ -81,7 +81,7 @@ int explain_mkstemp_or_die(char *template);
   * This function is intended to be used in a fashion similar to the
   * following example:
   * @code
-  * int result = explain_mkstemp_on_error(template);
+  * int result = explain_mkstemp_on_error(templat);
   * if (result < 0)
   * {
   *     ...cope with error
@@ -89,7 +89,7 @@ int explain_mkstemp_or_die(char *template);
   * }
   * @endcode
   */
-int explain_mkstemp_on_error(char *template);
+int explain_mkstemp_on_error(char *templat);
 
 /**
   * The explain_mkstemp function is used to obtain an explanation of an
@@ -101,7 +101,7 @@ int explain_mkstemp_on_error(char *template);
   * The errno global variable will be used to obtain the error value to be
   * decoded.
   *
-  * @param template
+  * @param templat
   *     The original template, exactly as passed to the <i>mkstemp</i>(3)
   *     system call.
   * @returns
@@ -119,10 +119,10 @@ int explain_mkstemp_on_error(char *template);
   * This function is intended to be used in a fashion similar to the
   * following example:
   * @code
-  * int result = mkstemp(template);
+  * int result = mkstemp(templat);
   * if (result < 0)
   * {
-  *     fprintf(stderr, "%s\n", explain_mkstemp(template));
+  *     fprintf(stderr, "%s\n", explain_mkstemp(templat));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
@@ -130,7 +130,7 @@ int explain_mkstemp_on_error(char *template);
   * The above code example is available pre-packaged as the
   * #explain_mkstemp_or_die function.
   */
-const char *explain_mkstemp(char *template)
+const char *explain_mkstemp(char *templat)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -146,7 +146,7 @@ const char *explain_mkstemp(char *template)
   *     necessary if you need to call <b>any</b> code between the system
   *     call to be explained and this function, because many libc functions
   *     will alter the value of errno.
-  * @param template
+  * @param templat
   *     The original template, exactly as passed to the <i>mkstemp</i>(3)
   *     system call.
   * @returns
@@ -164,11 +164,11 @@ const char *explain_mkstemp(char *template)
   * This function is intended to be used in a fashion similar to the
   * following example:
   * @code
-  * int result = mkstemp(template);
+  * int result = mkstemp(templat);
   * if (result < 0)
   * {
   *     int err = errno;
-  *     fprintf(stderr, "%s\n", explain_errno_mkstemp(err, template));
+  *     fprintf(stderr, "%s\n", explain_errno_mkstemp(err, templat));
   *     exit(EXIT_FAILURE);
   * }
   * @endcode
@@ -176,7 +176,7 @@ const char *explain_mkstemp(char *template)
   * The above code example is available pre-packaged as the
   * #explain_mkstemp_or_die function.
   */
-const char *explain_errno_mkstemp(int errnum, char *template)
+const char *explain_errno_mkstemp(int errnum, char *templat)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -195,7 +195,7 @@ const char *explain_errno_mkstemp(int errnum, char *template)
   * @param message_size
   *     The size in bytes of the location in which to store the returned
   *     message.
-  * @param template
+  * @param templat
   *     The original template, exactly as passed to the <i>mkstemp</i>(3)
   *     system call.
   *
@@ -203,11 +203,11 @@ const char *explain_errno_mkstemp(int errnum, char *template)
   * This function is intended to be used in a fashion similar to the
   * following example:
   * @code
-  * int result = mkstemp(template);
+  * int result = mkstemp(templat);
   * if (result < 0)
   * {
   *     char message[3000];
-  *     explain_message_mkstemp(message, sizeof(message), template);
+  *     explain_message_mkstemp(message, sizeof(message), templat);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
@@ -216,7 +216,7 @@ const char *explain_errno_mkstemp(int errnum, char *template)
   * The above code example is available pre-packaged as the
   * #explain_mkstemp_or_die function.
   */
-void explain_message_mkstemp(char *message, int message_size, char *template);
+void explain_message_mkstemp(char *message, int message_size, char *templat);
 
 /**
   * The explain_message_errno_mkstemp function is used to obtain an
@@ -237,7 +237,7 @@ void explain_message_mkstemp(char *message, int message_size, char *template);
   *     necessary if you need to call <b>any</b> code between the system
   *     call to be explained and this function, because many libc functions
   *     will alter the value of errno.
-  * @param template
+  * @param templat
   *     The original template, exactly as passed to the <i>mkstemp</i>(3)
   *     system call.
   *
@@ -245,12 +245,12 @@ void explain_message_mkstemp(char *message, int message_size, char *template);
   * This function is intended to be used in a fashion similar to the
   * following example:
   * @code
-  * int result = mkstemp(template);
+  * int result = mkstemp(templat);
   * if (result < 0)
   * {
   *     int err = errno;
   *     char message[3000];
-  *     explain_message_errno_mkstemp(message, sizeof(message), err, template);
+  *     explain_message_errno_mkstemp(message, sizeof(message), err, templat);
   *     fprintf(stderr, "%s\n", message);
   *     exit(EXIT_FAILURE);
   * }
@@ -260,7 +260,7 @@ void explain_message_mkstemp(char *message, int message_size, char *template);
   * #explain_mkstemp_or_die function.
   */
 void explain_message_errno_mkstemp(char *message, int message_size, int errnum,
-    char *template);
+    char *templat);
 
 #ifdef __cplusplus
 }

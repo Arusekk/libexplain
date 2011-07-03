@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,25 +20,13 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/sys/mman.h>
-#include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 int
-explain_path_is_efault(const char *path)
-{
-    struct stat     st;
-
-    if (!path)
-        return 1;
-    return (lstat(path, &st) < 0 && errno == EFAULT);
-}
-
-
-int
-explain_pointer_is_efault(const void *data, size_t data_size)
+explain_is_efault_pointer(const void *data, size_t data_size)
 {
 #ifdef HAVE_MINCORE
     /* mincore doesn't seem to work as expected on 64-bit Linux */
@@ -87,7 +75,7 @@ explain_pointer_is_efault(const void *data, size_t data_size)
     if (page_size <= 0)
     {
         plan_b:
-        return explain_path_is_efault((const char *)data);
+        return explain_is_efault_path(data);
     }
     lo_pages = (size_t)data / page_size;
     hi_pages = ((size_t)data + data_size + page_size - 1) / page_size;
@@ -132,6 +120,6 @@ explain_pointer_is_efault(const void *data, size_t data_size)
     (void)data_size;
     if (!data)
         return 1;
-    return explain_path_is_efault((const char *)data);
+    return explain_is_efault_path(data);
 #endif
 }

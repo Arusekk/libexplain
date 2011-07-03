@@ -29,10 +29,11 @@
   * @note
   *     This information is not kept in a single table for all values,
   *     like every other set of constants, because (a) some values
-  *     are ambiguous, and (b) the includes files have bugs making it
+  *     are ambiguous, and (b) the include files have bugs making it
   *     impossible to include all of them in the same compilation unit.
   */
 extern const explain_iocontrol_t explain_iocontrol_${basename
     $filename .h};
 
+/* vim: set ts=8 sw=4 et : */
 #endif /* ${ident ${upcase $filename}} */

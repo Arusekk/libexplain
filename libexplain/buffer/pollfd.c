@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,7 +22,7 @@
 #include <libexplain/buffer/pollfd.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/parse_bits.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -79,7 +79,7 @@ explain_buffer_pollfd(explain_string_buffer_t *sb,
     const struct pollfd *data, int include_revents)
 {
 #ifdef HAVE_POLL_H
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
@@ -113,7 +113,7 @@ explain_buffer_pollfd_array(explain_string_buffer_t *sb,
     (
         data_size <= 0
     ||
-        explain_pointer_is_efault(data, sizeof(*data) * data_size)
+        explain_is_efault_pointer(data, sizeof(*data) * data_size)
     )
     {
         explain_buffer_pointer(sb, data);

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,7 +21,7 @@
 #include <libexplain/buffer/int32_t.h>
 #include <libexplain/buffer/ppp_comp_stats.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 #ifdef SIOCGPPPCSTATS
@@ -54,7 +54,7 @@ void
 explain_buffer_ppp_comp_stats(explain_string_buffer_t *sb,
     const struct ppp_comp_stats *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;

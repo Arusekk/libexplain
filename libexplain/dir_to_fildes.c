@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  */
 
 #include <libexplain/dir_to_fildes.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 int
@@ -30,7 +30,7 @@ explain_dir_to_fildes(DIR *dir)
      * DIR is an opaque type, so we don't really know how big
      * is actually is.  So guess.
      */
-    if (explain_pointer_is_efault(dir, sizeof(int)))
+    if (explain_is_efault_pointer(dir, sizeof(int)))
         return -1;
 #ifdef HAVE_DIRFD
     return dirfd(dir);

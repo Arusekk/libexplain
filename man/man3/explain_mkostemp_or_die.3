@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009 Peter Miller
+.\" Copyright (C) 2009, 2011 Peter Miller
 .\"
 .\" This program is free software; you can redistribute it and/or modify it
 .\" under the terms of the GNU General Public License as published by the
@@ -26,9 +26,9 @@ explain_mkostemp_or_die \- create a unique temporary file and report errors
 .SH SYNOPSIS
 #include <libexplain/mkostemp.h>
 .sp 0.3
-int explain_mkostemp_or_die(char *template, int flags);
+int explain_mkostemp_or_die(char *templat, int flags);
 .br
-int explain_mkostemp_on_error(char *template, int flags);
+int explain_mkostemp_on_error(char *templat, int flags);
 .SH DESCRIPTION
 The \f[B]explain_mkostemp_or_die\fP function is used to call the
 \f[I]mkostemp\fP(3) system call. On failure an explanation will be printed
@@ -40,7 +40,7 @@ The \f[B]explain_mkostemp_on_error\fP function is used to call the
 to \f[I]stderr\fP, obtained from the \f[I]explain_mkostemp\fP(3) function,
 but still returns to the caller.
 .TP 8n
-\f[I]template\fP
+\f[I]templat\fP
 The template, exactly as to be passed to the \f[I]mkostemp\fP(3) system
 call.
 .TP 8n
@@ -61,7 +61,7 @@ fashion similar to the following example:
 .RS
 .ft CW
 .nf
-int result = explain_mkostemp_or_die(template, flags);
+int result = explain_mkostemp_or_die(templat, flags);
 .fi
 .ft R
 .RE

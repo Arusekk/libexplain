@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -28,7 +28,7 @@
 #include <libexplain/iocontrol/disambiguate/if_ppp.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/eql_enslave.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef EQL_ENSLAVE
 
@@ -66,14 +66,14 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
             const struct slaving_request *s;
 
             i = data;
-            if (explain_pointer_is_efault(i, sizeof(*i)))
+            if (explain_is_efault_pointer(i, sizeof(*i)))
             {
                 explain_buffer_efault(sb, "data");
                 break;
             }
 
             s = (const struct slaving_request *)i->ifr_data;
-            if (explain_pointer_is_efault(s, sizeof(*s)))
+            if (explain_is_efault_pointer(s, sizeof(*s)))
             {
                 explain_buffer_efault(sb, "data->ifr_data");
                 break;
@@ -118,6 +118,7 @@ const explain_iocontrol_t explain_iocontrol_eql_enslave =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct ifreq), /* data_size */
+    "struct ifreq *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -134,6 +135,7 @@ const explain_iocontrol_t explain_iocontrol_eql_enslave =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

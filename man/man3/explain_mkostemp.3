@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2009, 2010 Peter Miller
+.\" Copyright (C) 2009-2011 Peter Miller
 .\"
 .\" This program is free software; you can redistribute it and/or modify it
 .\" under the terms of the GNU General Public License as published by the
@@ -26,15 +26,15 @@ explain_mkostemp \- explain \f[I]mkostemp\fP(3) errors
 #include <libexplain/mkostemp.h>
 .sp 0.3
 .ad l
-const char *explain_mkostemp(char *template, int flags);
+const char *explain_mkostemp(char *templat, int flags);
 .br
-const char *explain_errno_mkostemp(int errnum, char *template, int flags);
+const char *explain_errno_mkostemp(int errnum, char *templat, int flags);
 .br
 void explain_message_mkostemp(char *message, int message_size, char
-*template, int flags);
+*templat, int flags);
 .br
 void explain_message_errno_mkostemp(char *message, int message_size, int
-errnum, char *template, int flags);
+errnum, char *templat, int flags);
 .ad b
 .SH DESCRIPTION
 These functions may be used to obtain explanations for errors returned by
@@ -42,7 +42,7 @@ the \f[I]mkostemp\fP(3) system call.
 .\" ----------------------------------------------------
 .SS explain_mkostemp
 .ad l
-const char *explain_mkostemp(char *template, int flags);
+const char *explain_mkostemp(char *templat, int flags);
 .ad b
 .PP
 The \f[B]explain_mkostemp\fP function is used to obtain an explanation of
@@ -53,7 +53,7 @@ it will do much better, and indicate the underlying cause in more detail.
 The \f[I]errno\fP global variable will be used to obtain the error value to
 be decoded.
 .TP 8n
-\f[I]template\fP
+\f[I]templat\fP
 The original template, exactly as passed to the \f[I]mkostemp\fP(3) system
 call.
 .TP 8n
@@ -76,7 +76,7 @@ to the following example:
 .ft CW
 .fi
 .ad l
-int result = mkostemp(template, flags);
+int result = mkostemp(templat, flags);
 .br
 if (result < 0)
 .ad b
@@ -85,7 +85,7 @@ if (result < 0)
 .fi
 .ad l
 .in +4n
-fprintf(stderr, "%s\en", explain_mkostemp(template, flags));
+fprintf(stderr, "%s\en", explain_mkostemp(templat, flags));
 .in -4n
 .nf
     exit(EXIT_FAILURE);
@@ -100,7 +100,7 @@ The above code example is available pre\[hy]packaged as the
 .\" ----------------------------------------------------
 .SS explain_errno_mkostemp
 .ad l
-const char *explain_errno_mkostemp(int errnum, char *template, int flags);
+const char *explain_errno_mkostemp(int errnum, char *templat, int flags);
 .ad b
 .PP
 The \f[B]explain_errno_mkostemp\fP function is used to obtain an
@@ -116,7 +116,7 @@ you need to call \f[B]any\fP code between the system call to be explained
 and this function, because many libc functions will alter the value of
 \f[I]errno\fP.
 .TP 8n
-\f[I]template\fP
+\f[I]templat\fP
 The original template, exactly as passed to the \f[I]mkostemp\fP(3) system
 call.
 .TP 8n
@@ -139,7 +139,7 @@ to the following example:
 .ft CW
 .fi
 .ad l
-int result = mkostemp(template, flags);
+int result = mkostemp(templat, flags);
 .br
 if (result < 0)
 .ad b
@@ -149,7 +149,7 @@ if (result < 0)
 .fi
 .ad l
 .in +4n
-fprintf(stderr, "%s\en", explain_errno_mkostemp(err, template, flags));
+fprintf(stderr, "%s\en", explain_errno_mkostemp(err, templat, flags));
 .in -4n
 .nf
     exit(EXIT_FAILURE);
@@ -165,7 +165,7 @@ The above code example is available pre\[hy]packaged as the
 .SS explain_message_mkostemp
 .ad l
 void explain_message_mkostemp(char *message, int message_size, char
-*template, int flags);
+*templat, int flags);
 .ad b
 .PP
 The \f[B]explain_message_mkostemp\fP function is used to obtain an
@@ -184,7 +184,7 @@ return buffer is supplied, this function is thread safe.
 \f[I]message_size\fP
 The size in bytes of the location in which to store the returned message.
 .TP 8n
-\f[I]template\fP
+\f[I]templat\fP
 The original template, exactly as passed to the \f[I]mkostemp\fP(3) system
 call.
 .TP 8n
@@ -198,7 +198,7 @@ to the following example:
 .ft CW
 .fi
 .ad l
-int result = mkostemp(template, flags);
+int result = mkostemp(templat, flags);
 .br
 if (result < 0)
 .ad b
@@ -208,7 +208,7 @@ if (result < 0)
 .in +4n
 .fi
 .ad l
-explain_message_mkostemp(message, sizeof(message), template, flags);
+explain_message_mkostemp(message, sizeof(message), templat, flags);
 .nf
 .in -4n
     fprintf(stderr, "%s\en", message);
@@ -225,7 +225,7 @@ The above code example is available pre\[hy]packaged as the
 .SS explain_message_errno_mkostemp
 .ad l
 void explain_message_errno_mkostemp(char *message, int message_size, int
-errnum, char *template, int flags);
+errnum, char *templat, int flags);
 .ad b
 .PP
 The \f[B]explain_message_errno_mkostemp\fP function is used to obtain an
@@ -248,7 +248,7 @@ you need to call \f[B]any\fP code between the system call to be explained
 and this function, because many libc functions will alter the value of
 \f[I]errno\fP.
 .TP 8n
-\f[I]template\fP
+\f[I]templat\fP
 The original template, exactly as passed to the \f[I]mkostemp\fP(3) system
 call.
 .TP 8n
@@ -262,7 +262,7 @@ to the following example:
 .ft CW
 .fi
 .ad l
-int result = mkostemp(template, flags);
+int result = mkostemp(templat, flags);
 .br
 if (result < 0)
 .ad b
@@ -273,7 +273,7 @@ if (result < 0)
 .in +4n
 .fi
 .ad l
-explain_message_errno_mkostemp(message, sizeof(message), err, template,
+explain_message_errno_mkostemp(message, sizeof(message), err, templat,
 flags);
 .nf
 .in -4n

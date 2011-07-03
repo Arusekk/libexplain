@@ -24,3 +24,6 @@ void
 explain_${ident ${trim_ext ${trim_dir $filename}}}(void)
 {
 }
+
+
+/* vim: set ts=8 sw=4 et : */

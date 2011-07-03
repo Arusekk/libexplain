@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -26,7 +26,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/tioclinux.h>
 #include <libexplain/parse_bits.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/sizeof.h>
 
 
@@ -96,7 +96,7 @@ explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
             {
                 struct tiocl_selection sel;
 
-                if (explain_pointer_is_efault(cp, 1 + sizeof(sel)))
+                if (explain_is_efault_pointer(cp, 1 + sizeof(sel)))
                     goto print_pointer;
                 memcpy(&sel, cp + 1, sizeof(sel));
                 explain_buffer_tiocl(sb, cp[0]);
@@ -117,7 +117,7 @@ explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
             break;
 
         case TIOCL_SETVESABLANK:
-            if (explain_pointer_is_efault(data, 2))
+            if (explain_is_efault_pointer(data, 2))
                 goto print_pointer;
             explain_string_buffer_puts(sb, "{ case = ");
             explain_buffer_tiocl(sb, cp[0]);
@@ -130,7 +130,7 @@ explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
             {
                 uint32_t        lut[8];
 
-                if (explain_pointer_is_efault(data, 4 + sizeof(lut)))
+                if (explain_is_efault_pointer(data, 4 + sizeof(lut)))
                     goto print_pointer;
                 memcpy(lut, cp + 4, sizeof(lut));
                 explain_string_buffer_puts(sb, "{ case = ");
@@ -145,7 +145,7 @@ explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
             {
                 int32_t         value;
 
-                if (explain_pointer_is_efault(data, 4 + sizeof(value)))
+                if (explain_is_efault_pointer(data, 4 + sizeof(value)))
                     goto print_pointer;
                 memcpy(&value, cp + 4, sizeof(value));
                 explain_string_buffer_puts(sb, "{ case = ");
@@ -177,7 +177,7 @@ explain_buffer_tioclinux(explain_string_buffer_t *sb, const void *data)
         case TIOCL_GETKMSGREDIRECT:
 #endif
         default:
-            if (explain_pointer_is_efault(data, 1))
+            if (explain_is_efault_pointer(data, 1))
                 goto print_pointer;
             explain_string_buffer_puts(sb, "{ case = ");
             explain_buffer_tiocl(sb, cp[0]);

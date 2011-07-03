@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -81,7 +81,7 @@ explain_buffer_emlink(explain_string_buffer_t *sb, const char *oldpath,
             char ftype[100];
 
             explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
-            explain_buffer_file_type(&ftype_sb, oldpath_st.st_mode);
+            explain_buffer_file_type_st(&ftype_sb, &oldpath_st);
             explain_string_buffer_printf_gettext
             (
                 sb,

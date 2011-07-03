@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,7 +30,7 @@
 #include <libexplain/buffer/timeval.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -113,7 +113,7 @@ explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
         break;
 
     case EFAULT:
-        if (readfds && explain_pointer_is_efault(readfds, sizeof(*readfds)))
+        if (readfds && explain_is_efault_pointer(readfds, sizeof(*readfds)))
         {
             explain_buffer_efault(sb, "readfds");
             break;
@@ -122,7 +122,7 @@ explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
         (
             writefds
         &&
-            explain_pointer_is_efault(writefds, sizeof(*writefds))
+            explain_is_efault_pointer(writefds, sizeof(*writefds))
         )
         {
             explain_buffer_efault(sb, "writefds");
@@ -132,13 +132,13 @@ explain_buffer_errno_select_explanation(explain_string_buffer_t *sb,
         (
             exceptfds
         &&
-            explain_pointer_is_efault(exceptfds, sizeof(*exceptfds))
+            explain_is_efault_pointer(exceptfds, sizeof(*exceptfds))
         )
         {
             explain_buffer_efault(sb, "exceptfds");
             break;
         }
-        if (timeout && explain_pointer_is_efault(timeout, sizeof(*timeout)))
+        if (timeout && explain_is_efault_pointer(timeout, sizeof(*timeout)))
         {
             explain_buffer_efault(sb, "timeout");
             break;

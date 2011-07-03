@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,7 @@
 #include <libexplain/buffer/int32_t.h>
 #include <libexplain/buffer/ppp_option_data.h>
 #include <libexplain/buffer/pointer.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 #ifdef PPPIOCSCOMPRESS
@@ -32,14 +32,14 @@ void
 explain_buffer_ppp_option_data(explain_string_buffer_t *sb,
     const struct ppp_option_data *data)
 {
-    if (explain_pointer_is_efault(data, sizeof(*data)))
+    if (explain_is_efault_pointer(data, sizeof(*data)))
     {
         explain_buffer_pointer(sb, data);
         return;
     }
 
     explain_string_buffer_puts(sb, "{ ptr = ");
-    if (explain_pointer_is_efault(data->ptr, data->length))
+    if (explain_is_efault_pointer(data->ptr, data->length))
         explain_buffer_pointer(sb, data->ptr);
     else
         explain_buffer_char_data(sb, data->ptr, data->length);

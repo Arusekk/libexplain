@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,7 +28,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/tiocshayesesp.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 #if defined(TIOCSHAYESESP) && defined(HAVE_LINUX_HAYESESP_H)
@@ -146,6 +146,7 @@ const explain_iocontrol_t explain_iocontrol_tiocshayesesp =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct hayes_esp_config), /* data_size */
+    "struct hayes_esp_config *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -162,6 +163,7 @@ const explain_iocontrol_t explain_iocontrol_tiocshayesesp =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

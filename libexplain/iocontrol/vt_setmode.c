@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,7 +26,7 @@
 #include <libexplain/capability.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vt_setmode.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef VT_SETMODE
 
@@ -62,7 +62,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
             const struct vt_mode *arg;
 
             arg = data;
-            if (!explain_pointer_is_efault(arg, sizeof(*arg)))
+            if (!explain_is_efault_pointer(arg, sizeof(*arg)))
             {
                 if (arg->mode != VT_AUTO && arg->mode != VT_PROCESS)
                 {
@@ -99,6 +99,7 @@ const explain_iocontrol_t explain_iocontrol_vt_setmode =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct vt_mode), /* data_size */
+    "struct vt_mode *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -115,6 +116,7 @@ const explain_iocontrol_t explain_iocontrol_vt_setmode =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

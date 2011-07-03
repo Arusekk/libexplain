@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -28,7 +28,7 @@
 #include <libexplain/buffer/stream.h>
 #include <libexplain/buffer/va_list.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/printf_format.h>
 
 
@@ -57,7 +57,7 @@ explain_buffer_errno_vfprintf_explanation(explain_string_buffer_t *sb,
         explain_buffer_is_the_null_pointer(sb, "fp");
         return;
     }
-    if (explain_pointer_is_efault(fp, sizeof(*fp)))
+    if (explain_is_efault_pointer(fp, sizeof(*fp)))
     {
         explain_buffer_efault(sb, "fp");
         return;
@@ -67,7 +67,7 @@ explain_buffer_errno_vfprintf_explanation(explain_string_buffer_t *sb,
         explain_buffer_is_the_null_pointer(sb, "format");
         return;
     }
-    if (explain_path_is_efault(format))
+    if (explain_is_efault_string(format))
     {
         explain_buffer_efault(sb, "format");
         return;

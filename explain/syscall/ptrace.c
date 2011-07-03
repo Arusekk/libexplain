@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -53,30 +53,40 @@ explain_syscall_ptrace(int errnum, int argc, char **argv)
     case 4:
         switch (request)
         {
-        case PTRACE_CONT:
-        case PTRACE_SYSCALL:
-        case PTRACE_SINGLESTEP:
-#ifdef PTRACE_SYSEMU
-        case PTRACE_SYSEMU:
+#ifdef PT_CONTINUE
+        case PT_CONTINUE:
 #endif
-#ifdef PTRACE_SYSEMU_SINGLESTEP
-        case PTRACE_SYSEMU_SINGLESTEP:
+#ifdef PT_SYSCALL
+        case PT_SYSCALL:
 #endif
-        case PTRACE_DETACH:
+#ifdef PT_STEP
+        case PT_STEP:
+#endif
+#ifdef PT_DETACH
+        case PT_DETACH:
+#endif
             data = (void *)(long)explain_signal_parse_or_die(argv[3], "arg 4");
             break;
 
-        case PTRACE_SETOPTIONS:
-#ifdef PTRACE_OLDSETOPTIONS
-        case PTRACE_OLDSETOPTIONS:
+#ifdef PT_SETOPTIONS
+        case PT_SETOPTIONS:
+#endif
+#ifdef PT_OLDSETOPTIONS
+        case PT_OLDSETOPTIONS:
 #endif
             data =
                 (void *)explain_parse_ptrace_options_or_die(argv[3], "arg 4");
             break;
 
-        case PTRACE_POKETEXT:
-        case PTRACE_POKEDATA:
-        case PTRACE_POKEUSER:
+#ifdef PT_WRITE_I
+        case PT_WRITE_I:
+#endif
+#ifdef PT_WRITE_D
+        case PT_WRITE_D:
+#endif
+#ifdef PT_WRITE_U
+        case PT_WRITE_U:
+#endif
             data = (void *)explain_strtol_or_die(argv[3], 0, 0);
             break;
 

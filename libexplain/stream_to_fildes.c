@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/stream_to_fildes.h>
 
 
@@ -44,7 +44,7 @@ explain_stream_to_fildes(FILE *fp)
      * implementations may keep the FILE pointer valid if the underlying
      * file descriptor is still valid.
      */
-    if (explain_pointer_is_efault(fp, sizeof(*fp)))
+    if (explain_is_efault_pointer(fp, sizeof(*fp)))
         return -1;
     return fileno(fp);
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -251,7 +251,7 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
                     /* FIXME: i18n */
                     "the file descriptor is associated with a "
                 );
-                explain_buffer_file_type(sb, st.st_mode);
+                explain_buffer_file_type_st(sb, &st);
             }
             else
             {

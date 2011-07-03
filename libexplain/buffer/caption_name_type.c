@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,22 @@
 #include <libexplain/buffer/caption_name_type.h>
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/option.h>
+
+
+static void
+explain_buffer_current_directory(explain_string_buffer_t *sb)
+{
+    explain_buffer_gettext
+    (
+        sb,
+        /*
+         * xgettext: the name of the current directory, rather than "." that
+         * not all users understand.
+         */
+        i18n("current directory")
+    );
+}
 
 
 void
@@ -31,15 +47,7 @@ explain_buffer_caption_name_type(explain_string_buffer_t *sb,
 {
     if (name && S_ISDIR(st_mode) && 0 == strcmp(name, "."))
     {
-        explain_buffer_gettext
-        (
-            sb,
-            /*
-             * xgettext: the name of the current directory, rather than
-             * "." that not all users understand.
-             */
-            i18n("current directory")
-        );
+        explain_buffer_current_directory(sb);
         return;
     }
 
@@ -58,4 +66,39 @@ explain_buffer_caption_name_type(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, "file");
     else
         explain_buffer_file_type(sb, st_mode);
+}
+
+
+void
+explain_buffer_caption_name_type_st(explain_string_buffer_t *sb,
+    const char *caption, const char *name, const struct stat *st)
+{
+    if (!st)
+    {
+        explain_buffer_caption_name_type(sb, caption, name, -1);
+        return;
+    }
+    if (!explain_option_extra_device_info())
+    {
+        explain_buffer_caption_name_type(sb, caption, name, st->st_mode);
+        return;
+    }
+    if (name && S_ISDIR(st->st_mode) && 0 == strcmp(name, "."))
+    {
+        explain_buffer_current_directory(sb);
+        return;
+    }
+
+    /* the rule is: [caption] [name] type */
+    if (caption)
+    {
+        explain_string_buffer_puts(sb, caption);
+        explain_string_buffer_putc(sb, ' ');
+    }
+    if (name)
+    {
+        explain_string_buffer_puts_quoted(sb, name);
+        explain_string_buffer_putc(sb, ' ');
+    }
+    explain_buffer_file_type_st(sb, st);
 }

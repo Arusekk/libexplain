@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -75,6 +75,8 @@ static option_t internal_strerror =
     { option_level_default, 0, option_type_bool };
 static option_t hanging_indent =
     { option_level_default, 0, option_type_int };
+static option_t extra_device_info =
+    { option_level_default, 1, option_type_bool };
 
 typedef struct table_t table_t;
 struct table_t
@@ -93,6 +95,7 @@ static const table_t table[] =
     { "numeric-errno", &numeric_errno },
     { "program-name", &assemble_program_name },
     { "symbolic-mode-bits", &symbolic_mode_bits },
+    { "extra-device-info", &extra_device_info },
 };
 
 
@@ -362,4 +365,13 @@ explain_option_hanging_indent_set(int columns)
         hanging_indent.value = columns;
         hanging_indent.level = option_level_client;
     }
+}
+
+
+int
+explain_option_extra_device_info(void)
+{
+    if (!initialised)
+        initialise();
+    return extra_device_info.value;
 }

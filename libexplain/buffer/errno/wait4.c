@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,7 @@
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/waitpid_options.h>
 #include <libexplain/explanation.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 static void
@@ -65,12 +65,12 @@ explain_buffer_errno_wait4_explanation(explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EFAULT:
-        if (rusage && explain_pointer_is_efault(rusage, sizeof(*rusage)))
+        if (rusage && explain_is_efault_pointer(rusage, sizeof(*rusage)))
         {
             explain_buffer_efault(sb, "rusage");
             break;
         }
-        if (explain_pointer_is_efault(status, sizeof(*status)))
+        if (explain_is_efault_pointer(status, sizeof(*status)))
         {
             explain_buffer_efault(sb, "status");
             break;

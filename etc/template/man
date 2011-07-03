@@ -54,3 +54,4 @@ libexplain version \*(v)
 Copyright \*(C) ${date %Y} ${user name}
 .SH AUTHOR
 Written by ${user email}
+.\" vim: set ts=8 sw=4 et :

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -25,7 +25,7 @@
 #include <libexplain/buffer/pid_t_star.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/option.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 
 #ifdef PROC_FS_USEFUL
@@ -110,7 +110,7 @@ explain_buffer_pid_t(explain_string_buffer_t *sb, pid_t pid)
 void
 explain_buffer_pid_t_star(explain_string_buffer_t *sb, const pid_t *value)
 {
-    if (explain_pointer_is_efault(value, sizeof(*value)))
+    if (explain_is_efault_pointer(value, sizeof(*value)))
         explain_buffer_pointer(sb, value);
     else
     {
@@ -124,7 +124,7 @@ explain_buffer_pid_t_star(explain_string_buffer_t *sb, const pid_t *value)
 void
 explain_buffer_int_pid_star(explain_string_buffer_t *sb, const int *value)
 {
-    if (explain_pointer_is_efault(value, sizeof(*value)))
+    if (explain_is_efault_pointer(value, sizeof(*value)))
         explain_buffer_pointer(sb, value);
     else
     {

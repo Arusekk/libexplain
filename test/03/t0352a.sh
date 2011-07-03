@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,9 +22,9 @@ TEST_SUBJECT="ioctl MTIOCGET"
 . test_prelude
 
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = MTIOCGET, data = 0x00001000) failed,
-Inappropriate ioctl for device (ENOTTY) because fildes is not associated
-with an object to which ioctl MTIOCGET can be applied
+ioctl(fildes = 42, request = MTIOCGET, struct mtget *data = 0x00001000)
+failed, Inappropriate ioctl for device (ENOTTY) because fildes is not
+associated with an object to which ioctl MTIOCGET can be applied
 fubar
 test $? -eq 0 || no_result
 

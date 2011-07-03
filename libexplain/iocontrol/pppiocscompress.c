@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,7 +28,7 @@
 #include <libexplain/buffer/ppp_option_data.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/pppiocscompress.h>
-#include <libexplain/path_is_efault.h>
+#include <libexplain/is_efault.h>
 
 #ifdef PPPIOCSCOMPRESS
 
@@ -56,7 +56,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EFAULT:
-        if (explain_pointer_is_efault(dp, sizeof(*dp)))
+        if (explain_is_efault_pointer(dp, sizeof(*dp)))
             explain_buffer_efault(sb, "data");
         else
             explain_buffer_efault(sb, "data->ptr");
@@ -110,6 +110,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocscompress =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct ppp_option_data), /* data_size */
+    "struct ppp_option_data *", /* data_type */
     __FILE__,
     __LINE__,
 };
@@ -126,6 +127,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocscompress =
     0, /* print_explanation */
     0, /* print_data_returned */
     0, /* data_size */
+    0, /* data_type */
     __FILE__,
     __LINE__,
 };

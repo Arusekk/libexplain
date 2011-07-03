@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -29,9 +29,12 @@
   *
   * @param sb
   *     The string buffer to print into.
+  * @param caption
+  *     The name of the offending system call argument.
   * @param pid
   *     The pid that provoked the message (negative ones are process groups)
   */
-void explain_buffer_esrch(explain_string_buffer_t *sb, pid_t pid);
+void explain_buffer_esrch(explain_string_buffer_t *sb, const char *caption,
+    pid_t pid);
 
 #endif /* LIBEXPLAIN_BUFFER_ESRCH_H */
