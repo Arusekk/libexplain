@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCSVBIFMT"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCSVBIFMT, struct vbi_format *data = {
 sampling_rate = 0, samples_per_line = 0, sample_format = 0, start = { 0, 0

@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCGFREQ"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 fmt > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCGFREQ, unsigned long *data =
 0xNNNNNNNN) failed, Invalid argument (EINVAL) because fildes is not

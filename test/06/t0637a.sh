@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCGPICT"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 fmt > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCGPICT, struct video_picture *data =
 0xNNNNNNNN) failed, Invalid argument (EINVAL) because ioctl request or

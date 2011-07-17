@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCSCHAN"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCSCHAN, struct video_channel *data = {
 channel = 0, name = "", tuners = 0, flags = 0, type = 0, norm = 0 })

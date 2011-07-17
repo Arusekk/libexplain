@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCSFBUF"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCSFBUF, struct video_buffer *data = {
 base = NULL, width = 0, height = 0, depth = 0 }) failed, Invalid argument

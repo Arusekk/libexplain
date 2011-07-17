@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCGCAP"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 fmt > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCGCAP, struct video_capability *data =
 0xNNNNNNNN) failed, Inappropriate ioctl for device (ENOTTY) because fildes is

@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCSAUDIO"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCSAUDIO, struct video_audio *data = {
 audio = 0, flags = 0, name = "", mode = 0 }) failed, Invalid argument

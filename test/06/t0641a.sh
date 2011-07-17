@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCCAPTURE"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCCAPTURE, int *data = { FALSE }) failed,
 Invalid argument (EINVAL) because fildes is not associated with an object

@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCMCAPTURE"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCMCAPTURE, struct video_mmap *data = {
 frame = 0, width = 0, height = 0, format = 0 }) failed, Invalid argument

@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCSPICT"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCSPICT, struct video_picture *data = {
 brightness = 0, hue = 0, color = 0, contrast = 0, whiteness = 0, depth = 0,

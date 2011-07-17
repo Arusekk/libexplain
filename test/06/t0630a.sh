@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCGCHAN"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCGCHAN, struct video_channel *data = {
 channel = 0 }) failed, Invalid argument (EINVAL) because the data argument

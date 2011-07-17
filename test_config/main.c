@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/linux/videodev.h>
 #include <libexplain/ac/linux/videodev2.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
@@ -146,6 +147,14 @@ static const table_t table[] =
     {
         "VIDIOC_G_DV_TIMINGS",
 #ifdef VIDIOC_G_DV_TIMINGS
+        1
+#else
+        0
+#endif
+    },
+    {
+        "VIDIOCGCAP",
+#ifdef VIDIOCGCAP
         1
 #else
         0

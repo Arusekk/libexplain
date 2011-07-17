@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCSFREQ"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCSFREQ, unsigned long *data = 0) failed,
 Invalid argument (EINVAL) because the data argument was incorrectly

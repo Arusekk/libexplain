@@ -21,6 +21,8 @@
 TEST_SUBJECT="ioctl VIDIOCSTUNER"
 . test_prelude
 
+test_config VIDIOCGCAP || pass
+
 cat > test.ok << 'fubar'
 ioctl(fildes = 42, request = VIDIOCSTUNER, struct video_tuner *data = {
 tuner = 0, name = "", rangelow = 0, rangehigh = 0, flags = 0, mode =
