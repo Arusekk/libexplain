@@ -43,6 +43,7 @@ static void
 print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     int errnum, int fildes, int request, const void *data)
 {
     (void)p;
@@ -64,6 +65,7 @@ const explain_iocontrol_t explain_iocontrol_lpgetstats =
     print_data_returned,
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -81,6 +83,7 @@ const explain_iocontrol_t explain_iocontrol_lpgetstats =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -40,12 +40,13 @@ web:
     ;
 
 web-site/lca2010/lca2010.pdf: man/pdf1/explain_lca2010.pdf
+    set shallow
 {
     cp [resolve [need]] [target];
 }
 
 web-src/%0%.html.d: web-src/%0%.html
-        set no-cascade
+    set no-cascade
 {
     c_incl -nc -ns -eia -r -nrec
         [addprefix "-I" [search_list]]
@@ -94,6 +95,7 @@ web-site/%0%.png: web-src/%0%.png
 
 
 web-site/fixme.html: [source_files] bin/fixme-html
+    set shallow
 {
     function print "GEN "[target];
     [resolve bin/fixme-html] -o [target] -F-;
@@ -103,11 +105,13 @@ dataend
 }
 
 web-site/[project_minus].README: README
+    set shallow
 {
     cp [resolve README] [target];
 }
 
 web-site/[project_minus].pdf: etc/reference.pdf
+    set shallow
 {
     cp [resolve etc/reference.pdf] [target];
 }

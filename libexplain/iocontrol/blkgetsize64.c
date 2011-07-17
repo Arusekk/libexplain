@@ -38,6 +38,7 @@ const explain_iocontrol_t explain_iocontrol_blkgetsize64 =
     explain_iocontrol_generic_print_data_uint64_star, /* print_data_returned */
     sizeof(uint64_t), /* data_size */
     "uint64_t *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -55,6 +56,7 @@ const explain_iocontrol_t explain_iocontrol_blkgetsize64 =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

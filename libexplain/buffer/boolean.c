@@ -17,6 +17,8 @@
  */
 
 #include <libexplain/buffer/boolean.h>
+#include <libexplain/buffer/pointer.h>
+#include <libexplain/is_efault.h>
 #include <libexplain/parse_bits.h>
 
 
@@ -30,6 +32,19 @@ explain_buffer_boolean(explain_string_buffer_t *sb, int value)
     };
 
     explain_parse_bits_print_single(sb, value, table, SIZEOF(table));
+}
+
+void
+explain_buffer_boolean_ptr(explain_string_buffer_t *sb, const int *data)
+{
+    if (explain_is_efault_pointer(data, sizeof(*data)))
+    {
+        explain_buffer_pointer(sb, data);
+    }
+
+    explain_string_buffer_puts(sb, "{ ");
+    explain_buffer_boolean(sb, *data);
+    explain_string_buffer_puts(sb, " }");
 }
 
 

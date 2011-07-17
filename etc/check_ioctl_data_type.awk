@@ -56,12 +56,24 @@
             ++nerr
         }
     }
-    else if (data_size != "0")
+    else if (data_size == "VOID_STAR")
     {
-        if (data_size " *" != data_type)
+        if (data_type != "void *")
         {
             print FILENAME ": " FNR ": " \
-                "data_type should be \"" data_size " *\", not \"" data_type "\""
+                "data_type should be 'void *', not '" data_type "'"
+            ++nerr
+        }
+    }
+    else if (data_size != "0")
+    {
+        dt = data_size;
+        if (substr(dt, length(dt), 1) != "]")
+            dt = dt " *";
+        if (dt != data_type)
+        {
+            print FILENAME ": " FNR ": " \
+                "data_type should be \"" dt "\", not \"" data_type "\""
             ++nerr
         }
     }

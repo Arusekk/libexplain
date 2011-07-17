@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2010 Peter Miller
+.\" Copyright (C) 2008-2011 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -59,7 +59,7 @@ href="doc-external/open_8h.html#7c0bfc9a553438096c19b86dab687b2a"
     src="http://miller.emu.id.au/pmiller/images/kfish-64.png" alt="" ></td><td>
     <small>&lsquo;I think it's totally awesome, in the category
     of &ldquo;why hasn't this existed for <i>n</i> years&rdquo;
-    awesome.&rsquo &mdash; <a href="http://www.kfish.org/"
+    awesome.&rsquo; &mdash; <a href="http://www.kfish.org/"
     >Parker san</a></small></td></tr>
     </table>
 If, for example, you were to try to open
@@ -110,49 +110,87 @@ in the source code marked &ldquo;FIXME&rdquo;.
 <br clear="right" />
 
 <h2>
-<img src="orrery1.128.png" align="right" alt="" />
 Download </h2>
+There are several ways you can obtain the software, as either source
+code or pre-compiled binaries.
+<p>
 <table>
 <tr>
-    <td valign="top" align="center" ><img src="libexplain.64.png" alt="[]"
-        /></td>
-    <td valign="top" >
-    The following files are available for download from this web site:
-    <p>
-    <table align="center">
-    <tr>
-        <th>File</th><th>Description</th></tr>
-    <tr>
-        <td nowrap><a href="libexplain-\*(V).README"
-            >libexplain-\*(V).README</a></td>
-        <td>The README file form the tarball.</td>
+    <td valign="top" align="center" >
+        <img src="libexplain.64.png" alt="[]" />
+    </td>
+    <td valign="top" ><b>Master Sources</b><br/>
+        <p>
+        The following files are available for download from this web site:
+        <p>
+        <table>
+        <tr>
+            <th>File</th>
+            <th>Description</th>
         </tr>
-    <tr>
-        <td nowrap><a href="libexplain-\*(V).tar.gz"
-            >libexplain-\*(V).tar.gz</a></td>
-        <td>The complete source.</td>
+        <tr>
+            <td nowrap>
+                <a href="libexplain-\*(V).README"
+                >libexplain-\*(V).README</a>
+            </td>
+            <td>
+                The README file form the tarball.
+            </td>
         </tr>
-    <tr>
-        <td nowrap><a href="libexplain-\*(V).ae" >libexplain-\*(V).ae</a></td>
-        <td>The complete source, in <a href="http://aegis.sourceforge.net/"
-            >aedist</a> format.</td>
+        <tr>
+            <td nowrap>
+                <a href="libexplain-\*(V).tar.gz"
+                >libexplain-\*(V).tar.gz</a>
+            </td>
+            <td>
+                The complete source.</td>
+            </tr>
+        <tr>
+            <td nowrap>
+                <a href="libexplain-\*(V).ae"
+                >libexplain-\*(V).ae</a>
+            </td>
+            <td>
+                The complete source, in <a href="http://aegis.sourceforge.net/"
+                >aedist</a> format.
+            </td>
         </tr>
-    <tr>
-        <td nowrap><a href="libexplain-\*(V).pdf" >libexplain-\*(V).pdf</a></td>
-        <td>The reference manual, in PDF format.</td>
-        </tr>
-    <tr>
-        <td nowrap valign="top" ><tt><a href="debian/" >debian</a>/</tt></td>
-        <td>Pre-built debian packages for Ubuntu 9.10 Karmic x86_64</td>
-        </tr>
-    </table>
+        <tr>
+            <td nowrap>
+                <a href="libexplain-\*(V).pdf" >libexplain-\*(V).pdf</a>
+            </td>
+            <td>
+                The reference manual, in PDF format.</td>
+            </tr>
+        </table>
+        <p><br/>
+    </td>
+</tr>
 
 <tr>
-    <td valign="top" align="center" ><a
-        href="https://launchpad.net/~pmiller-opensource/+archive/ppa" ><img
-        src="https://launchpad.net/@@/launchpad-logo.png" border=0 alt="[]"
+    <td valign="top" align="center" >
+        <a href="https://sourceforge.net/projects/libexplain/files/" ><img
+        src="sf.png" border=0 alt="" /></a>
+    </td>
+    <td valign="top" ><b>Sourceforge Downloads </b><br/>
+        <p>
+        The best possible download speed for the source tarball will be
+        from the <a href="https://sourceforge.net/projects/libexplain/files/"
+        >SourceForge download pages</a>, and here is the <a
+href="http://sourceforge.net/projects/libexplain/files/\
+\*(v)/libexplain-\*(V).tar.gz/download"
+        >most recent tarball</a> from there.
+        <p><br/>
+    </td>
+</tr>
+
+<tr>
+    <td valign="top" align="center" >
+        <a href="https://launchpad.net/~pmiller-opensource/+archive/ppa" ><img
+        src="https://launchpad.net/@@/launchpad-logo.png" border=0 alt=""
         /></a></td>
-    <td valign="top" >
+    <td valign="top" ><b>Ubuntu Packages</b><br/>
+        <p>
         If you use Ubuntu Linux, there are pre-built packages available for
         installation using the normal <tt>sudo apt-get install</tt> method,
         from <a href="https://launchpad.net/~pmiller-opensource/+archive/ppa"
@@ -167,26 +205,47 @@ Download </h2>
 sudo apt-get update
 sudo apt-get install libexplain-dev</pre>
         </blockquote>
-        </td>
-    </tr>
+        <p><br/>
+    </td>
+</tr>
 
 <tr>
-    <td valign="top" align="center" > <a
-        href="https://sourceforge.net/projects/libexplain/files/" ><img
-        src="sf.png" border=0 alt="[]" /></a></td>
-    <td valign="top" >
-        The best possible download speed for the source tarball will be
-        from the <a href="https://sourceforge.net/projects/libexplain/files/"
-        >SourceForge download pages</a>, and here is the <a
-      href="http://sourceforge.net/project/platformdownload.php?group_id=241772"
-        >most recent tarball</a> from there.
-        </td>
-    </tr>
+    <td valign="top" align="center" >
+        <img src="http://srecord.sourceforge.net/debian.png" alt="" />
+    </td>
+    <td valign="top" ><b>Debian Packages</b><br/>
+        <p>
+        You will also find that libexplain is available as part of Debian Linux.
+        This web site also provides <a href="debian/"
+        >pre-built Debian packages</a> for
+.so etc/lsb-release.so
+        <p><br/>
+    </td>
+</tr>
+
+<tr>
+    <td valign="top" align="center" >
+        <a href="http://aegis.sourceforge.net/" ><img
+        src="http://aegis.sourceforge.net/aegis.png"
+        border=0 alt="" /></a>
+    </td>
+    <td valign="top" ><b>Aegis</b><br/>
+        <p>
+        Libexplain is developed using <a href="http://aegis.sourceforge.net/"
+        >Aegis</a>, a transaction based software configuration management
+        system.  The Aegis <a
+        href="http://aegis.sourceforge.net/cgi-bin/aeget/libexplain.\*(v)?menu"
+        >repository</a> for this project is available.
+        <p><br/>
+    </td>
+</tr>
 
 </table>
 
 .\" ------------------------------------------------------------------------
-<h2> Services provided by SourceForge </h2>
+<h2>
+<img src="orrery1.128.png" align="right" alt="" />
+Services provided by SourceForge </h2>
 
 <ul>
 <li>
@@ -231,46 +290,39 @@ suite=unstable&amp;p=libexplain"
 
 .\" ------------------------------------------------------------------------
 <hr>
-<table border=0><tr><td valign="top">
-<a href="http://www.fsf.org/">
-<img
-src="http://upload.wikimedia.org/wikipedia/commons/b/bf/\
+<table border=0>
+<tr>
+    <td valign="top">
+        <a href="http://www.fsf.org/" ><img
+        src="http://upload.wikimedia.org/wikipedia/commons/b/bf/\
 GNU-FDL-ic%C3%B4ne-Transparente.PNG"
-border=0 width=129 height=122 alt="" /></a>
-</td><td valign="top" width="15%">
-Libexplain is written and owned by
-<a href="mailto:pmiller@opensource.org.au"
->Peter Miller &lt;pmiller@opensource.org.au&gt;</a>
-and is freely distributable under the terms and conditions of the
-<a href="http://www.gnu.org/licenses/lgpl.txt">GNU LGPL</a>,
-so you may use libexplain with proprietary programs.
-</td><td valign="top">
-<a href="http://www.opensource.org/docs/definition.php">
-<img
-src="http://www.opensource.org/trademarks/opensource/web/transparent/\
+        border=0 width=129 height=122 alt="" /></a>
+    </td>
+    <td valign="top" width="35%" >
+        Libexplain is written and owned by
+        <a href="mailto:pmiller@opensource.org.au"
+        >Peter Miller &lt;pmiller@opensource.org.au&gt;</a>
+        and is freely distributable under the terms and conditions of the
+        <a href="http://www.gnu.org/licenses/lgpl.txt">GNU LGPL</a>,
+        so you may use libexplain with proprietary programs.
+    </td>
+    <td valign="top">
+        <a href="http://www.opensource.org/docs/definition.php"> <img
+        src="http://www.opensource.org/trademarks/opensource/web/transparent/\
 opensource-110x95-t.png"
-border="0" width="110" height="95" alt="" /></a>
-</td><td valign="top" align="right">
-Libexplain is developed using <a
-href="http://aegis.sourceforge.net/" >Aegis</a>, a transaction based
-software configuration management system.
-The Aegis <a
-href="http://aegis.sourceforge.net/cgi-bin/aeget/libexplain.\*(v)?menu"
->repository</a> for this project is available.
-</td><td valign="top">
-<a href="http://aegis.sourceforge.net/" ><img
-src="http://aegis.sourceforge.net/aegis.png"
-border=0 alt="" /></a>
-</td><td valign="top" align="right">
-There is more <a
-href="http://miller.emu.id.au/pmiller/software/"
->Software by Peter Miller</a>
-at his home page.
-</td><td valign="top">
-<a href="http://miller.emu.id.au/pmiller/" ><img
-src="http://miller.emu.id.au/pmiller/pmiller_2003_colour.64.png"
-border=0 alt="" /></a>
-</td></tr></table>
+        border="0" width="110" height="95" alt="" /></a>
+    </td>
+    <td valign="top" align="right">
+        There is more <a href="http://miller.emu.id.au/pmiller/software/"
+        >Software by Peter Miller</a> at his home page.
+    </td>
+    <td valign="top">
+        <a href="http://miller.emu.id.au/pmiller/" ><img
+        src="http://miller.emu.id.au/pmiller/pmiller_2003_colour.64.png"
+        border=0 alt="" /></a>
+    </td>
+</tr>
+</table>
 .\" ------------------------------------------------------------------------
 <hr/>
 <a href="http://sourceforge.net/"><img

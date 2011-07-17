@@ -36,6 +36,7 @@ const explain_iocontrol_t explain_iocontrol_siocgpgrp =
     explain_iocontrol_generic_print_data_int_star, /* print_data_returned */
     sizeof(int), /* data_size */
     "int *", /* data_type */
+    IOCONTROL_FLAG_NON_META, /* flags */
     __FILE__,
     __LINE__,
 };

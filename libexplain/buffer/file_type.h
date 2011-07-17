@@ -22,6 +22,8 @@
 
 struct explain_string_buffer_t; /* forward */
 
+#define FILE_TYPE_BUFFER_SIZE_MIN 100
+
 /**
   * The explain_buffer_file_type function may be used to turn a file
   * type from struct stat::st_mode into a human readable string.

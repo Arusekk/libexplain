@@ -20,8 +20,8 @@
 #include <libexplain/ac/assert.h>
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/fcntl.h>
-#include <libexplain/ac/sys/sysmacros.h> /* major()/minor() on Solaris */
-#include <libexplain/ac/sys/stat.h> /* major()/minor() every where else */
+#include <libexplain/ac/sys/stat.h> /* for major()/minor() except Solaris */
+#include <libexplain/ac/sys/sysmacros.h> /* for major()/minor() on Solaris */
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/dac.h>
@@ -100,7 +100,7 @@ you_can_not_open_a_socket(explain_string_buffer_t *sb)
 static void
 no_corresponding_device(explain_string_buffer_t *sb, const struct stat *st)
 {
-    char            ftype[100];
+    char            ftype[FILE_TYPE_BUFFER_SIZE_MIN];
     char            numbers[40];
     explain_string_buffer_t ftype_sb;
     explain_string_buffer_t numbers_sb;
@@ -229,7 +229,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             )
             {
                 explain_string_buffer_t file_type_sb;
-                char            file_type[50];
+                char            file_type[FILE_TYPE_BUFFER_SIZE_MIN];
 
                 explain_string_buffer_init(&file_type_sb, file_type,
                     sizeof(file_type));
@@ -478,9 +478,9 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_t puid_sb;
             explain_string_buffer_t ftype_sb;
             explain_string_buffer_t fuid_sb;
-            char puid[100];
-            char ftype[100];
-            char fuid[100];
+            char            puid[100];
+            char            ftype[FILE_TYPE_BUFFER_SIZE_MIN];
+            char            fuid[100];
 
             explain_string_buffer_init(&puid_sb, puid, sizeof(puid));
             explain_buffer_uid(&puid_sb, geteuid());
@@ -632,7 +632,7 @@ explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
             if (stat(pathname, &st) >= 0)
             {
                 explain_string_buffer_t file_type_sb;
-                char            file_type[50];
+                char            file_type[FILE_TYPE_BUFFER_SIZE_MIN];
 
                 explain_string_buffer_init(&file_type_sb, file_type,
                     sizeof(file_type));

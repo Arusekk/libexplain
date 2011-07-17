@@ -124,6 +124,10 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb, int
 }
 
 
+/*
+ * The data_size is tricky.  On entry, it is always exactly 4.
+ * The returned data, however, can be up to 4+255*SECTOR_SIZE.
+ */
 const explain_iocontrol_t explain_iocontrol_hdio_drive_cmd =
 {
     "HDIO_DRIVE_CMD", /* name */
@@ -133,8 +137,9 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_cmd =
     print_data,
     print_explanation,
     print_data_returned,
-    4 + 255 * SECTOR_SIZE, /* data_size */
-    "4 + 255 * SECTOR_SIZE *", /* data_type */
+    sizeof(unsigned char[4]), /* data_size */
+    "unsigned char[4]", /* data_type */
+    IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -152,6 +157,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_cmd =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

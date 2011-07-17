@@ -58,7 +58,7 @@ explain_buffer_floppy_raw_cmd_flags(explain_string_buffer_t *sb, int value)
 
 void
 explain_buffer_floppy_raw_cmd(explain_string_buffer_t *sb,
-    const struct floppy_raw_cmd *data)
+    const struct floppy_raw_cmd *data, int extra)
 {
     if (explain_is_efault_pointer(data, sizeof(*data)))
     {
@@ -116,7 +116,7 @@ explain_buffer_floppy_raw_cmd(explain_string_buffer_t *sb,
         }
     }
 
-    if (data->reply_count)
+    if (extra && data->reply_count)
     {
         int             n;
 
@@ -138,7 +138,7 @@ explain_buffer_floppy_raw_cmd(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, ", track = ");
         explain_buffer_int(sb, data->track);
     }
-    if (data->resultcode)
+    if (extra && data->resultcode)
     {
         explain_string_buffer_puts(sb, ", resultcode = ");
         explain_buffer_int(sb, data->resultcode);
@@ -150,8 +150,9 @@ explain_buffer_floppy_raw_cmd(explain_string_buffer_t *sb,
 
 void
 explain_buffer_floppy_raw_cmd(explain_string_buffer_t *sb,
-    const struct floppy_raw_cmd *data)
+    const struct floppy_raw_cmd *data, int extra)
 {
+    (void)extra;
     explain_buffer_pointer(sb, data);
 }
 

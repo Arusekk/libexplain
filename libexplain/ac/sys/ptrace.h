@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,6 +26,7 @@
   */
 
 #include <libexplain/ac/sys/types.h>
+#include <libexplain/ac/unistd.h> /* Solaris defines ptrace() here */
 
 #ifdef HAVE_SYS_PTRACE_H
 #include <sys/ptrace.h>

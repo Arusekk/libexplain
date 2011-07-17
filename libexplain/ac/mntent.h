@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,18 +22,22 @@
 
 /**
   * @file
-  * @brief Insulate <mntent.h> differences
+  * @brief Insulate <mntent.h> and <sys/mnttab.h> differences
   */
 
 #include <libexplain/ac/stdio.h>
 
 #if HAVE_MNTENT_H
 #include <mntent.h>
-#elif defined(HAVE_SYS_MNTENT_H)
+#endif
+#ifdef HAVE_SYS_MNTENT_H
 #include <sys/mntent.h>
-#elif defined(HAVE_SYS_MNTTAB_H)
+#endif
+#ifdef HAVE_SYS_MNTTAB_H
 #include <sys/mnttab.h>
-#else
+#endif
+
+#if !defined(HAVE_MNTENT_H) && !defined(HAVE_SYS_MNTTAB_H)
 
 struct mntent
 {
@@ -44,8 +48,6 @@ struct mntent
     int             mnt_freq;       /* Dump frequency (in days).  */
     int             mnt_passno;     /* Pass number for `fsck'.  */
 };
-
-#include <libexplain/ac/stdio.h>
 
 FILE *setmntent(const char *filename, const char *mode);
 struct mntent *getmntent(FILE *fp);

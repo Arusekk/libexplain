@@ -33,6 +33,15 @@
 
 #ifdef BLKBSZSET
 
+/*
+ * On the subject of data_size, the define is
+ *
+ *     #define BLKBSZGET _IOR(0x12, 112, size_t)
+ *
+ * however the kernel actually uses "int" internally.
+ * So which is correct?  Guess the kernel is.
+ */
+
 static void
 print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data)
@@ -103,6 +112,7 @@ const explain_iocontrol_t explain_iocontrol_blkbszset =
     0, /* print_data_returned */
     sizeof(int), /* data_size */
     "int *", /* data_type */
+    IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -120,6 +130,7 @@ const explain_iocontrol_t explain_iocontrol_blkbszset =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

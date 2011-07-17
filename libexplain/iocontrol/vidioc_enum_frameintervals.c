@@ -23,6 +23,7 @@
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/einval.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_frmivalenum.h>
 #include <libexplain/buffer/v4l2_pixel_format.h>
 #include <libexplain/iocontrol/generic.h>
@@ -51,6 +52,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         {
             const struct v4l2_frmivalenum *arg;
             int             nsizes;
@@ -146,6 +153,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_enum_frameintervals =
     print_data_returned,
     sizeof(struct v4l2_frmivalenum), /* data_size */
     "struct v4l2_frmivalenum *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -163,6 +171,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_enum_frameintervals =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

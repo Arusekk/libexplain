@@ -202,14 +202,10 @@ iorw(explain_string_buffer_t *sb, int type, int nr, int size)
 #endif
 
 
-static void
-print_name(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
-    int errnum, int fildes, int request, const void *data)
+void
+explain_iocontrol_generic_print_hash_define(explain_string_buffer_t *sb,
+    int request)
 {
-    (void)p;
-    (void)errnum;
-    (void)fildes;
-    (void)data;
 #ifdef SIOCDEVPRIVATE
     if (SIOCDEVPRIVATE <= request && request < SIOCDEVPRIVATE + 16)
     {
@@ -330,7 +326,28 @@ print_name(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
         }
     }
 #endif
-    explain_string_buffer_printf(sb, "0x%X", request);
+    {
+        int             prec;
+
+        prec = 2;
+        if (request >= 0x10000)
+            prec = 8;
+        else if (request >= 0x100)
+            prec = 4;
+        explain_string_buffer_printf(sb, "0x%.*X", prec, request);
+    }
+}
+
+
+static void
+print_name(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)data;
+    explain_iocontrol_generic_print_hash_define(sb, request);
 }
 
 
@@ -343,13 +360,13 @@ explain_iocontrol_fake_syscall_name(char *name, int name_size,
     explain_string_buffer_init(&name_buf, name, name_size);
     explain_string_buffer_puts(&name_buf, "ioctl ");
     if (!p)
-        print_name(p, &name_buf, 0, 0, request, 0);
+        explain_iocontrol_generic_print_hash_define(&name_buf, request);
     else if (p->name)
         explain_string_buffer_puts(&name_buf, p->name);
     else if (p->print_name)
         p->print_name(p, &name_buf, 0, 0, request, 0);
     else
-        print_name(p, &name_buf, 0, 0, request, 0);
+        explain_iocontrol_generic_print_hash_define(&name_buf, request);
 }
 
 
@@ -473,8 +490,9 @@ const explain_iocontrol_t explain_iocontrol_generic =
     explain_iocontrol_generic_print_data_pointer, /* print data */
     explain_iocontrol_generic_print_explanation,
     0, /* print_data_returned */
-    NOT_A_POINTER, /* data_size */
-    "intptr_t", /* data_type */
+    VOID_STAR, /* data_size */
+    "void *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

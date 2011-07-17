@@ -20,6 +20,7 @@
 #define LIBEXPLAIN_BUFFER_V4L2_SLICED_VBI_SERVICE_SET_H
 
 #include <libexplain/ac/stdint.h>
+#include <libexplain/ac/stddef.h>
 
 #include <libexplain/string_buffer.h>
 

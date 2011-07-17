@@ -31,8 +31,8 @@ explain_buffer_wrong_file_type_st(explain_string_buffer_t *sb,
     {
         explain_string_buffer_t wrong_sb;
         explain_string_buffer_t right_sb;
-        char wrong[100];
-        char right[100];
+        char            wrong[FILE_TYPE_BUFFER_SIZE_MIN];
+        char            right[FILE_TYPE_BUFFER_SIZE_MIN];
 
         explain_string_buffer_init(&wrong_sb, wrong, sizeof(wrong));
         explain_buffer_file_type_st(&wrong_sb, st);
@@ -59,7 +59,7 @@ explain_buffer_wrong_file_type_st(explain_string_buffer_t *sb,
     else
     {
         explain_string_buffer_t right_sb;
-        char right[100];
+        char            right[FILE_TYPE_BUFFER_SIZE_MIN];
 
         explain_string_buffer_init(&right_sb, right, sizeof(right));
         explain_buffer_file_type(&right_sb, required_file_type);

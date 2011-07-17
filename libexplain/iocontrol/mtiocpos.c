@@ -51,6 +51,7 @@ const explain_iocontrol_t explain_iocontrol_mtiocpos =
     print_data_returned,
     sizeof(struct mtpos), /* data_size */
     "struct mtpos *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -68,6 +69,7 @@ const explain_iocontrol_t explain_iocontrol_mtiocpos =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

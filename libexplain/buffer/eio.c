@@ -115,8 +115,6 @@ explain_buffer_eio(explain_string_buffer_t *sb)
 }
 
 
-
-
 static int
 dev_stat(dev_t dev, struct stat *st, explain_string_buffer_t *dev_buf)
 {
@@ -128,7 +126,7 @@ static void
 a_low_level_io_error_occurred(explain_string_buffer_t *sb,
     const char *device_path, const struct stat *st)
 {
-    char            ftype[300];
+    char            ftype[FILE_TYPE_BUFFER_SIZE_MIN];
     explain_string_buffer_t ftype_sb;
 
     explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
@@ -203,11 +201,9 @@ explain_buffer_eio_fildes(explain_string_buffer_t *sb, int fildes)
     struct stat     st;
 
     if (fstat(fildes, &st) < 0)
-    {
         explain_buffer_eio(sb);
-        return;
-    }
-    return explain_buffer_eio_stat(sb, fildes, &st);
+    else
+        explain_buffer_eio_stat(sb, fildes, &st);
 }
 
 
@@ -217,11 +213,9 @@ explain_buffer_eio_path(explain_string_buffer_t *sb, const char *path)
     struct stat     st;
 
     if (stat(path, &st) < 0 && lstat(path, &st) < 0)
-    {
         explain_buffer_eio(sb);
-        return;
-    }
-    return explain_buffer_eio_stat(sb, -1, &st);
+    else
+        explain_buffer_eio_stat(sb, -1, &st);
 }
 
 

@@ -24,9 +24,9 @@ TEST_SUBJECT="ioctl VIDIOC_G_AUDIO"
 test_config HAVE_LINUX_VIDEODEV2_H || pass
 
 fmt > test.ok << 'fubar'
-ioctl(fildes = 42, request = VIDIOC_G_AUDIO, int *data = 0xNNNNNNNN) failed,
-Invalid argument (EINVAL) because fildes is not associated with an object
-to which ioctl VIDIOC_G_AUDIO can be applied
+ioctl(fildes = 42, request = VIDIOC_G_AUDIO, struct v4l2_audio *data =
+0xNNNNNNNN) failed, Invalid argument (EINVAL) because fildes is not
+associated with an object to which ioctl VIDIOC_G_AUDIO can be applied
 fubar
 test $? -eq 0 || no_result
 

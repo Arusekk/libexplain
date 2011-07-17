@@ -456,16 +456,24 @@ explain_buffer_errno_ptrace_explanation(explain_string_buffer_t *sb, int errnum,
         }
         switch (request)
         {
+#ifdef PT_CONTINUE
         case PT_CONTINUE:
+#endif
+#ifdef PT_SYSCALL
         case PT_SYSCALL:
+#endif
+#ifdef PT_STEP
         case PT_STEP:
+#endif
 #ifdef PT_SYSEMU
         case PT_SYSEMU:
 #endif
 #ifdef PT_SYSEMU_SINGLESTEP
         case PT_SYSEMU_SINGLESTEP:
 #endif
+#ifdef PT_DETACH
         case PT_DETACH:
+#endif
             explain_buffer_gettext
             (
                 sb,

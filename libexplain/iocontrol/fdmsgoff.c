@@ -37,6 +37,7 @@ const explain_iocontrol_t explain_iocontrol_fdmsgoff =
     0, /* print_data_returned */
     NOT_A_POINTER, /* data_size */
     "intptr_t", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -54,6 +55,7 @@ const explain_iocontrol_t explain_iocontrol_fdmsgoff =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

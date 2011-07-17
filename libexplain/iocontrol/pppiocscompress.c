@@ -111,6 +111,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocscompress =
     0, /* print_data_returned */
     sizeof(struct ppp_option_data), /* data_size */
     "struct ppp_option_data *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -128,6 +129,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocscompress =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

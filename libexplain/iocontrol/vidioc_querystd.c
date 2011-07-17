@@ -22,6 +22,7 @@
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/einval.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_std_id.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vidioc_querystd.h>
@@ -36,6 +37,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         explain_buffer_einval_no_vid_std(sb);
         return;
 
@@ -77,6 +84,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_querystd =
     print_data_returned,
     sizeof(v4l2_std_id), /* data_size */
     "v4l2_std_id *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -94,6 +102,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_querystd =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

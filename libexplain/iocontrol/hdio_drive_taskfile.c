@@ -164,6 +164,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_taskfile =
     0, /* print_data_returned */
     sizeof(ide_task_request_t), /* data_size */
     "ide_task_request_t *", /* data_type */
+    IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -181,6 +182,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_drive_taskfile =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

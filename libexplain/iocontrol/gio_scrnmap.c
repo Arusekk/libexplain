@@ -49,8 +49,9 @@ const explain_iocontrol_t explain_iocontrol_gio_scrnmap =
     explain_iocontrol_generic_print_data_pointer, /* print_data */
     0, /* print_explanation */
     print_data_returned,
-    E_TABSZ, /* data_size */
-    "E_TABSZ *", /* data_type */
+    sizeof(char[E_TABSZ]), /* data_size */
+    "char[E_TABSZ]", /* data_type */
+    IOCONTROL_FLAG_NON_META, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -68,6 +69,7 @@ const explain_iocontrol_t explain_iocontrol_gio_scrnmap =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

@@ -36,6 +36,7 @@ const explain_iocontrol_t explain_iocontrol_tiocgptn =
     explain_iocontrol_generic_print_data_uint_star, /* print_data_returned */
     sizeof(unsigned int), /* data_size */
     "unsigned int *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -53,6 +54,7 @@ const explain_iocontrol_t explain_iocontrol_tiocgptn =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,8 +31,10 @@ struct floppy_raw_cmd; /* forward */
   *     The string buffer to print into.
   * @param data
   *     The floppy_raw_cmd structure to be printed.
+  * @param extra
+  *     whether or not to also print the returned value fields
   */
 void explain_buffer_floppy_raw_cmd(explain_string_buffer_t *sb,
-    const struct floppy_raw_cmd *data);
+    const struct floppy_raw_cmd *data, int extra);
 
 #endif /* LIBEXPLAIN_BUFFER_FLOPPY_RAW_CMD_H */

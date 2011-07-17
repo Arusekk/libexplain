@@ -48,9 +48,10 @@ const explain_iocontrol_t explain_iocontrol_blktracesetup =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
-    0, /* print_data_returned */
+    print_data, /* print_data_returned */
     sizeof(struct blk_user_trace_setup), /* data_size */
     "struct blk_user_trace_setup *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -68,6 +69,7 @@ const explain_iocontrol_t explain_iocontrol_blktracesetup =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

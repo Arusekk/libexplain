@@ -43,7 +43,7 @@ set mkdir;
 
 /*
  * Make sure time mod-time of targets is consistent with the ingredients.
- * (During integration builds, adjust beack agressively.)
+ * (During integration builds, adjust back agressively.)
  */
 set time-adjust;
 if [match_mask %1D%2 [version]] then
@@ -408,6 +408,13 @@ signal_exceptions =
     libexplain/signalfd.h
     ;
 
+stdarg_exceptions =
+    libexplain/vfprintf.h
+    libexplain/vprintf.h
+    libexplain/vsnprintf.h
+    libexplain/vsprintf.h
+    ;
+
 stdio_exceptions =
     libexplain/fclose.h
     libexplain/fdopen.h
@@ -470,10 +477,6 @@ stdlib_exceptions =
 string_exceptions =
     libexplain/strndup.h
     test_mincore/main.c
-    ;
-
-sys/ptrace_exceptions =
-    libexplain/ptrace.h
     ;
 
 sys/select_exceptions =
@@ -576,6 +579,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=dirent.h"];
         if [in %0%.c [signal_exceptions]] then
             ex = [stringset [ex] - "-ex=signal.h"];
+        if [in %0%.c [stdarg_exceptions]] then
+            ex = [stringset [ex] - "-ex=stdarg.h"];
         if [in %0%.c [stdio_exceptions]] then
             ex = [stringset [ex] - "-ex=stdio.h"];
         if [in %0%.c [stdlib_exceptions]] then
@@ -584,8 +589,6 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=string.h"];
         if [in %0%.c [sys/mman_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/mman.h"];
-        if [in %0%.c [sys/ptrace_exceptions]] then
-            ex = [stringset [ex] - "-ex=sys/ptrace.h"];
         if [in %0%.c [sys/select_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/select.h"];
         if [in %0%.c [sys/timeb_exceptions]] then
@@ -636,6 +639,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=dirent.h"];
         if [in %0%.h [signal_exceptions]] then
             ex = [stringset [ex] - "-ex=signal.h"];
+        if [in %0%.h [stdarg_exceptions]] then
+            ex = [stringset [ex] - "-ex=stdarg.h"];
         if [in %0%.h [stdio_exceptions]] then
             ex = [stringset [ex] - "-ex=stdio.h"];
         if [in %0%.h [stdlib_exceptions]] then
@@ -644,8 +649,6 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=string.h"];
         if [in %0%.h [sys/mman_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/mman.h"];
-        if [in %0%.h [sys/ptrace_exceptions]] then
-            ex = [stringset [ex] - "-ex=sys/ptrace.h"];
         if [in %0%.h [sys/select_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/select.h"];
         if [in %0%.h [sys/socket_exceptions]] then

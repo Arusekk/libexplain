@@ -24,9 +24,9 @@ TEST_SUBJECT="ioctl VIDIOC_S_AUDIO"
 test_config HAVE_LINUX_VIDEODEV2_H || pass
 
 cat > test.ok << 'fubar'
-ioctl(fildes = 42, request = VIDIOC_S_AUDIO, int *data = { 0 }) failed,
-Invalid argument (EINVAL) because the data argument was incorrectly
-specified
+ioctl(fildes = 42, request = VIDIOC_S_AUDIO, struct v4l2_audio *data = {
+index = 0, name = "", capability = 0, mode = 0 }) failed, Invalid argument
+(EINVAL) because the data argument was incorrectly specified
 fubar
 test $? -eq 0 || no_result
 

@@ -140,7 +140,7 @@ explain_buffer_enosys_stat(explain_string_buffer_t *sb, const struct stat *st,
             struct stat     st2;
             char            device_name[150];
             explain_string_buffer_t device_name_buf;
-            char            file_type[30];
+            char            file_type[FILE_TYPE_BUFFER_SIZE_MIN];
             explain_string_buffer_t file_type_buf;
 
             explain_string_buffer_init
@@ -198,7 +198,7 @@ explain_buffer_enosys_stat(explain_string_buffer_t *sb, const struct stat *st,
 
     default:
         {
-            char            file_type[30];
+            char            file_type[FILE_TYPE_BUFFER_SIZE_MIN];
             explain_string_buffer_t file_type_buf;
 
             explain_string_buffer_init

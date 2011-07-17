@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 #include <libexplain/ac/ctype.h>
 #include <libexplain/ac/dlfcn.h>
+#include <libexplain/ac/linux/kdev_t.h>
 #include <libexplain/ac/stdarg.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
@@ -28,7 +29,6 @@
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/stat.h> /* for major()/minor() except Solaris */
 #include <libexplain/ac/sys/sysmacros.h> /* for major()/minor() on Solaris */
-#include <libexplain/ac/linux/kdev_t.h>
 
 #include <libexplain/gcc_attributes.h>
 #include <libexplain/parse_bits.h>

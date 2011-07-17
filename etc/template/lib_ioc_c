@@ -20,6 +20,7 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/ioctl.h>
 
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/${basename $filename .c}.h>
 #include <libexplain/iocontrol/generic.h>
 #include <${trim_ext $filename}.h>
@@ -46,6 +47,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         ...
         break;
 
@@ -86,7 +93,8 @@ const explain_iocontrol_t explain_iocontrol_${basename $filename .c} =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct ${basename $filename .c}), /* data_size */
-    "struct ${basename $filename .c} *", /* data type */
+    "struct ${basename $filename .c} *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -104,6 +112,7 @@ const explain_iocontrol_t explain_iocontrol_${basename $filename .c} =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

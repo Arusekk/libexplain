@@ -20,11 +20,24 @@
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/fd.h>
 
+#include <libexplain/buffer/floppy_struct.h>
 #include <libexplain/iocontrol/fddefmediaprm.h>
 #include <libexplain/iocontrol/generic.h>
 
 
 #ifdef FDDEFMEDIAPRM
+
+static void
+print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_floppy_struct(sb, data);
+}
+
 
 const explain_iocontrol_t explain_iocontrol_fddefmediaprm =
 {
@@ -32,11 +45,12 @@ const explain_iocontrol_t explain_iocontrol_fddefmediaprm =
     FDDEFMEDIAPRM, /* value */
     explain_iocontrol_disambiguate_false, /* synonym of FDDEFPRM */
     0, /* print_name */
-    explain_iocontrol_generic_print_data_ignored, /* print_data */
+    print_data,
     0, /* print_explanation */
     0, /* print_data_returned */
-    NOT_A_POINTER, /* data_size */
-    "intptr_t", /* data_type */
+    sizeof(struct floppy_struct), /* data_size */
+    "struct floppy_struct *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -54,6 +68,7 @@ const explain_iocontrol_t explain_iocontrol_fddefmediaprm =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

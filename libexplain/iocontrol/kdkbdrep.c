@@ -49,6 +49,7 @@ const explain_iocontrol_t explain_iocontrol_kdkbdrep =
     print_data, /* print_data_returned */
     sizeof(struct kbd_repeat), /* data_size */
     "struct kbd_repeat *", /* data_type */
+    IOCONTROL_FLAG_NON_META, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -66,6 +67,7 @@ const explain_iocontrol_t explain_iocontrol_kdkbdrep =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

@@ -17,6 +17,7 @@
  */
 
 #include <libexplain/ac/ctype.h>
+#include <libexplain/ac/string.h>
 
 #include <libexplain/buffer/errno/ioctl.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
@@ -47,11 +48,35 @@ system_call(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     explain_string_buffer_puts(sb, ", ");
     if (data && p->data_type)
     {
-        explain_string_buffer_puts(sb, p->data_type);
-        if (isalpha(last_char(p->data_type)))
-            explain_string_buffer_putc(sb, ' ');
+        const char      *s;
+        const char      *a;
+
+        s = p->data_type;
+        a = strchr(s, '[');
+        if (a)
+        {
+            const char      *e;
+
+            e = a;
+            while (e > s && isspace((unsigned char)e[-1]))
+                --e;
+            explain_string_buffer_write(sb, s, e - s);
+            if (isalpha((unsigned char)e[-1]))
+                explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts(sb, "data");
+            explain_string_buffer_puts(sb, a);
+        }
+        else
+        {
+            explain_string_buffer_puts(sb, p->data_type);
+            if (isalpha(last_char(p->data_type)))
+                explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts(sb, "data");
+        }
     }
-    explain_string_buffer_puts(sb, "data = ");
+    else
+        explain_string_buffer_puts(sb, "data");
+    explain_string_buffer_puts(sb, " = ");
     explain_iocontrol_print_data(p, sb, errnum, fildes, request, data);
     explain_string_buffer_putc(sb, ')');
 }
@@ -79,4 +104,4 @@ explain_buffer_errno_ioctl(explain_string_buffer_t *sb, int errnum,
     explain_explanation_assemble(&exp, sb);
 }
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et : */

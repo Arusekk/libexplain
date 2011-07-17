@@ -82,7 +82,7 @@ dir_vs_not_dir(explain_string_buffer_t *sb, const char *dir_caption,
     const char *not_dir_caption, const struct stat *not_dir_st)
 {
     explain_string_buffer_t ftype_sb;
-    char            ftype[40];
+    char            ftype[FILE_TYPE_BUFFER_SIZE_MIN];
 
     explain_string_buffer_init(&ftype_sb, ftype, sizeof(ftype));
     explain_buffer_file_type_st(&ftype_sb, not_dir_st);

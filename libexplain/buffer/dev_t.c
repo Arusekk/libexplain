@@ -18,7 +18,8 @@
 
 #include <libexplain/ac/limits.h>
 #include <libexplain/ac/linux/kdev_t.h>
-#include <libexplain/ac/sys/sysmacros.h> /* Solaris: makedev/major/minor */
+#include <libexplain/ac/sys/stat.h> /* for major()/minor() except Solaris */
+#include <libexplain/ac/sys/sysmacros.h> /* for major()/minor() on Solaris */
 
 #include <libexplain/buffer/dev_t.h>
 #include <libexplain/buffer/device_name.h>

@@ -23,6 +23,7 @@
 
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/enosys.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_jpegcompression.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vidioc_s_jpegcomp.h>
@@ -50,6 +51,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         {
             struct v4l2_jpegcompression qry;
 
@@ -163,7 +170,8 @@ const explain_iocontrol_t explain_iocontrol_vidioc_s_jpegcomp =
     print_explanation,
     0, /* print_data_returned */
     sizeof(struct v4l2_jpegcompression), /* data_size */
-    "struct v4l2_jpegcompression *", /* data type */
+    "struct v4l2_jpegcompression *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -181,6 +189,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_s_jpegcomp =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

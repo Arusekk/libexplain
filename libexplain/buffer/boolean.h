@@ -32,5 +32,16 @@
   */
 void explain_buffer_boolean(explain_string_buffer_t *sb, int data);
 
+/**
+  * The explain_buffer_boolean_ptr function may be used
+  * to print a representation of a boolean value.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param data
+  *     The boolean value to be printed.
+  */
+void explain_buffer_boolean_ptr(explain_string_buffer_t *sb, const int *data);
+
 /* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_BUFFER_BOOLEAN_H */

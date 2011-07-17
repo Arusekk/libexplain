@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -33,5 +33,17 @@
   *     The size_t value to be printed.
   */
 void explain_buffer_size_t(explain_string_buffer_t *sb, size_t value);
+
+/**
+  * The explain_buffer_size_t_star function may be used
+  * to print a representation of a size_t value.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param data
+  *     The size_t value to be printed.
+  */
+void explain_buffer_size_t_star(explain_string_buffer_t *sb,
+    const size_t *data);
 
 #endif /* LIBEXPLAIN_BUFFER_SIZE_T_H */

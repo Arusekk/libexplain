@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,7 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/size_t.h>
+#include <libexplain/is_efault.h>
 
 
 void
@@ -31,4 +33,19 @@ explain_buffer_size_t(explain_string_buffer_t *sb, size_t value)
     explain_string_buffer_printf(sb, "%lu", (unsigned long)value);
 #endif
 #endif
+}
+
+
+void
+explain_buffer_size_t_star(explain_string_buffer_t *sb, const size_t *data)
+{
+    if (explain_is_efault_pointer(data, sizeof(*data)))
+    {
+        explain_buffer_pointer(sb, data);
+        return;
+    }
+
+    explain_string_buffer_puts(sb, "{ ");
+    explain_buffer_size_t(sb, *data);
+    explain_string_buffer_puts(sb, " }");
 }

@@ -29,6 +29,11 @@
  * This ioctl is "for debugging only" and comes in wide variety of
  * sizes, all of which are private to the kernel, and all of which
  * are hard to separate out.
+ *
+ * Some of them are:
+ *   struct async_struct
+ *   struct e100_serial
+ *   struct m68k_serial
  */
 const explain_iocontrol_t explain_iocontrol_tiocsergstruct =
 {
@@ -39,8 +44,9 @@ const explain_iocontrol_t explain_iocontrol_tiocsergstruct =
     explain_iocontrol_generic_print_data_pointer, /* print_data */
     0, /* print_explanation */
     explain_iocontrol_generic_print_data_pointer, /* print_data_returned */
-    65536, /* data_size */
-    "65536 *", /* data_type */
+    sizeof(char[1024]), /* data_size */
+    "char[1024]", /* data_type */
+    IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -58,6 +64,7 @@ const explain_iocontrol_t explain_iocontrol_tiocsergstruct =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

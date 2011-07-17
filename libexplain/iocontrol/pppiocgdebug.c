@@ -21,22 +21,10 @@
 #include <libexplain/ac/net/if_ppp.h>
 
 #include <libexplain/buffer/int.h>
-#include <libexplain/buffer/pointer.h>
+#include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/pppiocgdebug.h>
 
 #ifdef PPPIOCGDEBUG
-
-
-static void
-print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
-    int errnum, int fildes, int request, const void *data)
-{
-    (void)p;
-    (void)errnum;
-    (void)fildes;
-    (void)request;
-    explain_buffer_pointer(sb, data);
-}
 
 
 static void
@@ -57,11 +45,12 @@ const explain_iocontrol_t explain_iocontrol_pppiocgdebug =
     PPPIOCGDEBUG, /* value */
     0, /* disambiguate */
     0, /* print_name */
-    print_data,
+    explain_iocontrol_generic_print_data_pointer, /* print_data */
     0, /* print_explanation */
     print_data_returned,
     sizeof(int), /* data_size */
     "int *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -79,6 +68,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocgdebug =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

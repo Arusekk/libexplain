@@ -23,6 +23,7 @@
 
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/enotsup.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_buf_type.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vidioc_streamoff.h>
@@ -48,8 +49,13 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 {
     switch (errnum)
     {
-    case EIO:
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         switch (explain_v4l2_buf_type_ptr_check(fildes, data))
         {
         case explain_v4l2_buf_type_check_no_idea:
@@ -88,18 +94,6 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 }
 
 
-static void
-print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
-    int errnum, int fildes, int request, const void *data)
-{
-    (void)p;
-    (void)errnum;
-    (void)fildes;
-    (void)request;
-    explain_buffer_v4l2_buf_type_ptr(sb, data);
-}
-
-
 const explain_iocontrol_t explain_iocontrol_vidioc_streamoff =
 {
     "VIDIOC_STREAMOFF", /* name */
@@ -108,9 +102,10 @@ const explain_iocontrol_t explain_iocontrol_vidioc_streamoff =
     0, /* print_name */
     print_data,
     print_explanation,
-    print_data_returned,
+    0, /* print_data_returned */
     sizeof(int), /* data_size */
     "int *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -128,6 +123,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_streamoff =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

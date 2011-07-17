@@ -21,6 +21,7 @@
 #include <libexplain/ac/linux/videodev2.h>
 #include <libexplain/ac/sys/ioctl.h>
 
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_dbg_chip_ident.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vidioc_dbg_g_chip_ident.h>
@@ -47,6 +48,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         errnum = ENOTTY;
         /* Fall through... */
 
@@ -88,6 +95,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_dbg_g_chip_ident =
     print_data_returned,
     sizeof(struct v4l2_dbg_chip_ident), /* data_size */
     "struct v4l2_dbg_chip_ident *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -105,6 +113,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_dbg_g_chip_ident =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

@@ -37,6 +37,7 @@ const explain_iocontrol_t explain_iocontrol_blksectget =
     explain_iocontrol_generic_print_data_ushort_star, /* print_data_returned */
     sizeof(unsigned short), /* data_size */
     "unsigned short *", /* data_type */
+    IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -54,6 +55,7 @@ const explain_iocontrol_t explain_iocontrol_blksectget =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

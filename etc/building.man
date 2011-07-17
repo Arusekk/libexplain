@@ -344,7 +344,7 @@ sometimes it's fakeroot, sometimes it really is running as root.  All
 these affect the ability of the library to probe the system looking for
 the proximal cause of the error, \f[I]e.g.\fP ENOSPC or EROFS.
 This often results in 2 or 4 or 8 explanations of an error, depending
-on what the library finds, e.g. existence of useful information in the
+on what the library finds, \f[I]e.g.\fP existence of useful information in the
 mount table, or not.
 .TP
 Mount Table
@@ -358,7 +358,7 @@ If your system has a completely inadequate \f[CW]/proc\fP implementation
 (including, but not limited to: *BSD, Mac OS X, and Solaris)
 or no \f[CW]/proc\fP at all,
 \f[B]and\fP you have not installed the \f[I]lsof\fP(1) tool,
-then most of the tests will return false negatives.
+then large numbers of tests will return false negatives.
 .PP
 As these problem have occured, many of the tests have been enhanced to cope,
 but not all false negative situations have yet been discovered.

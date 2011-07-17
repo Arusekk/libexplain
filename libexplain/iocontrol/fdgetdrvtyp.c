@@ -51,6 +51,7 @@ const explain_iocontrol_t explain_iocontrol_fdgetdrvtyp =
     print_data_returned,
     16, /* data_size */
     "16 *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -68,6 +69,7 @@ const explain_iocontrol_t explain_iocontrol_fdgetdrvtyp =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

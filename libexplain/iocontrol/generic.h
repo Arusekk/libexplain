@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -464,5 +464,18 @@ void explain_iocontrol_generic_print_data_int8_star(
 void explain_iocontrol_generic_print_data_uint8_star(
     const explain_iocontrol_t *p, struct explain_string_buffer_t *sb,
     int errnum, int fildes, int request, const void *data);
+
+/**
+  * The explain_iocontrol_generic_print_hash_define function is used to
+  * turn an ioctl request number into the corresponding hash define, or what
+  * it could have looked like had a hash define been used.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param request
+  *     The ioctl request number to be printed.
+  */
+void explain_iocontrol_generic_print_hash_define(
+    struct explain_string_buffer_t *sb, int request);
 
 #endif /* LIBEXPLAIN_IOCONTROL_GENERIC_H */

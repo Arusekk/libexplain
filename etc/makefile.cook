@@ -59,6 +59,7 @@ source_file_order =
      */
     libexplain/patchlevel.h
     etc/version.so
+    etc/lsb-release.so
 
     /*
      * for the reference manual
@@ -158,6 +159,18 @@ etc/version.so:
     aesub "'.ds V) ${version}'" >> [target];
     aesub "'.ds Y) ${copyright_years}'" >> [target];
 }
+
+etc/lsb-release.so: /etc/lsb-release etc/lsb-release.awk
+    set shallow
+{
+    if [not [verbose]] then
+        function print GEN [target];
+
+    awk -f [resolve etc/lsb-release.awk] /etc/lsb-release > [target];
+    arch >> [target];
+}
+
+cascade web-src/index.html = etc/lsb-release.so;
 
 debian/control
 debian/changelog

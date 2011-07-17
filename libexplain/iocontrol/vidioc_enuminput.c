@@ -22,6 +22,7 @@
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/einval.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_input.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vidioc_enuminput.h>
@@ -49,6 +50,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         {
             const struct v4l2_input *arg;
 
@@ -115,6 +122,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_enuminput =
     print_data_returned,
     sizeof(struct v4l2_input), /* data_size */
     "struct v4l2_input *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -132,6 +140,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_enuminput =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

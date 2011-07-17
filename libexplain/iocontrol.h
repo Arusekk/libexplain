@@ -152,6 +152,13 @@ struct explain_iocontrol_t
     const char *data_type;
 
     /**
+      * The flags member is used to store assorted information about the
+      * ioctl, mostly of interest when checking ioctl data for internal
+      * consistency.
+      */
+    unsigned flags;
+
+    /**
       * The file member is used to rememebr the name of the file this
       * ioctl is defined in, by using __FILE__ in the initialiser.
       * This is needed to obtain useful error message out of the
@@ -345,5 +352,28 @@ void explain_iocontrol_check_conflicts(void);
   * argument.
   */
 #define NOT_A_POINTER (unsigned)(-1)
+
+#define VOID_STAR (unsigned)(-2)
+
+/**
+  * The IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE flag value indicares the the
+  * size in the define from IOC(a,b,c) does not correspond to the actual
+  * data type used in the kernel.
+  */
+#define IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE  0x0001
+
+/**
+  * The IOCONTROL_FLAG_NON_META flag value indicates that the request
+  * is just a random number, and was not defined using the _IOC(a,b,c)
+  * macro, and thus it contains no useful meta-data for checking size
+  * and direction.
+  */
+#define IOCONTROL_FLAG_NON_META             0x0002
+
+/**
+  * The IOCONTROL_FLAG_RW flag is used to indicate that _IOR() is
+  * actually _IORW() in behaviour.
+  */
+#define IOCONTROL_FLAG_RW                   0x0004
 
 #endif /* LIBEXPLAIN_IOCONTROL_H */

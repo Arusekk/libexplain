@@ -76,7 +76,8 @@ const explain_iocontrol_t explain_iocontrol_pppiocsxasyncmap =
     print_explanation,
     0, /* print_data_returned */
     sizeof(int[8]), /* data_size */
-    "int[8] *", /* data_type */
+    "int[8]", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -94,6 +95,7 @@ const explain_iocontrol_t explain_iocontrol_pppiocsxasyncmap =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

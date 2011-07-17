@@ -23,6 +23,7 @@
 
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/enotsup.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_crop.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vidioc_s_crop.h>
@@ -53,6 +54,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         switch (explain_v4l2_crop_check_type(fildes, data))
         {
         case explain_v4l2_crop_check_type_no_idea:
@@ -94,18 +101,6 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 }
 
 
-static void
-print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
-    int errnum, int fildes, int request, const void *data)
-{
-    (void)p;
-    (void)errnum;
-    (void)fildes;
-    (void)request;
-    explain_buffer_v4l2_crop(sb, data, 1);
-}
-
-
 const explain_iocontrol_t explain_iocontrol_vidioc_s_crop =
 {
     "VIDIOC_S_CROP", /* name */
@@ -114,9 +109,10 @@ const explain_iocontrol_t explain_iocontrol_vidioc_s_crop =
     0, /* print_name */
     print_data,
     print_explanation,
-    print_data_returned,
+    0, /* print_data_returned */
     sizeof(struct v4l2_crop), /* data_size */
     "struct v4l2_crop *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -134,6 +130,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_s_crop =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

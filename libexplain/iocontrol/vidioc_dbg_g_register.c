@@ -23,6 +23,7 @@
 
 #include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/eperm.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_dbg_register.h>
 #include <libexplain/buffer/v4l2_register.h>
 #include <libexplain/iocontrol/generic.h>
@@ -59,6 +60,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         /*
          * It could be the address is invalid, or it could be that this
          * actually means ENOTTY.  Guess the latter.
@@ -109,9 +116,11 @@ const explain_iocontrol_t explain_iocontrol_vidioc_dbg_g_register =
 #ifdef HAVE_V4L2_DBG_REGISTER
     sizeof(struct v4l2_dbg_register), /* data_size */
     "struct v4l2_dbg_register *", /* data_type */
+    0, /* flags */
 #else
     sizeof(struct v4l2_register), /* data_size */
     "struct v4l2_register *", /* data_type */
+    0, /* flags */
 #endif
     __FILE__,
     __LINE__,
@@ -130,6 +139,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_dbg_g_register =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

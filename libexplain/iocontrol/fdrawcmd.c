@@ -34,10 +34,25 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     (void)errnum;
     (void)fildes;
     (void)request;
-    explain_buffer_floppy_raw_cmd(sb, data);
+    explain_buffer_floppy_raw_cmd(sb, data, 0);
 }
 
 
+static void
+print_data_returned(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
+    int errnum, int fildes, int request, const void *data)
+{
+    (void)p;
+    (void)errnum;
+    (void)fildes;
+    (void)request;
+    explain_buffer_floppy_raw_cmd(sb, data, 1);
+}
+
+
+/*
+ * "Structure size not included, because of batches."
+ */
 const explain_iocontrol_t explain_iocontrol_fdrawcmd =
 {
     "FDRAWCMD", /* name */
@@ -46,9 +61,10 @@ const explain_iocontrol_t explain_iocontrol_fdrawcmd =
     0, /* print_name */
     print_data,
     0, /* print_explanation */
-    0, /* print_data_returned */
+    print_data_returned,
     sizeof(struct floppy_raw_cmd), /* data_size */
     "struct floppy_raw_cmd *", /* data_type */
+    IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -66,6 +82,7 @@ const explain_iocontrol_t explain_iocontrol_fdrawcmd =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

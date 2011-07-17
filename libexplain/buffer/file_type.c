@@ -22,7 +22,8 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
-#include <libexplain/ac/sys/stat.h>
+#include <libexplain/ac/sys/stat.h> /* for major()/minor() except Solaris */
+#include <libexplain/ac/sys/sysmacros.h> /* for major()/minor() on Solaris */
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/file_type.h>
@@ -33,6 +34,20 @@
 void
 explain_buffer_file_type(explain_string_buffer_t *sb, int mode)
 {
+    if (sb->maximum < FILE_TYPE_BUFFER_SIZE_MIN)
+    {
+        explain_string_buffer_printf
+        (
+            sb->footnotes,
+            "; bug (file %s, line %d) explain_buffer_file_type buffer too "
+                "small (%d < %d)",
+            __FILE__,
+            __LINE__,
+            (int)sb->maximum,
+            FILE_TYPE_BUFFER_SIZE_MIN
+        );
+    }
+
     mode &= S_IFMT;
     switch (mode)
     {
@@ -356,8 +371,8 @@ usb_in_dev_symlink(const char *kind, dev_t st_rdev)
         sizeof(path),
         "/sys/dev/%s/%d:%d",
         kind,
-        major(st_rdev),
-        minor(st_rdev)
+        (int)major(st_rdev),
+        (int)minor(st_rdev)
     );
     n = readlink(path, slink, sizeof(slink) - 1);
     if (n <= 0)
@@ -385,7 +400,7 @@ explain_buffer_file_type_st(explain_string_buffer_t *sb, const struct stat *st)
     {
     case S_IFBLK:
         {
-            char            buffer[100];
+            char            buffer[FILE_TYPE_BUFFER_SIZE_MIN];
 
             if (usb_in_dev_symlink("block", st->st_rdev))
             {
@@ -402,7 +417,7 @@ explain_buffer_file_type_st(explain_string_buffer_t *sb, const struct stat *st)
 
     case S_IFCHR:
         {
-            char            buffer[100];
+            char            buffer[FILE_TYPE_BUFFER_SIZE_MIN];
 
             if (usb_in_dev_symlink("char", st->st_rdev))
             {
@@ -422,7 +437,7 @@ explain_buffer_file_type_st(explain_string_buffer_t *sb, const struct stat *st)
         switch (st->st_rdev)
         {
         default:
-            explain_buffer_file_type(sb, st->mode);
+            explain_buffer_file_type(sb, st->st_mode);
             break;
 
         case S_INSEM:

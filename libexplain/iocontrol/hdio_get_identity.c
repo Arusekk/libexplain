@@ -243,11 +243,12 @@ const explain_iocontrol_t explain_iocontrol_hdio_get_identity =
     print_data_returned,
 #ifdef HAVE_LINUX_ATA_H
     sizeof(short[ATA_ID_WORDS]), /* data_size */
-    "short[ATA_ID_WORDS] *", /* data_type */
+    "short[ATA_ID_WORDS]", /* data_type */
 #else
     sizeof(short[256]), /* data_size */
-    "short[256] *", /* data_type */
+    "short[256]", /* data_type */
 #endif
+    IOCONTROL_FLAG_NON_META, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -265,6 +266,7 @@ const explain_iocontrol_t explain_iocontrol_hdio_get_identity =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };

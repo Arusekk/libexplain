@@ -22,6 +22,7 @@
 #include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/einval.h>
+#include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/v4l2_audioout.h>
 #include <libexplain/iocontrol/generic.h>
 #include <libexplain/iocontrol/vidioc_s_audout.h>
@@ -36,8 +37,9 @@ print_data(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
 {
     (void)p;
     (void)errnum;
+    (void)fildes;
     (void)request;
-    explain_buffer_v4l2_audioout_index_ptr(sb, data, fildes);
+    explain_buffer_v4l2_audioout(sb, data, 1);
 }
 
 
@@ -48,6 +50,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
     switch (errnum)
     {
     case EINVAL:
+        if (!data)
+        {
+            explain_buffer_is_the_null_pointer(sb, "data");
+            return;
+        }
+
         {
             const int       *arg;
             int             naudouts;
@@ -106,8 +114,9 @@ const explain_iocontrol_t explain_iocontrol_vidioc_s_audout =
     print_data,
     print_explanation,
     0, /* print_data_returned */
-    sizeof(int), /* data_size */
-    "int *", /* data_type */
+    sizeof(struct v4l2_audioout), /* data_size */
+    "struct v4l2_audioout *", /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
@@ -125,6 +134,7 @@ const explain_iocontrol_t explain_iocontrol_vidioc_s_audout =
     0, /* print_data_returned */
     0, /* data_size */
     0, /* data_type */
+    0, /* flags */
     __FILE__,
     __LINE__,
 };
