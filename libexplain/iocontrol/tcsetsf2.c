@@ -16,11 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/termios.h>
-
-#include <libexplain/iocontrol/tcsetsf2.h>
+#include <libexplain/ac/linux/termios.h>
+#include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/buffer/termios2.h>
+#include <libexplain/iocontrol/tcsetsf2.h>
 
 #ifdef TCSETSF2
 

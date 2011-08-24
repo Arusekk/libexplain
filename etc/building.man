@@ -18,6 +18,7 @@
 .\" along with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\"
+.cp 0
 .TH Build libexplain libexplain "Reference Manual"
 .so etc/version.so
 .if n .hy 0

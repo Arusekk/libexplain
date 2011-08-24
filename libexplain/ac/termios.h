@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,10 @@
 
 #ifdef HAVE_TERMIOS_H
 #include <termios.h>
+#endif
+
+#ifdef HAVE_SYS_TERMIOS_H
+#include <sys/termios.h>
 #endif
 
 #endif /* LIBEXPLAIN_AC_TERMIOS_H */

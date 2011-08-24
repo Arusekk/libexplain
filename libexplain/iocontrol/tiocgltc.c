@@ -17,10 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/linux/termios.h> /* includes <termios.h> if not */
-#ifndef HAVE_LINUX_TERMIOS_H
-#include <libexplain/ac/sys/ioctl.h> /* order matters */
-#endif
+#include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/iocontrol/tiocgltc.h>
 

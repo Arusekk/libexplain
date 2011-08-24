@@ -17,9 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/linux/if_frad.h>
 #include <libexplain/ac/linux/sockios.h>
+#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/sockio.h>
 
 #include <libexplain/buffer/dlci_add.h>

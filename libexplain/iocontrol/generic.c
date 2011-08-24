@@ -488,7 +488,7 @@ const explain_iocontrol_t explain_iocontrol_generic =
     0, /* disambiguate */
     print_name,
     explain_iocontrol_generic_print_data_pointer, /* print data */
-    explain_iocontrol_generic_print_explanation,
+    explain_iocontrol_generic_print_explanation, /* print_explanation */
     0, /* print_data_returned */
     VOID_STAR, /* data_size */
     "void *", /* data_type */

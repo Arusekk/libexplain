@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,8 +31,16 @@
 #include <stddef.h>
 #endif
 
+/* for C89 compilance */
 #ifndef offsetof
 #define offsetof(a, b)  ((size_t)((char *)&((a *)0)->b - (char *)0))
 #endif
+
+/*
+ * Sun's Solaris 9 C compiler, and some other proprietary C compilers, are not
+ * ANSI C 1989 conforming (let alone C99) and need the sys/types.h header as
+ * well for size_t.  C'mon, people, it's been more than 20 years!
+ */
+#include <libexplain/ac/sys/types.h>
 
 #endif /* LIBEXPLAIN_AC_STDDEF_H */

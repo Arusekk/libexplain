@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/linux/videodev.h>
 #include <libexplain/ac/linux/videodev2.h>
 #include <libexplain/ac/stdio.h>
@@ -160,6 +161,46 @@ static const table_t table[] =
         0
 #endif
     },
+    {
+        "O_NOFOLLOW",
+#if defined(O_NOFOLLOW) && (O_NOFOLLOW != 0)
+        1
+#else
+        0
+#endif
+    },
+    {
+        "O_DIRECTORY",
+#if defined(O_DIRECTORY) && (O_DIRECTORY != 0)
+        1
+#else
+        0
+#endif
+    },
+    {
+        "O_CLOEXEC",
+#if defined(O_CLOEXEC) && (O_CLOEXEC != 0)
+        1
+#else
+        0
+#endif
+    },
+    {
+        "O_DIRECT",
+#if defined(O_DIRECT) && (O_DIRECT != 0)
+        1
+#else
+        0
+#endif
+    },
+    {
+        "O_NOATIME",
+#if defined(O_NOATIME) && (O_NOATIME != 0)
+        1
+#else
+        0
+#endif
+    },
 };
 
 
@@ -221,6 +262,18 @@ main(int argc, char **argv)
             );
             return EXIT_FAILURE;
         }
+    }
+    if (0 == strcmp(name, "not-root"))
+    {
+        if (getuid() == 0 || geteuid() == 0)
+        {
+            explain_output_error_and_die
+            (
+                "This test only applies when not executed by root, "
+                "therefore this test is declared to pass by default."
+            );
+        }
+        return EXIT_SUCCESS;
     }
 
     /*

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="lstat EACCES"
 . test_prelude
 
 # this test doesn't work for root (or fakeroot)
-test `id -u` -eq 0 && pass
+test_config not-root || pass
 
 fmt > test.ok << 'fubar'
 lstat(pathname = "a/b", data = xxxxxxxx) failed, Permission denied (EACCES)
@@ -51,7 +51,7 @@ then
     fail
 fi
 
-fmt -w500 test.out1 > test.out2
+fmt -w 500 test.out1 > test.out2
 test $? -eq 0 || no_result
 
 sed 's|, data = [^)]*)|, data = xxxxxxxx)|' test.out2 > test.out3

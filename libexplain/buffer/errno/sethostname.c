@@ -27,6 +27,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/sethostname.h>
 #include <libexplain/buffer/gettext.h>
+#include <libexplain/buffer/size_t.h>
 #include <libexplain/buffer/string_n.h>
 #include <libexplain/explanation.h>
 #include <libexplain/host_name_max.h>
@@ -40,7 +41,9 @@ explain_buffer_errno_sethostname_system_call(explain_string_buffer_t *sb,
     (void)errnum;
     explain_string_buffer_puts(sb, "sethostname(name = ");
     explain_buffer_string_n(sb, name, name_size);
-    explain_string_buffer_printf(sb, ", name_size = %zd)", name_size);
+    explain_string_buffer_puts(sb, ", name_size = ");
+    explain_buffer_size_t(sb, name_size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 

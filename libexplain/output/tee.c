@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -57,8 +57,10 @@ exiter(explain_output_t *op, int status)
     explain_output_tee_t *p;
 
     p = (explain_output_tee_t *)op;
-    explain_output_method_exit(p->first, status);
-    explain_output_method_exit(p->second, status);
+    if (p->first->vtable->exit)
+        p->first->vtable->exit(p->first, status);
+    if (p->second->vtable->exit)
+        p->second->vtable->exit(p->second, status);
 }
 
 

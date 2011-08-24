@@ -16,6 +16,7 @@
 .\" You should have received a copy of the GNU General Public License along
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
+.cp 0  \" Solaris defaults to ''.cp 1'', sheesh.
 .ds n) ${basename ${trim_ext $filename}}
 .TH \*(n) 1
 .SH NAME

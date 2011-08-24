@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ explain_lsof(const char *lsof_options, explain_lsof_t *context)
         "lsof -Ffnp0 %s %s %s",
         (lsof_options[0] ? "-a" : ""),
         lsof_options,
-        (explain_option_debug() ? "2> /dev/null" : "")
+        (explain_option_debug() >= 2 ? "" : "2> /dev/null")
     );
     fp = popen(command, "r");
     if (!fp)

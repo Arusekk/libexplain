@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -380,6 +380,7 @@ void explain_output_method_exit(explain_output_t *op, int status)
   *
   * @param op
   *     Pointer to the explain_output_t instance to be operated on.
+  *     The NULL pointer will reset to the default style (stderr).
   *
   * @note
   *     The output subsystem will "own" the pointer after this call.

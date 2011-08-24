@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,12 +24,13 @@
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/stat.h>
-#include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/get_current_directory.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/errno/fstat.h>
+#include <libexplain/buffer/errno/stat.h>
 #include <libexplain/buffer/errno/path_resolution.h>
+#include <libexplain/fileinfo.h>
 #include <libexplain/is_same_inode.h>
 #include <libexplain/name_max.h>
 
@@ -240,7 +241,7 @@ explain_buffer_get_current_directory(explain_string_buffer_t *sb,
      * maintained by many of the shell interpreters.
      */
     {
-        char            *pwd;
+        const char      *pwd;
 
         pwd = getenv("PWD");
         if (pwd && pwd[0] == '/')
@@ -263,34 +264,13 @@ explain_buffer_get_current_directory(explain_string_buffer_t *sb,
         }
     }
 
-#ifdef PROC_FS_USEFUL
     /*
      * The next thing to try is the /proc file system.
      */
+    if (explain_fileinfo_self_cwd(data, data_size))
     {
-        ssize_t         n;
-
-        n = readlink("/proc/self/pwd", data, data_size - 1);
-        if (n > 0)
-        {
-            struct stat     dot_st;
-            struct stat     pwd_st;
-
-            data[n] = '\0';
-            if
-            (
-                lstat(".", &dot_st) >= 0
-            &&
-                lstat(data, &pwd_st) >= 0
-            &&
-                explain_is_same_inode(&dot_st, &pwd_st)
-            )
-            {
-                return 0;
-            }
-        }
+        return 0;
     }
-#endif
 
     /*
      * If all else fails, do it the slow way.
@@ -299,7 +279,7 @@ explain_buffer_get_current_directory(explain_string_buffer_t *sb,
         explain_string_buffer_t dot_sb;
         explain_string_buffer_t result_sb;
         struct stat     dot_st;
-        char dot[PATH_MAX * 2 + 1];
+        char            dot[PATH_MAX * 2 + 1];
 
         if (lstat(".", &dot_st) < 0)
         {

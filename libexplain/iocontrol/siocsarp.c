@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/net/if_arp.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/sys/sockio.h> /* Solaris */
 
 #include <libexplain/buffer/arpreq.h>
 #include <libexplain/iocontrol/siocsarp.h>

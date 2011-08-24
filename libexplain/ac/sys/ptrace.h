@@ -32,4 +32,12 @@
 #include <sys/ptrace.h>
 #endif
 
+/* we need this one for the test */
+#ifndef PT_TRACE_ME
+#define PT_TRACE_ME 0
+#endif
+#ifndef PT_CONTINUE
+#define PT_CONTINUE 7
+#endif
+
 #endif /* LIBEXPLAIN_AC_SYS_PTRACE_H */

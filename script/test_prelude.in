@@ -33,7 +33,7 @@ export EXPLAIN_OPTIONS
 #
 # Remember where we came from, so that we can refer back to it as necessary.
 #
-here=$(pwd)
+here="`pwd`"
 test $? -eq 0 || exit 2
 arch=${1-.}
 bindir=$here/$arch/bin
@@ -118,3 +118,6 @@ then
         $diffpath --strip-trailing-cr "$@"
     }
 fi
+
+POSIXLY_CORRECT=1
+export POSIXLY_CORRECT

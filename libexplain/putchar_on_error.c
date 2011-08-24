@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,10 +24,6 @@
 #include <libexplain/output.h>
 
 
-#if __GNUC__ < 3
-static
-#endif
-
 void
 explain_putchar_on_error_failed(int c)
 {
@@ -40,7 +36,7 @@ explain_putchar_on_error_failed(int c)
 }
 
 
-#if __GNUC__ < 3
+#if !defined(__GNUC__) || __GNUC__ < 3
 
 int
 explain_putchar_on_error(int c)

@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/int.h>
 #include <libexplain/iocontrol/tiocssoftcar.h>

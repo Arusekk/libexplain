@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -43,23 +43,23 @@ explain_iocontrol_disambiguate_is_if_ppp(int fildes, int request,
         break;
 
     default:
-        return -1;
+        return DISAMBIGUATE_DO_NOT_USE;
     }
 
     /*
      * We ask the file descriptor for its PPP debug level.
-     * if it barfs, this file descriptor isn't suitable.
+     * If it barfs, this file descriptor isn't suitable.
      */
     debug = 0;
     if (ioctl(fildes, PPPIOCGDEBUG, &debug) < 0)
-        return -1;
+        return DISAMBIGUATE_DO_NOT_USE;
 
     /* looks ok */
-    return 0;
+    return DISAMBIGUATE_USE;
 #else
     (void)fildes;
     (void)request;
     (void)data;
-    return -1;
+    return DISAMBIGUATE_DO_NOT_USE;
 #endif
 }

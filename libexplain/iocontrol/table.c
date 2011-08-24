@@ -351,6 +351,14 @@
 #include <libexplain/iocontrol/siocoutq.h>
 #include <libexplain/iocontrol/siocrtmsg.h>
 #include <libexplain/iocontrol/siocsarp.h>
+#include <libexplain/iocontrol/siocscccal.h>
+#include <libexplain/iocontrol/siocscccfg.h>
+#include <libexplain/iocontrol/siocsccchanini.h>
+#include <libexplain/iocontrol/siocsccgkiss.h>
+#include <libexplain/iocontrol/siocsccgstat.h>
+#include <libexplain/iocontrol/siocsccini.h>
+#include <libexplain/iocontrol/siocsccskiss.h>
+#include <libexplain/iocontrol/siocsccsmem.h>
 #include <libexplain/iocontrol/siocshwtstamp.h>
 #include <libexplain/iocontrol/siocsifaddr.h>
 #include <libexplain/iocontrol/siocsifbr.h>
@@ -402,6 +410,7 @@
 #include <libexplain/iocontrol/tioccons.h>
 #include <libexplain/iocontrol/tiocdrain.h>
 #include <libexplain/iocontrol/tiocexcl.h>
+#include <libexplain/iocontrol/tiocgdev.h>
 #include <libexplain/iocontrol/tiocgetc.h>
 #include <libexplain/iocontrol/tiocgetd.h>
 #include <libexplain/iocontrol/tiocgetp.h>
@@ -440,6 +449,7 @@
 #include <libexplain/iocontrol/tiocserswild.h>
 #include <libexplain/iocontrol/tiocsetd.h>
 #include <libexplain/iocontrol/tiocshayesesp.h>
+#include <libexplain/iocontrol/tiocsig.h>
 #include <libexplain/iocontrol/tiocslcktrmios.h>
 #include <libexplain/iocontrol/tiocspgrp.h>
 #include <libexplain/iocontrol/tiocsptlck.h>
@@ -537,10 +547,10 @@
 #include <libexplain/iocontrol/vidiocsfbuf.h>
 #include <libexplain/iocontrol/vidiocsfreq.h>
 #include <libexplain/iocontrol/vidiocspict.h>
-#include <libexplain/iocontrol/vidiocswin.h>
-#include <libexplain/iocontrol/vidiocsync.h>
 #include <libexplain/iocontrol/vidiocstuner.h>
 #include <libexplain/iocontrol/vidiocsvbifmt.h>
+#include <libexplain/iocontrol/vidiocswin.h>
+#include <libexplain/iocontrol/vidiocsync.h>
 #include <libexplain/iocontrol/vt_activate.h>
 #include <libexplain/iocontrol/vt_disallocate.h>
 #include <libexplain/iocontrol/vt_gethifontmask.h>
@@ -905,6 +915,14 @@ const explain_iocontrol_t *const explain_iocontrol_table[] =
     &explain_iocontrol_siocoutq,
     &explain_iocontrol_siocrtmsg,
     &explain_iocontrol_siocsarp,
+    &explain_iocontrol_siocscccal,
+    &explain_iocontrol_siocscccfg,
+    &explain_iocontrol_siocsccchanini,
+    &explain_iocontrol_siocsccgkiss,
+    &explain_iocontrol_siocsccgstat,
+    &explain_iocontrol_siocsccini,
+    &explain_iocontrol_siocsccskiss,
+    &explain_iocontrol_siocsccsmem,
     &explain_iocontrol_siocshwtstamp,
     &explain_iocontrol_siocsifaddr,
     &explain_iocontrol_siocsifbr,
@@ -955,6 +973,7 @@ const explain_iocontrol_t *const explain_iocontrol_table[] =
     &explain_iocontrol_tioccons,
     &explain_iocontrol_tiocdrain,
     &explain_iocontrol_tiocexcl,
+    &explain_iocontrol_tiocgdev,
     &explain_iocontrol_tiocgetc,
     &explain_iocontrol_tiocgetd,
     &explain_iocontrol_tiocgetp,
@@ -993,6 +1012,7 @@ const explain_iocontrol_t *const explain_iocontrol_table[] =
     &explain_iocontrol_tiocserswild,
     &explain_iocontrol_tiocsetd,
     &explain_iocontrol_tiocshayesesp,
+    &explain_iocontrol_tiocsig,
     &explain_iocontrol_tiocslcktrmios,
     &explain_iocontrol_tiocspgrp,
     &explain_iocontrol_tiocsptlck,
@@ -1093,10 +1113,10 @@ const explain_iocontrol_t *const explain_iocontrol_table[] =
     &explain_iocontrol_vidiocsfbuf,
     &explain_iocontrol_vidiocsfreq,
     &explain_iocontrol_vidiocspict,
-    &explain_iocontrol_vidiocswin,
-    &explain_iocontrol_vidiocsync,
     &explain_iocontrol_vidiocstuner,
     &explain_iocontrol_vidiocsvbifmt,
+    &explain_iocontrol_vidiocswin,
+    &explain_iocontrol_vidiocsync,
     &explain_iocontrol_vt_activate,
     &explain_iocontrol_vt_disallocate,
     &explain_iocontrol_vt_gethifontmask,

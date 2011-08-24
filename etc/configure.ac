@@ -82,6 +82,7 @@ dnl
 AC_FUNC_FSEEKO
 AC_SYS_LARGEFILE
 
+AC_TYPE_SIZE_T
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([long long])
@@ -196,11 +197,73 @@ dnl!   actually useful, unlike BSD and Solaris.
 dnl!
 AC_CHECK_PROGS(LSOF, lsof)
 
-if test -L /proc/self/fd/0 2> /dev/null
+if test -L /proc/self 2> /dev/null
 then
-    AC_DEFINE([PROC_FS_USEFUL], [1],
+    AC_DEFINE([PROC_SELF], [1],
+    [Define this symbol if your system has symbolic link at /proc/self])
+fi
+
+if test -L /proc/$$/fd/0 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_FD_N], [1],
     [Define this symbol if your system has symbolic links containing the
-     absolute path of open files in /proc/self/fd/nnn])
+     absolute path of open files in /proc/nnn/fd/nnn])
+fi
+
+if test -L /proc/$$/path/0 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_PATH_N], [1],
+    [Define this symbol if your system has symbolic links containing the
+     absolute path of open files in /proc/nnn/path/nnn])
+fi
+
+if test -L /proc/$$/path/cwd 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_PATH_CWD], [1],
+    [Define this symbol if your system has symbolic links containing the
+    absolute path of the current directory of a process in /proc/pid/path/cwd])
+fi
+
+if test -L /proc/$$/cwd 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_CWD], [1],
+    [Define this symbol if your system has symbolic links containing the
+    absolute path of the current directory of a process in /proc/pid/cwd])
+fi
+
+if test -L /proc/$$/path/root 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_PATH_ROOT], [1],
+    [Define this symbol if your system has symbolic links containing the
+    absolute path of the root directory of a process in /proc/pid/path/root])
+fi
+
+if test -L /proc/$$/root 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_ROOT], [1],
+    [Define this symbol if your system has symbolic links containing the
+    absolute path of the root directory of a process in /proc/pid/root])
+fi
+
+if test -L /proc/$$/path/a.out 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_PATH_A_OUT], [1],
+    [Define this symbol if your system has symbolic links containing the
+    absolute path of the executable of a process in /proc/pid/path/a.out])
+fi
+
+if test -L /proc/$$/exe 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_EXE], [1],
+    [Define this symbol if your system has symbolic links containing the
+    absolute path of the executable of a process in /proc/pid/exe])
+fi
+
+if test -f /proc/$$/cmdline 2> /dev/null
+then
+    AC_DEFINE([PROC_PID_CMDLINE], [1],
+    [Define this symbol if your system has files containing the
+    command line each process in /proc/pid/cmdline])
 fi
 
 AC_CHECK_PROGS(MSGFMT, gmsgfmt msgfmt)
@@ -294,6 +357,7 @@ AC_CHECK_HEADERS([         \
     fcntl.h                \
     float.h                \
     getopt.h               \
+    inttypes.h             \
     libintl.h              \
     libv4l1-videodev.h     \
     limits.h               \
@@ -430,6 +494,7 @@ AC_CHECK_HEADERS([         \
     sys/eventfd.h          \
     sys/file.h             \
     sys/filio.h            \
+    sys/ioccom.h           \
     sys/ioctl.h            \
     sys/mman.h             \
     sys/mntent.h           \
@@ -648,6 +713,15 @@ AC_CHECK_HEADERS([netinet/in_var.h], [], [], [[
 #include <netinet/in_var.h>
 ]])
 
+AC_CHECK_HEADERS([linux/scc.h], [], [], [[
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_IOCTL_H
+#include <sys/ioctl.h>
+#endif
+]])
+
 dnl! =======================================================================
 
 dnl!
@@ -794,6 +868,7 @@ AC_CHECK_FUNCS(    \
     dlsym          \
     endmntent      \
     eventfd        \
+    fdopendir      \
     flock          \
     fpurge         \
     fstatfs        \
@@ -803,19 +878,23 @@ AC_CHECK_FUNCS(    \
     gethostname    \
     getmntent      \
     getmntinfo     \
+    getopt_long    \
     getpagesize    \
     gettext        \
     hasmntopt      \
     lchown         \
     mbrtowc        \
+    mkdtemp        \
     mkostemp       \
     mmap           \
     munmap         \
     on_exit        \
     poll           \
+    putenv         \
     readv          \
     remove         \
     setdomainname  \
+    setenv         \
     setlocale      \
     setmntent      \
     signalfd       \
@@ -828,6 +907,8 @@ AC_CHECK_FUNCS(    \
     strndup        \
     strnstr        \
     strsignal      \
+    strtof         \
+    strtold        \
     tcdrain        \
     tcflow         \
     tcflush        \
@@ -835,6 +916,7 @@ AC_CHECK_FUNCS(    \
     tcsendbreak    \
     tcsetattr      \
     timerfd_create \
+    unsetenv       \
     ustat          \
     utimes         \
     vsnprintf      \
@@ -919,26 +1001,6 @@ AC_DEFINE([HAVE_STRUCT_IFCONF], [1],
 ], [
 AC_MSG_RESULT([no])
 ])
-
-dnl
-dnl     Test to see where TIOCGWINSZ is defined.
-dnl
-AC_MSG_CHECKING([for TIOCGWINSZ])
-AC_TRY_RUN([
-#include <sys/ioctl.h>
-int main(argc, argv)int argc; char **argv;{
-#ifdef TIOCGWINSZ
-struct winsize ws; ws.ws_col = 0; exit(ws.ws_col);
-#else
-exit(1);
-#endif
-}]
-, AC_DEFINE(HAVE_winsize_SYS_IOCTL_H,1,
-[Define this symbol if your system as <sys/ioctl.h> AND it
-defines TIOCGWINSZ and struct winsize.])
-AC_MSG_RESULT([sys/ioctl.h]),
-AC_MSG_RESULT([not found]),
-AC_MSG_RESULT(cross))
 
 dnl!
 dnl!    Test to see if struct v4l2_hw_freq_seek has a member called "spacing".

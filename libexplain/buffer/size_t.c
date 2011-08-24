@@ -24,14 +24,10 @@
 void
 explain_buffer_size_t(explain_string_buffer_t *sb, size_t value)
 {
-#if HAVE_Z_MODIFIER
-    explain_string_buffer_printf("%zu", value);
-#else
 #if SIZEOF_SIZE_T > SIZEOF_LONG
     explain_string_buffer_printf(sb, "%llu", (unsigned long long)value);
 #else
     explain_string_buffer_printf(sb, "%lu", (unsigned long)value);
-#endif
 #endif
 }
 

@@ -73,7 +73,7 @@ explain_buffer_errno_strtof_explanation(explain_string_buffer_t *sb, int errnum,
              */
             ep = 0;
             err = errno;
-            n = strtof(nptr, &ep);
+            n = explain_ac_strtof(nptr, &ep);
             errno = err;
             if (ep == nptr)
             {

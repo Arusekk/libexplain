@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/pid_t_star.h>
 #include <libexplain/iocontrol/tiocspgrp.h>

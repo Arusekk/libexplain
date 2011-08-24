@@ -52,7 +52,7 @@
         if (data_type != "intptr_t")
         {
             print FILENAME ": " FNR ": " \
-                "data_type should be 'inptr_t', not '" data_type "'"
+                "data_type should be 'intptr_t', not '" data_type "'"
             ++nerr
         }
     }

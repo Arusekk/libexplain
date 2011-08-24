@@ -30,6 +30,8 @@
 #include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/int.h>
 #include <libexplain/buffer/iovec.h>
+#include <libexplain/buffer/long_long.h>
+#include <libexplain/buffer/ssize_t.h>
 #include <libexplain/explanation.h>
 #include <libexplain/option.h>
 #include <libexplain/is_efault.h>
@@ -138,13 +140,11 @@ explain_buffer_errno_writev_explanation(explain_string_buffer_t *sb, int errnum,
                 explain_buffer_einval_too_large(sb, "data[*].iov_len");
                 if (explain_option_dialect_specific())
                 {
-                    explain_string_buffer_printf
-                    (
-                        sb,
-                        " (%lld > %zu)",
-                        total,
-                        max
-                    );
+                    explain_string_buffer_puts(sb, " (");
+                    explain_buffer_long_long(sb, total);
+                    explain_string_buffer_puts(sb, " > ");
+                    explain_buffer_ssize_t(sb, max);
+                    explain_string_buffer_putc(sb, ')');
                 }
                 return;
             }

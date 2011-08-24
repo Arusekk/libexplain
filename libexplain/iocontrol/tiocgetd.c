@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/line_discipline.h>
 #include <libexplain/iocontrol/generic.h>

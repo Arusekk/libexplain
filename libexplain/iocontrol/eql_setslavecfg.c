@@ -111,7 +111,7 @@ const explain_iocontrol_t explain_iocontrol_eql_setslavecfg =
 {
     "EQL_SETSLAVECFG", /* name */
     EQL_SETSLAVECFG, /* value */
-    0, /* disambiguate */
+    explain_iocontrol_disambiguate_is_if_eql,
     0, /* print_name */
     print_data,
     print_explanation,

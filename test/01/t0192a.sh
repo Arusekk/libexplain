@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@ being executed
 fubar
 test $? -eq 0 || no_result
 
-explain truncate foobar 0 -e ETXTBSY -o test.out
+explain -e ETXTBSY truncate foobar 0 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

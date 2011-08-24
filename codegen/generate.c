@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -1196,6 +1196,7 @@ man_man3_explain_fubar_3(void)
     fp = explain_fopen_or_die(filename, "w");
     groff_license_header(fp);
     fprintf(fp, ".ds n) explain_%s\n", function_name);
+    fprintf(fp, ".cp 0  \\\" Compatibility mode off.\n");
     fprintf(fp, ".TH explain_%s 3\n", function_name);
     fprintf(fp, ".SH NAME\n");
     fprintf(fp, "explain_%s \\- explain \\f[I]%s\\fP(%d) errors\n",

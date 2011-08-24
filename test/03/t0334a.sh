@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 TEST_SUBJECT="fpathconf EINVAL"
 . test_prelude
 
-fmt -w75 > test.ok << 'fubar'
+fmt -w 75 > test.ok << 'fubar'
 fpathconf(fildes = 1, name = 666) failed, Invalid argument (EINVAL)
 because name does not refer to a known file configuration value
 fubar
@@ -35,13 +35,13 @@ then
     fail
 fi
 
-fmt -w500 < test.out4 > test.out3
+fmt -w 500 < test.out4 > test.out3
 test $? -eq 0 || no_result
 
 sed -e 's|fildes = 1[^,]*|fildes = 1|' < test.out3 > test.out2
 test $? -eq 0 || no_result
 
-fmt -w75 < test.out2 > test.out
+fmt -w 75 < test.out2 > test.out
 test $? -eq 0 || no_result
 
 diff test.ok test.out

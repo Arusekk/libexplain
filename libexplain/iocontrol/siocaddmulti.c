@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/net/if.h>
+#include <libexplain/ac/sys/sockio.h> /* Solaris */
 
 #include <libexplain/buffer/ifreq_hwaddr.h>
 #include <libexplain/buffer/pointer.h>

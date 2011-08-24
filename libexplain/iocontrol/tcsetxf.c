@@ -17,6 +17,7 @@
  */
 
 #include <libexplain/ac/linux/termios.h>
+#include <libexplain/ac/sys/ioctl.h>
 
 #include <libexplain/iocontrol/tcsetxf.h>
 

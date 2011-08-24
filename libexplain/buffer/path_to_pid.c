@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,15 @@
 #include <libexplain/string_buffer.h>
 
 
-#ifdef PROC_FS_USEFUL
+#if (defined(PROC_PID_PATH_CWD) || defined(PROC_PID_CWD)) && \
+    (defined(PROC_PID_PATH_ROOT) || defined(PROC_PID_ROOT)) && \
+    (defined(PROC_PID_PATH_A_OUT) || defined(PROC_PID_EXE)) && \
+    (defined(PROC_PID_PATH_N) || defined(PROC_PID_FD_N))
+#define TRY_PROC_FIRST 1
+#endif
+
+
+#ifdef TRY_PROC_FIRST
 
 static int
 snoop_symlink(const char *path, const struct stat *st1)
@@ -58,22 +66,48 @@ snoop_symlink(const char *path, const struct stat *st1)
 
 
 static int
-snoop_process(int pid, const struct stat *st)
+snoop_process(pid_t pid, const struct stat *st)
 {
     char          path2[100];
     DIR           *dp2;
 
-    snprintf(path2, sizeof(path2), "/proc/%d/cwd", pid);
+#if defined(PROC_PID_PATH_CWD)
+    snprintf(path2, sizeof(path2), "/proc/%ld/path/cwd", (long)pid);
     if (snoop_symlink(path2, st))
         return 1;
+#elif defined(PROC_PID_CWD)
+    snprintf(path2, sizeof(path2), "/proc/%ld/cwd", (long)pid);
+    if (snoop_symlink(path2, st))
+        return 1;
+#endif
+
+#if defined(PROC_PID_PATH_A_OUT)
+    snprintf(path2, sizeof(path2), "/proc/%d/path/a.out", pid);
+    if (snoop_symlink(path2, st))
+        return 1;
+#elif defined(PROC_PID_EXE)
     snprintf(path2, sizeof(path2), "/proc/%d/exe", pid);
     if (snoop_symlink(path2, st))
         return 1;
+#endif
+
+#if defined(PROC_PID_PATH_ROOT)
+    snprintf(path2, sizeof(path2), "/proc/%d/path/root", pid);
+    if (snoop_symlink(path2, st))
+        return 1;
+#elif defined(PROC_PID_ROOT)
     snprintf(path2, sizeof(path2), "/proc/%d/root", pid);
     if (snoop_symlink(path2, st))
         return 1;
+#endif
 
-    snprintf(path2, sizeof(path2), "/proc/%d/fd", pid);
+#if defined(PROC_PID_PATH_N)
+    snprintf(path2, sizeof(path2), "/proc/%ld/path", (long)pid);
+#elif defined(PROC_PID_FD_N)
+    snprintf(path2, sizeof(path2), "/proc/%ld/fd", (long)pid);
+#else
+    #error oops
+#endif
     dp2 = opendir(path2);
     if (!dp2)
         return 0;
@@ -91,7 +125,7 @@ snoop_process(int pid, const struct stat *st)
         fd = strtol(dep2->d_name, &ep2, 10);
         if (ep2 == dep2->d_name || *ep2)
             continue;
-        snprintf(path3, sizeof(path3), "/proc/%d/fd/%d", pid, fd);
+        snprintf(path3, sizeof(path3), "%s/%d", path2, fd);
         if (snoop_symlink(path3, st))
         {
             closedir(dp2);
@@ -103,7 +137,7 @@ snoop_process(int pid, const struct stat *st)
 }
 
 
-#else /* !PROC_FS_USEFUL */
+#else /* !TRY_PROC_FIRST */
 
 
 typedef struct adapter adapter;
@@ -149,7 +183,7 @@ n_callback(explain_lsof_t *context, const char *name)
 static int
 stat_to_pid(explain_string_buffer_t *sb, const struct stat *st)
 {
-#ifdef PROC_FS_USEFUL
+#ifdef TRY_PROC_FIRST
     int             count;
     DIR             *dp;
 
@@ -226,7 +260,7 @@ int
 explain_buffer_path_users(explain_string_buffer_t *sb, const char *path,
     const char *caption)
 {
-#ifdef PROC_FS_USEFUL
+#ifdef TRY_PROC_FIRST
     int             count;
     struct stat     st;
     DIR             *dp;

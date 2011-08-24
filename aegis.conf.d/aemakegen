@@ -25,7 +25,7 @@ project_specific =
     },
     {
         name = "aemakegen:version-info";
-        value = "44:0:14";
+        value = "45:0:15";
     },
     {
         name = "aemakegen:debian:copyright";

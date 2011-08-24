@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,67 +18,26 @@
  */
 
 #include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/sys/socket.h>
 #include <libexplain/ac/sys/stat.h>
-#include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/sockaddr.h>
-#include <libexplain/lsof.h>
+#include <libexplain/fileinfo.h>
 #include <libexplain/string_buffer.h>
-
-
-#ifndef PROC_FS_USEFUL
-
-
-typedef struct adapter adapter;
-struct adapter
-{
-    explain_lsof_t inherited;
-    explain_string_buffer_t *sb;
-};
-
-
-static void
-n_callback(explain_lsof_t *context, const char *name)
-{
-    adapter         *a;
-
-    a = (adapter *)context;
-    explain_string_buffer_putc(a->sb, ' ');
-    explain_string_buffer_puts_quoted(a->sb, name);
-}
-
-#endif
 
 
 static void
 explain_buffer_fildes_to_path(explain_string_buffer_t *sb, int fildes)
 {
-#ifdef PROC_FS_USEFUL
-    int             n;
-    char            procpath[100];
-    char            symlink_data[PATH_MAX + 1];
+    char            path[PATH_MAX + 1];
 
-    snprintf(procpath, sizeof(procpath), "/proc/self/fd/%d", fildes);
-    n = readlink(procpath, symlink_data, sizeof(symlink_data) - 1);
-    if (n > 0)
+    if (explain_fileinfo_self_fd_n(fildes, path, sizeof(path)))
     {
-        symlink_data[n] = 0;
         explain_string_buffer_putc(sb, ' ');
-        explain_string_buffer_puts_quoted(sb, symlink_data);
+        explain_string_buffer_puts_quoted(sb, path);
     }
-#else
-    adapter         obj;
-    char            options[40];
-
-    obj.inherited.n_callback = n_callback;
-    obj.sb = sb;
-    snprintf(options, sizeof(options), "-p %ld -d %d", (long)getpid(), fildes);
-    explain_lsof(options, &obj.inherited);
-#endif
 }
 
 
@@ -113,7 +72,7 @@ explain_buffer_fildes_to_sockaddr(explain_string_buffer_t *sb, int fildes)
 void
 explain_buffer_fildes_to_pathname(explain_string_buffer_t *sb, int fildes)
 {
-    struct stat st;
+    struct stat     st;
 
     if (fstat(fildes, &st) < 0)
         return;

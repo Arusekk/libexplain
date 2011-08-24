@@ -38,7 +38,7 @@ then
     fail
 fi
 
-fmt -w888 test.out.4 > test.out.3
+fmt -w 888 test.out.4 > test.out.3
 test $? -eq 0 || no_result
 
 sed 's|data = [^)]*|data = 0xNNNNNNNN|' test.out.3 > test.out.2

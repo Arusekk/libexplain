@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ fstat(fildes = 42, data = 0x00002468) failed, Cannot allocate memory
 fubar
 test $? -eq 0 || no_result
 
-explain fstat 42 0x2468 -e ENOMEM -o test.out
+explain -e ENOMEM fstat 42 0x2468 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

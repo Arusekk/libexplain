@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,13 +22,9 @@
 void
 explain_buffer_ssize_t(explain_string_buffer_t *sb, ssize_t value)
 {
-#ifdef HAVE_Z_MODIFIER
-    explain_string_buffer_printf("%zd", value);
-#else
 #if SIZEOF_SIZE_T > SIZEOF_LONG
         explain_string_buffer_printf(sb, "%lld", (long long)value);
 #else
         explain_string_buffer_printf(sb, "%ld", (long)value);
-#endif
 #endif
 }

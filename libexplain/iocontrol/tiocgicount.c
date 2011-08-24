@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/linux/serial.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/serial_icounter_struct.h>
 #include <libexplain/iocontrol/generic.h>

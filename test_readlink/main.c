@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ int
 main(int argc, char **argv)
 {
     const char      *pathname;
+    int             n;
     char            data[PATH_MAX + 1];
 
     for (;;)
@@ -60,6 +61,7 @@ main(int argc, char **argv)
         usage();
     pathname = argv[optind];
 
-    explain_readlink_or_die(pathname, data, sizeof(data));
+    n = explain_readlink_or_die(pathname, data, sizeof(data));
+    printf("%.*s\n", n, data);
     return 0;
 }

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -37,7 +37,7 @@ test $? -eq 0 || no_result
 explain -eEROFS tmpfile > test.out.1 2>&1
 test $? -eq 0 || fail
 
-fmt -w700 < test.out.1 > test.out.2
+fmt -w 700 < test.out.1 > test.out.2
 test $? -eq 0 || no_result
 
 sed -e 's|("[^)]*full)|("/example", 42% full)|' \

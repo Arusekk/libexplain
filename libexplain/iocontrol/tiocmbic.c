@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/tiocm.h>
 #include <libexplain/iocontrol/tiocmbic.h>

@@ -17,73 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdio.h>
-#include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/fileinfo.h>
 #include <libexplain/getppcwd.h>
-#include <libexplain/lsof.h>
-
-
-#ifdef PROC_FS_USEFUL
-
-char *
-explain_getppcwd(char *data, size_t data_size)
-{
-    int             n;
-    char            path[100];
-
-    snprintf(path, sizeof(path), "/proc/%d/cwd", getppid());
-    n = readlink(path, data, data_size - 1);
-    if (n <= 0)
-        return 0;
-    data[n] = '\0';
-    return data;
-}
-
-#else
-
-typedef struct adapter adapter;
-struct adapter
-{
-    explain_lsof_t  inherited;
-    char            *data;
-    size_t          data_size;
-    int             count;
-};
-
-
-static void
-n_callback(explain_lsof_t *context, const char *name)
-{
-    adapter         *a;
-
-    a = (adapter *)context;
-    explain_strendcpy(a->data, name, a->data + a->data_size);
-    a->count++;
-}
 
 
 char *
 explain_getppcwd(char *data, size_t data_size)
 {
-    int             ppid;
-    adapter         obj;
-    char            options[40];
+    pid_t           ppid;
 
     ppid = getppid();
-    if (ppid <= 0)
-        return 0;
-    snprintf(options, sizeof(options), "-a -p%d -dcwd", ppid);
-    obj.inherited.n_callback = n_callback;
-    obj.data = data;
-    obj.data_size = data_size;
-    obj.count = 0;
-    explain_lsof(options, &obj.inherited);
-
-    if (obj.count == 0)
-        return 0;
+    if (ppid < 0)
+        return NULL;
+    if (!explain_fileinfo_pid_cwd(ppid, data, data_size))
+        return NULL;
     return data;
 }
-
-#endif

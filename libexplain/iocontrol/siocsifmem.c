@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/net/if.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/sys/sockio.h> /* Solaris */
 
 #include <libexplain/buffer/ifreq_metric.h>
 #include <libexplain/iocontrol/siocsifmem.h>

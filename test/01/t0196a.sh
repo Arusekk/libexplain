@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -27,10 +27,10 @@ because length is larger than the maximum file size
 fubar
 test $? -eq 0 || no_result
 
-explain ftruncate 0 0x12345 -e EFBIG -o test.out4
+explain -e EFBIG ftruncate 0 0x12345 > test.out4
 test $? -eq 0 || fail
 
-fmt -w700 test.out4 > test.out3
+fmt -w 700 test.out4 > test.out3
 test $? -eq 0 || no_result
 
 sed -e 's|= 0 "[^"]*",|= 0,|' \

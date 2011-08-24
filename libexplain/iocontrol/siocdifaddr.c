@@ -17,10 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/stdint.h> /* order matters for Jaunty */
+#include <libexplain/ac/stdint.h> /* order matters for Ubuntu Jaunty */
 #include <libexplain/ac/linux/ipv6.h>
 #include <libexplain/ac/net/if.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/sys/sockio.h> /* Solaris */
 
 #ifndef HAVE_LINUX_IPV6_H
 /* This problem observed on FreeBSD */

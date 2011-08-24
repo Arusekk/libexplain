@@ -160,6 +160,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
             );
             break;
         }
+#ifdef AI_NUMERICSERV
         if (hints && (hints->ai_flags & AI_NUMERICSERV) && service)
         {
             explain_string_buffer_puts
@@ -169,6 +170,7 @@ explain_buffer_errcode_getaddrinfo_explanation(
             );
             break;
         }
+#endif
         if (!service)
         {
             explain_string_buffer_puts(sb, "the node is not known");

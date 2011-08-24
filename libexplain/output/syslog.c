@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -57,19 +57,22 @@ message(explain_output_t *op, const char *text)
      * inconsistent syslog format.
      */
     prog = explain_program_name_get();
-    plen = strlen(prog);
-    delta = plen + 2;
-    if
-    (
-        tlen >= delta
-    &&
-        memcmp(text, prog, plen) == 0
-    &&
-        memcmp(text + plen, ": ", 2) == 0
-    )
+    if (prog && *prog)
     {
-        text += delta;
-        tlen -= delta;
+        plen = strlen(prog);
+        delta = plen + 2;
+        if
+        (
+            tlen >= delta
+        &&
+            memcmp(text, prog, plen) == 0
+        &&
+            memcmp(text + plen, ": ", 2) == 0
+        )
+        {
+            text += delta;
+            tlen -= delta;
+        }
     }
     if (tlen == 0)
         return;
@@ -126,6 +129,8 @@ explain_output_syslog_new3(int option, int facility, int level)
          * makes for an inconsistent {ugly} syslog format.
          */
         ident = explain_program_name_get();
+        if (ident && !*ident)
+            ident = NULL;
 
         if (!openlog_has_been_called)
         {

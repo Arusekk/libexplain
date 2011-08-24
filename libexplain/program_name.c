@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,16 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/assert.h>
-#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/limits.h> /* for PATH_MAX except Solaris */
-#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
-#include <libexplain/ac/unistd.h>
 
-#include <libexplain/lsof.h>
+#include <libexplain/fileinfo.h>
 #include <libexplain/name_max.h>
 #include <libexplain/program_name.h>
 
@@ -83,82 +79,48 @@ explain_program_name_set_real(const char *name)
 }
 
 
-#ifndef PROC_FS_USEFUL
-
-static void
-n_callback(explain_lsof_t *context, const char *name)
-{
-    if (context->fildes == LIBEXPLAIN_LSOF_FD_txt)
-    {
-        explain_program_name_set_real(name);
-    }
-}
-
-#endif
-
-
 const char *
 explain_program_name_get(void)
 {
+    /*
+     * Use the cached result, if possible.
+     */
     if (progname[0])
         return progname;
 
-#ifdef PROC_FS_USEFUL
+    /*
+     * See if /proc can help us.
+     */
     {
-        int             fd;
+        char            path[PATH_MAX + 1];
 
-        fd = open("/proc/self/cmdline", O_RDONLY);
-        if (fd >= 0)
+        if (explain_fileinfo_self_exe(path, sizeof(path)))
         {
-            ssize_t         n;
-            char            buf[NAME_MAX + 1];
-
-            n = read(fd, buf, sizeof(buf));
-            close(fd);
-            if (n > 0)
-            {
-                char *cp = memchr(buf, '\0', n);
-                if (cp)
-                {
-                    explain_program_name_set_real(buf);
-                    if (progname[0])
-                        return progname;
-                }
-            }
+            explain_program_name_set_real(path);
+            if (progname[0])
+                return progname;
         }
     }
-    {
-        int             n;
-        char            buf[PATH_MAX + 1];
-
-        n = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
-        if (n > 0)
-        {
-            buf[n] = 0;
-            explain_program_name_set_real(buf);
-        }
-    }
-#else
-    {
-        explain_lsof_t obj;
-        char            options[40];
-
-        obj.n_callback = n_callback;
-        snprintf(options, sizeof(options), "-p %ld", (long)getpid());
-        explain_lsof(options, &obj);
-    }
-#endif
-    if (progname[0])
-        return progname;
 
     /*
      * bash(1) sets the "_" environment variable,
      * use that if available.
      */
-    explain_program_name_set_real(getenv("_"));
-    if (progname[0])
-        return progname;
+    {
+        const char      *path;
 
+        path = getenv("_");
+        if (path && *path)
+        {
+            explain_program_name_set_real(path);
+            if (progname[0])
+                return progname;
+        }
+    }
+
+    /*
+     * Sorry, can't help you.
+     */
     return "";
 }
 

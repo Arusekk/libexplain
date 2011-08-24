@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,10 +29,10 @@ software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain chmod foobar -e EFAULT -o test.out4
+explain -e EFAULT chmod foobar > test.out4
 test $? -eq 0 || fail
 
-fmt -w700 test.out4 > test.out3
+fmt -w 700 test.out4 > test.out3
 test $? -eq 0 || no_result
 
 sed 's|pathname = [^),]*|pathname = 0xNNNNNNNN|' test.out3 > test.out2

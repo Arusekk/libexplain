@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ permission was denied on the directory
 fubar
 test $? -eq 0 || no_result
 
-explain fchdir 42 -e EACCES -o test.out
+explain -e EACCES fchdir 42 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2010 Peter Miller
+# Copyright (C) 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ test $? -eq 0 || no_result
 explain -eEINVAL mmap 0 0 0 MAP_ANON 0 > test.out.4
 test $? -eq 0 || fail
 
-fmt -w700 test.out.4 > test.out.3
+fmt -w 700 test.out.4 > test.out.3
 test $? -eq 0 || no_result
 sed 's|ANONYMOUS|ANON|' test.out.3 > test.out.2
 test $? -eq 0 || no_result

@@ -578,7 +578,7 @@ expression
 #ifdef _IOC_READ
             $$ = _IOC(_IOC_READ, $3, $5, $7);
 #elif defined(IOC_OUT)
-            $$ = _IOC(IOC_OUT, $3, $5, $7);
+            $$ = _IORN($3, $5, $7);
 #else
             $$ = ($3 << 8) + $5;
 #endif
@@ -593,7 +593,7 @@ expression
 #ifdef _IOC_WRITE
             $$ = _IOC(_IOC_WRITE, $3, $5, $7);
 #elif defined(IOC_IN)
-            $$ = _IOC(IOC_IN, $3, $5, $7);
+            $$ = _IOWN($3, $5, $7);
 #else
             $$ = ($3 << 8) + $5;
 #endif
@@ -608,7 +608,7 @@ expression
 #if defined(_IOC_READ) && defined(_IOC_WRITE)
             $$ = _IOC(_IOC_READ | _IOC_WRITE, $3, $5, $7);
 #elif defined(IOC_INOUT)
-            $$ = _IOC(IOC_INOUT, $3, $5, $7);
+            $$ = _IOWRN($3, $5, $7);
 #else
             $$ = ($3 << 8) + $5;
 #endif

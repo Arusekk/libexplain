@@ -65,7 +65,7 @@ explain_iocontrol_check_conflicts(void)
 {
     const explain_iocontrol_t *const *tpp1;
     const explain_iocontrol_t *const *end;
-    size_t          number_of_errors;
+    unsigned        number_of_errors;
 
     end = explain_iocontrol_table + explain_iocontrol_table_size;
     number_of_errors = 0;
@@ -393,6 +393,8 @@ explain_iocontrol_check_conflicts(void)
             tp1->number >= SIOCDEVPRIVATE
         &&
             tp1->number < SIOCDEVPRIVATE + 16
+        &&
+            !(tp1->flags & IOCONTROL_FLAG_SIZE_DOES_NOT_AGREE)
         )
         {
             if (tp1->data_size != sizeof(struct ifreq))
@@ -644,7 +646,7 @@ explain_iocontrol_check_conflicts(void)
         fprintf
         (
             stderr,
-            "found %zu error%s\n",
+            "found %u error%s\n",
             number_of_errors,
             (number_of_errors == 1 ? "" : "s")
         );

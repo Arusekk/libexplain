@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,16 @@ BEGIN {
 /_FILE_OFFSET_BITS/ {
     print ""
     line = $0
-    sub(/_FILE_OFFSET_BITS/, "LIBEXPLAIN_FILE_OFFSET_BITS", line)
+
+    # with GNU Awk we can say
+    #   sub(/_FILE_OFFSET_BITS/, "LIBEXPLAIN_FILE_OFFSET_BITS", line)
+    # but we have to do it the slow way
+    n = index(line, "_FILE_OFFSET_BITS");
+    if (n > 0)
+    {
+        line = substr(line, 1, n - 1) "LIBEXPLAIN" substr(line, n, 999)
+    }
+
     print prev;
     print line;
     prev = "";
@@ -36,7 +45,16 @@ BEGIN {
 /_LARGEFILE_SOURCE/ {
     print ""
     line = $0
-    sub(/_LARGEFILE_SOURCE/, "LIBEXPLAIN_LARGEFILE_SOURCE", line)
+
+    # with GNU Awk we can say
+    #   sub(/_LARGEFILE_SOURCE/, "LIBEXPLAIN_LARGEFILE_SOURCE", line)
+    # but we have to do it the slow way
+    n = index(line, "_LARGEFILE_SOURCE");
+    if (n > 0)
+    {
+        line = substr(line, 1, n - 1) "LIBEXPLAIN" substr(line, n, 999)
+    }
+
     print prev;
     print line;
     prev = "";
@@ -45,7 +63,16 @@ BEGIN {
 /_LARGE_FILES/ {
     print ""
     line = $0
-    sub(/_LARGE_FILES/, "LIBEXPLAIN_LARGE_FILES", line)
+
+    # with GNU Awk we can say
+    #   sub(/_LARGE_FILES/, "LIBEXPLAIN_LARGE_FILES", line)
+    # but we have to do it the slow way
+    n = index(line, "_LARGE_FILES");
+    if (n > 0)
+    {
+        line = substr(line, 1, n - 1) "LIBEXPLAIN" substr(line, n, 999)
+    }
+
     print prev;
     print line;
     prev = "";
@@ -54,7 +81,16 @@ BEGIN {
 /HAVE_SIGSET_T/{
     print ""
     line = $0
-    sub(/HAVE_SIGSET_T/, "LIBEXPLAIN_SIGSET_T", line)
+
+    # with GNU Awk we can say
+    #   sub(/HAVE_SIGSET_T/, "LIBEXPLAIN_SIGSET_T", line)
+    # but we have to do it the slow way
+    n = index(line, "HAVE_SIGSET_T");
+    if (n > 0)
+    {
+        line = substr(line, 1, n - 1) "LIBEXPLAIN" substr(line, n + 4, 999)
+    }
+
     print prev;
     print line;
     prev = "";
@@ -65,7 +101,15 @@ BEGIN {
 /HAVE_USTAT_H/{
     print ""
     line = $0
-    sub(/HAVE_USTAT_H/, "LIBEXPLAIN_HAVE_USTAT_H", line)
+
+    # with GNU Awk we can say
+    #   sub(/HAVE_USTAT_H/, "LIBEXPLAIN_HAVE_USTAT_H", line)
+    # but we have to do it the slow way
+    n = index(line, "HAVE_USTAT_H");
+    if (n > 0)
+    {
+        line = substr(line, 1, n - 1) "LIBEXPLAIN_" substr(line, n, 999)
+    }
     print prev;
     print line;
     prev = "";
@@ -76,7 +120,15 @@ BEGIN {
 /STATFS_NARGS/{
     print ""
     line = $0
-    sub(/STATFS_NARGS/, "LIBEXPLAIN_STATFS_NARGS", line)
+
+    # with GNU Awk we can say
+    #   sub(/STATFS_NARGS/, "LIBEXPLAIN_STATFS_NARGS", line)
+    # but we have to do it the slow way
+    n = index(line, "STATFS_NARGS");
+    if (n > 0)
+    {
+        line = substr(line, 1, n - 1) "LIBEXPLAIN_" substr(line, n, 999)
+    }
     print prev;
     print line;
     prev = "";

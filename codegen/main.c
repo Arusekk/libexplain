@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,6 +44,8 @@ usage(void)
 }
 
 
+#ifdef HAVE_GETOPT_LONG
+
 static const struct option options[] =
 {
     { "ioctl-scan-include", 1, 0, 'i' },
@@ -53,6 +55,8 @@ static const struct option options[] =
     { "version", 0, 0, 'V' },
     { 0, 0, 0, 0 }
 };
+
+#endif
 
 
 int
@@ -67,7 +71,11 @@ main(int argc, char **argv)
     lisp = 0;
     for (;;)
     {
+#ifdef HAVE_GETOPT_LONG
         int c = getopt_long(argc, argv, "g:I:i:lV", options, 0);
+#else
+        int c = getopt(argc, argv, "g:I:i:lV");
+#endif
         if (c < 0)
             break;
         switch (c)

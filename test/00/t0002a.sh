@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008-2010 Peter Miller
+# Copyright (C) 2008-2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
 TEST_SUBJECT="explain_open ELOOP"
 . test_prelude
 
+# Solaris is still in the Dark Ages
+test_config O_NOFOLLOW || pass
+
 touch snot
 test $? -eq 0 || no_result
 ln -s snot slink
@@ -33,7 +36,7 @@ pathname refers to a symbolic link
 fubar
 test $? -eq 0 || no_result
 
-# This is fro FreeBSD
+# This is for FreeBSD
 cat > test.ok2 << 'fubar'
 open(pathname = "slink", flags = O_RDONLY | O_NOFOLLOW) failed, Too many
 links (EMLINK) because O_NOFOLLOW was specified but pathname refers to a

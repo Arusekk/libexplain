@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/linux/videodev2.h>
 
+#include <libexplain/buffer/int.h>
 #include <libexplain/buffer/v4l2_bt_timings_polarities.h>
 #include <libexplain/parse_bits.h>
 

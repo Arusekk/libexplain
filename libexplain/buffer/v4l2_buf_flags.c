@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/linux/videodev2.h>
 
+#include <libexplain/buffer/int.h>
 #include <libexplain/buffer/v4l2_buf_flags.h>
 #include <libexplain/parse_bits.h>
 
@@ -45,15 +46,6 @@ explain_buffer_v4l2_buf_flags(explain_string_buffer_t *sb, int value)
     explain_parse_bits_print(sb, value, table, SIZEOF(table));
 }
 
-#else
-
-void
-explain_buffer_v4l2_buf_flags(explain_string_buffer_t *sb, int value)
-{
-    explain_buffer_int(value);
-}
-
 #endif
-
 
 /* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -31,6 +31,7 @@ explain_iocontrol_disambiguate_is_a_socket(int fildes, int request,
 
     (void)request;
     (void)data;
-    /* success = 0, failure = -1 */
-    return (fstat(fildes, &st) >= 0 && S_ISSOCK(st.st_mode) ? 0 : -1);
+    if (fstat(fildes, &st) < 0 || !S_ISSOCK(st.st_mode))
+        return DISAMBIGUATE_DO_NOT_USE;
+    return DISAMBIGUATE_USE;
 }

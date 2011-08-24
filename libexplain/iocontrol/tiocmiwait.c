@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/stdint.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/tiocm.h>
 #include <libexplain/iocontrol/tiocmiwait.h>

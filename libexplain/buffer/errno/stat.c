@@ -52,7 +52,8 @@ explain_buffer_errno_stat_system_call(explain_string_buffer_t *sb,
 
 void
 explain_buffer_errno_stat_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *pathname, const struct stat *data)
+    int errnum, const char *syscall_name, const char *pathname,
+    const struct stat *data)
 {
     explain_final_t final_component;
 
@@ -106,7 +107,7 @@ explain_buffer_errno_stat_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum, "stat");
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -130,6 +131,7 @@ explain_buffer_errno_stat(explain_string_buffer_t *sb, int errnum,
     (
         &exp.explanation_sb,
         errnum,
+        "stat",
         pathname,
         data
     );

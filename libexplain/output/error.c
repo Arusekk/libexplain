@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -45,8 +45,14 @@ explain_output_error(const char *format, ...)
     explain_program_name_assemble_internal(1);
     if (explain_option_assemble_program_name())
     {
-        explain_string_buffer_puts(&sb, explain_program_name_get());
-        explain_string_buffer_puts(&sb, ": ");
+        const char      *prog;
+
+        prog = explain_program_name_get();
+        if (prog && *prog)
+        {
+            explain_string_buffer_puts(&sb, prog);
+            explain_string_buffer_puts(&sb, ": ");
+        }
     }
 
     va_start(ap, format);

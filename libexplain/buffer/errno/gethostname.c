@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +29,7 @@
 #include <libexplain/buffer/errno/gethostname.h>
 #include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/size_t.h>
 #include <libexplain/buffer/software_error.h>
 #include <libexplain/explanation.h>
 #include <libexplain/host_name_max.h>
@@ -41,7 +42,9 @@ explain_buffer_errno_gethostname_system_call(explain_string_buffer_t *sb,
     (void)errnum;
     explain_string_buffer_puts(sb, "gethostname(data = ");
     explain_buffer_pointer(sb, data);
-    explain_string_buffer_printf(sb, ", data_size = %zd)", data_size);
+    explain_string_buffer_puts(sb, ", data_size = ");
+    explain_buffer_size_t(sb, data_size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -194,6 +194,18 @@ const explain_iocontrol_t *explain_iocontrol_find_by_number(int fildes,
     int request, const void *data);
 
 /**
+  * The explain_iocontrol_request_by_name function may be used to
+  * locate an ioctl by name.
+  *
+  * @param name
+  *     The name of the ioctl(2) request.
+  * @returns
+  *     a pointer to an iocontrol object, that may be used to describe
+  *     the call the ioctl(2) system call; or NULL if not found.
+  */
+const explain_iocontrol_t *explain_iocontrol_request_by_name(const char *name);
+
+/**
   * The explain_iocontrol_print_name function is used to print the
   * name of a request argument passed to an ioctl(2) system call.
   *
@@ -340,6 +352,39 @@ int explain_iocontrol_disambiguate_is_v4l2(int fildes, int request,
     const void *data);
 
 /**
+  * The explain_iocontrol_disambiguate_scc function is used to test for
+  * a Z8530 SCC device, i.e. "scc" network devices.
+  *
+  * @param fildes
+  *     The file descriptor to test,
+  * @param request
+  *     probably not relevant
+  * @param data
+  *     probably not relevant
+  * @returns
+  *     0 if is a Z8530 device, -1 if anything else.
+  */
+int explain_iocontrol_disambiguate_scc(int fildes, int request,
+    const void *data);
+
+/**
+  * The explain_iocontrol_disambiguate_net_dev_name helper function is
+  * used to decide whether or not a file descriptor is associated with a
+  * network device of the given name.
+  *
+  * @param fildes
+  *     The file descriptor if interest
+  * @param name
+  *     The name of the network device of interest.  The actual network
+  *     device could also have an optional trailing number (e.g.
+  *     name="eth" will also match "eth0").
+  * @returns
+  *     DISAMBIGUATE_USE if the name matches, or
+  *     DISAMBIGUATE_DO_NOT_USE if the name does not match.
+  */
+int explain_iocontrol_disambiguate_net_dev_name(int fildes, const char *name);
+
+/**
   * The explain_iocontrol_check_conflicts function is sued to verify
   * that there are no un-expected ioctl request number conflicts.
   * (Expected conflicts have disambiguate functions defined.)
@@ -375,5 +420,18 @@ void explain_iocontrol_check_conflicts(void);
   * actually _IORW() in behaviour.
   */
 #define IOCONTROL_FLAG_RW                   0x0004
+
+/**
+  * The DISAMBIGUATE_USE symbol is used to indicate that a disambiguate
+  * function returns an OK result, the iocontrol entry can be used.
+  */
+#define DISAMBIGUATE_USE 0
+
+/**
+  * The DISAMBIGUATE_DO_NOT_USE symbol is used to indicate that a
+  * disambiguate function returns a negative result, the iocontrol entry
+  * shall not be used.
+  */
+#define DISAMBIGUATE_DO_NOT_USE -1
 
 #endif /* LIBEXPLAIN_IOCONTROL_H */

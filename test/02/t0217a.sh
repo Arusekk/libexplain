@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ test $? -eq 0 || no_result
 ln -s nowhere foobar
 test $? -eq 0 || no_result
 
-explain readlink foobar 0x9876543 1000 -e EFAULT -o test.out
+explain -e EFAULT readlink foobar 0x9876543 1000 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -59,14 +59,14 @@
 
 %{
 
-enum mode_t
+enum parse_mode_t
 {
-    mode_text,
-    mode_spec
+    parse_mode_text,
+    parse_mode_spec
 };
-typedef enum mode_t mode_t;
+typedef enum parse_mode_t parse_mode_t;
 
-static mode_t   mode;
+static parse_mode_t parse_mode;
 static const char *text;
 static int      number_of_errors;
 static int      arg_number;
@@ -82,7 +82,7 @@ explain_printf_format(const char *texta, explain_printf_format_list_t *rslt)
 {
     int             ret;
 
-    mode = mode_text;
+    parse_mode = parse_mode_text;
     text = texta;
     number_of_errors = 0;
     arg_number = 0;
@@ -125,7 +125,7 @@ format_string
     : /* empty */
     | format_string CHAR
     | format_string format
-        { mode = mode_text; }
+        { parse_mode = parse_mode_text; }
     ;
 
 position
@@ -292,11 +292,11 @@ yylex(void)
         if (c == '\0')
             return 0;
         ++text;
-        if (mode != mode_text)
+        if (parse_mode != parse_mode_text)
             break;
         if (c == '%')
         {
-            mode = mode_spec;
+            parse_mode = parse_mode_spec;
             return c;
         }
     }

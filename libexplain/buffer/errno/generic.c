@@ -145,6 +145,16 @@ explain_buffer_errno_generic(explain_string_buffer_t *sb, int errnum,
         explain_buffer_eoverflow(sb);
         break;
 
+    case EFAULT:
+        explain_string_buffer_puts
+        (
+            sb,
+            /* FIXME: i18n */
+            "one or more arguments referred to memory outside the "
+            "address space of the process"
+        );
+        break;
+
     default:
         /*
          * no additional information for other errno values

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@ or write(2) system call
 fubar
 test $? -eq 0 || no_result
 
-explain fchmod 43 0666 -e EIO -o test.out
+explain -e EIO fchmod 43 0666 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

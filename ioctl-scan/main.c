@@ -38,6 +38,8 @@ usage(void)
 }
 
 
+#ifdef HAVE_GETOPT_LONG
+
 static const struct option options[] =
 {
     { "block", 1, 0, 'B' },
@@ -46,13 +48,19 @@ static const struct option options[] =
     { 0, 0, 0, 0 }
 };
 
+#endif
+
 
 int
 main(int argc, char **argv)
 {
     for (;;)
     {
+#ifdef HAVE_GETOPT_LONG
         int c = getopt_long(argc, argv, "B:V", options, 0);
+#else
+        int c = getopt(argc, argv, "B:V");
+#endif
         if (c < 0)
             break;
         switch (c)

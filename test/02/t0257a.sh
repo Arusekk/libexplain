@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2009 Peter Miller
+# Copyright (C) 2008, 2009, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,15 @@
 TEST_SUBJECT="system"
 . test_prelude
 
-cat > test.ok << 'fubar'
+cat > test.ok.1 << 'fubar'
 system(command = "foobar baz"): success, but the child process terminated
 with exit status 127, "foobar" command not found on $PATH
+fubar
+test $? -eq 0 || no_result
+
+cat > test.ok.2 << 'fubar'
+system(command = "foobar baz"): success, but the child process terminated
+with exit status EXIT_FAILURE (1)
 fubar
 test $? -eq 0 || no_result
 
@@ -40,7 +46,9 @@ fi
 sed '1d' test.out2 > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out
+diff test.ok.2 test.out > /dev/null 2>&1  && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

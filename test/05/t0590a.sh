@@ -30,7 +30,7 @@ argument was incorrectly specified
 fubar
 test $? -eq 0 || no_result
 
-explain -e EINVAL ioctl 42 VIDIOC_ENUMAUDIO -o test.out
+explain -e EINVAL ioctl 42 VIDIOC_ENUMAUDIO > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

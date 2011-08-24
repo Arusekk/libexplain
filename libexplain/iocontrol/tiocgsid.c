@@ -19,6 +19,7 @@
 
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/pid_t_star.h>

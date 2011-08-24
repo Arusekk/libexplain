@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/termios.h>
 
 #include <libexplain/buffer/winsize.h>
 #include <libexplain/iocontrol/generic.h>

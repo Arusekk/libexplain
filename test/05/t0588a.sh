@@ -30,10 +30,10 @@ an object to which ioctl VIDIOC_G_OUTPUT can be applied
 fubar
 test $? -eq 0 || no_result
 
-explain -e EINVAL ioctl 42 VIDIOC_G_OUTPUT -o test.out.4
+explain -e EINVAL ioctl 42 VIDIOC_G_OUTPUT > test.out.4
 test $? -eq 0 || fail
 
-fmt -w800 test.out.4 > test.out.3
+fmt -w 800 test.out.4 > test.out.3
 test $? -eq 0 || no_result
 sed 's|data = 0x[0-9A-F]*|data = 0xNNNNNNNN|' test.out.3 > test.out.2
 test $? -eq 0 || no_result

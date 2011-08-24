@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,6 +29,24 @@
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
+#endif
+
+#include <libexplain/ac/sys/ioccom.h>
+
+/*
+ * In the _IO _IOW _IOWR _IOR world
+ * some have numeric equivalents
+ */
+#if defined(_IO) && defined(IOC_OUT) && defined(IOC_IN)
+#ifndef _IOWN
+#define _IOWN(x, y, t) (IOC_IN | ((t) << 16) | ((x) << 8) | y)
+#endif
+#ifndef _IOWRN
+#define _IOWRN(x, y, t) (IOC_INOUT | ((t) << 16) | ((x) << 8) | y)
+#endif
+#ifndef _IORN
+#define _IORN(x, y, t) (IOC_OUT | ((t) << 16) | ((x) << 8) | y)
+#endif
 #endif
 
 #endif /* LIBEXPLAIN_AC_SYS_IOCTL_H */

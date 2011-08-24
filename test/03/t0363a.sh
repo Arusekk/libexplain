@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@ then
     fail
 fi
 
-fmt -w700 test.out5 > test.out4
+fmt -w 700 test.out5 > test.out4
 test $? -eq 0 || no_result
 
 head -1 test.out4 > test.out3

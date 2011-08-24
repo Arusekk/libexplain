@@ -201,6 +201,13 @@
 0
 #endif
 },
+{ "HAVE_FDOPENDIR",
+#ifdef HAVE_FDOPENDIR
+1
+#else
+0
+#endif
+},
 { "HAVE_FLOAT_H",
 #ifdef HAVE_FLOAT_H
 1
@@ -280,6 +287,13 @@
 },
 { "HAVE_GETOPT_H",
 #ifdef HAVE_GETOPT_H
+1
+#else
+0
+#endif
+},
+{ "HAVE_GETOPT_LONG",
+#ifdef HAVE_GETOPT_LONG
 1
 #else
 0
@@ -1048,6 +1062,13 @@
 0
 #endif
 },
+{ "HAVE_LINUX_SCC_H",
+#ifdef HAVE_LINUX_SCC_H
+1
+#else
+0
+#endif
+},
 { "HAVE_LINUX_SERIAL_H",
 #ifdef HAVE_LINUX_SERIAL_H
 1
@@ -1272,6 +1293,13 @@
 0
 #endif
 },
+{ "HAVE_MKDTEMP",
+#ifdef HAVE_MKDTEMP
+1
+#else
+0
+#endif
+},
 { "HAVE_MKOSTEMP",
 #ifdef HAVE_MKOSTEMP
 1
@@ -1461,6 +1489,13 @@
 0
 #endif
 },
+{ "HAVE_PUTENV",
+#ifdef HAVE_PUTENV
+1
+#else
+0
+#endif
+},
 { "HAVE_PWD_H",
 #ifdef HAVE_PWD_H
 1
@@ -1491,6 +1526,13 @@
 },
 { "HAVE_SETDOMAINNAME",
 #ifdef HAVE_SETDOMAINNAME
+1
+#else
+0
+#endif
+},
+{ "HAVE_SETENV",
+#ifdef HAVE_SETENV
 1
 #else
 0
@@ -1636,6 +1678,20 @@
 0
 #endif
 },
+{ "HAVE_STRTOF",
+#ifdef HAVE_STRTOF
+1
+#else
+0
+#endif
+},
+{ "HAVE_STRTOLD",
+#ifdef HAVE_STRTOLD
+1
+#else
+0
+#endif
+},
 { "HAVE_STRUCT_IFCONF",
 #ifdef HAVE_STRUCT_IFCONF
 1
@@ -1680,6 +1736,13 @@
 },
 { "HAVE_SYS_FILIO_H",
 #ifdef HAVE_SYS_FILIO_H
+1
+#else
+0
+#endif
+},
+{ "HAVE_SYS_IOCCOM_H",
+#ifdef HAVE_SYS_IOCCOM_H
 1
 #else
 0
@@ -1986,6 +2049,13 @@
 0
 #endif
 },
+{ "HAVE_UNSETENV",
+#ifdef HAVE_UNSETENV
+1
+#else
+0
+#endif
+},
 { "HAVE_USTAT",
 #ifdef HAVE_USTAT
 1
@@ -2084,13 +2154,6 @@
 0
 #endif
 },
-{ "HAVE_winsize_SYS_IOCTL_H",
-#ifdef HAVE_winsize_SYS_IOCTL_H
-1
-#else
-0
-#endif
-},
 { "NET_IF_LINUX_IF_PLAY_NICE",
 #ifdef NET_IF_LINUX_IF_PLAY_NICE
 1
@@ -2140,8 +2203,71 @@
 0
 #endif
 },
-{ "PROC_FS_USEFUL",
-#ifdef PROC_FS_USEFUL
+{ "PROC_PID_CMDLINE",
+#ifdef PROC_PID_CMDLINE
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_CWD",
+#ifdef PROC_PID_CWD
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_EXE",
+#ifdef PROC_PID_EXE
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_FD_N",
+#ifdef PROC_PID_FD_N
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_PATH_A_OUT",
+#ifdef PROC_PID_PATH_A_OUT
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_PATH_CWD",
+#ifdef PROC_PID_PATH_CWD
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_PATH_N",
+#ifdef PROC_PID_PATH_N
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_PATH_ROOT",
+#ifdef PROC_PID_PATH_ROOT
+1
+#else
+0
+#endif
+},
+{ "PROC_PID_ROOT",
+#ifdef PROC_PID_ROOT
+1
+#else
+0
+#endif
+},
+{ "PROC_SELF",
+#ifdef PROC_SELF
 1
 #else
 0

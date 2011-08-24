@@ -17,8 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/net/route.h>
+#include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/sys/sockio.h> /* Solaris */
 
 #include <libexplain/buffer/rtentry.h>
 #include <libexplain/iocontrol/siocdelrt.h>
