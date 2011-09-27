@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -120,6 +120,8 @@ explain_buffer_einval_not_a_number(explain_string_buffer_t *sb,
          * xgettext: This error message is issued when a call to
          * strtol is given a string containing no digits.
          * Similarly for related functions.
+         *
+         * %1$s => the name of the offending system call argument
          */
         i18n("the %s argument does not appear to be a number"),
         caption

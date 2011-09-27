@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,10 +30,17 @@
 #include <libexplain/warn_unused_result.h>
 #include <libexplain/large_file_support.h>
 
-#include <sys/types.h>
-#ifdef LIBEXPLAIN_HAVE_USTAT_H
-#include <ustat.h>
-#endif
+/*
+ * Note: including <ustat.h> or <sys/ustat.h> here is most unwise,
+ * because there is a bug on older versions of linux where it also
+ * defines struct ustat in <linux/types.h> making it horribly difficult
+ * to use a naked
+ *
+ *     #include <ustat.h>
+ *
+ * at this point in this source file.  If the pid_t arguments are a
+ * problem, we may have to consider makeing them int in future.
+ */
 
 #ifdef __cplusplus
 extern "C" {

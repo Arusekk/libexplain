@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -92,7 +92,7 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
             flags = fcntl(fildes, F_GETFL);
             if (flags >= 0)
             {
-                explain_buffer_ebadf_not_open_for_reading(sb, flags);
+                explain_buffer_ebadf_not_open_for_reading(sb, "fildes", flags);
             }
             else
             {
@@ -118,11 +118,17 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
             {
                 if ((flags & O_ACCMODE) == O_WRONLY)
                 {
-                    explain_buffer_ebadf_not_open_for_reading(sb, flags);
+                    explain_buffer_ebadf_not_open_for_reading
+                    (
+                        sb,
+                        "fildes",
+                        flags
+                    );
                 }
 #ifdef O_DIRECT
                 else if (flags & O_DIRECT)
                 {
+                    /* FIXME: figure out which */
                     explain_string_buffer_puts
                     (
                         sb,

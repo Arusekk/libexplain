@@ -19,7 +19,7 @@
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
         "POT-Creation-Date: 2011-02-01 17:05+1100\n"
-        "PO-Revision-Date: 2011-08-14\n"
+        "PO-Revision-Date: 2011-09-06\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -303,17 +303,6 @@ msgstr  "%s is not an empty directory; that is, it contains entries other "
 #, c-format
 msgid   "%s is not associated with an object to which %s can be applied"
 msgstr  "%s is not associated with an object to which %s can be applied"
-
-#.
-#. This message is used when an attempt is made to write to
-#. a file descriptor that was not opened for writing.  The actual open
-#. mode will be printed separately.
-#.
-#. %1$s => The name of the offending system call argument
-#.
-#, c-format
-msgid   "%s is not open for writing"
-msgstr  "%s is not open for writing"
 
 #.
 #. This error message is issued when a system call
@@ -653,6 +642,14 @@ msgstr  "an interface of that name already exists"
 #.
 msgid   "an invalid signal was specified during a restart request"
 msgstr  "an invalid signal was specified during a restart request"
+
+#.
+#. this error message is used to explain an EPERM error
+#. returned by the setsid system call, in the case where the calling
+#. process is already a process group leader.
+#.
+msgid   "the process is already a process group leader"
+msgstr  "the process is already a process group leader"
 
 #.
 #. This message is used when explaining why file
@@ -1417,6 +1414,8 @@ msgstr  "the %s %s does not support the %s system call"
 #. strtol is given a string containing no digits.
 #. Similarly for related functions.
 #.
+#. %1$s => the name of the offending system call argument
+#.
 #, c-format
 msgid   "the %s argument does not appear to be a number"
 msgstr  "the %s argument does not appear to be a number"
@@ -1459,6 +1458,8 @@ msgstr  "the %s argument does not refer a valid file stream"
 #. reported by the ustat syatem call, in the case where the devive
 #. specified does not contain a mounted file system.
 #.
+#. %1$s => the name of the offending system call argument
+#.
 #, c-format
 msgid   "the %s argument does not refer to a device containing a mounted "
         "file system"
@@ -1478,6 +1479,28 @@ msgid   "the %s argument does not refer to a valid signalfd file "
         "descriptor"
 msgstr  "the %s argument does not refer to a valid signalfd file "
         "descriptor"
+
+#.
+#. This message is used when an attempt is made to read from
+#. a file descriptor that was not opened for reading.  The actual open
+#. mode will be printed separately.
+#.
+#. %1$s => the name of the offending system call argument
+#.
+#, c-format
+msgid   "the %s argument does not refer to an object that is open for reading"
+msgstr  "the %s argument does not refer to an object that is open for reading"
+
+#.
+#. This message is used when an attempt is made to write to a
+#. file descriptor (or I/O stream) that was not opened for writing.  The
+#. actual open mode will be printed separately.
+#.
+#. %1$s => the name of the offending argument
+#.
+#, c-format
+msgid   "the %s argument does not refer to an object that is open for writing"
+msgstr  "the %s argument does not refer to an object that is open for writing"
 
 #.
 #. This error message is issued when a system call
@@ -2081,14 +2104,6 @@ msgstr  "the executable is on a file system that is mounted with the "
 #.
 msgid   "the file descriptor is not open for both reading and writing"
 msgstr  "the file descriptor is not open for both reading and writing"
-
-#.
-#. This message is used when an attempt is made to read from
-#. a file descriptor that was not opened for reading.  The actual open
-#. mode will be printed separately.
-#.
-msgid   "the file descriptor is not open for reading"
-msgstr  "the file descriptor is not open for reading"
 
 #.
 #. This message is used when an attempt is
@@ -3256,6 +3271,8 @@ msgstr  "the underlying file system does not support memory mapping"
 #. This error message is issued when a system call
 #. reports a EINVAL error, in the case where an argument's value
 #. is outside the valid range.
+#.
+#. %1$s => the name of the offending system call argument
 #.
 #, c-format
 msgid   "the value of the %s argument is outside the valid range"

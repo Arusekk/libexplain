@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2009 Peter Miller
+# Copyright (C) 2008, 2009, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,13 +21,20 @@
 TEST_SUBJECT="explain_open"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 open(pathname = "snot", flags = O_RDONLY) failed, No such file or directory
 (ENOENT) because there is no "snot" regular file in the current directory
 fubar
 test $? -eq 0 || no_result
 
-test_open snot > test.out 2>&1
+fmt > test.ok.2 << fubar
+open(pathname = "snot", flags = O_RDONLY) failed, No such file or
+directory (ENOENT) because there is no "snot" regular file in the
+pathname "$testdir" directory
+fubar
+test $? -eq 0 || no_result
+
+test_open snot > test.out.4 2>&1
 if test $? -ne 1
 then
     echo "should have failed"
@@ -35,7 +42,12 @@ then
     fail
 fi
 
-diff test.ok test.out
+fmt test.out.4 > test.out
+test $? -eq 0 || no_result
+
+diff test.ok.2 test.out > /dev/null 2>&1 && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

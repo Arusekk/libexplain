@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,16 +21,28 @@
 TEST_SUBJECT="explain rename"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 rename(oldpath = "foo", newpath = "bar") failed, No such file or directory
 (ENOENT) because there is no "foo" regular file in the current directory
 fubar
 test $? -eq 0 || no_result
 
-explain -e ENOENT rename foo bar > test.out
+fmt > test.ok.2 << fubar
+rename(oldpath = "foo", newpath = "bar") failed, No such file or
+directory (ENOENT) because there is no "foo" regular file in the
+oldpath "$testdir" directory
+fubar
+test $? -eq 0 || no_result
+
+explain -e ENOENT rename foo bar > test.out.2
 test $? -eq 0 || fail
 
-diff test.ok test.out
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
+
+diff test.ok.2 test.out > /dev/null 2>&1 && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

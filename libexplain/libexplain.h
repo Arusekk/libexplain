@@ -160,6 +160,7 @@
 #include <libexplain/setlinebuf.h>
 #include <libexplain/setpgid.h>
 #include <libexplain/setpgrp.h>
+#include <libexplain/setsid.h>
 #include <libexplain/setsockopt.h>
 #include <libexplain/setvbuf.h>
 #include <libexplain/signalfd.h>

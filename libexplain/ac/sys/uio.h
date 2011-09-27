@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -25,6 +25,7 @@
   * @brief Insulate <sys/uio.h> differences
   */
 
+#include <libexplain/ac/linux/types.h> /* Ubuntu Hardy needs this first */
 #include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_SYS_UIO_H

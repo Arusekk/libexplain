@@ -147,6 +147,7 @@
 #include <explain/syscall/setlinebuf.h>
 #include <explain/syscall/setpgid.h>
 #include <explain/syscall/setpgrp.h>
+#include <explain/syscall/setsid.h>
 #include <explain/syscall/setsockopt.h>
 #include <explain/syscall/setvbuf.h>
 #include <explain/syscall/signalfd.h>
@@ -516,7 +517,7 @@ static const table_t table[] =
     /* FIXME: add support for setreuid */
     /* FIXME: add support for setrlimit */
     /* FIXME: add support for set_robust_list */
-    /* FIXME: add support for setsid */
+    { "setsid", explain_syscall_setsid },
     { "setsockopt", explain_syscall_setsockopt },
     /* FIXME: add support for set_thread_area */
     /* FIXME: add support for set_tid_address */

@@ -22,6 +22,7 @@
 #include <libexplain/ac/linux/sockios.h>
 #include <libexplain/ac/net/if.h>
 #include <libexplain/ac/sys/ioctl.h>
+#include <libexplain/ac/linux/net_tstamp.h>
 
 #include <libexplain/buffer/dac.h>
 #include <libexplain/buffer/einval.h>
@@ -84,11 +85,11 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
                     break;
                 }
             }
-        }
-        goto generic;
+         }
+         goto generic;
 
     case ERANGE:
-        {
+         {
             const struct ifreq *rq;
 
             rq = data;
@@ -119,8 +120,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
                             sb,
                             "data->ifr_data->tx_type"
                         );
-                        break;
-
+                        return;
                     }
 
                     switch (cfg->rx_filter)
@@ -153,7 +153,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
                             sb,
                             "data->ifr_data->rx_filter"
                         );
-                        break;
+                        return;
                     }
                 }
             }

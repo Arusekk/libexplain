@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,9 +20,16 @@
 #ifndef LIBEXPLAIN_AC_LINUX_TYPES_H
 #define LIBEXPLAIN_AC_LINUX_TYPES_H
 
-#include <libexplain/ac/sys/types.h>
+#include <libexplain/config.h>
 
 #ifdef HAVE_LINUX_TYPES_H
+
+#   ifdef CAN_INLUDE_BOTH_sys_types_h_AND_linux_types_h
+#      include <libexplain/ac/sys/types.h>
+#   else
+#      define LIBEXPLAIN_AC_SYS_TYPES_H
+#   endif
+
 #include <linux/types.h>
 #endif
 

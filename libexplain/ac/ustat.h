@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -25,21 +25,12 @@
   * @brief Insulate <ustat.h> differences
   */
 
-#include <libexplain/ac/sys/types.h>
+#include <libexplain/ac/sys/ustat.h>
 
+#ifndef LINUX_TYPES_H_STRUCT_USTAT
 #ifdef HAVE_USTAT_H
 #include <ustat.h>
-#else
-
-/* bogus definition, just so things compile */
-struct ustat
-{
-    long f_tfree;
-    long f_tinode;
-    char f_fname[6];
-    char f_fpack[6];
-};
-
+#endif
 #endif
 
 #if !HAVE_DECL_USTAT

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,8 +22,8 @@
 
 #include <libexplain/ac/stddef.h>
 #include <libexplain/ac/stdint.h>
-#include <libexplain/ac/sys/types.h>
 #include <libexplain/ac/linux/types.h>
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_LINUX_BLKTRACE_API_H
 #include <linux/blktrace_api.h>

@@ -36,6 +36,9 @@
 #define offsetof(a, b)  ((size_t)((char *)&((a *)0)->b - (char *)0))
 #endif
 
+/* always include this before <sys/types.h> */
+#include <libexplain/ac/linux/types.h>
+
 /*
  * Sun's Solaris 9 C compiler, and some other proprietary C compilers, are not
  * ANSI C 1989 conforming (let alone C99) and need the sys/types.h header as

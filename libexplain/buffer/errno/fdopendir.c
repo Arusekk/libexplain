@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -68,7 +68,12 @@ explain_buffer_errno_fdopendir_explanation(explain_string_buffer_t *sb,
             {
                 if ((flags & O_ACCMODE) == O_WRONLY)
                 {
-                    explain_buffer_ebadf_not_open_for_reading(sb, flags);
+                    explain_buffer_ebadf_not_open_for_reading
+                    (
+                        sb,
+                        "fildes",
+                        flags
+                    );
                     break;
                 }
             }

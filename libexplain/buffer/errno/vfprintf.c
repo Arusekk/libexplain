@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/errno.h>
 
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/errno/fputs.h>
@@ -25,10 +26,12 @@
 #include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
+#include <libexplain/buffer/software_error.h>
 #include <libexplain/buffer/stream.h>
 #include <libexplain/buffer/va_list.h>
 #include <libexplain/explanation.h>
 #include <libexplain/is_efault.h>
+#include <libexplain/libio.h>
 #include <libexplain/printf_format.h>
 
 
@@ -62,6 +65,21 @@ explain_buffer_errno_vfprintf_explanation(explain_string_buffer_t *sb,
         explain_buffer_efault(sb, "fp");
         return;
     }
+
+    if (errnum == EBADF)
+    {
+        /*
+         * The underlying fildes could be open read/write but the FILE
+         * may not be open for writing.
+         */
+        if (explain_libio_no_writes(fp))
+        {
+            explain_buffer_ebadf_not_open_for_writing(sb, "fp", -1);
+            explain_buffer_software_error(sb);
+            return;
+        }
+    }
+
     if (!format)
     {
         explain_buffer_is_the_null_pointer(sb, "format");

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,6 +24,7 @@
   * @brief Insulate <sys/select.h> differences
   */
 
+#include <libexplain/ac/linux/types.h> /* Ubuntu Hardy needs this first */
 #include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_SYS_SELECT_H

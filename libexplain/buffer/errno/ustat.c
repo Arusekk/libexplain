@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -64,6 +64,8 @@ explain_buffer_errno_ustat_explanation(explain_string_buffer_t *sb, int errnum,
              * xgettext: This error message is issued to explain an EINVAL error
              * reported by the ustat syatem call, in the case where the devive
              * specified does not contain a mounted file system.
+             *
+             * %1$s => the name of the offending system call argument
              */
             i18n("the %s argument does not refer to a device containing "
                 "a mounted file system"),

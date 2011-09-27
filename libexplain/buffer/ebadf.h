@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -64,15 +64,35 @@ void explain_buffer_ebadf_dir(explain_string_buffer_t *sb,
 /**
   * The explain_buffer_ebafd_not_open_for_reading function is used to
   * print an EBADF or EINVAL explanation into the string buffer, in the
-  * case where a file descriptor needs to be open for reading, but it is
-  * not.
+  * case where a file descriptor (or I/O stream) needs to be open for
+  * reading, but it is not.
   *
   * @param sb
   *    The string buffer to print into
+  * @param caption
+  *    The name of the offending argument.
   * @param flags
   *    The file's open flags, as returned by fcntl(fildes, F_GETFL);
+  *    or -1 when unknown.
   */
 void explain_buffer_ebadf_not_open_for_reading(explain_string_buffer_t *sb,
-    int flags);
+    const char *caption, int flags);
+
+/**
+  * The explain_buffer_ebafd_not_open_for_writing function is used to
+  * print an EBADF or EINVAL explanation into the string buffer, in the
+  * case where a file descriptor (or I/O stream) needs to be open for
+  * reading, but it is not.
+  *
+  * @param sb
+  *    The string buffer to print into
+  * @param caption
+  *    The name of the offending argument.
+  * @param flags
+  *    The file's open flags, as returned by fcntl(fildes, F_GETFL);
+  *    or -1 when unknown.
+  */
+void explain_buffer_ebadf_not_open_for_writing(explain_string_buffer_t *sb,
+    const char *caption, int flags);
 
 #endif /* LIBEXPLAIN_BUFFER_EBADF_H */

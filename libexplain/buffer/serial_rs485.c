@@ -25,7 +25,7 @@
 #include <libexplain/parse_bits.h>
 
 
-#ifdef HAVE_LINUX_SERIAL_H
+#ifdef HAVE_STRUCT_SERIAL_RS485
 
 static void
 explain_buffer_serial_rs485_flags(explain_string_buffer_t *sb, uint32_t value)
@@ -67,11 +67,13 @@ explain_buffer_serial_rs485(explain_string_buffer_t *sb,
         explain_string_buffer_puts(sb, ", delay_rts_before_send = ");
         explain_buffer_uint32_t(sb, data->delay_rts_before_send);
     }
+#ifdef HAVE_STRUCT_SERIAL_RS485_delay_rts_after_send
     if (data->delay_rts_after_send)
     {
         explain_string_buffer_puts(sb, ", delay_rts_after_send = ");
         explain_buffer_uint32_t(sb, data->delay_rts_after_send);
     }
+#endif
     if (!explain_uint32_array_all_zero(data->padding, SIZEOF(data->padding)))
     {
         explain_string_buffer_puts(sb, ", padding = ");
@@ -80,6 +82,14 @@ explain_buffer_serial_rs485(explain_string_buffer_t *sb,
     explain_string_buffer_puts(sb, " }");
 }
 
+#else
+
+void
+explain_buffer_serial_rs485(explain_string_buffer_t *sb,
+    const struct serial_rs485 *data)
+{
+    explain_buffer_pointer(sb, data);
+}
 
 #endif
 /* vim: set ts=8 sw=4 et : */

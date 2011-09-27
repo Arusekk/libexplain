@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/fcntl.h>
 
+#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/fildes_not_open_for_writing.h>
 #include <libexplain/open_flags.h>
 
@@ -40,22 +41,6 @@ explain_buffer_fildes_not_open_for_writing(explain_string_buffer_t *sb,
     default:
         break;
     }
-
-    explain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used when an attempt is made to write to
-         * a file descriptor that was not opened for writing.  The actual open
-         * mode will be printed separately.
-         *
-         * %1$s => The name of the offending system call argument
-         */
-        i18n("%s is not open for writing"),
-        fildes_caption
-    );
-    explain_string_buffer_puts(sb, " (");
-    explain_buffer_open_flags(sb, flags);
-    explain_string_buffer_putc(sb, ')');
+    explain_buffer_ebadf_not_open_for_writing(sb, fildes_caption, flags);
     return 0;
 }

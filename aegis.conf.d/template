@@ -30,6 +30,10 @@ file_template =
         body = "${read_file ${source etc/template/lib_ac_h abs}}";
     },
     {
+        pattern = [ "*/main.c" ];
+        body = "${read_file ${source etc/template/main_c abs}}";
+    },
+    {
         pattern = [ "libexplain/buffer/e*.c" ];
         body = "${read_file ${source etc/template/lib_buf_ec abs}}";
     },

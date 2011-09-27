@@ -25,6 +25,7 @@
   * @brief Insulate <linux/scc.h> differences
   */
 
+#include <libexplain/ac/linux/types.h> /* Ubuntu Hardy needs this first */
 #include <libexplain/ac/sys/ioctl.h>
 #include <libexplain/ac/sys/types.h>
 

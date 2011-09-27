@@ -23,13 +23,15 @@ TEST_SUBJECT="ftruncate EACCES"
 
 fmt > test.ok << 'fubar'
 ftruncate(fildes = 0, length = 0) failed, Permission denied (EACCES)
-because fildes is not open for writing (O_RDONLY | O_LARGEFILE)
+because the fildes argument does not refer to an object that is open
+for writing (O_RDONLY | O_LARGEFILE)
 fubar
 test $? -eq 0 || no_result
 
 fmt > test.ok2 << 'fubar'
 ftruncate(fildes = 0, length = 0) failed, Permission denied (EACCES)
-because fildes is not open for writing (O_RDONLY)
+because the fildes argument does not refer to an object that is open
+for writing (O_RDONLY)
 fubar
 test $? -eq 0 || no_result
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,20 +21,32 @@
 TEST_SUBJECT="open vs ENOTDIR"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 open(pathname = "door", flags = O_RDONLY | O_DIRECTORY) failed, Not a
 directory (ENOTDIR) because in the current directory there is a "door"
 regular file, but it should be a directory
 fubar
 test $? -eq 0 || no_result
 
+fmt > test.ok.2 << fubar
+open(pathname = "door", flags = O_RDONLY | O_DIRECTORY) failed, Not a
+directory (ENOTDIR) because in the pathname "$testdir" directory there is a
+"door" regular file, but it should be a directory
+fubar
+test $? -eq 0 || no_result
+
 touch door
 test $? -eq 0 || no_result
 
-explain -e ENOTDIR -o test.out open door O_RDONLY+O_DIRECTORY
+explain -e ENOTDIR -o test.out.b open door O_RDONLY+O_DIRECTORY
 test $? -eq 0 || fail
 
-diff test.ok test.out
+fmt test.out.b > test.out
+test $? -eq 0 || no_result
+
+diff test.ok.2 test.out > /dev/null 2>&1  && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

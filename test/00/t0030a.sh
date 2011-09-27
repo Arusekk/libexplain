@@ -21,10 +21,17 @@
 TEST_SUBJECT="path_resolution+fstrcmp"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok.1 << 'fubar'
 open(pathname = "somwhere/here", flags = O_RDONLY) failed, No such file or
 directory (ENOENT) because there is no "somwhere" directory in the current
 directory; did you mean the "somewhere" directory instead?
+fubar
+test $? -eq 0 || no_result
+
+fmt > test.ok.2 << fubar
+open(pathname = "somwhere/here", flags = O_RDONLY) failed, No such file or
+directory (ENOENT) because there is no "somwhere" directory in the pathname
+"$testdir" directory; did you mean the "somewhere" directory instead?
 fubar
 test $? -eq 0 || no_result
 
@@ -34,7 +41,7 @@ test $? -eq 0 || no_result
 touch somewhere/here
 test $? -eq 0 || no_result
 
-test_open -f O_RDONLY somwhere/here > test.out 2>&1
+test_open -f O_RDONLY somwhere/here > test.out.b 2>&1
 if test $? -ne 1
 then
     echo supposed to fail
@@ -42,7 +49,12 @@ then
     fail
 fi
 
-diff test.ok test.out
+fmt test.out.b > test.out
+test $? -eq 0 || no_result
+
+diff test.ok.2 test.out > /dev/null 2>&1  && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

@@ -17,14 +17,37 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 46 -unf
-.\"
-.\" command, and then editing it to be more appropriate.
-.\"
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 28
+Explanations are now available for errors reported by the
+\f[I]setsid\fP(2) system call.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change: 12, 13, 14, 16, 17, 18, 26,
+The Ubuntu PPA build farm found several Hardy build problems.
+These have been fixed.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 23
+Code has been added to detect those cases where a file
+descriptor may be open for reading and writing, but the I/O
+stream it is accessed by is only open for one of them.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 15
+Code has been added to cope with false negatives when
+\f[I]lsof\fP(1) is not as helpful as could be desired.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 11
+Michael Bienia <geser@ubuntu.com> discovered a build problem with the
+SIOCSHWTSTAMP ioctl request, and sent a patch.
 .\" ------------------------------------------------------------------------
 \" Add new entries above this line.
 .ne 2i

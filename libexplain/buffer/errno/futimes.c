@@ -123,4 +123,4 @@ explain_buffer_errno_futimes(explain_string_buffer_t *sb, int errnum,
     explain_explanation_assemble(&exp, sb);
 }
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et : */

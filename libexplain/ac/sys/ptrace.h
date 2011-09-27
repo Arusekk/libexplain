@@ -25,6 +25,7 @@
   * @brief Insulate <sys/ptrace.h> differences
   */
 
+#include <libexplain/ac/linux/types.h> /* Ubuntu Hardy needs this first */
 #include <libexplain/ac/sys/types.h>
 #include <libexplain/ac/unistd.h> /* Solaris defines ptrace() here */
 

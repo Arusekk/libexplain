@@ -359,6 +359,7 @@ AC_CHECK_HEADERS([         \
     getopt.h               \
     inttypes.h             \
     libintl.h              \
+    libio.h                \
     libv4l1-videodev.h     \
     limits.h               \
     linux/apm_bios.h       \
@@ -523,6 +524,7 @@ AC_CHECK_HEADERS([         \
     sys/types.h            \
     sys/uio.h              \
     sys/user.h             \
+    sys/ustat.h            \
     sys/un.h               \
     sys/vfs.h              \
     sys/wait.h             \
@@ -897,6 +899,7 @@ AC_CHECK_FUNCS(    \
     setenv         \
     setlocale      \
     setmntent      \
+    setsid         \
     signalfd       \
     snprintf       \
     statfs         \
@@ -1056,6 +1059,60 @@ AC_MSG_RESULT([no]),
 AC_MSG_RESULT(cross))
 
 dnl!
+dnl!    Test to see if struct serial_rs485 is defined
+dnl!
+AC_MSG_CHECKING([have struct serial_rs485])
+AC_TRY_RUN([
+#include <linux/serial.h>
+int main(argc, argv)int argc; char **argv;{
+struct serial_rs485 x;
+return 0;
+}]
+, AC_DEFINE(HAVE_STRUCT_SERIAL_RS485,1,
+[Define this symbol if your system has <linux/serial.h> AND it
+defines struct serial_rs485.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+dnl!
+dnl!    Test to see if struct serial_rs485 is defined
+dnl!
+AC_MSG_CHECKING([have struct serial_rs485.delay_rts_after_send])
+AC_TRY_RUN([
+#include <linux/serial.h>
+int main(argc, argv)int argc; char **argv;{
+struct serial_rs485 x;
+x.delay_rts_after_send = 0;
+return 0;
+}]
+, AC_DEFINE(HAVE_STRUCT_SERIAL_RS485_delay_rts_after_send,1,
+[Define this symbol if your system has <linux/serial.h> AND it
+defines struct serial_rs485.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+dnl!
+dnl!  Check that <linux/types.h> and <sys/types.h> can both be included
+dnl!  together in the same compilation unit.
+dnl!
+AC_MSG_CHECKING([whether can include both <linux/types.h> and <sys/types.h>])
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <linux/types.h>
+int main(argc, argv)int argc; char **argv;{
+__u64 x;
+return 0;
+}]
+, AC_DEFINE(CAN_INLUDE_BOTH_sys_types_h_AND_linux_types_h,1,
+[Define this symbol if your system has <sys/types.h> and <linux/types.h> AND
+they can both be included in the same compilation unit in that order.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+dnl!
 dnl! Does getpgrp need an argument?
 dnl! BSD = yes
 dnl! Posix = no
@@ -1100,6 +1157,25 @@ AC_TRY_COMPILE([
 AC_DEFINE_UNQUOTED([SETPGRP_NARGS], $ac_av_setpgrp_nargs,
 [Define this symbol to be the number of arguments required by the
 setpgrp function.])
+
+dnl!
+dnl!  Does <linux/types.h> define struct ustat?
+dnl!  For example, Ubuntu Hardy has this bug.
+dnl!
+AC_MSG_CHECKING([whether <linux/types.h> defines struct ustat])
+AC_TRY_RUN([
+#include <linux/types.h>
+int main(argc, argv)int argc; char **argv;{
+struct ustat x;
+x.f_fname[0] = 0;
+return 0;
+}]
+, AC_DEFINE(LINUX_TYPES_H_STRUCT_USTAT,1,
+[Define this symbol if your system has <linux/types.h> AND it
+defines struct ustat.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
 
 dnl the strsignal function is usually defined in <string.h>
 dnl but is sometimes defined in <unistd.h>

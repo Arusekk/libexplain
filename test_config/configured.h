@@ -1,3 +1,10 @@
+{ "CAN_INLUDE_BOTH_sys_types_h_AND_linux_types_h",
+#ifdef CAN_INLUDE_BOTH_sys_types_h_AND_linux_types_h
+1
+#else
+0
+#endif
+},
 { "CONF_NAME_MAX",
 #ifdef CONF_NAME_MAX
 1
@@ -364,6 +371,13 @@
 },
 { "HAVE_LIBINTL_H",
 #ifdef HAVE_LIBINTL_H
+1
+#else
+0
+#endif
+},
+{ "HAVE_LIBIO_H",
+#ifdef HAVE_LIBIO_H
 1
 #else
 0
@@ -1552,6 +1566,13 @@
 0
 #endif
 },
+{ "HAVE_SETSID",
+#ifdef HAVE_SETSID
+1
+#else
+0
+#endif
+},
 { "HAVE_SIGNALFD",
 #ifdef HAVE_SIGNALFD
 1
@@ -1694,6 +1715,20 @@
 },
 { "HAVE_STRUCT_IFCONF",
 #ifdef HAVE_STRUCT_IFCONF
+1
+#else
+0
+#endif
+},
+{ "HAVE_STRUCT_SERIAL_RS485",
+#ifdef HAVE_STRUCT_SERIAL_RS485
+1
+#else
+0
+#endif
+},
+{ "HAVE_STRUCT_SERIAL_RS485_delay_rts_after_send",
+#ifdef HAVE_STRUCT_SERIAL_RS485_delay_rts_after_send
 1
 #else
 0
@@ -1958,6 +1993,13 @@
 0
 #endif
 },
+{ "HAVE_SYS_USTAT_H",
+#ifdef HAVE_SYS_USTAT_H
+1
+#else
+0
+#endif
+},
 { "HAVE_SYS_VFS_H",
 #ifdef HAVE_SYS_VFS_H
 1
@@ -2149,6 +2191,13 @@
 },
 { "HAVE_v4l2_hw_freq_seek_spacing",
 #ifdef HAVE_v4l2_hw_freq_seek_spacing
+1
+#else
+0
+#endif
+},
+{ "LINUX_TYPES_H_STRUCT_USTAT",
+#ifdef LINUX_TYPES_H_STRUCT_USTAT
 1
 #else
 0
