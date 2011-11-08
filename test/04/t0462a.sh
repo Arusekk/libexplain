@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,15 +21,22 @@
 TEST_SUBJECT="kill EPERM"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 kill(pid = 42, sig = SIGTERM) failed, Operation not permitted (EPERM)
 because the process does not have permission to send the signal to any of
 the target processes, and the process is not privileged
 fubar
 test $? -eq 0 || no_result
 
-explain -eEPERM kill 42 SIGTERM > test.out
+explain -eEPERM kill 42 SIGTERM > test.out.4
 test $? -eq 0 || fail
+
+fmt -w 800 test.out.4 > test.out.3
+test $? -eq 0 || no_result
+sed 's|(42 ".*",|(42,|' test.out.3 > test.out.2
+test $? -eq 0 || no_result
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

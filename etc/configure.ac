@@ -507,6 +507,7 @@ AC_CHECK_HEADERS([         \
     sys/raw.h              \
     sys/resource.h         \
     sys/select.h           \
+    sys/shm.h              \
     sys/signalfd.h         \
     sys/socket.h           \
     sys/sockio.h           \
@@ -892,6 +893,7 @@ AC_CHECK_FUNCS(    \
     munmap         \
     on_exit        \
     poll           \
+    ptrace         \
     putenv         \
     readv          \
     remove         \
@@ -900,6 +902,7 @@ AC_CHECK_FUNCS(    \
     setlocale      \
     setmntent      \
     setsid         \
+    shmat          \
     signalfd       \
     snprintf       \
     statfs         \
@@ -1193,6 +1196,35 @@ AC_CHECK_DECLS([strsignal,ustat,strverscmp],,, [
 #include <ustat.h>
 #endif
 ])
+
+dnl!
+dnl! ptrace is just about the least architecture neutral syscall you can
+dnl! imagine.  If something can be wrong with an API, then ptrace works
+dnl! hard to get it wrong in the least architecture neutral as possible,
+dnl! and then some.
+dnl!
+AC_MSG_CHECKING([whether <sys/ptrace.h> defines struct user_regs_struct])
+AC_TRY_RUN([
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_PTRACE_H
+#include <sys/ptrace.h>
+#endif
+#ifdef HAVE_SYS_USER_H
+#include <sys/user.h>
+#endif
+int main(argc, argv)int argc; char **argv;{
+struct user_regs_struct x;
+printf("%d\n", (int)sizeof(x));
+return 0;
+}]
+, AC_DEFINE(SYS_PTRACE_USER_REGS_STRUCT,1,
+[Define this symbol if your system has <sys/ptrace.h> or <sys/user.h> AND one
+of them defines struct user_regs_struct.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
 
 dnl!
 dnl! Look for the NAME_MAX symbol.  This is the maximum length of a

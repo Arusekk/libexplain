@@ -108,8 +108,6 @@ explain_iocontrol_check_conflicts(void)
         if (!(tp1->flags & IOCONTROL_FLAG_NON_META))
         {
             unsigned        ioc_dir;
-            unsigned        ioc_type;
-            unsigned        ioc_nr;
             unsigned        ioc_size;
 
 #ifdef _IOC_DIR
@@ -120,20 +118,6 @@ explain_iocontrol_check_conflicts(void)
 #else
             ioc_dir = 0;
 #endif
-#endif
-#ifdef _IOC_TYPE
-            ioc_type = _IOC_TYPE(tp1->number);
-#else
-#ifdef IOCGROUP
-            ioc_type = IOCGROUP(tp1->number);
-#else
-            ioc_type = (tp1->number >> 8) & 0xFF;
-#endif
-#endif
-#ifdef _IOC_NR
-            ioc_nr = _IOC_NR(tp1->number);
-#else
-            ioc_nr = tp1->number & 0xFF;
 #endif
 #ifdef _IOC_SIZE
             ioc_size = _IOC_SIZE(tp1->number);

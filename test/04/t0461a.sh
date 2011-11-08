@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,21 @@
 TEST_SUBJECT="kill EINVAL"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 kill(pid = 42, sig = 3200) failed, Invalid argument (EINVAL) because the
 sig argument was incorrectly specified
 fubar
 test $? -eq 0 || no_result
 
-explain -eEINVAL kill 42 3200 > test.out
+explain -eEINVAL kill 42 3200 > test.out.4
 test $? -eq 0 || fail
+
+fmt -w 800 test.out.4 > test.out.3
+test $? -eq 0 || no_result
+sed -e 's|(42 ".*",|(42,|' test.out.3 > test.out.2
+test $? -eq 0 || no_result
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail
@@ -40,4 +47,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

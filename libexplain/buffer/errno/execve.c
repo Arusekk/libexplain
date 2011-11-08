@@ -382,7 +382,8 @@ explain_buffer_errno_execve_explanation(explain_string_buffer_t *sb,
                  * error from an execve system call, in the case where an ELF
                  * interpreter was a directory.
                  */
-                i18n("an ELF interpreter was a directory")
+                i18n("an ELF interpreter was a directory, and it is not "
+                "possible to execute a directory")
             );
         }
         break;

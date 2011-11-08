@@ -223,7 +223,8 @@ cascade etc/readme.man = etc/coverage.so;
 cascade web-src/index.html = etc/coverage.so;
 cascade man/man1/explain_lca2010.1 = etc/coverage.so;
 
-etc/%.txt: etc/%.roff
+etc/%.txt: etc/%.roff: etc/version.so
+    set shallow
 {
     if [not [verbose]] then
         function print GRO [target];

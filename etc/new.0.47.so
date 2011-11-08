@@ -17,14 +17,50 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 47 -unf
-.\"
-.\" command, and then editing it to be more appropriate.
-.\"
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 50
+Explanations are now available for errors reported by the
+\f[I]shmat\fP(2) system call.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 22
+Several build problems on Solaris have been fixed.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 21
+Dagobert Michelsen <dam@opencsw.org> found the test 625 was
+throwing a false negative in his test environment. It can now
+cope with stdin being closed.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 18
+Dagobert Michelsen <dam@opencsw.org> discovered that, on Solaris, test
+false negatives were caused by the need for a space before the width in
+a \[lq]\f[CW]fmt \-w 800\fP\[rq] command.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 15
+Eric Smith <eric@brouhaha.com> discovered that \f[I]lsof\fP(1) could
+report errors as executable names, when it couldn't read the
+symlink.  These non\[hy]results are now filtered out.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 14
+Eric Smith <eric@brouhaha.com> discovered three false negatives
+from tests of the \f[I]kill\fP(2) system call.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 13
+Better explanations are now available when
+a user attempts to execute a directory.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

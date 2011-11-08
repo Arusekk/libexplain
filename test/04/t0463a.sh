@@ -21,14 +21,21 @@
 TEST_SUBJECT="kill ESRCH"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 kill(pid = 42, sig = SIGKILL) failed, No such process (ESRCH) because the
 pid process does not exist
 fubar
 test $? -eq 0 || no_result
 
-explain -eESRCH kill 42 SIGKILL > test.out
+explain -eESRCH kill 42 SIGKILL > test.out.4
 test $? -eq 0 || fail
+
+fmt -w 800 test.out.4 > test.out.3
+test $? -eq 0 || no_result
+sed -e 's|(42 ".*",|(42,|' test.out.3 > test.out.2
+test $? -eq 0 || no_result
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail

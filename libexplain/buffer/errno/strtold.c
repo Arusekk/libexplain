@@ -65,7 +65,6 @@ explain_buffer_errno_strtold_explanation(explain_string_buffer_t *sb,
         {
             char            *ep;
             int             err;
-            long double     n;
 
             /*
              * Do the conversion again, this time *with* an end pointer,
@@ -73,7 +72,15 @@ explain_buffer_errno_strtold_explanation(explain_string_buffer_t *sb,
              */
             ep = 0;
             err = errno;
-            n = explain_ac_strtold(nptr, &ep);
+            if (explain_ac_strtold(nptr, &ep))
+            {
+                /*
+                 * Ordinarily, the warning "ignoring return value of function"
+                 * is a great way of discovering bugs.  In this case, however,
+                 * we aren't concerned with the actual return value, but with
+                 * the error that results from the call.
+                 */
+            }
             errno = err;
             if (ep == nptr)
             {

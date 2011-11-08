@@ -25,12 +25,17 @@
 #include <libexplain/buffer/file_type.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/gid.h>
+#include <libexplain/buffer/group_permission_ignored.h>
+#include <libexplain/buffer/others_permission_ignored.h>
+#include <libexplain/buffer/others_permission.h>
+#include <libexplain/buffer/rwx.h>
 #include <libexplain/buffer/uid.h>
 #include <libexplain/capability.h>
 #include <libexplain/gettext.h>
 #include <libexplain/group_in_groups.h>
 #include <libexplain/have_permission.h>
 #include <libexplain/option.h>
+#include <libexplain/translate.h>
 
 
 static int
@@ -61,17 +66,6 @@ explain_have_permission(const struct stat *st,
      * When neither holds, the third group is used.
      */
     return (0 != (st->st_mode & wanted & S_IRWXO));
-}
-
-
-static void
-explain_buffer_rwx(explain_string_buffer_t *sb, int mode_bits)
-{
-    explain_string_buffer_putc(sb, '"');
-    explain_string_buffer_putc(sb, ((mode_bits & 0444) ? 'r' : '-'));
-    explain_string_buffer_putc(sb, ((mode_bits & 0222) ? 'w' : '-'));
-    explain_string_buffer_putc(sb, ((mode_bits & 0111) ? 'x' : '-'));
-    explain_string_buffer_putc(sb, '"');
 }
 
 
@@ -228,89 +222,6 @@ group_permission_mode_used(explain_string_buffer_t *sb,
 }
 
 
-static void
-group_permission_mode_ignored(explain_string_buffer_t *sb,
-    const struct stat *st, const explain_have_identity_t *hip)
-{
-    char            part3[10];
-    explain_string_buffer_t part3_sb;
-
-    (void)hip;
-    explain_string_buffer_init(&part3_sb, part3, sizeof(part3));
-    explain_buffer_rwx(&part3_sb, st->st_mode & S_IRWXG);
-    explain_string_buffer_puts(sb, ", ");
-    explain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used when explaining why some
-         * permission mode bits are ignored.
-         *
-         * %1$s => text representation of the "rwx" bits, including the
-         *         quotes.  The 3-character string will look like ls -l
-         *         output.
-         */
-        i18n("the group permission mode %s is ignored"),
-        part3
-    );
-}
-
-
-static void
-others_permission_mode_used(explain_string_buffer_t *sb,
-    const struct stat *st, const explain_have_identity_t *hip)
-{
-    char            part3[10];
-    explain_string_buffer_t part3_sb;
-
-    (void)hip;
-    explain_string_buffer_init(&part3_sb, part3, sizeof(part3));
-    explain_buffer_rwx(&part3_sb, st->st_mode & S_IRWXO);
-    explain_string_buffer_puts(sb, ", ");
-    explain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used when explaining which
-         * permission mode bits are used when determining file access
-         * permsiions.
-         *
-         * %1$s => the "rwx" mode representation, including the quotes, in a
-         *         form resembling the ls -l representation of mode bits.
-         */
-        i18n("the others permission mode is %s"),
-        part3
-    );
-}
-
-
-static void
-others_permission_mode_ignored(explain_string_buffer_t *sb,
-    const struct stat *st, const explain_have_identity_t *hip)
-{
-    char            mode_text[10];
-    explain_string_buffer_t mode_text_sb;
-
-    (void)hip;
-    explain_string_buffer_init(&mode_text_sb, mode_text, sizeof(mode_text));
-    explain_buffer_rwx(&mode_text_sb, st->st_mode & S_IRWXO);
-    explain_string_buffer_puts(sb, ", ");
-    explain_string_buffer_printf_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is used when explaining why
-         * the "other" permission mode bits are ignored.
-         *
-         * %1$s => the "rwx" bits, including the quotes, like the
-         *         3-character string used in 'ls -l' output.
-         */
-        i18n("the others permission mode %s is ignored"),
-        mode_text
-    );
-}
-
-
 static int
 explain_explain_permission(explain_string_buffer_t *sb,
     const struct stat *st, const explain_have_identity_t *hip, int wanted)
@@ -339,11 +250,11 @@ explain_explain_permission(explain_string_buffer_t *sb,
             explain_group_in_groups(st->st_gid, hip)
         )
         {
-            group_permission_mode_ignored(sb, st, hip);
+            explain_buffer_group_permission_ignored(sb, st->st_mode);
         }
         if (st->st_mode & wanted & S_IRWXO)
         {
-            others_permission_mode_ignored(sb, st, hip);
+            explain_buffer_others_permission_ignored(sb, st->st_mode);
         }
         return (0 != (st->st_mode & wanted & S_IRWXU));
     }
@@ -353,6 +264,10 @@ explain_explain_permission(explain_string_buffer_t *sb,
      * file either equals the effective group ID of the process,
      * or is one of the supplementary group IDs of the process
      * (as set by setgroups(2)).
+     *
+     * FIXME: when the file is on a remote NFS mount, only the first 16
+     * groups are consulted.  This can be a problem when a process is in
+     * more than 16 groups.
      */
     if (explain_group_in_groups(st->st_gid, hip))
     {
@@ -365,7 +280,7 @@ explain_explain_permission(explain_string_buffer_t *sb,
 
         if (st->st_mode & wanted & S_IRWXO)
         {
-            others_permission_mode_ignored(sb, st, hip);
+            explain_buffer_others_permission_ignored(sb, st->st_mode);
         }
         return (0 != (st->st_mode & wanted & S_IRWXG));
     }
@@ -379,9 +294,9 @@ explain_explain_permission(explain_string_buffer_t *sb,
     }
     if (st->st_mode & wanted & S_IRWXG)
     {
-        group_permission_mode_ignored(sb, st, hip);
+        explain_buffer_group_permission_ignored(sb, st->st_mode);
     }
-    others_permission_mode_used(sb, st, hip);
+    explain_buffer_others_permission(sb, st->st_mode);
     return (0 != (st->st_mode & wanted & S_IRWXO));
 }
 
@@ -523,29 +438,11 @@ explain_have_identity_kind_of_uid(const explain_have_identity_t *hip)
 {
     if ((uid_t)hip->uid != geteuid())
     {
-        return
-            explain_gettext
-            (
-                /*
-                 * xgettext: This phrase is used to distinguish which of
-                 * the process's UIDs are in use during the permissions
-                 * check.  In this case, the real UID.
-                 */
-                i18n("real UID")
-            );
+        return explain_translate_real_uid();
     }
     else
     {
-        return
-            explain_gettext
-            (
-                /*
-                 * xgettext: This phrase is used to distinguish which of
-                 * the process's UIDs are in use during the permissions
-                 * check.  In this case, the effective UID.
-                 */
-                i18n("effective UID")
-            );
+        return explain_translate_effective_uid();
     }
 }
 
@@ -555,29 +452,11 @@ explain_have_identity_kind_of_gid(const explain_have_identity_t *hip)
 {
     if ((gid_t)hip->gid != getegid())
     {
-        return
-            explain_gettext
-            (
-                /*
-                 * xgettext: This phrase is used to distinguish which of
-                 * the process's GIDs are in use during the permissions
-                 * check.  In this case, the real gid.
-                 */
-                i18n("real GID")
-            );
+        return explain_translate_real_gid();
     }
     else
     {
-        return
-            explain_gettext
-            (
-                /*
-                 * xgettext: This phrase is used to distinguish which of
-                 * the process's GIDs are in use during the permissions
-                 * check.  In this case, the effective gid.
-                 */
-                i18n("effective GID")
-            );
+        return explain_translate_effective_gid();
     }
 }
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -89,6 +89,13 @@ configure: etc/configure.ac install-sh config.guess config.sub
     if [not [exists config.sub]] then
         ln -s [resolve config.sub] config.sub
             set clearstat;
+    if [not [exists test_mincore/main.c]] then
+    {
+        mkdir -p test_mincore;
+        rm -f test_mincore/main.c;
+        ln -s ../[resolve test_mincore/main.c] test_mincore/main.c
+            set clearstat;
+    }
     [autoconf] [resolve etc/configure.ac] > [target];
     chmod 755 [target];
 }

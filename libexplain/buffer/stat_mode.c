@@ -95,7 +95,6 @@ void
 explain_buffer_stat_mode(explain_string_buffer_t *sb, mode_t mode)
 {
     const explain_parse_bits_table_t *lo_table;
-    const explain_parse_bits_table_t *lo_table_end;
     const explain_parse_bits_table_t *tp;
     int             first;
 
@@ -117,11 +116,9 @@ explain_buffer_stat_mode(explain_string_buffer_t *sb, mode_t mode)
     }
 
     lo_table = lo_table_short;
-    lo_table_end = ENDOF(lo_table_short);
     if (explain_option_symbolic_mode_bits())
     {
         lo_table = lo_table_long;
-        lo_table_end = ENDOF(lo_table_long);
     }
     for (tp = lo_table; tp < ENDOF(lo_table); ++tp)
     {

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +41,6 @@ explain_execlp_or_die(const char *pathname, const char *arg, ...)
     const char      **argv;
     explain_string_buffer_t sb;
     int             errnum;
-    int             result;
     const char      *dummy[100];
 
     /*
@@ -91,8 +90,15 @@ explain_execlp_or_die(const char *pathname, const char *arg, ...)
 
     /* Note: if it returns at all, it has failed */
     errno = 0;
-    result = execvp(pathname, (char *const *)argv);
-    /* assert(result < 0); */
+    if (execvp(pathname, (char *const *)argv))
+    {
+        /*
+         * Ordinarily, the warning "ignoring return value of function"
+         * is a great way of discovering bugs.  In this case, however,
+         * we aren't concerned with the actual return value, but with
+         * the error that results from the call.
+         */
+    }
 
     errnum = errno;
     /* assert(errnum != 0); */

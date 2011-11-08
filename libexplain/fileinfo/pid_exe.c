@@ -119,13 +119,20 @@ n_callback(explain_lsof_t *context, const char *name)
 {
     if (context->fildes == LIBEXPLAIN_LSOF_FD_txt)
     {
-        adapter         *a;
-
-        a = (adapter *)context;
-        if (a->count == 0)
+        /*
+         * Sometimes lsof(1) is less than helpful, and says "exe (readlink:
+         * Permission denied)" which is effectively no answer at all.
+         */
+        if (0 != memcmp(name, "exe (readlink:", 14))
         {
-            explain_strendcpy(a->data, name, a->data + a->data_size);
-            a->count++;
+            adapter         *a;
+
+            a = (adapter *)context;
+            if (a->count == 0)
+            {
+                explain_strendcpy(a->data, name, a->data + a->data_size);
+                a->count++;
+            }
         }
     }
 }

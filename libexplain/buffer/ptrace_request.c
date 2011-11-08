@@ -27,112 +27,112 @@ static const explain_parse_bits_table_t table[] =
 #ifdef PT_TRACE_ME
     { "PT_TRACE_ME", PT_TRACE_ME },
 #endif
-#if defined(PTRACE_TRACEME) || (defined(__linux__) && defined(PT_TRACE_ME))
+#if defined(PTRACE_TRACEME)
     { "PTRACE_TRACEME", PTRACE_TRACEME },
 #endif
 
 #ifdef PT_READ_I
     { "PT_READ_I", PT_READ_I },
 #endif
-#if defined(PTRACE_PEEKTEXT) || (defined(__linux__) && defined(PT_READ_I))
+#if defined(PTRACE_PEEKTEXT)
     { "PTRACE_PEEKTEXT", PTRACE_PEEKTEXT },
 #endif
 
 #ifdef PT_READ_D
     { "PT_READ_D", PT_READ_D },
 #endif
-#if defined(PTRACE_PEEKDATA) || (defined(__linux__) && defined(PT_READ_D))
+#if defined(PTRACE_PEEKDATA)
     { "PTRACE_PEEKDATA", PTRACE_PEEKDATA },
 #endif
 
 #ifdef PT_READ_U
     { "PT_READ_U", PT_READ_U },
 #endif
-#if defined(PTRACE_PEEKUSER) || (defined(__linux__) && defined(PT_READ_U))
+#if defined(PTRACE_PEEKUSER)
     { "PTRACE_PEEKUSER", PTRACE_PEEKUSER },
 #endif
 
 #ifdef PT_WRITE_I
     { "PT_WRITE_I", PT_WRITE_I },
 #endif
-#if defined(PTRACE_POKETEXT) || (defined(__linux__) && defined(PT_WRITE_I))
+#if defined(PTRACE_POKETEXT)
     { "PTRACE_POKETEXT", PTRACE_POKETEXT },
 #endif
 
 #ifdef PT_WRITE_D
     { "PT_WRITE_D", PT_WRITE_D },
 #endif
-#if defined(PTRACE_POKEDATA) || (defined(__linux__) && defined(PT_WRITE_D))
+#if defined(PTRACE_POKEDATA)
     { "PTRACE_POKEDATA", PTRACE_POKEDATA },
 #endif
 
 #ifdef PT_WRITE_U
     { "PT_WRITE_U", PT_WRITE_U },
 #endif
-#if defined(PTRACE_POKEUSER) || (defined(__linux__) && defined(PT_WRITE_U))
+#if defined(PTRACE_POKEUSER)
     { "PTRACE_POKEUSER", PTRACE_POKEUSER },
 #endif
 
 #ifdef PT_CONTINUE
     { "PT_CONTINUE", PT_CONTINUE },
 #endif
-#if defined(PTRACE_CONT) || (defined(__linux__) && defined(PT_CONTINUE))
+#if defined(PTRACE_CONT)
     { "PTRACE_CONT", PTRACE_CONT },
 #endif
 
 #ifdef PT_KILL
     { "PT_KILL", PT_KILL },
 #endif
-#if defined(PTRACE_KILL) || (defined(__linux__) && defined(PT_KILL))
+#if defined(PTRACE_KILL)
     { "PTRACE_KILL", PTRACE_KILL },
 #endif
 
 #ifdef PT_STEP
     { "PT_STEP", PT_STEP },
 #endif
-#if defined(PTRACE_SINGLESTEP) || (defined(__linux__) && defined(PT_STEP))
+#if defined(PTRACE_SINGLESTEP)
     { "PTRACE_SINGLESTEP", PTRACE_SINGLESTEP },
 #endif
 
 #ifdef PT_GETREGS
     { "PT_GETREGS", PT_GETREGS },
 #endif
-#if defined(PTRACE_GETREGS) || (defined(__linux__) && defined(PT_GETREGS))
+#if defined(PTRACE_GETREGS)
     { "PTRACE_GETREGS", PTRACE_GETREGS },
 #endif
 
 #ifdef PT_SETREGS
     { "PT_SETREGS", PT_SETREGS },
 #endif
-#if defined(PTRACE_SETREGS) || (defined(__linux__) && defined(PT_SETREGS))
+#if defined(PTRACE_SETREGS)
     { "PTRACE_SETREGS", PTRACE_SETREGS },
 #endif
 
 #ifdef PT_GETFPREGS
     { "PT_GETFPREGS", PT_GETFPREGS },
 #endif
-#if defined(PTRACE_GETFPREGS) || (defined(__linux__) && defined(PT_GETFPREGS))
+#if defined(PTRACE_GETFPREGS)
     { "PTRACE_GETFPREGS", PTRACE_GETFPREGS },
 #endif
 
 #ifdef PT_SETFPREGS
     { "PT_SETFPREGS", PT_SETFPREGS },
 #endif
-#if defined(PTRACE_SETFPREGS) || (defined(__linux__) && defined(PT_SETFPREGS))
+#if defined(PTRACE_SETFPREGS)
     { "PTRACE_SETFPREGS", PTRACE_SETFPREGS },
 #endif
 
 #ifdef PT_ATTACH
     { "PT_ATTACH", PT_ATTACH },
 #endif
-#if defined(PTRACE_ATTACH) || (defined(__linux__) && defined(PT_ATTACH))
+#if defined(PTRACE_ATTACH)
     { "PTRACE_ATTACH", PTRACE_ATTACH },
 #endif
 
 #ifdef PT_DETACH
     { "PT_DETACH", PT_DETACH },
 #endif
-#if defined(PTRACE_DETACH) || (defined(__linux__) && defined(PT_DETACH))
+#if defined(PTRACE_DETACH)
     { "PTRACE_DETACH", PTRACE_DETACH },
 #endif
 
@@ -182,74 +182,70 @@ static const explain_parse_bits_table_t table[] =
 #ifdef PT_GETFPXREGS
     { "PT_GETFPXREGS", PT_GETFPXREGS },
 #endif
-#if defined(PTRACE_GETFPXREGS) || (defined(__linux__) && defined(PT_GETFPXREGS))
+#if defined(PTRACE_GETFPXREGS)
     { "PTRACE_GETFPXREGS", PTRACE_GETFPXREGS },
 #endif
 
 #ifdef TP_SETFPXREGS
     { "TP_SETFPXREGS", TP_SETFPXREGS },
 #endif
-#if defined(PTRACE_SETFPXREGS) || (defined(__linux__) && defined(TP_SETFPXREGS))
+#if defined(PTRACE_SETFPXREGS)
     { "PTRACE_SETFPXREGS", PTRACE_SETFPXREGS },
 #endif
 
 #ifdef PT_SYSCALL
     { "PT_SYSCALL", PT_SYSCALL },
 #endif
-#if defined(PTRACE_SYSCALL) || (defined(__linux__) && defined(PT_SYSCALL))
+#if defined(PTRACE_SYSCALL)
     { "PTRACE_SYSCALL", PTRACE_SYSCALL },
 #endif
 
 #ifdef PT_SETOPTIONS
     { "PT_SETOPTIONS", PT_SETOPTIONS },
 #endif
-#if defined(PTRACE_SETOPTIONS) || \
-        (defined(__linux__) && defined(PTRACE_SETOPTIONS))
+#if defined(PTRACE_SETOPTIONS)
     { "PTRACE_SETOPTIONS", PTRACE_SETOPTIONS },
 #endif
 
 #ifdef PT_OLDSETOPTIONS
     { "PT_OLDSETOPTIONS", PT_OLDSETOPTIONS },
 #endif
-#if defined(PTRACE_OLDSETOPTIONS) || \
-        (defined(__linux__) && defined(PT_OLDSETOPTIONS))
+#if defined(PTRACE_OLDSETOPTIONS)
     { "PTRACE_OLDSETOPTIONS", PTRACE_OLDSETOPTIONS },
 #endif
 
 #ifdef PT_GETEVENTMSG
     { "PT_GETEVENTMSG", PT_GETEVENTMSG },
 #endif
-#if defined(PTRACE_GETEVENTMSG) || \
-        (defined(__linux__) && defined(PT_GETEVENTMSG))
+#if defined(PTRACE_GETEVENTMSG)
     { "PTRACE_GETEVENTMSG", PTRACE_GETEVENTMSG },
 #endif
 
 #ifdef PT_GETSIGINFO
     { "PT_GETSIGINFO", PT_GETSIGINFO },
 #endif
-#if defined(PTRACE_GETSIGINFO) || (defined(__linux__) && defined(PT_GETSIGINFO))
+#if defined(PTRACE_GETSIGINFO)
     { "PTRACE_GETSIGINFO", PTRACE_GETSIGINFO },
 #endif
 
 #ifdef PT_SETSIGINFO
     { "PT_SETSIGINFO", PT_SETSIGINFO },
 #endif
-#if defined(PTRACE_SETSIGINFO) || (defined(__linux__) && defined(PT_SETSIGINFO))
+#if defined(PTRACE_SETSIGINFO)
     { "PTRACE_SETSIGINFO", PTRACE_SETSIGINFO },
 #endif
 
 #ifdef PT_SYSEMU
     { "PT_SYSEMU", PT_SYSEMU },
 #endif
-#if defined(PTRACE_SYSEMU) || (defined(__linux__) && defined(PT_SYSEMU))
+#if defined(PTRACE_SYSEMU)
     { "PTRACE_SYSEMU", PTRACE_SYSEMU },
 #endif
 
 #ifdef PT_SYSEMU_SINGLESTEP
     { "PT_SYSEMU_SINGLESTEP", PT_SYSEMU_SINGLESTEP },
 #endif
-#if defined(PTRACE_SYSEMU_SINGLESTEP) || \
-        (defined(__linux__) && defined(PT_SYSEMU_SINGLESTEP))
+#if defined(PTRACE_SYSEMU_SINGLESTEP)
     { "PTRACE_SYSEMU_SINGLESTEP", PTRACE_SYSEMU_SINGLESTEP },
 #endif
 };

@@ -63,11 +63,18 @@ struct adapter
 static void
 n_callback(explain_lsof_t *context, const char *name)
 {
-    adapter         *a;
+    /*
+     * Sometimes lsof(1) is less than helpful, and says "cwd (readlink:
+     * Permission denied)" which is effectively no answer at all.
+     */
+    if (0 != memcmp(name, "cwd (readlink:", 14))
+    {
+        adapter         *a;
 
-    a = (adapter *)context;
-    explain_strendcpy(a->data, name, a->data + a->data_size);
-    a->count++;
+        a = (adapter *)context;
+        explain_strendcpy(a->data, name, a->data + a->data_size);
+        a->count++;
+    }
 }
 
 

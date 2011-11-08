@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -42,12 +42,10 @@ main(int argc, char **argv)
 {
     int             fd;
     const char      *path;
-    int             flags;
     int             mode;
 
     fd = -1;
     path = 0;
-    flags = O_RDONLY;
     mode = 0666;
     for (;;)
     {

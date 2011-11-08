@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,31 +48,40 @@ read_lines(const char *filename, explain_string_list_t *content)
     size_t          j;
 
     fp = 0;
-    for (j = 0; j < view_path.length; ++j)
+    if (0 == strcmp(filename, "-"))
+        fp = stdin;
+    else
     {
-        if (j >= view_path.length)
+        for (j = 0; j < view_path.length; ++j)
         {
-            fprintf(stderr, "%s\n", explain_fopen(filename, "r"));
-            exit(EXIT_FAILURE);
+            if (j >= view_path.length)
+            {
+                fprintf(stderr, "%s\n", explain_fopen(filename, "r"));
+                exit(EXIT_FAILURE);
+            }
+            snprintf
+            (
+                read_lines_path,
+                sizeof(read_lines_path),
+                "%s/%s",
+                view_path.string[j],
+                filename
+            );
+            fp = fopen(read_lines_path, "r");
+            if (fp)
+                break;
+            if (errno != ENOENT)
+            {
+                fprintf(stderr, "%s\n", explain_fopen(read_lines_path, "r"));
+                exit(1);
+            }
         }
-        snprintf
-        (
-            read_lines_path,
-            sizeof(read_lines_path),
-            "%s/%s",
-            view_path.string[j],
-            filename
-        );
-        fp = fopen(read_lines_path, "r");
-        if (fp)
-            break;
-        if (errno != ENOENT)
+        if (!fp)
         {
             fprintf(stderr, "%s\n", explain_fopen(filename, "r"));
             exit(1);
         }
     }
-    assert(fp);
 
     for (;;)
     {
@@ -86,7 +95,8 @@ read_lines(const char *filename, explain_string_list_t *content)
             --n;
         explain_string_list_append_n(content, buffer, n);
     }
-    explain_fclose_or_die(fp);
+    if (fp != stdin)
+        explain_fclose_or_die(fp);
 }
 
 
@@ -289,11 +299,15 @@ main(int argc, char **argv)
     explain_string_list_append(&view_path, ".");
     for (;;)
     {
-        int c = getopt(argc, argv, "I:V");
+        int c = getopt(argc, argv, "F:I:V");
         if (c < 0)
             break;
         switch (c)
         {
+        case 'F':
+            read_lines(optarg, &source_files);
+            break;
+
         case 'I':
             explain_string_list_append(&view_path, optarg);
             break;
@@ -308,7 +322,7 @@ main(int argc, char **argv)
         }
     }
     while (optind < argc)
-        explain_string_list_append(&source_files, argv[optind++]);
+        explain_string_list_append_unique(&source_files, argv[optind++]);
     if (source_files.length == 0)
     {
         fprintf(stderr, "no source files named\n");
@@ -334,14 +348,14 @@ main(int argc, char **argv)
         name = extract_include_name(line);
         if (name)
         {
-            explain_string_list_append(&public_api, name);
+            explain_string_list_append_unique(&public_api, name);
             free(name);
         }
     }
     explain_string_list_destructor(&libexplain_h);
 
     /*
-     * Check each source file.
+     * Check each source file in the public API.
      */
     for (j = 0; j < public_api.length; ++j)
         check(public_api.string[j]);

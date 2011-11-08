@@ -163,6 +163,7 @@
 #include <libexplain/setsid.h>
 #include <libexplain/setsockopt.h>
 #include <libexplain/setvbuf.h>
+#include <libexplain/shmat.h>
 #include <libexplain/signalfd.h>
 #include <libexplain/snprintf.h>
 #include <libexplain/socket.h>

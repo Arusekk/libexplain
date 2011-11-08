@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -157,7 +157,7 @@ explain_buffer_errno_connect_explanation(explain_string_buffer_t *sb,
                 /*
                  * xgettext: This message is used to supplement an
                  * EAGAIN explanation for the connect(2) system call, on
-                 * Linux the numebr of local ports can be increased.
+                 * Linux the number of local ports can be increased.
                  */
                 i18n("see the net.ipv4.ip_local_port_range sysctl in ip(7) "
                 "for how to increase the number of local ports")

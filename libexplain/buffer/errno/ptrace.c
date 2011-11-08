@@ -278,13 +278,11 @@ calculate_addr_size(int request)
 static int
 calculate_data_size(int request)
 {
-#ifdef __linux__
+#ifdef SYS_PTRACE_USER_REGS_STRUCT
     /*
      * The following structs are all defined in <sys/user.h> (on Linux,
      * anyway), so if your system doesn't have them, we can't give
      * useful answers.
-     *
-     * FIXME: need a better ./configure test for this.
      */
     switch (request)
     {
@@ -339,9 +337,11 @@ calculate_data_size(int request)
         break;
     }
 #endif
+    (void)request;
     return 0;
 }
 
+#if defined(PT_SETOPTIONS) || defined(PT_OLDSETOPTIONS)
 
 static void
 setting_an_invalid_option(explain_string_buffer_t *sb)
@@ -358,6 +358,7 @@ setting_an_invalid_option(explain_string_buffer_t *sb)
     );
 }
 
+#endif
 
 void
 explain_buffer_errno_ptrace_explanation(explain_string_buffer_t *sb, int errnum,

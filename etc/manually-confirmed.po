@@ -18,8 +18,8 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2011-02-01 17:05+1100\n"
-        "PO-Revision-Date: 2011-09-06\n"
+        "POT-Creation-Date: 2011-11-08 15:38+1100\n"
+        "PO-Revision-Date: 2011-11-08\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -551,8 +551,10 @@ msgstr  "a symbolic link loop was encountered in %s, starting at %s"
 #. error from an execve system call, in the case where an ELF
 #. interpreter was a directory.
 #.
-msgid   "an ELF interpreter was a directory"
-msgstr  "an ELF interpreter was a directory"
+msgid   "an ELF interpreter was a directory, and it is not possible to "
+        "execute a directory"
+msgstr  "an ELF interpreter was a directory, and it is not possible to "
+        "execute a directory"
 
 #.
 #. This error message is used to explain an ESRCH
@@ -644,14 +646,6 @@ msgid   "an invalid signal was specified during a restart request"
 msgstr  "an invalid signal was specified during a restart request"
 
 #.
-#. this error message is used to explain an EPERM error
-#. returned by the setsid system call, in the case where the calling
-#. process is already a process group leader.
-#.
-msgid   "the process is already a process group leader"
-msgstr  "the process is already a process group leader"
-
-#.
 #. This message is used when explaining why file
 #. access is denied, and the process is not root.
 #.
@@ -681,8 +675,28 @@ msgid   "character special device"
 msgstr  "character special device"
 
 #.
-#. the name of the current directory, rather than
-#. "." that not all users understand.
+#. this phrase it used to describe an aspect of
+#. IPC object, their creator group id (see ipc_perm::cgid, or
+#. shmat(2) for more information).
+#.
+#. This is explicitly nothing to do with files.
+#.
+msgid   "creator GID"
+msgstr  "creator GID"
+
+#.
+#. this phrase it used to describe an aspect of IPC
+#. object, the creator user id (see struct ipc_perm member cuid, or
+#. shmat(2) for more information).
+#.
+#. This is explicitly nothing to do with files.
+#.
+msgid   "creator UID"
+msgstr  "creator UID"
+
+#.
+#. the name of the current directory, rather than "." that
+#. not all users understand.
 #.
 msgid   "current directory"
 msgstr  "current directory"
@@ -720,17 +734,17 @@ msgid   "does not have the %s capability"
 msgstr  "does not have the %s capability"
 
 #.
-#. This phrase is used to distinguish which of
-#. the process's GIDs are in use during the permissions
-#. check.  In this case, the effective gid.
+#. This phrase is used to distinguish which of the
+#. process's GIDs are in use during the permissions check.  In this
+#. case, the effective GID.
 #.
 msgid   "effective GID"
 msgstr  "effective GID"
 
 #.
-#. This phrase is used to distinguish which of
-#. the process's UIDs are in use during the permissions
-#. check.  In this case, the effective UID.
+#. This phrase is used to distinguish which of the
+#. process's UIDs are in use during the permissions check.  In this
+#. case, the effective UID.
 #.
 msgid   "effective UID"
 msgstr  "effective UID"
@@ -800,7 +814,7 @@ msgstr  "insufficient user-space or kernel memory was available"
 
 #.
 #. This message is used to explain an EINVAL
-#. error reorted by an ioctl(2) system call, when a more
+#. error reported by an ioctl(2) system call, when a more
 #. specific explanation is not availble.
 #.
 msgid   "ioctl request or ioctl data is not valid"
@@ -1164,6 +1178,26 @@ msgid   "or is outside your chroot jail"
 msgstr  "or is outside your chroot jail"
 
 #.
+#. this phrase it used to describe an aspect of
+#. IPC object, their owner group id (see ipc_perm::gid, or
+#. shmat(2) for more information).
+#.
+#. This is explicitly nothing to do with files.
+#.
+msgid   "owner GID"
+msgstr  "owner GID"
+
+#.
+#. this phrase it used to describe an aspect of IPC
+#. object, the owner user id (see struct ipc_perm member uid, or
+#. shmat(2) for more information).
+#.
+#. This is explicitly nothing to do with files.
+#.
+msgid   "owner UID"
+msgstr  "owner UID"
+
+#.
 #. This error message is used when the rmdir(2)
 #. system call returns EINVAL, in the case where the final
 #. path component is "."
@@ -1313,9 +1347,9 @@ msgstr  "read access to %s was not allowed, or one of the directory "
         "components of %s did not allow search permission"
 
 #.
-#. This phrase is used to distinguish which of
-#. the process's GIDs are in use during the permissions
-#. check.  In this case, the real gid.
+#. This phrase is used to distinguish which of the
+#. process's GIDs are in use during the permissions check.  In this
+#. case, the real gid.
 #.
 msgid   "real GID"
 msgstr  "real GID"
@@ -1362,12 +1396,20 @@ msgstr  "search permission is denied for a directory component of %s; or, "
 #.
 #. This message is used to supplement an
 #. EAGAIN explanation for the connect(2) system call, on
-#. Linux the numebr of local ports can be increased.
+#. Linux the number of local ports can be increased.
 #.
 msgid   "see the net.ipv4.ip_local_port_range sysctl in ip(7) for how to "
         "increase the number of local ports"
 msgstr  "see the net.ipv4.ip_local_port_range sysctl in ip(7) for how to "
         "increase the number of local ports"
+
+#.
+#. this phrase is used to name the category of
+#. thing known as shared memory segments.
+#. See shmat(2) for more information.
+#.
+msgid   "shared memory segment"
+msgstr  "shared memory segment"
 
 #.
 #. This string is the type of a file (see stat(2)
@@ -1488,8 +1530,10 @@ msgstr  "the %s argument does not refer to a valid signalfd file "
 #. %1$s => the name of the offending system call argument
 #.
 #, c-format
-msgid   "the %s argument does not refer to an object that is open for reading"
-msgstr  "the %s argument does not refer to an object that is open for reading"
+msgid   "the %s argument does not refer to an object that is open for "
+        "reading"
+msgstr  "the %s argument does not refer to an object that is open for "
+        "reading"
 
 #.
 #. This message is used when an attempt is made to write to a
@@ -1499,8 +1543,10 @@ msgstr  "the %s argument does not refer to an object that is open for reading"
 #. %1$s => the name of the offending argument
 #.
 #, c-format
-msgid   "the %s argument does not refer to an object that is open for writing"
-msgstr  "the %s argument does not refer to an object that is open for writing"
+msgid   "the %s argument does not refer to an object that is open for "
+        "writing"
+msgstr  "the %s argument does not refer to an object that is open for "
+        "writing"
 
 #.
 #. This error message is issued when a system call
@@ -1626,6 +1672,14 @@ msgid   "the %s argument was incorrectly specified, the actual value "
 msgstr  "the %s argument was incorrectly specified, the actual value "
         "requires at least %d bytes, or preferably use the HOST_NAME_MAX "
         "macro"
+
+#.
+#. This error message is used when explaining that a
+#. IPC object does not exist, when it should.
+#.
+#, c-format
+msgid   "the %s does not exist"
+msgstr  "the %s does not exist"
 
 #.
 #. This error message is used to explain an EPERM
@@ -2115,9 +2169,9 @@ msgid   "the file descriptor is open for append"
 msgstr  "the file descriptor is open for append"
 
 #.
-#. This message is used to explain an
-#. EAGAIN error reported by the mmap(2) syatem call,
-#. in the case where the file has been locked.
+#. This message is used to explain an EAGAIN error
+#. reported by the mmap(2) syatem call, in the case where the file
+#. has been locked.
 #.
 msgid   "the file is locked"
 msgstr  "the file is locked"
@@ -2270,16 +2324,6 @@ msgstr  "the local network cable is not plugged in, or a local network "
         "router or switch or hub is switched off"
 
 #.
-#. This message is used to explain an
-#. EAGAIN error reported by the mmap(2) syatem call,
-#. in the case where too much memory has been locked.
-#. The relevant getrlimit values will be printed
-#. separately.
-#.
-msgid   "the locked memory size of the process would have been exceeded"
-msgstr  "the locked memory size of the process would have been exceeded"
-
-#.
 #. This message is used to explain an ETXTBSY
 #. error reported by a mmap(2) system call, in the case
 #. where MAP_DENYWRITE was set but the object specified
@@ -2347,9 +2391,8 @@ msgid   "the others permission mode %s is ignored"
 msgstr  "the others permission mode %s is ignored"
 
 #.
-#. This message is used when explaining which
-#. permission mode bits are used when determining file access
-#. permsiions.
+#. This message is used when explaining which permission mode
+#. bits are used when determining file access permsiions.
 #.
 #. %1$s => the "rwx" mode representation, including the quotes, in a
 #.         form resembling the ls -l representation of mode bits.
@@ -2377,6 +2420,51 @@ msgid   "the pathname is being used by the system or another process and "
         "the implementation considers this an error"
 msgstr  "the pathname is being used by the system or another process and "
         "the implementation considers this an error"
+
+#.
+#. This message is used when explaining which permission
+#. mode bits are used when determining IPC access permissions.
+#.
+#. This is explicitly nothing to do with files.
+#.
+#. %1$s => the process kind of GID, "real GID" or "effective GID",
+#.         already translated
+#. %2$s => the GID of the process, number and name.
+#. %3$s => the IPOC onject kind, e.g. "shared memory segment",
+#.         already trsmalated
+#. %4$s => the IPC object kind of GID, "owner GID" or "creator GID",
+#.         already translated
+#. %5$s => the GID of the IPC object, number and name.
+#. %6$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#, c-format
+msgid   "the process %s %s does not match the %s %s %s and so the group "
+        "permission mode %s is ignored"
+msgstr  "the process %s %s does not match the %s %s %s and so the group "
+        "permission mode %s is ignored"
+
+#.
+#. This message is used when explaining which owner permission
+#. mode bits are ignored when determining IPC access permissions.
+#.
+#. %1$s => the kind of process UID, "real UID" or "effective UID",
+#.         already translated
+#. %2$s => the UID of the process, number and name.
+#. %3$s => the kind of IPC object, e.g. "shared memory segment",
+#.         already tramslated
+#. %4$s => the kind of shm UID, "owner UID" or "creator UID"
+#. %5$s => the shm UID of the IPC object, number and name.
+#. %6$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#, c-format
+msgid   "the process %s %s does not match the %s %s %s so the owner "
+        "permission mode %s is ignored"
+msgstr  "the process %s %s does not match the %s %s %s so the owner "
+        "permission mode %s is ignored"
 
 #.
 #. This message is used when explaining which
@@ -2416,6 +2504,51 @@ msgstr  "the process %s %s does not match the %s owner %s so the owner "
 #, c-format
 msgid   "the process %s %s does not match the %s owner UID %s"
 msgstr  "the process %s %s does not match the %s owner UID %s"
+
+#.
+#. This message is used when explaining which permission
+#. mode bits are used when determining IPC access permissions.
+#.
+#. This is explicitly nothing to do with files.
+#.
+#. %1$s => the process kind of GID, "real GID" or "effective GID",
+#.         already translated
+#. %2$s => the GID of the process, number and name.
+#. %3$s => the kinf of IPC object, e.g. "shared memory segment",
+#.         already translated
+#. %4$s => the IPC object kind of GID, "owner GID" or "creator GID",
+#.         already translated
+#. %5$s => the GID of the IPC object, number and name.
+#. %6$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#, c-format
+msgid   "the process %s %s matches the %s %s and the group permission "
+        "mode is %s"
+msgstr  "the process %s %s matches the %s %s and the group permission "
+        "mode is %s"
+
+#.
+#. This message is used when explaining which permission mode
+#. bits are used when determining IPC access permissions.
+#.
+#. %1$s => the kind of process UID, "real UID" or "effective UID",
+#.         already translated.
+#. %2$s => the UID of the process, number and name.
+#. %3$s => the kind if IPC object, e.g. "shared memory segment",
+#.         already translated
+#. %4$s => the kind of IPC object UID, "owner UID" or
+#.         "creator UID", already translated.
+#. %5$s => The mode bits like "rwx", including the quotes, in
+#.         a form resembling the ls -l representation of mode
+#.         bits.
+#.
+#, c-format
+msgid   "the process %s %s matches the %s %s and the owner permission "
+        "mode is %s"
+msgstr  "the process %s %s matches the %s %s and the owner permission "
+        "mode is %s"
 
 #.
 #. This message is used when explaining which
@@ -2760,6 +2893,19 @@ msgstr  "the process does not have the appropriate privileges to use the "
         "%s system call"
 
 #.
+#. This error message is used to explain that a
+#. process does not have the necessary IPC permissions to access
+#. the resource it requested.
+#.
+#. %1$s => The kind of resource, e.g. "shared memory segment" or
+#.         "semaphore", etc.  Already translated.
+#.
+#.
+#, c-format
+msgid   "the process does not have the necessary %s access permissions"
+msgstr  "the process does not have the necessary %s access permissions"
+
+#.
 #. This message is used when a process does not have
 #. write permission to something it attempts to
 #. open for writing; for example, open() or fopen().
@@ -2856,6 +3002,14 @@ msgid   "the process has insufficient privilege to control process "
         "accounting"
 msgstr  "the process has insufficient privilege to control process "
         "accounting"
+
+#.
+#. this error message is used to explain an EPERM error
+#. returned by the setsid system call, in the case where the calling
+#. process is already a process group leader.
+#.
+msgid   "the process is already a process group leader"
+msgstr  "the process is already a process group leader"
 
 #.
 #. This message is used by the wait*()
@@ -3286,11 +3440,11 @@ msgid   "the virtual console is still in use"
 msgstr  "the virtual console is still in use"
 
 #.
-#. This message is used to explain an ENOMEM
-#. error reported by the mmap(2) syatem call, in the
-#. case where the virtual memory size of the process
-#. was exceeded.  The relevant getrlimit values will be
-#. printed separately.
+#. This message is used to explain an ENOMEM error
+#. reported by a system call (e.g. mmap or shmat), in the case
+#. where the virtual memory size of the process would have been
+#. exceeded.  The relevant getrlimit values will be printed
+#. separately.
 #.
 msgid   "the virtual memory size limit of the process would have been "
         "exceeded"
@@ -3650,17 +3804,17 @@ msgstr  "you cannot use open(2) to open socket files, you must use connect"
         "(2) instead; a named pipe may be what was intended"
 
 #.
-#. This message is used to explain in EINVAL error
-#. reported by mmap(2), in the case where the flags did not
-#. contain exactly one of MAP_PRIVATE or MAP_SHARED.
-#.
-msgid   "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
-msgstr  "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
-
-#.
 #. This error message is used to explain an
 #. EINVAL error reported by the ioctl SIOCSCCINI system
 #. call.
 #.
 msgid   "you must call ioctl SIOCSCCCFG first"
 msgstr  "you must call ioctl SIOCSCCCFG first"
+
+#.
+#. This message is used to explain in EINVAL error
+#. reported by mmap(2), in the case where the flags did not
+#. contain exactly one of MAP_PRIVATE or MAP_SHARED.
+#.
+msgid   "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
+msgstr  "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"

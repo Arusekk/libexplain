@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -50,5 +50,33 @@ void explain_buffer_eacces(explain_string_buffer_t *sb,
   */
 void explain_buffer_eacces_syscall(explain_string_buffer_t *sb,
     const char *syscall_name);
+
+struct ipc_perm; /* forward */
+
+/**
+  * The explain_buffer_eacces_shmat function is use dto explain EACCES
+  * error returned by shmat (and friends?).
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param perm
+  *     The access permission attached to the shared memory segment.
+  * @param read_only
+  *     Whether or no read only access was requested (if false,
+  *     read-write access is requested).
+  * @returns
+  *     0 if it printed nothing, 1 if it printed an explanation
+  */
+int explain_buffer_eacces_shmat(explain_string_buffer_t *sb,
+    const struct ipc_perm *perm, int read_only);
+
+/**
+  * The explain_buffer_eacces_shmat_vague function is use dto explain EACCES
+  * error returned by shmat, when no specific error can be determined.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  */
+void explain_buffer_eacces_shmat_vague(explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_EACCES_H */

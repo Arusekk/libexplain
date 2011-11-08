@@ -1503,6 +1503,13 @@
 0
 #endif
 },
+{ "HAVE_PTRACE",
+#ifdef HAVE_PTRACE
+1
+#else
+0
+#endif
+},
 { "HAVE_PUTENV",
 #ifdef HAVE_PUTENV
 1
@@ -1568,6 +1575,13 @@
 },
 { "HAVE_SETSID",
 #ifdef HAVE_SETSID
+1
+#else
+0
+#endif
+},
+{ "HAVE_SHMAT",
+#ifdef HAVE_SHMAT
 1
 #else
 0
@@ -1862,6 +1876,13 @@
 },
 { "HAVE_SYS_SELECT_H",
 #ifdef HAVE_SYS_SELECT_H
+1
+#else
+0
+#endif
+},
+{ "HAVE_SYS_SHM_H",
+#ifdef HAVE_SYS_SHM_H
 1
 #else
 0
@@ -2408,6 +2429,13 @@
 },
 { "STRERROR_R_CHAR_P",
 #ifdef STRERROR_R_CHAR_P
+1
+#else
+0
+#endif
+},
+{ "SYS_PTRACE_USER_REGS_STRUCT",
+#ifdef SYS_PTRACE_USER_REGS_STRUCT
 1
 #else
 0

@@ -90,6 +90,8 @@ explain_v4l2_buf_type_check(int fildes, int data)
         case V4L2_BUF_TYPE_SLICED_VBI_CAPTURE:
         case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
         case V4L2_BUF_TYPE_PRIVATE:
+        case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+        case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
             return explain_v4l2_buf_type_check_notsup;
 
         default:
@@ -108,6 +110,8 @@ explain_v4l2_buf_type_check(int fildes, int data)
         case V4L2_BUF_TYPE_SLICED_VBI_CAPTURE:
         case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
         case V4L2_BUF_TYPE_PRIVATE:
+        case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+        case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
             return explain_v4l2_buf_type_check_no_idea;
 
         default:

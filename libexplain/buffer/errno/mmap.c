@@ -196,35 +196,8 @@ explain_buffer_errno_mmap_explanation(explain_string_buffer_t *sb, int errnum,
 #ifdef MAP_LOCKED
         if (flags & MAP_LOCKED)
         {
-            struct rlimit rlim;
-            if (getrlimit(RLIMIT_MEMLOCK, &rlim) >= 0)
-            {
-                if (rlim.rlim_cur + data_size > rlim.rlim_max)
-                {
-                    explain_buffer_gettext
-                    (
-                        sb,
-                        /**
-                          * xgettext:  This message is used to explain an
-                          * EAGAIN error reported by the mmap(2) syatem call,
-                          * in the case where too much memory has been locked.
-                          * The relevant getrlimit values will be printed
-                          * separately.
-                          */
-                        i18n("the locked memory size of the process "
-                            "would have been exceeded")
-                    );
-                    explain_string_buffer_printf
-                    (
-                        sb,
-                        " (RLIMIT_MEMLOCK: %ld + %ld > %ld)",
-                        (long)rlim.rlim_cur,
-                        (long)data_size,
-                        (long)rlim.rlim_max
-                    );
-                    return;
-                }
-            }
+            if (explain_buffer_enomem_rlimit_exceeded(sb, data_size))
+                return;
         }
 #endif
         /* FIXME: locked by whom? */
@@ -232,9 +205,9 @@ explain_buffer_errno_mmap_explanation(explain_string_buffer_t *sb, int errnum,
         (
             sb,
             /**
-              * xgettext:  This message is used to explain an
-              * EAGAIN error reported by the mmap(2) syatem call,
-              * in the case where the file has been locked.
+              * xgettext:  This message is used to explain an EAGAIN error
+              * reported by the mmap(2) syatem call, in the case where the file
+              * has been locked.
               */
             i18n("the file is locked")
         );
@@ -353,37 +326,8 @@ explain_buffer_errno_mmap_explanation(explain_string_buffer_t *sb, int errnum,
          * No memory is available, or
          * the process's maximum number of mappings would have been exceeded.
          */
-        {
-            struct rlimit rlim;
-            if (getrlimit(RLIMIT_AS, &rlim) >= 0)
-            {
-                if (rlim.rlim_cur + data_size > rlim.rlim_max)
-                {
-                    explain_buffer_gettext
-                    (
-                        sb,
-                        /**
-                          * xgettext:  This message is used to explain an ENOMEM
-                          * error reported by the mmap(2) syatem call, in the
-                          * case where the virtual memory size of the process
-                          * was exceeded.  The relevant getrlimit values will be
-                          * printed separately.
-                          */
-                        i18n("the virtual memory size limit of the process "
-                            "would have been exceeded")
-                    );
-                    explain_string_buffer_printf
-                    (
-                        sb,
-                        " (RLIMIT_AS: %ld + %ld > %ld)",
-                        (long)rlim.rlim_cur,
-                        (long)data_size,
-                        (long)rlim.rlim_max
-                    );
-                    return;
-                }
-            }
-        }
+        if (explain_buffer_enomem_rlimit_exceeded(sb, data_size))
+            return;
         explain_buffer_enomem_kernel(sb);
         break;
 

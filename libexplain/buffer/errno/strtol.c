@@ -72,7 +72,6 @@ explain_buffer_errno_strtol_explanation(explain_string_buffer_t *sb, int errnum,
         {
             char            *ep;
             int             err;
-            long            n;
 
             /*
              * Do the conversion again, this time *with* an end pointer,
@@ -80,7 +79,15 @@ explain_buffer_errno_strtol_explanation(explain_string_buffer_t *sb, int errnum,
              */
             ep = 0;
             err = errno;
-            n = strtol(nptr, &ep, base);
+            if (strtol(nptr, &ep, base))
+            {
+                /*
+                 * Ordinarily, the warning "ignoring return value of function"
+                 * is a great way of discovering bugs.  In this case, however,
+                 * we aren't concerned with the actual return value, but with
+                 * the error that results from the call.
+                 */
+            }
             errno = err;
             if (ep == nptr)
             {

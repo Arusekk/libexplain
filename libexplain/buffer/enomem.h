@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,5 +48,24 @@ void explain_buffer_enomem_user(explain_string_buffer_t *sb);
   *    The buffer to print the explanation to
   */
 void explain_buffer_enomem_kernel_or_user(explain_string_buffer_t *sb);
+
+/**
+  * The explain_buffer_enomem_rlimit_exceeded function is used to test
+  * whether or not the given data size would exceed the process's virtual
+  * memory limit.
+  *
+  * If it would be exceeded, a message to that effect is printed, and
+  * true (non-zero) is returned.  Otherwise nothing is printed, and
+  * false (zero) is returned.
+  *
+  * @param sb
+  *     String buffer to print into.
+  * @param size
+  *     The memory allocation size, in bytes.
+  * @returns
+  *     true if would exceed, false if not.
+  */
+int explain_buffer_enomem_rlimit_exceeded(explain_string_buffer_t *sb,
+    size_t size);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOMEM_H */

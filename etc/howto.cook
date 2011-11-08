@@ -789,9 +789,13 @@ all += .include.gotchas;
     if [not [verbose]] then
         function print CHK include portability;
 
-    [resolve bin/test_include_gotchas]
-        [filter -I%0% [CPPFLAGS]]
-        [source_files];
+    [resolve bin/test_include_gotchas] -F- [filter -I%0% [CPPFLAGS]] ;
+data
+[unsplit "\n"
+    [match_mask %0%.h [source_files]]
+    [match_mask %0%.c [source_files]]
+]
+dataend
     date > [target]
         set silent;
 }
@@ -819,6 +823,21 @@ test_config/configured.h: etc/configured.awk libexplain/config.h.in
 }
 
 cascade test_config/main.c = test_config/configured.h;
+
+/* ---------------------------------------------------------------------- */
+
+all += .test.checker;
+
+.test.checker: bin/test_checker
+    [match_mask test/%1/t%2.sh [source_files]]
+{
+    if [not [verbose]] then
+        function print CHK test scripts;
+    [resolve bin/test_checker]
+        [resolve [match_mask test/%1/t%2.sh [source_files]]]
+        ;
+    date > [target];
+}
 
 /* ---------------------------------------------------------------------- */
 #include-cooked etc/autoconf.cook

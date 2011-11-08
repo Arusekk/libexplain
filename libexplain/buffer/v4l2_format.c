@@ -72,6 +72,8 @@ explain_buffer_v4l2_format(explain_string_buffer_t *sb,
         case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
         case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY:
         case V4L2_BUF_TYPE_PRIVATE:
+        case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+        case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
         default:
             break;
         }

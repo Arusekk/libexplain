@@ -40,11 +40,21 @@ struct adapter
 static void
 n_callback(explain_lsof_t *context, const char *name)
 {
-    adapter         *a;
+    /*
+     * Sometimes lsof(1) is less than helpful, and says "n (readlink:
+     * Permission denied)" which is effectively no answer at all.
+     *
+     * There is a very small chance of discarding a valid result.
+     * Get fussier if it proves to be an actual problem.
+     */
+    if (!strstr(name, " (readlink: "))
+    {
+        adapter         *a;
 
-    a = (adapter *)context;
-    a->found = 1;
-    explain_strendcpy(a->data, name, a->data + a->data_size);
+        a = (adapter *)context;
+        a->found = 1;
+        explain_strendcpy(a->data, name, a->data + a->data_size);
+    }
 }
 
 

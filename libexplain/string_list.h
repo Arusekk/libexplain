@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -71,6 +71,19 @@ void explain_string_list_destructor(explain_string_list_t *slp);
   *     The string to be appended.
   */
 void explain_string_list_append(explain_string_list_t *slp, const char *text);
+
+/**
+  * The explain_string_list_append_unique function is used to add
+  * another string to the end of the list, provided that the string is
+  * not already in the list.  The string is *always* copied if it is used.
+  *
+  * @param slp
+  *     The string list to operate on.
+  * @param text
+  *     The string to be appended.
+  */
+void explain_string_list_append_unique(explain_string_list_t *slp,
+    const char *text);
 
 /**
   * The explain_string_list_append_n function is used to add another

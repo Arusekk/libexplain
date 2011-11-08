@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -52,6 +52,26 @@ explain_string_list_destructor(explain_string_list_t *slp)
         free(slp->string);
         slp->string = 0;
     }
+}
+
+
+static int
+explain_string_list_member(const explain_string_list_t *slp, const char *text)
+{
+    size_t          j;
+
+    for (j = 0; j < slp->length; ++j)
+        if (0 == strcmp(slp->string[j], text))
+            return 1;
+    return 0;
+}
+
+
+void
+explain_string_list_append_unique(explain_string_list_t *slp, const char *text)
+{
+    if (!explain_string_list_member(slp, text))
+        explain_string_list_append(slp, text);
 }
 
 

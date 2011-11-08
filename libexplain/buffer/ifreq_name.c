@@ -31,13 +31,10 @@ explain_buffer_ifreq_name(explain_string_buffer_t *sb,
         explain_buffer_pointer(sb, data);
     else
     {
-        const struct ifreq *ifr;
-
         /*
          * This is actually a huge big sucky union.  This specific case
          * is given the interface name.
          */
-        ifr = data;
         explain_string_buffer_puts(sb, "{ ifr_name = ");
         explain_string_buffer_puts_quoted_n
         (
