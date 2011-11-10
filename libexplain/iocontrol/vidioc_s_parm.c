@@ -85,8 +85,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
                 case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
                 case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY:
                 case V4L2_BUF_TYPE_PRIVATE:
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
                 case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
                 case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+#endif
                     explain_buffer_enotsup_device(sb, "data->type");
                     return;
 
@@ -109,8 +113,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
                 case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
                 case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY:
                 case V4L2_BUF_TYPE_PRIVATE:
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
                 case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
                 case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+#endif
                     explain_buffer_enotsup_device(sb, "data->type");
                     return;
 

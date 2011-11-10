@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,13 +23,14 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/gid.h>
+#include <libexplain/option.h>
 
 
 void
 explain_buffer_gid(explain_string_buffer_t *sb, int gid)
 {
     explain_string_buffer_printf(sb, "%d", gid);
-    if (gid >= 0)
+    if (gid >= 0 && explain_option_dialect_specific())
     {
         struct group    *gr;
 

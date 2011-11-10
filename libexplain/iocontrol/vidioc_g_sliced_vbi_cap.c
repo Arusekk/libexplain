@@ -98,8 +98,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
                         bit = V4L2_CAP_SLICED_VBI_OUTPUT;
                         break;
 
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
                     case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
                     case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+#endif
                     case V4L2_BUF_TYPE_VIDEO_CAPTURE:
                     case V4L2_BUF_TYPE_VIDEO_OUTPUT:
                     case V4L2_BUF_TYPE_VIDEO_OVERLAY:

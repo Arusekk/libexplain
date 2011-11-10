@@ -74,8 +74,12 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
             case V4L2_BUF_TYPE_VIDEO_OVERLAY:
             case V4L2_BUF_TYPE_VIDEO_OUTPUT:
             case V4L2_BUF_TYPE_PRIVATE:
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
             case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
             case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+#endif
                 break;
 
             case V4L2_BUF_TYPE_VBI_CAPTURE:

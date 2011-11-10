@@ -36,7 +36,9 @@ explain_buffer_blktrace_mask(explain_string_buffer_t *sb, int value)
     {
         { "BLK_TC_READ", BLK_TC_READ },
         { "BLK_TC_WRITE", BLK_TC_WRITE },
+#ifdef BLK_TC_BARRIER
         { "BLK_TC_BARRIER", BLK_TC_BARRIER },
+#endif
         { "BLK_TC_SYNC", BLK_TC_SYNC },
         { "BLK_TC_QUEUE", BLK_TC_QUEUE },
         { "BLK_TC_REQUEUE", BLK_TC_REQUEUE },

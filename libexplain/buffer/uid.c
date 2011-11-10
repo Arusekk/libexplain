@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2011 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,13 +20,14 @@
 #include <libexplain/ac/pwd.h>
 
 #include <libexplain/buffer/uid.h>
+#include <libexplain/option.h>
 
 
 void
 explain_buffer_uid(explain_string_buffer_t *sb, int uid)
 {
     explain_string_buffer_printf(sb, "%d", uid);
-    if (uid >= 0)
+    if (uid >= 0 && explain_option_dialect_specific())
     {
         struct passwd   *pw;
 

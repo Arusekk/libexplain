@@ -22,7 +22,7 @@ TEST_SUBJECT="lchown EPERM"
 . test_prelude
 
 fmt > test.ok << 'fubar'
-lchown(pathname = "foobar", owner = 0 "root", group = 0) failed, Operation
+lchown(pathname = "foobar", owner = 0, group = 0) failed, Operation
 not permitted (EPERM) because the process effective UID nnn is the same
 as the owner UID of pathname but this is not sufficient privilege to
 change the owner UID, and the process is not privileged
@@ -39,6 +39,7 @@ test $? -eq 0 || no_result
 
 sed -e 's|group = 0 "[^"]*"|group = 0|' \
     -e 's|UID [0-9][0-9]* *"[^"]*"|UID nnn|' \
+    -e 's|UID [0-9][0-9]*|UID nnn|' \
     test.out3 > test.out2
 test $? -eq 0 || no_result
 

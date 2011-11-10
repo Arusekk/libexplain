@@ -17,14 +17,19 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.\"
-.\" you can create the initial cut of this file using the
-.\"
-.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
-.\"             -p libexplain.0 -c 48 -unf
-.\"
-.\" command, and then editing it to be more appropriate.
-.\"
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 100
+Explanations are now available for errors reported by the
+\f[I]shmctl\fP(2) system call.
+.TP 2n
+.if n *
+.if t \(bu
+.\" Change 12
+.\" Change 11
+Some build problems (discovered by the LaunchPad PPA buid farm)
+have been fixed.
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i

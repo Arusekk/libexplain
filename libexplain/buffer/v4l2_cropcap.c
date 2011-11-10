@@ -69,8 +69,12 @@ explain_v4l2_cropcap_check_type(int fildes, const struct v4l2_cropcap *data)
     case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
     case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY:
     case V4L2_BUF_TYPE_PRIVATE:
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
     case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
     case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+#endif
         switch (explain_v4l2_buf_type_check(fildes, data->type))
         {
         case explain_v4l2_buf_type_check_no_idea:

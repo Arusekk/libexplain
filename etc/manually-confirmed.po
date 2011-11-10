@@ -18,7 +18,7 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2011-11-08 15:38+1100\n"
+        "POT-Creation-Date: 2011-11-09 21:42+1100\n"
         "PO-Revision-Date: 2011-11-08\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
@@ -1410,6 +1410,14 @@ msgstr  "see the net.ipv4.ip_local_port_range sysctl in ip(7) for how to "
 #.
 msgid   "shared memory segment"
 msgstr  "shared memory segment"
+
+#.
+#. This erro rmessage is used to describe the cause of an
+#. EIDRM error reported by the shmctl(2) system call, in the case
+#. where the shmid refers to a removed identifier.
+#.
+msgid   "shmid refers to a removed identifier"
+msgstr  "shmid refers to a removed identifier"
 
 #.
 #. This string is the type of a file (see stat(2)

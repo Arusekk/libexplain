@@ -903,6 +903,7 @@ AC_CHECK_FUNCS(    \
     setmntent      \
     setsid         \
     shmat          \
+    shmctl         \
     signalfd       \
     snprintf       \
     statfs         \
@@ -1243,6 +1244,48 @@ then
 fi
 
 dnl! "
+
+dnl!
+dnl! aSomewhere around Linux kernel version 3.0.0 these symbols were
+dnl! added.  The problem is they are members of an enum, not #defines.
+dnl!
+AC_MSG_CHECKING([whether V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE is defined])
+AC_TRY_COMPILE([
+#include <stdio.h>
+#include </usr/include/linux/videodev2.h>
+], [
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
+dont bother
+#else
+printf("%d\n", V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+#endif
+]
+, [AC_DEFINE(V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+[Define this symbol as itself if your system has <linux/videodev2.h> and
+it defines V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE as an enum member.])
+AC_MSG_RESULT([yes])],
+[AC_MSG_RESULT([no])]
+)
+
+AC_MSG_CHECKING([whether V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE is defined])
+AC_TRY_COMPILE([
+#include <stdio.h>
+#include </usr/include/linux/videodev2.h>
+], [
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
+dont bother
+#else
+printf("%d\n", V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+#endif
+]
+, [AC_DEFINE(V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+[Define this symbol as itself if your system has <linux/videodev2.h> and
+it defines V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE as an enum member.])
+AC_MSG_RESULT([yes])],
+[AC_MSG_RESULT([no])]
+)
 
 dnl!
 dnl!    Do not do this until after all of the compiler and symbol tests

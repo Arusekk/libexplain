@@ -45,6 +45,14 @@ explain_buffer_v4l2_buf_type(explain_string_buffer_t *sb, int value)
         { "V4L2_BUF_TYPE_SLICED_VBI_OUTPUT", V4L2_BUF_TYPE_SLICED_VBI_OUTPUT },
         { "V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY",
             V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY },
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
+        { "V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE",
+            V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE },
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
+        { "V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE",
+            V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE },
+#endif
         { "V4L2_BUF_TYPE_PRIVATE", V4L2_BUF_TYPE_PRIVATE },
     };
     explain_parse_bits_print_single(sb, value, table, SIZEOF(table));
@@ -90,8 +98,12 @@ explain_v4l2_buf_type_check(int fildes, int data)
         case V4L2_BUF_TYPE_SLICED_VBI_CAPTURE:
         case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
         case V4L2_BUF_TYPE_PRIVATE:
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
         case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
         case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+#endif
             return explain_v4l2_buf_type_check_notsup;
 
         default:
@@ -110,8 +122,12 @@ explain_v4l2_buf_type_check(int fildes, int data)
         case V4L2_BUF_TYPE_SLICED_VBI_CAPTURE:
         case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
         case V4L2_BUF_TYPE_PRIVATE:
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
         case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+#endif
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
         case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+#endif
             return explain_v4l2_buf_type_check_no_idea;
 
         default:

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2011 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -32,7 +32,7 @@ explain_buffer_errno_stime_system_call(explain_string_buffer_t *sb, int errnum,
 {
     (void)errnum;
     explain_string_buffer_puts(sb, "stime(t = ");
-    explain_buffer_time_t(sb, t);
+    explain_buffer_time_t_star(sb, t);
     explain_string_buffer_putc(sb, ')');
 }
 

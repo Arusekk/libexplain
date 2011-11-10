@@ -23,20 +23,14 @@
 
 
 void
-explain_buffer_time_t(explain_string_buffer_t *sb, const time_t *data)
+explain_buffer_time_t(explain_string_buffer_t *sb, time_t value)
 {
-    if (explain_is_efault_pointer(data, sizeof(*data)))
-    {
-        explain_buffer_pointer(sb, data);
-        return;
-    }
-
-    explain_string_buffer_printf(sb, "{ %ld", (long)*data);
+    explain_string_buffer_printf(sb, "%ld", (long)value);
     if (explain_option_dialect_specific())
     {
         struct tm       *tmp;
 
-        tmp = localtime(data);
+        tmp = localtime(&value);
         if (tmp)
         {
             char            buffer[200];
@@ -51,5 +45,19 @@ explain_buffer_time_t(explain_string_buffer_t *sb, const time_t *data)
             explain_string_buffer_puts(sb, buffer);
         }
     }
+}
+
+
+void
+explain_buffer_time_t_star(explain_string_buffer_t *sb, const time_t *data)
+{
+    if (explain_is_efault_pointer(data, sizeof(*data)))
+    {
+        explain_buffer_pointer(sb, data);
+        return;
+    }
+
+    explain_string_buffer_printf(sb, "{ ");
+    explain_buffer_time_t(sb, *data);
     explain_string_buffer_puts(sb, " }");
 }

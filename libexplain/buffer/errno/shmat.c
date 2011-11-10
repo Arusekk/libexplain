@@ -87,7 +87,14 @@ shmid_exists(int shmid)
 {
     struct shmid_ds shm;
 
-    return (shmctl(shmid, IPC_STAT, &shm) >= 0 || errno == EACCES);
+    return
+        (
+            shmctl(shmid, IPC_STAT, &shm) >= 0
+        ||
+            errno == EACCES
+        ||
+            errno == EPERM
+        );
 }
 
 
@@ -96,7 +103,7 @@ wrap_shmctl(int shmid, int cmd, struct shmid_ds *data)
 {
     if (shmctl(shmid, cmd, data) >= 0)
         return 0;
-    if (errno == EACCES)
+    if (errno == EACCES || errno == EPERM)
     {
         /*
          * Note that shmctl(IPC_STAT) requires read permission, so if we
@@ -120,6 +127,7 @@ explain_buffer_errno_shmat_explanation(explain_string_buffer_t *sb, int errnum,
     switch (errnum)
     {
     case EACCES:
+    case EPERM:
         /*
          * The calling process does not have the required permissions for
          * the requested attach type, and does not have the CAP_IPC_OWNER

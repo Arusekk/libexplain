@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,21 +22,13 @@ TEST_SUBJECT="fchown ENOMEM"
 . test_prelude
 
 cat > test.ok << 'fubar'
-fchown(fildes = 42, owner = 0 "root", group = 0 "root") failed, Cannot
-allocate memory (ENOMEM) because insufficient kernel memory was available
-fubar
-test $? -eq 0 || no_result
-
-cat > test.ok2 << 'fubar'
-fchown(fildes = 42, owner = 0 "root", group = 0 "wheel") failed, Cannot
-allocate memory (ENOMEM) because insufficient kernel memory was available
+fchown(fildes = 42, owner = 0, group = 0) failed, Cannot allocate memory
+(ENOMEM) because insufficient kernel memory was available
 fubar
 test $? -eq 0 || no_result
 
 explain -e ENOMEM fchown 42 0 0 > test.out
 test $? -eq 0 || fail
-
-diff test.ok2 test.out >/dev/null 2>&1 && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail

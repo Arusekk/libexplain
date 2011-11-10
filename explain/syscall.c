@@ -151,6 +151,7 @@
 #include <explain/syscall/setsockopt.h>
 #include <explain/syscall/setvbuf.h>
 #include <explain/syscall/shmat.h>
+#include <explain/syscall/shmctl.h>
 #include <explain/syscall/signalfd.h>
 #include <explain/syscall/socket.h>
 #include <explain/syscall/socketpair.h>
@@ -530,7 +531,7 @@ static const table_t table[] =
     /* FIXME: add support for set_zone_reclaim */
     /* FIXME: add support for sgetmask */
     { "shmat", explain_syscall_shmat },
-    /* FIXME: add support for shmctl */
+    { "shmctl", explain_syscall_shmctl },
     /* FIXME: add support for shmdt */
     /* FIXME: add support for shmget */
     /* FIXME: add support for shutdown */

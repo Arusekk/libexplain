@@ -1587,6 +1587,13 @@
 0
 #endif
 },
+{ "HAVE_SHMCTL",
+#ifdef HAVE_SHMCTL
+1
+#else
+0
+#endif
+},
 { "HAVE_SIGNALFD",
 #ifdef HAVE_SIGNALFD
 1
@@ -2443,6 +2450,20 @@
 },
 { "TIME_WITH_SYS_TIME",
 #ifdef TIME_WITH_SYS_TIME
+1
+#else
+0
+#endif
+},
+{ "V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE",
+#ifdef V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
+1
+#else
+0
+#endif
+},
+{ "V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE",
+#ifdef V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE
 1
 #else
 0

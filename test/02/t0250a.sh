@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,9 +22,9 @@ TEST_SUBJECT="lchown ENOENT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-lchown(pathname = "foobar", owner = 0 "root", group = 0) failed, No
-such file or directory (ENOENT) because there is no "foobar" regular file
-in the current directory
+lchown(pathname = "foobar", owner = 0, group = 0) failed, No such file or
+directory (ENOENT) because there is no "foobar" regular file in the current
+directory
 fubar
 test $? -eq 0 || no_result
 

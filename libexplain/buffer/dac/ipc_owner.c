@@ -19,7 +19,6 @@
 #include <libexplain/ac/sys/capability.h>
 
 #include <libexplain/buffer/dac.h>
-#include <libexplain/buffer/gettext.h>
 #include <libexplain/capability.h>
 #include <libexplain/option.h>
 
