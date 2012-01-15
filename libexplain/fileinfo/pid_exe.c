@@ -123,7 +123,7 @@ n_callback(explain_lsof_t *context, const char *name)
          * Sometimes lsof(1) is less than helpful, and says "exe (readlink:
          * Permission denied)" which is effectively no answer at all.
          */
-        if (0 != memcmp(name, "exe (readlink:", 14))
+        if (0 == strstr(name, "exe (readlink:"))
         {
             adapter         *a;
 

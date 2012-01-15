@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008-2011 Peter Miller
+# Copyright (C) 2008-2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ project_specific =
     },
     {
         name = "aemakegen:version-info";
-        value = "48:0:18";
+        value = "49:0:19";
     },
     {
         name = "aemakegen:debian:copyright";
@@ -54,6 +54,13 @@ project_specific =
     {
         name = "aemakegen:debian:extended-description:explain";
         value =
+            "This package provides an explain(1) command to explain "
+            "Unix and Linux system call errors, after the fact."
+            ;
+    },
+    {
+        name = "aemakegen:rpm-spec:description:libexplain";
+        value =
             "This package provides a command to explain Unix and Linux "
             "system call errors, after the fact."
             ;
@@ -61,6 +68,14 @@ project_specific =
     {
         name = "aemakegen:debian:description:libexplain";
         value = "library of syscall-specific strerror replacements";
+    },
+    {
+        name = "aemakegen:rpm-spec:summary";
+        value = "library of syscall-specific strerror replacements";
+    },
+    {
+        name = "aemakegen:rpm-spec:license";
+        value = "LGPL, GPL";
     },
     {
         name = "aemakegen:debian:extended-description:libexplain";
@@ -73,8 +88,30 @@ project_specific =
             ;
     },
     {
+        name = "aemakegen:rpm-spec:description:libexplain-libs";
+        value =
+            "This package provides a library which may be used to "
+            "explain Unix and Linux system call errors.  The library is "
+            "not quite a drop-in replacement for strerror, but it comes "
+            "close, with each system call having a dedicated libexplain "
+            "function."
+            ;
+    },
+    {
+        name = "aemakegen:rpm-spec:description:libexplain-devel";
+        value =
+            "This package contains static libraries and header files "
+            "for compiling applications that use libexplain to explain "
+            "Unix and Linux system call errors."
+            ;
+    },
+    {
         name = "aemakegen:debian:build-depends";
         value = "libcap-dev, bison, groff, linux-libc-dev, lsof";
+    },
+    {
+        name = "aemakegen:rpm-spec:build-requires";
+        value = "libcap-devel, bison, groff, glibc-devel, lsof";
     },
     {
         name = "aemakegen:debian:depends";
@@ -93,3 +130,5 @@ project_specific =
         value = "false";
     },
 ];
+
+/* vim: set ts=8 sw=4 et : */

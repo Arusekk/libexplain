@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2010-2012 Peter Miller
+# Copyright (C) 2011 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -18,31 +18,30 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-TEST_SUBJECT="ptrace EFAULT"
+TEST_SUBJECT="realpath EACCES"
 . test_prelude
 
-test_config __linux__ || pass
-
-cat > test.ok << 'fubar'
-ptrace(request = PT_GETSIGINFO, pid = 0, addr = NULL, data = NULL) failed,
-Bad address (EFAULT) because data refers to memory that is outside the
-process's accessible address space; this is more likely to be a software
-error (a bug) than it is to be a user error
+fmt > test.ok << 'fubar'
+realpath(pathname = "fu/bar/baz", resolved_pathname = 0xNNNNNNNN) failed,
+Permission denied (EACCES) because search permission is denied for a
+directory component of pathname
 fubar
 test $? -eq 0 || no_result
 
-cat > test.ok.2 << 'fubar'
-ptrace(request = PT_GETSIGINFO, pid = 0, addr = NULL, data = NULL) failed,
-Bad address (EFAULT) because there was an attempt to read from or write to
-an invalid area in the parent's or child's memory, probably because the
-area wasn't mapped or accessible
-fubar
+mkdir -p fu/bar
+test $? -eq 0 || no_result
+touch fu/bar/baz
 test $? -eq 0 || no_result
 
-explain -eEFAULT ptrace PT_GETSIGINFO 0 0 > test.out
+explain -eEACCES realpath fu/bar/baz > test.out.4
 test $? -eq 0 || fail
 
-diff test.ok.2 test.out > /dev/null 2>&1 && pass
+fmt -w 800 test.out.4 > test.out.3
+test $? -eq 0 || no_result
+sed 's|0x[0-9A-F]*|0xNNNNNNNN|' test.out.3 > test.out.2
+test $? -eq 0 || no_result
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail
@@ -54,4 +53,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

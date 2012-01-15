@@ -22,14 +22,14 @@ TEST_SUBJECT="shmctl EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-shmctl(shmid = 666, command = IPC_STAT, data = 0x87654321) failed, Bad
+shmctl(shmid = 666, command = IPC_STAT, data = 0x77654321) failed, Bad
 address (EFAULT) because data refers to memory that is outside the
 process's accessible address space; this is more likely to be a software
 error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
-explain -eEFAULT shmctl 666 IPC_STAT 0x87654321 > test.out
+explain -eEFAULT shmctl 666 IPC_STAT 0x77654321 > test.out
 test $? -eq 0 || fail
 
 diff test.ok test.out

@@ -147,6 +147,7 @@
 #include <libexplain/readlink.h>
 #include <libexplain/readv.h>
 #include <libexplain/realloc.h>
+#include <libexplain/realpath.h>
 #include <libexplain/remove.h>
 #include <libexplain/rename.h>
 #include <libexplain/rmdir.h>

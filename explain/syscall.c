@@ -134,6 +134,7 @@
 #include <explain/syscall/readlink.h>
 #include <explain/syscall/readv.h>
 #include <explain/syscall/realloc.h>
+#include <explain/syscall/realpath.h>
 #include <explain/syscall/remove.h>
 #include <explain/syscall/rename.h>
 #include <explain/syscall/rmdir.h>
@@ -456,6 +457,7 @@ static const table_t table[] =
     { "readlink", explain_syscall_readlink },
     { "readv", explain_syscall_readv },
     { "realloc", explain_syscall_realloc },
+    { "realpath", explain_syscall_realpath },
     /* FIXME: add support for reboot */
     /* FIXME: add support for recv */
     /* FIXME: add support for recvfrom */

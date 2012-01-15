@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011 Peter Miller
+ * Copyright (C) 2009, 2011, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -34,24 +34,54 @@ explain_buffer_blktrace_mask(explain_string_buffer_t *sb, int value)
 {
     static const explain_parse_bits_table_t table[] =
     {
+#ifdef BLK_TC_READ
         { "BLK_TC_READ", BLK_TC_READ },
+#endif
+#ifdef BLK_TC_WRITE
         { "BLK_TC_WRITE", BLK_TC_WRITE },
+#endif
 #ifdef BLK_TC_BARRIER
         { "BLK_TC_BARRIER", BLK_TC_BARRIER },
 #endif
-        { "BLK_TC_SYNC", BLK_TC_SYNC },
-        { "BLK_TC_QUEUE", BLK_TC_QUEUE },
-        { "BLK_TC_REQUEUE", BLK_TC_REQUEUE },
-        { "BLK_TC_ISSUE", BLK_TC_ISSUE },
-        { "BLK_TC_COMPLETE", BLK_TC_COMPLETE },
-        { "BLK_TC_FS", BLK_TC_FS },
-        { "BLK_TC_PC", BLK_TC_PC },
-        { "BLK_TC_NOTIFY", BLK_TC_NOTIFY },
-        { "BLK_TC_AHEAD", BLK_TC_AHEAD },
-        { "BLK_TC_META", BLK_TC_META },
-        { "BLK_TC_DISCARD", BLK_TC_DISCARD },
-        { "BLK_TC_DRV_DATA", BLK_TC_DRV_DATA },
-        { "BLK_TC_END", BLK_TC_END },
+#ifdef BLK_TC_SYNC
+    { "BLK_TC_SYNC", BLK_TC_SYNC },
+#endif
+#ifdef BLK_TC_QUEUE
+    { "BLK_TC_QUEUE", BLK_TC_QUEUE },
+#endif
+#ifdef BLK_TC_REQUEUE
+    { "BLK_TC_REQUEUE", BLK_TC_REQUEUE },
+#endif
+#ifdef BLK_TC_ISSUE
+    { "BLK_TC_ISSUE", BLK_TC_ISSUE },
+#endif
+#ifdef BLK_TC_COMPLETE
+    { "BLK_TC_COMPLETE", BLK_TC_COMPLETE },
+#endif
+#ifdef BLK_TC_FS
+    { "BLK_TC_FS", BLK_TC_FS },
+#endif
+#ifdef BLK_TC_PC
+    { "BLK_TC_PC", BLK_TC_PC },
+#endif
+#ifdef BLK_TC_NOTIFY
+    { "BLK_TC_NOTIFY", BLK_TC_NOTIFY },
+#endif
+#ifdef BLK_TC_AHEAD
+    { "BLK_TC_AHEAD", BLK_TC_AHEAD },
+#endif
+#ifdef BLK_TC_META
+    { "BLK_TC_META", BLK_TC_META },
+#endif
+#ifdef BLK_TC_DISCARD
+    { "BLK_TC_DISCARD", BLK_TC_DISCARD },
+#endif
+#ifdef BLK_TC_DRV_DATA
+    { "BLK_TC_DRV_DATA", BLK_TC_DRV_DATA },
+#endif
+#ifdef BLK_TC_END
+    { "BLK_TC_END", BLK_TC_END },
+#endif
     };
 
     explain_parse_bits_print(sb, value, table, SIZEOF(table));
@@ -95,3 +125,6 @@ explain_buffer_blk_user_trace_setup(explain_string_buffer_t *sb,
 }
 
 #endif
+
+
+/* vim: set ts=8 sw=4 et : */

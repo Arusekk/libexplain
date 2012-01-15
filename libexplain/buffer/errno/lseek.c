@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,8 +52,9 @@ explain_buffer_errno_lseek_system_call(explain_string_buffer_t *sb,
 #if defined(SEEK_HOLE) || defined(SEEK_DATA)
 
 static int
-holes_are_not_supported(int fildes)
+holes_are_supported(int fildes)
 {
+#ifdef _PC_MIN_HOLE_SIZE
     long            result;
 
     errno = 0;
@@ -64,22 +65,26 @@ holes_are_not_supported(int fildes)
         {
         case EINVAL:
         case ENOSYS:
-            /* yes, not supported */
-            return 1;
+            /* holes are not supported */
+            return 0;
 
         case EBADF:
         default:
-            /* no, can't tell */
-            return 0;
+            /* can't tell */
+            return -1;
         }
     }
     if (result <= 0)
     {
-        /* yes, not supported */
-        return 1;
+        /* holes are not supported */
+        return 0;
     }
-    /* no, holes are supported */
-    return 0;
+    /* holes are supported */
+    return 1;
+#else
+    /* can't tell */
+    return -1;
+#endif
 }
 
 #endif
@@ -109,12 +114,18 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
                     sb,
                     /* FIXME: i18n */
                     "'whence' is not one of SEEK_SET, SEEK_CUR, SEEK_END"
+#ifdef SEEK_HOLE
+                    ", SEEK_HOLE"
+#endif
+#ifdef SEEK_DATA
+                    ", SEEK_DATA"
+#endif
                 );
                 return;
 
 #ifdef SEEK_HOLE
             case SEEK_HOLE:
-                if (holes_are_not_supported(fildes))
+                if (!holes_are_supported(fildes))
                     goto seek_hole_enosys;
                 if (offset < 0)
                 {
@@ -128,7 +139,7 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
 
 #ifdef SEEK_DATA
             case SEEK_DATA:
-                if (holes_are_not_supported(fildes))
+                if (!holes_are_supported(fildes))
                     goto seek_data_enosys;
                 if (offset < 0)
                 {
@@ -271,7 +282,7 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
     case EOPNOTSUPP:
 #endif
 #ifdef SEEK_HOLE
-        if (whence == SEEK_HOLE && holes_are_not_supported(fildes))
+        if (whence == SEEK_HOLE && !holes_are_supported(fildes))
         {
             char            temp[50];
 
@@ -282,7 +293,7 @@ explain_buffer_errno_lseek_explanation(explain_string_buffer_t *sb,
         }
 #endif
 #ifdef SEEK_DATA
-        if (whence == SEEK_DATA && holes_are_not_supported(fildes))
+        if (whence == SEEK_DATA && !holes_are_supported(fildes))
         {
             char            temp[50];
 

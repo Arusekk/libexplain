@@ -17,9 +17,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-integration-build-targets +=
-    web-site/[project_minus].tar.gz
-    ;
+integration-build-targets += tarball ;
+
+tarball: web-site/[project_minus].tar.gz ;
 
 /* Need gnu style tar to build the tarball - so try different names */
 if [find_command gnutar] then
@@ -77,6 +77,11 @@ source_file_order =
      * for message translators
      */
     po/libexplain.pot
+
+    /*
+     * For rpmbuild
+     */
+    libexplain.spec
     ;
 
 web-site/%.tar.gz: [source_file_order] debian/control debian/changelog
@@ -282,3 +287,12 @@ libexplain/public_config.h: etc/large.awk libexplain/config.h
 }
 
 cascade libexplain/large_file_support.h = libexplain/public_config.h;
+
+libexplain.spec: [source_files]
+{
+    if [not [verbose]] then
+        function print GEN [target];
+    [aemakegen] --target\=rpm-spec
+        libdir/pkgconfig/[project_short].pc.in
+        > [target];
+}
