@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -41,6 +41,8 @@
 #include <libexplain/wrap_and_print.h>
 
 
+#ifdef VIDIOCGCAP
+
 static int
 ioctl_wary(int fildes, int request, void *data)
 {
@@ -60,6 +62,8 @@ ioctl_wary(int fildes, int request, void *data)
     return -1;
 }
 
+#endif
+
 
 int
 main(int argc, char **argv)
@@ -67,10 +71,10 @@ main(int argc, char **argv)
     int             fildes;
 #ifdef VIDIOCGCAP
     struct video_capability cap;
-#endif
     struct explain_string_buffer_t sb;
-    const char      *filename;
     char            message[1 << 12];
+#endif
+    const char      *filename;
 
     explain_program_name_set(argv[0]);
     filename = "/dev/video0";

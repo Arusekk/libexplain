@@ -1,6 +1,6 @@
 dnl!
 dnl! libexplain - Explain errno values returned by libc functions
-dnl! Copyright (C) 2008-2011 Peter Miller
+dnl! Copyright (C) 2008-2012 Peter Miller
 dnl! Written by Peter Miller <pmiller@opensource.org.au>
 dnl!
 dnl! This program is free software; you can redistribute it and/or
@@ -1199,10 +1199,10 @@ AC_CHECK_DECLS([strsignal,ustat,strverscmp],,, [
 ])
 
 dnl!
-dnl! ptrace is just about the least architecture neutral syscall you can
-dnl! imagine.  If something can be wrong with an API, then ptrace works
-dnl! hard to get it wrong in the least architecture neutral as possible,
-dnl! and then some.
+dnl! ptrace is just about the least architecture neutral syscall you
+dnl! can imagine.  If something can be wrong with an API, then ptrace
+dnl! works hard to get it wrong in the least architecture neutral way as
+dnl! possible, and then some.
 dnl!
 AC_MSG_CHECKING([whether <sys/ptrace.h> defines struct user_regs_struct])
 AC_TRY_RUN([
@@ -1223,6 +1223,52 @@ return 0;
 , AC_DEFINE(SYS_PTRACE_USER_REGS_STRUCT,1,
 [Define this symbol if your system has <sys/ptrace.h> or <sys/user.h> AND one
 of them defines struct user_regs_struct.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+AC_MSG_CHECKING([whether <sys/ptrace.h> defines struct user_fpregs_struct])
+AC_TRY_RUN([
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_PTRACE_H
+#include <sys/ptrace.h>
+#endif
+#ifdef HAVE_SYS_USER_H
+#include <sys/user.h>
+#endif
+int main(argc, argv)int argc; char **argv;{
+struct user_fpregs_struct x;
+printf("%d\n", (int)sizeof(x));
+return 0;
+}]
+, AC_DEFINE(SYS_PTRACE_USER_FPREGS_STRUCT,1,
+[Define this symbol if your system has <sys/ptrace.h> or <sys/user.h> AND one
+of them defines struct user_fpregs_struct.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+AC_MSG_CHECKING([whether <sys/ptrace.h> defines struct user_fpxregs_struct])
+AC_TRY_RUN([
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_PTRACE_H
+#include <sys/ptrace.h>
+#endif
+#ifdef HAVE_SYS_USER_H
+#include <sys/user.h>
+#endif
+int main(argc, argv)int argc; char **argv;{
+struct user_fpxregs_struct x;
+printf("%d\n", (int)sizeof(x));
+return 0;
+}]
+, AC_DEFINE(SYS_PTRACE_USER_FPXREGS_STRUCT,1,
+[Define this symbol if your system has <sys/ptrace.h> or <sys/user.h> AND one
+of them defines struct user_fpxregs_struct.])
 AC_MSG_RESULT([yes]),
 AC_MSG_RESULT([no]),
 AC_MSG_RESULT(cross))
@@ -1558,7 +1604,7 @@ AC_SUBST(PROGRAM_SUFFIX)
 AH_TOP(
 [/*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -1590,3 +1636,4 @@ AH_BOTTOM([
 #endif /* LIBEXPLAIN_CONFIG_H */])
 
 AC_OUTPUT(Makefile)
+dnl! vim: set sw=4 ts=8 et :

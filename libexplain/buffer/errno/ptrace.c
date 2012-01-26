@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -278,7 +278,6 @@ calculate_addr_size(int request)
 static int
 calculate_data_size(int request)
 {
-#ifdef SYS_PTRACE_USER_REGS_STRUCT
     /*
      * The following structs are all defined in <sys/user.h> (on Linux,
      * anyway), so if your system doesn't have them, we can't give
@@ -286,6 +285,7 @@ calculate_data_size(int request)
      */
     switch (request)
     {
+#ifdef SYS_PTRACE_USER_REGS_STRUCT
 #ifdef PT_GETREGS
     case PT_GETREGS:
         return sizeof(struct user_regs_struct);
@@ -294,6 +294,9 @@ calculate_data_size(int request)
     case PT_SETREGS:
         return sizeof(struct user_regs_struct);
 #endif
+#endif /* SYS_PTRACE_USER_REGS_STRUCT */
+
+#ifdef SYS_PTRACE_USER_FPREGS_STRUCT
 #ifdef PT_GETFPREGS
     case PT_GETFPREGS:
         return sizeof(struct user_fpregs_struct);
@@ -302,8 +305,9 @@ calculate_data_size(int request)
     case PT_SETFPREGS:
         return sizeof(struct user_fpregs_struct);
 #endif
+#endif /* SYS_PTRACE_USER_FPREGS_STRUCT */
 
-#if defined(linux) && (__WORDSIZE < 64)
+#ifdef SYS_PTRACE_USER_FPXREGS_STRUCT
 #ifdef PT_GETFPXREGS
     case PT_GETFPXREGS:
         return sizeof(struct user_fpxregs_struct);
@@ -312,7 +316,7 @@ calculate_data_size(int request)
     case PT_SETFPXREGS:
         return sizeof(struct user_fpxregs_struct);
 #endif
-#endif
+#endif /* SYS_PTRACE_USER_FPREGS_STRUCT */
 
 #ifdef PT_GETEVENTMSG
     case PT_GETEVENTMSG:
@@ -336,8 +340,6 @@ calculate_data_size(int request)
     default:
         break;
     }
-#endif
-    (void)request;
     return 0;
 }
 
@@ -571,4 +573,4 @@ explain_buffer_errno_ptrace(explain_string_buffer_t *sb, int errnum, int
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

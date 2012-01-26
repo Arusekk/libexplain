@@ -17,16 +17,16 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.TP 2n
-.if n *
-.if t \(bu
-.\" Change 11
-The \f[I]ptrace\fP(2) support has been improved with more conditionals
-determined by the ./configure script when building.
-.br
-Debian: Closes: #645745
+.\"
+.\" you can create the initial cut of this file using the
+.\"
+.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
+.\"             -p libexplain.0 -c 51 -unf
+.\"
+.\" command, and then editing it to be more appropriate.
+.\"
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.50 (2012\[hy]Jan\[hy]16)
+.SS Version 0.51 (2012\[hy]Jan\[hy]26)
 .\" vim: set ts=8 sw=4 et :
