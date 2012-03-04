@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -50,6 +50,9 @@ check(const char *filename)
 {
     FILE *fp = explain_fopen_or_die(filename, "r");
     int linum = 0;
+    int saw_eacces = 0;
+    int saw_eperm = 0;
+    int saw_test_config_not_root = 0;
     for (;;)
     {
         char            *cp;
@@ -58,6 +61,12 @@ check(const char *filename)
         if (!explain_fgets_or_die(line, sizeof(line), fp))
             break;
         ++linum;
+        if (strstr(line, "EACCES"))
+            saw_eacces = linum;
+        if (strstr(line, "EPERM"))
+            saw_eperm = linum;
+        if (strstr(line, "test_config not-root"))
+            saw_test_config_not_root = linum;
         cp = strstr(line, "fmt -w");
         if (cp && cp[6] != ' ')
         {
@@ -82,6 +91,17 @@ check(const char *filename)
         }
     }
     explain_fclose_or_die(fp);
+    if ((saw_eacces || saw_eperm) && !saw_test_config_not_root)
+    {
+        explain_output_error
+        (
+            "%s: %d: the EACCES and EPERM tests do not work when invoked "
+                "by root, use \"test_config not-root || pass\" to cope",
+            filename,
+            (saw_eacces ? saw_eacces : saw_eperm)
+        );
+        ++number_of_errors;
+    }
 }
 
 

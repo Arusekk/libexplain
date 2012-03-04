@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
 
 TEST_SUBJECT="execlp EACCES"
 . test_prelude
+
+# this test doesn't work for root (or fakeroot)
+test_config not-root || pass
 
 cat > test.ok << 'fubar'
 execlp(pathname = "cant-exec-me", arg = "cant-exec-me", "arg1", "arg2",
@@ -53,4 +56,4 @@ fi
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

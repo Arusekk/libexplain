@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009-2011 Peter Miller
+# Copyright (C) 2009-2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
 
 TEST_SUBJECT="execvp EACCES"
 . test_prelude
+
+# this test doesn't work for root (or fakeroot)
+test_config not-root || pass
 
 fmt > test.ok << 'fubar'
 execvp(pathname = "yuck", argv = ["yuck"]) failed, Permission denied
@@ -66,4 +69,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

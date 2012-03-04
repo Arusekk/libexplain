@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2011 Peter Miller
+# Copyright (C) 2011, 2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -20,6 +20,9 @@
 
 TEST_SUBJECT="setsid EPERM"
 . test_prelude
+
+# this test doesn't work for root (or fakeroot)
+test_config not-root || pass
 
 cat > test.ok << 'fubar'
 setsid() failed, Operation not permitted (EPERM) because the process is

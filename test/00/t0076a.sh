@@ -21,6 +21,9 @@
 TEST_SUBJECT="rename EACCES"
 . test_prelude
 
+# this test doesn't work for root (or fakeroot)
+test_config not-root || pass
+
 cat > test.ok << 'fubar'
 rename(oldpath = "a/foo", newpath = "b/bar") failed, Permission denied
 (EACCES) because oldpath is a directory and does not allow write

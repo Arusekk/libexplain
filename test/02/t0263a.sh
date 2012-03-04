@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
 
 TEST_SUBJECT="utime EPERM"
 . test_prelude
+
+# this test doesn't work for root (or fakeroot)
+test_config not-root || pass
 
 cat > test.ok << 'fubar'
 utime(pathname = "foobar", times = 0x00054321) failed, Operation not
@@ -44,4 +47,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :
