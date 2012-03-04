@@ -17,27 +17,16 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
-.if n *
-.if t \(bu
-.\" Change 19
-A false negative in test 76, where Linux security modules change the
-\f[I]rename\fP(2) semantics.
-.PP
-.if n *
-.if t \(bu
-.\" Change 12
-A problem on sparc64 has been fixed.  Libexplain can now cope with a
-missing O_LARGEFILE declaration, and yet file flags returned by the
-kernel have the flag set.
-.PP
-.if n *
-.if t \(bu
-.\" Change 11
-A build problem on Debian alpha has been fixed, the name of an include
-file was incorrect.
+.\"
+.\" you can create the initial cut of this file using the
+.\"
+.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
+.\"             -p libexplain.0 -c 52 -unf
+.\"
+.\" command, and then editing it to be more appropriate.
+.\"
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.51 (2012\[hy]Jan\[hy]26)
+.SS Version 0.52 (2012\[hy]Mar\[hy]04)
 .\" vim: set ts=8 sw=4 et :

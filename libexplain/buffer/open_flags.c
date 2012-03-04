@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,6 +44,9 @@
 #if defined(__linux__) && defined(__sparc__) && defined(__arch64__)
 /* It is difficult to see just how this could ever come to pass.  Oh well. */
 #define O_LARGEFILE 0x40000
+#ifndef O_LARGEFILE_HIDDEN
+#define O_LARGEFILE_HIDDEN 0x40000
+#endif
 #else
 #define O_LARGEFILE 0
 #endif
@@ -124,7 +127,8 @@ static const explain_parse_bits_table_t table[] =
 #endif
 #ifdef O_LARGEFILE_HIDDEN
     { "O_LARGEFILE", O_LARGEFILE_HIDDEN },
-#else
+#endif
+#ifdef O_LARGEFILE
     { "O_LARGEFILE", O_LARGEFILE },
 #endif
 #ifdef O_BINARY
@@ -189,3 +193,6 @@ explain_open_flags_parse_or_die(const char *text, const char *caption)
 {
     return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

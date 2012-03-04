@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,10 @@
 
 TEST_SUBJECT="open vs ELOOP"
 . test_prelude
+
+# see if /proc is useful.
+# it prints the explanation if it fails, causing a pass-by-default
+test_getppcwd_works || pass
 
 cat > test.ok << 'fubar'
 open(pathname = "a", flags = O_RDONLY) failed, Too many levels of symbolic
@@ -55,4 +59,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

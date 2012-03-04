@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,15 +21,6 @@
 TEST_SUBJECT="rename EACCES"
 . test_prelude
 
-if test `uname -s` = SunOS
-then
-    echo
-    echo "    Solaris has non-POSIX semantics for renaming directories."
-    echo "    This test is declared to pass by default."
-    echo
-    pass
-fi
-
 cat > test.ok << 'fubar'
 rename(oldpath = "a/foo", newpath = "b/bar") failed, Permission denied
 (EACCES) because oldpath is a directory and does not allow write
@@ -44,14 +35,8 @@ test $? -eq 0 || no_result
 chmod a-w a/foo
 test $? -eq 0 || no_result
 
-test_rename a/foo b/bar > test.out 2>&1
-if test $? -ne 1
-then
-    echo "expected to fail"
-    test -f test.out && cat test.out
-    chmod -R u+w .
-    fail
-fi
+explain -e EACCES rename a/foo b/bar > test.out
+test $? -eq 0 || fail
 
 chmod -R u+w .
 
@@ -65,4 +50,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

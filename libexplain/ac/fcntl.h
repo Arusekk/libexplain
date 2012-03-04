@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,8 +31,7 @@
 #if defined(__alpha__) && defined(HAVE_LINUX_FCNTL_H)
 #include <libexplain/ac/linux/types.h> /* Ubuntu Hardy needs this first */
 /* This is very strange, but numerous tests fail if we use <fcntl.h>
-   because is appears to have several incorrect macro definitions */
-#include <linux/ac/sys/types.h>
+   because it appears to have several incorrect macro definitions */
 #include <linux/fcntl.h>
 #else
 #include <fcntl.h>
@@ -62,11 +61,12 @@
 
 /*
  * Even when O_LARGEFILE is not necessary, glibc adds one in for free.
- * The trouble is that this make things interesting when decoding
+ * The trouble is, this make things interesting when decoding
  * flags values returned by the kernel.
  */
 #if defined(__linux__) && (O_LARGEFILE == 0)
 #define O_LARGEFILE_HIDDEN 0100000
 #endif
 
+/* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_AC_FCNTL_H */
