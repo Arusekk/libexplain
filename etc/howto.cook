@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -110,6 +110,8 @@ loop
     search_name = [search_name]bl;
 }
 
+#include-cooked etc/apt-get-depends.cook
+
 /* -------------------------------------------------------------------------
  * Section: Utilities
  *
@@ -119,7 +121,7 @@ loop
 
 CPPFLAGS = [addprefix "-I" [search_list]];
 CC = gcc;
-CFLAGS = -Werror -Wall -Wextra
+CFLAGS = -Wall -Wextra
     -Wformat\=2
     -Wswitch-default
     -Wswitch-enum
@@ -136,6 +138,8 @@ CFLAGS = -Werror -Wall -Wextra
     -g
     -O2
     ;
+if [matches %1C%2 [version]] then
+    CFLAGS += -Werror;
 LDFLAGS = -Wl,--as-needed;
 LIBS = -lcap -ldl;
 
@@ -356,6 +360,7 @@ cascade %0%.lo = %0%.o %0.libs/%.lo;
         [defined-or-null %0%.c_CFLAGS]
         [defined-or-null [dir %0%.c]_CFLAGS]
         [CPPFLAGS]
+        ['if' [matches %%.yacc.cc %.cc] 'then' -Wno-switch-default ]
         -c [resolve %0%.c]
         -o [target];
     md5sum %0%.o %0.libs/%.o | sed "'s|^|# |'" >> [target];
@@ -848,3 +853,5 @@ all += .test.checker;
 #include-cooked etc/documentation.cook
 #include-cooked etc/i18n.cook
 #include-cooked web-src/module.cook
+
+/* vim: set ts=8 sw=4 et : */

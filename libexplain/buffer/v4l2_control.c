@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -124,6 +124,9 @@ explain_buffer_v4l2_control(explain_string_buffer_t *sb,
         default:
         case V4L2_CTRL_TYPE_INTEGER:
         case V4L2_CTRL_TYPE_BUTTON:
+#if defined(V4L2_CTRL_TYPE_BITMASK) || defined(HAVE_V4L2_CTRL_TYPE_BITMASK)
+        case V4L2_CTRL_TYPE_BITMASK:
+#endif
             explain_buffer_int32_t(sb, data->value);
             break;
 
@@ -202,4 +205,5 @@ explain_v4l2_control_check_id(int fildes, const struct v4l2_control *data)
     }
 }
 
+/* vim: set ts=8 sw=4 et : */
 #endif

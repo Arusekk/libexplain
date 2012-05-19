@@ -1,0 +1,77 @@
+/*
+ * libexplain - a library of system-call-specific strerror replacements
+ * Copyright (C) 2012 Peter Miller
+ * Written by Peter Miller <pmiller@opensource.org.au>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+apt-package-list = ;
+
+function apt-get-command =
+{
+    if [not [find_command [@1]]] then
+        apt-package-list += [@1];
+}
+
+function apt-get-package =
+{
+    if [not [collect dpkg -l | grep "'^ii  "[@1]" '" | wc -l || true]] then
+        apt-package-list += [@1];
+}
+
+function apt-get-library =
+{
+    function apt-get-package lib[@1]-dev;
+}
+
+/*
+ * Make sure the package we want are present
+ */
+if [find_command apt-get] then
+{
+    function apt-get-command autoconf;
+    function apt-get-command automake;
+    function apt-get-command bison;
+    function apt-get-command doxygen;
+    function apt-get-command gawk;
+    function apt-get-command groff;
+    function apt-get-command libtool;
+    function apt-get-command lintian;
+    function apt-get-command lsof;
+    function apt-get-command tar;
+    function apt-get-command tardy;
+    function apt-get-library cap;
+    function apt-get-package build-essential;
+    function apt-get-package coreutils; /* ptx, md5sum */
+    function apt-get-package debhelper;
+    function apt-get-package devscripts; /* debuild cmd */
+    function apt-get-package dpkg-dev; /* dpkg-buildpackage cmd */
+    function apt-get-package exuberant-ctags; /* ctags cmd */
+    function apt-get-package gettext; /* xgettext cmd */
+    function apt-get-package ghostscript; /* ps2pdf */
+    function apt-get-package linux-libc-dev;
+    function apt-get-package psutils; /* psselect */
+    function apt-get-package wdg-html-validator; /* validate cmd */
+
+    if [count [apt-package-list]] then
+    {
+        sudo apt-get install -y [apt-package-list]
+            < /dev/tty > /dev/tty 2>&1
+            || true;
+    }
+}
+
+
+/* vim: set ts=8 sw=4 et : */

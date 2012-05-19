@@ -17,14 +17,16 @@
 .\" with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
 .\" ------------------------------------------------------------------------
-.PP
-.if n *
-.if t \(bu
-.\" Change 11
-Several testing false negative has been fix, concerning EACCES when
-executed by root.
+.\"
+.\" you can create the initial cut of this file using the
+.\"
+.\"     aereport -f /usr/local/share/aegis/report/chan_so.rpt \
+.\"             -p libexplain.1 -c 0 -unf
+.\"
+.\" command, and then editing it to be more appropriate.
+.\"
 .\" ------------------------------------------------------------------------
 .\" Add new entries above this line.
 .ne 2i
-.SS Version 0.52 (2012\[hy]Mar\[hy]04)
+.SS Version 1.0 (2012\[hy]May\[hy]19)
 .\" vim: set ts=8 sw=4 et :

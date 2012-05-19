@@ -20,7 +20,7 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdio.h> /* for snprintf */
 #include <libexplain/ac/sys/stat.h>
-#include <libexplain/ac/unistd.h>
+#include <libexplain/ac/unistd.h> /* for fpathconf */
 
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/einval.h>
@@ -83,6 +83,7 @@ holes_are_supported(int fildes)
     return 1;
 #else
     /* can't tell */
+    (void)fildes;
     return -1;
 #endif
 }
@@ -340,3 +341,6 @@ explain_buffer_errno_lseek(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

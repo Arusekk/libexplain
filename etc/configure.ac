@@ -1046,6 +1046,24 @@ AC_MSG_RESULT([no]),
 AC_MSG_RESULT(cross))
 
 dnl!
+dnl!    Test to see if V4L2_CTRL_TYPE_BITMASK is defined
+dnl!    (we can't use #ifdef, it's an enum).
+dnl!
+AC_MSG_CHECKING([have V4L2_CTRL_TYPE_BITMASK])
+AC_TRY_RUN([
+#include <linux/videodev2.h>
+int main(argc, argv)int argc; char **argv;{
+int x = V4L2_CTRL_TYPE_BITMASK;
+return 0;
+}]
+, AC_DEFINE(HAVE_V4L2_CTRL_TYPE_BITMASK,1,
+[Define this symbol if your system as <linux/videodev2.h> AND it
+defines enum member V4L2_CTRL_TYPE_BITMASK.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+dnl!
 dnl!    Test to see if struct v4l2_dbg_register defined
 dnl!
 AC_MSG_CHECKING([have struct v4l2_dbg_register])

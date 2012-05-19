@@ -16,7 +16,7 @@
 #
 Summary: library of syscall-specific strerror replacements
 Name: libexplain
-Version: 0.52.D001
+Version: 1.0.D001
 Release: 1
 License: LGPL, GPL
 Group: Development/Tools
