@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -60,14 +60,31 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
 {
     explain_final_t final_component;
 
-    (void)mode;
     explain_final_init(&final_component);
     final_component.want_to_modify_inode = 1;
 
+    explain_buffer_errno_chmod_explanation_fc
+    (
+        sb,
+        errnum,
+        "chmod",
+        pathname,
+        mode,
+        &final_component
+    );
+}
+
+
+void
+explain_buffer_errno_chmod_explanation_fc(explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, const char *pathname, int mode,
+    const explain_final_t *final_component)
+{
+    (void)mode;
     switch (errnum)
     {
     case EACCES:
-        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        explain_buffer_eacces(sb, pathname, "pathname", final_component);
         break;
 
     case EFAULT:
@@ -80,7 +97,7 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
 
     case ELOOP:
     case EMLINK: /* BSD */
-        explain_buffer_eloop(sb, pathname, "pathname", &final_component);
+        explain_buffer_eloop(sb, pathname, "pathname", final_component);
         break;
 
     case ENAMETOOLONG:
@@ -89,12 +106,12 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
             sb,
             pathname,
             "pathname",
-            &final_component
+            final_component
         );
         break;
 
     case ENOENT:
-        explain_buffer_enoent(sb, pathname, "pathname", &final_component);
+        explain_buffer_enoent(sb, pathname, "pathname", final_component);
         break;
 
     case ENOMEM:
@@ -102,7 +119,7 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOTDIR:
-        explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
+        explain_buffer_enotdir(sb, pathname, "pathname", final_component);
         break;
 
     case EPERM:
@@ -114,7 +131,7 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
                 errnum,
                 pathname,
                 "pathname",
-                &final_component
+                final_component
             )
         )
         {
@@ -123,7 +140,7 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
                 sb,
                 (struct stat *)0,
                 "pathname",
-                &final_component.id
+                &final_component->id
             );
         }
         break;
@@ -133,7 +150,7 @@ explain_buffer_errno_chmod_explanation(explain_string_buffer_t *sb,
         break;
 
     default:
-        explain_buffer_errno_generic(sb, errnum, "chmod");
+        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
 }
@@ -162,3 +179,6 @@ explain_buffer_errno_chmod(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

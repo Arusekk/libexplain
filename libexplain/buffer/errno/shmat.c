@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -67,6 +67,10 @@ memory_already_mapped(const void *data, size_t data_size)
     vec = malloc((data_size + page_size - 1) / page_size);
     if (!vec)
         return 0;
+    /*
+     * The signed-ness of 'vec' differs by system.  There is a 50/50
+     * chance you will get a compiler warning on the next line.
+     */
     if (mincore((void *)data, data_size, vec) < 0)
     {
         free(vec);
@@ -153,11 +157,13 @@ explain_buffer_errno_shmat_explanation(explain_string_buffer_t *sb, int errnum,
         break;
 
     case EINVAL:
+#ifdef SHM_REMAP
         if ((shmflg & SHM_REMAP) && !shmaddr)
         {
             explain_buffer_is_the_null_pointer(sb, "shmaddr");
             return;
         }
+#endif
         /* use shmctl to find this out */
         if (!shmid_exists(shmid))
         {
@@ -279,4 +285,4 @@ explain_buffer_errno_shmat(explain_string_buffer_t *sb, int errnum, int shmid,
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

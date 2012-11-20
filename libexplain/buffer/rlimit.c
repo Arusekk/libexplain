@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,25 +19,39 @@
 
 #include <libexplain/ac/sys/resource.h>
 
+#include <libexplain/buffer/int.h>
+#include <libexplain/buffer/long.h>
+#include <libexplain/buffer/long_long.h>
 #include <libexplain/buffer/rlimit.h>
 #include <libexplain/string_buffer.h>
+
+
+void
+explain_buffer_rlim_t(explain_string_buffer_t *sb, rlim_t rlim)
+{
+    if (rlim == RLIM_INFINITY)
+        explain_string_buffer_puts(sb, "RLIM_INFINITY");
+    else if (sizeof(rlim) <= sizeof(int))
+        explain_buffer_int(sb, rlim);
+    else if (sizeof(rlim) <= sizeof(long))
+        explain_buffer_long(sb, rlim);
+    else
+        explain_buffer_long_long(sb, rlim);
+}
 
 
 void
 explain_buffer_rlimit(explain_string_buffer_t *sb, const struct rlimit *p)
 {
     explain_string_buffer_puts(sb, "{ rlim_cur = ");
-    if (p->rlim_cur == RLIM_INFINITY)
-        explain_string_buffer_puts(sb, "RLIM_INFINITY");
-    else
-        explain_string_buffer_printf(sb, "%lld", (long long)p->rlim_cur);
+    explain_buffer_rlim_t(sb, p->rlim_cur);
     if (p->rlim_cur != p->rlim_max)
     {
         explain_string_buffer_puts(sb, ", rlim_max = ");
-        if (p->rlim_max == RLIM_INFINITY)
-            explain_string_buffer_puts(sb, "RLIM_INFINITY");
-        else
-            explain_string_buffer_printf(sb, "%lld", (long long)p->rlim_max);
+        explain_buffer_rlim_t(sb, p->rlim_max);
     }
     explain_string_buffer_puts(sb, " }");
 }
+
+
+/* vim: set ts=8 sw=4 et : */

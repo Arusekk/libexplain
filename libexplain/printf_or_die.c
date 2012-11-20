@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,7 +23,6 @@
 #include <libexplain/buffer/errno/printf.h>
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/printf.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 #include <libexplain/string_buffer.h>
 
@@ -47,7 +46,6 @@ explain_printf_or_die(const char *format, ...)
         explain_string_buffer_t sb;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
         explain_string_buffer_init
         (
             &sb,
@@ -56,7 +54,7 @@ explain_printf_or_die(const char *format, ...)
         );
         /* can't re-use "ap" here, this is why we prepped "ap2" earlier */
         explain_buffer_errno_printf(&sb, hold_errno, format, ap2);
-        explain_output_message(explain_common_message_buffer);
+        explain_output_error("%s", explain_common_message_buffer);
         explain_output_exit_failure();
     }
     va_end(ap2); /* yes, both of them */
@@ -85,7 +83,6 @@ explain_printf_on_error(const char *format, ...)
         explain_string_buffer_t sb;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
         explain_string_buffer_init
         (
             &sb,
@@ -93,7 +90,7 @@ explain_printf_on_error(const char *format, ...)
             explain_common_message_buffer_size
         );
         explain_buffer_errno_printf(&sb, hold_errno, format, ap2);
-        explain_output_message(explain_common_message_buffer);
+        explain_output_error("%s", explain_common_message_buffer);
     }
     va_end(ap2); /* yes, both of them */
     va_end(ap);
@@ -102,4 +99,4 @@ explain_printf_on_error(const char *format, ...)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

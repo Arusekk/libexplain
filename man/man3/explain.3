@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2011 Peter Miller
+.\" Copyright (C) 2008-2012 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -304,6 +304,12 @@ Explain \f[I]execlp\fP(3) errors
 \f[I]explain_execlp_or_die\fP(3)
 execute a file and report errors
 .TP 8n
+\f[I]explain_execv\fP(3)
+Explain \f[I]execv\fP(3) errors
+.TP 8n
+\f[I]explain_execv_or_die\fP(3)
+execute a file and report errors
+.TP 8n
 \f[I]explain_execve\fP(3)
 Explain \f[I]execve\fP(2) errors
 .TP 8n
@@ -588,6 +594,18 @@ Explain \f[I]getpgrp\fP(2) errors
 \f[I]explain_getpgrp_or_die\fP(3)
 get process group and report errors
 .TP 8n
+\f[I]explain_getresgid\fP(3)
+Explain \f[I]getresgid\fP(2) errors
+.TP 8n
+\f[I]explain_getresgid_or_die\fP(3)
+get real, effective and saved group IDs and report errors
+.TP 8n
+\f[I]explain_getresuid\fP(3)
+Explain \f[I]getresuid\fP(2) errors
+.TP 8n
+\f[I]explain_getresuid_or_die\fP(3)
+get real, effective and saved user IDs and report errors
+.TP 8n
 \f[I]explain_getrlimit\fP(3)
 Explain \f[I]getrlimit\fP(2) errors
 .TP 8n
@@ -625,6 +643,7 @@ Explain \f[I]ioctl\fP(2) errors
 .TP 8n
 \f[I]explain_ioctl_or_die\fP(3)
 Execute \f[I]ioctl\fP(2) and report errors
+.\" ----------  J  ---------------------------------------------------------
 .\" ----------  K  ---------------------------------------------------------
 .TP 8n
 \f[I]explain_kill\fP(3)
@@ -633,6 +652,12 @@ Explain \f[I]kill\fP(2) errors
 \f[I]explain_kill_or_die\fP(3)
 send signal to a process and report errors
 .\" ----------  L  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_lchmod\fP(3)
+Explain \f[I]lchmod\fP(2) errors
+.TP 8n
+\f[I]explain_lchmod_or_die\fP(3)
+change permissions of a file and report errors
 .TP 8n
 \f[I]explain_lchown\fP(3)
 Explain \f[I]lchown\fP(2) errors
@@ -911,6 +936,12 @@ Explain \f[I]setenv\fP(3) errors
 \f[I]explain_setenv_or_die\fP(3)
 change or add an environment variable and report errors
 .TP 8n
+\f[I]explain_setgid\fP(3)
+Explain \f[I]setgid\fP(2) errors
+.TP 8n
+\f[I]explain_setgid_or_die\fP(3)
+set group identity and report errors
+.TP 8n
 \f[I]explain_setgroups\fP(3)
 Explain \f[I]setgroups\fP(2) errors
 .TP 8n
@@ -941,6 +972,36 @@ Explain \f[I]setpgrp\fP(2) errors
 \f[I]explain_setpgrp_or_die\fP(3)
 set process group and report errors
 .TP 8n
+\f[I]explain_setregid\fP(3)
+Explain \f[I]setregid\fP(2) errors
+.TP 8n
+\f[I]explain_setregid_or_die\fP(3)
+set real and/or effective group ID and report errors
+.TP 8n
+\f[I]explain_setreuid\fP(3)
+Explain \f[I]setreuid\fP(2) errors
+.TP 8n
+\f[I]explain_setreuid_or_die\fP(3)
+set the real and effective user ID and report errors
+.TP 8n
+\f[I]explain_setresgid\fP(3)
+Explain \f[I]setresgid\fP(2) errors
+.TP 8n
+\f[I]explain_setresgid_or_die\fP(3)
+set real, effective and saved group ID and report errors
+.TP 8n
+\f[I]explain_setresuid\fP(3)
+Explain \f[I]setresuid\fP(2) errors
+.TP 8n
+\f[I]explain_setresuid_or_die\fP(3)
+set real, effective and saved user ID and report errors
+.TP 8n
+\f[I]explain_setreuid\fP(3)
+Explain \f[I]setreuid\fP(2) errors
+.TP 8n
+\f[I]explain_setreuid_or_die\fP(3)
+set real and/or effective user ID and report errors
+.TP 8n
 \f[I]explain_setsid\fP(3)
 Explain \f[I]setsid\fP(2) errors
 .TP 8n
@@ -952,6 +1013,12 @@ Explain \f[I]setsockopt\fP(2) errors
 .TP 8n
 \f[I]explain_setsockopt_or_die\fP(3)
 execute \f[I]setsockopt\fP(2) and report errors
+.TP 8n
+\f[I]explain_setuid\fP(3)
+Explain \f[I]setuid\fP(2) errors
+.TP 8n
+\f[I]explain_setuid_or_die\fP(3)
+set user identity and report errors
 .TP 8n
 \f[I]explain_setvbuf\fP(3)
 Explain \f[I]setvbuf\fP(3) errors
@@ -1192,6 +1259,18 @@ Explain \f[I]utime\fP(2) errors
 \f[I]explain_utime_or_die\fP(3)
 change file last access and modification times and report errors
 .TP 8n
+\f[I]explain_utimens\fP(3)
+Explain \f[I]utimens\fP(2) errors
+.TP 8n
+\f[I]explain_utimens_or_die\fP(3)
+change file last access and modification times and report errors
+.TP 8n
+\f[I]explain_utimensat\fP(3)
+Explain \f[I]utimensat\fP(2) errors
+.TP 8n
+\f[I]explain_utimensat_or_die\fP(3)
+change file timestamps with nanosecond precision and report errors
+.TP 8n
 \f[I]explain_utimes\fP(3)
 Explain \f[I]utimes\fP(2) errors
 .TP 8n
@@ -1297,3 +1376,4 @@ libexplain version \*(v)
 Copyright \*(C) 2008 Peter Miller
 .SH AUTHOR
 Written by Peter Miller <pmiller@opensource.org.au>
+.\" vim: set ts=8 sw=4 et :

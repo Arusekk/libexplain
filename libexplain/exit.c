@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -67,7 +67,6 @@ grim_reaper(int es, void *aux)
 
             explain_string_buffer_init(&sb, text, sizeof(text));
 
-            explain_program_name_assemble_internal(1);
             if (explain_option_assemble_program_name())
             {
                 const char      *prog;
@@ -147,3 +146,6 @@ explain_exit_cancel(void)
     action = action_never;
 #endif
 }
+
+
+/* vim: set ts=8 sw=4 et : */

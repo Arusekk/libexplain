@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -63,8 +63,7 @@ extern "C" {
   * time_t result = explain_time_or_die(t);
   * @endcode
   */
-time_t explain_time_or_die(time_t *t)
-                                                  LIBEXPLAIN_WARN_UNUSED_RESULT;
+time_t explain_time_or_die(time_t *t);
 
 /**
   * The explain_time_on_error function is used to call the <i>time</i>(2)
@@ -264,5 +263,5 @@ void explain_message_errno_time(char *message, int message_size, int errnum,
 }
 #endif
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_TIME_H */

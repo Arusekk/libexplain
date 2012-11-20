@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -60,15 +60,18 @@ const char *explain_program_name_get(void);
 void explain_program_name_set(const char *name);
 
 /**
-  * The explain_program_name_assemble function is used to control
-  * whether or not the name of the calling process is to be included in
-  * error messages issued by the explain_*_or_die functions.  If not
-  * expolicitly set, is controlled by the EXPLAIN_OPTIONS environemnt
-  * variable, or defaults to false if not set there either.
+  * The explain_option_assemble_program_name_set option is used to
+  * override any EXPLAIN_OPTIONS or default setting as to whether or
+  * not the #explain_output_error, #explain_output_error_and_die and
+  * #explain_output_warning functions should include the program name
+  * at the start the messages.
+  *
+  * If not explicitly set, is controlled by the EXPLAIN_OPTIONS
+  * environemnt variable, or defaults to false if not set there either.
   *
   * @param yesno
-  *     non-zero (true) to have program name included,
-  *     zero (false) to have program name excluded.
+  *     true (non-zero) to include the program name, zero (false)
+  *     to omit the program name.
   */
 void explain_program_name_assemble(int yesno);
 
@@ -77,3 +80,4 @@ void explain_program_name_assemble(int yesno);
 #endif
 
 #endif /* LIBEXPLAIN_PROGRAM_NAME_H */
+/* vim: set ts=8 sw=4 et : */

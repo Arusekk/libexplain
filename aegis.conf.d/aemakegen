@@ -25,7 +25,7 @@ project_specific =
     },
     {
         name = "aemakegen:version-info";
-        value = "52:0:0";
+        value = "53:0:2";
     },
     {
         name = "aemakegen:debian:copyright";
@@ -59,7 +59,7 @@ project_specific =
             ;
     },
     {
-        name = "aemakegen:rpm-spec:description:libexplain";
+        name = "aemakegen:rpm-spec:description:explain";
         value =
             "This package provides a command to explain Unix and Linux "
             "system call errors, after the fact."

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,6 @@
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/system.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 
 
@@ -133,8 +132,7 @@ explain_system_success(const char *command)
     status = system(command);
     if (status < 0)
     {
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_system(command));
+        explain_output_error("%s", explain_system(command));
     }
     else if (status != 0)
     {
@@ -191,8 +189,7 @@ explain_system_success(const char *command)
                 }
             }
         }
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_common_message_buffer);
+        explain_output_error("%s", explain_common_message_buffer);
     }
     return status;
 }
@@ -204,3 +201,6 @@ explain_system_success_or_die(const char *command)
     if (explain_system_success(command))
         explain_output_exit_failure();
 }
+
+
+/* vim: set ts=8 sw=4 et : */

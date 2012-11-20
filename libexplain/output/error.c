@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,7 @@
 #include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
 #include <libexplain/ac/stdarg.h>
 #include <libexplain/ac/stdio.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 
 #include <libexplain/option.h>
@@ -41,8 +42,21 @@ explain_output_error(const char *format, ...)
      */
     char buf[PATH_MAX * 2 + 200];
 
+    /*
+     * See if we can just pass the text through, unchanged.
+     */
+    if (0 == strcmp(format, "%s") && !explain_option_assemble_program_name())
+    {
+        const char      *text;
+
+        va_start(ap, format);
+        text = va_arg(ap, const char *);
+        va_end(ap);
+        explain_output_message(text);
+        return;
+    }
+
     explain_string_buffer_init(&sb, buf, sizeof(buf));
-    explain_program_name_assemble_internal(1);
     if (explain_option_assemble_program_name())
     {
         const char      *prog;
@@ -61,3 +75,6 @@ explain_output_error(const char *format, ...)
 
     explain_output_message(buf);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

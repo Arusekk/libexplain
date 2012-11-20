@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 #ifndef LIBEXPLAIN_BUFFER_GID_H
 #define LIBEXPLAIN_BUFFER_GID_H
 
+#include <libexplain/ac/unistd.h>
+
 #include <libexplain/string_buffer.h>
 
 /**
@@ -31,7 +33,7 @@
   * @param gid
   *    The goup ID to print.
   */
-void explain_buffer_gid(explain_string_buffer_t *sb, int gid);
+void explain_buffer_gid(explain_string_buffer_t *sb, gid_t gid);
 
 /**
   * The explain_buffer_gid_supplementary function is used to print a
@@ -43,3 +45,4 @@ void explain_buffer_gid(explain_string_buffer_t *sb, int gid);
 void explain_buffer_gid_supplementary(struct explain_string_buffer_t *sb);
 
 #endif /* LIBEXPLAIN_BUFFER_GID_H */
+/* vim: set ts=8 sw=4 et : */

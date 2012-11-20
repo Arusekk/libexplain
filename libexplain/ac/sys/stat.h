@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2011 Peter Miller
+ * Copyright (C) 2008, 2009, 2011, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,4 +29,11 @@
 #include <libexplain/ac/sys/types.h>
 #include <sys/stat.h>
 
+/* utimens(2) */
+#ifndef UTIME_NOW
+# define UTIME_NOW      ((1l << 30) - 1l)
+# define UTIME_OMIT     ((1l << 30) - 2l)
+#endif
+
 #endif /* LIBEXPLAIN_AC_SYS_STAT_H */
+/* vim: set ts=8 sw=4 et : */

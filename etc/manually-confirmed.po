@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008-2011 Peter Miller
+# Copyright (C) 2008-2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
         "POT-Creation-Date: 2011-11-09 21:42+1100\n"
-        "PO-Revision-Date: 2011-11-08\n"
+        "PO-Revision-Date: 2012-10-11\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -758,6 +758,20 @@ msgid   "firewall rules forbid connection"
 msgstr  "firewall rules forbid connection"
 
 #.
+#. This error message is used to explain an
+#. EPERM error reported by the setgid system call, in
+#. the case where gid does not match the real group ID
+#. or saved group ID of the calling process, and the
+#. user is not privileged (Linux: does not have the
+#. CAP_SETUID capability)
+#.
+#, c-format
+msgid   "gid does not match the real group ID (%1$s) or the saved group ID "
+        "(%2$s) of the calling process"
+msgstr  "gid does not match the real group ID (%1$s) or the saved group ID "
+        "(%2$s) of the calling process"
+
+#.
 #. This message is used when directory has a directory
 #. entry for the named component, but a directory was expected
 #. and something else was there instead.
@@ -1443,6 +1457,54 @@ msgstr  "some values were too large to be represented in the returned "
 #.
 msgid   "symbolic link"
 msgstr  "symbolic link"
+
+#.
+#. This error message is used to explain an EPERM error
+#. reported by the setresgid system call, in the case where gid does
+#. not match the real group ID or saved group ID of the calling
+#. process, and the process is not privileged (Linux: does not have
+#. the CAP_SETGID capability)
+#.
+#, c-format
+msgid   "the %1$s argument does not match the real group ID (%2$s) or the "
+        "effective group ID (%3$s) or the saved group ID (%4$s) of the calling "
+        "process"
+msgstr  "the %1$s argument does not match the real group ID (%2$s) or the "
+        "effective group ID (%3$s) or the saved group ID (%4$s) of the calling "
+        "process"
+
+#.
+#. This error message is used to explain an EPERM error
+#. reported by the setresuid system call, in the case where uid does
+#. not match the real ser ID or saved user ID of the calling
+#. process, and the user is not privileged (Linux: does not have the
+#. CAP_SETUID capability)
+#.
+#, c-format
+msgid   "the %1$s argument does not match the real user ID (%2$s) or the "
+        "effective user ID (%3$s) or the saved user ID (%4$s) of the calling "
+        "process"
+msgstr  "the %1$s argument does not match the real user ID (%2$s) or the "
+        "effective user ID (%3$s) or the saved user ID (%4$s) of the calling "
+        "process"
+
+#.
+#. This error message is used to explain an EAGAIN
+#. error reported by the setuid(2) system call (or similar) in the
+#. case where the uid does not match the real user ID and 'uid'
+#. would take the process count of the new real user ID
+#. 'uid' over its RLIMIT_NPROC resource limit.
+#.
+#. %1$s => the name of the offending system call argument
+#. %2$s => real user ID and user name of current process
+#.
+#, c-format
+msgid   "the %1$s argument does not match the process's real user ID (%2$s), "
+        "and would take the new real user ID over its maximum number of "
+        "processes/threads that can be created"
+msgstr  "the %1$s argument does not match the process's real user ID (%2$s), "
+        "and would take the new real user ID over its maximum number of "
+        "processes/threads that can be created"
 
 #.
 #. this error message is issued to explain
@@ -3686,6 +3748,20 @@ msgid   "too many symbolic links were encountered in %s"
 msgstr  "too many symbolic links were encountered in %s"
 
 #.
+#. This error message is used to explain an
+#. EPERM error reported by the setuid system call, in
+#. the case where uid does not match the real ser ID or
+#. saved user ID of the calling process, and the user is
+#. not privileged (Linux: does not have the CAP_SETUID
+#. capability)
+#.
+#, c-format
+msgid   "uid does not match the real user ID (%1$s) or the saved user ID "
+        "(%2$s) of the calling process"
+msgstr  "uid does not match the real user ID (%1$s) or the saved user ID "
+        "(%2$s) of the calling process"
+
+#.
 #. This string is the type of a file (see stat(2)
 #. for more information) when that file is of an unknown
 #. type, often the result of a bad inode block on a hard disk.
@@ -3701,6 +3777,13 @@ msgstr  "unknown file type"
 #.
 msgid   "unknown system error"
 msgstr  "unknown system error"
+
+#.
+#. this text is added to the beginning of warning
+#. messages, to indicate they are a warning and not an error.
+#.
+msgid   "warning: "
+msgstr  "warning: "
 
 #.
 #. This message is used when supplementing
@@ -3826,3 +3909,5 @@ msgstr  "you must call ioctl SIOCSCCCFG first"
 #.
 msgid   "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
 msgstr  "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
+
+# vim: set ts=8 sw=4 et :

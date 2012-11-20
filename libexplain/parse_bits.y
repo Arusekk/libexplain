@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 #include <libexplain/ac/ctype.h>
 #include <libexplain/ac/dlfcn.h>
+#include <libexplain/ac/fcntl.h> /* for AT_FDCWD */
 #include <libexplain/ac/linux/kdev_t.h>
 #include <libexplain/ac/stdarg.h>
 #include <libexplain/ac/stdio.h>
@@ -213,6 +214,15 @@ static explain_parse_bits_table_t constants[] =
 #endif
 #ifdef IOCSIZE_SHIFT
     { "IOCSIZE_SHIFT", IOCSIZE_SHIFT },
+#endif
+#ifdef AT_FDCWD
+    { "AT_FDCWD", AT_FDCWD }, /* from <fcntl.h> */
+#endif
+#ifdef UTIME_NOW
+    { "UTIME_NOW", UTIME_NOW }, /* from <sys/stat.h> */
+#endif
+#ifdef UTIME_OMIT
+    { "UTIME_OMIT", UTIME_OMIT }, /* from <sys/stat.h> */
 #endif
 };
 
@@ -638,3 +648,6 @@ expression
 #endif
         }
     ;
+
+
+/* vim: set ts=8 sw=4 et : */

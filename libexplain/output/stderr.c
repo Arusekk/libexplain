@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,14 @@
 static void
 message(explain_output_t *op, const char *text)
 {
+    /*
+     * If stderr and stdout are writing to the same terminal (etc) the
+     * buffered nature of stdout means that the error may appear in
+     * advance of the output.  This can be confusing for the user.  We
+     * flush the standard output to bring the two into sync.
+     */
+    fflush(stdout);
+
     (void)op;
     explain_wrap_and_print(stderr, text);
 }
@@ -48,3 +56,6 @@ explain_output_stderr_new(void)
 {
     return explain_output_new(&vtable);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

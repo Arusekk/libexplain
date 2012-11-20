@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,10 +24,11 @@
   * @brief Insulate <net/ethernet.h> differences
   */
 
-#include <libexplain/config.h>
+#include <libexplain/ac/sys/types.h>
 
 #ifdef HAVE_NET_ETHERNET_H
 #include <net/ethernet.h>
 #endif
 
 #endif /* LIBEXPLAIN_AC_NET_ETHERNET_H */
+/* vim: set ts=8 sw=4 et : */

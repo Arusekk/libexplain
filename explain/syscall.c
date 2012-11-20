@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011 Peter Miller
+ * Copyright (C) 2009-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -46,6 +46,7 @@
 #include <explain/syscall/dup2.h>
 #include <explain/syscall/eventfd.h>
 #include <explain/syscall/execlp.h>
+#include <explain/syscall/execv.h>
 #include <explain/syscall/execve.h>
 #include <explain/syscall/execvp.h>
 #include <explain/syscall/fchdir.h>
@@ -91,6 +92,8 @@
 #include <explain/syscall/getpeername.h>
 #include <explain/syscall/getpgid.h>
 #include <explain/syscall/getpgrp.h>
+#include <explain/syscall/getresgid.h>
+#include <explain/syscall/getresuid.h>
 #include <explain/syscall/getrlimit.h>
 #include <explain/syscall/getsockname.h>
 #include <explain/syscall/getsockopt.h>
@@ -98,6 +101,7 @@
 #include <explain/syscall/getw.h>
 #include <explain/syscall/ioctl.h>
 #include <explain/syscall/kill.h>
+#include <explain/syscall/lchmod.h>
 #include <explain/syscall/lchown.h>
 #include <explain/syscall/link.h>
 #include <explain/syscall/listen.h>
@@ -143,14 +147,21 @@
 #include <explain/syscall/setbuffer.h>
 #include <explain/syscall/setdomainname.h>
 #include <explain/syscall/setenv.h>
+#include <explain/syscall/setgid.h>
 #include <explain/syscall/setgroups.h>
 #include <explain/syscall/sethostname.h>
 #include <explain/syscall/setlinebuf.h>
 #include <explain/syscall/setpgid.h>
 #include <explain/syscall/setpgrp.h>
+#include <explain/syscall/setregid.h>
+#include <explain/syscall/setreuid.h>
+#include <explain/syscall/setresgid.h>
+#include <explain/syscall/setresuid.h>
+#include <explain/syscall/setreuid.h>
 #include <explain/syscall/setsid.h>
 #include <explain/syscall/setsockopt.h>
 #include <explain/syscall/setvbuf.h>
+#include <explain/syscall/setuid.h>
 #include <explain/syscall/shmat.h>
 #include <explain/syscall/shmctl.h>
 #include <explain/syscall/signalfd.h>
@@ -190,6 +201,8 @@
 #include <explain/syscall/unsetenv.h>
 #include <explain/syscall/ustat.h>
 #include <explain/syscall/utime.h>
+#include <explain/syscall/utimens.h>
+#include <explain/syscall/utimensat.h>
 #include <explain/syscall/utimes.h>
 #include <explain/syscall/vfork.h>
 #include <explain/syscall/wait.h>
@@ -257,6 +270,7 @@ static const table_t table[] =
     /* FIXME: add support for execl */
     /* FIXME: add support for execle */
     { "execlp", explain_syscall_execlp },
+    { "execv", explain_syscall_execv },
     { "execve", explain_syscall_execve },
     { "execvp", explain_syscall_execvp },
     /* ----------  F  ------------------------------------------------------- */
@@ -323,8 +337,8 @@ static const table_t table[] =
     { "getpgrp", explain_syscall_getpgrp },
     /* FIXME: add support for getpmsg */
     /* FIXME: add support for getpriority */
-    /* FIXME: add support for getresgid */
-    /* FIXME: add support for getresuid */
+    { "getresgid", explain_syscall_getresgid },
+    { "getresuid", explain_syscall_getresuid },
     { "getrlimit", explain_syscall_getrlimit },
     /* FIXME: add support for get_robust_list */
     /* FIXME: add support for getrusage */
@@ -362,6 +376,7 @@ static const table_t table[] =
     /* FIXME: add support for keyctl */
     { "kill", explain_syscall_kill },
     /* ----------  L  ------------------------------------------------------- */
+    { "lchmod", explain_syscall_lchmod },
     { "lchown", explain_syscall_lchown },
     /* FIXME: add support for lgetxattr */
     { "link", explain_syscall_link },
@@ -506,7 +521,7 @@ static const table_t table[] =
     { "setenv", explain_syscall_setenv },
     /* FIXME: add support for setfsgid */
     /* FIXME: add support for setfsuid */
-    /* FIXME: add support for setgid */
+    { "setgid", explain_syscall_setgid },
     { "setgroups", explain_syscall_setgroups },
     { "sethostname", explain_syscall_sethostname },
     /* FIXME: add support for setitimer */
@@ -515,10 +530,10 @@ static const table_t table[] =
     { "setpgid", explain_syscall_setpgid },
     { "setpgrp", explain_syscall_setpgrp },
     /* FIXME: add support for setpriority */
-    /* FIXME: add support for setregid */
-    /* FIXME: add support for setresgid */
-    /* FIXME: add support for setresuid */
-    /* FIXME: add support for setreuid */
+    { "setregid", explain_syscall_setregid },
+    { "setresgid", explain_syscall_setresgid },
+    { "setresuid", explain_syscall_setresuid },
+    { "setreuid", explain_syscall_setreuid },
     /* FIXME: add support for setrlimit */
     /* FIXME: add support for set_robust_list */
     { "setsid", explain_syscall_setsid },
@@ -526,7 +541,7 @@ static const table_t table[] =
     /* FIXME: add support for set_thread_area */
     /* FIXME: add support for set_tid_address */
     /* FIXME: add support for settimeofday */
-    /* FIXME: add support for setuid */
+    { "setuid", explain_syscall_setuid },
     /* FIXME: add support for setup */
     { "setvbuf", explain_syscall_setvbuf },
     /* FIXME: add support for setxattr */
@@ -616,7 +631,8 @@ static const table_t table[] =
     /* FIXME: add support for uselib */
     { "ustat", explain_syscall_ustat },
     { "utime", explain_syscall_utime },
-    /* FIXME: add support for utimens */
+    { "utimens", explain_syscall_utimens },
+    { "utimensat", explain_syscall_utimensat },
     { "utimes", explain_syscall_utimes },
     /* ----------  V  ------------------------------------------------------- */
     { "vfork", explain_syscall_vfork },
@@ -690,3 +706,6 @@ syscall_statistics(int *total)
 {
     *total = SIZEOF(table);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

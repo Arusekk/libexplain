@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -344,6 +344,10 @@ catalogue_save(catalogue_t *cp)
             wrapper_hang(fp, "", elastic_buffer_get(&sb));
         }
     }
+    fprintf(fp, "# vi" "m: set ts=8 sw=4 et :\n");
     explain_fclose_or_die(fp);
     elastic_buffer_destructor(&sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

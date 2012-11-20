@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +20,6 @@
 #include <libexplain/ac/stdio.h>
 
 #include <libexplain/setvbuf.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 
 
@@ -36,7 +35,6 @@ explain_setvbuf_on_error(FILE *fp, char *data, int mode, size_t size)
     if (result < 0)
     {
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
         explain_output_message
         (
             explain_errno_setvbuf(hold_errno, fp, data, mode, size)
@@ -47,4 +45,4 @@ explain_setvbuf_on_error(FILE *fp, char *data, int mode, size_t size)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

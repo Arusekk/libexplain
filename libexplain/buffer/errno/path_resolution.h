@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -122,4 +122,31 @@ int explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
 #define must_be_a_directory(fcp) \
     (fcp->must_be_a_st_mode && fcp->st_mode == S_IFDIR)
 
+/**
+  * The explain_buffer_errno_path_resolution_at function may be used to
+  * check a path for problems.
+  *
+  * @param sb
+  *    The string buffer to write the error to, once it is found
+  * @param errnum
+  *    The error number expected.
+  * @param fildes
+  *    The directory file descriptor that relative file names are relative to.
+  * @param pathname
+  *    The path being checked.
+  * @param pathname_caption
+  *    The name of the argument being checked in the function arguments
+  *    of the system call being deciphered.
+  * @param final_component
+  *    Flags controlling the final component
+  * @returns
+  *    0 on success, meaning it found an error and wrote it to sb;
+  *    -1 on failure, meaning it didn't find an error or it didn't find
+  *    the expected error.
+  */
+int explain_buffer_errno_path_resolution_at(explain_string_buffer_t *sb,
+    int errnum, int fildes, const char *pathname, const char *pathname_caption,
+    const explain_final_t *final_component);
+
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_PATH_RESOLUTION_H */
+/* vim: set ts=8 sw=4 et : */

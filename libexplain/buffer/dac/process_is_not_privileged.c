@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,8 +22,7 @@
 
 
 void
-explain_buffer_and_the_process_is_not_privileged(
-    explain_string_buffer_t *sb)
+explain_buffer_and_the_process_is_not_privileged(explain_string_buffer_t *sb)
 {
     explain_buffer_gettext
     (
@@ -35,3 +34,6 @@ explain_buffer_and_the_process_is_not_privileged(
         i18n("and the process is not privileged")
     );
 }
+
+
+/* vim: set ts=8 sw=4 et : */

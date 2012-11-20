@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,7 +21,6 @@
 #include <libexplain/ac/string.h>
 
 #include <libexplain/is_efault.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 #include <libexplain/setenv.h>
 
@@ -187,8 +186,7 @@ explain_setenv_on_error(const char *name, const char *value, int overwrite)
         int             hold_errno;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_setenv(hold_errno, name,
+        explain_output_error("%s", explain_errno_setenv(hold_errno, name,
             value, overwrite));
         errno = hold_errno;
     }
@@ -196,4 +194,4 @@ explain_setenv_on_error(const char *name, const char *value, int overwrite)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

@@ -32,12 +32,12 @@
 #include <libexplain/ac/linux/types.h> /* Ubuntu Hardy needs this first */
 /* This is very strange, but numerous tests fail if we use <fcntl.h>
    because it appears to have several incorrect macro definitions */
-#include <linux/fcntl.h>
+#include <libexplain/ac/linux/fcntl.h>
 #else
 #include <fcntl.h>
 #endif
 #else
-#include <sys/file.h>
+#include <libexplain/ac/sys/file.h>
 #endif
 
 #ifndef O_BINARY
@@ -67,6 +67,27 @@
 #if defined(__linux__) && (O_LARGEFILE == 0)
 #define O_LARGEFILE_HIDDEN 0100000
 #endif
+
+
+/*
+ * From /usr/include/sharutils/fcntl.h ...
+ *
+ * Work around a bug in Solaris 9 and 10: AT_FDCWD is positive.
+ * Its value exceeds INT_MAX, so its use as an int doesn't conform to
+ * the C standard, and GCC and Sun C complain in some cases.  If the
+ * bug is present, undef AT_FDCWD here, so it can be redefined.
+ */
+#if 0 < AT_FDCWD && AT_FDCWD == 0xffd19553
+#undef AT_FDCWD
+
+/*
+ * Use the same bit pattern as Solaris 9, but with the proper signedness.
+ * The bit pattern is important, in case this actually is Solaris with
+ * the above workaround.
+ */
+#define AT_FDCWD (-3041965)
+#endif
+
 
 /* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_AC_FCNTL_H */

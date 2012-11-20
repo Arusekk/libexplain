@@ -313,6 +313,34 @@
 0
 #endif
 },
+{ "HAVE_GETREGID",
+#ifdef HAVE_GETREGID
+1
+#else
+0
+#endif
+},
+{ "HAVE_GETRESGID",
+#ifdef HAVE_GETRESGID
+1
+#else
+0
+#endif
+},
+{ "HAVE_GETRESUID",
+#ifdef HAVE_GETRESUID
+1
+#else
+0
+#endif
+},
+{ "HAVE_GETREUID",
+#ifdef HAVE_GETREUID
+1
+#else
+0
+#endif
+},
 { "HAVE_GETTEXT",
 #ifdef HAVE_GETTEXT
 1
@@ -336,6 +364,13 @@
 },
 { "HAVE_INTTYPES_H",
 #ifdef HAVE_INTTYPES_H
+1
+#else
+0
+#endif
+},
+{ "HAVE_LCHMOD",
+#ifdef HAVE_LCHMOD
 1
 #else
 0
@@ -378,6 +413,13 @@
 },
 { "HAVE_LIBIO_H",
 #ifdef HAVE_LIBIO_H
+1
+#else
+0
+#endif
+},
+{ "HAVE_LIBM",
+#ifdef HAVE_LIBM
 1
 #else
 0
@@ -1286,6 +1328,13 @@
 0
 #endif
 },
+{ "HAVE_LUTIMENS",
+#ifdef HAVE_LUTIMENS
+1
+#else
+0
+#endif
+},
 { "HAVE_MBRTOWC",
 #ifdef HAVE_MBRTOWC
 1
@@ -1568,6 +1617,34 @@
 },
 { "HAVE_SETMNTENT",
 #ifdef HAVE_SETMNTENT
+1
+#else
+0
+#endif
+},
+{ "HAVE_SETREGID",
+#ifdef HAVE_SETREGID
+1
+#else
+0
+#endif
+},
+{ "HAVE_SETRESGID",
+#ifdef HAVE_SETRESGID
+1
+#else
+0
+#endif
+},
+{ "HAVE_SETRESUID",
+#ifdef HAVE_SETRESUID
+1
+#else
+0
+#endif
+},
+{ "HAVE_SETREUID",
+#ifdef HAVE_SETREUID
 1
 #else
 0
@@ -2140,6 +2217,20 @@
 0
 #endif
 },
+{ "HAVE_UTIMENS",
+#ifdef HAVE_UTIMENS
+1
+#else
+0
+#endif
+},
+{ "HAVE_UTIMENSAT",
+#ifdef HAVE_UTIMENSAT
+1
+#else
+0
+#endif
+},
 { "HAVE_UTIMES",
 #ifdef HAVE_UTIMES
 1
@@ -2420,6 +2511,13 @@
 0
 #endif
 },
+{ "SIZEOF_TIME_T",
+#ifdef SIZEOF_TIME_T
+1
+#else
+0
+#endif
+},
 { "SIZEOF_VOID_P",
 #ifdef SIZEOF_VOID_P
 1
@@ -2464,6 +2562,13 @@
 },
 { "SYS_PTRACE_USER_REGS_STRUCT",
 #ifdef SYS_PTRACE_USER_REGS_STRUCT
+1
+#else
+0
+#endif
+},
+{ "SYS_SHM_H_struct_ipc_perm_underscore_key",
+#ifdef SYS_SHM_H_struct_ipc_perm_underscore_key
 1
 #else
 0

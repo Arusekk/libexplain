@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -65,7 +65,7 @@ void explain_buffer_enotdir2(explain_string_buffer_t *sb,
     const struct explain_final_t *newpath_final_component);
 
 /**
-  * The explain_buffer_enotdir function may be used to
+  * The explain_buffer_enotdir_fd function may be used to
   *
   * @param sb
   *     The string buffer to print into
@@ -78,3 +78,4 @@ void explain_buffer_enotdir_fd(explain_string_buffer_t *sb,
     int fildes, const char *fildes_caption);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOTDIR_H */
+/* vim: set ts=8 sw=4 et : */

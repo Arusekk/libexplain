@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +20,6 @@
 #include <libexplain/ac/stdio.h>
 
 #include <libexplain/fgets.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 
 
@@ -35,8 +34,7 @@ explain_fgets_on_error(char *data, int data_size, FILE *fp)
         int             hold_errno;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_fgets(hold_errno, data,
+        explain_output_error("%s", explain_errno_fgets(hold_errno, data,
             data_size, fp));
         errno = hold_errno;
     }
@@ -58,4 +56,4 @@ explain_fgets_or_die(char *data, int data_size, FILE *fp)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +20,6 @@
 #include <libexplain/ac/time.h>
 
 #include <libexplain/time.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 
 
@@ -35,12 +34,11 @@ explain_time_on_error(time_t *t)
         int             hold_errno;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_time(hold_errno, t));
+        explain_output_error("%s", explain_errno_time(hold_errno, t));
         errno = hold_errno;
     }
     return result;
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

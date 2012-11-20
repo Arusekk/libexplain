@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,6 @@
 #include <libexplain/buffer/strerror.h>
 #include <libexplain/explanation.h>
 #include <libexplain/gettext.h>
-#include <libexplain/option.h>
 #include <libexplain/program_name.h>
 
 
@@ -173,18 +172,6 @@ explain_explanation_assemble_common(explain_explanation_t *exp,
     long            prob_len;
     long            exp_len;
     int             err_len;
-
-    if (explain_option_assemble_program_name())
-    {
-        const char      *prog;
-
-        prog = explain_program_name_get();
-        if (prog && *prog)
-        {
-            explain_string_buffer_puts(result, prog);
-            explain_string_buffer_puts(result, ": ");
-        }
-    }
 
     if (exp->errnum == 0)
     {
@@ -359,3 +346,6 @@ explain_explanation_assemble_gai(explain_explanation_t *exp,
 
     explain_explanation_assemble_common(exp, errstr, result);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

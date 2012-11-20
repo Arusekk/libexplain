@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2011 Peter Miller
+.\" Copyright (C) 2008-2012 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -57,9 +57,50 @@ an errno, the message comes first, both in the argument list, and the
 file's name.
 .\" ------------------------------------------------------------------------
 .SH MODIFIED FILES
-Note that the \f[I]test_generator\fP command does most of the work for
+Note that the \f[I]codegen\fP command does most of the work for
 you.  Pass it the function prototype (in single quotes) and it will do
 most of the work.
+.PP
+.RS
+.ft CW
+.nf
+$ \f[CB]bin/codegen '\fP\f[CI]example(const char *pathname, \
+int flags);\fP\f[CB]'\fP
+creating catalogue/\f[CI]example\fP
+$
+.fi
+.ft R
+.RE
+.PP
+then you mast edit the \f[CW]catalogue/\fP\f[CI]example\fP file to
+make any adjustment necessary.
+This file is then used to do the boring stuff:
+.RS
+.nf
+.ft CW
+$ \f[CB]bin/codegen\fP \f[CI]example\fP
+creating explain/syscall/\f[CI]example\fP.c
+creating explain/syscall/\f[CI]example\fP.h
+creating libexplain/buffer/errno/\f[CI]example\fP.c
+creating libexplain/buffer/errno/\f[CI]example\fP.h
+creating libexplain/\f[CI]example\fP.c
+creating libexplain/\f[CI]example\fP.h
+creating libexplain/\f[CI]example\f[P]_or_die.c
+creating man/man3/explain_\f[CI]example\fP.3
+creating man/man3/explain_\f[CI]example\f[P]_or_die.3
+creating test_\f[CI]example\fP/main.c
+modify explain/syscall.c
+modify libexplain/libexplain.h
+modify man/man1/explain.1
+modify man/man3/explain.3
+$
+.ft R
+.fi
+.RE
+.PP
+All of these files have been added to the Aegis change set.
+Edit the last 4 to place the appended line in their correct positions
+within the files, respecting the symbol sort ordering of each file.
 .\"
 .SS libexplain/libexplain.h
 The \f[CR]libexplain/libexplain.h\fP include file defines the
@@ -69,9 +110,11 @@ are installed into \f[CR]$(prefix)/include\fP by \f[I]make install\fP.
 This file needs another include line.
 This means that the entire API is available to the user as a
 single include directive.
+.PP
 .RS
 \f[CR]#include <libexplain/\fP\f[I]example\fP\f[CR].h>\fP
 .RE
+.PP
 This file is also used to decide which files are installed by the \f[I]make
 install\fP command.
 .PP
@@ -94,27 +137,27 @@ Add a description of the new system call.
 .SS man/man3/libexplain.3
 Add your new man pages,
 man/man3/explain_\f[I]example\fP.3 and
-man/man3/explain_\f[I]example\fP_or_die.3,
+man/man3/explain_\f[I]example\f[P]_or_die.3,
 to the list.
 Keep the list sorted.
 .\" ------------------------------------------------------------------------
 .SH NEW FILES
-Note that the \f[I]test_generator\fP command does most of the work for
+Note that the \f[I]codegen\fP command does most of the work for
 you.  Pass it the function prototype (in single quotes) and it will do
 most of the work.
 .\"
-.SS libexplain/buffer/errno/example.c
+.SS libexplain/buffer/errno/\f[I]example\fP.c
 The central file for adding a new example
-is \f[CR]libexplain/buffer/errno/\fP\f[I]explain\fP\f[CR].c\fP
+is \f[CR]libexplain/buffer/errno/\fP\f[I]example\fP\f[CR].c\fP
 Which defines a function
 .RS
-\f[CR]void explain_buffer_errno_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_buffer_errno_\fP\f[I]example\fP\f[CR](\
 explain_string_buffer_t *buffer, int errnum, \fP\fIconst char *pathname,
 int flags\fP\f[CR]);\fP
 .RE
 The \f[CR]errnum\fP argument holds the \f[I]errno\fP value.
 Note that calling \f[I]errno\fP usually has problems because many
-systems has \f[I]errno\fP as a macro, which makes the compiler barf,
+systems have \f[I]errno\fP as a macro, which makes the compiler barf,
 and because there are times you want access to the global \f[I]errno\fP,
 and having it shadowed by the argument is a nuisance.
 .PP
@@ -180,20 +223,20 @@ for the above function definition.
 The file contains the user visible API for the \f[I]example\fP system call.
 There are five function prototypes declared in this file:
 .RS
-\f[CR]void explain_\fP\f[I]example\fP\f[CR]_or_die(
+\f[CR]void explain_\fP\f[I]example\fP\f[CR]_or_die(\
 \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
 \f[CR]void explain_\fP\f[I]example\fP\f[CR](
 \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
-\f[CR]void explain_errno_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_errno_\fP\f[I]example\fP\f[CR](\
 int errnum, \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
-\f[CR]void explain_message_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_message_\fP\f[I]example\fP\f[CR](\
 const char *message, int message_size,
 \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .br
-\f[CR]void explain_message_errno_\fP\f[I]example\fP\f[CR](
+\f[CR]void explain_message_errno_\fP\f[I]example\fP\f[CR](\
 const char *message, int message_size,
 int errnum, \fP\fIconst char *pathname, int flags\fP\f[CR]);\fP
 .RE
@@ -205,7 +248,7 @@ comments.  These are extracted and placed on the web site.
 .PP
 The buffer functions are \f[B]never\fP part of the user visible API.
 .\"
-.SS libexplain/example_or_die.c
+.SS libexplain/\f[I]example\f[P]_or_die.c
 One function per file,
 \f[CR]explain_\fP\f[I]example\fP\f[CR]_or_die\fP in this case.
 It simply calls \f[I]example\fP and then, if fails,
@@ -311,3 +354,4 @@ libexplain version \*(v)
 Copyright \*(C) 2008 Peter Miller
 .SH AUTHOR
 Written by Peter Miller <pmiller@opensource.org.au>
+.\" vim: set ts=8 sw=4 et :

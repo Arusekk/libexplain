@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011 Peter Miller
+ * Copyright (C) 2009-2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,6 +28,16 @@
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/syscall/ustat.h>
+
+
+#ifndef HAVE_USTAT
+
+struct ustat
+{
+    int dummy;
+};
+
+#endif
 
 
 void
@@ -62,4 +72,4 @@ explain_syscall_ustat(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

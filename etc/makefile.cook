@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ else
 
 check-tarball: etc/check-tarball.sh web-site/[project_minus].tar.gz
 {
-    set no-silent;
+    function quiet_print '';
     sh [resolve etc/check-tarball.sh web-site/[project_minus].tar.gz];
 }
 
@@ -87,8 +87,7 @@ source_file_order =
 web-site/%.tar.gz: [source_file_order] debian/control debian/changelog
     set shallow ingredients-fingerprint
 {
-    if [not [verbose]] then
-        function print TAR [target];
+    function quiet_print Build;
 
     if [exists web-site/%.tar] then
         rm web-site/%.tar
@@ -112,11 +111,10 @@ dataend
     tardy -unu 0 -gnu 0 -una Peter -gna Miller
         -p % -ms 0644 -mc 07022 -now
         [prepost "-rp=" "" [search_list]]
-        < web-site/%.tmp
-        > web-site/%.tar;
+        web-site/%.tmp
+        web-site/%.tar.gz;
     rm web-site/%.tmp
         set silent;
-    gzip -9 -v web-site/%.tar;
 }
 
 
@@ -129,8 +127,7 @@ vs_file = libexplain/patchlevel.h;
 [vs_file]:
     set shallow
 {
-    if [not [verbose]] then
-        function print GEN [target];
+    function quiet_print Generate;
 
     echo "'#define PATCHLEVEL \""[version]"\"'"
         > [target];
@@ -143,13 +140,21 @@ cascade libexplain/version.c = [vs_file];
 
 aemakegen = aemakegen;
 
-Makefile.in: [source_files]
+aemakegen_extra =
+    libdir/pkgconfig/[project_short].pc.in
+    libexplain/public_config.h
+    ;
+
+Makefile.in: [stringset [source_file_order] [aemakegen_extra] - [targets]]
 {
-    if [not [verbose]] then
-        function print GEN [target];
+    function quiet_print Generate;
 
     [aemakegen] -p [project] -c [change] -o [target]
-        libdir/pkgconfig/[project_short].pc.in
+        [stringset
+            [source_file_order] [aemakegen_extra]
+        -
+            [source_files] [targets]
+        ]
         ;
     cat [resolve etc/makefile-tail] >> [target];
 }
@@ -157,8 +162,7 @@ Makefile.in: [source_files]
 etc/version.so:
     set shallow
 {
-    if [not [verbose]] then
-        function print GEN [target];
+    function quiet_print Generate;
 
     aesub "'.ds v) ${project version}'" > [target];
     aesub "'.ds V) ${version}'" >> [target];
@@ -168,8 +172,7 @@ etc/version.so:
 etc/lsb-release.so: /etc/lsb-release etc/lsb-release.awk
     set shallow
 {
-    if [not [verbose]] then
-        function print GEN [target];
+    function quiet_print Generate;
 
     awk -f [resolve etc/lsb-release.awk] /etc/lsb-release > [target];
     arch >> [target];
@@ -177,20 +180,19 @@ etc/lsb-release.so: /etc/lsb-release etc/lsb-release.awk
 
 cascade web-src/index.html = etc/lsb-release.so;
 
-debian/control
 debian/changelog
+debian/changelog
+debian/control
 debian/explain.install
 debian/libexplain-dev.install
-debian/changelog: [source_files]
+debian/rules: [source_files]
     set shallow
 {
-    if [not [verbose]] then
-        function print DEB [target];
+    function quiet_print Generate;
 
     /* This actually makes more files than just debian/control */
     [aemakegen] -p [project] -c [change] --target\=debian
-        libdir/pkgconfig/[project_short].pc.in
-        libexplain/public_config.h
+        [aemakegen_extra]
         ;
 }
 
@@ -210,8 +212,7 @@ web-site/debian/build.sh
 debian-package: web-site/[project_minus].tar.gz bin/test_user
     debian/changelog
 {
-    if [not [verbose]] then
-        function print PKG [project_minus];
+    function quiet_print Generate;
 
     local vsn = [collect head -1 [resolve debian/changelog]
                          | sed "'s|.*(\\([^()]*\\).*|\\1|'" ];
@@ -271,17 +272,16 @@ dataend
 
 libdir/pkgconfig/[project_short].pc.in: [source_files]
 {
-    if [not [verbose]] then
-        function print GEN [target];
+    function quiet_print Generate;
 
     [aemakegen] -p\=[project] -c\=[change] --target\=pkg-config
-            > [target];
+        [aemakegen_extra]
+        > [target];
 }
 
 libexplain/public_config.h: etc/large.awk libexplain/config.h
 {
-    if [not [verbose]] then
-        function print GEN [target];
+    function quiet_print Generate;
 
     awk -f [resolve etc/large.awk libexplain/config.h] > [target];
 }
@@ -290,9 +290,11 @@ cascade libexplain/large_file_support.h = libexplain/public_config.h;
 
 libexplain.spec: [source_files]
 {
-    if [not [verbose]] then
-        function print GEN [target];
+    function quiet_print Generate;
     [aemakegen] --target\=rpm-spec
-        libdir/pkgconfig/[project_short].pc.in
+        [aemakegen_extra]
         > [target];
 }
+
+
+/* vim: set ts=8 sw=4 et : */

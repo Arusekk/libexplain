@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -68,7 +68,7 @@ static option_t numeric_errno =
 static option_t dialect_specific =
     { option_level_default, 1, option_type_bool };
 static option_t assemble_program_name =
-    { option_level_default, 0, option_type_bool };
+    { option_level_default, 1, option_type_bool };
 static option_t symbolic_mode_bits =
     { option_level_default, 0, option_type_bool };
 static option_t internal_strerror =
@@ -287,7 +287,7 @@ explain_program_name_assemble(int yesno)
     /*
      * This is the public interface, it has highest
      * precedence.  For the internal interface, see the
-     * explain_program_name_assemble_internal function.
+     * #explain_program_name_assemble_internal function.
      */
     if (!initialised)
         initialise();
@@ -299,6 +299,7 @@ explain_program_name_assemble(int yesno)
 }
 
 
+#if 0
 void
 explain_program_name_assemble_internal(int yesno)
 {
@@ -313,6 +314,7 @@ explain_program_name_assemble_internal(int yesno)
         assemble_program_name.value = !!yesno;
     }
 }
+#endif
 
 
 int
@@ -375,3 +377,6 @@ explain_option_extra_device_info(void)
         initialise();
     return extra_device_info.value;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

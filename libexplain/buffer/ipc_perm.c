@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -96,8 +96,13 @@ explain_buffer_ipc_perm(explain_string_buffer_t *sb,
     explain_string_buffer_puts(sb, "{ ");
     if (extra)
     {
+#ifdef SYS_SHM_H_struct_ipc_perm_underscore_key
         explain_string_buffer_puts(sb, "__key = ");
         explain_buffer_int(sb, data->__key);
+#else
+        explain_string_buffer_puts(sb, "key = ");
+        explain_buffer_int(sb, data->key);
+#endif
         explain_string_buffer_puts(sb, ", ");
     }
     explain_string_buffer_puts(sb, "uid = ");
@@ -115,8 +120,13 @@ explain_buffer_ipc_perm(explain_string_buffer_t *sb,
     explain_buffer_ipc_perm_mode(sb, data->mode);
     if (extra)
     {
+#ifdef SYS_SHM_H_struct_ipc_perm_underscore_key
         explain_string_buffer_puts(sb, ", __seq = ");
         explain_buffer_ushort(sb, data->__seq);
+#else
+        explain_string_buffer_puts(sb, ", seq = ");
+        explain_buffer_ushort(sb, data->seq);
+#endif
     }
     explain_string_buffer_puts(sb, " }");
 #else

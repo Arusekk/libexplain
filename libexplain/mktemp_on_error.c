@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +20,6 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/mktemp.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 
 
@@ -53,8 +52,7 @@ explain_mktemp_on_error(char *templat)
         hold_errno = errno;
         /* assert(templat[0] == '\0'); */
         templat[0] = first;
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_mktemp(hold_errno, templat));
+        explain_output_error("%s", explain_errno_mktemp(hold_errno, templat));
         templat[0] = '\0';
         errno = hold_errno;
     }
@@ -62,4 +60,4 @@ explain_mktemp_on_error(char *templat)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

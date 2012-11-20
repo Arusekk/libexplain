@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2011 Peter Miller
+ * Copyright (C) 2008, 2009, 2011, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,12 +35,47 @@ explain_string_buffer_puts_quoted(explain_string_buffer_t *sb,
         unsigned char   c;
 
         c = *s++;
-        if (!c)
+        switch (c)
         {
+        case '\0':
             explain_string_buffer_putc(sb, '"');
             return;
+
+        case '?':
+            /*
+             * Watch out for C string contents that could look like a
+             * trigraph, the second question mark will need to be quoted.
+             */
+            explain_string_buffer_putc(sb, '?');
+            if (s[0] == '?')
+            {
+                switch (s[1])
+                {
+                case '!':
+                case '\'':
+                case '(':
+                case ')':
+                case '-':
+                case '/':
+                case '<':
+                case '=':
+                case '>':
+                    ++s;
+                    explain_string_buffer_putc(sb, '\\');
+                    explain_string_buffer_putc(sb, '?');
+                    break;
+
+                default:
+                    /* not a trigraph */
+                    break;
+                }
+            }
+            break;
+
+        default:
+            explain_string_buffer_putc_escaped(sb, c, '"');
+            break;
         }
-        explain_string_buffer_putc_escaped(sb, c, '"');
     }
 }
 
@@ -51,3 +86,6 @@ explain_string_buffer_putsu_quoted(explain_string_buffer_t *sb,
 {
     explain_string_buffer_puts_quoted(sb, (const char *)s);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

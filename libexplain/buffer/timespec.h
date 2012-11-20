@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -49,4 +49,24 @@ void explain_buffer_timespec(explain_string_buffer_t *sb,
 void explain_buffer_timespec_array(explain_string_buffer_t *sb,
     const struct timespec *data, unsigned data_size);
 
+/**
+  * The explain_parse_timespec_or_die function is used to parse some
+  * text, to extract a timespec value.  It could be a floating point
+  * number of seconds, it coule be one of the UTIME_* values, it could
+  * be free text as permitted by explain_parse_time_t
+  *
+  * On error, ithis function does not return, but errors out using the
+  * usual libexplain error handling.
+  *
+  * @param text
+  *     The text string to be parsed.
+  * @param caption
+  *     additionl context for fatal error message, if necessary
+  * @param result
+  *     where to put the answer on success
+  */
+void explain_parse_timespec_or_die(const char *text, const char *caption,
+    struct timespec *result);
+
 #endif /* LIBEXPLAIN_BUFFER_TIMESPEC_H */
+/* vim: set ts=8 sw=4 et : */

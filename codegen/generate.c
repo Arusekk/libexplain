@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -575,7 +575,9 @@ groff_footer(FILE *fp)
 static void
 vim_line(FILE *fp, const char *before, const char *after)
 {
-    fprintf(fp, "%s vim: set ts=8 sw=4 et", before);
+    /* important not to match itself */
+    fprintf(fp, "%s vi"
+        "m: set ts=8 sw=4 et :", before);
     if (after && *after)
         fprintf(fp, " %s", after);
     fprintf(fp, "\n");
@@ -1710,14 +1712,14 @@ libexplain_fubar_or_die_c(node_t *declaration)
         char            line[256];
 
         explain_string_list_constructor(&incls);
-        explain_string_list_append(&incls, "#include <libexplain/option.h>\n");
         explain_string_list_append(&incls, "#include <libexplain/output.h>\n");
         snprintf
         (
             line,
             sizeof(line),
             "#include <libexplain/%s.h>\n",
-            function_name);
+            function_name
+        );
         explain_string_list_append(&incls, line);
         explain_string_list_sort(&incls);
         for (j = 0; j < incls.length; ++j)
@@ -1770,7 +1772,6 @@ libexplain_fubar_or_die_c(node_t *declaration)
         fprintf(fp, "\n");
         if (reset_errno)
             fprintf(fp, "    errno = 0;\n");
-
         elastic_buffer_rewind(&sb);
         elastic_buffer_puts(&sb, "result = explain_");
         elastic_buffer_puts(&sb, function_name);
@@ -1822,12 +1823,27 @@ libexplain_fubar_or_die_c(node_t *declaration)
         fprintf(fp, "    errno = 0;\n");
     }
     elastic_buffer_rewind(&sb);
+
+    {
+        char cond[100];
+        snprintf(cond, sizeof(cond), "HAVE_%s", function_name);
+        upcase_insitu(cond);
+        fprintf(fp, "#ifdef %s\n", cond);
+    }
+
     elastic_buffer_puts(&sb, "result = ");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_putc(&sb, '(');
     node_print_sb(call_args, &sb, node_print_style_normal);
     elastic_buffer_puts(&sb, ");");
     wrapper_hang(fp, "    ", elastic_buffer_get(&sb));
+    fprintf(fp, "#else\n");
+    fprintf(fp, "    errno = ENOSYS;\n");
+    if (ret_ptr)
+        fprintf(fp, "    result = 0;\n");
+    else
+        fprintf(fp, "    result = -1;\n");
+    fprintf(fp, "#endif\n");
     fprintf(fp, "    if (");
     if (ret_ptr)
         fprintf(fp, "!result");
@@ -1839,15 +1855,22 @@ libexplain_fubar_or_die_c(node_t *declaration)
     fprintf(fp, "    {\n");
     if (!reset_errno)
         fprintf(fp, "        int             hold_errno;\n\n");
-    fprintf(fp, "        hold_errno = errno;\n");
-    fprintf(fp, "        explain_program_name_assemble_internal(1);\n");
+    fputs
+    (
+        "        hold_errno = errno;\n"
+        "        explain_output_error\n"
+        "        (\n"
+        "            \"%s\",\n",
+        fp
+    );
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "explain_output_message(explain_errno_");
+    elastic_buffer_puts(&sb, "explain_errno_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "(hold_errno, ");
     node_print_sb(call_args, &sb, node_print_style_normal);
-    elastic_buffer_puts(&sb, "));");
-    wrapper_hang(fp, "        ", elastic_buffer_get(&sb));
+    elastic_buffer_puts(&sb, ")");
+    wrapper_hang(fp, "            ", elastic_buffer_get(&sb));
+    fprintf(fp, "        );\n");
     if (!reset_errno)
         fprintf(fp, "        errno = hold_errno;\n");
     fprintf(fp, "    }\n");
@@ -2144,6 +2167,26 @@ name_is_fildes(const char *name)
 
 
 static int
+name_is_uid(const char *name)
+{
+    size_t          len;
+
+    len = strlen(name);
+    return (len >= 3 && 0 == strcmp(name + len - 3, "uid"));
+}
+
+
+static int
+name_is_gid(const char *name)
+{
+    size_t          len;
+
+    len = strlen(name);
+    return (len >= 3 && 0 == strcmp(name + len - 3, "gid"));
+}
+
+
+static int
 name_is_stream(const char *name)
 {
     return (0 == strcmp(name, "fp") || 0 == strcmp(name, "stream"));
@@ -2264,6 +2307,14 @@ libexplain_buffer_errno_fubar_c(void)
         if (name_is_fildes(arg_name))
         {
             fprintf(fp, "    explain_buffer_fildes(sb, %s);\n", arg_name);
+        }
+        else if (name_is_uid(arg_name))
+        {
+            fprintf(fp, "    explain_buffer_uid(sb, %s);\n", arg_name);
+        }
+        else if (name_is_gid(arg_name))
+        {
+            fprintf(fp, "    explain_buffer_gid(sb, %s);\n", arg_name);
         }
         else if (name_is_stream(arg_name))
         {
@@ -2774,6 +2825,22 @@ man_man1_explain_1(void)
 }
 
 
+static void
+etc_configure_ac(void)
+{
+    FILE            *fp;
+    char            filename[1000];
+
+    snprintf(filename, sizeof(filename), "etc/configure.ac");
+    if (!selected(filename))
+        return;
+    aegis_copy_file(filename);
+    fp = explain_fopen_or_die(filename, "a");
+    fprintf(fp, "AC_CHECK_FUNCS(%s)\n", function_name);
+    explain_fclose_or_die(fp);
+}
+
+
 static const char *
 try_to_guess_include(const char *function)
 {
@@ -2904,4 +2971,8 @@ generate(node_t *declaration, catalogue_t *cat)
     libexplain_libexplain_h();
     man_man1_explain_1();
     man_man3_explain_3();
+    etc_configure_ac();
 }
+
+
+/* vim: set ts=8 sw=4 et : */

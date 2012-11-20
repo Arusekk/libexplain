@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2011 Peter Miller
+ * Copyright (C) 2008, 2009, 2011, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -60,7 +60,7 @@ void node_print_sb(const node_t *np, struct elastic_buffer_t *sb,
     node_print_style_t style);
 
 /**
-  * The node_syn_or_die function is used to take the AST from the
+  * The node_synth_or_die function is used to take the AST from the
   * command line, and synthesize a new AST that declares the matching
   * explain_*_or_die function.
   *
@@ -97,3 +97,4 @@ int node_parameter_is_pointer(const node_t *np);
 const char *find_function_name(node_t *np);
 
 #endif /* CODEGEN_NODE_H */
+/* vim: set ts=8 sw=4 et : */

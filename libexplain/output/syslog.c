@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,46 +39,44 @@ message(explain_output_t *op, const char *text)
 {
     explain_output_syslog_t *p;
     const char      *prog;
-    size_t          plen;
-    size_t          tlen;
-    size_t          delta;
+    size_t          text_size;
 
-    tlen = strlen(text);
-    while (tlen > 0 && text[tlen - 1] == '\n')
-        --tlen;
+    text_size = strlen(text);
+    while (text_size > 0 && text[text_size - 1] == '\n')
+        --text_size;
 
     /*
      * The syslog implementation in glibc is determined to have the "ident"
      * in the error message.  Contrary to the man page, if "ident" is NULL,
      * instead of no program name (as documented), it inserts its own idea of
-     * the program name.  To have it user libexplain's idea of the program
+     * the program name.  To have it use libexplain's idea of the program
      * name, we provide it to openlog(), and remove it (if present) from the
      * string passed to syslog().  Plus, an empty "ident" string makes for an
-     * inconsistent syslog format.
+     * inconsistent {ugly} syslog format.
      */
     prog = explain_program_name_get();
     if (prog && *prog)
     {
-        plen = strlen(prog);
-        delta = plen + 2;
+        size_t prog_size = strlen(prog);
+        size_t delta = prog_size + 2;
         if
         (
-            tlen >= delta
+            text_size >= delta
         &&
-            memcmp(text, prog, plen) == 0
+            memcmp(text, prog, prog_size) == 0
         &&
-            memcmp(text + plen, ": ", 2) == 0
+            memcmp(text + prog_size, ": ", 2) == 0
         )
         {
             text += delta;
-            tlen -= delta;
+            text_size -= delta;
         }
     }
-    if (tlen == 0)
+    if (text_size == 0)
         return;
 
     p = (explain_output_syslog_t *)op;
-    syslog(p->priority, "%.*s\n", (int)tlen, text);
+    syslog(p->priority, "%.*s\n", (int)text_size, text);
 }
 
 
@@ -123,7 +121,7 @@ explain_output_syslog_new3(int option, int facility, int level)
          * The syslog implementation in glibc is determined to have the "ident"
          * in the error message.  Contrary to the man page, if "ident" is NULL,
          * instead of no program name (as documented), it inserts its own idea
-         * of the program name.  To have it user libexplain's idea of the
+         * of the program name.  To have it use libexplain's idea of the
          * program name, we provide it to openlog(), and remove it (if present)
          * from the string passed to syslog().  Plus, an empty "ident" string
          * makes for an inconsistent {ugly} syslog format.
@@ -142,3 +140,6 @@ explain_output_syslog_new3(int option, int facility, int level)
     }
     return result;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -1240,6 +1240,8 @@ node_synth_result_variable(node_t *np)
 #define IS_PTRDIFF_T (1 << 24)
 #define IS_TIME_T    (1 << 25)
 #define IS_DEV_T     (1 << 26)
+#define IS_UID_T     (1 << 27)
+#define IS_GID_T     (1 << 28)
 
 
 static int
@@ -1318,7 +1320,9 @@ grope_type_specifier(node_t *np)
         return IS_STRUCT;
     if (node_is_literal(np, "fd_set"))
         return IS_STRUCT;
-    if (node_is_literal(np, "gid_t") || node_is_literal(np, "mode_t") )
+    if (node_is_literal(np, "gid_t"))
+        return IS_GID_T;
+    if (node_is_literal(np, "mode_t") )
         return IS_INTEGER;
     if (node_is_literal(np, "off_t"))
         return IS_OFF_T;
@@ -1329,7 +1333,7 @@ grope_type_specifier(node_t *np)
     if (node_is_literal(np, "socklen_t") )
         return IS_SOCKLEN_T;
     if (node_is_literal(np, "uid_t") )
-        return IS_INTEGER;
+        return IS_UID_T;
     if (node_is_literal(np, "time_t") )
         return IS_TIME_T;
     return 0;
@@ -1706,6 +1710,14 @@ node_parameter_from_string(const node_t *parameter, char *fmt,
         strsizecopy(fmt, "explain_string_to_time_t", fmt_size);
         return 1;
 
+    case IS_UID_T:
+        strsizecopy(fmt, "explain_string_to_uid_t", fmt_size);
+        return 1;
+
+    case IS_GID_T:
+        strsizecopy(fmt, "explain_string_to_gid_t", fmt_size);
+        return 1;
+
     default:
         return 0;
     }
@@ -1737,3 +1749,6 @@ find_function_name(node_t *np)
 
     return np->child[0]->literal;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

@@ -90,6 +90,7 @@ AC_CHECK_SIZEOF([off_t])
 AC_CHECK_SIZEOF([ptrdiff_t])
 AC_CHECK_SIZEOF([size_t])
 AC_CHECK_SIZEOF([ssize_t])
+AC_CHECK_SIZEOF([time_t])
 AC_CHECK_SIZEOF([void *])
 
 
@@ -111,6 +112,11 @@ AC_DEFUN([AC_ADD_CFLAGS],
 AC_ADD_CFLAGS(-Wall)
 AC_ADD_CFLAGS(-Wextra)
 AC_ADD_CFLAGS([-Wl,--as-needed])
+
+dnl!
+dnl! mostly for time parsing, we need floor()
+dnl!
+AC_CHECK_LIB(m, floor)
 
 dnl!
 dnl!  Solaris keeps socket functions in different library than libc.
@@ -883,9 +889,15 @@ AC_CHECK_FUNCS(    \
     getmntinfo     \
     getopt_long    \
     getpagesize    \
+    getregid       \
+    getresgid      \
+    getresuid      \
+    getreuid       \
     gettext        \
     hasmntopt      \
+    lchmod         \
     lchown         \
+    lutimens       \
     mbrtowc        \
     mkdtemp        \
     mkostemp       \
@@ -901,6 +913,10 @@ AC_CHECK_FUNCS(    \
     setenv         \
     setlocale      \
     setmntent      \
+    setregid       \
+    setresgid      \
+    setresuid      \
+    setreuid       \
     setsid         \
     shmat          \
     shmctl         \
@@ -925,6 +941,8 @@ AC_CHECK_FUNCS(    \
     timerfd_create \
     unsetenv       \
     ustat          \
+    utimens        \
+    utimensat      \
     utimes         \
     vsnprintf      \
     wcwidth        \
@@ -1199,8 +1217,10 @@ AC_MSG_RESULT([yes]),
 AC_MSG_RESULT([no]),
 AC_MSG_RESULT(cross))
 
-dnl the strsignal function is usually defined in <string.h>
-dnl but is sometimes defined in <unistd.h>
+dnl!
+dnl! The strsignal function is usually defined in <string.h>
+dnl! but is sometimes defined in <unistd.h>
+dnl!
 AC_CHECK_DECLS([strsignal,ustat,strverscmp],,, [
 #ifndef __USE_GNU
 #define __USE_GNU
@@ -1287,6 +1307,21 @@ return 0;
 , AC_DEFINE(SYS_PTRACE_USER_FPXREGS_STRUCT,1,
 [Define this symbol if your system has <sys/ptrace.h> or <sys/user.h> AND one
 of them defines struct user_fpxregs_struct.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+AC_MSG_CHECKING([whether <sys/shm.h> defines struct ipc_perm::__key])
+AC_TRY_RUN([
+#include <sys/shm.h>
+int main(argc, argv)int argc; char **argv;{
+struct ipc_perm x;
+printf("%d\n", x.__key);
+return 0;
+}]
+, AC_DEFINE(SYS_SHM_H_struct_ipc_perm_underscore_key,1,
+[Define this symbol if your system has <sys/shm.h> AND it
+defines struct ipc_perm AND it has a __key member.])
 AC_MSG_RESULT([yes]),
 AC_MSG_RESULT([no]),
 AC_MSG_RESULT(cross))
@@ -1395,13 +1430,6 @@ case "$datadir" in
         ;;
 *)
         datadir="${datadir}/libexplain"
-        ;;
-esac
-case "$datarootdir" in
-*/libexplain/* | */libexplain )
-        ;;
-*)
-        datarootdir="${datarootdir}/libexplain"
         ;;
 esac
 case "$sharedstatedir" in
@@ -1654,4 +1682,4 @@ AH_BOTTOM([
 #endif /* LIBEXPLAIN_CONFIG_H */])
 
 AC_OUTPUT(Makefile)
-dnl! vim: set sw=4 ts=8 et :
+dnl! vim: set ts=8 sw=4 et :

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -177,10 +177,26 @@ explain_output_t *explain_output_new(const explain_output_vtable_t *vtable);
 
 /**
   * The explain_output_stderr_new function may be used to create a new
-  * dynamically allocated instance of an explain_output_t
-  * class that writes to stderr, and exits via exit(2);
+  * dynamically allocated instance of an explain_output_t class that
+  * writes to stderr, and exits via exit(2);
   *
   * This is the default output handler.
+  *
+  * Long error messages will be wrapped to fit the size of the current
+  * terminal line.
+  *
+  * You can select whether or not the second and subsequent lines of wrapped
+  * error messages are indented.
+  * <ul>
+  * <li> calling the #explain_option_hanging_indent_set function at the
+  *      beginning of main(); or,
+  * <li> setting the EXPLAIN_OPTIONS environment variable, setting the
+  *      "hanging-indent=N" option; or,
+  * <li> the default is not to indent the second and subsequent lines of
+  *      wrapped error messages.
+  * </ul>
+  * The above list is in order of highest precedence to lowest.
+  * A hanging indent of zero means "no indent".
   *
   * @returns
   *     NULL on error (i.e. malloc failed), or a pointer to a new
@@ -245,7 +261,7 @@ explain_output_t *explain_output_syslog_new3(int option, int facility,
 
 /**
   * The explain_output_file_new function may be used to create a new
-  * dynamically allocated instance of an explain_output_t class that
+  * dynamically allocated instance of an #explain_output_t class that
   * writes to a file, and exits via exit(2).
   *
   * @param filename
@@ -283,7 +299,7 @@ explain_output_t *explain_output_tee_new(explain_output_t *first,
 
 /**
   * The explain_output_message function is used to print text.  It is
-  * printed via the registered output class, #explain_output_register
+  * printed via the registered output class, see #explain_output_register
   * for how.
   *
   * @param text
@@ -294,8 +310,24 @@ void explain_output_message(const char *text);
 
 /**
   * The explain_output_error function is used to print a formatted error
-  * message.  The printing is done via the #explain_output_message
-  * function.
+  * message.
+  *
+  * If the program name option has been selected, the program name will
+  * be prepended to the error message before it is printed.
+  * To select the option
+  * <ul>
+  * <li> calling the #explain_program_name_assemble function at the start of
+  *      your program's main() function; or,
+  * <li> using the EXPLAIN_OPTIONS environment variable, giving the
+  *      "program-name" or "no-program-name" option; or,
+  * <li> the default is to print the program name at the start of error
+  *      and warning messages.
+  * </ul>
+  * These methods are presented here in order of highest to lowest precedence.
+  *
+  * The printing is done via the #explain_output_message function, which
+  * will do wrapping and indenting if the appropriate output class and
+  * options have been selected.
   *
   * @param fmt
   *     The format text of the message to be printed.
@@ -319,8 +351,23 @@ void explain_output_error_and_die(const char *fmt, ...)
 
 /**
   * The explain_output_warning function is used to print a formatted
-  * error message, including the word "warning".  The printing is done
-  * via the #explain_output_message function.
+  * error message, including the word "warning".
+  *
+  * If the program name option has been selected, the program name will be
+  * prepended to the error message before it is printed.  To select the option
+  * <ul>
+  * <li> call the #explain_program_name_assemble  function at the start of your
+  *      program's main() function; or,
+  * <li> use the EXPLAIN_OPTIONS environment variable, giving the
+  *      "program-name" or "no-program-name" option; or,
+  * <li> the default is to always print the program name at the start of error
+  *      and warning messages.
+  * </ul>
+  * These methods are presented here in order of highest to lowest precedence.
+  *
+  * The printing is done via the #explain_output_message function, which
+  * will do wrapping and indenting if the appropriate output class and
+  * options have been selected.
   *
   * @param fmt
   *     The format text of the message to be printed.
@@ -405,6 +452,19 @@ void explain_output_register(explain_output_t *op);
 void explain_output_method_destructor(explain_output_t *op);
 
 /**
+  * The explain_option_assemble_program_name_set option is used to
+  * override any EXPLAIN_OPTIONS or default setting as to whether or
+  * not the #explain_output_error, #explain_output_error_and_die and
+  * #explain_output_warning functions should include the program name
+  * at the start the messages.
+  *
+  * @param yesno
+  *     true (non-zero) to include the program name, zero (false)
+  *     to omit the program name.
+  */
+void explain_program_name_assemble(int yesno);
+
+/**
   * The explain_option_hanging_indent_set function is used to cause
   * the output wrapping to use hanging indents.  By default no hanging
   * indent is used, but this can sometimes obfuscate the end of one
@@ -430,3 +490,4 @@ void explain_option_hanging_indent_set(int columns);
 #endif
 
 #endif /* LIBEXPLAIN_OUTPUT_H */
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -208,4 +208,29 @@ struct timeval; /* forward */
 
 void explain_string_to_timeval(const char *text, struct timeval *result);
 
+/**
+  * The explain_string_to_uid_t function may be used to convert text to
+  * a user ID.
+  *
+  * @param text
+  *    The text to be converted.
+  * @returns
+  *    On success, a uid.  On error, prints an error message and does
+  *    not return.
+  */
+int explain_string_to_uid_t(const char *text);
+
+/**
+  * The explain_string_to_gid_t function may be used to convert text to
+  * a group ID.
+  *
+  * @param text
+  *    The text to be converted.
+  * @returns
+  *    On success, a gid.  On error, prints an error message and does
+  *    not return.
+  */
+int explain_string_to_gid_t(const char *text);
+
 #endif /* LIBEXPLAIN_STRING_TO_THING_H */
+/* vim: set ts=8 sw=4 et : */

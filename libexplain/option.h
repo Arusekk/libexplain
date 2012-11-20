@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -61,9 +61,10 @@ int explain_option_dialect_specific(void);
 int explain_option_debug(void);
 
 /**
-  * The explain_option_assemble_program_name option is used to
-  * determine whether or not the explain_assemble function should
-  * include the program name in the assembled messages.
+  * The explain_option_assemble_program_name option is used to determine
+  * whether or not the #explain_output_error, #explain_output_error_and_die and
+  * #explain_output_warning functions should include the program name at the
+  * start the messages.
   *
   * @returns
   *     int; true (non-zero) is shall include program name, zero (false)
@@ -71,19 +72,21 @@ int explain_option_debug(void);
   */
 int explain_option_assemble_program_name(void);
 
+#if 0
 /**
   * The explain_program_name_assemble_internal function is used
   * to control whether or not the name of the calling process is to
   * be included in error messages issued by the explain_*_or_die
   * functions.  This will have a precedence below the EXPLAIN_OPTIONS
   * environment variable, but higher than default.  It is intended for
-  * use bu the explain_*_or_die functions.
+  * use by the explain_*_or_die functions.
   *
   * @param yesno
   *     non-zero (true) to have program name included,
   *     zero (false) to have program name excluded.
   */
 void explain_program_name_assemble_internal(int yesno);
+#endif
 
 /**
   * The explain_option_symbolic_mode_bits function may be used to obtain
@@ -122,3 +125,4 @@ int explain_option_hanging_indent(int width);
 int explain_option_extra_device_info(void);
 
 #endif /* LIBEXPLAIN_OPTION_H */
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/stdio.h>
 
-#include <libexplain/option.h>
 #include <libexplain/remove.h>
 #include <libexplain/output.h>
 
@@ -51,9 +50,11 @@ explain_remove_on_error(const char *pathname)
         int             hold_errno;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_remove(hold_errno, pathname));
+        explain_output_error("%s", explain_errno_remove(hold_errno, pathname));
         errno = hold_errno;
     }
     return result;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

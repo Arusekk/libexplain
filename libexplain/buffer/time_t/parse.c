@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,9 +23,8 @@
 #include <libexplain/ac/string.h>
 
 #include <libexplain/buffer/time_t.h>
-#include <libexplain/option.h>
+#include <libexplain/output.h>
 #include <libexplain/sizeof.h>
-#include <libexplain/wrap_and_print.h>
 
 
 #define YEAR_BIT  (1 << 0)
@@ -757,8 +756,7 @@ explain_parse_time_t_on_error(const char *text, const char *caption)
             );
         }
 
-        explain_program_name_assemble_internal(1);
-        explain_wrap_and_print(stderr, message);
+        explain_output_error("%s", message);
     }
     return result;
 }
@@ -772,7 +770,10 @@ explain_parse_time_t_or_die(const char *text, const char *caption)
     result = explain_parse_time_t_on_error(text, caption);
     if (result == (time_t)(-1))
     {
-        exit(1);
+        explain_output_exit_failure();
     }
     return result;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

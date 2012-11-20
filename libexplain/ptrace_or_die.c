@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
 #include <libexplain/ac/errno.h>
 #include <libexplain/ac/sys/ptrace.h>
 
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 #include <libexplain/ptrace.h>
 
@@ -63,13 +62,15 @@ explain_ptrace_on_error(int request, pid_t pid, void *addr, void *data)
         int             hold_errno;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_ptrace(hold_errno, request, pid,
-            addr, data));
+        explain_output_error
+        (
+            "%s",
+            explain_errno_ptrace(hold_errno, request, pid, addr, data)
+        );
         errno = hold_errno;
     }
     return result;
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

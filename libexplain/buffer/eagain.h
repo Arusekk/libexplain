@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,4 +21,17 @@
 
 #include <libexplain/buffer/ewouldblock.h>
 
+/**
+  * The explain_buffer_eagain function may be used to print an explanation
+  * for an EAGAIN error issued by one of the set*uid functions.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param caption
+  *     The name of the offending system call argument.
+  */
+void explain_buffer_eagain_setuid(explain_string_buffer_t *sb,
+    const char *caption);
+
 #endif /* LIBEXPLAIN_BUFFER_EAGAIN_H */
+/* vim: set ts=8 sw=4 et : */

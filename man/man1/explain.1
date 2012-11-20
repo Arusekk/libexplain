@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2011 Peter Miller
+.\" Copyright (C) 2008-2012 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -115,6 +115,9 @@ The \f[I]eventfd\fP(2) system call.
 .TP 8n
 execlp \f[I]pathname\fP \f[I]arg\fP...
 The \f[I]execlp\fP(3) system call.
+.TP 8n
+execv \f[I]pathname\fP \f[I]argv\fP
+The \f[I]execv\fP(3) system call.
 .TP 8n
 execve \f[I]pathname\fP \f[I]arg\fP...
 The \f[I]execve\fP(2) system call.
@@ -252,6 +255,12 @@ The \f[I]getpgid\fP(2) system call.
 getpgrp \f[I]pid\fP
 The \f[I]getpgrp\fP(2) system call.
 .TP 8n
+getresgid \f[I]rgid\fP \f[I]egid\fP \f[I]sgid\fP
+The \f[I]getresgid\fP(2) system call.
+.TP 8n
+getresuid \f[I]ruid\fP \f[I]euid\fP \f[I]suid\fP
+The \f[I]getresuid\fP(2) system call.
+.TP 8n
 getrlimit \f[I]resource\fP \f[I]rlim\fP
 The \f[I]getrlimit\fP(2) system call.
 .TP 8n
@@ -278,6 +287,9 @@ The \f[I]ioctl\fP(2) system call.
 kill \f[I]pid\fP \f[I]sig\fP
 The \f[I]kill\fP(2) system call.
 .\" ----------  L  ---------------------------------------------------------
+.TP 8n
+lchmod \f[I]pathname\fP \f[I]mode\fP
+The \f[I]lchmod\fP(2) system call.
 .TP 8n
 lchown \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP
 The \f[I]lchown\fP(2) system call.
@@ -415,6 +427,9 @@ The \f[I]setdomainname\fP(2) system call.
 setenv \f[I]name\fP \f[I]value\fP \f[I]overwrite\fP
 The \f[I]setenv\fP(3) system call.
 .TP 8n
+setgid \f[I]gid\fP
+The \f[I]setgid\fP(2) system call.
+.TP 8n
 setgroups \f[I]data_size\fP \f[I]data\fP
 The \f[I]setgroups\fP(2) system call.
 .TP 8n
@@ -430,12 +445,30 @@ The \f[I]setpgid\fP(2) system call.
 setpgrp \f[I]pid\fP \f[I]pgid\fP
 The \f[I]setpgrp\fP(2) system call.
 .TP 8n
+setregid \f[I]rgid\fP \f[I]egid\fP
+The \f[I]setregid\fP(2) system call.
+.TP 8n
+setreuid \f[I]ruid\fP \f[I]euid\fP
+The \f[I]setreuid\fP(2) system call.
+.TP 8n
+setresgid \f[I]rgid\fP \f[I]egid\fP \f[I]sgid\fP
+The \f[I]setresgid\fP(2) system call.
+.TP 8n
+setresuid \f[I]ruid\fP \f[I]euid\fP \f[I]suid\fP
+The \f[I]setresuid\fP(2) system call.
+.TP 8n
+setreuid \f[I]ruid\fP \f[I]euid\fP
+The \f[I]setreuid\fP(2) system call.
+.TP 8n
 setsid
 The \f[I]setsid\fP(2) system call.
 .TP 8n
 setsockopt \f[I]fildes\fP \f[I]level\fP \f[I]name\fP \f[I]data\fP \
 \f[I]data_size\fP
 The \f[I]setsockopt\fP(2) system call.
+.TP 8n
+setuid \f[I]uid\fP
+The \f[I]setuid\fP(2) system call.
 .TP 8n
 setvbuf \f[I]fp\fP \f[I]data\fP \f[I]mode\fP \f[I]size\fP
 The \f[I]setvbuf\fP(3) system call.
@@ -559,6 +592,12 @@ The \f[I]ustat\fP(2) system call.
 utime \f[I]pathname\fP [ \f[I]times\fP ]
 The \f[I]utime\fP(2) system call.
 .TP 8n
+utimens \f[I]pathname\fP [ \f[I]data\fP ]
+The \f[I]utimens\fP(2) system call.
+.TP 8n
+utimensat [ \f[I]fildes\fP ] \f[I]pathname\fP [ \f[I]data\fP [ \f[I]flags\fP ]]
+The \f[I]utimensat\fP(2) system call.
+.TP 8n
 utimes \f[I]pathname\fP \f[I]data\fP
 The \f[I]utimes\fP(2) system call.
 .\" ----------  V  ---------------------------------------------------------
@@ -620,3 +659,4 @@ Copyright
 Peter Miller
 .SH AUTHOR
 Written by Peter Miller <pmiller@opensource.org.au>
+.\" vim: set ts=8 sw=4 et :

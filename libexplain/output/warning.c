@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/option.h>
 #include <libexplain/output.h>
 #include <libexplain/program_name.h>
@@ -42,7 +43,6 @@ explain_output_warning(const char *format, ...)
     char buf[PATH_MAX * 2 + 200];
 
     explain_string_buffer_init(&sb, buf, sizeof(buf));
-    explain_program_name_assemble_internal(1);
     if (explain_option_assemble_program_name())
     {
         const char      *prog;
@@ -55,8 +55,18 @@ explain_output_warning(const char *format, ...)
         }
     }
 
-    /* FIXME: i18n */
-    explain_string_buffer_puts(&sb, "warning: ");
+    explain_buffer_gettext
+    (
+        &sb,
+        i18n
+        (
+            /*
+             * xgettext: this text is added to the beginning of warning
+             * messages, to indicate they are a warning and not an error.
+             */
+            "warning: "
+        )
+    );
 
     va_start(ap, format);
     explain_string_buffer_vprintf(&sb, format, ap);
@@ -64,3 +74,6 @@ explain_output_warning(const char *format, ...)
 
     explain_output_message(buf);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

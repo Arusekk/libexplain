@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +20,6 @@
 #include <libexplain/ac/termios.h>
 
 #include <libexplain/tcflush.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 
 
@@ -40,8 +39,7 @@ explain_tcflush_on_error(int fildes, int selector)
         int             hold_errno;
 
         hold_errno = errno;
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_errno_tcflush(hold_errno, fildes,
+        explain_output_error("%s", explain_errno_tcflush(hold_errno, fildes,
             selector));
         errno = hold_errno;
     }
@@ -49,4 +47,4 @@ explain_tcflush_on_error(int fildes, int selector)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

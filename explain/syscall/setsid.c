@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,6 +18,7 @@
 
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/sys/types.h>
 
 #include <libexplain/setsid.h>
 #include <libexplain/wrap_and_print.h>

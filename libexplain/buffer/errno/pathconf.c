@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -107,6 +107,10 @@ explain_buffer_errno_pathconf_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
+    case ENOSYS: /* many systems say this for EINVAL */
+#ifdef EOPNOTSUPP
+    case EOPNOTSUPP: /* HPUX says this for EINVAL */
+#endif
         explain_buffer_pathconf_einval(sb, "pathname", name, "name");
         break;
 
@@ -158,3 +162,6 @@ explain_buffer_errno_pathconf(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,6 @@
 #include <libexplain/buffer/errno/execlp.h>
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/execlp.h>
-#include <libexplain/option.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 #include <libexplain/output.h>
@@ -96,15 +95,18 @@ explain_execlp_on_error(const char *pathname, const char *arg, ...)
 
     hold_errno = errno;
     /* assert(hold_errno != 0); */
-    explain_program_name_assemble_internal(1);
 
-    explain_string_buffer_init(&sb, explain_common_message_buffer,
-        explain_common_message_buffer_size);
+    explain_string_buffer_init
+    (
+        &sb,
+        explain_common_message_buffer,
+        explain_common_message_buffer_size
+    );
     explain_buffer_errno_execlpv(&sb, hold_errno, pathname, argc, argv);
-    explain_output_message(explain_common_message_buffer);
+    explain_output_error("%s", explain_common_message_buffer);
     errno = hold_errno;
     return result;
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

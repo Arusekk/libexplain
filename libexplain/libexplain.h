@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,6 +52,7 @@
 #include <libexplain/dup2.h>
 #include <libexplain/eventfd.h>
 #include <libexplain/execlp.h>
+#include <libexplain/execv.h>
 #include <libexplain/execve.h>
 #include <libexplain/execvp.h>
 #include <libexplain/exit.h>
@@ -68,6 +69,7 @@
 #include <libexplain/fgetc.h>
 #include <libexplain/fgetpos.h>
 #include <libexplain/fgets.h>
+#include <libexplain/filename.h>
 #include <libexplain/fileno.h>
 #include <libexplain/flock.h>
 #include <libexplain/fopen.h>
@@ -100,6 +102,8 @@
 #include <libexplain/getpeername.h>
 #include <libexplain/getpgid.h>
 #include <libexplain/getpgrp.h>
+#include <libexplain/getresgid.h>
+#include <libexplain/getresuid.h>
 #include <libexplain/getrlimit.h>
 #include <libexplain/getsockname.h>
 #include <libexplain/getsockopt.h>
@@ -107,6 +111,7 @@
 #include <libexplain/getw.h>
 #include <libexplain/ioctl.h>
 #include <libexplain/kill.h>
+#include <libexplain/lchmod.h>
 #include <libexplain/lchown.h>
 #include <libexplain/link.h>
 #include <libexplain/listen.h>
@@ -156,13 +161,20 @@
 #include <libexplain/setbuffer.h>
 #include <libexplain/setdomainname.h>
 #include <libexplain/setenv.h>
+#include <libexplain/setgid.h>
 #include <libexplain/setgroups.h>
 #include <libexplain/sethostname.h>
 #include <libexplain/setlinebuf.h>
 #include <libexplain/setpgid.h>
 #include <libexplain/setpgrp.h>
+#include <libexplain/setregid.h>
+#include <libexplain/setreuid.h>
+#include <libexplain/setresgid.h>
+#include <libexplain/setresuid.h>
+#include <libexplain/setreuid.h>
 #include <libexplain/setsid.h>
 #include <libexplain/setsockopt.h>
+#include <libexplain/setuid.h>
 #include <libexplain/setvbuf.h>
 #include <libexplain/shmat.h>
 #include <libexplain/shmctl.h>
@@ -204,6 +216,8 @@
 #include <libexplain/unsetenv.h>
 #include <libexplain/ustat.h>
 #include <libexplain/utime.h>
+#include <libexplain/utimens.h>
+#include <libexplain/utimensat.h>
 #include <libexplain/utimes.h>
 #include <libexplain/vfork.h>
 #include <libexplain/vfprintf.h>
@@ -266,3 +280,4 @@
   */
 
 #endif /* LIBEXPLAIN_LIBEXPLAIN_H */
+/* vim: set ts=8 sw=4 et : */

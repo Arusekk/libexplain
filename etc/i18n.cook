@@ -27,8 +27,7 @@ all += po/libexplain.pot;
 po/libexplain.pot: [c_src_files]
     etc/xgettext-postprocess.sh
 {
-    if [not [verbose]] then
-        function print XGT [target];
+    function quiet_print Generate;
 
     xgettext
         [addprefix "-D" [search_list]]
@@ -65,8 +64,7 @@ all += etc/manually-confirmed.merge;
 
 etc/manually-confirmed.merge: po/libexplain.pot etc/manually-confirmed.po
 {
-    if [not [verbose]] then
-        function print CHK etc/manually-confirmed.po;
+    function quiet_print Check;
 
     msgmerge
         --indent
@@ -78,6 +76,8 @@ etc/manually-confirmed.merge: po/libexplain.pot etc/manually-confirmed.po
         -o [target]
         [resolve etc/manually-confirmed.po po/libexplain.pot]
         ;
+    echo >> [target];
+    echo "'# vim: set ts=8 sw=4 et :'" >> [target];
 
     /*
      * There should be no differences.

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008 Peter Miller
+ * Copyright (C) 2008, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,8 +18,8 @@
  */
 
 /*
- * This is the project ``config'' file.  It controls many aspects of
- * how Aegis interacts with your project.
+ * This is part of the project "aegis.conf" file.  It controls many
+ * aspects of how Aegis interacts with your project.
  */
 
 /*
@@ -63,3 +63,5 @@ merge_command =
         "${quote $mostrecent} ${quote $original} ${quote $input} "
         "> ${quote $output}; "
     "test $? -le 1";
+
+/* vim: set ts=8 sw=4 et : */

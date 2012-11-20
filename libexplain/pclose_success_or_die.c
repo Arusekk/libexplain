@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2012 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,6 @@
 #include <libexplain/common_message_buffer.h>
 #include <libexplain/pclose.h>
 #include <libexplain/string_buffer.h>
-#include <libexplain/option.h>
 #include <libexplain/output.h>
 
 
@@ -36,8 +35,7 @@ explain_pclose_success(FILE *fp)
     status = pclose(fp);
     if (status < 0)
     {
-        explain_program_name_assemble_internal(1);
-        explain_output_message(explain_pclose(fp));
+        explain_output_error("%s", explain_pclose(fp));
     }
     else if (status != 0)
     {
@@ -54,7 +52,7 @@ explain_pclose_success(FILE *fp)
         /* FIXME: i18n */
         explain_string_buffer_puts(&sb, ", but ");
         explain_buffer_wait_status(&sb, status);
-        explain_output_message(explain_common_message_buffer);
+        explain_output_error("%s", explain_common_message_buffer);
     }
     return status;
 }
@@ -66,3 +64,6 @@ explain_pclose_success_or_die(FILE *fp)
     if (explain_pclose_success(fp))
         explain_output_exit_failure();
 }
+
+
+/* vim: set ts=8 sw=4 et : */
