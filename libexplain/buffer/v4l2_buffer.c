@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -87,8 +87,10 @@ explain_buffer_v4l2_buffer(explain_string_buffer_t *sb,
         }
         explain_string_buffer_puts(sb, ", length = ");
         explain_buffer_uint32_t(sb, data->length);
+#ifdef LINUX_VIDEODEV2_H_struct_v4l2_buffer_input
         explain_string_buffer_puts(sb, ", input = ");
         explain_buffer_uint32_t(sb, data->input);
+#endif
         if (data->reserved)
         {
             explain_string_buffer_puts(sb, ", reserved = ");

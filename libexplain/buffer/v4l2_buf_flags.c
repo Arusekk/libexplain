@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2012 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -40,7 +40,9 @@ explain_buffer_v4l2_buf_flags(explain_string_buffer_t *sb, int value)
         { "V4L2_BUF_FLAG_ERROR", V4L2_BUF_FLAG_ERROR },
 #endif
         { "V4L2_BUF_FLAG_TIMECODE", V4L2_BUF_FLAG_TIMECODE },
+#ifdef V4L2_BUF_FLAG_INPUT
         { "V4L2_BUF_FLAG_INPUT", V4L2_BUF_FLAG_INPUT },
+#endif
     };
 
     explain_parse_bits_print(sb, value, table, SIZEOF(table));

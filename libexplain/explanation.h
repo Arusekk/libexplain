@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -78,4 +78,20 @@ void explain_explanation_assemble(explain_explanation_t *exp,
 void explain_explanation_assemble_gai(explain_explanation_t *exp,
     explain_string_buffer_t *result);
 
+/**
+  * The explain_explanation_assemble_netdb function may be used to
+  * carefully glue the problem statement and the explanation together,
+  * using internationalization, for which localizations may re-arrange
+  * the order.  (Specific to gethostbyname, et al.)
+  *
+  * @param exp
+  *     The explanation of interest.  You are expected to have filled out
+  *     the two string buffers already.
+  * @param result
+  *     where to print the resulting completed explanation.
+  */
+void explain_explanation_assemble_netdb(explain_explanation_t *exp,
+    explain_string_buffer_t *result);
+
 #endif /* LIBEXPLAIN_EXPLANATION_H */
+/* vim: set ts=8 sw=4 et : */

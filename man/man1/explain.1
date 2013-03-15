@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2012 Peter Miller
+.\" Copyright (C) 2008-2013 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -243,6 +243,9 @@ The \f[I]getdomainname\fP(2) system call.
 getgroups \f[I]data_size\fP \f[I]data\fP
 The \f[I]getgroups\fP(2) system call.
 .TP 8n
+gethostbyname \f[I]name\fP
+The \f[I]gethostbyname\fP(3) system call.
+.TP 8n
 gethostname [ \f[I]data\fP \f[I]data_size\fP ]
 The \f[I]gethostname\fP(2) system call.
 .TP 8n
@@ -263,6 +266,9 @@ The \f[I]getresuid\fP(2) system call.
 .TP 8n
 getrlimit \f[I]resource\fP \f[I]rlim\fP
 The \f[I]getrlimit\fP(2) system call.
+.TP 8n
+getrusage \f[I]who\fP \f[I]usage\fP
+The \f[I]getrusage\fP(2) system call.
 .TP 8n
 getsockname \f[I]fildes\fP [ \f[I]sock_addr\fP [ \f[I]sock_addr_size\fP ]]
 The \f[I]getsockname\fP(2) system call.

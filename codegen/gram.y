@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -258,7 +258,12 @@ yyerror(const char *s)
 }
 
 
-static int yyparse(void);
+// Different versions of bison and yacc emit code chunks and function
+// prototypes in different orders.  We need this prototype declaration
+// because the call to yyparse, below, would complain in the cases where
+// there is not yet a yyparse prototype in scope.
+int yyparse(void);
+
 static node_t *result;
 #if YYDEBUG
 extern int yydebug;

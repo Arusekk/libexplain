@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -98,6 +98,7 @@
 #include <libexplain/getcwd.h>
 #include <libexplain/getdomainname.h>
 #include <libexplain/getgroups.h>
+#include <libexplain/gethostbyname.h>
 #include <libexplain/gethostname.h>
 #include <libexplain/getpeername.h>
 #include <libexplain/getpgid.h>
@@ -105,6 +106,7 @@
 #include <libexplain/getresgid.h>
 #include <libexplain/getresuid.h>
 #include <libexplain/getrlimit.h>
+#include <libexplain/getrusage.h>
 #include <libexplain/getsockname.h>
 #include <libexplain/getsockopt.h>
 #include <libexplain/gettimeofday.h>

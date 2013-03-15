@@ -2501,9 +2501,9 @@ test_fubar_main_c(void)
     FILE            *fp;
     size_t          j;
     elastic_buffer_t sb;
-    char            filename[1000];
+    char            filename[100];
 
-    snprintf(filename, sizeof(filename), "test_%s/main.c", function_name);
+    snprintf(filename, sizeof(filename), "test/%s/main.c", function_name);
     if (!selected(filename))
         return;
     elastic_buffer_constructor(&sb);

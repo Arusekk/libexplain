@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,8 @@
 
 integration-build-targets += tarball ;
 
-tarball: web-site/[project_minus].tar.gz ;
+tarball = web-site/[project_short]-[version_short].tar.gz;
+tarball: [tarball];
 
 /* Need gnu style tar to build the tarball - so try different names */
 if [find_command gnutar] then
@@ -30,10 +31,10 @@ else
     tar-cmd = tar;
 
 
-check-tarball: etc/check-tarball.sh web-site/[project_minus].tar.gz
+check-tarball: etc/check-tarball.sh [tarball]
 {
     function quiet_print '';
-    sh [resolve etc/check-tarball.sh web-site/[project_minus].tar.gz];
+    sh [resolve etc/check-tarball.sh [tarball]];
 }
 
 source_file_order =
@@ -84,37 +85,43 @@ source_file_order =
     libexplain.spec
     ;
 
-web-site/%.tar.gz: [source_file_order] debian/control debian/changelog
+debian-aemakegen-files =
+    debian/changelog
+    debian/compat
+    debian/control
+    debian/explain.install
+    debian/libexplain-dev.install
+    debian/libexplain-doc.doc-base
+    debian/libexplain-doc.install
+    /* debian/libexplain51.install / * <= will change over time */
+    debian/rules
+    debian/source/format
+    ;
+debian-built-files =
+    [debian-aemakegen-files]
+    debian/copyright
+    ;
+
+web-site/%.tar.gz: [source_file_order] [debian-built-files]
     set shallow ingredients-fingerprint
 {
     function quiet_print Build;
-
-    if [exists web-site/%.tar] then
-        rm web-site/%.tar
-            set clearstat;
-    [tar-cmd] --create --file web-site/%.tmp --dereference --files-from\=- ;
+    [tar-cmd] --create --file - --dereference
+        "`cat`"
+        'debian/libexplain[0-9]*.install' /* <= changes with time */
+    | tardy -unu 0 -gnu 0 -una Peter -gna Miller
+        -p [project_short]-[version_short]
+        -ms 0644 -mc 07022 -now
+        [prepost "-rp=" "" [search_list]]
+        - /* stdin */
+        [target]
+        ;
 data
 [unsplit "\n"
-    [resolve
-        [sort
-            [source_file_order]
-            debian/changelog
-            debian/compat
-            debian/control
-            debian/rules
-        ]
-    ]
-    [glob 'debian/*.install' ]
+    [resolve [sort [source_file_order]]]
+    [resolve [debian-built-files]]
 ]
 dataend
-
-    tardy -unu 0 -gnu 0 -una Peter -gna Miller
-        -p % -ms 0644 -mc 07022 -now
-        [prepost "-rp=" "" [search_list]]
-        web-site/%.tmp
-        web-site/%.tar.gz;
-    rm web-site/%.tmp
-        set silent;
 }
 
 
@@ -149,7 +156,7 @@ Makefile.in: [stringset [source_file_order] [aemakegen_extra] - [targets]]
 {
     function quiet_print Generate;
 
-    [aemakegen] -p [project] -c [change] -o [target]
+    [aemakegen] --project\=[project] --change\=[change] -o [target]
         [stringset
             [source_file_order] [aemakegen_extra]
         -
@@ -180,20 +187,29 @@ etc/lsb-release.so: /etc/lsb-release etc/lsb-release.awk
 
 cascade web-src/index.html = etc/lsb-release.so;
 
-debian/changelog
-debian/changelog
-debian/control
-debian/explain.install
-debian/libexplain-dev.install
-debian/rules: [source_files]
+[debian-aemakegen-files]: [source_files]
     set shallow
 {
     function quiet_print Generate;
 
-    /* This actually makes more files than just debian/control */
     [aemakegen] -p [project] -c [change] --target\=debian
         [aemakegen_extra]
         ;
+}
+
+debian/copyright: [source_files]
+    set shallow
+{
+    function quiet_print Generate;
+    licensecheck "--check='[.]cc$|[.][chy]$'" --copyright "`cat`"
+    | sed "'s|^bl\\(bl\\)*/||'"
+    | /usr/lib/cdbs/licensecheck2dep5
+    | awk -f [resolve etc/deb-cop-fix.awk]
+    > [target]
+    ;
+data
+[unsplit "\n" [resolve [need]]]
+dataend
 }
 
 
@@ -209,7 +225,7 @@ if [in [fromto %1D%2 %2 [version]] 001 002 003 004 005] then
 }
 
 web-site/debian/build.sh
-debian-package: web-site/[project_minus].tar.gz bin/test_user
+debian-package: [tarball] bin/test_user
     debian/changelog
 {
     function quiet_print Generate;
@@ -220,7 +236,7 @@ debian-package: web-site/[project_minus].tar.gz bin/test_user
     function print "vsn = '"[vsn]"'";
     if [not [in [count [vsn]] 1]] then
         fail "debian version not right";
-    local tarball = [project_short]_[vsn].orig.tar.gz;
+    local neutered_tarball = [project_short]_[vsn].orig.tar.gz;
 
     local user = [collect [resolve bin/test_user]];
     local key = ;
@@ -235,23 +251,27 @@ debian-package: web-site/[project_minus].tar.gz bin/test_user
      * warning, for no real benefit.
      */
 
+    "set" -x &&
     unset GPG_AGENT_INFO &&
     rm -rf web-site/debian &&
     mkdir -p web-site/debian &&
     cd web-site/debian &&
     echo Options Indexes > .htaccess &&
-    gunzip < ../[project_minus].tar.gz
-        | tardy -exclude "'"[project_minus]"/debian/*'"
-        | gzip -9 > [tarball] &&
-    tar xzf ../[project_minus].tar.gz &&
-    cd [project_minus] &&
+    tardy -exclude "'"[project_short]-[version_short]"/debian/*'"
+        ../[notdir [tarball]]
+        [neutered_tarball] &&
+    tar xzf ../[notdir [tarball]] &&
+    cd [project_short]-[version_short] &&
 #if 0
-    dpkg-buildpackage -sgpg [key] -sa &&
+    dpkg-buildpackage -sgpg [key] -sa
 #else
-    debuild [key] -sa &&
+    debuild [key] -sa
+        --changes-option\=-DDistribution\=[collect
+            gawk -F\= "'/CODENAME/{print $2}'" /etc/lsb-release]
 #endif
+    &&
     cd .. &&
-    rm -rf [project_minus] &&
+    rm -rf [project_short]-[version_short] &&
     lintian -iIv --pedantic *.changes
     ;
 
@@ -291,9 +311,9 @@ cascade libexplain/large_file_support.h = libexplain/public_config.h;
 libexplain.spec: [source_files]
 {
     function quiet_print Generate;
-    [aemakegen] --target\=rpm-spec
+    [aemakegen] --project\=[project] --change\=[change] --target\=rpm-spec
         [aemakegen_extra]
-        > [target];
+        -o [target];
 }
 
 

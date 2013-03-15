@@ -1,6 +1,6 @@
 .\"
 .\" libexplain - Explain errno values returned by libc functions
-.\" Copyright (C) 2008-2012 Peter Miller
+.\" Copyright (C) 2008-2013 Peter Miller
 .\" Written by Peter Miller <pmiller@opensource.org.au>
 .\"
 .\" This program is free software; you can redistribute it and/or modify
@@ -570,6 +570,12 @@ get list of supplementary group IDs and report errors
 \f[I]explain_getcwd_or_die\fP(3)
 Get current working directory and report errors
 .TP 8n
+\f[I]explain_gethostbyname\fP(3)
+Explain \f[I]gethostbyname\fP(3) errors
+.TP 8n
+\f[I]explain_gethostbyname_or_die\fP(3)
+get host address given host name and report errors
+.TP 8n
 \f[I]explain_gethostname\fP(3)
 Explain \f[I]gethostname\fP(2) errors
 .TP 8n
@@ -611,6 +617,12 @@ Explain \f[I]getrlimit\fP(2) errors
 .TP 8n
 \f[I]explain_getrlimit_or_die\fP(3)
 get resource limits and report errors
+.TP 8n
+\f[I]explain_getrusage\fP(3)
+Explain \f[I]getrusage\fP(2) errors
+.TP 8n
+\f[I]explain_getrusage_or_die\fP(3)
+get resource usage and report errors
 .TP 8n
 \f[I]explain_getsockname\fP(3)
 Explain \f[I]getsockname\fP(2) errors

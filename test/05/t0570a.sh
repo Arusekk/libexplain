@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2011 Peter Miller
+# Copyright (C) 2011, 2012 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -23,7 +23,7 @@ TEST_SUBJECT="ioctl VIDIOC_QBUF"
 
 test_config HAVE_LINUX_VIDEODEV2_H || pass
 
-cat > test.ok << 'fubar'
+cat > test.ok.1 << 'fubar'
 ioctl(fildes = 42, request = VIDIOC_QBUF, struct v4l2_buffer *data = {
 index = 0, type = 0, bytesused = 0, flags = 0, field = V4L2_FIELD_ANY,
 timestamp = { 0 seconds }, timecode = { type = 0, flags = 0, frames = 0,
@@ -33,10 +33,22 @@ argument was incorrectly specified
 fubar
 test $? -eq 0 || no_result
 
+cat > test.ok.2 << 'fubar'
+ioctl(fildes = 42, request = VIDIOC_QBUF, struct v4l2_buffer *data = {
+index = 0, type = 0, bytesused = 0, flags = 0, field = V4L2_FIELD_ANY,
+timestamp = { 0 seconds }, timecode = { type = 0, flags = 0, frames = 0,
+seconds = 0, minutes = 0, hours = 0 }, sequence = 0, memory = 0, length = 0
+}) failed, Invalid argument (EINVAL) because the data->type argument was
+incorrectly specified
+fubar
+test $? -eq 0 || no_result
+
 explain -e EINVAL ioctl 42 VIDIOC_QBUF > test.out
 test $? -eq 0 || fail
 
-diff test.ok test.out
+diff test.ok.2 test.out > /dev/null 2>&1 && pass
+
+diff test.ok.1 test.out
 test $? -eq 0 || fail
 
 #

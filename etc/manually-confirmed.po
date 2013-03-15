@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008-2012 Peter Miller
+# Copyright (C) 2008-2013 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
         "POT-Creation-Date: 2011-11-09 21:42+1100\n"
-        "PO-Revision-Date: 2012-10-11\n"
+        "PO-Revision-Date: 2013-03-14\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -621,6 +621,29 @@ msgid   "an attempt was made to set an invalid option"
 msgstr  "an attempt was made to set an invalid option"
 
 #.
+#. this error message is used to explain TRY_AGAIN
+#. errors returned by the gethostbyname system call.
+#. Authoritative Answer Host not found, or SERVERFAIL.  A
+#. temporary error occurred on an authoritative name server.
+#. The specified host is unknown.
+#.
+msgid   "an authoritative DNS server could not be reached and so the given "
+        "host name does not appear to exist"
+msgstr  "an authoritative DNS server could not be reached and so the given "
+        "host name does not appear to exist"
+
+#.
+#. this error message is used to explain
+#. HOST_NOT_FOUND errors returned by the gethostbyname system
+#. call.  Authoritative Answer Host not found.  The specified
+#. host is unknown.
+#.
+msgid   "an authoritative DNS server was reached and the given host name does "
+        "not exist"
+msgstr  "an authoritative DNS server was reached and the given host name does "
+        "not exist"
+
+#.
 #. This message is used to explan an ECONNABORTED error
 #. reported by the accept(2) system call, in the case where an incoming
 #. connection has been aborted by the remote host.
@@ -770,6 +793,15 @@ msgid   "gid does not match the real group ID (%1$s) or the saved group ID "
         "(%2$s) of the calling process"
 msgstr  "gid does not match the real group ID (%1$s) or the saved group ID "
         "(%2$s) of the calling process"
+
+#.
+#. this error message is used to explain a
+#. NO_RECOVERY error returned by the gethostbyname
+#. system call, in the case where the host name contains
+#. at least one empty label.
+#.
+msgid   "host names may not have empty parts"
+msgstr  "host names may not have empty parts"
 
 #.
 #. This message is used when directory has a directory
@@ -2329,6 +2361,43 @@ msgid   "the group permission mode %s is ignored"
 msgstr  "the group permission mode %s is ignored"
 
 #.
+#. this error message is used to explain a NO_RECOVERY
+#. error returned by the gethostbyname system call, in the case
+#. where the host name is not properly formed.
+#.
+#. %1$s => text of the label (the text between the dots)
+#.
+#, c-format
+msgid   "the host name (at %s) is not properly formed"
+msgstr  "the host name (at %s) is not properly formed"
+
+#.
+#. this error message is used to explain NO_DATA
+#. errors returned by the gethostbyname system call.
+#. Valid name, no data record of requested type.
+#. The requested name is valid but does not have an IP address.
+#.
+msgid   "the host name does not have any DNS data"
+msgstr  "the host name does not have any DNS data"
+
+#.
+#. this error message is used to explain NO_ADDRESS
+#. errors returned by the gethostbyname system call.
+#. No address, look for MX record.
+#.
+msgid   "the host name has DNS data but does not have an IP address"
+msgstr  "the host name has DNS data but does not have an IP address"
+
+#.
+#. this error message is used to explain a
+#. NO_RECOVERY error returned by the gethostbyname system
+#. call, in the case where the host name is not a valid
+#. length.
+#.
+msgid   "the host name is not a valid length"
+msgstr  "the host name is not a valid length"
+
+#.
 #. this error message is issued when a process
 #. attempts to set the hostname, and the hostname contains
 #. characters not in the RFC1035 spec (section 2.3.1).
@@ -2470,6 +2539,16 @@ msgstr  "the others permission mode %s is ignored"
 #, c-format
 msgid   "the others permission mode is %s"
 msgstr  "the others permission mode is %s"
+
+#.
+#. this error message is used to explain NO_RECOVERY
+#. errors returned by the gethostbyname system call.
+#. Non recoverable errors, FORMERR, REFUSED, NOTIMP.
+#.
+msgid   "the operation was refused, or the operation is not implemented on "
+        "this system"
+msgstr  "the operation was refused, or the operation is not implemented on "
+        "this system"
 
 #.
 #. This error message is issued to explain an EINVAL error
@@ -3760,6 +3839,13 @@ msgid   "uid does not match the real user ID (%1$s) or the saved user ID "
         "(%2$s) of the calling process"
 msgstr  "uid does not match the real user ID (%1$s) or the saved user ID "
         "(%2$s) of the calling process"
+
+#.
+#. This message is used when hstreror is unable to translate
+#. an h_errno value, in which causes this fall-back message to be used.
+#.
+msgid   "unknown <netdb.h> error"
+msgstr  "unknown <netdb.h> error"
 
 #.
 #. This string is the type of a file (see stat(2)

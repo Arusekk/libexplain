@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,12 +31,15 @@ bin/%: script/%.sh.in: config.status
     set shallow
     single-thread conftest.subs
 {
+    function quiet_print Generate;
     if [not [exists script]] then
         mkdir script
             set clearstat;
     /* these 2 env vars control what is generated */
     CONFIG_FILES\=[target]\:[resolve script/%.sh.in] CONFIG_HEADERS\=
-        sh [resolve config.status];
+        sh [resolve config.status]
+        ['if' [quiet] 'then' --quiet]
+        ;
     chmod 755 [target];
 }
 
@@ -68,7 +71,7 @@ configured_files =
     ];
 configured_files: [configured_files];
 
-configure: etc/configure.ac install-sh config.guess config.sub
+configure: etc/configure.ac install-sh(exists) config.guess config.sub
 {
     function quiet_print Generate;
 
@@ -92,7 +95,10 @@ configure: etc/configure.ac install-sh config.guess config.sub
         ln -s ../[resolve test_mincore/main.c] test_mincore/main.c
             set clearstat;
     }
-    [autoconf] [resolve etc/configure.ac] > [target];
+    [autoconf]
+        /* ['if' [quiet] 'then' --quiet] */
+        [resolve etc/configure.ac]
+        > [target];
     chmod 755 [target];
 }
 
@@ -176,7 +182,7 @@ config.guess: [config.guess]
     chmod 755 [target];
 }
 
-config.status: configure install-sh config.sub config.guess
+config.status: configure install-sh(exists) config.sub config.guess
 {
     function quiet_print Generate;
     if [not [exists install-sh]] then
@@ -210,9 +216,11 @@ config.status: configure install-sh config.sub config.guess
 
     CC\=[quote [unsplit " " [CC]]]
     [flags]
-
-    [pathname [resolve configure]] --cache-file\=/dev/null --verbose
-    --no-create --srcdir\=. --sysconfdir\=/etc
+    [pathname [resolve configure]]
+        --cache-file\=/dev/null
+        ['if' [quiet] 'then' --quiet]
+        --no-create --srcdir\=.
+        --sysconfdir\=/etc
     ;
 }
 
@@ -226,24 +234,30 @@ libexplain/config.h.in: etc/configure.ac
 %0%.h: %0%.h.in config.status
     single-thread conftest.subs
 {
+    function quiet_print Generate;
     if [not [exists [dirname %0%.h]]] then
         mkdir -p [dirname %0%.h]
             set clearstat;
     /* these 2 env vars control what is generated */
     CONFIG_FILES\= CONFIG_HEADERS\=[target]\:[resolve %0%.h.in]
-        sh [resolve config.status];
+        sh [resolve config.status]
+        ['if' [quiet] 'then' --quiet]
+        ;
 }
 
 %0%: %0%.in config.status
     set ['if' [not [defined baseline]] 'then' shallow]
     single-thread conftest.subs
 {
+    function quiet_print Generate;
     if [not [exists [dirname %0%]]] then
         mkdir [dirname %0%]
             set clearstat;
     /* these 2 env vars control what is generated */
     CONFIG_FILES\=[target]\:[resolve %0%.in] CONFIG_HEADERS\=
-       sh  [resolve config.status];
+       sh  [resolve config.status]
+        ['if' [quiet] 'then' --quiet]
+       ;
 
     /*
      * Make shell scripts and CGI scripts executable.

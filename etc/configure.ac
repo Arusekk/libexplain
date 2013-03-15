@@ -1,6 +1,6 @@
 dnl!
 dnl! libexplain - Explain errno values returned by libc functions
-dnl! Copyright (C) 2008-2012 Peter Miller
+dnl! Copyright (C) 2008-2013 Peter Miller
 dnl! Written by Peter Miller <pmiller@opensource.org.au>
 dnl!
 dnl! This program is free software; you can redistribute it and/or
@@ -884,6 +884,7 @@ AC_CHECK_FUNCS(    \
     ftime          \
     futimes        \
     getdomainname  \
+    gethostbyname  \
     gethostname    \
     getmntent      \
     getmntinfo     \
@@ -893,6 +894,7 @@ AC_CHECK_FUNCS(    \
     getresgid      \
     getresuid      \
     getreuid       \
+    getrusage      \
     gettext        \
     hasmntopt      \
     lchmod         \
@@ -1326,6 +1328,21 @@ AC_MSG_RESULT([yes]),
 AC_MSG_RESULT([no]),
 AC_MSG_RESULT(cross))
 
+AC_MSG_CHECKING([whether <linux/videodev2.h> defines struct v4l2_buffer::input])
+AC_TRY_RUN([
+#include <linux/videodev2.h>
+int main(argc, argv)int argc; char **argv;{
+struct v4l2_buffer x;
+printf("%d\n", (int)x.input);
+return 0;
+}]
+, AC_DEFINE(LINUX_VIDEODEV2_H_struct_v4l2_buffer_input,1,
+[Define this symbol if your system has <linux/videodev2.h> AND it
+defines struct v4l2_buffer AND it has an 'input' member.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
 dnl!
 dnl! Look for the NAME_MAX symbol.  This is the maximum length of a
 dnl! pathname component (between th slashes) in a path.
@@ -1650,7 +1667,7 @@ AC_SUBST(PROGRAM_SUFFIX)
 AH_TOP(
 [/*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by

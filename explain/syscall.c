@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2012 Peter Miller
+ * Copyright (C) 2009-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -88,6 +88,7 @@
 #include <explain/syscall/getcwd.h>
 #include <explain/syscall/getdomainname.h>
 #include <explain/syscall/getgroups.h>
+#include <explain/syscall/gethostbyname.h>
 #include <explain/syscall/gethostname.h>
 #include <explain/syscall/getpeername.h>
 #include <explain/syscall/getpgid.h>
@@ -95,6 +96,7 @@
 #include <explain/syscall/getresgid.h>
 #include <explain/syscall/getresuid.h>
 #include <explain/syscall/getrlimit.h>
+#include <explain/syscall/getrusage.h>
 #include <explain/syscall/getsockname.h>
 #include <explain/syscall/getsockopt.h>
 #include <explain/syscall/gettimeofday.h>
@@ -327,6 +329,7 @@ static const table_t table[] =
     /* FIXME: add support for getdents */
     { "getdomainname", explain_syscall_getdomainname },
     { "getgroups", explain_syscall_getgroups },
+    { "gethostbyname", explain_syscall_gethostbyname },
     { "gethostname", explain_syscall_gethostname },
     /* FIXME: add support for getitimer */
     /* FIXME: add support for get_kernel_syms */
@@ -341,7 +344,7 @@ static const table_t table[] =
     { "getresuid", explain_syscall_getresuid },
     { "getrlimit", explain_syscall_getrlimit },
     /* FIXME: add support for get_robust_list */
-    /* FIXME: add support for getrusage */
+    { "getrusage", explain_syscall_getrusage },
     /* FIXME: add support for gets */
     /* FIXME: add support for getsid */
     { "getsockname", explain_syscall_getsockname },

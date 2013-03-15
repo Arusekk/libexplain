@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,22 +18,17 @@
  */
 
 apt-package-list = ;
-
-function apt-get-command =
-{
-    if [not [find_command [@1]]] then
-        apt-package-list += [@1];
-}
+darch = [collect dpkg-architecture -qDEB_BUILD_ARCH];
 
 function apt-get-package =
 {
-    if [not [collect dpkg -l | grep "'^ii  "[@1]" '" | wc -l || true]] then
+    if [not [collect dpkg -l | grep "'^ii  "[@1]" '"
+        | wc -l || true]] then
+    if [not [collect dpkg -l | grep "'^ii  "[@1]":"[darch]" '"
+        | wc -l || true]] then
+    {
         apt-package-list += [@1];
-}
-
-function apt-get-library =
-{
-    function apt-get-package lib[@1]-dev;
+    }
 }
 
 /*
@@ -41,28 +36,30 @@ function apt-get-library =
  */
 if [find_command apt-get] then
 {
-    function apt-get-command autoconf;
-    function apt-get-command automake;
-    function apt-get-command bison;
-    function apt-get-command doxygen;
-    function apt-get-command gawk;
-    function apt-get-command groff;
-    function apt-get-command libtool;
-    function apt-get-command lintian;
-    function apt-get-command lsof;
-    function apt-get-command tar;
-    function apt-get-command tardy;
-    function apt-get-library cap;
+    function apt-get-package autoconf;
+    function apt-get-package automake;
+    function apt-get-package bison;
     function apt-get-package build-essential;
+    function apt-get-package cdbs; /* licensecheck2dep5 */
     function apt-get-package coreutils; /* ptx, md5sum */
     function apt-get-package debhelper;
+    function apt-get-package devscripts; /* debuild, licensecheck, etc */
     function apt-get-package devscripts; /* debuild cmd */
+    function apt-get-package doxygen;
     function apt-get-package dpkg-dev; /* dpkg-buildpackage cmd */
     function apt-get-package exuberant-ctags; /* ctags cmd */
+    function apt-get-package gawk;
     function apt-get-package gettext; /* xgettext cmd */
     function apt-get-package ghostscript; /* ps2pdf */
+    function apt-get-package groff;
+    function apt-get-package libcap-dev;
+    function apt-get-package libtool;
+    function apt-get-package lintian;
     function apt-get-package linux-libc-dev;
+    function apt-get-package lsof;
     function apt-get-package psutils; /* psselect */
+    function apt-get-package tar;
+    function apt-get-package tardy;
     function apt-get-package wdg-html-validator; /* validate cmd */
 
     if [count [apt-package-list]] then

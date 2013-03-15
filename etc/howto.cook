@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -66,9 +66,9 @@ quiet = [not [verbose]];
 function quiet_print =
 {
    if [quiet] then
-        function print [@1] [target];
+        function print /*[@1]*/ [target];
     else if [in [count [younger]] 0] then
-        function print Building [target] because it doesn\'t exist yet;
+        function print Building [target] because it "doesn't" exist yet;
     else if [in [count [younger]] 0 1 2 3] then
         function print Building [target] because of [younger];
     else
@@ -275,17 +275,29 @@ lib%/lib%.la lib%/.libs/lib%.a lib%/.libs/lib%.so:
 
 programs =
     [stringset /* remove duplicates */
-        [patsubst %/main.c % [filter %/main.c [source_files]]]
+        [patsubst %0%/main.c %0% [filter %0%/main.c [source_files]]]
     ];
+
+function prog-var-from-prog-path =
+{
+    local prog = [@1];
+    local prog_var =;
+    if [in [substr 1 5 [prog] ] "test/"] then
+        prog_var = [subst "/" "_" [prog]];
+    else
+        prog_var = [subst "/" "-" [prog]];
+    return [prog_var];
+}
 
 loop prog = [programs]
 {
-    bin/[prog]_obj =
+    prog_var = [prog-var-from-prog-path [prog]];
+    bin/[prog_var]_obj =
         [patsubst %0%.c      %0%.o [filter [prog]/%0%.c [source_files]]]
         [patsubst %0%.y %0%.yacc.o [filter [prog]/%0%.y [source_files]]]
-        [patsubst %0%.l %0%.lex.o  [filter [prog]/%0%.l [source_files]]]
+        [patsubst %0%.l  %0%.lex.o [filter [prog]/%0%.l [source_files]]]
         ;
-    bin/[prog]_libs = libexplain/libexplain.la;
+    bin/[prog_var]_libs = libexplain/libexplain.la;
 }
 
 /*
@@ -332,8 +344,14 @@ bin/% bin/.libs/%: [[target]_obj] [defined-or-null [target]_libs]
  * The "all" targets are each of the commands.
  */
 
-all = [addprefix "bin/" [programs]];
+all = ;
 all: [all];
+
+loop prog = [programs]
+{
+    prog_var = [prog-var-from-prog-path [prog]];
+    all += bin/[prog_var];
+}
 
 integration-build-targets = web-site/[project_minus].ae;
 integration-build-targets: [integration-build-targets];

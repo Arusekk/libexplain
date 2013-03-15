@@ -32,6 +32,7 @@ project_specific =
             "fsf-address "
             "gpl-version=3 "
             "line-length "
+            "man-pages "
             "merge-fhist "
             "merge-rcs "
             "no-tabs "

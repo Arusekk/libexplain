@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -157,8 +157,9 @@ etc/%.man.d: etc/%.man
 cascade etc/reference.man = etc/ref-parts.so;
 
 etc/ref-parts.so: [match_mask man/man%1/%2.%1 [source_files]]
-    etc/ref-ptx.sh
+    etc/ref-ptx.sh etc/version.so(exists)
 {
+    function quiet_print Generate;
     sh -f [resolve etc/ref-ptx.sh]
         [match_mask man/man%1/%2.%1 [source_files]]
     > [target];
@@ -168,6 +169,7 @@ etc/ref-parts.so: [match_mask man/man%1/%2.%1 [source_files]]
 #if [count [match_mask etc/new.%.so [source_files]]]
 etc/new.so: : etc/new.sh [match_mask etc/new.%.so [source_files]]
 {
+    function quiet_print Generate;
     sh [resolve etc/new.sh] -r [match_mask etc/new.%.so [need]] > [target];
 }
 #include-cooked-nowarn etc/new.so.d
