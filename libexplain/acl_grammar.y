@@ -34,6 +34,9 @@
 #define YYERROR_VERBOSE 1
 #define YYDEBUG 0
 
+/* is this forward enough? */
+static int yyparse(void);
+
 %}
 
 %token COLON
