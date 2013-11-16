@@ -67,7 +67,7 @@ main(int argc, char **argv)
         cmd_line_usage();
 
     case 2:
-        usage = explain_string_to_pointer(argv[optind + 1]);
+        usage = explain_parse_pointer_or_die(argv[optind + 1]);
         /* Fall through... */
 
     case 1:

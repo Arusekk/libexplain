@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2011 Peter Miller
+# Copyright (C) 2011, 2013 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -21,14 +21,24 @@
 TEST_SUBJECT="getpgid ESRCH"
 . test_prelude
 
-cat > test.ok << 'fubar'
+fmt > test.ok << 'fubar'
 getpgid(pid = 666) failed, No such process (ESRCH) because the pid process
 does not exist
 fubar
 test $? -eq 0 || no_result
 
-explain -eESRCH getpgid 666 > test.out
+# watch out for the case where process 666 exists.
+explain -eESRCH getpgid 666 > test.out.4
 test $? -eq 0 || fail
+
+fmt -w 800 test.out.4 > test.out.3
+test $? -eq 0 || no_result
+
+sed 's|666 "[^)]*")|666)|' test.out.3 > test.out.2
+test $? -eq 0 || no_result
+
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
 
 diff test.ok test.out
 test $? -eq 0 || fail
@@ -40,4 +50,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

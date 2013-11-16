@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011 Peter Miller
+ * Copyright (C) 2009-2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -245,3 +245,34 @@ explain_buffer_enosys_pathname(explain_string_buffer_t *sb,
     else
         explain_buffer_enosys_generic(sb, caption, syscall_name);
 }
+
+
+void
+explain_buffer_enosys_acl(explain_string_buffer_t *sb, const char *caption,
+    const char *syscall_name)
+{
+    explain_string_buffer_printf
+    (
+        sb,
+        i18n
+        (
+            /*
+             * xgettext:  This error message is issued to explain an ENOSYS
+             * or EOPNOTSUPP or ENOTSUP error, when returned by one of the
+             * ACL functions.
+             *
+             * %1$s => the name of the offending system call argument
+             * %2$s => the name of the offending system call
+             */
+            "the %s argument is not associated with an object to which the "
+            "%s system call can be applied, or the file system on which the "
+            "file is located may not support ACLs, or ACLs are disabled, or "
+            "this host system does not support ACLs"
+        ),
+        caption,
+        syscall_name
+    );
+}
+
+
+/* vim: set ts=8 sw=4 et : */

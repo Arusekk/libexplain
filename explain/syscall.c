@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
+#include <libexplain/ac/sys/acl.h>
 
 #include <libexplain/sizeof.h>
 #include <libexplain/fstrcmp.h>
@@ -29,6 +30,12 @@
 #include <explain/syscall/accept4.h>
 #include <explain/syscall/access.h>
 #include <explain/syscall/acct.h>
+#include <explain/syscall/acl_from_text.h>
+#include <explain/syscall/acl_get_fd.h>
+#include <explain/syscall/acl_get_file.h>
+#include <explain/syscall/acl_set_fd.h>
+#include <explain/syscall/acl_set_file.h>
+#include <explain/syscall/acl_to_text.h>
 #include <explain/syscall/adjtime.h>
 #include <explain/syscall/adjtimex.h>
 #include <explain/syscall/bind.h>
@@ -44,6 +51,7 @@
 #include <explain/syscall/dirfd.h>
 #include <explain/syscall/dup.h>
 #include <explain/syscall/dup2.h>
+#include <explain/syscall/endgrent.h>
 #include <explain/syscall/eventfd.h>
 #include <explain/syscall/execlp.h>
 #include <explain/syscall/execv.h>
@@ -52,6 +60,7 @@
 #include <explain/syscall/fchdir.h>
 #include <explain/syscall/fchmod.h>
 #include <explain/syscall/fchown.h>
+#include <explain/syscall/fchownat.h>
 #include <explain/syscall/fclose.h>
 #include <explain/syscall/fcntl.h>
 #include <explain/syscall/fdopen.h>
@@ -73,26 +82,35 @@
 #include <explain/syscall/fread.h>
 #include <explain/syscall/freopen.h>
 #include <explain/syscall/fseek.h>
+#include <explain/syscall/fseeko.h>
 #include <explain/syscall/fsetpos.h>
 #include <explain/syscall/fstat.h>
+#include <explain/syscall/fstatat.h>
 #include <explain/syscall/fstatfs.h>
 #include <explain/syscall/fstatvfs.h>
 #include <explain/syscall/fsync.h>
 #include <explain/syscall/ftell.h>
+#include <explain/syscall/ftello.h>
 #include <explain/syscall/ftime.h>
 #include <explain/syscall/ftruncate.h>
+#include <explain/syscall/futimens.h>
 #include <explain/syscall/futimes.h>
+#include <explain/syscall/futimens.h>
 #include <explain/syscall/fwrite.h>
 #include <explain/syscall/getc.h>
 #include <explain/syscall/getchar.h>
 #include <explain/syscall/getcwd.h>
 #include <explain/syscall/getdomainname.h>
+#include <explain/syscall/getgrent.h>
 #include <explain/syscall/getgroups.h>
+#include <explain/syscall/getgrouplist.h>
 #include <explain/syscall/gethostbyname.h>
+#include <explain/syscall/gethostid.h>
 #include <explain/syscall/gethostname.h>
 #include <explain/syscall/getpeername.h>
 #include <explain/syscall/getpgid.h>
 #include <explain/syscall/getpgrp.h>
+#include <explain/syscall/getpriority.h>
 #include <explain/syscall/getresgid.h>
 #include <explain/syscall/getresuid.h>
 #include <explain/syscall/getrlimit.h>
@@ -102,6 +120,9 @@
 #include <explain/syscall/gettimeofday.h>
 #include <explain/syscall/getw.h>
 #include <explain/syscall/ioctl.h>
+#include <explain/syscall/iconv.h>
+#include <explain/syscall/iconv_close.h>
+#include <explain/syscall/iconv_open.h>
 #include <explain/syscall/kill.h>
 #include <explain/syscall/lchmod.h>
 #include <explain/syscall/lchown.h>
@@ -119,11 +140,13 @@
 #include <explain/syscall/mmap.h>
 #include <explain/syscall/munmap.h>
 #include <explain/syscall/nice.h>
+#include <explain/syscall/openat.h>
 #include <explain/syscall/opendir.h>
 #include <explain/syscall/open.h>
 #include <explain/syscall/pathconf.h>
 #include <explain/syscall/pclose.h>
 #include <explain/syscall/pipe.h>
+#include <explain/syscall/pipe2.h>
 #include <explain/syscall/poll.h>
 #include <explain/syscall/popen.h>
 #include <explain/syscall/pread.h>
@@ -150,12 +173,14 @@
 #include <explain/syscall/setdomainname.h>
 #include <explain/syscall/setenv.h>
 #include <explain/syscall/setgid.h>
+#include <explain/syscall/setgrent.h>
 #include <explain/syscall/setgroups.h>
 #include <explain/syscall/sethostname.h>
 #include <explain/syscall/setlinebuf.h>
 #include <explain/syscall/setpgid.h>
 #include <explain/syscall/setpgrp.h>
 #include <explain/syscall/setregid.h>
+#include <explain/syscall/setpriority.h>
 #include <explain/syscall/setreuid.h>
 #include <explain/syscall/setresgid.h>
 #include <explain/syscall/setresuid.h>
@@ -173,6 +198,7 @@
 #include <explain/syscall/statfs.h>
 #include <explain/syscall/statvfs.h>
 #include <explain/syscall/stime.h>
+#include <explain/syscall/strcoll.h>
 #include <explain/syscall/strdup.h>
 #include <explain/syscall/strerror.h>
 #include <explain/syscall/strndup.h>
@@ -232,6 +258,12 @@ static const table_t table[] =
     { "acct", explain_syscall_acct },
     { "adjtime", explain_syscall_adjtime },
     { "adjtimex", explain_syscall_adjtimex },
+    { "acl_from_text", explain_syscall_acl_from_text },
+    { "acl_get_fd", explain_syscall_acl_get_fd },
+    { "acl_get_file", explain_syscall_acl_get_file },
+    { "acl_set_fd", explain_syscall_acl_set_fd },
+    { "acl_set_file", explain_syscall_acl_set_file },
+    { "acl_to_text", explain_syscall_acl_to_text },
     /* FIXME: add support for afs_syscall */
     /* FIXME: add support for alloc_hugepages */
     /* ----------  B  ------------------------------------------------------- */
@@ -268,6 +300,7 @@ static const table_t table[] =
     /* FIXME: add support for epoll_ctl */
     /* FIXME: add support for epoll_pwait */
     /* FIXME: add support for epoll_wait */
+    { "endgrent", explain_syscall_endgrent },
     { "eventfd", explain_syscall_eventfd },
     /* FIXME: add support for execl */
     /* FIXME: add support for execle */
@@ -282,10 +315,12 @@ static const table_t table[] =
     { "fchdir", explain_syscall_fchdir },
     { "fchmod", explain_syscall_fchmod },
     { "fchown", explain_syscall_fchown },
+    { "fchownat", explain_syscall_fchownat },
     { "fclose", explain_syscall_fclose },
     { "fcntl", explain_syscall_fcntl },
     /* FIXME: add support for fdatasync */
     { "fdopen", explain_syscall_fdopen },
+    { "openat", explain_syscall_openat },
     { "fdopendir", explain_syscall_fdopendir },
     { "feof", explain_syscall_feof },
     { "ferror", explain_syscall_ferror },
@@ -309,16 +344,20 @@ static const table_t table[] =
     /* FIXME: add support for fremovexattr */
     /* FIXME: add support for fscanf */
     { "fseek", explain_syscall_fseek },
+    { "fseeko", explain_syscall_fseeko },
     { "fsetpos", explain_syscall_fsetpos },
     /* FIXME: add support for fsetxattr */
     { "fstat", explain_syscall_fstat },
+    { "fstatat", explain_syscall_fstatat },
     { "fstatfs", explain_syscall_fstatfs },
     { "fstatvfs", explain_syscall_fstatvfs },
     { "fsync", explain_syscall_fsync },
     { "ftell", explain_syscall_ftell },
+    { "ftello", explain_syscall_ftello },
     { "ftime", explain_syscall_ftime },
     { "ftruncate", explain_syscall_ftruncate },
     /* FIXME: add support for futex */
+    { "futimens", explain_syscall_futimens },
     { "futimes", explain_syscall_futimes },
     { "fwrite", explain_syscall_fwrite },
     /* ----------  G  ------------------------------------------------------- */
@@ -328,8 +367,11 @@ static const table_t table[] =
     { "getcwd", explain_syscall_getcwd },
     /* FIXME: add support for getdents */
     { "getdomainname", explain_syscall_getdomainname },
+    { "getgrent", explain_syscall_getgrent },
+    { "getgrouplist", explain_syscall_getgrouplist },
     { "getgroups", explain_syscall_getgroups },
     { "gethostbyname", explain_syscall_gethostbyname },
+    { "gethostid", explain_syscall_gethostid },
     { "gethostname", explain_syscall_gethostname },
     /* FIXME: add support for getitimer */
     /* FIXME: add support for get_kernel_syms */
@@ -339,7 +381,7 @@ static const table_t table[] =
     { "getpgid", explain_syscall_getpgid },
     { "getpgrp", explain_syscall_getpgrp },
     /* FIXME: add support for getpmsg */
-    /* FIXME: add support for getpriority */
+    { "getpriority", explain_syscall_getpriority },
     { "getresgid", explain_syscall_getresgid },
     { "getresuid", explain_syscall_getresuid },
     { "getrlimit", explain_syscall_getrlimit },
@@ -357,6 +399,9 @@ static const table_t table[] =
     /* FIXME: add support for gtty */
     /* ----------  H  ------------------------------------------------------- */
     /* ----------  I  ------------------------------------------------------- */
+    { "iconv", explain_syscall_iconv },
+    { "iconv_close", explain_syscall_iconv_close },
+    { "iconv_open", explain_syscall_iconv_open },
     /* FIXME: add support for idle */
     /* FIXME: add support for init_module */
     /* FIXME: add support for inotify_add_watch */
@@ -447,6 +492,7 @@ static const table_t table[] =
     /* FIXME: add support for personality */
     /* FIXME: add support for phys */
     { "pipe", explain_syscall_pipe },
+    { "pipe2", explain_syscall_pipe2 },
     /* FIXME: add support for pivot_root */
     { "poll", explain_syscall_poll },
     { "popen", explain_syscall_popen },
@@ -525,6 +571,7 @@ static const table_t table[] =
     /* FIXME: add support for setfsgid */
     /* FIXME: add support for setfsuid */
     { "setgid", explain_syscall_setgid },
+    { "setgrent", explain_syscall_setgrent },
     { "setgroups", explain_syscall_setgroups },
     { "sethostname", explain_syscall_sethostname },
     /* FIXME: add support for setitimer */
@@ -532,7 +579,7 @@ static const table_t table[] =
     /* FIXME: add support for set_mempolicy */
     { "setpgid", explain_syscall_setpgid },
     { "setpgrp", explain_syscall_setpgrp },
-    /* FIXME: add support for setpriority */
+    { "setpriority", explain_syscall_setpriority },
     { "setregid", explain_syscall_setregid },
     { "setresgid", explain_syscall_setresgid },
     { "setresuid", explain_syscall_setresuid },
@@ -576,6 +623,7 @@ static const table_t table[] =
     { "statfs", explain_syscall_statfs },
     { "statvfs", explain_syscall_statvfs },
     { "stime", explain_syscall_stime },
+    { "strcoll", explain_syscall_strcoll },
     { "strdup", explain_syscall_strdup },
     { "strerror", explain_syscall_strerror },
     { "strndup", explain_syscall_strndup },
@@ -690,7 +738,7 @@ find_function(const char *name)
         fprintf
         (
             stderr,
-            "function \"%s\" unknown, did you mean the \"%s\" funtion?\n",
+            "function \"%s\" unknown, did you mean the \"%s\" function?\n",
             name,
             best_tp->name
         );

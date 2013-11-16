@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,11 +21,14 @@
 
 
 ptrdiff_t
-explain_string_to_ptrdiff_t(const char *text)
+explain_parse_ptrdiff_t_or_die(const char *text)
 {
 #if SIZEOF_PTRDIFF_T > SIZEOF_LONG
-    return explain_string_to_longlong(text);
+    return explain_parse_longlong_or_die(text);
 #else
-    return explain_string_to_long(text);
+    return explain_parse_long_or_die(text);
 #endif
 }
+
+
+/* vim: set ts=8 sw=4 et : */

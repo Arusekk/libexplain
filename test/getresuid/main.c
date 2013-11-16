@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,9 +58,9 @@ main(int argc, char **argv)
     }
     if (optind + 3 != argc)
         usage();
-    ruid = explain_string_to_pointer(argv[optind]);
-    euid = explain_string_to_pointer(argv[optind + 1]);
-    suid = explain_string_to_pointer(argv[optind + 2]);
+    ruid = explain_parse_pointer_or_die(argv[optind]);
+    euid = explain_parse_pointer_or_die(argv[optind + 1]);
+    suid = explain_parse_pointer_or_die(argv[optind + 2]);
 
     explain_getresuid_or_die(ruid, euid, suid);
     return EXIT_SUCCESS;

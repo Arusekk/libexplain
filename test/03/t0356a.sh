@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009, 2010, 2013 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="pipe EFAULT"
 . test_prelude
 
 cat > test.ok << 'fubar'
-pipe(pipefds = 0x09876543) failed, Bad address (EFAULT) because pipefds
+pipe(fildes = 0x09876543) failed, Bad address (EFAULT) because fildes
 refers to memory that is outside the process's accessible address space;
 this is more likely to be a software error (a bug) than it is to be a user
 error
@@ -42,4 +42,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

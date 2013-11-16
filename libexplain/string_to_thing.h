@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2012 Peter Miller
+ * Copyright (C) 2009, 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 
 #include <libexplain/ac/stddef.h>
 #include <libexplain/ac/sys/socket.h>
+#include <libexplain/ac/stdio.h>
 #include <libexplain/ac/unistd.h>
 
 /**
@@ -34,10 +35,10 @@
   *    On success, a size_t value.  On error, prints an error message
   *    and does not return.
   */
-size_t explain_string_to_size_t(const char *text);
+size_t explain_parse_size_t_or_die(const char *text);
 
 /**
-  * The explain_string_to_thing function may be used to convert text to
+  * The explain_parse_ssize_t_or_die function may be used to convert text to
   * a ssize_t value.
   *
   * @param text
@@ -46,7 +47,7 @@ size_t explain_string_to_size_t(const char *text);
   *    On success, a ssize_t value.  On error, prints an error message
   *    and does not return.
   */
-ssize_t explain_string_to_ssize_t(const char *text);
+ssize_t explain_parse_ssize_t_or_die(const char *text);
 
 /**
   * The explain_string_to_thing function may be used to convert text to
@@ -58,7 +59,7 @@ ssize_t explain_string_to_ssize_t(const char *text);
   *    On success, a ptrdiff_t value.  On error, prints an error message
   *    and does not return.
   */
-ptrdiff_t explain_string_to_ptrdiff_t(const char *text);
+ptrdiff_t explain_parse_ptrdiff_t_or_die(const char *text);
 
 /**
   * The explain_string_to_thing function may be used to convert text to
@@ -70,7 +71,7 @@ ptrdiff_t explain_string_to_ptrdiff_t(const char *text);
   *    On success, a off_t value.  On error, prints an error message
   *    and does not return.
   */
-off_t explain_string_to_off_t(const char *text);
+off_t explain_parse_off_t_or_die(const char *text);
 
 /**
   * The explain_string_to_thing function may be used to convert text to
@@ -82,10 +83,10 @@ off_t explain_string_to_off_t(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-void *explain_string_to_pointer(const char *text);
+void *explain_parse_pointer_or_die(const char *text);
 
 /**
-  * The explain_string_to_long function may be used to convert text to
+  * The explain_parse_long_or_die function may be used to convert text to
   * a long value.
   *
   * @param text
@@ -94,7 +95,7 @@ void *explain_string_to_pointer(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-long explain_string_to_long(const char *text);
+long explain_parse_long_or_die(const char *text);
 
 /**
   * The explain_string_to_ulong function may be used to convert text to
@@ -106,7 +107,7 @@ long explain_string_to_long(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-unsigned long explain_string_to_ulong(const char *text);
+unsigned long explain_parse_ulong_or_die(const char *text);
 
 /**
   * The explain_string_to_longlong function may be used to convert text
@@ -118,7 +119,7 @@ unsigned long explain_string_to_ulong(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-long long explain_string_to_longlong(const char *text);
+long long explain_parse_longlong_or_die(const char *text);
 
 /**
   * The explain_string_to_ulonglong function may be used to convert text
@@ -130,7 +131,7 @@ long long explain_string_to_longlong(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-unsigned long long explain_string_to_ulonglong(const char *text);
+unsigned long long explain_parse_ulonglong_or_die(const char *text);
 
 /**
   * The explain_string_to_socklen_t function may be used to convert text
@@ -142,10 +143,10 @@ unsigned long long explain_string_to_ulonglong(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-socklen_t explain_string_to_socklen_t(const char *text);
+socklen_t explain_parse_socklen_t_or_die(const char *text);
 
 /**
-  * The explain_string_to_int function may be used to convert text
+  * The explain_parse_int_or_die function may be used to convert text
   * to a int value.
   *
   * @param text
@@ -154,7 +155,7 @@ socklen_t explain_string_to_socklen_t(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-int explain_string_to_int(const char *text);
+int explain_parse_int_or_die(const char *text);
 
 /**
   * The explain_string_to_uint function may be used to convert text to
@@ -166,7 +167,7 @@ int explain_string_to_int(const char *text);
   *    On success, a pointer value.  On error, prints an error message
   *    and does not return.
   */
-unsigned explain_string_to_uint(const char *text);
+unsigned explain_parse_uint_or_die(const char *text);
 
 /**
   * The explain_string_to_double function may be used to convert text to
@@ -178,7 +179,7 @@ unsigned explain_string_to_uint(const char *text);
   *    On success, a floating-point value.  On error, prints an error
   *    message and does not return.
   */
-double explain_string_to_double(const char *text);
+double explain_parse_double_or_die(const char *text);
 
 /**
   * The explain_string_to_float function may be used to convert text to
@@ -190,7 +191,7 @@ double explain_string_to_double(const char *text);
   *    On success, a floating-point value.  On error, prints an error
   *    message and does not return.
   */
-float explain_string_to_float(const char *text);
+float explain_parse_float_or_die(const char *text);
 
 /**
   * The explain_string_to_long_double function may be used to convert
@@ -202,15 +203,15 @@ float explain_string_to_float(const char *text);
   *    On success, a floating-point value.  On error, prints an error
   *    message and does not return.
   */
-long double explain_string_to_long_double(const char *text);
+long double explain_parse_long_double_or_die(const char *text);
 
 struct timeval; /* forward */
 
-void explain_string_to_timeval(const char *text, struct timeval *result);
+void explain_parse_timeval_or_die(const char *text, struct timeval *result);
 
 /**
-  * The explain_string_to_uid_t function may be used to convert text to
-  * a user ID.
+  * The explain_parse_uid_t_or_die function may be used to convert text
+  * to a user ID.
   *
   * @param text
   *    The text to be converted.
@@ -218,11 +219,11 @@ void explain_string_to_timeval(const char *text, struct timeval *result);
   *    On success, a uid.  On error, prints an error message and does
   *    not return.
   */
-int explain_string_to_uid_t(const char *text);
+uid_t explain_parse_uid_t_or_die(const char *text);
 
-/**
-  * The explain_string_to_gid_t function may be used to convert text to
-  * a group ID.
+/*
+  * The explain_parse_gid_t_or_die function may be used to convert text
+  * to a group ID.
   *
   * @param text
   *    The text to be converted.
@@ -230,7 +231,13 @@ int explain_string_to_uid_t(const char *text);
   *    On success, a gid.  On error, prints an error message and does
   *    not return.
   */
-int explain_string_to_gid_t(const char *text);
+gid_t explain_parse_gid_t_or_die(const char *text);
+
+int explain_parse_fildes_or_die(const char * text);
+
+int explain_parse_bool_or_die(const char * text);
+
+FILE *explain_parse_stream_or_die(const char *text, const char *mode);
 
 #endif /* LIBEXPLAIN_STRING_TO_THING_H */
 /* vim: set ts=8 sw=4 et : */

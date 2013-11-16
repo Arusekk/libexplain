@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010-2012 Peter Miller
+ * Copyright (C) 2010-2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,11 +26,20 @@
 
 #ifndef HAVE_STRNDUP
 
+static size_t
+strnlen(const char *s, size_t n)
+{
+    end = memchr(s, '\0', n);
+    return (end ? n : end - s);
+}
+
+
 static char *
 strndup(const char *text, size_t text_size)
 {
     char            *result;
 
+    text_size = strnlen(text, tst_size);
     result = malloc(text_size + 1);
     if (result)
     {

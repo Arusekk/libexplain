@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -91,13 +91,13 @@ explain_syscall_ptrace(int errnum, int argc, char **argv)
             break;
 
         default:
-            data = explain_string_to_pointer(argv[3]);
+            data = explain_parse_pointer_or_die(argv[3]);
             break;
         }
         /* Fall through... */
 
     case 3:
-        addr = explain_string_to_pointer(argv[2]);
+        addr = explain_parse_pointer_or_die(argv[2]);
         /* Fall through... */
 
     case 2:
@@ -119,4 +119,4 @@ explain_syscall_ptrace(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

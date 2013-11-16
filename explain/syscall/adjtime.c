@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,11 +37,11 @@ explain_syscall_adjtime(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 2:
-        old_delta_p = explain_string_to_pointer(argv[1]);
+        old_delta_p = explain_parse_pointer_or_die(argv[1]);
         /* fall through */
 
     case 1:
-        explain_string_to_timeval(argv[0], &delta);
+        explain_parse_timeval_or_die(argv[0], &delta);
         break;
 
     default:
@@ -54,4 +54,4 @@ explain_syscall_adjtime(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

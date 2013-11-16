@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -25,7 +25,7 @@ struct enotconn; /* forward */
 
 /**
   * The explain_buffer_enotconn function may be used to
-  * explain an ENOTCONN error reported by socket funtions.
+  * explain an ENOTCONN error reported by socket functions.
   *
   * @param sb
   *     The string buffer to print into.
@@ -36,3 +36,4 @@ void explain_buffer_enotconn(explain_string_buffer_t *sb,
     const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOTCONN_H */
+/* vim: set ts=8 sw=4 et : */

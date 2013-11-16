@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -41,12 +41,12 @@
 #include <libexplain/buffer/mount_point.h>
 #include <libexplain/buffer/must_be_multiple_of_page_size.h>
 #include <libexplain/buffer/off_t.h>
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/size_t.h>
 #include <libexplain/buffer/wrong_file_type.h>
 #include <libexplain/explanation.h>
 #include <libexplain/getpagesize.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/parse_bits.h>
 
 
@@ -412,4 +412,4 @@ explain_buffer_errno_mmap(explain_string_buffer_t *sb, int errnum, void *data,
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

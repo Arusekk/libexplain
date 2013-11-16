@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,12 +40,12 @@ explain_syscall_calloc(int errnum, int argc, char **argv)
 
     case 1:
         nmemb = 1;
-        size = explain_string_to_size_t(argv[0]);
+        size = explain_parse_size_t_or_die(argv[0]);
         break;
 
     case 2:
-        nmemb = explain_string_to_size_t(argv[0]);
-        size = explain_string_to_size_t(argv[1]);
+        nmemb = explain_parse_size_t_or_die(argv[0]);
+        size = explain_parse_size_t_or_die(argv[1]);
         break;
     }
 
@@ -53,4 +53,4 @@ explain_syscall_calloc(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

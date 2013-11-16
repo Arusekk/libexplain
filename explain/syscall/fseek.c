@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -48,11 +48,11 @@ explain_syscall_fseek(int errnum, int argc, char **argv)
         /* fall through... */
 
     case 2:
-        offset = explain_string_to_long(argv[1]);
+        offset = explain_parse_long_or_die(argv[1]);
         /* fall through... */
 
     case 1:
-        fp = explain_string_to_pointer(argv[0]);
+        fp = explain_parse_stream_or_die(argv[0], "r");
         break;
     }
 
@@ -61,4 +61,4 @@ explain_syscall_fseek(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

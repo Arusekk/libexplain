@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2012 Peter Miller
+ * Copyright (C) 2008, 2009, 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,7 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/path_resolution.h>
 #include <libexplain/buffer/permission_mode.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/capability.h>
 #include <libexplain/explanation.h>
@@ -43,11 +44,9 @@ static void
 explain_buffer_errno_chmod_system_call(explain_string_buffer_t *sb,
     int errnum, const char *pathname, int mode)
 {
+    (void)errnum;
     explain_string_buffer_puts(sb, "chmod(pathname = ");
-    if (errnum == EFAULT)
-        explain_buffer_pointer(sb, pathname);
-    else
-        explain_string_buffer_puts_quoted(sb, pathname);
+    explain_buffer_pathname(sb, pathname);
     explain_string_buffer_puts(sb, ", mode = ");
     explain_buffer_permission_mode(sb, mode);
     explain_string_buffer_putc(sb, ')');

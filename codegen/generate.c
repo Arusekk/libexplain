@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -659,7 +659,7 @@ libexplain_fubar_h_code_begin(FILE *fp, elastic_buffer_t *sb)
         node_print_sb(call_args, sb, node_print_style_normal);
         elastic_buffer_puts(sb, ") < 0");
         if (reset_errno)
-            elastic_buffer_puts(sb, " && errno != 0");
+            elastic_buffer_puts(sb, " || errno != 0");
         elastic_buffer_putc(sb, ')');
     }
     else
@@ -679,7 +679,7 @@ libexplain_fubar_h_code_begin(FILE *fp, elastic_buffer_t *sb)
         else
             elastic_buffer_puts(sb, "result < 0");
         if (reset_errno)
-            elastic_buffer_puts(sb, " && errno != 0");
+            elastic_buffer_puts(sb, " || errno != 0");
         elastic_buffer_putc(sb, ')');
     }
     wrapper_hang(fp, "  * ", elastic_buffer_get(sb));
@@ -871,7 +871,7 @@ libexplain_fubar_h(node_t *declaration)
         node_print_sb(call_args, &sb, node_print_style_normal);
         elastic_buffer_puts(&sb, ") < 0");
         if (reset_errno)
-            elastic_buffer_puts(&sb, " && errno != 0");
+            elastic_buffer_puts(&sb, " || errno != 0");
         elastic_buffer_putc(&sb, ')');
     }
     else
@@ -890,7 +890,7 @@ libexplain_fubar_h(node_t *declaration)
         else
             elastic_buffer_puts(&sb, "if (result < 0");
         if (reset_errno)
-            elastic_buffer_puts(&sb, " && errno != 0");
+            elastic_buffer_puts(&sb, " || errno != 0");
         elastic_buffer_putc(&sb, ')');
     }
     wrapper_hang(fp, "  * ", elastic_buffer_get(&sb));
@@ -938,13 +938,13 @@ libexplain_fubar_h(node_t *declaration)
     libexplain_fubar_h_code_begin(fp, &sb);
     fprintf(fp, "  * {\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "fprintf(stderr, \"%s\\n\", explain_");
+    elastic_buffer_puts(&sb,
+        "explain_output_error_and_die(\"%s\\n\", explain_");
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_putc(&sb, '(');
     node_print_sb(call_args, &sb, node_print_style_normal);
     elastic_buffer_puts(&sb, "));");
     wrapper_hang(fp, "  *     ", elastic_buffer_get(&sb));
-    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
@@ -991,13 +991,16 @@ libexplain_fubar_h(node_t *declaration)
     fprintf(fp, "  * {\n");
     fprintf(fp, "  *     int err = errno;\n");
     elastic_buffer_rewind(&sb);
-    elastic_buffer_puts(&sb, "fprintf(stderr, \"%s\\n\", explain_errno_");
+    elastic_buffer_puts
+    (
+        &sb,
+        "explain_output_error_and_die(\"%s\", explain_errno_"
+    );
     elastic_buffer_puts(&sb, function_name);
     elastic_buffer_puts(&sb, "(err, ");
     node_print_sb(call_args, &sb, node_print_style_normal);
     elastic_buffer_puts(&sb, "));");
     wrapper_hang(fp, "  *     ", elastic_buffer_get(&sb));
-    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
@@ -1050,8 +1053,7 @@ libexplain_fubar_h(node_t *declaration)
     node_print_sb(call_args, &sb, node_print_style_normal);
     elastic_buffer_puts(&sb, ");");
     wrapper_hang(fp, "  *     ", elastic_buffer_get(&sb));
-    fprintf(fp, "  *     fprintf(stderr, \"%%s\\n\", message);\n");
-    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
+    fprintf(fp, "  *     explain_output_error_and_die(\"%%s\", message);");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
@@ -1104,8 +1106,7 @@ libexplain_fubar_h(node_t *declaration)
     node_print_sb(call_args, &sb, node_print_style_normal);
     elastic_buffer_puts(&sb, ");");
     wrapper_hang(fp, "  *     ", elastic_buffer_get(&sb));
-    fprintf(fp, "  *     fprintf(stderr, \"%%s\\n\", message);\n");
-    fprintf(fp, "  *     exit(EXIT_FAILURE);\n");
+    fprintf(fp, "  *     explain_output_error_and_die(\"%%s\", message);\n");
     fprintf(fp, "  * }\n");
     fprintf(fp, "  * @endcode\n");
     fprintf(fp, "  * @par\n");
@@ -1152,7 +1153,7 @@ man_man3_explain_fubar_3_code_begin(FILE *fp, elastic_buffer_t *sb)
         node_print_sb(call_args, sb, node_print_style_normal);
         elastic_buffer_puts(sb, ") < 0");
         if (reset_errno)
-            elastic_buffer_puts(sb, " && errno != 0");
+            elastic_buffer_puts(sb, " || errno != 0");
         elastic_buffer_putc(sb, ')');
     }
     else
@@ -1173,7 +1174,7 @@ man_man3_explain_fubar_3_code_begin(FILE *fp, elastic_buffer_t *sb)
         else
             elastic_buffer_puts(sb, "result < 0");
         if (reset_errno)
-            elastic_buffer_puts(sb, " && errno != 0");
+            elastic_buffer_puts(sb, " || errno != 0");
         elastic_buffer_putc(sb, ')');
     }
     wrapper(fp, "", elastic_buffer_get(sb));
@@ -1755,7 +1756,7 @@ libexplain_fubar_or_die_c(node_t *declaration)
         if (!ret_ptr)
             elastic_buffer_puts(&sb, " < 0");
         if (reset_errno)
-            elastic_buffer_puts(&sb, " && errno != 0");
+            elastic_buffer_puts(&sb, " || errno != 0");
         elastic_buffer_putc(&sb, ')');
         wrapper_hang(fp, "    ", elastic_buffer_get(&sb));
     }
@@ -1786,7 +1787,7 @@ libexplain_fubar_or_die_c(node_t *declaration)
         else
             fprintf(fp, "result < 0");
         if (reset_errno)
-            elastic_buffer_puts(&sb, " && errno != 0");
+            elastic_buffer_puts(&sb, " || errno != 0");
         fprintf(fp, ")\n");
     }
     fprintf(fp, "    {\n");
@@ -1850,7 +1851,7 @@ libexplain_fubar_or_die_c(node_t *declaration)
     else
         fprintf(fp, "result < 0");
     if (reset_errno)
-        fprintf(fp, " && errno != 0");
+        fprintf(fp, " || errno != 0");
     fprintf(fp, ")\n");
     fprintf(fp, "    {\n");
     if (!reset_errno)
@@ -2218,7 +2219,6 @@ libexplain_buffer_errno_fubar_c(void)
 {
     FILE            *fp;
     size_t          j;
-    const char      *opengroup_url;
     elastic_buffer_t sb;
     char            filename[1000];
     node_t          *error_cases;
@@ -2362,10 +2362,6 @@ libexplain_buffer_errno_fubar_c(void)
     elastic_buffer_putc(&sb, ')');
     wrapper_hang(fp, "", elastic_buffer_get(&sb));
     fprintf(fp, "{\n");
-    fprintf(fp, "    /*\n");
-    opengroup_url = "http://www.opengroup.org/onlinepubs/009695399";
-    fprintf(fp, "     * %s/functions/%s.html\n", opengroup_url, function_name);
-    fprintf(fp, "     */\n");
     fprintf(fp, "    switch (errnum)\n");
     fprintf(fp, "    {\n");
 
@@ -2621,6 +2617,7 @@ explain_syscall_fubar_c(void)
     fprintf(fp, "#include <libexplain/ac/stdlib.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "#include <libexplain/%s.h>\n", function_name);
+    fprintf(fp, "#include <libexplain/output.h>\n");
     fprintf(fp, "#include <libexplain/wrap_and_print.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "#include <explain/syscall/%s.h>\n", function_name);
@@ -2643,13 +2640,12 @@ explain_syscall_fubar_c(void)
     fprintf
     (
         fp,
-        "        fprintf(stderr, \"%s: requires %d argument%s, "
+        "        explain_output_error_and_die(\"%s: requires %d argument%s, "
             "not %%d\\n\", argc);\n",
         function_name,
         (int)((call_args->nchild + 1) / 2),
         (call_args->nchild == 1 ? "" : "s")
     );
-    fprintf(fp, "        exit(EXIT_FAILURE);\n");
     fprintf(fp, "    }\n");
     for (j = 0; j < call_args->nchild; j += 2)
     {

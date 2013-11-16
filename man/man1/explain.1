@@ -40,7 +40,7 @@ explain \- explain system call error messages
 .B \-\-version
 .SH DESCRIPTION
 The \*(n) command is used to decode an error return read from an
-\f[I]strace\fP(1) listing, or silimar.  Because thisd is being
+\f[I]strace\fP(1) listing, or silimar.  Because this is being
 deciphered in a different process than the orginal, the results
 will be less accurate than if the program itself were to use
 \f[I]libexplain\fP(3).
@@ -61,11 +61,32 @@ The \f[I]access\fP(2) system call.
 acct \f[I]pathname\fP
 The \f[I]acct\fP(2) system call.
 .TP 8n
+acl_from_text \f[I]text\fP
+The \f[I]acl_from_text\fP(3) system call.
+.TP 8n
+acl_get_fd \f[I]fildes\fP
+The \f[I]acl_get_fd\fP(3) system call.
+.TP 8n
+acl_get_file \f[I]pathname\fP \f[I]type\fP
+The \f[I]acl_get_file\fP(3) system call.
+.TP 8n
+acl_set_fd \f[I]fildes\fP \f[I]acl\fP
+The \f[I]acl_set_fd\fP(3) system call.
+.TP 8n
+acl_set_file \f[I]pathname\fP \f[I]type\fP \f[I]acl\fP
+The \f[I]acl_set_file\fP(3) system call.
+.TP 8n
+acl_to_text \f[I]acl\fP \f[I]len_p\fP
+The \f[I]acl_to_text\fP(3) system call.
+.TP 8n
 adjtime \f[I]delta\fP \f[I]olddelta\fP
 The \f[I]adjtime\fP(2) system call.
 .TP 8n
 adjtimex \f[I]data\fP
 The \f[I]adjtimex\fP(2) system call.
+.TP 8n
+asprintf
+The \f[I]asprintf\fP(3) system call.
 .\" ----------  B  ---------------------------------------------------------
 .TP 8n
 bind \f[I]fildes\fP \f[I]addr\fP \f[I]sockaddr_size\fP
@@ -110,6 +131,9 @@ dup2 \f[I]oldfd\fP \f[I]newfd\fP
 The \f[I]dup2\fP(2) system call.
 .\" ----------  E  ---------------------------------------------------------
 .TP 8n
+endgrent
+The \f[I]endgrent\fP(3) system call.
+.TP 8n
 eventfd \f[I]initval\fP \f[I]flags\fP
 The \f[I]eventfd\fP(2) system call.
 .TP 8n
@@ -129,8 +153,15 @@ The \f[I]execvp\fP(3) system call.
 fchdir \f[I]pathname\fP
 The \f[I]fchdir\fP(2) system call.
 .TP 8n
+fchmod \f[I]fildes\fP \f[I]mode\fP
+The \f[I]fchmod\fP(2) system call.
+.TP 8n
 fchown \f[I]fildes\fP \f[I]owner\fP \f[I]group\fP
 The \f[I]fchown\fP(2) system call.
+.TP 8n
+fchownat \f[I]dirfd\fP \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP \
+\f[I]flags\fP
+The \f[I]fchownat\fP(2) system call.
 .TP 8n
 fclose \f[I]fp\fP
 The \f[I]fclose\fP(3) system call.
@@ -200,11 +231,17 @@ The \f[I]freopen\fP(3) system call.
 fseek \f[I]fp\fP \f[I]offset\fP \f[I]whence\fP
 The \f[I]fseek\fP(3) system call.
 .TP 8n
+fseeko \f[I]fp\fP \f[I]offset\fP \f[I]whence\fP
+The \f[I]fseeko\fP(3) system call.
+.TP 8n
 fsetpos \f[I]fp\fP \f[I]pos\fP
 The \f[I]fsetpos\fP(3) system call.
 .TP 8n
 fstat \f[I]pathname\fP
 The \f[I]fstat\fP(2) system call.
+.TP 8n
+fstatat \f[I]fildes\fP \f[I]pathname\fP \f[I]data\fP \f[I]flags\fP
+The \f[I]fstatat\fP(2) system call.
 .TP 8n
 fstatfs \f[I]fildes\fP \f[I]data\fP
 The \f[I]fstatfs\fP(2) system call.
@@ -218,11 +255,17 @@ The \f[I]fsync\fP(2) system call.
 ftell \f[I]fp\fP
 The \f[I]ftell\fP(3) system call.
 .TP 8n
+ftello \f[I]fp\fP
+The \f[I]ftello\fP(3) system call.
+.TP 8n
 ftime \f[I]tp\fP
 The \f[I]ftime\fP(3) system call.
 .TP 8n
 ftruncate \f[I]fildes\fP \f[I]length\fP
 The \f[I]ftruncate\fP(2) system call.
+.TP 8n
+futimens \f[I]fildes\fP \f[I]data\fP
+The \f[I]futimens\fP(3) system call.
 .TP 8n
 futimes \f[I]fildes\fP \f[I]tv[0]\fP \f[I]tv[1]\fP
 The \f[I]futimes\fP(3) system call.
@@ -240,11 +283,20 @@ The \f[I]getcwd\fP(2) system call.
 getdomainname \f[I]data\fP \f[I]data_size\fP
 The \f[I]getdomainname\fP(2) system call.
 .TP 8n
+getgrent
+The \f[I]getgrent\fP(3) system call.
+.TP 8n
+getgrouplist \f[I]user\fP \f[I]group\fP \f[I]groups\fP \f[I]ngroups\fP
+The \f[I]getgrouplist\fP(3) system call.
+.TP 8n
 getgroups \f[I]data_size\fP \f[I]data\fP
 The \f[I]getgroups\fP(2) system call.
 .TP 8n
 gethostbyname \f[I]name\fP
 The \f[I]gethostbyname\fP(3) system call.
+.TP 8n
+gethostid
+The \f[I]gethostid\fP(3) system call.
 .TP 8n
 gethostname [ \f[I]data\fP \f[I]data_size\fP ]
 The \f[I]gethostname\fP(2) system call.
@@ -257,6 +309,9 @@ The \f[I]getpgid\fP(2) system call.
 .TP 8n
 getpgrp \f[I]pid\fP
 The \f[I]getpgrp\fP(2) system call.
+.TP 8n
+getpriority \f[I]which\fP \f[I]who\fP
+The \f[I]getpriority\fP(2) system call.
 .TP 8n
 getresgid \f[I]rgid\fP \f[I]egid\fP \f[I]sgid\fP
 The \f[I]getresgid\fP(2) system call.
@@ -284,6 +339,16 @@ getw \f[I]fp\fP
 The \f[I]getw\fP(3) system call.
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
+.TP 8n
+iconv \f[I]cd\fP \f[I]inbuf\fP \f[I]inbytesleft\fP \f[I]outbuf\fP \
+\f[I]outbytesleft\fP
+The \f[I]iconv\fP(3) system call.
+.TP 8n
+iconv_close \f[I]cd\fP
+The \f[I]iconv_close\fP(3) system call.
+.TP 8n
+iconv_open \f[I]tocode\fP \f[I]fromcode\fP
+The \f[I]iconv_open\fP(3) system call.
 .TP 8n
 ioctl \f[I]fildes\fP \f[I]request\fP \f[I]data\fP
 The \f[I]ioctl\fP(2) system call.
@@ -353,6 +418,11 @@ punctuation from the shell.
 The \f[I]flags\fP argument may be numeric or symbolic.
 The \f[I]mode\fP argument may be numeric or symbolic.
 .TP 8n
+openat \f[I]fildes\fP \f[I]pathname\fP \f[I]flags\fP \f[I]mode\fP
+The \f[I]openat\fP(2) system call.
+The \f[I]flags\fP argument may be numeric or symbolic.
+The \f[I]mode\fP argument may be numeric or symbolic.
+.TP 8n
 opendir \f[I]pathname\fP
 The \f[I]opendir\fP(3) system call.
 .\" ----------  P  ---------------------------------------------------------
@@ -365,6 +435,9 @@ The \f[I]pclose\fP(3) system call.
 .TP 8n
 pipe \f[I]pipefd\fP
 The \f[I]pipe\fP(2) system call.
+.TP 8n
+pipe2 \f[I]fildes\fP \f[I]flags\fP
+The \f[I]pipe2\fP(2) system call.
 .TP 8n
 poll \f[I]fds\fP \f[I]nfds\fP \f[I]timeout\fP
 The \f[I]poll\fP(2) system call.
@@ -436,6 +509,9 @@ The \f[I]setenv\fP(3) system call.
 setgid \f[I]gid\fP
 The \f[I]setgid\fP(2) system call.
 .TP 8n
+setgrent
+The \f[I]setgrent\fP(3) system call.
+.TP 8n
 setgroups \f[I]data_size\fP \f[I]data\fP
 The \f[I]setgroups\fP(2) system call.
 .TP 8n
@@ -450,6 +526,9 @@ The \f[I]setpgid\fP(2) system call.
 .TP 8n
 setpgrp \f[I]pid\fP \f[I]pgid\fP
 The \f[I]setpgrp\fP(2) system call.
+.TP 8n
+setpriority \f[I]which\fP \f[I]who\fP \f[I]prio\fP
+The \f[I]setpriority\fP(2) system call.
 .TP 8n
 setregid \f[I]rgid\fP \f[I]egid\fP
 The \f[I]setregid\fP(2) system call.
@@ -505,6 +584,9 @@ The \f[I]statvfs\fP(2) system call.
 .TP 8n
 stime \f[I]t\fP
 The \f[I]stime\fP(2) system call.
+.TP 8n
+strcoll \f[I]s1\fP \f[I]s2\fP
+The \f[I]strcoll\fP(3) system call.
 .TP 8n
 strdup \f[I]data\fP
 The \f[I]strdup\fP(3) system call.
@@ -607,6 +689,9 @@ The \f[I]utimensat\fP(2) system call.
 utimes \f[I]pathname\fP \f[I]data\fP
 The \f[I]utimes\fP(2) system call.
 .\" ----------  V  ---------------------------------------------------------
+.TP 8n
+vasprintf \f[I]data\fP \f[I]format\fP \f[I]ap\fP
+The \f[I]vasprintf\fP(3) system call.
 .TP 8n
 vfork
 The \f[I]vfork\fP(2) system call.

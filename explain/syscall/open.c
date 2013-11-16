@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,9 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/buffer/permission_mode.h>
 #include <libexplain/open.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/wrap_and_print.h>
 
 #include <explain/syscall/open.h>
@@ -43,7 +43,7 @@ explain_syscall_open(int errnum, int argc, char **argv)
         /* fall through... */
 
     case 2:
-        flags = explain_open_flags_parse_or_die(argv[1], "open arg 2");
+        flags = explain_parse_open_flags_or_die(argv[1], "open arg 2");
         /* fall through... */
 
     case 1:
@@ -61,3 +61,6 @@ explain_syscall_open(int errnum, int argc, char **argv)
         explain_errno_open(errnum, path, flags, mode)
     );
 }
+
+
+/* vim: set ts=8 sw=4 et : */

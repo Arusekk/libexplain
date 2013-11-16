@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ explain_syscall_flock(int errnum, int argc, char **argv)
         fprintf(stderr, "flock: requires 2 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    fildes = explain_string_to_int(argv[0]);
+    fildes = explain_parse_int_or_die(argv[0]);
     command = explain_flock_command_parse_or_die(argv[1], "flock arg 2");
 
     explain_wrap_and_print(stdout, explain_errno_flock(errnum, fildes,
@@ -46,4 +46,4 @@ explain_syscall_flock(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

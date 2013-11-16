@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,10 +37,10 @@ explain_syscall_dirfd(int errnum, int argc, char **argv)
         fprintf(stderr, "dirfd: requires 1 argument, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    dir = explain_string_to_pointer(argv[0]);
+    dir = explain_parse_pointer_or_die(argv[0]);
 
     explain_wrap_and_print(stdout, explain_errno_dirfd(errnum, dir));
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

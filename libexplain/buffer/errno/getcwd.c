@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -56,6 +56,7 @@ explain_buffer_errno_getcwd_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the data_size argument is zero and data is not the NULL pointer"
         );
         break;
@@ -64,6 +65,7 @@ explain_buffer_errno_getcwd_explanation(explain_string_buffer_t *sb,
         explain_string_buffer_puts
         (
             sb,
+            /* FIXME: i18n */
             "the data_size argument is less than the length of the "
             "working directory name, you need to allocate a bigger "
             "array and try again"
@@ -108,6 +110,7 @@ explain_buffer_errno_getcwd_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "read or search permission was denied for a component "
                 "of the pathname"
             );
@@ -115,7 +118,7 @@ explain_buffer_errno_getcwd_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOMEM:
-        explain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb, 0);
         break;
 
     case EFAULT:
@@ -136,6 +139,7 @@ explain_buffer_errno_getcwd_explanation(explain_string_buffer_t *sb,
             explain_string_buffer_puts
             (
                 sb,
+                /* FIXME: i18n */
                 "the current working directory has been unlinked"
             );
         }
@@ -171,3 +175,6 @@ explain_buffer_errno_getcwd(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,8 +23,8 @@
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/fdopen.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/explanation.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/string_flags.h>
 
 
@@ -74,7 +74,7 @@ explain_buffer_errno_fdopen_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOMEM:
-        explain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb, 0);
         break;
 
     default:
@@ -107,3 +107,6 @@ explain_buffer_errno_fdopen(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

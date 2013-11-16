@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/telldir.h>
 #include <libexplain/wrap_and_print.h>
@@ -34,13 +35,16 @@ explain_syscall_telldir(int errnum, int argc, char **argv)
 
     if (argc != 1)
     {
-        fprintf(stderr, "telldir: requires 1 argument, not %d\n", argc);
-        exit(EXIT_FAILURE);
+        explain_output_error_and_die
+        (
+            "telldir: requires 1 argument, not %d\n",
+            argc
+        );
     }
-    dir = explain_string_to_pointer(argv[0]);
+    dir = explain_parse_pointer_or_die(argv[0]);
 
     explain_wrap_and_print(stdout, explain_errno_telldir(errnum, dir));
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011 Peter Miller
+ * Copyright (C) 2009, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -43,9 +43,6 @@ void
 explain_buffer_errno_fdopendir_explanation(explain_string_buffer_t *sb,
     int errnum, const char *syscall_name, int fildes)
 {
-    /*
-     * http://www.opengroup.org/onlinepubs/009695399/functions/fdopendir.html
-     */
     switch (errnum)
     {
     case EBADF:
@@ -53,7 +50,7 @@ explain_buffer_errno_fdopendir_explanation(explain_string_buffer_t *sb,
         break;
 
     case ENOMEM:
-        explain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb, 0);
         break;
 
     case ENOTDIR:
@@ -66,6 +63,7 @@ explain_buffer_errno_fdopendir_explanation(explain_string_buffer_t *sb,
             int flags = fcntl(fildes, F_GETFL);
             if (flags >= 0)
             {
+                /* FIXME: O_DIRECTORY */
                 if ((flags & O_ACCMODE) == O_WRONLY)
                 {
                     explain_buffer_ebadf_not_open_for_reading
@@ -103,4 +101,4 @@ explain_buffer_errno_fdopendir(explain_string_buffer_t *sb, int errnum,
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

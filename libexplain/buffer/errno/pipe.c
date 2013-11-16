@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,53 +23,33 @@
 #include <libexplain/buffer/enfile.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/pipe.h>
+#include <libexplain/buffer/errno/pipe2.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/explanation.h>
 
 
 static void
-explain_buffer_errno_pipe_system_call(explain_string_buffer_t *sb,
-    int errnum, int *pipefds)
+explain_buffer_errno_pipe_system_call(explain_string_buffer_t *sb, int errnum,
+    int *fildes)
 {
     (void)errnum;
-    explain_string_buffer_puts(sb, "pipe(pipefds = ");
-    explain_buffer_pointer(sb, pipefds);
+    explain_string_buffer_puts(sb, "pipe(fildes = ");
+    explain_buffer_pointer(sb, fildes);
     explain_string_buffer_putc(sb, ')');
 }
 
 
 static void
-explain_buffer_errno_pipe_explanation(explain_string_buffer_t *sb,
-    int errnum, int *pipefds)
+explain_buffer_errno_pipe_explanation(explain_string_buffer_t *sb, int errnum,
+    int *fildes)
 {
-    /*
-     * http://www.opengroup.org/onlinepubs/009695399/functions/pipe.html
-     */
-    (void)pipefds;
-    switch (errnum)
-    {
-    case EFAULT:
-        explain_buffer_efault(sb, "pipefds");
-        break;
-
-    case EMFILE:
-        explain_buffer_emfile(sb);
-        break;
-
-    case ENFILE:
-        explain_buffer_enfile(sb);
-        break;
-
-    default:
-        explain_buffer_errno_generic(sb, errnum, "pipe");
-        break;
-    }
+    int flags = 0;
+    explain_buffer_errno_pipe2_explanation(sb, errnum, "pipe", fildes, flags);
 }
 
 
 void
-explain_buffer_errno_pipe(explain_string_buffer_t *sb, int errnum,
-    int *pipefds)
+explain_buffer_errno_pipe(explain_string_buffer_t *sb, int errnum, int *fildes)
 {
     explain_explanation_t exp;
 
@@ -78,15 +58,15 @@ explain_buffer_errno_pipe(explain_string_buffer_t *sb, int errnum,
     (
         &exp.system_call_sb,
         errnum,
-        pipefds
+        fildes
     );
     explain_buffer_errno_pipe_explanation
     (
         &exp.explanation_sb,
         errnum,
-        pipefds
+        fildes
     );
     explain_explanation_assemble(&exp, sb);
 }
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et : */

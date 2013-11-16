@@ -151,6 +151,9 @@ dnl!     libexplain.  So we leave it alone.
 dnl!
 dnl! AC_CHECK_LIB(compat, ftime)
 
+dnl!
+dnl! Access control support
+dnl!
 AC_CHECK_PROGS(LIBTOOL, libtool)
 
 if test -z "$LIBTOOL"
@@ -352,6 +355,7 @@ AC_MSG_RESULT([-m$GROFF_MM_MACROS])
 
 AC_CHECK_HEADERS([         \
     _G_config.h            \
+    acl/libacl.h           \
     arpa/inet.h            \
     bluetooth/bluetooth.h  \
     bluetooth/bnep.h       \
@@ -363,6 +367,7 @@ AC_CHECK_HEADERS([         \
     fcntl.h                \
     float.h                \
     getopt.h               \
+    iconv.h                \
     inttypes.h             \
     libintl.h              \
     libio.h                \
@@ -475,6 +480,7 @@ AC_CHECK_HEADERS([         \
     linux/videodev2.h      \
     linux/vt.h             \
     linux/watchdog.h       \
+    locale.h               \
     mntent.h               \
     net/ethernet.h         \
     net/if_ppp.h           \
@@ -497,6 +503,7 @@ AC_CHECK_HEADERS([         \
     stdio_ext.h            \
     stdlib.h               \
     string.h               \
+    sys/acl.h              \
     sys/capability.h       \
     sys/eventfd.h          \
     sys/file.h             \
@@ -844,8 +851,9 @@ fi
 
 AC_SEARCH_LIBS(cap_get_proc, cap)
 AC_SEARCH_LIBS(dlopen, dl)
+AC_SEARCH_LIBS(acl_free, acl)
 
-AC_CHECK_TYPES([sigset_t, loff_t], , ,
+AC_CHECK_TYPES([sigset_t, off_t, loff_t], , ,
 [#include <signal.h>
 #include <sys/types.h>])
 
@@ -864,91 +872,121 @@ fi
 
 AC_SYS_LONG_FILE_NAMES
 AC_FUNC_STRERROR_R
-AC_CHECK_FUNCS(    \
-    __fpurge       \
-    accept4        \
-    adjtimex       \
-    atexit         \
-    cap_get_proc   \
-    capget         \
-    cfmakeraw      \
-    dirfd          \
-    dladdr         \
-    dlsym          \
-    endmntent      \
-    eventfd        \
-    fdopendir      \
-    flock          \
-    fpurge         \
-    fstatfs        \
-    ftime          \
-    futimes        \
-    getdomainname  \
-    gethostbyname  \
-    gethostname    \
-    getmntent      \
-    getmntinfo     \
-    getopt_long    \
-    getpagesize    \
-    getregid       \
-    getresgid      \
-    getresuid      \
-    getreuid       \
-    getrusage      \
-    gettext        \
-    hasmntopt      \
-    lchmod         \
-    lchown         \
-    lutimens       \
-    mbrtowc        \
-    mkdtemp        \
-    mkostemp       \
-    mmap           \
-    munmap         \
-    on_exit        \
-    poll           \
-    ptrace         \
-    putenv         \
-    readv          \
-    remove         \
-    setdomainname  \
-    setenv         \
-    setlocale      \
-    setmntent      \
-    setregid       \
-    setresgid      \
-    setresuid      \
-    setreuid       \
-    setsid         \
-    shmat          \
-    shmctl         \
-    signalfd       \
-    snprintf       \
-    statfs         \
-    stime          \
-    strcasecmp     \
-    strerror       \
-    strncasecmp    \
-    strndup        \
-    strnstr        \
-    strsignal      \
-    strtof         \
-    strtold        \
-    tcdrain        \
-    tcflow         \
-    tcflush        \
-    tcgetattr      \
-    tcsendbreak    \
-    tcsetattr      \
-    timerfd_create \
-    unsetenv       \
-    ustat          \
-    utimens        \
-    utimensat      \
-    utimes         \
-    vsnprintf      \
-    wcwidth        \
-    writev         \
+AC_CHECK_FUNCS(     \
+    __fpurge        \
+    accept4         \
+    acl_entries     \
+    acl_from_text   \
+    acl_get_fd      \
+    acl_get_file    \
+    acl_set_fd      \
+    acl_set_file    \
+    acl_to_any_text \
+    acl_to_text     \
+    adjtimex        \
+    asprintf        \
+    atexit          \
+    cap_get_proc    \
+    capget          \
+    cfmakeraw       \
+    dhmod           \
+    dirfd           \
+    dladdr          \
+    dlsym           \
+    endgrent        \
+    endmntent       \
+    eventfd         \
+    fchmod          \
+    fchmodat        \
+    fchownat        \
+    fdopendir       \
+    flock           \
+    fseeko          \
+    fstatat         \
+    fstatfs         \
+    ftello          \
+    ftime           \
+    futimens        \
+    futimes         \
+    getdomainname   \
+    getgrent        \
+    getgrouplist    \
+    gethostbyname   \
+    gethostid       \
+    gethostname     \
+    getmntent       \
+    getmntinfo      \
+    getopt_long     \
+    getpagesize     \
+    getpriority     \
+    getregid        \
+    getresgid       \
+    getresuid       \
+    getreuid        \
+    getrusage       \
+    gettext         \
+    hasmntopt       \
+    iconv_close     \
+    iconv_open      \
+    lchmod          \
+    lchown          \
+    lutimens        \
+    mbrtowc         \
+    mkdtemp         \
+    mkostemp        \
+    mmap            \
+    munmap          \
+    on_exit         \
+    openat          \
+    pipe2           \
+    poll            \
+    ptrace          \
+    putenv          \
+    readv           \
+    remove          \
+    setdomainname   \
+    setenv          \
+    setgrent        \
+    setlocale       \
+    setmntent       \
+    setpriority     \
+    setregid        \
+    setresgid       \
+    setresuid       \
+    setreuid        \
+    setsid          \
+    shmat           \
+    shmctl          \
+    signalfd        \
+    snprintf        \
+    statfs          \
+    stime           \
+    strcasecmp      \
+    strcoll         \
+    strerror        \
+    strncasecmp     \
+    strndup         \
+    strnstr         \
+    strsignal       \
+    strtof          \
+    strtold         \
+    strverscmp      \
+    tcdrain         \
+    tcflow          \
+    tcflush         \
+    tcgetattr       \
+    tcsendbreak     \
+    tcsetattr       \
+    timerfd_create  \
+    unsetenv        \
+    ustat           \
+    utimens         \
+    utimensat       \
+    utimes          \
+    vasprintf       \
+    vsnprintf       \
+    wcwidth         \
+    writev          \
     )
 
 if test "$ac_cv_func_capget" = "yes"
@@ -1000,34 +1038,36 @@ AC_MSG_RESULT([broken])
 ])
 
 dnl!
-dnl! Does the system have struct ifconf defined?
+dnl!    Test to see if <stdio.h> defined off_t
 dnl!
-AC_MSG_CHECKING([struct ifconf])
-AC_RUN_IFELSE([
-#if HAVE_SYS_TYPES_H
+AC_MSG_CHECKING([stdio defines off_t])
+AC_TRY_RUN([
+#include <stdio.h>
+int main(int argc, char **argv){
+int x = sizeof(off_t);
+return 0;
+}]
+, AC_DEFINE(HAVE_STDIO_OFF_T,1,
+[Define this symbol if your system <stdio.h> defines the off_t type.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+dnl!
+dnl!    Test to see if <sys/types.h> defined off_t
+dnl!
+AC_MSG_CHECKING([sys/types.h defines off_t])
+AC_TRY_RUN([
 #include <sys/types.h>
-#endif
-#if HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
-#endif
-#if HAVE_NET_IF_H
-#include <net/if.h>
-#endif
-
-int
-main(int argc, char **argv)
-{
-    struct ifconf x;
-    return 0;
-}
-
-], [
-AC_MSG_RESULT([yes])
-AC_DEFINE([HAVE_STRUCT_IFCONF], [1],
-  [Define this symbol if your system declares struct ifconf.])
-], [
-AC_MSG_RESULT([no])
-])
+int main(int argc, char **argv){
+int x = sizeof(off_t);
+return 0;
+}]
+, AC_DEFINE(HAVE_SYS_TYPES_OFF_T,1,
+[Define this symbol if your system <sys/types.h> defines the off_t type.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
 
 dnl!
 dnl!    Test to see if struct v4l2_hw_freq_seek has a member called "spacing".
@@ -1466,7 +1506,7 @@ if test "x$NLSDIR" = "x"; then
         if test "x$with_nlsdir" != "x"; then
                 NLSDIR=$with_nlsdir
         else
-                NLSDIR=${libdir}
+                NLSDIR=${datarootdir}/locale
         fi
 fi
 

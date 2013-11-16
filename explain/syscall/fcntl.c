@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@
 
 #include <libexplain/fcntl.h>
 #include <libexplain/buffer/errno/fcntl.h>
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/buffer/signal.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/strtol.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -117,7 +117,7 @@ explain_syscall_fcntl(int errnum, int argc, char **argv)
                 fprintf(stderr, "fcntl: need 3 arguments (not %d)\n", argc);
                 exit(EXIT_FAILURE);
             }
-            arg = explain_open_flags_parse_or_die(argv[2], "fcntl arg 3");
+            arg = explain_parse_open_flags_or_die(argv[2], "fcntl arg 3");
             explain_wrap_and_print
             (
                 stdout,
@@ -173,3 +173,6 @@ explain_syscall_fcntl(int errnum, int argc, char **argv)
 #endif
     }
 }
+
+
+/* vim: set ts=8 sw=4 et : */

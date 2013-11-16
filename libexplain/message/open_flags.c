@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libexplain/open_flags.h>
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/string_buffer.h>
 
 
@@ -29,3 +29,6 @@ explain_message_open_flags(char *message, size_t message_size, int flags)
     explain_string_buffer_init(&sb, message, message_size);
     explain_buffer_open_flags(&sb, flags);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

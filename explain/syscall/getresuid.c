@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,9 +39,9 @@ explain_syscall_getresuid(int errnum, int argc, char **argv)
         fprintf(stderr, "getresuid: requires 3 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    ruid = explain_string_to_pointer(argv[0]);
-    euid = explain_string_to_pointer(argv[1]);
-    suid = explain_string_to_pointer(argv[2]);
+    ruid = explain_parse_pointer_or_die(argv[0]);
+    euid = explain_parse_pointer_or_die(argv[1]);
+    suid = explain_parse_pointer_or_die(argv[2]);
 
     explain_wrap_and_print(stdout, explain_errno_getresuid(errnum, ruid, euid,
         suid));

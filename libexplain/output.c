@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,6 +39,7 @@ explain_output_new(const explain_output_vtable_t *vtable)
     if (!result)
         return NULL;
     result->vtable = vtable;
+    result->exit_has_been_used = 0;
     return result;
 }
 
@@ -72,6 +73,9 @@ explain_output_method_message(explain_output_t *op, const char *text)
 }
 
 
+void _exit(int);
+
+
 void
 explain_output_method_exit(explain_output_t *op, int status)
 {
@@ -79,10 +83,23 @@ explain_output_method_exit(explain_output_t *op, int status)
     assert(op->vtable);
     if (op->vtable->exit)
         op->vtable->exit(op, status);
+
+    /**
+      * POSIX and the C standard both say that it should not call
+      * 'exit', because the behavior is undefined if 'exit' is called
+      * more than once.  So we call '_exit' instead of 'exit'.
+      */
+    if (op->exit_has_been_used)
+        _exit(status);
+
     /*
      * 1. We call ::exit if they didn't supply an exit method.
      * 2. We ::exit if their exit method returns, because the rest of
      *    the libexplain code assumes that exit means ::exit.
      */
     exit(status);
+    op->exit_has_been_used = 1;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

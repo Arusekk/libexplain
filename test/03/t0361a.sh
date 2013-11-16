@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009-2011 Peter Miller
+# Copyright (C) 2009-2011, 2013 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,12 +28,6 @@ space
 fubar
 test $? -eq 0 || no_result
 
-fmt > test.ok2 << 'fubar'
-malloc(size = 19088743) failed, Cannot allocate memory (ENOMEM) because
-insufficient user-space memory was available { rlim_cur = NNN }
-fubar
-test $? -eq 0 || no_result
-
 explain -e ENOMEM malloc 0x1234567 > test.out.4
 test $? -eq 0 || fail
 
@@ -46,9 +40,7 @@ test $? -eq 0 || no_result
 fmt test.out.2 > test.out
 test $? -eq 0 || no_result
 
-diff test.ok test.out >/dev/null 2>&1 && pass
-
-diff test.ok2 test.out
+diff test.ok test.out
 test $? -eq 0 || fail
 
 #
@@ -58,4 +50,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

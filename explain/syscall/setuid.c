@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,7 +36,7 @@ explain_syscall_setuid(int errnum, int argc, char **argv)
         fprintf(stderr, "setuid: requires 1 argument, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    uid = explain_string_to_uid_t(argv[0]);
+    uid = explain_parse_uid_t_or_die(argv[0]);
 
     explain_wrap_and_print(stdout, explain_errno_setuid(errnum, uid));
 }

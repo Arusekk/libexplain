@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -24,7 +24,7 @@
 /**
   * The explain_buffer_enosys_fildes function may be used to print an
   * explanation of an ENOSYS or EOPNOTSUPP error, associated with a
-  * particular file descriptori (device?).
+  * particular file descriptor (device?).
   *
   * @param sb
   *     The string buffer to print into.
@@ -83,4 +83,20 @@ void explain_buffer_enosys_socket(explain_string_buffer_t *sb,
 void explain_buffer_enosys_vague(explain_string_buffer_t *sb,
     const char *syscall_name);
 
+/**
+  * The explain_buffer_enosys_acl function may be used to print an
+  * explanation of an ENOSYS or EOPNOTSUPP error.  In the cae where it
+  * one of the Access Control List (ACL) functions.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param caption
+  *     The name of the offending system call argument.
+  * @param syscall_name
+  *     The name of the offending system call.
+  */
+void explain_buffer_enosys_acl(explain_string_buffer_t *sb, const char *caption,
+    const char *syscall_name);
+
 #endif /* LIBEXPLAIN_BUFFER_ENOSYS_H */
+/* vim: set ts=8 sw=4 et : */

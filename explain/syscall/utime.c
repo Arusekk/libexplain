@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ explain_syscall_utime(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 2:
-        times = explain_string_to_pointer(argv[1]);
+        times = explain_parse_pointer_or_die(argv[1]);
         /* fall through... */
 
     case 1:
@@ -58,3 +58,6 @@ explain_syscall_utime(int errnum, int argc, char **argv)
         explain_errno_utime(errnum, pathname, times)
     );
 }
+
+
+/* vim: set ts=8 sw=4 et : */

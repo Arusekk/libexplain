@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,13 +38,13 @@ explain_syscall_shmat(int errnum, int argc, char **argv)
         fprintf(stderr, "shmat: requires 3 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    shmid = explain_string_to_int(argv[0]);
-    shmaddr = explain_string_to_pointer(argv[1]);
-    shmflg = explain_string_to_int(argv[2]);
+    shmid = explain_parse_int_or_die(argv[0]);
+    shmaddr = explain_parse_pointer_or_die(argv[1]);
+    shmflg = explain_parse_int_or_die(argv[2]);
 
     explain_wrap_and_print(stdout, explain_errno_shmat(errnum, shmid, shmaddr,
         shmflg));
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011 Peter Miller
+ * Copyright (C) 2009, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,7 +17,7 @@
  */
 
 #include <libexplain/buffer/ebadf.h>
-#include <libexplain/open_flags.h>
+#include <libexplain/buffer/open_flags.h>
 
 
 void
@@ -45,3 +45,6 @@ explain_buffer_ebadf_not_open_for_reading(explain_string_buffer_t *sb,
         explain_string_buffer_putc(sb, ')');
     }
 }
+
+
+/* vim: set ts=8 sw=4 et : */

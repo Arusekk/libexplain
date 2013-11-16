@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010-2012 Peter Miller
+ * Copyright (C) 2010-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -102,6 +102,16 @@ struct explain_output_t
       * if this instance's class's method pointers.
       */
     const struct explain_output_vtable_t *vtable;
+
+    /**
+      * POSIX and the C standard both say that it should not call
+      * 'exit', because the behavior is undefined if 'exit' is called
+      * more than once.  So we call '_exit' instead of 'exit'.
+      *
+      * This important if a libexplain funcion is called by an atexit
+      * hander, where exit has been called by libexplain.
+      */
+    int exit_has_been_used;
 };
 
 /**

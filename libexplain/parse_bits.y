@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -489,7 +489,6 @@ explain_parse_bits(const char *text,
 {
 #if YYDEBUG
     yydebug = 1;
-    fprintf(stderr, "%s: %d: text = \"%s\"\n", __FILE__, __LINE__, text);
     {
         size_t j;
         fprintf(stderr, "%s: %d: table_size = %d\n", __FILE__, __LINE__,

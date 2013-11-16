@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,12 +44,12 @@ explain_syscall_writev(int errnum, int argc, char **argv)
     }
     iovcnt = (argc - 1) / 2;
     iov = explain_malloc_or_die(iovcnt * sizeof(*iov));
-    fildes = explain_string_to_int(argv[0]);
+    fildes = explain_parse_int_or_die(argv[0]);
     for (j = 1; j < argc; j += 2)
     {
         struct iovec *p = iov + j / 2;
-        p->iov_base = explain_string_to_pointer(argv[j]);
-        p->iov_len = explain_string_to_size_t(argv[j + 1]);
+        p->iov_base = explain_parse_pointer_or_die(argv[j]);
+        p->iov_len = explain_parse_size_t_or_die(argv[j + 1]);
     }
 
     explain_wrap_and_print(stdout, explain_errno_writev(errnum, fildes, iov,
@@ -57,4 +57,4 @@ explain_syscall_writev(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

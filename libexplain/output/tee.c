@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010, 2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@ struct explain_output_tee_t
 
 
 static void
-destructor(explain_output_t *op)
+tee_destructor(explain_output_t *op)
 {
     explain_output_tee_t *p;
 
@@ -41,7 +41,7 @@ destructor(explain_output_t *op)
 
 
 static void
-message(explain_output_t *op, const char *text)
+tee_message(explain_output_t *op, const char *text)
 {
     explain_output_tee_t *p;
 
@@ -52,7 +52,7 @@ message(explain_output_t *op, const char *text)
 
 
 static void
-exiter(explain_output_t *op, int status)
+tee_exit(explain_output_t *op, int status)
 {
     explain_output_tee_t *p;
 
@@ -66,9 +66,9 @@ exiter(explain_output_t *op, int status)
 
 static const explain_output_vtable_t vtable =
 {
-    destructor,
-    message,
-    exiter,
+    tee_destructor,
+    tee_message,
+    tee_exit,
     sizeof(explain_output_tee_t)
 };
 
@@ -93,3 +93,6 @@ explain_output_tee_new(explain_output_t *first, explain_output_t *second)
     }
     return result;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

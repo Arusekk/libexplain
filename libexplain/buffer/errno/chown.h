@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -40,15 +40,15 @@
   *     to call <b>any</b> code between the system call to
   *     be explained and this function, because many libc
   *     functions will alter the value of errno.
-  * @param path
-  *     The original path, exactly as passed to the chown(2) system call.
-  * @param owner
+  * @param pathname
+  *     The original pathname, exactly as passed to the chown(2) system call.
+  * @param uid
   *     The original owner, exactly as passed to the chown(2) system call.
-  * @param group
+  * @param gid
   *     The original group, exactly as passed to the chown(2) system call.
   */
 void explain_buffer_errno_chown(explain_string_buffer_t *sb, int errnum,
-    const char *path, int owner, int group);
+    const char *pathname, int uid, int gid);
 
 struct explain_final_t; /* forward */
 
@@ -63,21 +63,21 @@ struct explain_final_t; /* forward */
   *     The error value to be decoded.
   * @param syscall_name
   *     The name of the offending system call.
-  * @param path
-  *     The original path, exactly as passed to the chown(2) system call.
-  * @param owner
+  * @param pathname
+  *     The original pathname, exactly as passed to the chown(2) system call.
+  * @param uid
   *     The original owner, exactly as passed to the chown(2) system call.
-  * @param group
+  * @param gid
   *     The original group, exactly as passed to the chown(2) system call.
-  * @param path_caption
+  * @param pathname_caption
   *     The name of the offending syscall argument.
   * @param final_component
   *     The designed properties of the final component.
   */
 void explain_buffer_errno_chown_explanation_fc(
     explain_string_buffer_t *sb, int errnum, const char *syscall_name,
-    const char *path, int owner, int group,
-    const char *path_caption,
+    const char *pathname, int uid, int gid,
+    const char *pathname_caption,
     struct explain_final_t *final_component);
 
 /**
@@ -93,15 +93,39 @@ void explain_buffer_errno_chown_explanation_fc(
   *     The name of the offending system call.
   * @param fildes
   *     The original fildes, exactly as passed to the fchown(2) system call.
-  * @param owner
+  * @param uid
   *     The original owner, exactly as passed to the fchown(2) system call.
-  * @param group
+  * @param gid
   *     The original group, exactly as passed to the fchown(2) system call.
   * @param fildes_caption
   *     The name of the offending syscall argument.
   */
 void explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
-    int errnum, const char *syscall_name, int fildes, int owner, int group,
+    int errnum, const char *syscall_name, int fildes, int uid, int gid,
     const char *fildes_caption);
 
+/**
+  * The explain_buffer_errno_fchown_explanation function factors out
+  * code common to both several hown systcall foms.
+  *
+  * @param sb
+  *     The string buffer to print the message into.
+  * @param errnum
+  *     The error value to be decoded.
+  * @param syscall_name
+  *     The name of the offending system call.
+  * @param pathname
+  *     The original fildes, exactly as passed to the fchown(2) system call.
+  * @param owner
+  *     The original owner, exactly as passed to the fchown(2) system call.
+  * @param group
+  *     The original group, exactly as passed to the fchown(2) system call.
+  * @param pathname_caption
+  *     The name of the offending system call argument.
+  */
+void explain_buffer_errno_chown_explanation(explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, const char *pathname, int owner,
+    int group, const char *pathname_caption);
+
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_CHOWN_H */
+/* vim: set ts=8 sw=4 et : */

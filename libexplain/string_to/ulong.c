@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,10 @@
 
 
 unsigned long
-explain_string_to_ulong(const char *text)
+explain_parse_ulong_or_die(const char *text)
 {
     return explain_strtoul_or_die(text, 0, 0);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,6 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/fcntl.h>
+#include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
+#include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
+#include <libexplain/ac/unistd.h>
+
 #include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
 
@@ -23,6 +28,24 @@
 void
 explain_buffer_fildes(explain_string_buffer_t *sb, int fildes)
 {
+    if (fildes == AT_FDCWD)
+    {
+        char path[PATH_MAX + 1];
+        explain_string_buffer_puts(sb, "AT_FDCWD");
+        if (getcwd(path, sizeof(path)))
+        {
+            explain_string_buffer_putc(sb, ' ');
+            explain_string_buffer_puts_quoted(sb, path);
+        }
+        else
+        {
+            explain_string_buffer_puts(sb, " \".\"");
+        }
+        return;
+    }
     explain_string_buffer_printf(sb, "%d", fildes);
     explain_buffer_fildes_to_pathname(sb, fildes);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

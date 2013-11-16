@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,8 +29,10 @@ explain_string_flags_init(explain_string_flags_t *sf, const char *flags)
     int             acc_mode;
     int             options;
     const char      *cp;
-    unsigned char   c;
     explain_string_buffer_t yuck_buf;
+    int             plus_seen;
+
+    explain_string_buffer_init(&yuck_buf, sf->invalid, sizeof(sf->invalid));
 
     /*
      * Parse the flags string.
@@ -42,103 +44,140 @@ explain_string_flags_init(explain_string_flags_t *sf, const char *flags)
     sf->rwa_seen = 0;
     acc_mode = O_RDONLY;
     options = 0;
+#ifdef O_LARGEFILE
+    options |= O_LARGEFILE;
+#endif
+#ifdef O_LARGEFILE_HIDDEN
+    options |= O_LARGEFILE_HIDDEN;
+#endif
     sf->flags_string_valid = 1;
     cp = flags;
-    c = *cp++;
-    switch (c)
-    {
-    case 'b':
-        options |= O_BINARY;
-        c = *cp++;
-        break;
-
-    case 't':
-        options |= O_TEXT;
-        c = *cp++;
-        break;
-
-    default:
-        break;
-    }
-    switch (c)
-    {
-    case 'r':
-        acc_mode = O_RDONLY;
-        sf->rwa_seen = 1;
-        break;
-
-    case 'w':
-        acc_mode = O_WRONLY;
-        options |= O_CREAT | O_TRUNC;
-        sf->rwa_seen = 1;
-        break;
-
-    case 'a':
-        acc_mode = O_WRONLY;
-        options |= O_CREAT | O_APPEND;
-        sf->rwa_seen = 1;
-        break;
-
-    case '\0':
-        --cp;
-        /* fall through... */
-
-    default:
-        sf->flags_string_valid = 0;
-        break;
-    }
-    explain_string_buffer_init(&yuck_buf, sf->invalid, sizeof(sf->invalid));
+    plus_seen = 0;
     for (;;)
     {
+        unsigned char   c;
+
         c = *cp++;
         switch (c)
         {
+        case '\0':
+            /* end of string */
+            if (!sf->rwa_seen)
+                sf->flags_string_valid = 0;
+            sf->flags = acc_mode | options;
+            return;
+
         case '+':
+            /*
+             * "r+" Open for reading and writing.  The stream is
+             *      positioned at the beginning of the file.
+             *
+             * "w+" Open for reading and writing.  The file is created
+             *      if it does not exist, otherwise it is truncated.
+             *      The stream is positioned at the beginning of the
+             *      file.
+             *
+             * "a+" Open for reading and appending (writing at end of
+             *      file).  The file is created if it does not exist.
+             *      The initial file position for reading is at the
+             *      beginning of the file, but output is always appended
+             *      to the end of the file.
+             */
+            if (!sf->rwa_seen || plus_seen)
+                goto duplicate;
             acc_mode = O_RDWR;
-            continue;
+            plus_seen = 1;
+            break;
+
+        case 'a':
+            /*
+             * Open for appending (writing at end of file).  The file is
+             * created if it does not exist.  The stream is positioned
+             * at the end of the file.
+             */
+            if (sf->rwa_seen && (options & O_APPEND))
+                goto duplicate;
+            acc_mode = O_WRONLY;
+            options |= O_CREAT | O_APPEND;
+            sf->rwa_seen = 1;
+            break;
 
         case 'b':
+            /*
+             * The mode string can also include the letter 'b' either
+             * as a last character or as a character between the
+             * characters in any of the two-character strings
+             * described above.  This is strictly for compatibility with
+             * C89 and has no effect; the 'b' is ignored on all POSIX
+             * conforming systems, including Linux.  (Other systems
+             * may treat text files and binary files differently, and
+             * adding the 'b' may be a good idea if you do I/O to a
+             * binary file and expect that your program may be ported to
+             * non-UNIX environments.)
+             */
             options |= O_BINARY;
-            continue;
+            break;
 
-        case 'c':
-            /* no cancel */
-            continue;
+        case  'c':
+            /*
+             * GNU extension
+             * not a thread cancellation point
+             */
+            break;
 
         case 'e':
-#ifdef O_CLOEXEC
+            /* GNU extension */
             options |= O_CLOEXEC;
-#endif
-            continue;
+            break;
 
         case 'm':
-            /* mmap */
-            continue;
+            /*
+             * GNU extension
+             * try to use mmap
+             */
+            break;
+
+        case 'r':
+            /*
+             * Open text file for reading.  The stream is positioned at
+             * the beginning of the file.
+             */
+            if (sf->rwa_seen && acc_mode == O_RDONLY)
+                goto duplicate;
+            acc_mode = O_RDONLY;
+            sf->rwa_seen = 1;
+            break;
 
         case 't':
+            /* GNU extension */
             options |= O_TEXT;
-            continue;
+            break;
+
+        case 'w':
+            /*
+             * Truncate file to zero length or create text file for
+             * writing.  The stream is positioned at the beginning of
+             * the file.
+             */
+            if (sf->rwa_seen && acc_mode == O_WRONLY)
+                goto duplicate;
+            acc_mode = O_WRONLY;
+            options |= O_CREAT | O_TRUNC;
+            sf->rwa_seen = 1;
+            break;
 
         case 'x':
+            /* GNU extension */
             options |= O_EXCL;
-            continue;
+            break;
 
         default:
+            duplicate:
             sf->flags_string_valid = 0;
             explain_string_buffer_putc(&yuck_buf, c);
-            continue;
-
-        case '\0':
-            --cp;
             break;
         }
-        break;
     }
-    sf->flags = acc_mode | options;
-#ifdef O_LARGEFILE
-    sf->flags |= O_LARGEFILE;
-#endif
-#ifdef O_LARGEFILE_HIDDEN
-    sf->flags |= O_LARGEFILE_HIDDEN;
-#endif
 }
+
+/* vim: set ts=8 sw=4 et : */

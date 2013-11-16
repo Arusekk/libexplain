@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,15 +37,15 @@ explain_syscall_read(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 3:
-        data_size = explain_string_to_long(argv[2]);
+        data_size = explain_parse_long_or_die(argv[2]);
         /* fall through... */
 
     case 2:
-        data = explain_string_to_pointer(argv[1]);
+        data = explain_parse_pointer_or_die(argv[1]);
         /* fall through... */
 
     case 1:
-        fildes = explain_string_to_long(argv[0]);
+        fildes = explain_parse_long_or_die(argv[0]);
         break;
 
     default:
@@ -59,3 +59,6 @@ explain_syscall_read(int errnum, int argc, char **argv)
         explain_errno_read(errnum, fildes, data, data_size)
     );
 }
+
+
+/* vim: set ts=8 sw=4 et : */

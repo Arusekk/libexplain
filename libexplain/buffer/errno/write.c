@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -36,11 +36,11 @@
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/mount_point.h>
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/pretty_size.h>
 #include <libexplain/buffer/rlimit.h>
 #include <libexplain/explanation.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/option.h>
 #include <libexplain/string_buffer.h>
 
@@ -61,6 +61,14 @@ explain_buffer_errno_write_system_call(explain_string_buffer_t *sb,
         (long long)data_size
     );
 }
+
+#if defined(__alpha__) && defined(__osf__)
+#define TRUE64 1
+#endif
+
+#ifndef OFF_T_MAX
+#define OFF_T_MAX ((~(off_t)0) >> 1)
+#endif
 
 
 void
@@ -132,6 +140,33 @@ explain_buffer_errno_write_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
+#if TRU64
+        if (INT_MAX < OFF_T_MAX)
+        {
+            if (data_size > INT_MAX)
+            {
+                explain_string_buffer_puts
+                (
+                    sb,
+                    /*
+                     * xgettext: Work around a bug in Tru64 5.1.
+                     * Attempting to read more than INT_MAX
+                     * bytes fails with errno == EINVAL.  See
+    <http://lists.gnu.org/archive/html/bug-gnu-utils/2002-04/msg00010.html>.
+                     */
+                    "there is a bug in the TRU64 kernel, limiting it"
+                    "to reading at most (2**31-1) bytes at a time"
+                );
+                explain_string_buffer_puts(sb->footnotes, "; ");
+                explain_string_buffer_puts
+                (
+                    sb->footnotes,
+                    "break your read() call into smaller pieces"
+                );
+                return;
+            }
+        }
+#endif
         {
             int flags = fcntl(fildes, F_GETFL);
             if (flags >= 0)
@@ -344,3 +379,6 @@ explain_buffer_errno_write(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

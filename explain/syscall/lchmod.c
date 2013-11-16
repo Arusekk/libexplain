@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,7 +40,7 @@ explain_syscall_lchmod(int errnum, int argc, char **argv)
     }
 
     pathname = argv[0];
-    mode = explain_string_to_long(argv[1]);
+    mode = explain_parse_long_or_die(argv[1]);
 
     explain_wrap_and_print
     (

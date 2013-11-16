@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -451,7 +451,7 @@ explain_buffer_eperm_chown_fd(explain_string_buffer_t *sb, int fildes,
 }
 
 
-static void
+void
 explain_buffer_errno_chown_explanation(explain_string_buffer_t *sb,
     int errnum, const char *syscall_name, const char *pathname, int owner,
     int group, const char *pathname_caption)
@@ -571,9 +571,6 @@ explain_buffer_errno_fchown_explanation(explain_string_buffer_t *sb,
     int errnum, const char *syscall_name, int fildes, int owner, int group,
     const char *fildes_caption)
 {
-    /*
-     * http://www.opengroup.org/onlinepubs/009695399/functions/fchown.html
-     */
     switch (errnum)
     {
     case EBADF:
@@ -660,3 +657,6 @@ explain_buffer_errno_chown(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

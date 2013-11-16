@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,10 +38,10 @@ explain_syscall_fputs(int errnum, int argc, char **argv)
         exit(EXIT_FAILURE);
     }
     s = argv[0];
-    fp = explain_string_to_pointer(argv[1]);
+    fp = explain_parse_pointer_or_die(argv[1]);
 
     explain_wrap_and_print(stdout, explain_errno_fputs(errnum, s, fp));
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

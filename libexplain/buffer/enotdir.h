@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2012 Peter Miller
+ * Copyright (C) 2008, 2009, 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -76,6 +76,18 @@ void explain_buffer_enotdir2(explain_string_buffer_t *sb,
   */
 void explain_buffer_enotdir_fd(explain_string_buffer_t *sb,
     int fildes, const char *fildes_caption);
+
+/**
+  * The explain_fildes_is_a_directory function is used to determine
+  * whether or not a file descriptor refers to a directory.
+  *
+  * @param fildes
+  *     The file descriptor to be tested.
+  * @returns
+  *     true (nonzero0 if it is a dir;
+  *     false (zero) is it is not a dir.
+  */
+int explain_fildes_is_a_directory(int fildes);
 
 #endif /* LIBEXPLAIN_BUFFER_ENOTDIR_H */
 /* vim: set ts=8 sw=4 et : */

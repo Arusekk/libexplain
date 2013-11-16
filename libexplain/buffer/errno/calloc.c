@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,6 +23,7 @@
 #include <libexplain/buffer/errno/malloc.h>
 #include <libexplain/buffer/size_t.h>
 #include <libexplain/explanation.h>
+#include <libexplain/option.h>
 
 
 static void
@@ -42,9 +43,33 @@ void
 explain_buffer_errno_calloc_explanation(explain_string_buffer_t *sb, int errnum,
     const char *syscall_name, size_t nmemb, size_t size)
 {
-    /*
-     * http://www.opengroup.org/onlinepubs/009695399/functions/calloc.html
-     */
+    if (errnum == EINVAL)
+    {
+        /* this is deliberately conservative */
+        size_t nmemb_avail = (((size_t)-1) / 3 * 2 / size);
+        if (nmemb_avail <= nmemb)
+        {
+            explain_string_buffer_puts
+            (
+                sb,
+                /* FIXME: i18n */
+                "the requested amount of memory exceeds the size "
+                "representable by a size_t argument"
+            );
+            if (explain_option_dialect_specific())
+            {
+                explain_string_buffer_printf
+                (
+                    sb,
+                    " (%zu > %zu)",
+                    nmemb,
+                    nmemb_avail
+                );
+            }
+            return;
+        }
+    }
+
     explain_buffer_errno_malloc_explanation
     (
         sb,
@@ -70,4 +95,4 @@ explain_buffer_errno_calloc(explain_string_buffer_t *sb, int errnum, size_t
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

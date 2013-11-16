@@ -19,7 +19,7 @@
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
         "POT-Creation-Date: 2011-11-09 21:42+1100\n"
-        "PO-Revision-Date: 2013-03-14\n"
+        "PO-Revision-Date: 2013-11-16\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -1661,6 +1661,26 @@ msgstr  "the %s argument does not refer to an object that is open for "
 #, c-format
 msgid   "the %s argument is not a multiple of %d"
 msgstr  "the %s argument is not a multiple of %d"
+
+#.
+#. This error message is issued to explain an ENOSYS
+#. or EOPNOTSUPP or ENOTSUP error, when returned by one of the
+#. ACL functions.
+#.
+#. %1$s => the name of the offending system call argument
+#. %2$s => the name of the offending system call
+#.
+#, c-format
+msgid   ""
+"the %s argument is not associated with an object to which the %s system "
+"call can be applied, or the file system on which the file is located may "
+"not support ACLs, or ACLs are disabled, or this host system does not "
+"support ACLs"
+msgstr  ""
+"the %s argument is not associated with an object to which the %s system "
+"call can be applied, or the file system on which the file is located may "
+"not support ACLs, or ACLs are disabled, or this host system does not "
+"support ACLs"
 
 #.
 #. This error message is issued when a system call
@@ -3979,6 +3999,16 @@ msgid   "you cannot use open(2) to open socket files, you must use connect"
         "(2) instead; a named pipe may be what was intended"
 msgstr  "you cannot use open(2) to open socket files, you must use connect"
         "(2) instead; a named pipe may be what was intended"
+
+#.
+#. This supplemntary explanation is given when the user
+#. can expand one of the limits to possdibly satisfy the memory
+#. request.
+#.
+msgid   "you have some head room in the resource allocation, it may help to "
+        "run the command \"ulimit -m hard\" and retry"
+msgstr  "you have some head room in the resource allocation, it may help to "
+        "run the command \"ulimit -m hard\" and retry"
 
 #.
 #. This error message is used to explain an

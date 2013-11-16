@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -88,7 +88,7 @@ explain_buffer_errno_fopen_explanation(explain_string_buffer_t *sb,
                 break;
             }
             close(fd);
-            explain_buffer_enomem_user(sb);
+            explain_buffer_enomem_user(sb, 0);
         }
         break;
 
@@ -169,3 +169,6 @@ explain_string_flags_einval(const explain_string_flags_t *sf,
         explain_string_buffer_puts(sb, " unknown");
     }
 }
+
+
+/* vim: set ts=8 sw=4 et : */

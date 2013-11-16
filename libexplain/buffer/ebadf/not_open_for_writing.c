@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,7 +17,7 @@
  */
 
 #include <libexplain/buffer/ebadf.h>
-#include <libexplain/open_flags.h>
+#include <libexplain/buffer/open_flags.h>
 
 
 void

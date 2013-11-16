@@ -107,7 +107,14 @@ project_specific =
     },
     {
         name = "aemakegen:debian:build-depends";
-        value = "libcap-dev, bison, groff, linux-libc-dev, lsof";
+        value = @
+            libcap-dev,
+            libacl1-dev,
+            bison,
+            groff,
+            linux-libc-dev,
+            lsof
+            @;
     },
     {
         name = "aemakegen:rpm-spec:build-requires";

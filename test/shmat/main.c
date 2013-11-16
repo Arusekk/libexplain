@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2011, 2012 Peter Miller
+ * Copyright (C) 2011-2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,9 +58,9 @@ main(int argc, char **argv)
     }
     if (optind + 3 != argc)
         usage();
-    shmid = explain_string_to_int(argv[optind]);
-    shmaddr = explain_string_to_pointer(argv[optind + 1]);
-    shmflg = explain_string_to_int(argv[optind + 2]);
+    shmid = explain_parse_int_or_die(argv[optind]);
+    shmaddr = explain_parse_pointer_or_die(argv[optind + 1]);
+    shmflg = explain_parse_int_or_die(argv[optind + 2]);
 
     if (explain_shmat_or_die(shmid, shmaddr, shmflg))
     {

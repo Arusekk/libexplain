@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2012 Peter Miller
+ * Copyright (C) 2008, 2009, 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,10 +22,10 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/buffer/permission_mode.h>
 #include <libexplain/close.h>
 #include <libexplain/open.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/version_print.h>
 #include <libexplain/write.h>
 
@@ -57,7 +57,7 @@ main(int argc, char **argv)
         switch (c)
         {
         case 'f':
-            flags = explain_open_flags_parse_or_die(optarg, "-f");
+            flags = explain_parse_open_flags_or_die(optarg, "-f");
             break;
 
         case 'm':

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -141,3 +141,16 @@ explain_buffer_enotdir_fd(explain_string_buffer_t *sb, int fildes,
 {
     explain_buffer_wrong_file_type(sb, fildes, caption, S_IFDIR);
 }
+
+
+int
+explain_fildes_is_a_directory(int fildes)
+{
+    struct stat st;
+    if (fstat(fildes, &st) < 0)
+        return 0;
+    return !!S_ISDIR(st.st_mode);
+}
+
+
+/* vim: set ts=8 sw=4 et : */

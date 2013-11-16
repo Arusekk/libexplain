@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2013 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ TEST_SUBJECT="pipe ENFILE"
 . test_prelude
 
 cat > test.ok << 'fubar'
-pipe(pipefds = 0x09AB0000) failed, Too many open files in system (ENFILE)
+pipe(fildes = 0x09AB0000) failed, Too many open files in system (ENFILE)
 because the system limit on the total number of open files has been reached
 fubar
 test $? -eq 0 || no_result
@@ -40,4 +40,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

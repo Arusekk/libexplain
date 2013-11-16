@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2011 Peter Miller
+ * Copyright (C) 2008, 2009, 2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -170,6 +170,29 @@ explain_buffer_errno_read_explanation(explain_string_buffer_t *sb, int errnum,
                 );
             }
         }
+
+        /*
+         * There is a bug in Tru64 5.1.  Attempting to read more than
+         * INT_MAX bytes fails with errno == EINVAL.
+         */
+        if (data_size > INT_MAX)
+        {
+            explain_string_buffer_puts
+            (
+                sb,
+                /* FIXME: i18n */
+                "you have tripped over a bug in Tru64 5.1 where it is unable "
+                "to read more than INT_MAX bytes at a time"
+            );
+            explain_string_buffer_printf
+            (
+                sb,
+                " (%zd > %d)",
+                data_size,
+                INT_MAX
+            );
+            break;
+        }
         break;
 
     case EIO:
@@ -306,3 +329,6 @@ explain_buffer_errno_read(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

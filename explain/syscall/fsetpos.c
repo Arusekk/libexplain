@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/fsetpos.h>
+#include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -40,20 +41,23 @@ explain_syscall_fsetpos(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 2:
-        pos = explain_string_to_pointer(argv[1]);
+        pos = explain_parse_pointer_or_die(argv[1]);
         /* fall through... */
 
     case 1:
-        fp = explain_string_to_pointer(argv[0]);
+        fp = explain_parse_stream_or_die(argv[0], "r");
         break;
 
     default:
-        fprintf(stderr, "fsetpos: requires 2 arguments, not %d\n", argc);
-        exit(EXIT_FAILURE);
+        explain_output_error_and_die
+        (
+            "fsetpos: requires 2 arguments, not %d\n",
+            argc
+        );
     }
 
     explain_wrap_and_print(stdout, explain_errno_fsetpos(errnum, fp, pos));
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

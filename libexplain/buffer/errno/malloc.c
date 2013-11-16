@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 #include <libexplain/buffer/enomem.h>
 #include <libexplain/buffer/errno/generic.h>
 #include <libexplain/buffer/errno/malloc.h>
+#include <libexplain/buffer/size_t.h>
 #include <libexplain/explanation.h>
 
 
@@ -29,7 +30,9 @@ explain_buffer_errno_malloc_system_call(explain_string_buffer_t *sb,
     int errnum, size_t size)
 {
     (void)errnum;
-    explain_string_buffer_printf(sb, "malloc(size = %ld)", (long)size);
+    explain_string_buffer_printf(sb, "malloc(size = ");
+    explain_buffer_size_t(sb, size);
+    explain_string_buffer_putc(sb, ')');
 }
 
 
@@ -44,7 +47,7 @@ explain_buffer_errno_malloc_explanation(explain_string_buffer_t *sb,
     switch (errnum)
     {
     case ENOMEM:
-        explain_buffer_enomem_user(sb);
+        explain_buffer_enomem_user(sb, size);
         break;
 
     default:
@@ -72,4 +75,4 @@ explain_buffer_errno_malloc(explain_string_buffer_t *sb, int errnum,
     explain_explanation_assemble(&exp, sb);
 }
 
-/* vim:ts=8:sw=4:et */
+/* vim: set ts=8 sw=4 et : */

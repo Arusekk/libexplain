@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011, 2012 Peter Miller
+ * Copyright (C) 2011-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -67,7 +67,7 @@ main(int argc, char **argv)
         usage();
 
     arg1 = argv[optind];
-    arg2 = explain_string_to_pointer(argv[optind + 1]);
+    arg2 = explain_parse_pointer_or_die(argv[optind + 1]);
 
     explain_fputs_or_die(arg1, arg2);
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,11 +21,11 @@
 
 
 void
-explain_string_to_timeval(const char *text, struct timeval *result)
+explain_parse_timeval_or_die(const char *text, struct timeval *result)
 {
     double          seconds;
 
-    seconds = explain_string_to_double(text);
+    seconds = explain_parse_double_or_die(text);
     result->tv_sec = seconds;
     result->tv_usec = (seconds - result->tv_sec) * 1e6 + 0.5;
     if (result->tv_usec < 0)
@@ -34,3 +34,6 @@ explain_string_to_timeval(const char *text, struct timeval *result)
         result->tv_usec += 1000000;
     }
 }
+
+
+/* vim: set ts=8 sw=4 et : */

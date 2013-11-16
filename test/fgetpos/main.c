@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2012 Peter Miller
+ * Copyright (C) 2010, 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -65,11 +65,11 @@ main(int argc, char **argv)
         usage();
 
     case 2:
-        pos = explain_string_to_pointer(argv[optind + 1]);
+        pos = explain_parse_pointer_or_die(argv[optind + 1]);
         /* fall through... */
 
     case 1:
-        fp = explain_string_to_pointer(argv[optind]);
+        fp = explain_parse_pointer_or_die(argv[optind]);
         break;
     }
 

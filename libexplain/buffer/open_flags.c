@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010, 2012 Peter Miller
+ * Copyright (C) 2008-2010, 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 
 #include <libexplain/ac/fcntl.h>
 
-#include <libexplain/open_flags.h>
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
@@ -137,6 +137,20 @@ static const explain_parse_bits_table_t table[] =
 #ifdef O_TEXT
     { "O_TEXT", O_TEXT },
 #endif
+#ifdef O_NOINHERIT
+    { "O_NOINHERIT", O_NOINHERIT },
+#endif
+#ifdef O_SEARCH
+    /* open a directory for searchin only */
+    { "O_SEARCH", O_SEARCH },
+#endif
+#ifdef O_EXEC
+    /* open a regular file for execution only */
+    { "O_EXEC", O_EXEC },
+#endif
+#ifdef O_TTY_INIT
+    { "O_TTY_INIT", O_TTY_INIT },
+#endif
 };
 
 
@@ -161,6 +175,20 @@ explain_buffer_open_flags(explain_string_buffer_t *sb, int flags)
     case O_WRONLY:
         explain_string_buffer_puts(sb, "O_WRONLY");
         break;
+
+#if defined(O_SEARCH) && O_SEARCH != 0
+     case O_SEARCH:
+        /* open a directory for searchin only */
+        explain_string_buffer_puts(sb, "O_SEARCH");
+        break;
+#endif
+
+#if defined(O_EXEC) && O_EXEC != 0
+    case O_EXEC:
+        /* open a regular file for execution only */
+        explain_string_buffer_puts(sb, "O_EXEC");
+        break;
+#endif
 
     default:
         explain_string_buffer_printf(sb, "%d", low_bits);
@@ -189,7 +217,7 @@ explain_buffer_open_flags(explain_string_buffer_t *sb, int flags)
 
 
 int
-explain_open_flags_parse_or_die(const char *text, const char *caption)
+explain_parse_open_flags_or_die(const char *text, const char *caption)
 {
     return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@ static const explain_parse_bits_table_t long_table[] =
 
 
 void
-explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode)
+explain_buffer_permission_mode(explain_string_buffer_t *sb, mode_t mode)
 {
     const explain_parse_bits_table_t *table;
     const explain_parse_bits_table_t *table_end;
@@ -77,13 +77,14 @@ explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode)
     }
     for (tp = table; tp < table_end; ++tp)
     {
-        if (tp->value != 0 && (mode & tp->value) == tp->value)
+        unsigned value = tp->value;
+        if (value != 0 && (mode & value) == value)
         {
             if (!first)
                 explain_string_buffer_puts(sb, " | ");
             explain_string_buffer_puts(sb, tp->name);
             first = 0;
-            mode -= tp->value;
+            mode -= value;
         }
     }
     if (mode != 0)
@@ -95,7 +96,7 @@ explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode)
 }
 
 
-int
+mode_t
 explain_permission_mode_parse_or_die(const char *text, const char *caption)
 {
     return
@@ -107,3 +108,6 @@ explain_permission_mode_parse_or_die(const char *text, const char *caption)
             caption
         );
 }
+
+
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 
 
 void *
-explain_string_to_pointer(const char *text)
+explain_parse_pointer_or_die(const char *text)
 {
     if (0 == strcasecmp(text, "null"))
         return NULL;
@@ -86,8 +86,11 @@ explain_string_to_pointer(const char *text)
         return NULL;
 
 #if SIZEOF_VOID_P > SIZEOF_LONG
-    return (void *)explain_string_to_longlong(text);
+    return (void *)explain_parse_longlong_or_die(text);
 #else
-    return (void *)explain_string_to_long(text);
+    return (void *)explain_parse_long_or_die(text);
 #endif
 }
+
+
+/* vim: set ts=8 sw=4 et : */

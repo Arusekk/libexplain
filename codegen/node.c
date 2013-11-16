@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010, 2012 Peter Miller
+ * Copyright (C) 2008-2010, 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -1282,8 +1282,6 @@ grope_type_specifier(node_t *np)
     assert(node_is(np, "type_specifier"));
     assert(np->nchild == 1);
     np = np->child[0];
-    if (node_is_literal(np, "void"))
-        return IS_VOID;
     if (node_is_literal(np, "char"))
         return IS_CHAR;
     if (node_is_literal(np, "short"))
@@ -1306,36 +1304,43 @@ grope_type_specifier(node_t *np)
         return IS_ENUM;
     if (node_is(np, "enum_specifier"))
         return IS_ENUM;
+
     /* everything else is a 'type_secifier = TYPE_NAME' production */
     assert(node_is_a_literal(np));
-    if (node_is_literal(np, "size_t"))
-        return IS_SIZE_T;
+    if (node_is_literal(np, "acl_t") )
+        return IS_STRUCT;
     if (node_is_literal(np, "dev_t"))
         return IS_DEV_T;
-    if (node_is_literal(np, "ssize_t"))
-        return IS_SSIZE_T;
-    if (node_is_literal(np, "ptrdiff_t") )
-        return IS_PTRDIFF_T;
-    if (node_is_literal(np, "DIR") || node_is_literal(np, "FILE") )
+    if (node_is_literal(np, "DIR"))
         return IS_STRUCT;
     if (node_is_literal(np, "fd_set"))
         return IS_STRUCT;
+    if (node_is_literal(np, "FILE") )
+        return IS_STRUCT;
     if (node_is_literal(np, "gid_t"))
         return IS_GID_T;
+    if (node_is_literal(np, "iconv_t") )
+        return IS_STRUCT;
     if (node_is_literal(np, "mode_t") )
         return IS_INTEGER;
     if (node_is_literal(np, "off_t"))
         return IS_OFF_T;
     if (node_is_literal(np, "pid_t") )
         return IS_INTEGER;
+    if (node_is_literal(np, "ptrdiff_t") )
+        return IS_PTRDIFF_T;
     if (node_is_literal(np, "sigset_t"))
         return IS_INTEGER;
+    if (node_is_literal(np, "size_t"))
+        return IS_SIZE_T;
     if (node_is_literal(np, "socklen_t") )
         return IS_SOCKLEN_T;
-    if (node_is_literal(np, "uid_t") )
-        return IS_UID_T;
+    if (node_is_literal(np, "ssize_t"))
+        return IS_SSIZE_T;
     if (node_is_literal(np, "time_t") )
         return IS_TIME_T;
+    if (node_is_literal(np, "uid_t") )
+        return IS_UID_T;
     return 0;
 }
 
@@ -1607,7 +1612,7 @@ node_parameter_from_string(const node_t *parameter, char *fmt,
     }
     if (node_parameter_is_pointer(parameter))
     {
-        strsizecopy(fmt, "explain_string_to_pointer", fmt_size);
+        strsizecopy(fmt, "explain_parse_pointer_or_die", fmt_size);
         return 1;
     }
 
@@ -1620,102 +1625,102 @@ node_parameter_from_string(const node_t *parameter, char *fmt,
     {
     case IS_CHAR:
     case IS_CHAR | IS_SIGNED:
-        strsizecopy(fmt, "explain_string_to_int", fmt_size);
+        strsizecopy(fmt, "explain_parse_int", fmt_size);
         return 1;
 
     case IS_CHAR | IS_UNSIGNED:
-        strsizecopy(fmt, "explain_string_to_uint", fmt_size);
+        strsizecopy(fmt, "explain_parse_uint_or_die", fmt_size);
         return 1;
 
     case IS_OFF_T:
-        strsizecopy(fmt, "explain_string_to_off_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_off_t_or_die", fmt_size);
         return 1;
 
     case IS_SOCKLEN_T:
-        strsizecopy(fmt, "explain_string_to_socklen_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_socklen_t_or_die", fmt_size);
         return 1;
 
     case IS_SHORT:
     case IS_SHORT | IS_SIGNED:
     case IS_SHORT | IS_INT:
     case IS_SHORT | IS_INT | IS_SIGNED:
-        strsizecopy(fmt, "explain_string_to_int", fmt_size);
+        strsizecopy(fmt, "explain_parse_int_or_die", fmt_size);
         return 1;
 
     case IS_SHORT | IS_UNSIGNED:
     case IS_SHORT | IS_INT | IS_UNSIGNED:
-        strsizecopy(fmt, "explain_string_to_uint", fmt_size);
+        strsizecopy(fmt, "explain_parse_uint_or_die", fmt_size);
         return 1;
 
     case IS_INT:
     case IS_INT | IS_SIGNED:
     case IS_SIGNED:
-        strsizecopy(fmt, "explain_string_to_int", fmt_size);
+        strsizecopy(fmt, "explain_parse_int_or_die", fmt_size);
         return 1;
 
     case IS_INT | IS_UNSIGNED:
     case IS_UNSIGNED:
-        strsizecopy(fmt, "explain_string_to_uint", fmt_size);
+        strsizecopy(fmt, "explain_parse_uint_or_die", fmt_size);
         return 1;
 
     case IS_LONG:
     case IS_LONG | IS_SIGNED:
     case IS_LONG | IS_INT:
     case IS_LONG | IS_INT | IS_SIGNED:
-        strsizecopy(fmt, "explain_string_to_long", fmt_size);
+        strsizecopy(fmt, "explain_parse_long_od_die", fmt_size);
         return 1;
 
     case IS_LONG | IS_UNSIGNED:
     case IS_LONG | IS_INT | IS_UNSIGNED:
-        strsizecopy(fmt, "explain_string_to_ulong", fmt_size);
+        strsizecopy(fmt, "explain_parse_ulomg_or_die", fmt_size);
         return 1;
 
     case IS_LONGLONG:
     case IS_LONGLONG | IS_SIGNED:
     case IS_LONGLONG | IS_INT:
     case IS_LONGLONG | IS_INT | IS_SIGNED:
-        strsizecopy(fmt, "explain_string_to_longlong", fmt_size);
+        strsizecopy(fmt, "explain_parse_longlong_or_die", fmt_size);
         return 1;
 
     case IS_LONGLONG | IS_UNSIGNED:
     case IS_LONGLONG | IS_INT | IS_UNSIGNED:
-        strsizecopy(fmt, "explain_string_to_ulonglong", fmt_size);
+        strsizecopy(fmt, "explain_parse_ulonglong_or_die", fmt_size);
         return 1;
 
     case IS_PTRDIFF_T:
-        strsizecopy(fmt, "explain_string_to_ptrdiff_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_ptrdiff_t_or_die", fmt_size);
         return 1;
 
     case IS_SIZE_T:
-        strsizecopy(fmt, "explain_string_to_size_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_size_t_or_die", fmt_size);
         return 1;
 
     case IS_SSIZE_T:
-        strsizecopy(fmt, "explain_string_to_ssize_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_ssize_t_or_die", fmt_size);
         return 1;
 
     case IS_FLOAT:
-        strsizecopy(fmt, "explain_string_to_float", fmt_size);
+        strsizecopy(fmt, "explain_parse_float_or_die", fmt_size);
         return 1;
 
     case IS_DOUBLE:
-        strsizecopy(fmt, "explain_string_to_double", fmt_size);
+        strsizecopy(fmt, "explain_parse_double_or_die", fmt_size);
         return 1;
 
     case IS_LONG | IS_DOUBLE:
-        strsizecopy(fmt, "explain_string_to_long_double", fmt_size);
+        strsizecopy(fmt, "explain_parse_long_double_or_die", fmt_size);
         return 1;
 
     case IS_TIME_T:
-        strsizecopy(fmt, "explain_string_to_time_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_time_t_or_die", fmt_size);
         return 1;
 
     case IS_UID_T:
-        strsizecopy(fmt, "explain_string_to_uid_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_uid_t_or_die", fmt_size);
         return 1;
 
     case IS_GID_T:
-        strsizecopy(fmt, "explain_string_to_gid_t", fmt_size);
+        strsizecopy(fmt, "explain_parse_gid_t_or_die", fmt_size);
         return 1;
 
     default:

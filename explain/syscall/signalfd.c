@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,7 +50,7 @@ explain_syscall_signalfd(int errnum, int argc, char **argv)
         /* fall through... */
 
     case 1:
-        fildes = explain_string_to_int(argv[0]);
+        fildes = explain_parse_int_or_die(argv[0]);
         /* fall through... */
 
     case 0:
@@ -66,4 +66,4 @@ explain_syscall_signalfd(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

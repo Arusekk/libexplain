@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,7 +38,7 @@ explain_syscall_tcflow(int errnum, int argc, char **argv)
         fprintf(stderr, "tcflow: requires 2 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    fildes = explain_string_to_int(argv[0]);
+    fildes = explain_parse_fildes_or_die(argv[0]);
     action = explain_parse_tcflow_action_or_die(argv[1], "argv[1]");
 
     explain_wrap_and_print(stdout, explain_errno_tcflow(errnum, fildes,
@@ -46,4 +46,4 @@ explain_syscall_tcflow(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

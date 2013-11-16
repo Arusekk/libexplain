@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2011 Peter Miller
+ * Copyright (C) 2008, 2009, 2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,10 +35,12 @@ void explain_buffer_enomem_kernel(explain_string_buffer_t *sb);
   * The explain_buffer_enomem function may be used to
   * explain a 'no user-space memory' error.
   *
+  * @param size
+  *     The memory allocation size, in bytes.  Or zero is unknown.
   * @param sb
-  *    The buffer to print the explanation to
+  *     The buffer to print the explanation to
   */
-void explain_buffer_enomem_user(explain_string_buffer_t *sb);
+void explain_buffer_enomem_user(explain_string_buffer_t *sb, size_t size);
 
 /**
   * The explain_buffer_enomem_or_user function may be used to
@@ -61,11 +63,24 @@ void explain_buffer_enomem_kernel_or_user(explain_string_buffer_t *sb);
   * @param sb
   *     String buffer to print into.
   * @param size
-  *     The memory allocation size, in bytes.
+  *     The memory allocation size, in bytes.  Or zero is unknown.
   * @returns
-  *     true if would exceed, false if not.
+  *     0 if print nothing, 1 if printed something.
   */
 int explain_buffer_enomem_rlimit_exceeded(explain_string_buffer_t *sb,
     size_t size);
 
+/**
+  * The explain_buffer_enomem_exhausting_swap function is used to print
+  * additional information when "infinite" memory is availabl, but the
+  * kernel says we have run out.
+  *
+  * @param sb
+  *     String buffer to print into.
+  * @returns
+  *     0 if print nothing, 1 if printed something.
+  */
+int explain_buffer_enomem_exhausting_swap(explain_string_buffer_t *sb);
+
 #endif /* LIBEXPLAIN_BUFFER_ENOMEM_H */
+/* vim: set ts=8 sw=4 et : */

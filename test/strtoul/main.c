@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2012 Peter Miller
+ * Copyright (C) 2009, 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ main(int argc, char **argv)
     switch (argc - optind)
     {
     case 2:
-        base = explain_string_to_int(argv[optind + 1]);
+        base = explain_parse_int_or_die(argv[optind + 1]);
         /* fall through... */
 
     case 1:

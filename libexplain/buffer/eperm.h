@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011 Peter Miller
+ * Copyright (C) 2009-2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -110,7 +110,7 @@ void explain_buffer_eperm_unlink(explain_string_buffer_t *sb,
 
 /**
   * The explain_buffer_eperm_unlink functions is used to print an
-  * explanation of a EPERM error, in the case where the circumatanves
+  * explanation of a EPERM error, in the case where the circumstances
   * are a bit vague or non-specific.
   *
   * @param sb
@@ -122,3 +122,4 @@ void explain_buffer_eperm_vague(explain_string_buffer_t *sb,
     const char *syscall_name);
 
 #endif /* LIBEXPLAIN_BUFFER_EPERM_H */
+/* vim: set ts=8 sw=4 et : */

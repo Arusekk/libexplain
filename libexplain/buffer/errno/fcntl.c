@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011 Peter Miller
+ * Copyright (C) 2008-2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,11 +34,11 @@
 #include <libexplain/buffer/fildes_to_pathname.h>
 #include <libexplain/buffer/flock.h>
 #include <libexplain/buffer/is_the_null_pointer.h>
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/signal.h>
 #include <libexplain/explanation.h>
 #include <libexplain/fcntl.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/parse_bits.h>
 #include <libexplain/is_efault.h>
 #include <libexplain/sizeof.h>
@@ -434,3 +434,6 @@ explain_buffer_errno_fcntl(explain_string_buffer_t *sb, int errnum,
     );
     explain_explanation_assemble(&exp, sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

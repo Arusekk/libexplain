@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011 Peter Miller
+ * Copyright (C) 2009, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,8 +19,8 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/open_flags.h>
 #include <libexplain/mkostemp.h>
-#include <libexplain/open_flags.h>
 #include <libexplain/strdup.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -39,7 +39,7 @@ explain_syscall_mkostemp(int errnum, int argc, char **argv)
         exit(EXIT_FAILURE);
     }
     templat = explain_strdup_or_die(argv[0]);
-    flags = explain_open_flags_parse_or_die(argv[1], "arg 2");
+    flags = explain_parse_open_flags_or_die(argv[1], "arg 2");
     explain_wrap_and_print
     (
         stdout,
@@ -48,4 +48,4 @@ explain_syscall_mkostemp(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

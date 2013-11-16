@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2012 Peter Miller
+ * Copyright (C) 2008-2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,7 +52,7 @@
  * Needed for explain_buffer_errno_path_resolution
  */
 #ifndef O_DIRECTORY
-#define O_DIRECTORY 0x40000000
+#define O_DIRECTORY 0x40000000  /* or O_RDONLY */
 #endif
 
 #ifndef O_NOFOLLOW

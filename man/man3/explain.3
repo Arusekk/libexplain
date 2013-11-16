@@ -198,6 +198,42 @@ Explain \f[I]acct\fP(2) errors
 \f[I]explain_acct_or_die\fP(3)
 process accounting control and report errors
 .TP 8n
+\f[I]explain_acl_from_text\fP(3)
+Explain \f[I]acl_from_text\fP(3) errors
+.TP 8n
+\f[I]explain_acl_from_text_or_die\fP(3)
+create an ACL from text and report errors
+.TP 8n
+\f[I]explain_acl_get_fd\fP(3)
+Explain \f[I]acl_get_fd\fP(3) errors
+.TP 8n
+\f[I]explain_acl_get_fd_or_die\fP(3)
+Execute \f[I]acl_get_fd\fP(3) and report errors
+.TP 8n
+\f[I]explain_acl_get_file\fP(3)
+Explain \f[I]acl_get_file\fP(3) errors
+.TP 8n
+\f[I]explain_acl_get_file_or_die\fP(3)
+Execute \f[I]acl_get_file\fP(3) and report errors
+.TP 8n
+\f[I]explain_acl_set_fd\fP(3)
+Explain \f[I]acl_set_fd\fP(3) errors
+.TP 8n
+\f[I]explain_acl_set_fd_or_die\fP(3)
+set an ACL by file descriptor and report errors
+.TP 8n
+\f[I]explain_acl_set_file\fP(3)
+Explain \f[I]acl_set_file\fP(3) errors
+.TP 8n
+\f[I]explain_acl_set_file_or_die\fP(3)
+set an ACL by filename and report errors
+.TP 8n
+\f[I]explain_acl_to_text\fP(3)
+Explain \f[I]acl_to_text\fP(3) errors
+.TP 8n
+\f[I]explain_acl_to_text_or_die\fP(3)
+convert an ACL to text and report errors
+.TP 8n
 \f[I]explain_adjtime\fP(3)
 Explain \f[I]adjtime\fP(2) errors
 .TP 8n
@@ -209,6 +245,12 @@ Explain \f[I]adjtimex\fP(2) errors
 .TP 8n
 \f[I]explain_adjtimex_or_die\fP(3)
 tune kernel clock and report errors
+.TP 8n
+\f[I]explain_asprintf\fP(3)
+Explain \f[I]asprintf\fP(3) errors
+.TP 8n
+\f[I]explain_asprintf_or_die\fP(3)
+print to allocated string and report errors
 .\" ----------  B  ---------------------------------------------------------
 .TP 8n
 \f[I]explain_bind\fP(3)
@@ -292,6 +334,12 @@ Explain \f[I]dup2\fP(2) errors
 duplicate a file descriptor and report errors
 .\" ----------  E  ---------------------------------------------------------
 .TP 8n
+\f[I]explain_endgrent\fP(3)
+Explain \f[I]endgrent\fP(3) errors
+.TP 8n
+\f[I]explain_endgrent_or_die\fP(3)
+finish group file accesses and report errors
+.TP 8n
 \f[I]explain_eventfd\fP(3)
 Explain \f[I]eventfd\fP(2) errors
 .TP 8n
@@ -333,13 +381,19 @@ Explain \f[I]fchdir\fP(2) errors
 Explain \f[I]fchmod\fP(2) errors
 .TP 8n
 \f[I]explain_fchmod_or_die\fP(3)
-change permissions of a file and report errors
+change permissions of an open file and report errors
 .TP 8n
 \f[I]explain_fchown\fP(3)
 Explain \f[I]fchown\fP(2) errors
 .TP 8n
 \f[I]explain_fchown_or_die\fP(3)
 change ownership of a file and report errors
+.TP 8n
+\f[I]explain_fchownat\fP(3)
+Explain \f[I]fchownat\fP(2) errors
+.TP 8n
+\f[I]explain_fchownat_or_die\fP(3)
+change ownership of a file relative to a directory and report errors
 .TP 8n
 \f[I]explain_fclose\fP(3)
 Explain \f[I]fclose\fP(2) errors
@@ -473,6 +527,12 @@ Explain \f[I]fseek\fP(3) errors
 \f[I]explain_fseek_or_die\fP(3)
 reposition a stream and report errors
 .TP 8n
+\f[I]explain_fseeko\fP(3)
+Explain \f[I]fseeko\fP(3) errors
+.TP 8n
+\f[I]explain_fseeko_or_die\fP(3)
+seek to or report file position and report errors
+.TP 8n
 \f[I]explain_fsetpos\fP(3)
 Explain \f[I]fsetpos\fP(3) errors
 .TP 8n
@@ -484,6 +544,12 @@ Explain \f[I]fstat\fP(3) errors
 .TP 8n
 \f[I]explain_fstat_or_die\fP(3)
 get file status and report errors
+.TP 8n
+\f[I]explain_fstatat\fP(3)
+Explain \f[I]fstatat\fP(2) errors
+.TP 8n
+\f[I]explain_fstatat_or_die\fP(3)
+get file status relative to a directory file descriptor and report errors
 .TP 8n
 \f[I]explain_fstatfs\fP(3)
 Explain \f[I]fstatfs\fP(2) errors
@@ -509,6 +575,12 @@ Explain \f[I]ftell\fP(3) errors
 \f[I]explain_ftell_or_die\fP(3)
 get stream position and report errors
 .TP 8n
+\f[I]explain_ftello\fP(3)
+Explain \f[I]ftello\fP(3) errors
+.TP 8n
+\f[I]explain_ftello_or_die\fP(3)
+get stream position and report errors
+.TP 8n
 \f[I]explain_ftime\fP(3)
 Explain \f[I]ftime\fP(3) errors
 .TP 8n
@@ -520,6 +592,12 @@ Explain \f[I]ftruncate\fP(2) errors
 .TP 8n
 \f[I]explain_ftruncate_or_die\fP(3)
 truncate a file to a specified length and report errors
+.TP 8n
+\f[I]explain_futimens\fP(3)
+Explain \f[I]futimens\fP(3) errors
+.TP 8n
+\f[I]explain_futimens_or_die\fP(3)
+change file timestamps with nanosecond precision and report errors
 .TP 8n
 \f[I]explain_futimes\fP(3)
 Explain \f[I]futimes\fP(3) errors
@@ -561,6 +639,18 @@ Explain \f[I]getdomainname\fP(2) errors
 \f[I]explain_getdomainname_or_die\fP(3)
 get domain name and report errors
 .TP 8n
+\f[I]explain_getgrent\fP(3)
+Explain \f[I]getgrent\fP(3) errors
+.TP 8n
+\f[I]explain_getgrent_or_die\fP(3)
+get group file entry and report errors
+.TP 8n
+\f[I]explain_getgrouplist\fP(3)
+Explain \f[I]getgrouplist\fP(3) errors
+.TP 8n
+\f[I]explain_getgrouplist_or_die\fP(3)
+get list of groups to which a user belongs and report errors
+.TP 8n
 \f[I]explain_getgroups\fP(3)
 Explain \f[I]getgroups\fP(2) errors
 .TP 8n
@@ -575,6 +665,12 @@ Explain \f[I]gethostbyname\fP(3) errors
 .TP 8n
 \f[I]explain_gethostbyname_or_die\fP(3)
 get host address given host name and report errors
+.TP 8n
+\f[I]explain_gethostid\fP(3)
+Explain \f[I]gethostid\fP(3) errors
+.TP 8n
+\f[I]explain_gethostid_or_die\fP(3)
+get the unique identifier of the current host and report errors
 .TP 8n
 \f[I]explain_gethostname\fP(3)
 Explain \f[I]gethostname\fP(2) errors
@@ -599,6 +695,12 @@ Explain \f[I]getpgrp\fP(2) errors
 .TP 8n
 \f[I]explain_getpgrp_or_die\fP(3)
 get process group and report errors
+.TP 8n
+\f[I]explain_getpriority\fP(3)
+Explain \f[I]getpriority\fP(2) errors
+.TP 8n
+\f[I]explain_getpriority_or_die\fP(3)
+get program scheduling priority and report errors
 .TP 8n
 \f[I]explain_getresgid\fP(3)
 Explain \f[I]getresgid\fP(2) errors
@@ -649,6 +751,24 @@ Explain \f[I]getw\fP(3) errors
 input a word (int) and report errors
 .\" ----------  H  ---------------------------------------------------------
 .\" ----------  I  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_iconv\fP(3)
+Explain \f[I]iconv\fP(3) errors
+.TP 8n
+\f[I]explain_iconv_or_die\fP(3)
+perform character set conversion and report errors
+.TP 8n
+\f[I]explain_iconv_close\fP(3)
+Explain \f[I]iconv_close\fP(3) errors
+.TP 8n
+\f[I]explain_iconv_close_or_die\fP(3)
+deallocate descriptor for character set conversion and report errors
+.TP 8n
+\f[I]explain_iconv_open\fP(3)
+Explain \f[I]iconv_open\fP(3) errors
+.TP 8n
+\f[I]explain_iconv_open_or_die\fP(3)
+allocate descriptor for character set conversion and report errors
 .TP 8n
 \f[I]explain_ioctl\fP(3)
 Explain \f[I]ioctl\fP(2) errors
@@ -770,6 +890,12 @@ Explain \f[I]open\fP(2) errors
 \f[I]explain_open_or_die\fP(3)
 open files and report errors
 .TP 8n
+\f[I]explain_openat\fP(3)
+Explain \f[I]openat\fP(2) errors
+.TP 8n
+\f[I]explain_openat_or_die\fP(3)
+open a file relative to a directory file descriptor and report errors
+.TP 8n
 \f[I]explain_opendir\fP(3)
 Explain \f[I]opendir\fP(3) errors
 .TP 8n
@@ -794,6 +920,12 @@ Explain \f[I]pipe\fP(2) errors
 .TP 8n
 \f[I]explain_pipe_or_die\fP(3)
 Execute \f[I]pipe\fP(2) and report errors
+.TP 8n
+\f[I]explain_pipe2\fP(3)
+Explain \f[I]pipe2\fP(2) errors
+.TP 8n
+\f[I]explain_pipe2_or_die\fP(3)
+create pipe and report errors
 .TP 8n
 \f[I]explain_poll\fP(3)
 Explain \f[I]poll\fP(2) errors
@@ -954,6 +1086,12 @@ Explain \f[I]setgid\fP(2) errors
 \f[I]explain_setgid_or_die\fP(3)
 set group identity and report errors
 .TP 8n
+\f[I]explain_setgrent\fP(3)
+Explain \f[I]setgrent\fP(3) errors
+.TP 8n
+\f[I]explain_setgrent_or_die\fP(3)
+rewind to the start of the group database and report errors
+.TP 8n
 \f[I]explain_setgroups\fP(3)
 Explain \f[I]setgroups\fP(2) errors
 .TP 8n
@@ -983,6 +1121,12 @@ Explain \f[I]setpgrp\fP(2) errors
 .TP 8n
 \f[I]explain_setpgrp_or_die\fP(3)
 set process group and report errors
+.TP 8n
+\f[I]explain_setpriority\fP(3)
+Explain \f[I]setpriority\fP(2) errors
+.TP 8n
+\f[I]explain_setpriority_or_die\fP(3)
+set program scheduling priority and report errors
 .TP 8n
 \f[I]explain_setregid\fP(3)
 Explain \f[I]setregid\fP(2) errors
@@ -1094,6 +1238,12 @@ Explain \f[I]stime\fP(2) errors
 .TP 8n
 \f[I]explain_stime_or_die\fP(3)
 set system time and report errors
+.TP 8n
+\f[I]explain_strcoll\fP(3)
+Explain \f[I]strcoll\fP(3) errors
+.TP 8n
+\f[I]explain_strcoll_or_die\fP(3)
+compare two strings using the current locale and report errors
 .TP 8n
 \f[I]explain_strdup\fP(3)
 Explain \f[I]strdup\fP(3) errors
@@ -1289,6 +1439,12 @@ Explain \f[I]utimes\fP(2) errors
 \f[I]explain_utimes_or_die\fP(3)
 change file last access and modification times and report errors
 .\" ----------  V  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_vasprintf\fP(3)
+Explain \f[I]vasprintf\fP(3) errors
+.TP 8n
+\f[I]explain_vasprintf_or_die\fP(3)
+print to allocated string and report errors
 .TP 8n
 \f[I]explain_vfork\fP(3)
 Explain \f[I]vfork\fP(2) errors

@@ -43,7 +43,7 @@ explain_syscall_getrusage(int errnum, int argc, char **argv)
         exit(EXIT_FAILURE);
 
     case 2:
-        usage = explain_string_to_pointer(argv[1]);
+        usage = explain_parse_pointer_or_die(argv[1]);
         /* Fall through... */
 
     case 1:

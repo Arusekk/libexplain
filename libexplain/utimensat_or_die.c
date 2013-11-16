@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -59,6 +59,19 @@ explain_utimensat_on_error(int fildes, const char *pathname, const struct
     int             result;
 
     result = utimensat(fildes, pathname, data, flags);
+
+#ifdef __linux__
+    /*
+     * Work around a kernel bug:
+     * http://bugzilla.redhat.com/442352
+     * http://bugzilla.redhat.com/449910
+     * It appears that utimensat can mistakenly return 280 rather
+     * than -1 upon ENOSYS failure.
+     */
+    if (result > 0 && errno == ENOSYS)
+        result = -1;
+#endif
+
     if (result < 0)
     {
         int             hold_errno;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -61,9 +61,9 @@ main(int argc, char **argv)
     switch (argc - optind)
     {
     case 2:
-        egid = explain_string_to_gid_t(argv[optind + 1]);
+        egid = explain_parse_gid_t_or_die(argv[optind + 1]);
     case 1:
-        rgid = explain_string_to_gid_t(argv[optind]);
+        rgid = explain_parse_gid_t_or_die(argv[optind]);
     case 0:
         break;
 

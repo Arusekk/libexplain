@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,19 +18,89 @@
  */
 
 #include <libexplain/ac/grp.h>
+#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
 
+#include <libexplain/fstrcmp.h>
+#include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 
 
-int
-explain_string_to_gid_t(const char *text)
+gid_t
+explain_parse_gid_t_or_die(const char *text)
 {
-    struct group    *gr;
+    /* see if it is a group name */
+    {
+        struct group    *gr;
 
-    gr = getgrnam(text);
-    if (gr)
-        return gr->gr_gid;
-    return explain_string_to_int(text);
+        setgrent();
+        gr = getgrnam(text);
+        if (gr)
+            return gr->gr_gid;
+    }
+
+    /* see if it is a number */
+    {
+        char            *ep;
+        long            result;
+
+        result = strtol(text, &ep, 0);
+        if (ep != text && *ep == '\0')
+            return result;
+    }
+
+    /* fuzzy name match for nicer error messages */
+    {
+        double          best_weight = 0.6;
+        int             best_gid = -1;
+        char            best_name[100];
+
+        setgrent();
+        for (;;)
+        {
+            double          w;
+            struct group    *gr;
+
+            gr = getgrent();
+            if (!gr)
+                break;
+            w = explain_fstrcmp(text, gr->gr_name);
+            if (w > best_weight)
+            {
+                best_weight = w;
+                explain_strendcpy
+                (
+                    best_name,
+                    gr->gr_name,
+                    best_name + sizeof(best_name)
+                );
+                best_gid = gr->gr_gid;
+            }
+        }
+        if (best_gid > 0)
+        {
+            explain_output_error_and_die
+            (
+                /* FIXME: i18n */
+                "unable to interpret \"%s\" as a group name, "
+                    "did you mean the \"%s\" group instead?",
+                text,
+                best_name
+            );
+        }
+        else
+        {
+            explain_output_error_and_die
+            (
+                /* FIXME: i18n */
+                "unable to interpret \"%s\" as a group name",
+                text
+            );
+        }
+    }
+
+    /* I give up */
+    return -1;
 }
 
 

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -32,7 +32,7 @@
   * @param mode
   *    the permission mode bits to be decoded
   */
-void explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode);
+void explain_buffer_permission_mode(explain_string_buffer_t *sb, mode_t mode);
 
 /**
   * The explain_permission_mode_parse_or_die function may be used to
@@ -41,7 +41,7 @@ void explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode);
   *
   * @param text
   *     The text to be parsed to extract a permission mode value.
-  * @param cptn
+  * @param caption
   *     additional text to add to the start of the error message
   * @returns
   *     permission mode value
@@ -50,6 +50,8 @@ void explain_buffer_permission_mode(explain_string_buffer_t *sb, int mode);
   *     and exit(EXIT_FAILURE) is called.  If there is an error, this
   *     function will not return.
   */
-int explain_permission_mode_parse_or_die(const char *text, const char *cptn);
+mode_t explain_permission_mode_parse_or_die(const char *text,
+    const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_PERMISSION_MODE_H */
+/* vim: set ts=8 sw=4 et : */

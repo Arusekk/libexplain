@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010 Peter Miller
+ * Copyright (C) 2008-2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,8 +31,17 @@
 #include <sys/types.h>
 #endif
 
+#ifndef HAVE_SYS_TYPES_OFF_T
+# ifndef HAVE_OFF_T
+#  ifndef off_t
+#   define off_t long
+#  endif
+# endif
+#endif
+
 #ifndef HAVE_LOFF_T
 typedef off_t loff_t;
 #endif
 
 #endif /* LIBEXPLAIN_AC_SYS_TYPES_H */
+/* vim: set ts=8 sw=4 et : */

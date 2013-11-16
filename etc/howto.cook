@@ -60,7 +60,13 @@ set fingerprint;
  * If you want all the gorey details, add verbose=1 to the aeb command line.
  */
 if [not [defined verbose]] then
-    verbose = 0;
+{
+    /* or for brevity, put V=1 on the command line */
+    if [defined V] then
+        verbose = [V];
+    else
+        verbose = 0;
+}
 quiet = [not [verbose]];
 
 function quiet_print =
@@ -155,9 +161,11 @@ CFLAGS = -Wall -Wextra
     -O2
     ;
 if [matches %1C%2 [version]] then
-    CFLAGS += -Werror;
+    CFLAGS += -Werror --pipe;
 LDFLAGS = -Wl,--as-needed;
 LIBS = -lcap -ldl -lm;
+
+#include-cooked etc/howto.conf
 
 /* -------------------------------------------------------------------------
  * Section: Compile Flags
@@ -440,6 +448,12 @@ dirent_exceptions =
     libexplain/telldir.h
     ;
 
+iconv_exceptions =
+    libexplain/iconv_open.h
+    libexplain/iconv.h
+    libexplain/iconv_close.h
+    ;
+
 signal_exceptions =
     libexplain/signalfd.h
     ;
@@ -452,6 +466,7 @@ stdarg_exceptions =
     ;
 
 stdio_exceptions =
+    libexplain/asprintf.h
     libexplain/fclose.h
     libexplain/fdopen.h
     libexplain/feof.h
@@ -471,8 +486,10 @@ stdio_exceptions =
     libexplain/freopen.h
     libexplain/fscanf.h
     libexplain/fseek.h
+    libexplain/fseeko.h
     libexplain/fsetpos.h
     libexplain/ftell.h
+    libexplain/ftello.h
     libexplain/fwrite.h
     libexplain/fwrite.h
     libexplain/getc.h
@@ -496,6 +513,7 @@ stdio_exceptions =
     libexplain/sprintf.h
     libexplain/tmpfile.h
     libexplain/ungetc.h
+    libexplain/vasprintf.h
     libexplain/vfprintf.h
     libexplain/vfscanf.h
     libexplain/vprintf.h
@@ -514,6 +532,15 @@ stdlib_exceptions =
 string_exceptions =
     libexplain/strndup.h
     test_mincore/main.c
+    ;
+
+sys/acl_exceptions =
+    libexplain/acl_from_text.h
+    libexplain/acl_get_fd.h
+    libexplain/acl_get_file.h
+    libexplain/acl_set_fd.h
+    libexplain/acl_set_file.h
+    libexplain/acl_to_text.h
     ;
 
 sys/select_exceptions =
@@ -536,6 +563,7 @@ sys/socket_exceptions =
     ;
 
 sys/stat_exceptions =
+    libexplain/fchmod.h
     libexplain/lchmod.h
     ;
 
@@ -544,10 +572,13 @@ sys/timeb_exceptions =
     ;
 
 sys/types_exceptions =
+    libexplain/fseeko.h
+    libexplain/ftello.h
     libexplain/kill.h
     libexplain/mknod.h
     libexplain/ustat.h
     libexplain/vfork.h
+    libexplain/getgrouplist.h
     ;
 
 sys/uio_exceptions =
@@ -563,6 +594,7 @@ time_exceptions =
 
 unistd_exceptions =
     cat/main.c
+    libexplain/fchownat.h
     libexplain/ftruncate.h
     libexplain/getcwd.h
     libexplain/getdomainname.h
@@ -623,6 +655,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=libexplain/libexplain.h"];
         if [in %0%.c [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
+        if [in %0%.c [iconv_exceptions]] then
+            ex = [stringset [ex] - "-ex=iconv.h"];
         if [in %0%.c [signal_exceptions]] then
             ex = [stringset [ex] - "-ex=signal.h"];
         if [in %0%.c [stdarg_exceptions]] then
@@ -633,6 +667,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=stdlib.h"];
         if [in %0%.c [string_exceptions]] then
             ex = [stringset [ex] - "-ex=string.h"];
+        if [in %0%.c [sys/acl_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/acl.h"];
         if [in %0%.c [sys/mman_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/mman.h"];
         if [in %0%.c [sys/select_exceptions]] then
@@ -684,6 +720,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=libexplain/libexplain.h"];
         if [in %0%.h [dirent_exceptions]] then
             ex = [stringset [ex] - "-ex=dirent.h"];
+        if [in %0%.h [iconv_exceptions]] then
+            ex = [stringset [ex] - "-ex=iconv.h"];
         if [in %0%.h [signal_exceptions]] then
             ex = [stringset [ex] - "-ex=signal.h"];
         if [in %0%.h [stdarg_exceptions]] then
@@ -694,6 +732,8 @@ libexplain/libexplain_exceptions =
             ex = [stringset [ex] - "-ex=stdlib.h"];
         if [in %0%.h [string_exceptions]] then
             ex = [stringset [ex] - "-ex=string.h"];
+        if [in %0%.h [sys/acl_exceptions]] then
+            ex = [stringset [ex] - "-ex=sys/acl.h"];
         if [in %0%.h [sys/mman_exceptions]] then
             ex = [stringset [ex] - "-ex=sys/mman.h"];
         if [in %0%.h [sys/select_exceptions]] then

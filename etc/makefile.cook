@@ -201,6 +201,13 @@ debian/copyright: [source_files]
     set shallow
 {
     function quiet_print Generate;
+
+    if [verbose] then
+    {
+        setenv DH_VERBOSE = 1;
+        set no-silent tell-position;
+    }
+
     licensecheck "--check='[.]cc$|[.][chy]$'" --copyright "`cat`"
     | sed "'s|^bl\\(bl\\)*/||'"
     | /usr/lib/cdbs/licensecheck2dep5
@@ -218,8 +225,10 @@ dataend
  *     [in [fromto %1D%2 %2 [version]] 001 002 003 004]
  *     [collect "set +e; on_ac_power; expr 1 - $?; exit 0" ]
  * ] then
+ *
+ if [in [fromto %1D%2 %2 [version]] 001 002 003 004 005] then
  */
-if [in [fromto %1D%2 %2 [version]] 001 002 003 004 005] then
+if [collect "set +e; on_ac_power; expr 1 - $?; exit 0" ] then
 {
     integration-build-targets += debian-package;
 }
@@ -230,50 +239,12 @@ debian-package: [tarball] bin/test_user
 {
     function quiet_print Generate;
 
-    local vsn = [collect head -1 [resolve debian/changelog]
-                         | sed "'s|.*(\\([^()]*\\).*|\\1|'" ];
-    vsn = [fromto %-1 % [vsn]];
-    function print "vsn = '"[vsn]"'";
-    if [not [in [count [vsn]] 1]] then
-        fail "debian version not right";
-    local neutered_tarball = [project_short]_[vsn].orig.tar.gz;
-
-    local user = [collect [resolve bin/test_user]];
-    local key = ;
-    if [in [user] archives] then
-        key = -k19CEC7D5;
-    else
-        key = -us -uc;
-
-    /*
-     * We fake the .orig.tar.gz file to not have a debian/ directory,
-     * by filtering it out with tardy.  This silences a PITA lintian
-     * warning, for no real benefit.
-     */
-
-    "set" -x &&
-    unset GPG_AGENT_INFO &&
-    rm -rf web-site/debian &&
-    mkdir -p web-site/debian &&
-    cd web-site/debian &&
-    echo Options Indexes > .htaccess &&
-    tardy -exclude "'"[project_short]-[version_short]"/debian/*'"
-        ../[notdir [tarball]]
-        [neutered_tarball] &&
-    tar xzf ../[notdir [tarball]] &&
-    cd [project_short]-[version_short] &&
-#if 0
-    dpkg-buildpackage -sgpg [key] -sa
-#else
-    debuild [key] -sa
-        --changes-option\=-DDistribution\=[collect
-            gawk -F\= "'/CODENAME/{print $2}'" /etc/lsb-release]
-#endif
-    &&
-    cd .. &&
-    rm -rf [project_short]-[version_short] &&
-    lintian -iIv --pedantic *.changes
-    ;
+    if [verbose] then
+    {
+        set no-silent tell-position;
+    }
+    sh [resolve etc/debian-package.sh]
+       [resolve [tarball]];
 
     cat > web-site/debian/build.sh;
 data

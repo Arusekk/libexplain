@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/tcsendbreak.h>
 #include <libexplain/wrap_and_print.h>
@@ -37,16 +38,19 @@ explain_syscall_tcsendbreak(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 2:
-        duration = explain_string_to_int(argv[1]);
+        duration = explain_parse_int_or_die(argv[1]);
         /* fall through... */
 
     case 1:
-        fildes = explain_string_to_int(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0]);
         break;
 
     default:
-        fprintf(stderr, "tcsendbreak: requires 2 arguments, not %d\n", argc);
-        exit(EXIT_FAILURE);
+        explain_output_error_and_die
+        (
+            "tcsendbreak: requires 2 arguments, not %d\n",
+            argc
+        );
     }
 
     explain_wrap_and_print(stdout, explain_errno_tcsendbreak(errnum, fildes,
@@ -54,4 +58,4 @@ explain_syscall_tcsendbreak(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

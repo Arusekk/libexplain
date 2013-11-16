@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2012 Peter Miller
+ * Copyright (C) 2009-2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -53,14 +53,14 @@ explain_syscall_ustat(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 2:
-        ubuf_p = explain_string_to_pointer(argv[1]);
+        ubuf_p = explain_parse_pointer_or_die(argv[1]);
         /* fall through... */
 
     case 1:
         if (stat(argv[0], &st) >= 0)
             dev = st.st_dev;
         else
-            dev = explain_string_to_long(argv[0]);
+            dev = explain_parse_long_or_die(argv[0]);
         break;
 
     default:

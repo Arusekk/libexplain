@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,13 +58,13 @@ explain_syscall_shmctl(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 3:
-        data = explain_string_to_pointer(argv[2]);
+        data = explain_parse_pointer_or_die(argv[2]);
         /* Fall through... */
 
     case 2:
         command =
             explain_parse_shmctl_command_or_die(argv[1], "arg 2");
-        shmid = explain_string_to_int(argv[0]);
+        shmid = explain_parse_int_or_die(argv[0]);
         break;
 
     default:
@@ -77,4 +77,4 @@ explain_syscall_shmctl(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

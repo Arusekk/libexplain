@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,12 +38,12 @@ explain_syscall_munmap(int errnum, int argc, char **argv)
         fprintf(stderr, "munmap: requires 2 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    data = explain_string_to_pointer(argv[0]);
-    data_size = explain_string_to_size_t(argv[1]);
+    data = explain_parse_pointer_or_die(argv[0]);
+    data_size = explain_parse_size_t_or_die(argv[1]);
 
     explain_wrap_and_print(stdout, explain_errno_munmap(errnum, data,
         data_size));
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

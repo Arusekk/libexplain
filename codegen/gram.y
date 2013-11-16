@@ -115,6 +115,8 @@ struct res_tab_t
 static const res_tab_t res_tab[] =
 {
     { "...", ELLIPSIS },
+    { "acl_t", TYPE_NAME },
+    { "acl_type_t", TYPE_NAME },
     { "DIR", TYPE_NAME },
     { "FILE", TYPE_NAME },
     { "auto", AUTO },
@@ -129,6 +131,7 @@ static const res_tab_t res_tab[] =
     { "float", FLOAT },
     { "fpos_t", TYPE_NAME },
     { "gid_t", TYPE_NAME },
+    { "iconv_t", TYPE_NAME },
     { "int", INT },
     { "long", LONG },
     { "mode_t", TYPE_NAME },

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -39,11 +39,11 @@ explain_syscall_fstatfs(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 2:
-        data = explain_string_to_pointer(argv[1]);
+        data = explain_parse_pointer_or_die(argv[1]);
         /* fall through... */
 
     case 1:
-        fildes = explain_string_to_int(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0]);
         break;
 
     default:
@@ -55,4 +55,4 @@ explain_syscall_fstatfs(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */

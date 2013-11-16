@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -46,13 +46,13 @@ explain_syscall_strtol(int errnum, int argc, char **argv)
 
     case 2:
         nptr = argv[0];
-        base = explain_string_to_int(argv[1]);
+        base = explain_parse_int_or_die(argv[1]);
         break;
 
     case 3:
         nptr = argv[0];
-        endptr = explain_string_to_pointer(argv[1]);
-        base = explain_string_to_int(argv[2]);
+        endptr = explain_parse_pointer_or_die(argv[1]);
+        base = explain_parse_int_or_die(argv[2]);
         break;
 
     default:
@@ -65,4 +65,4 @@ explain_syscall_strtol(int errnum, int argc, char **argv)
 }
 
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */
