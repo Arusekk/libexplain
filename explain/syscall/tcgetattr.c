@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/tcgetattr.h>
 #include <libexplain/wrap_and_print.h>
@@ -37,7 +38,7 @@ explain_syscall_tcgetattr(int errnum, int argc, char **argv)
         fprintf(stderr, "tcgetattr: requires 2 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    fildes = explain_parse_fildes_or_die(argv[0]);
+    fildes = explain_parse_fildes_or_die(argv[0], "arg one");
     data = explain_parse_pointer_or_die(argv[1]);
 
     explain_wrap_and_print(stdout, explain_errno_tcgetattr(errnum, fildes,

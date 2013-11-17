@@ -18,11 +18,16 @@
 
 #include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/limits.h> /* for PATH_MAX on Solaris */
+#include <libexplain/ac/stdio.h>
+#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/stdlib.h>
+#include <libexplain/ac/string.h>
 #include <libexplain/ac/sys/param.h> /* for PATH_MAX except Solaris */
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/fildes_to_pathname.h>
+#include <libexplain/open.h>
 
 
 void
@@ -46,6 +51,32 @@ explain_buffer_fildes(explain_string_buffer_t *sb, int fildes)
     explain_string_buffer_printf(sb, "%d", fildes);
     explain_buffer_fildes_to_pathname(sb, fildes);
 }
+
+
+int
+explain_parse_fildes_or_die(const char *text, const char *caption)
+{
+    /* First try, it could be a number */
+    char *ep;
+    long result = strtol(text, &ep, 0);
+    if (text != ep && !*ep)
+        return result;
+
+    /* Second try, it could be a specific stream */
+    if (0 == strcmp(text, "stdin"))
+        return fileno(stdin);
+    if (0 == strcmp(text, "stdout"))
+        return fileno(stdout);
+    if (0 == strcmp(text, "stderr"))
+        return fileno(stderr);
+
+    /* Third try, it could be a pathname */
+    return explain_open_or_die(text, O_RDONLY, 0);
+    (void)caption;
+}
+
+
+/* vim: set ts=8 sw=4 et : */
 
 
 /* vim: set ts=8 sw=4 et : */

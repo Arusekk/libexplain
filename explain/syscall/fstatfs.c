@@ -21,6 +21,7 @@
 #include <libexplain/ac/sys/mount.h>
 #include <libexplain/ac/sys/statfs.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/fstatfs.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/wrap_and_print.h>
@@ -43,7 +44,7 @@ explain_syscall_fstatfs(int errnum, int argc, char **argv)
         /* fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
 
     default:

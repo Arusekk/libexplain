@@ -95,7 +95,7 @@
 #include <explain/syscall/ftruncate.h>
 #include <explain/syscall/futimens.h>
 #include <explain/syscall/futimes.h>
-#include <explain/syscall/futimens.h>
+#include <explain/syscall/futimesat.h>
 #include <explain/syscall/fwrite.h>
 #include <explain/syscall/getc.h>
 #include <explain/syscall/getchar.h>
@@ -130,6 +130,7 @@
 #include <explain/syscall/listen.h>
 #include <explain/syscall/lseek.h>
 #include <explain/syscall/lstat.h>
+#include <explain/syscall/lutimes.h>
 #include <explain/syscall/malloc.h>
 #include <explain/syscall/mkdir.h>
 #include <explain/syscall/mkdtemp.h>
@@ -359,6 +360,7 @@ static const table_t table[] =
     /* FIXME: add support for futex */
     { "futimens", explain_syscall_futimens },
     { "futimes", explain_syscall_futimes },
+    { "futimesat", explain_syscall_futimesat },
     { "fwrite", explain_syscall_fwrite },
     /* ----------  G  ------------------------------------------------------- */
     { "getc", explain_syscall_getc },
@@ -437,6 +439,7 @@ static const table_t table[] =
     { "lseek", explain_syscall_lseek },
     /* FIXME: add support for lsetxattr */
     { "lstat", explain_syscall_lstat },
+    { "lutimes", explain_syscall_lutimes },
     /* ----------  M  ------------------------------------------------------- */
     /* FIXME: add support for madvise */
     /* FIXME: add support for madvise1 */

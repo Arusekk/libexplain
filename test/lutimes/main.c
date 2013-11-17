@@ -21,17 +21,16 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
-#include <libexplain/buffer/fildes.h>
-#include <libexplain/buffer/timespec.h>
-#include <libexplain/futimens.h>
+#include <libexplain/buffer/timeval.h>
+#include <libexplain/lutimes.h>
 #include <libexplain/version_print.h>
 
 
 static void
 usage(void)
 {
-    fprintf(stderr, "Usage: test_futimens <fildes> <data>\n");
-    fprintf(stderr, "       test_futimens -V\n");
+    fprintf(stderr, "Usage: test_lutimes <pathname> <data>\n");
+    fprintf(stderr, "       test_lutimes -V\n");
     exit(EXIT_FAILURE);
 }
 
@@ -39,9 +38,14 @@ usage(void)
 int
 main(int argc, char **argv)
 {
-    int             fildes;
-    struct timespec data[2];
+    const char      *pathname;
+    struct timeval  data[2];
 
+    pathname = 0;
+    data[0].tv_sec = 0;
+    data[0].tv_usec = UTIME_OMIT;
+    data[1].tv_sec = 0;
+    data[1].tv_usec = UTIME_OMIT;
     for (;;)
     {
         int c = getopt(argc, argv, "V");
@@ -57,28 +61,25 @@ main(int argc, char **argv)
             usage();
         }
     }
-    fildes = -1;
-    data[0].tv_nsec = UTIME_NOW;
-    data[1].tv_nsec = UTIME_OMIT;
     switch (argc - optind)
     {
     case 3:
-        explain_parse_timespec_or_die(argv[optind + 2], "arg three", &data[1]);
+        explain_parse_timeval_or_die(argv[optind + 2], "arg three", &data[1]);
         /* Fall through... */
 
     case 2:
-        explain_parse_timespec_or_die(argv[optind + 1], "arg two", &data[0]);
+        explain_parse_timeval_or_die(argv[optind + 1], "arg two", &data[0]);
         /* Fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[optind], "arg one");
+        pathname = argv[optind];
         break;
 
     default:
         usage();
     }
 
-    explain_futimens_or_die(fildes, data);
+    explain_lutimes_or_die(pathname, data);
     return EXIT_SUCCESS;
 }
 

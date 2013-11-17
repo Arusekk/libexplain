@@ -21,6 +21,7 @@
 #include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/permission_mode.h>
 #include <libexplain/fchmod.h>
 #include <libexplain/string_to_thing.h>
@@ -59,7 +60,7 @@ main(int argc, char **argv)
     }
     fildes = -1;
     mode = 0;
-    switch (argc)
+    switch (argc - optind)
     {
     default:
         usage();
@@ -69,7 +70,7 @@ main(int argc, char **argv)
         /* Fall through ... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[optind]);
+        fildes = explain_parse_fildes_or_die(argv[optind], "arg one");
         break;
     }
 

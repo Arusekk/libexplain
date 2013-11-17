@@ -32,7 +32,7 @@
   */
 void explain_buffer_fildes(explain_string_buffer_t *sb, int value);
 
-int explain_parse_fildes_or_die(const char * text);
+int explain_parse_fildes_or_die(const char *tet, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_FILDES_H */
 /* vim: set ts=8 sw=4 et : */

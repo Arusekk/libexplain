@@ -21,6 +21,7 @@
 #include <libexplain/ac/pwd.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/fstatat_flags.h>
 #include <libexplain/fchownat.h>
 #include <libexplain/fstrcmp.h>
@@ -67,7 +68,7 @@ explain_syscall_fchownat(int errnum, int argc, char **argv)
         pathname = argv[1];
 
         /* see if is openable */
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
     }
 

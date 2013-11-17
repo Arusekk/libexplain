@@ -205,10 +205,6 @@ float explain_parse_float_or_die(const char *text);
   */
 long double explain_parse_long_double_or_die(const char *text);
 
-struct timeval; /* forward */
-
-void explain_parse_timeval_or_die(const char *text, struct timeval *result);
-
 /**
   * The explain_parse_uid_t_or_die function may be used to convert text
   * to a user ID.
@@ -232,8 +228,6 @@ uid_t explain_parse_uid_t_or_die(const char *text);
   *    not return.
   */
 gid_t explain_parse_gid_t_or_die(const char *text);
-
-int explain_parse_fildes_or_die(const char * text);
 
 int explain_parse_bool_or_die(const char * text);
 

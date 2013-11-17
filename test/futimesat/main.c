@@ -18,20 +18,20 @@
 
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
-#include <libexplain/ac/sys/stat.h>
 #include <libexplain/ac/unistd.h>
+#include <libexplain/ac/sys/stat.h>
 
 #include <libexplain/buffer/fildes.h>
-#include <libexplain/buffer/timespec.h>
-#include <libexplain/futimens.h>
+#include <libexplain/buffer/timeval.h>
+#include <libexplain/futimesat.h>
 #include <libexplain/version_print.h>
 
 
 static void
 usage(void)
 {
-    fprintf(stderr, "Usage: test_futimens <fildes> <data>\n");
-    fprintf(stderr, "       test_futimens -V\n");
+    fprintf(stderr, "Usage: test_futimesat <fildes> <pathname> <data>\n");
+    fprintf(stderr, "       test_futimesat -V\n");
     exit(EXIT_FAILURE);
 }
 
@@ -40,7 +40,8 @@ int
 main(int argc, char **argv)
 {
     int             fildes;
-    struct timespec data[2];
+    const char      *pathname;
+    struct timeval  data[2];
 
     for (;;)
     {
@@ -58,27 +59,34 @@ main(int argc, char **argv)
         }
     }
     fildes = -1;
-    data[0].tv_nsec = UTIME_NOW;
-    data[1].tv_nsec = UTIME_OMIT;
+    pathname = NULL;
+    data[0].tv_sec = 0;
+    data[0].tv_usec = UTIME_OMIT;
+    data[1].tv_sec = 0;
+    data[1].tv_usec = UTIME_OMIT;
     switch (argc - optind)
     {
+    default:
+        usage();
+
+    case 4:
+        explain_parse_timeval_or_die(argv[optind + 3], "arg four", &data[1]);
+        /* Fall through.... */
+
     case 3:
-        explain_parse_timespec_or_die(argv[optind + 2], "arg three", &data[1]);
-        /* Fall through... */
+        explain_parse_timeval_or_die(argv[optind + 2], "arg three", &data[0]);
+        /* Fall through.... */
 
     case 2:
-        explain_parse_timespec_or_die(argv[optind + 1], "arg two", &data[0]);
-        /* Fall through... */
+        pathname = argv[optind + 1];
+        /* Fall through.... */
 
     case 1:
         fildes = explain_parse_fildes_or_die(argv[optind], "arg one");
         break;
-
-    default:
-        usage();
     }
 
-    explain_futimens_or_die(fildes, data);
+    explain_futimesat_or_die(fildes, pathname, data);
     return EXIT_SUCCESS;
 }
 

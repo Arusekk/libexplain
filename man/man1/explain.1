@@ -267,8 +267,11 @@ The \f[I]ftruncate\fP(2) system call.
 futimens \f[I]fildes\fP \f[I]data\fP
 The \f[I]futimens\fP(3) system call.
 .TP 8n
-futimes \f[I]fildes\fP \f[I]tv[0]\fP \f[I]tv[1]\fP
+futimes \f[I]fildes\fP \f[I]tv[0]\fP \f[I]data[1]\fP
 The \f[I]futimes\fP(3) system call.
+.TP 8n
+futimesat \f[I]fildes\fP \f[I]pathname\fP \f[I]data\fP
+The \f[I]futimesat\fP(2) system call.
 .\" ----------  G  ---------------------------------------------------------
 .TP 8n
 getc \f[I]fp\fP
@@ -376,6 +379,9 @@ The \f[I]lseek\fP(2) system call.
 .TP 8n
 lstat \f[I]pathname\fP
 The \f[I]lstat\fP(2) system call.
+.TP 8n
+lutimes \f[I]pathname\fP \f[I]data\fP
+The \f[I]lutimes\fP(3) system call.
 .\" ----------  M  ---------------------------------------------------------
 .TP 8n
 malloc \f[I]size\fP

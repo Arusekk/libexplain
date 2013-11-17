@@ -908,6 +908,7 @@ AC_CHECK_FUNCS(     \
     ftime           \
     futimens        \
     futimes         \
+    futimesat       \
     getdomainname   \
     getgrent        \
     getgrouplist    \
@@ -930,7 +931,12 @@ AC_CHECK_FUNCS(     \
     iconv_open      \
     lchmod          \
     lchown          \
+    lutime          \
+    lutimeat        \
     lutimens        \
+    lutimensat      \
+    lutimes         \
+    lutimesat       \
     mbrtowc         \
     mkdtemp         \
     mkostemp        \

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2012 Peter Miller
+ * Copyright (C) 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,11 +21,7 @@
 
 #include <libexplain/buffer/eacces.h>
 #include <libexplain/buffer/ebadf.h>
-#include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/efault.h>
-#include <libexplain/buffer/einval.h>
-#include <libexplain/buffer/einval.h>
-#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/eloop.h>
 #include <libexplain/buffer/enametoolong.h>
@@ -33,17 +29,20 @@
 #include <libexplain/buffer/enotdir.h>
 #include <libexplain/buffer/eperm.h>
 #include <libexplain/buffer/erofs.h>
-#include <libexplain/buffer/errno/generic.h>
+#include <libexplain/buffer/errno/futimens.h>
 #include <libexplain/buffer/errno/path_resolution.h>
+#include <libexplain/buffer/errno/utimens.h>
 #include <libexplain/buffer/errno/utimensat.h>
 #include <libexplain/buffer/esrch.h>
 #include <libexplain/buffer/fildes.h>
+#include <libexplain/buffer/gettext.h>
 #include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/pathname.h>
 #include <libexplain/buffer/timespec.h>
 #include <libexplain/buffer/utimensat_fildes.h>
 #include <libexplain/buffer/utimensat_flags.h>
 #include <libexplain/explanation.h>
+#include <libexplain/fileinfo.h>
 #include <libexplain/is_efault.h>
 
 
@@ -86,19 +85,80 @@ valid_nsec(long value)
 }
 
 
+static void
+user_path_at(explain_string_buffer_t *sb, int fildes, const char *pathname)
+{
+     char dirpath[PATH_MAX + 1];
+
+     if (!pathname || !*pathname)
+        pathname = ".";
+
+     if (pathname[0] == '/')
+     {
+         explain_string_buffer_puts(sb, pathname);
+         return;
+     }
+     if (fildes == AT_FDCWD)
+     {
+         explain_string_buffer_puts(sb, pathname);
+         return;
+     }
+     explain_fileinfo_self_fd_n(fildes, dirpath, sizeof(dirpath));
+     explain_string_buffer_puts(sb, dirpath);
+     explain_string_buffer_path_join(sb, pathname);
+}
+
+
 void
 explain_buffer_errno_utimensat_explanation(explain_string_buffer_t *sb,
     int errnum, const char *syscall_name, int fildes, const char *pathname,
     const struct timespec *data, int flags)
 {
     explain_final_t final_component;
+    struct timespec phony_data[2];
+    char pathname2[PATH_MAX + 1];
+
+    /*
+     * Strange handling of corner case.  See Linux kernel sources file
+     * fs/utimes.c, around line 122, for more detail.
+     */
+    if (pathname == NULL)
+    {
+        explain_buffer_errno_futimens_explanation(sb, errnum, syscall_name,
+            fildes, data);
+        return;
+    }
+
+    /*
+     * Extract an absolute path from the arguments.  This has the
+     * potential to exceed PATH_MAX, which is partly why the *st
+     * funtions exist.
+     */
+    {
+        explain_string_buffer_t sb2;
+        explain_string_buffer_init(&sb2, pathname2, sizeof(pathname2));
+        user_path_at(&sb2, fildes, pathname);
+        pathname = pathname2;
+    }
+
+    /*
+     * Default the data, if necessary.
+     */
+    if (!data)
+    {
+        phony_data[0].tv_sec = 0;
+        phony_data[0].tv_nsec= UTIME_NOW;
+        phony_data[1].tv_sec = 0;
+        phony_data[1].tv_nsec= UTIME_NOW;
+        data = phony_data;
+    }
 
     explain_final_init(&final_component);
     if
     (
-        data
-    &&
-        (data[0].tv_nsec != UTIME_OMIT || data[1].tv_nsec != UTIME_OMIT)
+        data[0].tv_nsec != UTIME_OMIT
+    ||
+        data[1].tv_nsec != UTIME_OMIT
     )
     {
         if (data[0].tv_nsec == UTIME_NOW && data[1].tv_nsec == UTIME_NOW)
@@ -114,40 +174,37 @@ explain_buffer_errno_utimensat_explanation(explain_string_buffer_t *sb,
         final_component.follow_symlink = 0;
     final_component.must_exist = 1;
 
-    /*
-     * http://www.opengroup.org/onlinepubs/009695399/functions/utimensat.html
-     */
     switch (errnum)
     {
-    case EACCES:
-        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
-        break;
-
-    case EBADF:
-        explain_buffer_ebadf(sb, fildes, "fildes");
-        break;
-
-    case EFAULT:
-        /*
-         * 'data' pointed to an invalid address; or, 'fildes' was
-         * AT_FDCWD, and 'pathname' is NULL or an invalid address
-         */
-        if (fildes == AT_FDCWD && !pathname)
-            explain_buffer_is_the_null_pointer(sb, "pathname");
-        else if (explain_is_efault_path(pathname))
-            explain_buffer_efault(sb, "pathname");
-        else
-            explain_buffer_efault(sb, "data");
-        break;
-
     case EINVAL:
+        /* see fs/utimes.c: 134 */
+        if (!valid_nsec(data[0].tv_nsec))
+        {
+            explain_buffer_einval_vague(sb, "data[0]");
+            return;
+        }
+        if (!valid_nsec(data[1].tv_nsec))
+        {
+            explain_buffer_einval_vague(sb, "data[1]");
+            return;
+        }
+        if (data[0].tv_nsec == UTIME_NOW && data[1].tv_nsec == UTIME_NOW)
+        {
+            explain_buffer_gettext
+            (
+                sb,
+                /* FIXME:i8n */
+                "both tv_nsec values are UTIME_NOW"
+            );
+            return;
+        }
         if (flags & ~explain_allbits_utimensat_flags())
         {
             /*
              * Invalid value in flags.
              */
             explain_buffer_einval_vague(sb, "flags");
-            break;
+            return;
         }
         if (data)
         {
@@ -159,27 +216,53 @@ explain_buffer_errno_utimensat_explanation(explain_string_buffer_t *sb,
             if (!valid_nsec(data[0].tv_nsec))
             {
                 explain_buffer_einval_vague(sb, "data[0].tv_nsec");
-                break;
+                return;
             }
             if (!valid_nsec(data[1].tv_nsec))
             {
                 explain_buffer_einval_vague(sb, "data[1].tv_nsec");
-                break;
+                return;
             }
         }
-        if (!pathname)
+        break;
+
+    case EACCES:
+        explain_buffer_eacces(sb, pathname, "pathname", &final_component);
+        return;
+
+    case EBADF:
         {
-            /*
-             * "pathname is NULL, fildes is not AT_FDCWD, and flags contains
-             * AT_SYMLINK_NOFOLLOW."
-             *
-             * FIXME: are these 3 conditions one strict condition, or three
-             * separate conditions?
-             */
-            explain_buffer_is_the_null_pointer(sb, "pathname");
-            break;
+            struct stat st;
+            if (fstat(fildes, &st) < 0)
+            {
+                explain_buffer_ebadf(sb, fildes, "fildes");
+                return;
+            }
+            if (!S_ISDIR(st.st_mode))
+            {
+                explain_buffer_ebadf_dir(sb, "fildes");
+                return;
+            }
         }
-        goto generic;
+        break;
+
+    case EFAULT:
+        if (explain_is_efault_pointer(data, sizeof(*data) * 2))
+        {
+            explain_buffer_efault(sb, "data");
+            return;
+        }
+
+        /*
+         * 'data' pointed to an invalid address; or, 'fildes' was
+         * AT_FDCWD, and 'pathname' is NULL or an invalid address
+         */
+        if (explain_is_efault_path(pathname))
+        {
+            explain_buffer_efault(sb, "pathname");
+            return;
+        }
+        break;
 
     case ELOOP:
     case EMLINK:
@@ -188,14 +271,14 @@ explain_buffer_errno_utimensat_explanation(explain_string_buffer_t *sb,
          * pathname.
          */
         explain_buffer_eloop(sb, pathname, "pathname", &final_component);
-        break;
+        return;
 
     case ENAMETOOLONG:
         /*
          * pathname is too long.
          */
         explain_buffer_enametoolong(sb, pathname, "pathname", &final_component);
-        break;
+        return;
 
     case ENOENT:
         /*
@@ -203,7 +286,7 @@ explain_buffer_errno_utimensat_explanation(explain_string_buffer_t *sb,
          * directory or file, or pathname is an empty string.
          */
         explain_buffer_enoent(sb, pathname, "pathname", &final_component);
-        break;
+        return;
 
     case ENOTDIR:
         /*
@@ -220,36 +303,20 @@ explain_buffer_errno_utimensat_explanation(explain_string_buffer_t *sb,
         )
         {
             explain_buffer_enotdir_fd(sb, fildes, "fildes");
-            break;
+            return;
         }
 
         /*
          * or, one of the prefix components of pathname is not a directory.
          */
         explain_buffer_enotdir(sb, pathname, "pathname", &final_component);
-        break;
+        return;
 
     case EPERM:
         if (!data)
-            goto generic;
+            break;
         if (data[0].tv_nsec == UTIME_OMIT && data[1].tv_nsec == UTIME_OMIT)
-            goto generic;
-
-        if
-        (
-            explain_buffer_errno_path_resolution_at
-            (
-                sb,
-                errnum,
-                fildes,
-                pathname,
-                "pathname",
-                &final_component
-            )
-        <
-            0
-        )
-            goto generic;
+            break;
         break;
 
     case EROFS:
@@ -264,14 +331,16 @@ explain_buffer_errno_utimensat_explanation(explain_string_buffer_t *sb,
          * "Search permission is denied for one of the prefix components
          * of pathname."
          */
+        errnum = ENOENT;
         explain_buffer_eacces(sb, pathname, "pathname", &final_component);
         break;
 
     default:
-        generic:
-        explain_buffer_errno_generic(sb, errnum, syscall_name);
         break;
     }
+
+    explain_buffer_errno_utimens_explanation(sb, errnum, syscall_name,
+        pathname, data);
 }
 
 

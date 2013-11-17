@@ -20,6 +20,8 @@
 #include <libexplain/ac/stdlib.h>
 
 #include <libexplain/adjtime.h>
+#include <libexplain/buffer/timeval.h>
+#include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/wrap_and_print.h>
 
@@ -41,12 +43,15 @@ explain_syscall_adjtime(int errnum, int argc, char **argv)
         /* fall through */
 
     case 1:
-        explain_parse_timeval_or_die(argv[0], &delta);
+        explain_parse_timeval_or_die(argv[0], "arg one", &delta);
         break;
 
     default:
-        fprintf(stderr, "adjtime: requires 2 arguments, not %d\n", argc);
-        exit(EXIT_FAILURE);
+        explain_output_error_and_die
+        (
+            "adjtime: requires 2 arguments, not %d\n",
+            argc - optind
+        );
     }
 
     explain_wrap_and_print(stdout, explain_errno_adjtime(errnum, &delta,

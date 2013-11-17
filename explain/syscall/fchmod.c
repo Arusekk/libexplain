@@ -45,11 +45,11 @@ explain_syscall_fchmod(int errnum, int argc, char **argv)
             "not %d\n", argc);
 
     case 2:
-        mode = explain_permission_mode_parse_or_die(argv[1], "arg 2");
+        mode = explain_permission_mode_parse_or_die(argv[1], "arg two");
         /* Fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
     }
 

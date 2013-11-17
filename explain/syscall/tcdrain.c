@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/tcdrain.h>
 #include <libexplain/wrap_and_print.h>
@@ -36,7 +37,7 @@ explain_syscall_tcdrain(int errnum, int argc, char **argv)
         fprintf(stderr, "tcdrain: requires 1 argument, not %d\n", argc);
         exit(EXIT_FAILURE);
     }
-    fildes = explain_parse_fildes_or_die(argv[0]);
+    fildes = explain_parse_fildes_or_die(argv[0], "arg one");
 
     explain_wrap_and_print(stdout, explain_errno_tcdrain(errnum, fildes));
 }

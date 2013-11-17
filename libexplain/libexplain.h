@@ -104,6 +104,7 @@
 #include <libexplain/ftruncate.h>
 #include <libexplain/futimens.h>
 #include <libexplain/futimes.h>
+#include <libexplain/futimesat.h>
 #include <libexplain/fwrite.h>
 #include <libexplain/getaddrinfo.h>
 #include <libexplain/getc.h>
@@ -139,6 +140,7 @@
 #include <libexplain/listen.h>
 #include <libexplain/lseek.h>
 #include <libexplain/lstat.h>
+#include <libexplain/lutimes.h>
 #include <libexplain/malloc.h>
 #include <libexplain/mkdir.h>
 #include <libexplain/mkdtemp.h>

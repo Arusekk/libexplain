@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/sys/statvfs.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/fstatvfs.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/wrap_and_print.h>
@@ -42,7 +43,7 @@ explain_syscall_fstatvfs(int errnum, int argc, char **argv)
         /* Fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
 
     default:

@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/tcsendbreak.h>
@@ -42,7 +43,7 @@ explain_syscall_tcsendbreak(int errnum, int argc, char **argv)
         /* fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
 
     default:

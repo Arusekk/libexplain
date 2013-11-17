@@ -19,6 +19,7 @@
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/tcflow_action.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/tcflow.h>
@@ -33,16 +34,28 @@ explain_syscall_tcflow(int errnum, int argc, char **argv)
     int             fildes;
     int             action;
 
-    if (argc != 2)
+    fildes = -1;
+    action = -1;
+    switch (argc)
     {
+    default:
         fprintf(stderr, "tcflow: requires 2 arguments, not %d\n", argc);
         exit(EXIT_FAILURE);
-    }
-    fildes = explain_parse_fildes_or_die(argv[0]);
-    action = explain_parse_tcflow_action_or_die(argv[1], "argv[1]");
 
-    explain_wrap_and_print(stdout, explain_errno_tcflow(errnum, fildes,
-        action));
+    case 2:
+        action = explain_parse_tcflow_action_or_die(argv[1], "arg two");
+        /* Fall through... */
+
+    case 1:
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
+        break;
+    }
+
+    explain_wrap_and_print
+    (
+        stdout,
+        explain_errno_tcflow(errnum, fildes, action)
+    );
 }
 
 

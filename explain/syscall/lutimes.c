@@ -20,54 +20,49 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/sys/stat.h>
 
-#include <libexplain/buffer/fildes.h>
-#include <libexplain/buffer/timespec.h>
-#include <libexplain/futimens.h>
+#include <libexplain/lutimes.h>
 #include <libexplain/output.h>
 #include <libexplain/wrap_and_print.h>
+#include <libexplain/buffer/timeval.h>
 
-#include <explain/syscall/futimens.h>
+#include <explain/syscall/lutimes.h>
 
 
 void
-explain_syscall_futimens(int errnum, int argc, char **argv)
+explain_syscall_lutimes(int errnum, int argc, char **argv)
 {
-    int             fildes;
-    struct timespec data[2];
+    const char      *pathname;
+    struct timeval  data[2];
 
-    /*
-     * [fildes [timespec [timepec]]]
-     */
-    fildes = -1;
-    data[0].tv_nsec = UTIME_NOW;
-    data[1].tv_nsec = UTIME_NOW;
+    pathname = NULL;
+    data[0].tv_usec = UTIME_OMIT;
+    data[1].tv_usec = UTIME_OMIT;
     switch (argc)
     {
     case 3:
-        explain_parse_timespec_or_die(argv[2], "arg three", &data[1]);
+        explain_parse_timeval_or_die(argv[2], "arg three", &data[1]);
         /* Fall through... */
 
     case 2:
-        explain_parse_timespec_or_die(argv[1], "arg two", &data[0]);
+        explain_parse_timeval_or_die(argv[1], "arg two", &data[0]);
         /* Fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
+        pathname = argv[0];
         break;
 
     default:
         explain_output_error_and_die
         (
-            "futimens: requires 3 arguments, not %d\n",
+            "lutimes: requires 3 arguments, not %d\n",
             argc
         );
         break;
     }
-
     explain_wrap_and_print
     (
-         stdout,
-         explain_errno_futimens(errnum, fildes, data)
+        stdout,
+        explain_errno_lutimes(errnum, pathname, data)
     );
 }
 

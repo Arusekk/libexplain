@@ -23,6 +23,7 @@
 
 #include <libexplain/acl_from_text.h>
 #include <libexplain/acl_set_fd.h>
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/wrap_and_print.h>
@@ -46,7 +47,7 @@ explain_syscall_acl_set_fd(int errnum, int argc, char **argv)
         /* Fall through ... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
 
     default:

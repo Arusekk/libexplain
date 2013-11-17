@@ -21,6 +21,7 @@
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/termios.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/tcsetattr_options.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/tcsetattr.h>
@@ -52,7 +53,7 @@ explain_syscall_tcsetattr(int errnum, int argc, char **argv)
         /* fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
 
     default:

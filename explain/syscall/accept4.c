@@ -22,6 +22,7 @@
 
 #include <libexplain/accept4.h>
 #include <libexplain/buffer/accept4_flags.h>
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/output.h>
 #include <libexplain/string_to_thing.h>
 #include <libexplain/wrap_and_print.h>
@@ -49,16 +50,16 @@ explain_syscall_accept4(int errnum, int argc, char **argv)
     switch (argc)
     {
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         break;
 
     case 2:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         flags = explain_accept4_flags_parse_or_die(argv[1], "arg 2");
         break;
 
     case 4:
-        fildes = explain_parse_fildes_or_die(argv[0]);
+        fildes = explain_parse_fildes_or_die(argv[0], "arg one");
         sock_addr = explain_parse_pointer_or_die(argv[1]);
         sock_addr_size = explain_parse_pointer_or_die(argv[2]);
         flags = explain_accept4_flags_parse_or_die(argv[3], "arg 4");

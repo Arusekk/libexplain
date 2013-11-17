@@ -20,6 +20,7 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/unistd.h>
 
+#include <libexplain/buffer/fildes.h>
 #include <libexplain/buffer/fstatat_flags.h>
 #include <libexplain/fchownat.h>
 #include <libexplain/string_to_thing.h>
@@ -87,7 +88,7 @@ main(int argc, char **argv)
         /* Fall through... */
 
     case 1:
-        fildes = explain_parse_fildes_or_die(argv[optind]);
+        fildes = explain_parse_fildes_or_die(argv[optind], "arg one");
         break;
     }
 
