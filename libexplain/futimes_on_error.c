@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2012 Peter Miller
+ * Copyright (C) 2010, 2012, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,6 +30,19 @@ explain_futimes_on_error(int fildes, const struct timeval *tv)
 
 #ifdef HAVE_FUTIMES
     result = futimes(fildes, tv);
+#ifdef __linux__
+    if (result > 0)
+    {
+        /* Work around a kernel bug:
+         * http://bugzilla.redhat.com/442352
+         * http://bugzilla.redhat.com/449910
+         * It appears that utimensat can mistakenly return 280 rather
+         * than -1 upon ENOSYS failure.
+         */
+        errno = ENOSYS;
+        result = -1;
+    }
+#endif /* __linux__ */
 #else
     errno = ENOSYS;
     result = -1;
