@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -137,3 +137,6 @@ const explain_iocontrol_t explain_iocontrol_vidioc_queryctrl =
 };
 
 #endif /* VIDIOC_QUERYCTRL */
+
+
+/* vim: set ts=8 sw=4 et : */

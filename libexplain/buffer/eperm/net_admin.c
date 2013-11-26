@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -39,3 +39,6 @@ explain_buffer_eperm_net_admin(explain_string_buffer_t *sb,
     );
     explain_buffer_dac_net_admin(sb);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

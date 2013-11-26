@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -36,3 +36,4 @@ void explain_buffer_serial_multiport_struct(explain_string_buffer_t *sb,
     const struct serial_multiport_struct *value);
 
 #endif /* LIBEXPLAIN_BUFFER_SERIAL_MULTIPORT_STRUCT_H */
+/* vim: set ts=8 sw=4 et : */

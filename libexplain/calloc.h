@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,8 +27,9 @@
   * by the <i>calloc</i>(3) system call.
   */
 
-#include <libexplain/warn_unused_result.h>
+#include <libexplain/gcc_attributes.h>
 #include <libexplain/large_file_support.h>
+#include <libexplain/gcc_attributes.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,6 +60,8 @@ extern "C" {
   * @endcode
   */
 void *explain_calloc_or_die(size_t nmemb, size_t size)
+                                                     LIBEXPLAIN_ATTRIBUTE_MALLOC
+                                          LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE2(1, 2)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -89,6 +92,8 @@ void *explain_calloc_or_die(size_t nmemb, size_t size)
   * @endcode
   */
 void *explain_calloc_on_error(size_t nmemb, size_t size)
+                                                     LIBEXPLAIN_ATTRIBUTE_MALLOC
+                                          LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE2(1, 2)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -135,6 +140,8 @@ void *explain_calloc_on_error(size_t nmemb, size_t size)
   * #explain_calloc_or_die function.
   */
 const char *explain_calloc(size_t nmemb, size_t size)
+                                                     LIBEXPLAIN_ATTRIBUTE_MALLOC
+                                          LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE2(1, 2)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -185,6 +192,7 @@ const char *explain_calloc(size_t nmemb, size_t size)
   * #explain_calloc_or_die function.
   */
 const char *explain_errno_calloc(int errnum, size_t nmemb, size_t size)
+                                          LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE2(2, 3)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -229,7 +237,8 @@ const char *explain_errno_calloc(int errnum, size_t nmemb, size_t size)
   * #explain_calloc_or_die function.
   */
 void explain_message_calloc(char *message, int message_size, size_t nmemb,
-    size_t size);
+    size_t size)
+                                         LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE2(2, 3);
 
 /**
   * The explain_message_errno_calloc function is used to obtain an
@@ -278,11 +287,12 @@ void explain_message_calloc(char *message, int message_size, size_t nmemb,
   * #explain_calloc_or_die function.
   */
 void explain_message_errno_calloc(char *message, int message_size, int errnum,
-    size_t nmemb, size_t size);
+    size_t nmemb, size_t size)
+                                         LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE2(4, 5);
 
 #ifdef __cplusplus
 }
 #endif
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_CALLOC_H */

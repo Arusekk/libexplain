@@ -112,13 +112,15 @@ struct res_tab_t
     int value;
 };
 
+/*
+ * Keep thid table in strcmp order
+ * so that bsearch will work
+ */
 static const res_tab_t res_tab[] =
 {
     { "...", ELLIPSIS },
     { "acl_t", TYPE_NAME },
     { "acl_type_t", TYPE_NAME },
-    { "DIR", TYPE_NAME },
-    { "FILE", TYPE_NAME },
     { "auto", AUTO },
     { "char", CHAR },
     { "class", JUNK }, // avoid so C++ doesn't barf
@@ -157,6 +159,7 @@ static const res_tab_t res_tab[] =
     { "uid_t", TYPE_NAME },
     { "union", UNION },
     { "unsigned", UNSIGNED },
+    { "useconds_t", TYPE_NAME },
     { "va_list", TYPE_NAME },
     { "void", VOID },
     { "volatile", VOLATILE },
@@ -168,6 +171,7 @@ reserved(const char *s)
 {
     const res_tab_t *tp;
 
+    /* FIXME: use bearch */
     for (tp = res_tab; tp < ENDOF(res_tab); ++tp)
     {
         if (0 == strcmp(s, tp->name))

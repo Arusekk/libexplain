@@ -50,6 +50,7 @@ static const struct option options[] =
 {
     { "ioctl-scan-include", 1, 0, 'i' },
     { "ioctl-scan-generate", 1, 0, 'I' },
+    { "ioctl-scan-dir", 1, 0, 'S' },
     { "lisp", 0, 0, 'l' },
     { "specific", 1, 0, 'g' },
     { "version", 0, 0, 'V' },
@@ -72,9 +73,9 @@ main(int argc, char **argv)
     for (;;)
     {
 #ifdef HAVE_GETOPT_LONG
-        int c = getopt_long(argc, argv, "g:I:i:lV", options, 0);
+        int c = getopt_long(argc, argv, "g:I:i:lS:V", options, 0);
 #else
-        int c = getopt(argc, argv, "g:I:i:lV");
+        int c = getopt(argc, argv, "g:I:i:lS:V");
 #endif
         if (c < 0)
             break;
@@ -90,6 +91,10 @@ main(int argc, char **argv)
 
         case 'i':
             ioctl_scan_include(optarg);
+            return 0;
+
+        case 'S':
+            ioctl_scan_dir(optarg);
             return 0;
 
         case 'l':

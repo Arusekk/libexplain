@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,6 +34,12 @@
 void ioctl_scan_include(const char *pathname);
 
 /**
+  * The ioctl_scan_dir funvtion id usedto walk a directory tree, and
+  * passing all .h files to ioctrl_scan_include
+  */
+void ioctl_scan_dir(const char *pathname);
+
+/**
   * The ioctl_scan_generate function may be used to read a system include
   * file, and remember the ioctl requests it defines, placing them into
   * a suitably named catalogue file.
@@ -45,3 +51,4 @@ void ioctl_scan_include(const char *pathname);
 void ioctl_scan_generate(const char *pathname);
 
 #endif /* CODEGEN_IOCTL_SCAN_H */
+/* vim: set ts=8 sw=4 et : */

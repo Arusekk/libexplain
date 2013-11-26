@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -46,3 +46,4 @@ void explain_buffer_signal(explain_string_buffer_t *sb, int signum);
 int explain_signal_parse_or_die(const char *text, const char *caption);
 
 #endif /* LIBEXPLAIN_BUFFER_SIGNAL_H */
+/* vim: set ts=8 sw=4 et : */

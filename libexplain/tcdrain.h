@@ -27,7 +27,7 @@
   * by the <i>tcdrain</i>(3) system call.
   */
 
-#include <libexplain/warn_unused_result.h>
+#include <libexplain/gcc_attributes.h>
 
 #ifdef __cplusplus
 extern "C" {

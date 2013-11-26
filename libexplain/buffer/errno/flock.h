@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -61,5 +61,5 @@ void explain_buffer_errno_flock(explain_string_buffer_t *sb, int errnum, int
   */
 int explain_flock_command_parse_or_die(const char *text, const char *caption);
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_FLOCK_H */

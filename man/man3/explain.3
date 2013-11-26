@@ -895,6 +895,12 @@ Explain \f[I]munmap\fP(2) errors
 unmap a file or device from memory and report errors
 .\" ----------  N  ---------------------------------------------------------
 .TP 8n
+\f[I]explain_nanosleep\fP(3)
+Explain \f[I]nanosleep\fP(2) errors
+.TP 8n
+\f[I]explain_nanosleep_or_die\fP(3)
+    high\[hy]resolution sleep and report errors
+.TP 8n
 \f[I]explain_nice\fP(3)
 Explain \f[I]nice\fP(2) errors
 .TP 8n
@@ -1188,6 +1194,12 @@ Explain \f[I]setsockopt\fP(2) errors
 \f[I]explain_setsockopt_or_die\fP(3)
 execute \f[I]setsockopt\fP(2) and report errors
 .TP 8n
+\f[I]explain_settimeofday\fP(3)
+Explain \f[I]settimeofday\fP(2) errors
+.TP 8n
+\f[I]explain_settimeofday_or_die\fP(3)
+sets system time and report errors
+.TP 8n
 \f[I]explain_setuid\fP(3)
 Explain \f[I]setuid\fP(2) errors
 .TP 8n
@@ -1217,6 +1229,12 @@ Explain \f[I]signalfd\fP(2) errors
 .TP 8n
 \f[I]explain_signalfd_or_die\fP(3)
 create a file descriptor for accepting signals and report errors
+.TP 8n
+\f[I]explain_sleep\fP(3)
+Explain \f[I]sleep\fP(3) errors
+.TP 8n
+\f[I]explain_sleep_or_die\fP(3)
+Sleep for the specified number of seconds and report errors
 .TP 8n
 \f[I]explain_socket\fP(3)
 Explain \f[I]socket\fP(2) errors
@@ -1408,6 +1426,12 @@ Explain \f[I]truncate\fP(2) errors
 \f[I]explain_truncate_or_die\fP(3)
 truncate a file to a specified length and report errors
 .\" ----------  U  ---------------------------------------------------------
+.TP 8n
+\f[I]explain_usleep\fP(3)
+Explain \f[I]usleep\fP(3) errors
+.TP 8n
+\f[I]explain_usleep_or_die\fP(3)
+suspend execution for microsecond intervals and report errors
 .TP 8n
 \f[I]explain_ungetc\fP(3)
 Explain \f[I]ungetc\fP(3) errors

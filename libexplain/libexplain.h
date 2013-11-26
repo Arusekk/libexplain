@@ -150,6 +150,7 @@
 #include <libexplain/mktemp.h>
 #include <libexplain/mmap.h>
 #include <libexplain/munmap.h>
+#include <libexplain/nanosleep.h>
 #include <libexplain/nice.h>
 #include <libexplain/open.h>
 #include <libexplain/openat.h>
@@ -202,11 +203,13 @@
 #include <libexplain/setreuid.h>
 #include <libexplain/setsid.h>
 #include <libexplain/setsockopt.h>
+#include <libexplain/settimeofday.h>
 #include <libexplain/setuid.h>
 #include <libexplain/setvbuf.h>
 #include <libexplain/shmat.h>
 #include <libexplain/shmctl.h>
 #include <libexplain/signalfd.h>
+#include <libexplain/sleep.h>
 #include <libexplain/snprintf.h>
 #include <libexplain/socket.h>
 #include <libexplain/socketpair.h>
@@ -243,6 +246,7 @@
 #include <libexplain/ungetc.h>
 #include <libexplain/unlink.h>
 #include <libexplain/unsetenv.h>
+#include <libexplain/usleep.h>
 #include <libexplain/ustat.h>
 #include <libexplain/utime.h>
 #include <libexplain/utimens.h>

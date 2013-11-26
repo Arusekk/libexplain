@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -39,3 +39,6 @@ explain_errno_select(int errnum, int nfds, fd_set *readfds, fd_set *writefds,
     );
     return explain_common_message_buffer;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

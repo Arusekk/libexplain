@@ -1,6 +1,6 @@
 /*
  * cook - file construction tool
- * Copyright (C) 1991, 1993, 1994, 1997, 2001, 2005-2009 Peter Miller
+ * Copyright (C) 1991, 1993, 1994, 1997, 2001, 2005-2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -450,3 +450,6 @@ explain_fstrcasecmp(const char *s1, const char *s2)
     free(lc2);
     return result;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

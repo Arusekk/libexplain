@@ -27,7 +27,7 @@
   * by the <i>acl_set_file</i>(3) system call.
   */
 
-#include <libexplain/warn_unused_result.h>
+#include <libexplain/gcc_attributes.h>
 #include <libexplain/large_file_support.h>
 
 #include <sys/acl.h>

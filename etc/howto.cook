@@ -142,7 +142,7 @@ loop
  */
 
 CPPFLAGS = [addprefix "-I" [search_list]];
-CC = gcc;
+CC = gcc -pipe;
 CFLAGS = -Wall -Wextra
     -Wformat\=2
     -Wswitch-default

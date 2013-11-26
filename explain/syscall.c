@@ -26,6 +26,7 @@
 #include <libexplain/fstrcmp.h>
 
 #include <explain/syscall.h>
+/* ----------  A  ------------------------------------------------------- */
 #include <explain/syscall/accept.h>
 #include <explain/syscall/accept4.h>
 #include <explain/syscall/access.h>
@@ -38,7 +39,9 @@
 #include <explain/syscall/acl_to_text.h>
 #include <explain/syscall/adjtime.h>
 #include <explain/syscall/adjtimex.h>
+/* ----------  B  ------------------------------------------------------- */
 #include <explain/syscall/bind.h>
+/* ----------  C  ------------------------------------------------------- */
 #include <explain/syscall/calloc.h>
 #include <explain/syscall/chdir.h>
 #include <explain/syscall/chmod.h>
@@ -49,14 +52,17 @@
 #include <explain/syscall/connect.h>
 #include <explain/syscall/creat.h>
 #include <explain/syscall/dirfd.h>
+/* ----------  D  ------------------------------------------------------- */
 #include <explain/syscall/dup.h>
 #include <explain/syscall/dup2.h>
+/* ----------  E  ------------------------------------------------------- */
 #include <explain/syscall/endgrent.h>
 #include <explain/syscall/eventfd.h>
 #include <explain/syscall/execlp.h>
 #include <explain/syscall/execv.h>
 #include <explain/syscall/execve.h>
 #include <explain/syscall/execvp.h>
+/* ----------  F  ------------------------------------------------------- */
 #include <explain/syscall/fchdir.h>
 #include <explain/syscall/fchmod.h>
 #include <explain/syscall/fchown.h>
@@ -97,6 +103,7 @@
 #include <explain/syscall/futimes.h>
 #include <explain/syscall/futimesat.h>
 #include <explain/syscall/fwrite.h>
+/* ----------  G  ------------------------------------------------------- */
 #include <explain/syscall/getc.h>
 #include <explain/syscall/getchar.h>
 #include <explain/syscall/getcwd.h>
@@ -119,11 +126,16 @@
 #include <explain/syscall/getsockopt.h>
 #include <explain/syscall/gettimeofday.h>
 #include <explain/syscall/getw.h>
+/* ----------  H  ------------------------------------------------------- */
+/* ----------  I  ------------------------------------------------------- */
 #include <explain/syscall/ioctl.h>
 #include <explain/syscall/iconv.h>
 #include <explain/syscall/iconv_close.h>
 #include <explain/syscall/iconv_open.h>
+/* ----------  J  ------------------------------------------------------- */
+/* ----------  K  ------------------------------------------------------- */
 #include <explain/syscall/kill.h>
+/* ----------  L  ------------------------------------------------------- */
 #include <explain/syscall/lchmod.h>
 #include <explain/syscall/lchown.h>
 #include <explain/syscall/link.h>
@@ -131,6 +143,7 @@
 #include <explain/syscall/lseek.h>
 #include <explain/syscall/lstat.h>
 #include <explain/syscall/lutimes.h>
+/* ----------  M  ------------------------------------------------------- */
 #include <explain/syscall/malloc.h>
 #include <explain/syscall/mkdir.h>
 #include <explain/syscall/mkdtemp.h>
@@ -140,11 +153,15 @@
 #include <explain/syscall/mktemp.h>
 #include <explain/syscall/mmap.h>
 #include <explain/syscall/munmap.h>
+/* ----------  N  ------------------------------------------------------- */
+#include <explain/syscall/nanosleep.h>
 #include <explain/syscall/nice.h>
+/* ----------  O  ------------------------------------------------------- */
 #include <explain/syscall/openat.h>
 #include <explain/syscall/opendir.h>
 #include <explain/syscall/open.h>
 #include <explain/syscall/pathconf.h>
+/* ----------  P  ------------------------------------------------------- */
 #include <explain/syscall/pclose.h>
 #include <explain/syscall/pipe.h>
 #include <explain/syscall/pipe2.h>
@@ -158,6 +175,8 @@
 #include <explain/syscall/puts.h>
 #include <explain/syscall/putw.h>
 #include <explain/syscall/pwrite.h>
+/* ----------  Q  ------------------------------------------------------- */
+/* ----------  R  ------------------------------------------------------- */
 #include <explain/syscall/raise.h>
 #include <explain/syscall/read.h>
 #include <explain/syscall/readdir.h>
@@ -168,6 +187,7 @@
 #include <explain/syscall/remove.h>
 #include <explain/syscall/rename.h>
 #include <explain/syscall/rmdir.h>
+/* ----------  S  ------------------------------------------------------- */
 #include <explain/syscall/select.h>
 #include <explain/syscall/setbuf.h>
 #include <explain/syscall/setbuffer.h>
@@ -180,19 +200,22 @@
 #include <explain/syscall/setlinebuf.h>
 #include <explain/syscall/setpgid.h>
 #include <explain/syscall/setpgrp.h>
-#include <explain/syscall/setregid.h>
 #include <explain/syscall/setpriority.h>
-#include <explain/syscall/setreuid.h>
+#include <explain/syscall/setregid.h>
 #include <explain/syscall/setresgid.h>
 #include <explain/syscall/setresuid.h>
 #include <explain/syscall/setreuid.h>
+#include <explain/syscall/setreuid.h>
 #include <explain/syscall/setsid.h>
 #include <explain/syscall/setsockopt.h>
-#include <explain/syscall/setvbuf.h>
+#include <explain/syscall/settimeofday.h>
 #include <explain/syscall/setuid.h>
+#include <explain/syscall/setvbuf.h>
 #include <explain/syscall/shmat.h>
 #include <explain/syscall/shmctl.h>
 #include <explain/syscall/signalfd.h>
+#include <explain/syscall/sleep.h>
+#include <explain/syscall/sleep.h>
 #include <explain/syscall/socket.h>
 #include <explain/syscall/socketpair.h>
 #include <explain/syscall/stat.h>
@@ -212,6 +235,7 @@
 #include <explain/syscall/strtoull.h>
 #include <explain/syscall/symlink.h>
 #include <explain/syscall/system.h>
+/* ----------  T  ------------------------------------------------------- */
 #include <explain/syscall/tcdrain.h>
 #include <explain/syscall/tcflow.h>
 #include <explain/syscall/tcflush.h>
@@ -225,21 +249,28 @@
 #include <explain/syscall/tmpfile.h>
 #include <explain/syscall/tmpnam.h>
 #include <explain/syscall/truncate.h>
+/* ----------  U  ------------------------------------------------------- */
 #include <explain/syscall/ungetc.h>
 #include <explain/syscall/unlink.h>
+#include <explain/syscall/usleep.h>
 #include <explain/syscall/unsetenv.h>
 #include <explain/syscall/ustat.h>
 #include <explain/syscall/utime.h>
 #include <explain/syscall/utimens.h>
 #include <explain/syscall/utimensat.h>
 #include <explain/syscall/utimes.h>
+/* ----------  V  ------------------------------------------------------- */
 #include <explain/syscall/vfork.h>
+/* ----------  W  ------------------------------------------------------- */
 #include <explain/syscall/wait.h>
 #include <explain/syscall/wait3.h>
 #include <explain/syscall/wait4.h>
 #include <explain/syscall/waitpid.h>
 #include <explain/syscall/write.h>
 #include <explain/syscall/writev.h>
+/* ----------  X  ------------------------------------------------------- */
+/* ----------  Y  ------------------------------------------------------- */
+/* ----------  Z  ------------------------------------------------------- */
 
 
 typedef struct table_t table_t;
@@ -478,7 +509,7 @@ static const table_t table[] =
     /* FIXME: add support for munlockall */
     { "munmap", explain_syscall_munmap },
     /* ----------  N  ------------------------------------------------------- */
-    /* FIXME: add support for nanosleep */
+    { "nanosleep", explain_syscall_nanosleep },
     /* FIXME: add support for nfsservctl */
     { "nice", explain_syscall_nice },
     /* ----------  O  ------------------------------------------------------- */
@@ -593,7 +624,7 @@ static const table_t table[] =
     { "setsockopt", explain_syscall_setsockopt },
     /* FIXME: add support for set_thread_area */
     /* FIXME: add support for set_tid_address */
-    /* FIXME: add support for settimeofday */
+    { "settimeofday", explain_syscall_settimeofday },
     { "setuid", explain_syscall_setuid },
     /* FIXME: add support for setup */
     { "setvbuf", explain_syscall_setvbuf },
@@ -613,6 +644,7 @@ static const table_t table[] =
     /* FIXME: add support for sigprocmask */
     /* FIXME: add support for sigreturn */
     /* FIXME: add support for sigsuspend */
+    { "sleep", explain_syscall_sleep },
     { "socket", explain_syscall_socket },
     /* FIXME: add support for socketcall */
     { "socketpair", explain_syscall_socketpair },
@@ -678,6 +710,7 @@ static const table_t table[] =
     /* FIXME: add support for ulimit */
     /* FIXME: add support for umount */
     /* FIXME: add support for uname */
+    { "usleep", explain_syscall_usleep },
     { "ungetc", explain_syscall_ungetc },
     { "unlink", explain_syscall_unlink },
     { "unsetenv", explain_syscall_unsetenv },

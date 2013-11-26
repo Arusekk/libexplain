@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -75,3 +75,4 @@ int explain_path_search_explanation(struct explain_string_buffer_t *sb,
     int errnum, const char *dir, int try_tmpdir);
 
 #endif /* LIBEXPLAIN_PATH_SEARCH_H */
+/* vim: set ts=8 sw=4 et : */

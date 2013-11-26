@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010, 2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -63,3 +63,6 @@ explain_iocontrol_disambiguate_is_if_ppp(int fildes, int request,
     return DISAMBIGUATE_DO_NOT_USE;
 #endif
 }
+
+
+/* vim: set ts=8 sw=4 et : */

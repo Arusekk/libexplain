@@ -413,6 +413,9 @@ munmap \f[I]data\fP \f[I]data_size\fP
 The \f[I]munmap\fP(2) system call.
 .\" ----------  N  ---------------------------------------------------------
 .TP 8n
+nanosleep \f[I]req\fP \f[I]rem\fP
+The \f[I]nanosleep\fP(2) system call.
+.TP 8n
 nice \f[I]inc\fP
 The \f[I]nice\fP(2) system call.
 .\" ----------  O  ---------------------------------------------------------
@@ -558,6 +561,9 @@ setsockopt \f[I]fildes\fP \f[I]level\fP \f[I]name\fP \f[I]data\fP \
 \f[I]data_size\fP
 The \f[I]setsockopt\fP(2) system call.
 .TP 8n
+settimeofday \f[I]tv\fP \f[I]tz\fP
+The \f[I]settimeofday\fP(2) system call.
+.TP 8n
 setuid \f[I]uid\fP
 The \f[I]setuid\fP(2) system call.
 .TP 8n
@@ -572,6 +578,9 @@ The \f[I]shmctl\fP(2) system call.
 .TP 8n
 signalfd \f[I]fildes\fP \f[I]mask\fP \f[I]flags\fP
 The \f[I]signalfd\fP(2) system call.
+.TP 8n
+sleep \f[I]seconds\fP
+The \f[I]sleep\fP(3) system call.
 .TP 8n
 socket \f[I]domain\fP \f[I]type\fP \f[I]protocol\fP
 The \f[I]socket\fP(2) system call.
@@ -670,6 +679,9 @@ The \f[I]tmpnam\fP(3) system call.
 truncate \f[I]pathname\fP \f[I]size\fP
 The \f[I]truncate\fP(2) system call.
 .\" ----------  U  ---------------------------------------------------------
+.TP 8n
+usleep \f[I]usec\fP
+The \f[I]usleep\fP(3) system call.
 .TP 8n
 ungetc \f[I]c\fP \f[I]fp\fP
 The \f[I]ungetc\fP(3) system call.

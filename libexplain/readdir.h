@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
   * @brief explain readdir(2) errors
   */
 
-#include <libexplain/warn_unused_result.h>
+#include <libexplain/gcc_attributes.h>
 #include <libexplain/large_file_support.h>
 
 #include <dirent.h>
@@ -255,5 +255,5 @@ void explain_message_errno_readdir(char *message, int message_size, int errnum,
 }
 #endif
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_READDIR_H */

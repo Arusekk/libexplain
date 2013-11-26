@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -33,3 +33,6 @@ explain_message_errno_opendir(char *message, int message_size, int errnum,
     explain_string_buffer_init(&sb, message, message_size);
     explain_buffer_errno_opendir(&sb, errnum, pathname);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

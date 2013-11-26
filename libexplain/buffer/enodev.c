@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -36,3 +36,6 @@ explain_buffer_enodev_anon_inodes(explain_string_buffer_t *sb,
         i18n("the kernel could not mount the internal anonymous inode device")
     );
 }
+
+
+/* vim: set ts=8 sw=4 et : */

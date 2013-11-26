@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009 Peter Miller
+ * Copyright (C) 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
   * @brief explain malloc(3) errors
   */
 
-#include <libexplain/warn_unused_result.h>
+#include <libexplain/gcc_attributes.h>
 
 #include <stdlib.h>
 
@@ -51,7 +51,9 @@ extern "C" {
   *     This function only returns on success. On failure, prints an
   *     explanation and exits, it does not return.
   */
-void *explain_malloc_or_die(size_t size);
+void *explain_malloc_or_die(size_t size)
+                                                     LIBEXPLAIN_ATTRIBUTE_MALLOC
+                                             LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE(1);
 
 /**
   * The explain_malloc_on_error function is used to call the
@@ -76,6 +78,8 @@ void *explain_malloc_or_die(size_t size);
   *     The value returned by the wrapped <i>malloc</i>(3) system call.
   */
 void *explain_malloc_on_error(size_t size)
+                                                     LIBEXPLAIN_ATTRIBUTE_MALLOC
+                                              LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE(1)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -117,6 +121,8 @@ void *explain_malloc_on_error(size_t size)
   *     library.
   */
 const char *explain_malloc(size_t size)
+                                                     LIBEXPLAIN_ATTRIBUTE_MALLOC
+                                              LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE(1)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -162,6 +168,7 @@ const char *explain_malloc(size_t size)
   *     library.
   */
 const char *explain_errno_malloc(int errnum, size_t size)
+                                              LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE(2)
                                                   LIBEXPLAIN_WARN_UNUSED_RESULT;
 
 /**
@@ -200,7 +207,8 @@ const char *explain_errno_malloc(int errnum, size_t size)
   *     The original size, exactly as passed to the <i>malloc</i>(3) system
   *     call.
   */
-void explain_message_malloc(char *message, int message_size, size_t size);
+void explain_message_malloc(char *message, int message_size, size_t size)
+                                             LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE(3);
 
 /**
   * The explain_message_errno_malloc function is used to obtain an
@@ -243,11 +251,12 @@ void explain_message_malloc(char *message, int message_size, size_t size);
   *     call.
   */
 void explain_message_errno_malloc(char *message, int message_size, int errnum,
-    size_t size);
+    size_t size)
+                                             LIBEXPLAIN_ATTRIBUTE_ALLOC_SIZE(4);
 
 #ifdef __cplusplus
 }
 #endif
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_MALLOC_H */

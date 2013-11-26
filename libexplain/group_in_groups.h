@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -37,3 +37,4 @@ int explain_group_in_groups(int gid,
     const struct explain_have_identity_t *hip);
 
 #endif /* LIBEXPLAIN_GROUP_IN_GROUPS_H */
+/* vim: set ts=8 sw=4 et : */

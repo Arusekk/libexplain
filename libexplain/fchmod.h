@@ -27,7 +27,7 @@
   * by the <i>fchmod</i>(2) system call.
   */
 
-#include <libexplain/warn_unused_result.h>
+#include <libexplain/gcc_attributes.h>
 #include <libexplain/large_file_support.h>
 
 #include <sys/stat.h>

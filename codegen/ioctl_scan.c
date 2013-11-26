@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,10 +18,12 @@
  */
 
 #include <libexplain/ac/ctype.h>
+#include <libexplain/ac/ftw.h>
+#include <libexplain/ac/regex.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
-#include <libexplain/ac/regex.h>
+#include <libexplain/ac/sys/stat.h>
 
 #include <libexplain/fclose.h>
 #include <libexplain/fgets.h>
@@ -117,7 +119,7 @@ void
 ioctl_scan_include(const char *pathname)
 {
     const char      *p;
-    FILE            *fp;
+    FILE            *ifp;
     regex_t         define_io;
     regex_t         define_hex;
     FILE            *ofp;
@@ -125,6 +127,7 @@ ioctl_scan_include(const char *pathname)
     explain_string_list_t iocg;
     explain_string_list_t iocs;
     char            *mangled;
+    int             line_number;
     size_t          j;
 
     p = pathname;
@@ -133,50 +136,76 @@ ioctl_scan_include(const char *pathname)
         explain_output_error_and_die("must be a system include file");
     }
     p += 13;
-    mangled = mangle_include_file_name(p);
-    snprintf(ofn, sizeof(ofn), "catalogue-ioctl/%s", mangled);
-    free(mangled);
-    mangled = 0;
-    aegis_new_file(ofn);
-    ofp = explain_fopen_or_die(ofn, "w");
-    gpl_header(ofp, "# ");
-    fprintf(ofp, "Include: %s\n", p);
 
+    /*
+     * scan the file to see if has any ioctl defnitions,
+     * and quietly ignore it if there are none.
+     */
     explain_string_list_constructor(&iocg);
     explain_string_list_constructor(&iocs);
-
     regcomp_or_die
     (
         &define_io,
-       "#[ \t]*define[ \t]+([A-Z][A-Z_0-9]*)[ \t]+(_IO[CRW]*[ \t]*\\([^)]*\\))",
+       "#[ \t]*define[ \t]+"
+       "([A-Z][A-Z_0-9]*)"
+       "[ \t]+"
+       "(_IO[CRW]*[ \t]*\\([^)]*\\))",
         REG_EXTENDED
     );
     regcomp_or_die
     (
         &define_hex,
-        "#[ \t]*define[ \t]+([A-Z][A-Z_0-9]*)[ \t]+(0x[0-9A-Fa-f]+)",
+        "#[ \t]*define[ \t]+"
+        "([A-Z_][0-9A-Za-z_]*IOC[A-Za-z_0-9]*)"
+        "[ \t]+"
+        "(0x[0-9A-Fa-f]+)",
         REG_EXTENDED
     );
-    fp = explain_fopen_or_die(pathname, "r");
+    ifp = explain_fopen_or_die(pathname, "r");
+    line_number = 0;
     for (;;)
     {
         char            line[1000];
         regmatch_t      match[3];
 
-        if (!explain_fgets_or_die(line, sizeof(line), fp))
+        if (!explain_fgets_or_die(line, sizeof(line), ifp))
             break;
-        if
-        (
-            regexec_or_die(&define_io, line, SIZEOF(match), match, 0)
-        ||
-            regexec_or_die(&define_hex, line, SIZEOF(match), match, 0)
-        )
+        ++line_number;
+
+        { char *nl = strchr(line, '\n'); if (nl) *nl = '\0'; }
+
+        if (regexec_or_die(&define_hex, line, SIZEOF(match), match, 0))
+        {
+            explain_output_error
+            (
+                "%s:%d: %.*s 0x%08lX",
+                p,
+                line_number,
+                match[1].rm_eo - match[1].rm_so,
+                line + match[1].rm_so,
+                strtoul(line + match[2].rm_so, 0, 0)
+            );
+            goto stash;
+        }
+        else if (regexec_or_die(&define_io, line, SIZEOF(match), match, 0))
         {
             size_t           len;
             const char       *str;
             size_t           len2;
             const char       *str2;
 
+            explain_output_error
+            (
+                "%s:%d: %.*s %.*s",
+                p,
+                line_number,
+                match[1].rm_eo - match[1].rm_so,
+                line + match[1].rm_so,
+                match[2].rm_eo - match[2].rm_so,
+                line + match[2].rm_so
+            );
+
+            stash:
             len = match[1].rm_eo - match[1].rm_so;
             str = line + match[1].rm_so;
 
@@ -207,9 +236,31 @@ ioctl_scan_include(const char *pathname)
             else
                 explain_string_list_append_n(&iocs, str, len);
         }
+        else
+        {
+            /* no match */
+        }
     }
+    explain_fclose_or_die(ifp);
     regfree(&define_io);
     regfree(&define_hex);
+    if (iocg.length == 0 && iocs.length == 0)
+        return;
+    explain_output_error("%s: iocg %zu, iocs %zu",
+        pathname, iocg.length, iocs.length);
+
+    /*
+     * Now write the catalogue entry
+     */
+    mangled = mangle_include_file_name(p);
+
+    snprintf(ofn, sizeof(ofn), "catalogue-ioctl/%s", mangled);
+    free(mangled);
+    mangled = 0;
+
+    ofp = explain_fopen_or_die(ofn, "w");
+    gpl_header(ofp, "# ");
+    fprintf(ofp, "Include: %s\n", p);
 
     fprintf(ofp, "#\n");
     wrapper(ofp, "# ", "Requests that don't alter system state, device "
@@ -230,8 +281,49 @@ ioctl_scan_include(const char *pathname)
     explain_string_list_destructor(&iocg);
     explain_string_list_destructor(&iocs);
 
-    explain_fclose_or_die(fp);
     explain_fclose_or_die(ofp);
+}
+
+
+static int
+ends_with(const char *haystack, const char *needle)
+{
+    size_t haystack_size = strlen(haystack);
+    size_t needle_size = strlen(needle);
+    const char *haystack_end = haystack + haystack_size;
+    return
+        (
+            needle_size < haystack_size
+        &&
+            !memcmp(haystack_end - needle_size, needle, needle_size)
+        );
+}
+
+
+static int
+walker(const char *pathname, const struct stat *st, int typeflag,
+    struct FTW *ftwbuf)
+{
+    (void)typeflag;
+    (void)ftwbuf;
+    if (typeflag == FTW_D)
+    {
+       explain_output_error("walking %s\n", pathname);
+       if (!strcmp(pathname, ".."))
+           return FTW_SKIP_SUBTREE;
+       if (ends_with(pathname, "/.."))
+           return FTW_SKIP_SUBTREE;
+    }
+    if (S_ISREG(st->st_mode) && ends_with(pathname , ".h"))
+        ioctl_scan_include(pathname);
+    return FTW_CONTINUE;
+}
+
+
+void
+ioctl_scan_dir(const char *pathname)
+{
+    nftw(pathname, walker, 5, FTW_PHYS);
 }
 
 
@@ -568,3 +660,6 @@ ioctl_scan_generate(const char *pathname)
 
     elastic_buffer_destructor(&buf);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

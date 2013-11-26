@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,3 +43,6 @@ explain_is_same_inode(const struct stat *st1, const struct stat *st2)
     }
     return (st1->st_dev == st2->st_dev && st1->st_ino == st2->st_ino);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

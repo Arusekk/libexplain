@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -81,3 +81,4 @@ void explain_buffer_errno_open_explanation(explain_string_buffer_t *sb,
     int mode);
 
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_OPEN_H */
+/* vim: set ts=8 sw=4 et : */

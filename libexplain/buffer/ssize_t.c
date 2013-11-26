@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011 Peter Miller
+ * Copyright (C) 2009, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -28,3 +28,6 @@ explain_buffer_ssize_t(explain_string_buffer_t *sb, ssize_t value)
         explain_string_buffer_printf(sb, "%ld", (long)value);
 #endif
 }
+
+
+/* vim: set ts=8 sw=4 et : */

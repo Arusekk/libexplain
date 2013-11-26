@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010, 2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,3 +27,6 @@ explain_iocontrol_disambiguate_scc(int fildes, int request, const void *data)
     (void)data;
     return explain_iocontrol_disambiguate_net_dev_name(fildes, "scc");
 }
+
+
+/* vim: set ts=8 sw=4 et : */

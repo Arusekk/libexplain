@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011 Peter Miller
+ * Copyright (C) 2009, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -107,3 +107,6 @@ explain_uint32_array_all_zero(const uint32_t *data, size_t data_size)
     }
     return 1;
 }
+
+
+/* vim: set ts=8 sw=4 et : */

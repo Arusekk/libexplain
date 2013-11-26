@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -90,5 +90,5 @@ void explain_buffer_errno_vsnprintf_explanation(explain_string_buffer_t *sb,
     const char *format, va_list ap)
                                                  LIBEXPLAIN_FORMAT_PRINTF(6, 0);
 
-/* vim: set ts=8 sw=4 et */
+/* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_VSNPRINTF_H */

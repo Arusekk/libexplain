@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2010, 2011 Peter Miller
+ * Copyright (C) 2010, 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -71,3 +71,6 @@ explain_parse_ptrace_options_or_die(const char *text, const char *caption)
 {
     return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

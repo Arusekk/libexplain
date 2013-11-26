@@ -1,61 +1,69 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2013 Peter Miller
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
 # Free Software Foundation; either version 3 of the License, or (at your
 # option) any later version.
 #
-# This program is distributed in the hope that it will be useful,but
-# WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY
-# or FITNESS FOR A PARTICULAR PURPOSE. See the GNULesser General Public
-# License for more details.
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+# General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 Include: linux/fs.h
-# You need to sort these into one of the categories "Get", "Put" or
-# "Put-Get".
-Unclassified:
+#
 # Requests that don't alter system state, device state or media state.
 # These are safe to probe, and will not cause probems or damage.
 Get:
- BLKROGET
- BLKGETSIZE
- BLKRAGET
+ BLKBSZGET
+ BLKELVGET
  BLKFRAGET
+ BLKGETSIZE
+ BLKGETSIZE64
+ BLKPBSZGET
+ BLKRAGET
+ BLKROGET
  BLKSECTGET
  BLKSSZGET
- FIBMAP
  FIGETBSZ
- FS_IOC_FIEMAP
- BLKELVGET
- BLKBSZGET
- BLKGETSIZE64
- FS_IOC_GETFLAGS
- FS_IOC_GETVERSION
  FS_IOC32_GETFLAGS
  FS_IOC32_GETVERSION
+ FS_IOC_GETFLAGS
+ FS_IOC_GETVERSION
+#
 # These are requests that alter the system state.
-Put:
+Set:
+ BLKALIGNOFF
+ BLKBSZSET
+ BLKDISCARD
+ BLKDISCARDZEROES
+ BLKELVSET
+ BLKFLSBUF
+ BLKFRASET
+ BLKIOMIN
+ BLKIOOPT
+ BLKPG
+ BLKRASET
  BLKROSET
  BLKRRPART
- BLKFLSBUF
- BLKRASET
- BLKFRASET
+ BLKSECDISCARD
  BLKSECTSET
- BLKPG
  BLKTRACESETUP
  BLKTRACESTART
  BLKTRACESTOP
  BLKTRACETEARDOWN
- BLKDISCARD
- BLKELVSET
- BLKBSZSET
- FS_IOC_SETFLAGS
- FS_IOC_SETVERSION
+ FIBMAP
+ FIFREEZE
+ FITHAW
+ FITRIM
  FS_IOC32_SETFLAGS
  FS_IOC32_SETVERSION
-Put-Get:
+ FS_IOC_FIEMAP
+ FS_IOC_SETFLAGS
+ FS_IOC_SETVERSION
+# vim: set ts=8 sw=4 et :

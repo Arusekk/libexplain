@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -33,3 +33,4 @@
 void explain_buffer_v4l2_ctrl_type(explain_string_buffer_t *sb, int value);
 
 #endif /* LIBEXPLAIN_BUFFER_V4L2_CTRL_TYPE_H */
+/* vim: set ts=8 sw=4 et : */

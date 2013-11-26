@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -49,3 +49,4 @@ void explain_wrap_and_print(FILE *fp, const char *text);
 void explain_wrap_and_print_width(FILE *fp, const char *text, int width);
 
 #endif /* LIBEXPLAIN_WRAP_AND_PRINT_H */
+/* vim: set ts=8 sw=4 et : */

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009 Peter Miller
+ * Copyright (C) 2008, 2009, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -60,3 +60,6 @@ explain_access_mode_parse_or_die(const char *text, const char *caption)
 {
     return explain_parse_bits_or_die(text, table, SIZEOF(table), caption);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

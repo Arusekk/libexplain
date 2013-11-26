@@ -27,7 +27,7 @@
   * by the <i>ftello</i>(3) system call.
   */
 
-#include <libexplain/warn_unused_result.h>
+#include <libexplain/gcc_attributes.h>
 #include <libexplain/large_file_support.h>
 
 #include <stdio.h>

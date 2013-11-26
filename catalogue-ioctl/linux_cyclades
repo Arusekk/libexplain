@@ -1,16 +1,16 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2013 Peter Miller
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
 # Free Software Foundation; either version 3 of the License, or (at your
 # option) any later version.
 #
-# This program is distributed in the hope that it will be useful,but
-# WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY
-# or FITNESS FOR A PARTICULAR PURPOSE. See the GNULesser General Public
-# License for more details.
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+# General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
@@ -20,25 +20,11 @@ Include: linux/cyclades.h
 # Requests that don't alter system state, device state or media state.
 # These are safe to probe, and will not cause probems or damage.
 Get:
- CYGETCD1400VER
- CYGETDEFTHRESH
- CYGETDEFTIMEOUT
- CYGETMON
- CYGETRFLOW
- CYGETRTSDTR_INV
- CYGETTHRESH
- CYGETTIMEOUT
- CYGETWAIT
- CYZGETPOLLCYCLE
 #
 # These are requests that alter the system state.
 Set:
- CYCLADES_MAGIC
- CYSETDEFTHRESH
- CYSETDEFTIMEOUT
- CYSETRFLOW
- CYSETRTSDTR_INV
- CYSETTHRESH
- CYSETTIMEOUT
- CYSETWAIT
- CYZSETPOLLCYCLE
+ C_CM_IOCTL
+ C_CM_IOCTLM
+ C_CM_IOCTLW
+ C_IN_IOCTLW
+# vim: set ts=8 sw=4 et :

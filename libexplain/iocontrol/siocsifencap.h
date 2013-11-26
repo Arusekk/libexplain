@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010 Peter Miller
+ * Copyright (C) 2009, 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -35,3 +35,4 @@
 extern const explain_iocontrol_t explain_iocontrol_siocsifencap;
 
 #endif /* LIBEXPLAIN_IOCONTROL_SIOCSIFENCAP_H */
+/* vim: set ts=8 sw=4 et : */

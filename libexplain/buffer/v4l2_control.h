@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011 Peter Miller
+ * Copyright (C) 2011, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -65,3 +65,4 @@ enum explain_v4l2_control_check_id_t explain_v4l2_control_check_id(int fildes,
     const struct v4l2_control *data);
 
 #endif /* LIBEXPLAIN_BUFFER_V4L2_CONTROL_H */
+/* vim: set ts=8 sw=4 et : */

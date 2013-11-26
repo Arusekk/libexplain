@@ -17,13 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/limits.h>
+
 #include <libexplain/string_to_thing.h>
 
 
 unsigned
 explain_parse_uint_or_die(const char *text)
 {
-    return explain_parse_ulong_or_die(text);
+    unsigned long n = explain_parse_ulong_or_die(text);
+    if (n > UINT_MAX)
+        n = UINT_MAX;
+    return n;
 }
 
 

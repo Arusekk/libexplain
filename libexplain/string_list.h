@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011 Peter Miller
+ * Copyright (C) 2009-2011, 2013 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -109,3 +109,4 @@ void explain_string_list_append_n(explain_string_list_t *slp, const char *text,
 void explain_string_list_sort(explain_string_list_t *slp);
 
 #endif /* LIBEXPLAIN_STRING_LIST_H */
+/* vim: set ts=8 sw=4 et : */

@@ -739,7 +739,7 @@ libexplain_fubar_h(node_t *declaration)
     wrapper(fp, "  * ", elastic_buffer_get(&sb));
     fprintf(fp, "  */\n");
     fprintf(fp, "\n");
-    fprintf(fp, "#include <libexplain/warn_unused_result.h>\n");
+    fprintf(fp, "#include <libexplain/gcc_attributes.h>\n");
     if (system_include)
     {
         fprintf(fp, "#include <libexplain/large_file_support.h>\n");

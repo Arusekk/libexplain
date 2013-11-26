@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2010 Peter Miller
+ * Copyright (C) 2010, 2013 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -41,3 +41,6 @@ explain_buffer_must_be_multiple_of_page_size(explain_string_buffer_t *sb,
     if (n > 0)
         explain_string_buffer_printf(sb, " (%d)", n);
 }
+
+
+/* vim: set ts=8 sw=4 et : */

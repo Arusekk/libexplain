@@ -366,6 +366,7 @@ AC_CHECK_HEADERS([         \
     dlfcn.h                \
     fcntl.h                \
     float.h                \
+    ftw.h                  \
     getopt.h               \
     iconv.h                \
     inttypes.h             \
@@ -942,6 +943,7 @@ AC_CHECK_FUNCS(     \
     mkostemp        \
     mmap            \
     munmap          \
+    nanosleep       \
     on_exit         \
     openat          \
     pipe2           \
@@ -961,9 +963,11 @@ AC_CHECK_FUNCS(     \
     setresuid       \
     setreuid        \
     setsid          \
+    settimeofday    \
     shmat           \
     shmctl          \
     signalfd        \
+    sleep           \
     snprintf        \
     statfs          \
     stime           \
@@ -985,6 +989,7 @@ AC_CHECK_FUNCS(     \
     tcsetattr       \
     timerfd_create  \
     unsetenv        \
+    usleep          \
     ustat           \
     utimens         \
     utimensat       \
