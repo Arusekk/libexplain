@@ -62,6 +62,9 @@ explain_parse_fildes_or_die(const char *text, const char *caption)
     if (text != ep && !*ep)
         return result;
 
+    if (0 == strcmp(text, "AT_FDCWD"))
+        return AT_FDCWD;
+
     /* Second try, it could be a specific stream */
     if (0 == strcmp(text, "stdin"))
         return fileno(stdin);

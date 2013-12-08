@@ -138,6 +138,7 @@
 /* ----------  L  ------------------------------------------------------- */
 #include <explain/syscall/lchmod.h>
 #include <explain/syscall/lchown.h>
+#include <explain/syscall/lchownat.h>
 #include <explain/syscall/link.h>
 #include <explain/syscall/listen.h>
 #include <explain/syscall/lseek.h>
@@ -152,6 +153,7 @@
 #include <explain/syscall/mkstemp.h>
 #include <explain/syscall/mktemp.h>
 #include <explain/syscall/mmap.h>
+#include <explain/syscall/mount.h>
 #include <explain/syscall/munmap.h>
 /* ----------  N  ------------------------------------------------------- */
 #include <explain/syscall/nanosleep.h>
@@ -250,6 +252,7 @@
 #include <explain/syscall/tmpnam.h>
 #include <explain/syscall/truncate.h>
 /* ----------  U  ------------------------------------------------------- */
+#include <explain/syscall/uname.h>
 #include <explain/syscall/ungetc.h>
 #include <explain/syscall/unlink.h>
 #include <explain/syscall/usleep.h>
@@ -459,6 +462,7 @@ static const table_t table[] =
     /* ----------  L  ------------------------------------------------------- */
     { "lchmod", explain_syscall_lchmod },
     { "lchown", explain_syscall_lchown },
+    { "lchownat", explain_syscall_lchownat },
     /* FIXME: add support for lgetxattr */
     { "link", explain_syscall_link },
     { "listen", explain_syscall_listen },
@@ -489,7 +493,7 @@ static const table_t table[] =
     { "mmap", explain_syscall_mmap },
     /* FIXME: add support for mmap2 */
     /* FIXME: add support for modify_ldt */
-    /* FIXME: add support for mount */
+    { "mount", explain_syscall_mount },
     /* FIXME: add support for move_pages */
     /* FIXME: add support for mprotect */
     /* FIXME: add support for mpx */
@@ -709,7 +713,7 @@ static const table_t table[] =
     /* FIXME: add support for ugetrlimit */
     /* FIXME: add support for ulimit */
     /* FIXME: add support for umount */
-    /* FIXME: add support for uname */
+    { "uname", explain_syscall_uname },
     { "usleep", explain_syscall_usleep },
     { "ungetc", explain_syscall_ungetc },
     { "unlink", explain_syscall_unlink },

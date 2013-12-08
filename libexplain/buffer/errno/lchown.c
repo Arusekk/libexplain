@@ -45,7 +45,7 @@ explain_buffer_errno_lchown_system_call(explain_string_buffer_t *sb,
 }
 
 
-static void
+void
 explain_buffer_errno_lchown_explanation(explain_string_buffer_t *sb,
     int errnum, const char *syscall_name, const char *pathname, int owner,
     int group)

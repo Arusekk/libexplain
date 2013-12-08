@@ -40,6 +40,21 @@ explain_gethostname_on_error(char *data, size_t data_size)
 
 #ifdef HAVE_GETHOSTNAME
     result = gethostname(data, data_size);
+    if (result >= 0 && data_size > 0)
+    {
+        /*
+         * Use data_size-1 here rather than SIZE to work around the bug
+         * in SunOS 5.5's gethostname whereby it NUL-terminates HOSTNAME
+         * even when the name is as long as the supplied buffer.
+         *
+         * provenance: coreutils::xgethostname
+         *
+         * POSIX.1-2001 says that if such truncation occurs, then
+         * it is unspecified whether the returned buffer includes a
+         * terminating NUL byte.
+         */
+        data[data_size - 1] = '\0';
+    }
 #else
     errno = ENOSYS;
     result = -1;

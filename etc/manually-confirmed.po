@@ -1554,6 +1554,21 @@ msgid   "the %s %s does not support the %s system call"
 msgstr  "the %s %s does not support the %s system call"
 
 #.
+#. This error message is issued when a system call
+#. reports an EBUSY errors  No more specific cause is known.
+#.
+#. %1$s => The name of the offending argument
+#. %2$s => The file type (e.g. block special) of the offending
+#.          argument, alreada translated.
+#. %3$s => The name of the offended system call.
+#.
+#, c-format
+msgid   "the %s %s is in use by another process or by the system and this "
+        "prevents the %s system call from operating"
+msgstr  "the %s %s is in use by another process or by the system and this "
+        "prevents the %s system call from operating"
+
+#.
 #. This error message is issued when a call to
 #. strtol is given a string containing no digits.
 #. Similarly for related functions.

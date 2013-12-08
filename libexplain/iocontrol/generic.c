@@ -395,7 +395,7 @@ explain_iocontrol_generic_print_explanation(const explain_iocontrol_t *p,
 
     case EBUSY:
         explain_iocontrol_fake_syscall_name(name, sizeof(name), p, request);
-        explain_buffer_ebusy(sb, fildes, name);
+        explain_buffer_ebusy(sb, fildes, "fildes", name);
         break;
 
     case EFAULT:

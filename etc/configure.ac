@@ -540,6 +540,7 @@ AC_CHECK_HEADERS([         \
     sys/uio.h              \
     sys/user.h             \
     sys/ustat.h            \
+    sys/utsname.h          \
     sys/un.h               \
     sys/vfs.h              \
     sys/wait.h             \
@@ -899,6 +900,7 @@ AC_CHECK_FUNCS(     \
     eventfd         \
     fchmod          \
     fchmodat        \
+    fchown          \
     fchownat        \
     fdopendir       \
     flock           \
@@ -932,6 +934,8 @@ AC_CHECK_FUNCS(     \
     iconv_open      \
     lchmod          \
     lchown          \
+    lchownat        \
+    lchownat        \
     lutime          \
     lutimeat        \
     lutimens        \
@@ -942,6 +946,7 @@ AC_CHECK_FUNCS(     \
     mkdtemp         \
     mkostemp        \
     mmap            \
+    mount           \
     munmap          \
     nanosleep       \
     on_exit         \
@@ -988,6 +993,7 @@ AC_CHECK_FUNCS(     \
     tcsendbreak     \
     tcsetattr       \
     timerfd_create  \
+    uname           \
     unsetenv        \
     usleep          \
     ustat           \

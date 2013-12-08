@@ -136,6 +136,7 @@
 #include <libexplain/kill.h>
 #include <libexplain/lchmod.h>
 #include <libexplain/lchown.h>
+#include <libexplain/lchownat.h>
 #include <libexplain/link.h>
 #include <libexplain/listen.h>
 #include <libexplain/lseek.h>
@@ -149,6 +150,7 @@
 #include <libexplain/mkstemp.h>
 #include <libexplain/mktemp.h>
 #include <libexplain/mmap.h>
+#include <libexplain/mount.h>
 #include <libexplain/munmap.h>
 #include <libexplain/nanosleep.h>
 #include <libexplain/nice.h>
@@ -243,6 +245,7 @@
 #include <libexplain/tmpfile.h>
 #include <libexplain/tmpnam.h>
 #include <libexplain/truncate.h>
+#include <libexplain/uname.h>
 #include <libexplain/ungetc.h>
 #include <libexplain/unlink.h>
 #include <libexplain/unsetenv.h>

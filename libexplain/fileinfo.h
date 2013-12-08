@@ -112,5 +112,16 @@ int explain_fileinfo_pid_exe(pid_t pid, char *data, size_t data_size);
   */
 int explain_fileinfo_self_exe(char *data, size_t data_size);
 
+/**
+  * The explain_fileinfo_dir_tree_in_use function is used to determine
+  * whether or not a given mount point still has files open.
+  *
+  * @param dirpath
+  *     The absolute path of the diretory to be checked.
+  * @returns
+  *     -1 on error, 0 i niot in use, 1 if in use at least once
+  */
+int explain_fileinfo_dir_tree_in_use(const char *dirpath);
+
 /* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_FILEINFO_H */

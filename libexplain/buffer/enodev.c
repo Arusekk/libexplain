@@ -17,25 +17,7 @@
  */
 
 #include <libexplain/buffer/enodev.h>
-#include <libexplain/buffer/gettext.h>
 
-
-void
-explain_buffer_enodev_anon_inodes(explain_string_buffer_t *sb,
-    const char *syscall_name)
-{
-    (void)syscall_name;
-    explain_buffer_gettext
-    (
-        sb,
-        /*
-         * xgettext: This message is issued to explain an ENODEV error
-         * reported by the eventfs, eventpoll, signalfd and timerfd system
-         * call.
-         */
-        i18n("the kernel could not mount the internal anonymous inode device")
-    );
-}
-
+/* nothing here */
 
 /* vim: set ts=8 sw=4 et : */

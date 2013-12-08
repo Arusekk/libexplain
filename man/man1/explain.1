@@ -368,6 +368,9 @@ The \f[I]lchmod\fP(2) system call.
 lchown \f[I]pathname\fP \f[I]owner\fP \f[I]group\fP
 The \f[I]lchown\fP(2) system call.
 .TP 8n
+lchownat \f[I]fildes\fP \f[I]pathname\fP \f[I]uid\fP \f[I]gid\fP
+The \f[I]lchownat\fP(2) system call.
+.TP 8n
 link \f[I]oldpath\fP \f[I]newpath\fP
 The \f[I]link\fP(2) system call.
 .TP 8n
@@ -408,6 +411,10 @@ The \f[I]mktemp\fP(3) system call.
 mmap \f[I]data\fP \f[I]data_size\fP \f[I]prot\fP \f[I]flags\fP \
 \f[I]fildes\fP \f[I]offset\fP
 The \f[I]mmap\fP(2) system call.
+.TP 8n
+mount \f[I]source\fP \f[I]target\fP \f[I]file_systems_type\fP \
+      \f[I]flags\fP \f[I]data\fP
+The \f[I]mount\fP(2) system call.
 .TP 8n
 munmap \f[I]data\fP \f[I]data_size\fP
 The \f[I]munmap\fP(2) system call.
@@ -682,6 +689,9 @@ The \f[I]truncate\fP(2) system call.
 .TP 8n
 usleep \f[I]usec\fP
 The \f[I]usleep\fP(3) system call.
+.TP 8n
+uname \f[I]data\fP
+The \f[I]uname\fP(2) system call.
 .TP 8n
 ungetc \f[I]c\fP \f[I]fp\fP
 The \f[I]ungetc\fP(3) system call.

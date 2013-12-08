@@ -128,6 +128,19 @@ void explain_string_buffer_puts_quoted(explain_string_buffer_t *sb,
     const char *s);
 
 /*
+ * The explain_string_buffer_puts_shell_quoted function is used to print
+ * a shell string into the string buffer, complete with double quotes and
+ * sdingle quotes, and escape sequences if necessary.
+ *
+ * @param sb
+ *     The string buffer to print into.
+ * @param s
+ *     The string to print into the string buffer.
+ */
+void explain_string_buffer_puts_shell_quoted(explain_string_buffer_t *sb,
+    const char *s);
+
+/*
  * The explain_string_buffer_putsu_quoted function is used to print
  * a C string into the string buffer, complete with double quotes and
  * escape sequences if necessary.

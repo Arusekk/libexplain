@@ -93,6 +93,12 @@ explain_buffer_errno_gethostname_explanation(explain_string_buffer_t *sb,
         break;
 
     case EINVAL:
+        if (data && data_size + 1 < get_actual_hostname_size())
+        {
+          /* OSX/Darwin does this when the buffer is not large enough */
+          goto bad_size;
+        }
+
         if (!data)
         {
             explain_buffer_is_the_null_pointer(sb, "data");
@@ -108,7 +114,10 @@ explain_buffer_errno_gethostname_explanation(explain_string_buffer_t *sb,
     case ENAMETOOLONG:
         /* data_size is smaller than the actual size.  */
         {
-            size_t actual_size = get_actual_hostname_size();
+            size_t actual_size;
+            bad_size:
+            /* OSX/Darwin does this when the buffer is not large enough */
+            actual_size = get_actual_hostname_size();
             if (actual_size > 0 && data_size < actual_size + 1)
             {
                 explain_buffer_enametoolong_gethostname

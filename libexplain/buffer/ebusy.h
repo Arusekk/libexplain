@@ -29,11 +29,29 @@
   *     The string buffer to print into.
   * @param fildes
   *     The open file descriptor of the file (device) with the problem.
+  * @param fildes_caption
+  *     The name of the offending syscall argument
   * @param syscall_name
   *     The name of the offending system call.
   */
 void explain_buffer_ebusy(explain_string_buffer_t *sb, int fildes,
-    const char *syscall_name);
+    const char *fildes_caption, const char *syscall_name);
+
+/**
+  * The explain_buffer_ebusy function may be used
+  * to print an explanation of an EBUSY error.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param path
+  *     The path of the file (device) with the problem.
+  * @param path_caption
+  *     The name of the offending syscall argument
+  * @param syscall_name
+  *     The name of the offending system call.
+  */
+void explain_buffer_ebusy_path(explain_string_buffer_t *sb, const char *path,
+    const char *path_caption, const char *syscall_name);
 
 #endif /* LIBEXPLAIN_BUFFER_EBUSY_H */
 /* vim: set ts=8 sw=4 et : */

@@ -121,5 +121,18 @@ void explain_buffer_eperm_unlink(explain_string_buffer_t *sb,
 void explain_buffer_eperm_vague(explain_string_buffer_t *sb,
     const char *syscall_name);
 
+/**
+  * The explain_buffer_eperm_cap_sys_admin function is used to print an
+  * explanation of a EPERM error, in the case where the CAP_SYS_ADMIN
+  * capability ids required.
+  *
+  * @param sb
+  *     The string buffer to print into.
+  * @param syscall_name
+  *     The name of the offended system call.
+  */
+void explain_buffer_eperm_cap_sys_admin(explain_string_buffer_t *sb,
+    const char *syscall_name);
+
 #endif /* LIBEXPLAIN_BUFFER_EPERM_H */
 /* vim: set ts=8 sw=4 et : */

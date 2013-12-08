@@ -16,8 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libexplain/ac/fcntl.h>
 #include <libexplain/ac/stdio.h>
 #include <libexplain/ac/sys/stat.h>
+#include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/ebusy.h>
 #include <libexplain/buffer/file_type.h>
@@ -25,8 +27,18 @@
 
 
 void
+explain_buffer_ebusy_path(explain_string_buffer_t *sb, const char *path,
+    const char *path_caption, const char *syscall_name)
+{
+    int fildes = open(path, O_RDONLY);
+    explain_buffer_ebusy(sb, fildes, path_caption, syscall_name);
+    close(fildes);
+}
+
+
+void
 explain_buffer_ebusy(explain_string_buffer_t *sb, int fildes,
-    const char *syscall_name)
+    const char *fildes_caption, const char *syscall_name)
 {
     struct stat     st;
     char            file_type[100];
@@ -50,9 +62,15 @@ explain_buffer_ebusy(explain_string_buffer_t *sb, int fildes,
         /*
          * xgettext: This error message is issued when a system call
          * reports an EBUSY error.
+         *
+         * %1$s => The name of the offending argument
+         * %2$s => The file type (e.g. block special) of the offending
+         *          argument, alredaytranslated.
+         * %3$s => The name of the offended system call.
          */
-        i18n("the %s is in use by another process or by the system "
+        i18n("the %s %s is in use by another process or by the system "
             "and this prevents the %s system call from operating"),
+        fildes_caption,
         file_type,
         syscall_name
     );

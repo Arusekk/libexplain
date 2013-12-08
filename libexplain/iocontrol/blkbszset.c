@@ -75,7 +75,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
         break;
 
     case EBUSY:
-        explain_buffer_ebusy(sb, fildes, "ioctl BLKBSZSET");
+        explain_buffer_ebusy(sb, fildes, "fildes", "ioctl BLKBSZSET");
         break;
 
     case EINVAL:

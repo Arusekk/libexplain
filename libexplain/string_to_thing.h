@@ -217,7 +217,7 @@ long double explain_parse_long_double_or_die(const char *text);
   */
 uid_t explain_parse_uid_t_or_die(const char *text);
 
-/*
+/**
   * The explain_parse_gid_t_or_die function may be used to convert text
   * to a group ID.
   *

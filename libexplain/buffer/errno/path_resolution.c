@@ -923,6 +923,31 @@ current_directory_confusing(void)
 }
 
 
+static int
+is_ok_pathname_caption(const char *caption)
+{
+    /* most of them */
+    if (0 == strcmp(caption, "pathname"))
+        return 1;
+    /* rename */
+    if  (0 == strcmp(caption, "oldpath"))
+        return 1;
+    /* rename */
+    if (0 == strcmp(caption, "newpath"))
+        return 1;
+
+    /* mount */
+    if (0 == strcmp(caption, "source"))
+        return 1;
+    /* mount */
+    if (0 == strcmp(caption, "target"))
+        return 1;
+
+    /* heuristic */
+    return !strchr(caption, '/');
+}
+
+
 int
 explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
     int expected_errno, const char *initial_pathname, const char *caption,
@@ -947,8 +972,7 @@ explain_buffer_errno_path_resolution(explain_string_buffer_t *sb,
      * libexplain API inconsistent (at the expense of avoiding lame
      * POSIX argument name inconsistencies).
      */
-    assert(0 == strcmp(caption, "pathname") || 0 == strcmp(caption, "oldpath")
-        || 0 == strcmp(caption, "newpath"));
+    assert(is_ok_pathname_caption(caption));
 
     if (expected_errno == EMLINK)
         expected_errno = ELOOP;

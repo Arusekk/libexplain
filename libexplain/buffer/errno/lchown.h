@@ -50,5 +50,9 @@
 void explain_buffer_errno_lchown(explain_string_buffer_t *sb, int errnum,
     const char *pathname, int owner, int group);
 
+void explain_buffer_errno_lchown_explanation(explain_string_buffer_t *sb,
+    int errnum, const char *syscall_name, const char *pathname, int owner,
+    int group);
+
 #endif /* LIBEXPLAIN_BUFFER_ERRNO_LCHOWN_H */
 /* vim: set ts=8 sw=4 et : */
