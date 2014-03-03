@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -49,7 +49,7 @@ explain_buffer_utsname(explain_string_buffer_t *sb, const struct utsname *data)
     explain_string_buffer_puts(sb, ", machine = ");
     explain_string_buffer_puts_quoted_n(sb,
         data->machine, sizeof(data->machine));
-#ifdef _GNU_SOURCE
+#if HAVE_UTSNAME_DOMAINNAME
     explain_string_buffer_puts(sb, ", domainname = ");
     explain_string_buffer_puts_quoted_n(sb,
         data->domainname, sizeof(data->domainname));

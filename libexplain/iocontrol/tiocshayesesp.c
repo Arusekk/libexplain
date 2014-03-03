@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011, 2013 Peter Miller
+ * Copyright (C) 2009-2011, 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -53,7 +53,13 @@ print_explanation(const explain_iocontrol_t *p,
     switch (errnum)
     {
     case EBUSY:
-        explain_buffer_ebusy(sb, fildes, "ioctl TIOCSHAYESESP");
+        explain_buffer_ebusy_fildes
+        (
+            sb,
+            fildes,
+            "fildes",
+            "ioctl TIOCSHAYESESP"
+        );
         break;
 
 #ifdef HAVE_LINUX_HAYESESP_H

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2013 Peter Miller
+# Copyright (C) 2013, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -18,7 +18,7 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-TEST_SUBJECT="acl_get_file"
+TEST_SUBJECT="acl_get_file EINVAL"
 . test_prelude
 
 cat > test.in << 'fubar'
@@ -28,13 +28,22 @@ test $? -eq 0 || no_result
 
 cat > test.ok << 'fubar'
 acl_get_file(pathname = ".", type = 0x2A) failed, Invalid argument (EINVAL)
-because the argument type is not a known ACL type; this is more likely to
+because the type argument is not a known ACL type; this is more likely to
 be a software error (a bug) than it is to be a user error
+fubar
+test $? -eq 0 || no_result
+
+cat > test.ok.2 << 'fubar'
+acl_get_file(pathname = ".", type = ACL_TYPE_ACCESS | 0x28) failed, Invalid
+argument (EINVAL) because the type argument is not a known ACL type; this
+is more likely to be a software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
 explain -eEINVAL acl_get_file . 42 > test.out
 test $? -eq 0 || fail
+
+diff test.ok.2 test.out >/dev/null 2>&1 && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail

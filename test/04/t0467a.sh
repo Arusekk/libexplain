@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009 Peter Miller
+# Copyright (C) 2009, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -27,8 +27,26 @@ the flags argument was incorrectly specified, it contained undefined bits
 fubar
 test $? -eq 0 || no_result
 
+cat > test.ok.2 << 'fubar'
+eventfd(initval = 0, flags = EFD_NONBLOCK | 0x1) failed, Invalid argument
+(EINVAL) because the flags argument was incorrectly specified, it contained
+undefined bits
+fubar
+test $? -eq 0 || no_result
+
+cat > test.ok.3 << 'fubar'
+eventfd(initval = 0, flags = 0x1) failed, Invalid argument (EINVAL) because
+the flags argument was incorrectly specified, it contained undefined bits
+fubar
+test $? -eq 0 || no_result
+
 explain -eEINVAL eventfd 0 EFD_NONBLOCK+1 > test.out
 test $? -eq 0 || fail
+
+diff test.ok.2 test.out > /dev/null 2>&1
+test $? -eq 0 && pass
+diff test.ok.3 test.out > /dev/null 2>&1
+test $? -eq 0 && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail
@@ -40,4 +58,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

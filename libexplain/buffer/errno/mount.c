@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -282,6 +282,7 @@ source_is_in_partition_table(const char *source)
     fp = fopen("/proc/partitions", "r");
     if (!fp)
         return -1;
+    found = 0;
     for (;;)
     {
         char line[100];
@@ -384,8 +385,10 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
    target_fc.st_mode = S_IFDIR;
    target_fc.must_exist = 1;
 
+#ifdef MS_MGC_MSK
    if ((flags & MS_MGC_MSK) & MS_MGC_VAL)
        flags &= ~MS_MGC_MSK;
+#endif
 
     switch (errnum)
     {
@@ -425,8 +428,11 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
          * Or, mounting a read-only file system was attempted without
          * giving the MS_RDONLY flag.
          */
+#ifdef MS_RDONLY
+        /* FIXME: this is Linux specific, add more systems? */
         if (!(flags & MS_RDONLY))
         {
+#ifdef BLKROGET
             int fd = open(source, O_RDONLY, 0);
             if (fd >= 0)
             {
@@ -443,12 +449,16 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
                 }
             }
             close(fd);
+#endif
         }
+#endif
 
         /*
          * Or, the block device source is located on a file system
          * mounted with the MS_NODEV option.
          */
+#ifdef MS_NODEV
+        /* FIXME: this is Linux specific, add more systems? */
         {
             struct statvfs info;
             if (statvfs(source, &info) >  0)
@@ -469,6 +479,7 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
                 }
             }
         }
+#endif
 
         /* no idea */
         explain_buffer_eacces(sb, target, "target", &target_fc);
@@ -488,6 +499,7 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
          * Or, it cannot be remounted read-only, because it still holds
          * files open for writing.
          */
+#ifdef MS_REMOUNT
         {
             unsigned long flags2 = MS_RDONLY | MS_REMOUNT;
             if ((flags & flags2) == flags2)
@@ -502,6 +514,7 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
                 return;
             }
         }
+#endif
         if (target_is_already_mounted(target))
         {
             explain_buffer_gettext
@@ -606,6 +619,7 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
          * Or, a remount (MS_REMOUNT) was attempted, but source was not
          * already mounted on target.
          */
+#ifdef MS_REMOUNT
         if ((flags & MS_REMOUNT) && !source_mounted_on_target(source, target))
         {
             explain_buffer_gettext
@@ -617,11 +631,13 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
             );
             return;
         }
+#endif
 
         /*
          * Or, a move (MS_MOVE) was attempted, but source was not a
          * mount point, or was '/'.
          */
+#ifdef HAVE_SYS_MOUNT_MS_MOVE
         if (flags & MS_MOVE)
         {
              if (0 == strcmp(target, "/"))
@@ -645,6 +661,7 @@ explain_buffer_errno_mount_explanation(explain_string_buffer_t *sb, int errnum,
                 return;
             }
         }
+#endif
 
         /*
          * (we have ruled out most everything else)

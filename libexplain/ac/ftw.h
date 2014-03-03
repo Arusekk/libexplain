@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -30,6 +30,11 @@
 #ifdef HAVE_FTW_H
 #include <ftw.h>
 #endif
+
+#ifndef FTW_CONTINUE
+#define FTW_CONTINUE 0
+#endif
+
 
 /* vim: set ts=8 sw=4 et : */
 #endif /* LIBEXPLAIN_AC_FTW_H */

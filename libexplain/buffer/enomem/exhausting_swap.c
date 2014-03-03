@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -30,28 +30,16 @@
 int
 explain_buffer_enomem_exhausting_swap(explain_string_buffer_t *sb)
 {
-    struct rlimit rlim;
-
-    /*
-     * Try to provide more information about memory limits.
-     */
-    if (getrlimit(RLIMIT_DATA, &rlim) < 0)
-        return 0;
-
-    if (rlim.rlim_cur != RLIM_INFINITY)
-        return 0;
-
     explain_string_buffer_puts(sb, ", ");
     explain_buffer_gettext
     (
         sb,
         /*
-         * xgettext:  This message is used when supplementing
-         * an explation an ENOMEM error, when it is specific to
-         * user space memory, and the process has an infinite
-         * memory limit, meaning that a system limit on the
-         * total amout of user space memory available to all
-         * processes has been exhausted.
+         * xgettext:  This message is used when supplementing an explation an
+         * ENOMEM error, when it is specific to user space memory, and the
+         * process has an infinite memory limit, meaning that a system limit on
+         * the total amout of user space memory available to all processes has
+         * been exhausted.
          */
         i18n("probably by exhausting swap space")
     );

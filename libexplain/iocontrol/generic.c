@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011, 2013 Peter Miller
+ * Copyright (C) 2009-2011, 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -395,7 +395,7 @@ explain_iocontrol_generic_print_explanation(const explain_iocontrol_t *p,
 
     case EBUSY:
         explain_iocontrol_fake_syscall_name(name, sizeof(name), p, request);
-        explain_buffer_ebusy(sb, fildes, "fildes", name);
+        explain_buffer_ebusy_fildes(sb, fildes, "fildes", name);
         break;
 
     case EFAULT:

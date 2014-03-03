@@ -138,6 +138,7 @@
 #include <libexplain/lchown.h>
 #include <libexplain/lchownat.h>
 #include <libexplain/link.h>
+#include <libexplain/linkat.h>
 #include <libexplain/listen.h>
 #include <libexplain/lseek.h>
 #include <libexplain/lstat.h>

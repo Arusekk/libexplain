@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011, 2013 Peter Miller
+ * Copyright (C) 2008-2011, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -64,6 +64,9 @@ explain_buffer_errno_fgetc_explanation(explain_string_buffer_t *sb,
             explain_buffer_software_error(sb);
             return;
         }
+        fildes = explain_stream_to_fildes(fp);
+        explain_buffer_ebadf(sb, fildes, "fp");
+        return;
     }
 
     fildes = explain_stream_to_fildes(fp);

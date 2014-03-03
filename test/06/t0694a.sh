@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2013 Peter Miller
+# Copyright (C) 2013, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -28,6 +28,13 @@ was incorrectly specified, it contained undefined bits
 fubar
 test $? -eq 0 || no_result
 
+fmt > test.ok.2 << 'fubar'
+pipe2(fildes = 0xNNNNNNNN, flags = O_RDONLY | O_NONBLOCK | O_EXCL |
+O_CLOEXEC) failed, Invalid argument (EINVAL) because the flags argument
+was incorrectly specified, it contained undefined bits
+fubar
+test $? -eq 0 || no_result
+
 explain -eEINVAL pipe2 'O_EXCL+O_CLOEXEC|O_NONBLOCK' > test.out.4
 test $? -eq 0 || fail
 
@@ -39,6 +46,8 @@ test $? -eq 0 || no_result
 
 fmt test.out.2 > test.out
 test $? -eq 0 || no_result
+
+diff test.ok.2 test.out > /dev/null 2>&1 && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2010, 2013 Peter Miller
+ * Copyright (C) 2010, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -44,6 +44,12 @@ explain_buffer_errno_fpurge_explanation(explain_string_buffer_t *sb, int errnum,
 {
     if (fp == NULL)
     {
+        /*
+         * Caution: this is one particularly nasty part of the <stdio.h>
+         * API.  Actually it means "flush all streams".  Given that we
+         * have no access to stdio's list, we can't tell you what went
+         * wrong.
+         */
         explain_buffer_is_the_null_pointer(sb, "fp");
         return;
     }

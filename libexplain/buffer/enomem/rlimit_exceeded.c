@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011, 2013 Peter Miller
+ * Copyright (C) 2011, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -60,7 +60,10 @@ explain_buffer_enomem_rlimit_exceeded(explain_string_buffer_t *sb, size_t size)
     if (getrlimit(RLIMIT_AS, &rlim) <= 0)
         return 0;
     if (rlim.rlim_cur == RLIM_INFINITY)
-        return 0;
+    {
+        explain_buffer_enomem_user(sb, rlim.rlim_cur);
+        return 1;
+    }
 
     if (getrusage(RUSAGE_SELF, &ru) < 0)
         return 0;

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2010, 2013 Peter Miller
+ * Copyright (C) 2009, 2010, 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -181,7 +181,7 @@ ioctl_scan_include(const char *pathname)
                 "%s:%d: %.*s 0x%08lX",
                 p,
                 line_number,
-                match[1].rm_eo - match[1].rm_so,
+                (int)(match[1].rm_eo - match[1].rm_so),
                 line + match[1].rm_so,
                 strtoul(line + match[2].rm_so, 0, 0)
             );
@@ -199,9 +199,9 @@ ioctl_scan_include(const char *pathname)
                 "%s:%d: %.*s %.*s",
                 p,
                 line_number,
-                match[1].rm_eo - match[1].rm_so,
+                (int)(match[1].rm_eo - match[1].rm_so),
                 line + match[1].rm_so,
-                match[2].rm_eo - match[2].rm_so,
+                (int)(match[2].rm_eo - match[2].rm_so),
                 line + match[2].rm_so
             );
 
@@ -309,10 +309,12 @@ walker(const char *pathname, const struct stat *st, int typeflag,
     if (typeflag == FTW_D)
     {
        explain_output_error("walking %s\n", pathname);
+#ifdef FTW_SKIP_SUBTREE
        if (!strcmp(pathname, ".."))
            return FTW_SKIP_SUBTREE;
        if (ends_with(pathname, "/.."))
            return FTW_SKIP_SUBTREE;
+#endif
     }
     if (S_ISREG(st->st_mode) && ends_with(pathname , ".h"))
         ioctl_scan_include(pathname);

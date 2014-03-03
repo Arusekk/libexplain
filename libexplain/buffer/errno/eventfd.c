@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2013 Peter Miller
+ * Copyright (C) 2009, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -90,8 +90,8 @@ explain_buffer_errno_eventfd_explanation(explain_string_buffer_t *sb,
 
 
 void
-explain_buffer_errno_eventfd(explain_string_buffer_t *sb, int errnum, unsigned
-    int initval, int flags)
+explain_buffer_errno_eventfd(explain_string_buffer_t *sb, int errnum,
+    unsigned int initval, int flags)
 {
     explain_explanation_t exp;
 

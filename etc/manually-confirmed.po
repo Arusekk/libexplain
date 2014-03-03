@@ -1,6 +1,6 @@
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008-2013 Peter Miller
+# Copyright (C) 2008-2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 #
 msgid   ""
 msgstr  "Report-Msgid-Bugs-To: Peter Miller <pmiller@opensource.org.au>\n"
-        "POT-Creation-Date: 2011-11-09 21:42+1100\n"
-        "PO-Revision-Date: 2013-11-16\n"
+        "POT-Creation-Date: 2014-02-28 11:28+1100\n"
+        "PO-Revision-Date: 2014-02-28\n"
         "Last-Translator: Peter Miller <pmiller@opensource.org.au>\n"
         "Content-Type: text/plain; charset=us-ascii\n"
 
@@ -127,16 +127,6 @@ msgstr  "%s does not refer to a %s"
 #, c-format
 msgid   "%s does not refer to a known file configuration value"
 msgstr  "%s does not refer to a known file configuration value"
-
-#.
-#. This message is used when a file descriptor is not
-#. valid and does not refer to an open file.
-#.
-#. %1$s => the name of the offending system call argument.
-#.
-#, c-format
-msgid   "%s does not refer to an open file"
-msgstr  "%s does not refer to an open file"
 
 #.
 #. This message is used when a pathname
@@ -313,18 +303,6 @@ msgstr  "%s is not associated with an object to which %s can be applied"
 #, c-format
 msgid   "%s is not supported by the network type"
 msgstr  "%s is not supported by the network type"
-
-#.
-#. This message is used when a file descriptor
-#. is detected that is negative, or larger than
-#. sysconf(_SC_OPEN_MAX).
-#.
-#. The range will be printed separately, if available, so do not
-#. mention sysconf(_SC_OPEN_MAX) in the translation.
-#.
-#, c-format
-msgid   "%s is outside the allowed range for file descriptors"
-msgstr  "%s is outside the allowed range for file descriptors"
 
 #.
 #. This message is used when a system call argument is
@@ -627,10 +605,10 @@ msgstr  "an attempt was made to set an invalid option"
 #. temporary error occurred on an authoritative name server.
 #. The specified host is unknown.
 #.
-msgid   "an authoritative DNS server could not be reached and so the given "
-        "host name does not appear to exist"
-msgstr  "an authoritative DNS server could not be reached and so the given "
-        "host name does not appear to exist"
+msgid   "an authoritative DNS server could not be reached and so the "
+        "given host name does not appear to exist"
+msgstr  "an authoritative DNS server could not be reached and so the "
+        "given host name does not appear to exist"
 
 #.
 #. this error message is used to explain
@@ -638,10 +616,10 @@ msgstr  "an authoritative DNS server could not be reached and so the given "
 #. call.  Authoritative Answer Host not found.  The specified
 #. host is unknown.
 #.
-msgid   "an authoritative DNS server was reached and the given host name does "
-        "not exist"
-msgstr  "an authoritative DNS server was reached and the given host name does "
-        "not exist"
+msgid   "an authoritative DNS server was reached and the given host name "
+        "does not exist"
+msgstr  "an authoritative DNS server was reached and the given host name "
+        "does not exist"
 
 #.
 #. This message is used to explan an ECONNABORTED error
@@ -789,10 +767,10 @@ msgstr  "firewall rules forbid connection"
 #. CAP_SETUID capability)
 #.
 #, c-format
-msgid   "gid does not match the real group ID (%1$s) or the saved group ID "
-        "(%2$s) of the calling process"
-msgstr  "gid does not match the real group ID (%1$s) or the saved group ID "
-        "(%2$s) of the calling process"
+msgid   "gid does not match the real group ID (%1$s) or the saved group "
+        "ID (%2$s) of the calling process"
+msgstr  "gid does not match the real group ID (%1$s) or the saved group "
+        "ID (%2$s) of the calling process"
 
 #.
 #. this error message is used to explain a
@@ -1491,36 +1469,6 @@ msgid   "symbolic link"
 msgstr  "symbolic link"
 
 #.
-#. This error message is used to explain an EPERM error
-#. reported by the setresgid system call, in the case where gid does
-#. not match the real group ID or saved group ID of the calling
-#. process, and the process is not privileged (Linux: does not have
-#. the CAP_SETGID capability)
-#.
-#, c-format
-msgid   "the %1$s argument does not match the real group ID (%2$s) or the "
-        "effective group ID (%3$s) or the saved group ID (%4$s) of the calling "
-        "process"
-msgstr  "the %1$s argument does not match the real group ID (%2$s) or the "
-        "effective group ID (%3$s) or the saved group ID (%4$s) of the calling "
-        "process"
-
-#.
-#. This error message is used to explain an EPERM error
-#. reported by the setresuid system call, in the case where uid does
-#. not match the real ser ID or saved user ID of the calling
-#. process, and the user is not privileged (Linux: does not have the
-#. CAP_SETUID capability)
-#.
-#, c-format
-msgid   "the %1$s argument does not match the real user ID (%2$s) or the "
-        "effective user ID (%3$s) or the saved user ID (%4$s) of the calling "
-        "process"
-msgstr  "the %1$s argument does not match the real user ID (%2$s) or the "
-        "effective user ID (%3$s) or the saved user ID (%4$s) of the calling "
-        "process"
-
-#.
 #. This error message is used to explain an EAGAIN
 #. error reported by the setuid(2) system call (or similar) in the
 #. case where the uid does not match the real user ID and 'uid'
@@ -1531,12 +1479,42 @@ msgstr  "the %1$s argument does not match the real user ID (%2$s) or the "
 #. %2$s => real user ID and user name of current process
 #.
 #, c-format
-msgid   "the %1$s argument does not match the process's real user ID (%2$s), "
-        "and would take the new real user ID over its maximum number of "
-        "processes/threads that can be created"
-msgstr  "the %1$s argument does not match the process's real user ID (%2$s), "
-        "and would take the new real user ID over its maximum number of "
-        "processes/threads that can be created"
+msgid   "the %1$s argument does not match the process's real user ID "
+        "(%2$s), and would take the new real user ID over its maximum "
+        "number of processes/threads that can be created"
+msgstr  "the %1$s argument does not match the process's real user ID "
+        "(%2$s), and would take the new real user ID over its maximum "
+        "number of processes/threads that can be created"
+
+#.
+#. This error message is used to explain an EPERM error
+#. reported by the setresgid system call, in the case where gid does
+#. not match the real group ID or saved group ID of the calling
+#. process, and the process is not privileged (Linux: does not have
+#. the CAP_SETGID capability)
+#.
+#, c-format
+msgid   "the %1$s argument does not match the real group ID (%2$s) or the "
+        "effective group ID (%3$s) or the saved group ID (%4$s) of the "
+        "calling process"
+msgstr  "the %1$s argument does not match the real group ID (%2$s) or the "
+        "effective group ID (%3$s) or the saved group ID (%4$s) of the "
+        "calling process"
+
+#.
+#. This error message is used to explain an EPERM error
+#. reported by the setresuid system call, in the case where uid does
+#. not match the real user ID or effective user ID or saved user ID
+#. of the calling process, and the user is not privileged (Linux:
+#. does not have the CAP_SETUID capability)
+#.
+#, c-format
+msgid   "the %1$s argument does not match the real user ID (%2$s) or the "
+        "effective user ID (%3$s) or the saved user ID (%4$s) of the "
+        "calling process"
+msgstr  "the %1$s argument does not match the real user ID (%2$s) or the "
+        "effective user ID (%3$s) or the saved user ID (%4$s) of the "
+        "calling process"
 
 #.
 #. this error message is issued to explain
@@ -1555,11 +1533,11 @@ msgstr  "the %s %s does not support the %s system call"
 
 #.
 #. This error message is issued when a system call
-#. reports an EBUSY errors  No more specific cause is known.
+#. reports an EBUSY error.
 #.
 #. %1$s => The name of the offending argument
 #. %2$s => The file type (e.g. block special) of the offending
-#.          argument, alreada translated.
+#.          argument, alredaytranslated.
 #. %3$s => The name of the offended system call.
 #.
 #, c-format
@@ -1666,6 +1644,16 @@ msgstr  "the %s argument does not refer to an object that is open for "
         "writing"
 
 #.
+#. This message is used when a file descriptor is not
+#. valid and does not refer to an open file.
+#.
+#. %1$s => the name of the offending system call argument.
+#.
+#, c-format
+msgid   "the %s argument does not refer to an open file"
+msgstr  "the %s argument does not refer to an open file"
+
+#.
 #. This error message is issued when a system call
 #. argument is requested to be a multiple of a particular
 #. number, but it is not.
@@ -1686,16 +1674,14 @@ msgstr  "the %s argument is not a multiple of %d"
 #. %2$s => the name of the offending system call
 #.
 #, c-format
-msgid   ""
-"the %s argument is not associated with an object to which the %s system "
-"call can be applied, or the file system on which the file is located may "
-"not support ACLs, or ACLs are disabled, or this host system does not "
-"support ACLs"
-msgstr  ""
-"the %s argument is not associated with an object to which the %s system "
-"call can be applied, or the file system on which the file is located may "
-"not support ACLs, or ACLs are disabled, or this host system does not "
-"support ACLs"
+msgid   "the %s argument is not associated with an object to which the %s "
+        "system call can be applied, or the file system on which the file "
+        "is located may not support ACLs, or ACLs are disabled, or this "
+        "host system does not support ACLs"
+msgstr  "the %s argument is not associated with an object to which the %s "
+        "system call can be applied, or the file system on which the file "
+        "is located may not support ACLs, or ACLs are disabled, or this "
+        "host system does not support ACLs"
 
 #.
 #. This error message is issued when a system call
@@ -1711,6 +1697,18 @@ msgstr  ""
 #, c-format
 msgid   "the %s argument is not supported by the device"
 msgstr  "the %s argument is not supported by the device"
+
+#.
+#. This message is used when a file descriptor
+#. is detected that is negative, or larger than
+#. sysconf(_SC_OPEN_MAX).
+#.
+#. The range will be printed separately, if available, so do not
+#. mention sysconf(_SC_OPEN_MAX) in the translation.
+#.
+#, c-format
+msgid   "the %s argument is outside the allowed range for file descriptors"
+msgstr  "the %s argument is outside the allowed range for file descriptors"
 
 #.
 #. This message is used to explain an ENOTCONN
@@ -1878,16 +1876,6 @@ msgstr  "the %s in the %s is being used as a directory when it is not"
 #, c-format
 msgid   "the %s in the %s refers to %s that does not exist"
 msgstr  "the %s in the %s refers to %s that does not exist"
-
-#.
-#. This error message is issued when a system call
-#. reports an EBUSY error.
-#.
-#, c-format
-msgid   "the %s is in use by another process or by the system and this "
-        "prevents the %s system call from operating"
-msgstr  "the %s is in use by another process or by the system and this "
-        "prevents the %s system call from operating"
 
 #.
 #. This message is used when explaining an EACCES
@@ -2554,6 +2542,16 @@ msgid   "the network protocol requested is not available on this system"
 msgstr  "the network protocol requested is not available on this system"
 
 #.
+#. this error message is used to explain NO_RECOVERY
+#. errors returned by the gethostbyname system call.
+#. Non recoverable errors, FORMERR, REFUSED, NOTIMP.
+#.
+msgid   "the operation was refused, or the operation is not implemented "
+        "on this system"
+msgstr  "the operation was refused, or the operation is not implemented "
+        "on this system"
+
+#.
 #. This message is used when explaining why
 #. the "other" permission mode bits are ignored.
 #.
@@ -2574,16 +2572,6 @@ msgstr  "the others permission mode %s is ignored"
 #, c-format
 msgid   "the others permission mode is %s"
 msgstr  "the others permission mode is %s"
-
-#.
-#. this error message is used to explain NO_RECOVERY
-#. errors returned by the gethostbyname system call.
-#. Non recoverable errors, FORMERR, REFUSED, NOTIMP.
-#.
-msgid   "the operation was refused, or the operation is not implemented on "
-        "this system"
-msgstr  "the operation was refused, or the operation is not implemented on "
-        "this system"
 
 #.
 #. This error message is issued to explain an EINVAL error
@@ -3624,11 +3612,12 @@ msgid   "the virtual console is still in use"
 msgstr  "the virtual console is still in use"
 
 #.
-#. This message is used to explain an ENOMEM error
-#. reported by a system call (e.g. mmap or shmat), in the case
-#. where the virtual memory size of the process would have been
-#. exceeded.  The relevant getrlimit values will be printed
-#. separately.
+#. This message is used to explain an
+#. ENOMEM error reported by a system call (e.g.
+#. mmap or shmat), in the case where the virtual
+#. memory size of the process would have been
+#. exceeded.  The relevant getrlimit values will be
+#. printed separately.
 #.
 msgid   "the virtual memory size limit of the process would have been "
         "exceeded"
@@ -4020,10 +4009,10 @@ msgstr  "you cannot use open(2) to open socket files, you must use connect"
 #. can expand one of the limits to possdibly satisfy the memory
 #. request.
 #.
-msgid   "you have some head room in the resource allocation, it may help to "
-        "run the command \"ulimit -m hard\" and retry"
-msgstr  "you have some head room in the resource allocation, it may help to "
-        "run the command \"ulimit -m hard\" and retry"
+msgid   "you have some head room in the resource allocation, it may help "
+        "to run the command \"ulimit -m hard\" and retry"
+msgstr  "you have some head room in the resource allocation, it may help "
+        "to run the command \"ulimit -m hard\" and retry"
 
 #.
 #. This error message is used to explain an
@@ -4040,5 +4029,10 @@ msgstr  "you must call ioctl SIOCSCCCFG first"
 #.
 msgid   "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
 msgstr  "you must specify exactly one of MAP_PRIVATE or MAP_SHARED"
+
+#~ msgid        "the %s is in use by another process or by the system and "
+#~      "this prevents the %s system call from operating"
+#~ msgstr       "the %s is in use by another process or by the system and "
+#~      "this prevents the %s system call from operating"
 
 # vim: set ts=8 sw=4 et :

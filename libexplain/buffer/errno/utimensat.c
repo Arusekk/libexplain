@@ -68,6 +68,9 @@ static int
 is_a_directory(int fildes)
 {
     struct stat st;
+
+    if (fildes == AT_FDCWD)
+        return 1;
     if (fstat(fildes, &st) < 0)
         return -1;
     return S_ISDIR(st.st_mode);

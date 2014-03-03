@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011, 2013 Peter Miller
+ * Copyright (C) 2011, 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,6 +18,7 @@
  */
 
 #include <libexplain/ac/libio.h>
+#include <libexplain/ac/stdio.h>
 
 #include <libexplain/is_efault.h>
 #include <libexplain/libio.h>
@@ -26,10 +27,12 @@
 int
 explain_libio_no_writes(FILE *fp)
 {
-#if defined(HAVE_LIBIO_H) && defined(_IO_NO_WRITES)
     if (explain_is_efault_pointer(fp, sizeof(*fp)))
         return 0;
+#if defined(HAVE_LIBIO_H) && defined(_IO_NO_WRITES)
     return !!(((_IO_FILE *)fp)->_flags & _IO_NO_WRITES);
+#elif defined(__BSD_VISIBLE) && defined(__SWR)
+    return !((fp->_flags & __SWR) || (fp->_flags & __SRW));
 #else
     (void)fp;
     return 0;

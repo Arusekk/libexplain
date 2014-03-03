@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010, 2013 Peter Miller
+ * Copyright (C) 2008-2010, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,6 +23,8 @@
 #include <libexplain/buffer/check_fildes_range.h>
 #include <libexplain/buffer/ebadf.h>
 #include <libexplain/buffer/eintr.h>
+#include <libexplain/buffer/eintr.h>
+#include <libexplain/buffer/einval.h>
 #include <libexplain/buffer/emfile.h>
 #include <libexplain/buffer/errno/dup2.h>
 #include <libexplain/buffer/errno/generic.h>
@@ -57,23 +59,34 @@ explain_buffer_errno_dup2_explanation(explain_string_buffer_t *sb,
     case EBADF:
         if (fcntl(oldfd, F_GETFL) < 0)
         {
+            /* oldfd is not an open file */
             explain_buffer_ebadf(sb, oldfd, "oldfd");
+            return;
         }
-        else if (explain_buffer_check_fildes_range(sb, newfd, "newfd"))
+        if (explain_buffer_check_fildes_range(sb, newfd, "newfd") >= 0)
         {
-            explain_string_buffer_puts
-            (
-                sb,
-                "oldfd isn't an open file descriptor; or, newfd is "
-                "outside the allowed range for file descriptors"
-            );
+            /* newfd is out of range */
+            return;
         }
+        explain_string_buffer_puts
+        (
+            sb,
+            /* FIXME: i18n */
+            "the oldfd argument isn't an open file descriptor; or, "
+            "the newf argument is outside the allowed range for file "
+            "descriptors"
+        );
         break;
 
     case EINVAL:
-       /* not on Linux */
-       explain_buffer_check_fildes_range(sb, newfd, "newfd");
-       break;
+        /* not on Linux */
+        if (explain_buffer_check_fildes_range(sb, newfd, "newfd") >= 0)
+        {
+            /* newfd is out of range */
+            return;
+        }
+        explain_buffer_einval_vague(sb, "data");
+        break;
 
     case EBUSY:
         explain_string_buffer_puts

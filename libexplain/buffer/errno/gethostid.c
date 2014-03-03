@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <libexplain/buffer/errno/open.h>
 #include <libexplain/buffer/errno/gethostid.h>
+#include <libexplain/buffer/pathname.h>
 #include <libexplain/explanation.h>
 
 
@@ -33,8 +34,13 @@ static void
 explain_buffer_errno_gethostid_system_call(explain_string_buffer_t *sb,
     int errnum)
 {
-    (void)errnum;
-    explain_string_buffer_puts(sb, "get_host_id()");
+    explain_string_buffer_puts(sb, "gethostid(");
+    if (errnum == ENOENT)
+    {
+        explain_string_buffer_puts(sb, "pathname = ");
+        explain_buffer_pathname(sb, "/etc/hostid");
+    }
+    explain_string_buffer_puts(sb, ")");
 }
 
 

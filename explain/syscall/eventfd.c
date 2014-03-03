@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2013 Peter Miller
+ * Copyright (C) 2009, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,7 +35,7 @@ explain_syscall_eventfd(int errnum, int argc, char **argv)
 
     initval = 0;
     flags = 0;
-    switch (argc != 2)
+    switch (argc)
     {
     case 2:
         flags = explain_parse_eventfd_flags_or_die(argv[1], "arg 2");

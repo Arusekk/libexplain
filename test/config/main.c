@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011, 2012 Peter Miller
+ * Copyright (C) 2011, 2012, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -24,6 +24,7 @@
 #include <libexplain/ac/stdlib.h>
 #include <libexplain/ac/string.h>
 #include <libexplain/ac/unistd.h>
+#include <libexplain/ac/sys/eventfd.h> /* for EFD_NONBLOCK */
 
 #include <libexplain/fstrcmp.h>
 #include <libexplain/output.h>
@@ -201,6 +202,14 @@ static const table_t table[] =
         0
 #endif
     },
+    {
+        "EFD_NONBLOCK",
+#ifdef EFD_NONBLOCK
+        1
+#else
+        0
+#endif
+    },
 };
 
 
@@ -239,7 +248,7 @@ main(int argc, char **argv)
 
         case 'V':
             explain_version_print();
-            return 0;
+            return EXIT_SUCCESS;
 
         default:
             usage();

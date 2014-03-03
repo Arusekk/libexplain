@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -42,7 +42,12 @@ explain_mount_on_error(const char *source, const char *target, const char
     int             result;
 
 #ifdef HAVE_MOUNT
+# ifdef __FreeBSD__
+    (void)file_systems_type;
+    result = mount(source, target, flags, data);
+#  else
     result = mount(source, target, file_systems_type, flags, data);
+#  endif
 #else
     errno = ENOSYS;
     result = -1;

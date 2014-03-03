@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,10 +18,11 @@
  */
 
 #include <libexplain/ac/acl/libacl.h>
+#include <libexplain/ac/sys/acl.h>
 
 #ifndef HAVE_ACL_ENTRIES
 
-static int
+int
 acl_entries(acl_t acl)
 {
     int result = 0;

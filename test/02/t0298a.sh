@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010, 2011 Peter Miller
+# Copyright (C) 2008, 2010, 2011, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@ TEST_SUBJECT="dup2 EBADF"
 
 cat > test.ok << 'fubar'
 dup2(oldfd = 42, newfd = 99) failed, Bad file descriptor (EBADF) because
-oldfd does not refer to an open file; this is more likely to be a software
-error (a bug) than it is to be a user error
+the oldfd argument does not refer to an open file; this is more likely to
+be a software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
@@ -41,13 +41,13 @@ test $? -eq 0 || fail
 
 fmt > test.ok << 'fubar'
 dup2(oldfd = 1, newfd = 987654) failed, Bad file descriptor (EBADF)
-because newfd is outside the allowed range for file descriptors
+because the newfd argument is outside the allowed range for file descriptors
 fubar
 test $? -eq 0 || no_result
 
 fmt > test.ok2 << 'fubar'
 dup2(oldfd = 1, newfd = 987654) failed, Too many open files (EMFILE)
-because newfd is outside the allowed range for file descriptors
+because the newfd argument is outside the allowed range for file descriptors
 fubar
 test $? -eq 0 || no_result
 
@@ -80,4 +80,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

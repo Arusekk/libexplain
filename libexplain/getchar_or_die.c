@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2010, 2012, 2013 Peter Miller
+ * Copyright (C) 2008-2010, 2012-2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 #include <libexplain/output.h>
 
 
-#if __GNUC__ < 3
+#if !(__GNUC__ >= 3 || defined(__clang__))
 static
 #endif
 
@@ -34,7 +34,7 @@ explain_getchar_or_die_failed(void)
 }
 
 
-#if __GNUC__ < 3
+#if !(__GNUC__ >= 3 || defined(__clang__))
 
 int
 explain_getchar_or_die(void)

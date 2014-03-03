@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -66,7 +66,7 @@ static const explain_parse_bits_table_t table[] =
 #ifdef MS_BIND
     { "MS_BIND", MS_BIND },
 #endif
-#ifdef MS_MOVE
+#ifdef HAVE_SYS_MOUNT_MS_MOVE
     { "MS_MOVE", MS_MOVE },
 #endif
 #ifdef MS_REC
@@ -148,6 +148,7 @@ explain_buffer_mount_flags(explain_string_buffer_t *sb, unsigned long flags)
      * information and must be discarded.
      */
     first = 1;
+#ifdef MS_MGC_MSK
     if ((flags & MS_MGC_MSK) == MS_MGC_VAL)
     {
         flags &= ~MS_MGC_MSK;
@@ -156,7 +157,9 @@ explain_buffer_mount_flags(explain_string_buffer_t *sb, unsigned long flags)
             return;
         first = 0;
     }
-    else if (flags == 0)
+    else
+#endif
+    if (flags == 0)
     {
         explain_string_buffer_putc(sb, '0');
         return;

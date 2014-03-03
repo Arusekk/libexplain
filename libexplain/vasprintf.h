@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,7 +30,7 @@
 #include <libexplain/gcc_attributes.h>
 #include <libexplain/large_file_support.h>
 
-#include <stdio.h>
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {

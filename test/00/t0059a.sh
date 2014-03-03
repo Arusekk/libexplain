@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008 Peter Miller
+# Copyright (C) 2008, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -18,13 +18,14 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-TEST_SUBJECT="lseek"
+TEST_SUBJECT="lseek EBADF"
 . test_prelude
 
 cat > test.ok << 'fubar'
 lseek(fildes = 42, offset = 0, whence = SEEK_END) failed, Bad file
-descriptor (EBADF) because fildes does not refer to an open file; this is
-more likely to be a software error (a bug) than it is to be a user error
+descriptor (EBADF) because the fildes argument does not refer to an open
+file; this is more likely to be a software error (a bug) than it is to be a
+user error
 fubar
 test $? -eq 0 || no_result
 
@@ -41,4 +42,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

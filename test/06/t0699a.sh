@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2013 Peter Miller
+# Copyright (C) 2013, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -37,8 +37,17 @@ mean the "LATIN1" locale instead?
 fubar
 test $? -eq 0 || no_result
 
+cat > test.ok.2 << 'fubar'
+iconv_open(tocode = "latin-1", fromcode = "utf-8") failed, Invalid argument
+(EINVAL) because the tocode argument is not a known locale name; did you
+mean the "LATIN10" locale instead?
+fubar
+test $? -eq 0 || no_result
+
 explain -eEINVAL iconv_open latin-1 utf-8 > test.out
 test $? -eq 0 || fail
+
+diff test.ok.2 test.out > /dev/null 2>&1 && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail

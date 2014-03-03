@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009-2011, 2013 Peter Miller
+ * Copyright (C) 2009-2011, 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -75,7 +75,7 @@ print_explanation(const explain_iocontrol_t *p, explain_string_buffer_t *sb,
         break;
 
     case EBUSY:
-        explain_buffer_ebusy(sb, fildes, "fildes", "ioctl BLKBSZSET");
+        explain_buffer_ebusy_fildes(sb, fildes, "fildes", "ioctl BLKBSZSET");
         break;
 
     case EINVAL:

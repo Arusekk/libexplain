@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011, 2013 Peter Miller
+ * Copyright (C) 2009, 2011, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -32,10 +32,18 @@ explain_buffer_kd_font_op(explain_string_buffer_t *sb, int value)
 {
     static const explain_parse_bits_table_t table[] =
     {
+#ifdef KD_FONT_OP_SET
         { "KD_FONT_OP_SET", KD_FONT_OP_SET },
+#endif
+#ifdef KD_FONT_OP_GET
         { "KD_FONT_OP_GET", KD_FONT_OP_GET },
+#endif
+#ifdef KD_FONT_OP_SET_DEFAULT
         { "KD_FONT_OP_SET_DEFAULT", KD_FONT_OP_SET_DEFAULT },
+#endif
+#ifdef KD_FONT_OP_COPY
         { "KD_FONT_OP_COPY", KD_FONT_OP_COPY },
+#endif
     };
 
     explain_parse_bits_print_single(sb, value, table, SIZEOF(table));
@@ -47,11 +55,15 @@ explain_buffer_kd_font_flag(explain_string_buffer_t *sb, int value)
 {
     static const explain_parse_bits_table_t table[] =
     {
+#ifdef KD_FONT_FLAG_DONT_RECALC
         { "KD_FONT_FLAG_DONT_RECALC", KD_FONT_FLAG_DONT_RECALC },
+#endif
     };
 
     explain_parse_bits_print(sb, value, table, SIZEOF(table));
 }
+
+#endif
 
 
 void
@@ -82,8 +94,6 @@ explain_buffer_console_font_op(explain_string_buffer_t *sb,
     explain_buffer_pointer(sb, value);
 #endif
 }
-
-#endif /* HAVE_LINUX_KD_H */
 
 
 /* vim: set ts=8 sw=4 et : */

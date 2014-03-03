@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2011, 2012 Peter Miller
+ * Copyright (C) 2011, 2012, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -132,16 +132,14 @@ main(int argc, char **argv)
      */
     if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)
     {
-        enum v4l2_buf_type type;
         int             j;
 
-        type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         for (j = 0; ; ++j)
         {
             struct v4l2_fmtdesc fmtdesc;
 
             memset(&fmtdesc, 0, sizeof(fmtdesc));
-            fmtdesc.type = type;
+            fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
             fmtdesc.index = j;
             if (ioctl_wary(fildes, VIDIOC_ENUM_FMT, &fmtdesc) < 0)
                 break;
@@ -159,7 +157,7 @@ main(int argc, char **argv)
 
             memset(&qry, 0, sizeof(qry));
             qry.id = j | V4L2_CTRL_FLAG_NEXT_CTRL;
-            qry.type = type;
+            qry.type = V4L2_CTRL_TYPE_INTEGER;
 
             if (ioctl_wary(fildes, VIDIOC_QUERYCTRL, &qry) < 0)
                 break;
@@ -183,6 +181,7 @@ main(int argc, char **argv)
         }
 
         {
+            enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
             struct v4l2_streamparm parm;
 
             memset(&parm, 0, sizeof(parm));

@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2013 Peter Miller
+ * Copyright (C) 2008, 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,14 @@
 #define LIBEXPLAIN_CONFIG_MESSY_H
 
 /*
+ * clang tries to impersonate gcc, but does a poor job of it.
+ */
+#ifdef __clang__
+#undef __GNUC__
+#undef __GNU_MINOR__
+#endif
+
+/*
  * Make sure Solaris includes POSIX extensions.
  */
 #if (defined(__sun) || defined(__sun__) || defined(sun)) && \
@@ -32,6 +40,13 @@
 
 #ifndef __EXTENSIONS__
 #define __EXTENSIONS__ 1
+#endif
+
+/* Make dure FreeBSDbes us everything z*/
+#ifndef __USE_GNU
+#ifdef _GNU_SOURCE
+#define __USE_GNU 1
+#endif
 #endif
 
 /*

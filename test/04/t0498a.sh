@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2009, 2010 Peter Miller
+# Copyright (C) 2009, 2010, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@ TEST_SUBJECT="tcflush EBADF"
 
 cat > test.ok << 'fubar'
 tcflush(fildes = 99, selector = TCIOFLUSH) failed, Bad file descriptor
-(EBADF) because fildes does not refer to an open file; this is more likely
-to be a software error (a bug) than it is to be a user error
+(EBADF) because the fildes argument does not refer to an open file; this is
+more likely to be a software error (a bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
@@ -41,4 +41,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

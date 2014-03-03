@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2013 Peter Miller
+# Copyright (C) 2013, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -23,9 +23,9 @@ TEST_SUBJECT="openat EBADF"
 
 cat > test.ok << 'fubar'
 openat(fildes = 666, pathname = "ugly/duck", flags = O_RDONLY, mode = 0)
-failed, Bad file descriptor (EBADF) because fildes does not refer to an
-open file; this is more likely to be a software error (a bug) than it is to
-be a user error
+failed, Bad file descriptor (EBADF) because the fildes argument does not
+refer to an open file; this is more likely to be a software error (a bug)
+than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 

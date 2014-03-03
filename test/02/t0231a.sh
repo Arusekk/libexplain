@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - Explain errno values returned by libc functions
-# Copyright (C) 2008, 2010 Peter Miller
+# Copyright (C) 2008, 2010, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -23,9 +23,9 @@ TEST_SUBJECT="fread EBADF"
 
 cat > test.ok << 'fubar'
 fread(ptr = 0x00000100, size = 1, nmemb = 1, fp = 0x09876543) failed, Bad
-file descriptor (EBADF) because fp is outside the allowed range for file
-descriptors, fp does not refer to an open file; this is more likely to be a
-software error (a bug) than it is to be a user error
+file descriptor (EBADF) because the fp argument is outside the allowed
+range for file descriptors; this is more likely to be a software error (a
+bug) than it is to be a user error
 fubar
 test $? -eq 0 || no_result
 
@@ -42,4 +42,4 @@ test $? -eq 0 || fail
 #
 pass
 
-# vim:ts=8:sw=4:et
+# vim: set ts=8 sw=4 et :

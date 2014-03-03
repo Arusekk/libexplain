@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2012, 2013 Peter Miller
+ * Copyright (C) 2012-2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -38,6 +38,8 @@ int
 utimens(char const *path, const struct timespec timespec[2])
 {
 #ifndef HAVE_UTIMENSAT
+    (void)path;
+    (void)timespec[0].tv_sec;
     errno = ENOSYS;
     return -1;
 #else
@@ -56,6 +58,8 @@ int
 lutimens(char const *path, const struct timespec timespec[2])
 {
 #ifndef HAVE_UTIMENSAT
+    (void)path;
+    (void)timespec[0].tv_sec;
     errno = ENOSYS;
     return -1;
 #else

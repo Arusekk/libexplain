@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -96,11 +96,12 @@ void explain_buffer_errno_acl_get_file_explanation(explain_string_buffer_t *sb,
             explain_buffer_is_the_null_pointer(sb, "pathname");
             break;
         }
-        explain_string_buffer_puts
+        explain_string_buffer_printf
         (
             sb,
             /* FIXME: i18n */
-            "the argument type is not a known ACL type"
+            "the %s argument is not a known ACL type",
+            "type"
         );
         explain_buffer_software_error(sb);
         break;

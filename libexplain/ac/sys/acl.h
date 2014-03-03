@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,6 +29,10 @@
 
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
+#else
+
+    typedef struct acl_t *acl_t;
+
 #endif
 
 /* vim: set ts=8 sw=4 et : */

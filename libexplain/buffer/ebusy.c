@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2009, 2011, 2013 Peter Miller
+ * Copyright (C) 2009, 2011, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,13 +31,13 @@ explain_buffer_ebusy_path(explain_string_buffer_t *sb, const char *path,
     const char *path_caption, const char *syscall_name)
 {
     int fildes = open(path, O_RDONLY);
-    explain_buffer_ebusy(sb, fildes, path_caption, syscall_name);
+    explain_buffer_ebusy_fildes(sb, fildes, path_caption, syscall_name);
     close(fildes);
 }
 
 
 void
-explain_buffer_ebusy(explain_string_buffer_t *sb, int fildes,
+explain_buffer_ebusy_fildes(explain_string_buffer_t *sb, int fildes,
     const char *fildes_caption, const char *syscall_name)
 {
     struct stat     st;

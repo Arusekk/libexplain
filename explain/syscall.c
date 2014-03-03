@@ -140,6 +140,7 @@
 #include <explain/syscall/lchown.h>
 #include <explain/syscall/lchownat.h>
 #include <explain/syscall/link.h>
+#include <explain/syscall/linkat.h>
 #include <explain/syscall/listen.h>
 #include <explain/syscall/lseek.h>
 #include <explain/syscall/lstat.h>
@@ -465,6 +466,7 @@ static const table_t table[] =
     { "lchownat", explain_syscall_lchownat },
     /* FIXME: add support for lgetxattr */
     { "link", explain_syscall_link },
+    { "linkat", explain_syscall_linkat },
     { "listen", explain_syscall_listen },
     /* FIXME: add support for listxattr */
     /* FIXME: add support for llistxattr */

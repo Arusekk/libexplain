@@ -1,6 +1,6 @@
 dnl!
 dnl! libexplain - Explain errno values returned by libc functions
-dnl! Copyright (C) 2008-2013 Peter Miller
+dnl! Copyright (C) 2008-2014 Peter Miller
 dnl! Written by Peter Miller <pmiller@opensource.org.au>
 dnl!
 dnl! This program is free software; you can redistribute it and/or
@@ -19,12 +19,34 @@ dnl!
 AC_INIT(install-sh)
 AC_CONFIG_HEADER(libexplain/config.h)
 AC_USE_SYSTEM_EXTENSIONS
+AC_LANG_C
+AC_LANG_ASSERT(C)
 AC_PROG_CC
 AC_PROG_CPP
 AC_CANONICAL_HOST
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PROG_YACC
+
+dnl!
+dnl! See if the clang compiler is masquerading as gcc.
+dnl!
+dnl! Autoconf detects the Clang compiler as GNU GCC (clang sets defines
+dnl! like __GNUC__ etc) but Clang is *not* completely compatible. If we
+dnl! detect Clang we set ac_vc_c_compiler_gnu to 'no'.
+dnl!
+AC_TRY_LINK([
+#include <stdio.h>
+], [
+#ifndef __clang__
+This is not clang!
+#endif
+],
+[cv_c_compiler_clang=yes
+cv_c_compiler_gcc=no
+],
+[cv_c_compiler_clang=no]
+)
 
 case "$YACC" in
 *bison*)
@@ -435,7 +457,6 @@ AC_CHECK_HEADERS([         \
     linux/isdn_ppp.h       \
     linux/ivtvfb.h         \
     linux/joystick.h       \
-    linux/kd.h             \
     linux/kdev_t.h         \
     linux/kvm.h            \
     linux/lp.h             \
@@ -559,6 +580,16 @@ dnl! =======================================================================
 dnl!
 dnl!  Headers that need special handling.
 dnl!
+
+AC_CHECK_HEADERS([linux/kd.h], [], [], [[
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include <linux/kd.h>
+#ifdef __FreeBSD__
+=%fail^!
+#endif
+]])
 
 AC_CHECK_HEADERS([net/if.h], [], [], [[
 #ifdef HAVE_SYS_TYPES_H
@@ -773,6 +804,30 @@ getmntent function.])
 dnl! =======================================================================
 
 dnl!
+dnl!  We need to know whether struct utsname::domainname exists.
+dnl!
+AC_MSG_CHECKING([for struct utsname::domainname])
+AC_TRY_COMPILE([
+#ifdef HAVE_SYS_UTSNAME_H
+#include <sys/utsname.h>
+#endif
+], [
+    struct utsname x;
+    x.domainname[0] = 0;
+], [
+    AC_MSG_RESULT([yes])
+    ac_av_utsname_domainname=1
+], [
+    AC_MSG_RESULT([no])
+    ac_av_utsname_domainname=0
+])
+AC_DEFINE_UNQUOTED([HAVE_UTSNAME_DOMAINNAME], $ac_av_utsname_domainname,
+[Define this symbol to indicate the presence of the utsname domainname
+member.])
+
+dnl! =======================================================================
+
+dnl!
 dnl!  We need to know whether va_list is compatible with const void *
 dnl!
 AC_MSG_CHECKING([what va_list is compatible with])
@@ -891,7 +946,7 @@ AC_CHECK_FUNCS(     \
     cap_get_proc    \
     capget          \
     cfmakeraw       \
-    dhmod           \
+    chmod           \
     dirfd           \
     dladdr          \
     dlsym           \
@@ -935,7 +990,7 @@ AC_CHECK_FUNCS(     \
     lchmod          \
     lchown          \
     lchownat        \
-    lchownat        \
+    linkat          \
     lutime          \
     lutimeat        \
     lutimens        \
@@ -1069,6 +1124,27 @@ return 0;
 AC_MSG_RESULT([yes]),
 AC_MSG_RESULT([no]),
 AC_MSG_RESULT(cross))
+
+dnl!
+dnl! Test to see if MS_MOVE is defineds and/or usable.
+dnl! it may exist as an enum tag, but isn't defined to itself
+dnl!
+dnl!
+AC_MSG_CHECKING([stdio defines off_t])
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <sys/mount.h>
+int main(int argc, char **argv){
+int x = MS_MOVE;
+return 0;
+}]
+, AC_DEFINE(HAVE_SYS_MOUNT_MS_MOVE,1,
+[Define this symbol if your system <sys/mount.h> defines MS_MOVE.])
+AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no]),
+AC_MSG_RESULT(cross))
+
+
 
 dnl!
 dnl!    Test to see if <sys/types.h> defined off_t
@@ -1724,7 +1800,7 @@ AC_SUBST(PROGRAM_SUFFIX)
 AH_TOP(
 [/*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2013 Peter Miller
+ * Copyright (C) 2008-2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by

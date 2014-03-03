@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # libexplain - a library of system-call-specific strerror replacements
-# Copyright (C) 2013 Peter Miller
+# Copyright (C) 2013, 2014 Peter Miller
 # Written by Peter Miller <pmiller@opensource.org.au>
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -27,15 +27,27 @@ TEST_SUBJECT="gethostid ENOENT"
 # "/etc/hostid".  Thus most errors are probaly those involved with
 # opening he file.  The linux kernel always returns ENOSYS.
 #
-cat > test.ok << 'fubar'
-get_host_id() failed, No such file or directory (ENOENT) because there is
-no "hostid" regular file in the pathname "/etc" directory; did you mean the
-"hosts" regular file instead?
+fmt > test.ok << 'fubar'
+gethostid(pathname = "/etc/hostid") failed, No such file or directory
+(ENOENT) because there is no "hostid" regular file in the pathname "/etc"
+directory; did you mean the "hosts" regular file instead?
 fubar
 test $? -eq 0 || no_result
 
-explain -e ENOENT gethostid > test.out
+fmt > test.ok.2 << 'fubar'
+gethostid(pathname = "/etc/hostid") failed, No such file or directory
+(ENOENT) because pathname, or a directory component of pathname, does
+not exist or is a dangling symbolic link
+fubar
+test $? -eq 0 || no_result
+
+explain -e ENOENT gethostid > test.out.2
 test $? -eq 0 || fail
+
+fmt test.out.2 > test.out
+test $? -eq 0 || no_result
+
+diff test.ok.2 test.out > /dev/null 2>&1 && pass
 
 diff test.ok test.out
 test $? -eq 0 || fail

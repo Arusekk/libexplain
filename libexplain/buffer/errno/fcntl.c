@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2011, 2013 Peter Miller
+ * Copyright (C) 2008-2011, 2013, 2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,9 +22,7 @@
 #include <libexplain/ac/unistd.h>
 
 #include <libexplain/buffer/check_fildes_range.h>
-#include <libexplain/buffer/check_fildes_range.h>
 #include <libexplain/buffer/ebadf.h>
-#include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/efault.h>
 #include <libexplain/buffer/eintr.h>
 #include <libexplain/buffer/einval.h>
@@ -35,12 +33,13 @@
 #include <libexplain/buffer/flock.h>
 #include <libexplain/buffer/is_the_null_pointer.h>
 #include <libexplain/buffer/open_flags.h>
+#include <libexplain/buffer/pid_t_star.h>
 #include <libexplain/buffer/pointer.h>
 #include <libexplain/buffer/signal.h>
 #include <libexplain/explanation.h>
 #include <libexplain/fcntl.h>
-#include <libexplain/parse_bits.h>
 #include <libexplain/is_efault.h>
+#include <libexplain/parse_bits.h>
 #include <libexplain/sizeof.h>
 #include <libexplain/string_buffer.h>
 
@@ -118,9 +117,17 @@ explain_buffer_errno_fcntl_system_call(explain_string_buffer_t *sb,
 #ifdef F_DUPFD_CLOEXEC
     case F_DUPFD_CLOEXEC:
 #endif
-    case F_SETFD:
-    case F_SETOWN:
         explain_string_buffer_printf(sb, ", data = %ld", data);
+        break;
+
+    case F_SETFD:
+        explain_string_buffer_puts(sb, ", data = ");
+        explain_buffer_open_flags(sb, data);
+        break;
+
+    case F_SETOWN:
+        explain_string_buffer_puts(sb, ", data = ");
+        explain_buffer_pid_t(sb, data);
         break;
 
 #ifdef F_SETSIG
@@ -299,16 +306,21 @@ explain_buffer_errno_fcntl_explanation(explain_string_buffer_t *sb,
 #ifdef F_DUPFD_CLOEXEC
         case F_DUPFD_CLOEXEC:
 #endif
-            explain_buffer_check_fildes_range(sb, data, "data");
+            if (explain_buffer_check_fildes_range(sb, data, "data") < 0)
+            {
+                explain_buffer_einval_vague(sb, "data");
+            }
             break;
 
 #ifdef F_SETSIG
         case F_SETSIG:
-            explain_string_buffer_puts
+            /* FIXME: devode signal number */
+            explain_string_buffer_printf
             (
                 sb,
                 /* FIXME: i18n */
-                "the data argument is not an allowable signal number"
+                "the %s argument is not an allowable signal number",
+                "data"
             );
             break;
 #endif

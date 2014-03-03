@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008-2013 Peter Miller
+ * Copyright (C) 2008-2014 Peter Miller
  * Written by Peter Miller <pmiller@opensource.org.au>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -243,7 +243,7 @@ lib%/lib%.la lib%/.libs/lib%.a lib%/.libs/lib%.so:
      */
     local version-info =
         [collect aesub "'${project_specific aemakegen:version-info}'" ];
-    libtool [libtool-quiet] --mode\=link
+    libtool [libtool-quiet] --mode\=link --tag\=BINCC
     [CC] [CPPFLAGS] [CFLAGS]
         -o [target]
         [resolve [[target]_obj]]
@@ -321,7 +321,7 @@ bin/% bin/.libs/%: [[target]_obj] [defined-or-null [target]_libs]
     function quiet_print Link;
 
     rm -f bin/.libs/lt-%;
-    libtool [libtool-quiet] --mode\=link
+    libtool [libtool-quiet] --mode\=link --tag\=BINCC
     [CC] -o [target]
         [LDFLAGS]
         [resolve [[target]_obj] [defined-or-null [target]_libs]]
@@ -377,8 +377,9 @@ if [match_mask %1D%2 [version]] then
     function quiet_print Compile;
 
     rm -f %0.libs/%.o %0.libs/%.lo;
-    libtool [libtool-quiet] --mode\=compile
-    [CC] [CFLAGS]
+    libtool [libtool-quiet] --mode\=compile --tag\=BINCC
+    [CC]
+        [stringset [CFLAGS] - -Wl,--as-needed]
         [defined-or-null %0%.c_CFLAGS]
         [defined-or-null [dir %0%.c]_CFLAGS]
         [CPPFLAGS]
@@ -394,8 +395,9 @@ cascade %0%.lo = %0%.o %0.libs/%.lo;
     function quiet_print Compile;
 
     rm -f %0%.lo %0.libs/%.o %0.libs/%.lo;
-    libtool [libtool-quiet] --mode\=compile
-    [CC] [CFLAGS]
+    libtool [libtool-quiet] --mode\=compile --tag\=BINCC
+    [CC]
+        [stringset [CFLAGS] - -Wl,--as-needed]
         [defined-or-null %0%.c_CFLAGS]
         [defined-or-null [dir %0%.c]_CFLAGS]
         [CPPFLAGS]
@@ -463,6 +465,7 @@ stdarg_exceptions =
     libexplain/vprintf.h
     libexplain/vsnprintf.h
     libexplain/vsprintf.h
+    libexplain/vasprintf.h
     ;
 
 stdio_exceptions =
@@ -513,7 +516,6 @@ stdio_exceptions =
     libexplain/sprintf.h
     libexplain/tmpfile.h
     libexplain/ungetc.h
-    libexplain/vasprintf.h
     libexplain/vfprintf.h
     libexplain/vfscanf.h
     libexplain/vprintf.h

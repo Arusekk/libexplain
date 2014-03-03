@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2008, 2009, 2013 Peter Miller
+ * Copyright (C) 2008, 2009, 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +38,7 @@ extern "C" {
  * but the defines in libexplain/config.h are not suitable for inclusion
  * in the client API because they have no LIBEXPLAIN_ namespace prefix.
  */
-#if __GNUC__ >= 3
+#if __GNUC__ >= 3 || defined(__clang__)
 /**
  * Private function, provided for the exclusive use of the
  * explain_getchar_or_die inline function.  Clients of libexplain must
@@ -64,16 +64,16 @@ void explain_getchar_or_die_failed(void);
   *     This function only returns on success. On failure, prints an
   *     explanation and exits, it does not return.
   */
-#if __GNUC__ >= 3
+#if __GNUC__ >= 3 || defined(__clang__)
 static __inline__
 #endif
 int explain_getchar_or_die(void)
-#if __GNUC__ >= 3
+#if __GNUC__ >= 3 || defined(__clang__)
 __attribute__((always_inline))
 #endif
 ;
 
-#if __GNUC__ >= 3
+#if __GNUC__ >= 3 || defined(__clang__)
 
 static __inline__ int
 explain_getchar_or_die(void)

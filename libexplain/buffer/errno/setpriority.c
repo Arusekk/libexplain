@@ -1,6 +1,6 @@
 /*
  * libexplain - Explain errno values returned by libc functions
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -135,11 +135,13 @@ explain_buffer_errno_setpriority_explanation(explain_string_buffer_t *sb, int
              */
             struct rlimit rlim;
 
+#ifdef RLIMIT_NICE
             if (getrlimit(RLIMIT_NICE, &rlim) >= 0)
             {
                 int cur = 20 - rlim.rlim_cur;
                 explain_string_buffer_printf(sb, " (%d < %d)", prio, cur);
             }
+#endif
         }
         explain_buffer_dac_sys_nice(sb);
         break;

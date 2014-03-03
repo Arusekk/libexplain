@@ -1,6 +1,6 @@
 /*
  * libexplain - a library of system-call-specific strerror replacements
- * Copyright (C) 2013 Peter Miller
+ * Copyright (C) 2013, 2014 Peter Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,6 +17,7 @@
  */
 
 #include <libexplain/ac/netdb.h>
+#include <libexplain/ac/sys/socket.h> /* for FreeBSD, for AF_INET */
 #include <libexplain/ac/string.h>
 
 #include <libexplain/buffer/address_family.h>
